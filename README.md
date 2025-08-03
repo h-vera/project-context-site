@@ -29,3 +29,24 @@ We're using:
 We’re currently designing the **splash screen (index page)** and defining the structure of the full site.
 
 ## 📂 Structure (Planned)
+project-context-site/
+├── index.html                     ← Splash screen / homepage
+├── about.html
+├── studies/
+│   ├── hosea/
+│   │   ├── hosea.html             ← Main Hosea page (renamed from index.html)
+│   │   ├── structure.html
+│   │   ├── hebrew-words.html
+│   │   ├── literary-analysis.html
+│   │   ├── theology.html
+│   │   ├── timeline.html
+│   │   ├── nt-usage.html
+│   │   └── resources.html
+│   └── evolution-of-satan/
+│       └── index.html             ← Main page for this study (TBD content)
+├── assets/
+│   ├── images/
+│   └── icons/
+├── styles/
+│   └── main.css
+└── README.md
