@@ -92,6 +92,40 @@
             color: var(--primary-dark);
         }
 
+        /* Dropdown Menu */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--primary-light);
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            z-index: 1;
+            top: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .dropdown-content a {
+            color: var(--text-gray);
+            padding: 0.75rem 1rem;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: var(--bg-gray);
+            color: var(--primary-dark);
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
         .cta-button {
             background: var(--primary-dark);
             color: var(--primary-light);
@@ -391,10 +425,32 @@
             line-height: 1.8;
         }
 
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: var(--primary-dark);
+            margin: 5px 0;
+            transition: 0.3s;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
             }
 
             .hero-buttons {
@@ -405,6 +461,10 @@
             .dynamic-word {
                 min-width: 200px;
             }
+
+            .cta-button {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -412,7 +472,7 @@
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
-            <a href="#" class="logo">
+            <a href="index.html" class="logo">
                 <div class="logo-icon">
                     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                         <!-- Left bracket -->
@@ -447,12 +507,23 @@
                 <span class="logo-text">Project Context</span>
             </a>
             <ul class="nav-links">
-                <li><a href="#studies">Studies</a></li>
+                <li class="dropdown">
+                    <a href="#studies">Studies</a>
+                    <div class="dropdown-content">
+                        <a href="studies/hosea/hosea.html">Hosea Study</a>
+                        <a href="studies/evolution-of-satan/index.html">Evolution of Satan</a>
+                    </div>
+                </li>
                 <li><a href="#resources">Resources</a></li>
-                <li><a href="#about">About</a></li>
+                <li><a href="about.html">About</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
-            <a href="#" class="cta-button">Get Started</a>
+            <a href="studies/hosea/hosea.html" class="cta-button">Get Started</a>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
 
@@ -517,10 +588,10 @@
                 God's Word, His creation, and our divine likeness
             </p>
             <div class="hero-buttons">
-                <a href="#" class="primary-button">
+                <a href="studies/hosea/hosea.html" class="primary-button">
                     Explore Hosea Study →
                 </a>
-                <a href="#" class="secondary-button">
+                <a href="about.html" class="secondary-button">
                     Learn More
                 </a>
             </div>
@@ -528,7 +599,7 @@
     </section>
 
     <!-- Features Section -->
-    <section class="features">
+    <section class="features" id="features">
         <div class="features-container">
             <h2 class="features-title">Empowering Understanding Through Context</h2>
             <div class="features-grid">
@@ -550,11 +621,44 @@
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🌍</div>
-                    <div class="feature-title">Free & Shareable</div>
+                    <h3 class="feature-title">Free & Shareable</h3>
                     <p class="feature-description">
                         All resources are freely available to share, empowering 
                         communities worldwide
                     </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Studies Preview Section -->
+    <section class="features" id="studies" style="background: var(--bg-gray);">
+        <div class="features-container">
+            <h2 class="features-title">Current Studies</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📜</div>
+                    <h3 class="feature-title">The Book of Hosea</h3>
+                    <p class="feature-description">
+                        A comprehensive study exploring the prophet Hosea's message of God's 
+                        unwavering love through historical context, Hebrew word studies, 
+                        literary analysis, and theological insights.
+                    </p>
+                    <a href="studies/hosea/hosea.html" class="primary-button" style="margin-top: 1.5rem; font-size: 1rem; padding: 0.75rem 1.5rem;">
+                        Begin Study →
+                    </a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔥</div>
+                    <h3 class="feature-title">Evolution of Satan</h3>
+                    <p class="feature-description">
+                        Trace the development of the concept of Satan throughout 
+                        Scripture and history, examining how understanding of evil has evolved 
+                        across cultures and time.
+                    </p>
+                    <a href="studies/evolution-of-satan/index.html" class="primary-button" style="margin-top: 1.5rem; font-size: 1rem; padding: 0.75rem 1.5rem;">
+                        Begin Study →
+                    </a>
                 </div>
             </div>
         </div>
@@ -586,6 +690,12 @@
                 nav.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
             }
         });
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            // This would be implemented if you add a mobile menu
+            console.log('Mobile menu toggle - to be implemented');
+        }
     </script>
 </body>
 </html>
