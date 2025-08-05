@@ -27,10 +27,10 @@
             line-height: 1.6;
             color: var(--primary-dark);
             overflow-x: hidden;
-            background: var(--primary-light);
+            background: var(--bg-gray);
         }
 
-        /* Navigation - Same as index.html */
+        /* Navigation - Updated to match splash page */
         nav {
             position: fixed;
             width: 100%;
@@ -56,6 +56,11 @@
             gap: 1rem;
             text-decoration: none;
             color: var(--primary-dark);
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
         }
 
         .logo-icon {
@@ -87,46 +92,19 @@
             text-decoration: none;
             color: var(--text-gray);
             font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: var(--primary-dark);
-        }
-
-        /* Dropdown Menu */
-        .dropdown {
-            position: relative;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: var(--primary-light);
-            min-width: 200px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            z-index: 1;
-            top: 100%;
-            margin-top: 0.5rem;
-        }
-
-        .dropdown-content a {
-            color: var(--text-gray);
-            padding: 0.75rem 1rem;
-            text-decoration: none;
-            display: block;
             transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
         }
 
-        .dropdown-content a:hover {
-            background-color: var(--bg-gray);
+        .nav-links a:hover {
             color: var(--primary-dark);
+            background-color: rgba(0, 0, 0, 0.05);
         }
 
-        .dropdown:hover .dropdown-content {
-            display: block;
+        .nav-links a.active {
+            color: var(--accent-blue);
+            background-color: rgba(0, 180, 216, 0.1);
         }
 
         .cta-button {
@@ -144,9 +122,9 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
 
-        /* Hero Section - Styled like index.html */
+        /* Hero Section - Modern style */
         .hero {
-            min-height: 60vh;
+            min-height: 70vh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -163,13 +141,16 @@
             position: absolute;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: float 20s infinite linear;
+            background: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(255,255,255,0.03) 0%, transparent 50%);
+            animation: float 30s infinite linear;
         }
 
         @keyframes float {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
         }
 
         .hero-content {
@@ -178,20 +159,15 @@
             z-index: 1;
         }
 
+
+
         .hero-title {
-            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-size: clamp(3rem, 8vw, 5rem);
             font-weight: 900;
             line-height: 1.1;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             animation: fadeInUp 0.8s ease-out;
-        }
-
-        .hero-subtitle {
-            font-size: clamp(1.25rem, 3vw, 1.75rem);
-            opacity: 0.9;
-            margin-bottom: 3rem;
-            font-weight: 400;
-            animation: fadeInUp 0.8s ease-out 0.2s both;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         @keyframes fadeInUp {
@@ -205,7 +181,18 @@
             }
         }
 
-        /* Quick Navigation Cards */
+        .hero-subtitle {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            opacity: 0.9;
+            margin-bottom: 3rem;
+            font-weight: 300;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Quick Navigation Cards - Modern design */
         .quick-nav {
             display: flex;
             gap: 1rem;
@@ -240,21 +227,21 @@
             padding: 4rem 2rem;
         }
 
-        /* Content Sections - Modern Card Style */
+        /* Modern Content Sections */
         .content-section {
             background: var(--primary-light);
             padding: 3rem;
             margin-bottom: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
             position: relative;
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .content-section:hover {
             transform: translateY(-5px);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
         }
 
         .content-section::before {
@@ -265,11 +252,18 @@
             width: 100%;
             height: 4px;
             background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .content-section:hover::before {
+            transform: scaleX(1);
         }
 
         .section-title {
-            font-size: 2rem;
-            font-weight: 700;
+            font-size: 2.5rem;
+            font-weight: 800;
             color: var(--primary-dark);
             margin-bottom: 1.5rem;
             display: flex;
@@ -278,10 +272,11 @@
         }
 
         .section-icon {
-            font-size: 2.5rem;
+            font-size: 3rem;
+            opacity: 0.8;
         }
 
-        /* Study Sections Grid - Like index.html features */
+        /* Modern Grid Layout */
         .sections-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -290,16 +285,17 @@
         }
 
         .section-card {
-            background: var(--bg-gray);
-            padding: 2rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 2.5rem;
             border-radius: 20px;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
             cursor: pointer;
             text-decoration: none;
             color: inherit;
             display: block;
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .section-card::before {
@@ -308,28 +304,40 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 0;
         }
 
         .section-card:hover::before {
-            transform: translateX(0);
+            opacity: 0.1;
         }
 
         .section-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border-color: var(--accent-blue);
+        }
+
+        .section-card > * {
+            position: relative;
+            z-index: 1;
         }
 
         .card-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .card-title {
-            font-size: 1.5rem;
+            font-size: 1.75rem;
             font-weight: 700;
             margin-bottom: 1rem;
             color: var(--primary-dark);
@@ -338,13 +346,25 @@
         .card-description {
             color: var(--text-gray);
             line-height: 1.8;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .card-footer {
             font-size: 0.875rem;
             color: var(--accent-blue);
-            font-weight: 500;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-footer::after {
+            content: '→';
+            transition: transform 0.3s ease;
+        }
+
+        .section-card:hover .card-footer::after {
+            transform: translateX(5px);
         }
 
         /* Progress Indicator */
@@ -352,28 +372,48 @@
             position: absolute;
             top: 1rem;
             right: 1rem;
-            background: var(--accent-gold);
+            background: linear-gradient(135deg, var(--accent-gold), #f4c430);
             color: white;
             padding: 0.25rem 0.75rem;
             border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 600;
+            box-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
         }
 
         /* Key Themes Section */
         .themes-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.5rem;
             margin-top: 2rem;
         }
 
         .theme-item {
-            background: linear-gradient(135deg, var(--bg-gray) 0%, #ffffff 100%);
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
             padding: 2rem;
-            border-radius: 15px;
-            border-left: 4px solid var(--accent-blue);
-            transition: all 0.3s ease;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent-blue), var(--accent-purple));
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-item:hover::before {
+            transform: scaleY(1);
         }
 
         .theme-item:hover {
@@ -385,56 +425,28 @@
             color: var(--primary-dark);
             margin-bottom: 0.5rem;
             font-size: 1.25rem;
+            font-weight: 700;
         }
 
-        /* Footer */
+        /* Footer - Modern style */
         footer {
             background: var(--primary-dark);
             color: var(--primary-light);
             text-align: center;
             padding: 3rem 2rem;
             margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Floating Elements Animation */
-        .bg-pattern {
+        footer::before {
+            content: '';
             position: absolute;
-            width: 100%;
-            height: 100%;
             top: 0;
             left: 0;
-            overflow: hidden;
-            z-index: 0;
-        }
-
-        .floating-element {
-            position: absolute;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-            opacity: 0.1;
-            animation: float-random 20s ease-in-out infinite;
-        }
-
-        .floating-element:nth-child(1) {
-            width: 300px;
-            height: 300px;
-            top: -150px;
-            right: -150px;
-        }
-
-        .floating-element:nth-child(2) {
-            width: 200px;
-            height: 200px;
-            bottom: -100px;
-            left: -100px;
-            animation-delay: 5s;
-        }
-
-        @keyframes float-random {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(30px, -30px) rotate(90deg); }
-            50% { transform: translate(-20px, 20px) rotate(180deg); }
-            75% { transform: translate(-30px, -20px) rotate(270deg); }
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 0%, rgba(0, 180, 216, 0.1) 0%, transparent 70%);
         }
 
         /* Mobile Menu Toggle */
@@ -453,6 +465,7 @@
             background: var(--primary-dark);
             margin: 5px 0;
             transition: 0.3s;
+            border-radius: 3px;
         }
 
         /* Responsive */
@@ -465,9 +478,8 @@
                 display: block;
             }
 
-            .hero-buttons {
-                flex-direction: column;
-                align-items: center;
+            .hero-title {
+                font-size: 2.5rem;
             }
 
             .sections-grid {
@@ -486,6 +498,15 @@
             .content-section {
                 padding: 2rem;
             }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
         }
     </style>
 </head>
@@ -520,13 +541,7 @@
                 <span class="logo-text">Project Context</span>
             </a>
             <ul class="nav-links">
-                <li class="dropdown">
-                    <a href="#" class="active">Studies</a>
-                    <div class="dropdown-content">
-                        <a href="hosea.html">Hosea Study</a>
-                        <a href="../evolution-of-satan/satan-evolution.html">Evolution of Satan</a>
-                    </div>
-                </li>
+                <li><a href="#" class="active">Studies</a></li>
                 <li><a href="#resources">Resources</a></li>
                 <li><a href="../../about.html">About</a></li>
                 <li><a href="#contact">Contact</a></li>
@@ -542,10 +557,6 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="bg-pattern">
-            <div class="floating-element"></div>
-            <div class="floating-element"></div>
-        </div>
         <div class="hero-content">
             <h1 class="hero-title">The Book of Hosea</h1>
             <p class="hero-subtitle">A comprehensive study exploring God's unwavering love through historical context, Hebrew word studies, literary analysis, and theological insights</p>
@@ -566,9 +577,9 @@
                 <span class="section-icon">📖</span>
                 About the Book of Hosea
             </h2>
-            <p>The Book of Hosea inaugurates the corpus of the Minor Prophets, presenting God's relationship with Israel through the powerful metaphor of marriage. Written during the tumultuous 8th century BCE in the northern kingdom of Israel (ca. 750-720 BCE), Hosea's prophecy spans approximately thirty years—from the prosperous but morally corrupt reign of Jeroboam II through the chaotic succession of six kings in twenty years, culminating in the Assyrian destruction of Samaria in 722 BCE.</p>
+            <p style="font-size: 1.1rem; line-height: 1.8; color: #444;">The Book of Hosea inaugurates the corpus of the Minor Prophets, presenting God's relationship with Israel through the powerful metaphor of marriage. Written during the tumultuous 8th century BCE in the northern kingdom of Israel (ca. 750-720 BCE), Hosea's prophecy spans approximately thirty years—from the prosperous but morally corrupt reign of Jeroboam II through the chaotic succession of six kings in twenty years, culminating in the Assyrian destruction of Samaria in 722 BCE.</p>
             
-            <p>Central to Hosea's message is the tension between divine judgment and incredible mercy. Despite Israel's unfaithfulness (portrayed as adultery), God's חֶסֶד (ḥesed - steadfast love) remains constant. The book reveals not only Israel's covenant violations but also the divine character—a God torn between justice and compassion, whose ultimate goal is restoration.</p>
+            <p style="font-size: 1.1rem; line-height: 1.8; color: #444; margin-top: 1.5rem;">Central to Hosea's message is the tension between divine judgment and incredible mercy. Despite Israel's unfaithfulness (portrayed as adultery), God's חֶסֶד (ḥesed - steadfast love) remains constant. The book reveals not only Israel's covenant violations but also the divine character—a God torn between justice and compassion, whose ultimate goal is restoration.</p>
         </section>
 
         <!-- How to Use Section -->
@@ -695,7 +706,7 @@
     </div>
 
     <footer>
-        <p>&copy; 2024 Project Context. Empowering faith through understanding.</p>
+        <p style="position: relative; z-index: 1;">&copy; 2024 Project Context. Empowering faith through understanding.</p>
     </footer>
 
     <script>
@@ -713,15 +724,12 @@
             });
         });
 
-        // Add scroll effect to nav
+        // Add parallax effect to hero
         window.addEventListener('scroll', () => {
-            const nav = document.querySelector('nav');
-            if (window.scrollY > 100) {
-                nav.style.background = 'rgba(255, 255, 255, 0.98)';
-                nav.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.1)';
-            } else {
-                nav.style.background = 'rgba(255, 255, 255, 0.95)';
-                nav.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
             }
         });
 
@@ -730,6 +738,18 @@
             // This would be implemented if you add a mobile menu
             console.log('Mobile menu toggle - to be implemented');
         }
+
+        // Add hover effect to cards
+        const cards = document.querySelectorAll('.section-card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
     </script>
 </body>
 </html>
