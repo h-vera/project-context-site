@@ -5,230 +5,346 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hebrew Words - Hosea Study Guide</title>
     <style>
-        :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #8b4513;
-            --accent-color: #d4af37;
-            --bg-color: #f5f5f0;
-            --text-color: #333;
-            --card-bg: #ffffff;
-            --hebrew-font: 'SBL Hebrew', 'Ezra SIL', 'Times New Roman', serif;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            --primary-dark: #0a0a0a;
+            --primary-light: #ffffff;
+            --accent-blue: #00b4d8;
+            --accent-purple: #7209b7;
+            --text-gray: #666;
+            --bg-gray: #f5f5f5;
+            --secondary-color: #8b4513;
+            --accent-gold: #d4af37;
+            --hebrew-font: 'SBL Hebrew', 'Ezra SIL', 'Times New Roman', serif;
+        }
+
         body {
-            font-family: 'Georgia', serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--bg-color);
+            color: var(--primary-dark);
+            overflow-x: hidden;
+            background: var(--bg-gray);
         }
 
-        /* Header */
-        header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 2rem 0;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Navigation */
+        /* Navigation - Modern style matching main site */
         nav {
-            background-color: var(--primary-color);
-            padding: 1rem 0;
-            position: sticky;
+            position: fixed;
+            width: 100%;
             top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
         }
 
-        nav ul {
-            list-style: none;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 2rem;
+        .nav-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        nav a {
-            color: white;
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
             text-decoration: none;
+            color: var(--primary-dark);
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 500;
+            transition: all 0.3s ease;
             padding: 0.5rem 1rem;
-            border-radius: 4px;
+            border-radius: 8px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-dark);
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-links a.active {
+            color: var(--accent-blue);
+            background-color: rgba(0, 180, 216, 0.1);
+        }
+
+        .cta-button {
+            background: var(--primary-dark);
+            color: var(--primary-light);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
             transition: all 0.3s ease;
         }
 
-        nav a:hover {
-            background-color: rgba(255,255,255,0.1);
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
 
-        nav a.active {
-            background-color: var(--accent-color);
-            color: var(--primary-color);
+        /* Hero Section - Matching structure.html style */
+        .hero {
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            margin-top: 80px;
+            position: relative;
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            color: white;
+            overflow: hidden;
         }
 
-        /* Main Content */
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
+            animation: float 25s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            opacity: 0.9;
+            font-weight: 300;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Content Container */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 3rem 2rem;
         }
 
-        /* Section Styles */
-        section {
-            background-color: var(--card-bg);
-            padding: 2rem;
+        /* Modern Content Sections */
+        .content-section {
+            background: var(--primary-light);
+            padding: 3rem;
             margin-bottom: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        h2 {
-            color: var(--primary-color);
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-dark);
             margin-bottom: 1.5rem;
-            font-size: 2rem;
-            border-bottom: 3px solid var(--accent-color);
-            padding-bottom: 0.5rem;
-        }
-
-        h3 {
-            color: var(--secondary-color);
-            margin: 2rem 0 1rem;
-            font-size: 1.5rem;
-        }
-
-        h4 {
-            color: var(--primary-color);
-            margin: 1.5rem 0 1rem;
-            font-size: 1.2rem;
-        }
-
-        /* Hebrew Text Styling */
-        .hebrew {
-            font-family: var(--hebrew-font);
-            font-size: 1.5em;
-            direction: rtl;
-            unicode-bidi: embed;
-            color: var(--secondary-color);
-            background-color: #f9f9f9;
-            padding: 0.3rem 0.6rem;
-            border-radius: 4px;
-            display: inline-block;
-            margin: 0 0.5rem;
-            text-align: right;
-        }
-
-        .hebrew-large {
-            font-size: 2em;
-            display: block;
-            text-align: center;
-            margin: 1rem 0;
-            padding: 1rem;
-            background-color: #f5f5f5;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-        }
-
-        /* Tables */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1.5rem 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: var(--primary-color);
-            color: white;
-            font-weight: bold;
-        }
-
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-
-        td:first-child {
-            font-weight: bold;
-        }
-
-        /* Concept Cards */
-        .concept-card {
-            background-color: #f9f9f9;
-            border-left: 4px solid var(--accent-color);
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            border-radius: 4px;
-        }
-
-        .concept-card h4 {
-            margin-top: 0;
-            color: var(--secondary-color);
-        }
-
-        /* Word Study Cards */
-        .word-study {
-            background-color: #f5f5f5;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            border-radius: 8px;
-            border: 1px solid #e0e0e0;
-        }
-
-        .word-study h4 {
-            color: var(--secondary-color);
-            margin-top: 0;
             display: flex;
             align-items: center;
             gap: 1rem;
         }
 
-        /* Tabs */
+        .section-icon {
+            font-size: 3rem;
+            opacity: 0.8;
+        }
+
+        /* Hebrew Text Styling */
+        .hebrew {
+            font-family: var(--hebrew-font);
+            font-size: 1.4em;
+            direction: rtl;
+            unicode-bidi: embed;
+            color: var(--secondary-color);
+            background-color: rgba(139, 69, 19, 0.08);
+            padding: 0.3rem 0.6rem;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 0 0.5rem;
+            text-align: right;
+            transition: all 0.3s ease;
+        }
+
+        .hebrew:hover {
+            background-color: rgba(139, 69, 19, 0.15);
+            transform: scale(1.05);
+        }
+
+        .hebrew-large {
+            font-size: 2.5em;
+            display: block;
+            text-align: center;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px solid var(--accent-gold);
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.2);
+        }
+
+        /* Modern Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--primary-light);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        th {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #1a1a1a 100%);
+            color: white;
+            padding: 1.25rem;
+            text-align: left;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 1.25rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        tr {
+            transition: all 0.3s ease;
+        }
+
+        tr:hover {
+            background-color: rgba(0, 180, 216, 0.05);
+            transform: scale(1.01);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td:first-child {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        /* Modern Tabs */
         .tabs {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #ddd;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 0.5rem;
+            border-radius: 16px;
             flex-wrap: wrap;
         }
 
         .tab {
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1.5rem;
             cursor: pointer;
             border: none;
-            background: none;
+            background: transparent;
             font-size: 1rem;
+            font-weight: 500;
             transition: all 0.3s ease;
             font-family: inherit;
+            border-radius: 12px;
+            color: var(--text-gray);
+        }
+
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.5);
+            color: var(--primary-dark);
         }
 
         .tab.active {
-            border-bottom: 3px solid var(--accent-color);
-            color: var(--primary-color);
-            font-weight: bold;
+            background: var(--primary-light);
+            color: var(--accent-blue);
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .tab-content {
             display: none;
-            animation: fadeIn 0.3s ease-in;
+            animation: fadeIn 0.5s ease-in;
         }
 
         .tab-content.active {
@@ -236,48 +352,196 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Block Structure */
+        /* Modern Card Styles */
+        .concept-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 4px solid var(--accent-gold);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .concept-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .concept-card h4 {
+            margin-top: 0;
+            color: var(--secondary-color);
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        /* Word Study Cards - Modern Design */
+        .word-study {
+            background: var(--primary-light);
+            padding: 2.5rem;
+            margin: 2rem 0;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .word-study::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .word-study:hover::before {
+            transform: scaleX(1);
+        }
+
+        .word-study:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+        }
+
+        .word-study h4 {
+            color: var(--primary-dark);
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .word-study p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+            color: var(--text-gray);
+        }
+
+        .word-study p strong {
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        /* Block Section - Modern */
         .block-section {
-            background-color: #fafafa;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            border-radius: 8px;
-            border: 1px solid #e0e0e0;
+            background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+            padding: 2.5rem;
+            margin: 2rem 0;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .block-section:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
         }
 
         .block-section h4 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--accent-color);
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--accent-gold);
+            font-size: 1.5rem;
+            font-weight: 700;
         }
 
-        /* Verse References */
-        .verse-ref {
-            color: var(--primary-color);
-            font-style: italic;
-            font-size: 0.9em;
+        /* Lists */
+        ul, ol {
+            margin: 1rem 0;
+            padding-left: 2rem;
         }
 
-        /* Notes */
+        li {
+            margin-bottom: 0.75rem;
+            line-height: 1.8;
+        }
+
+        /* Note style */
         .note {
             font-style: italic;
-            color: #666;
+            color: var(--text-gray);
             font-size: 0.95em;
+            background: rgba(0, 180, 216, 0.08);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-blue);
+            margin: 1rem 0;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary-dark);
+            color: var(--primary-light);
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 0%, rgba(0, 180, 216, 0.1) 0%, transparent 70%);
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: var(--primary-dark);
+            margin: 5px 0;
+            transition: 0.3s;
+            border-radius: 3px;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
             .container {
-                padding: 10px;
+                padding: 2rem 1rem;
             }
             
-            section {
-                padding: 1rem;
+            .content-section {
+                padding: 2rem;
             }
             
             table {
@@ -285,52 +549,104 @@
             }
             
             th, td {
-                padding: 0.5rem;
+                padding: 0.75rem;
             }
             
             .hebrew {
-                font-size: 1.3em;
+                font-size: 1.2em;
+            }
+
+            .tabs {
+                gap: 0.25rem;
+            }
+
+            .tab {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .cta-button {
+                display: none;
             }
         }
 
-        /* Print Styles */
-        @media print {
-            nav {
-                display: none;
-            }
-            
-            section {
-                page-break-inside: avoid;
-            }
-            
-            table {
-                page-break-inside: avoid;
-            }
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Key Hebrew Words</h1>
-        <p>Essential Vocabulary for Understanding Hosea</p>
-    </header>
-
+    <!-- Navigation -->
     <nav>
-        <ul>
-            <li><a href="hosea.html">🏠 Home</a></li>
-            <li><a href="structure.html">📊 Structure</a></li>
-            <li><a href="hebrew-words.html" class="active">📜 Hebrew Words</a></li>
-            <li><a href="literary-analysis.html">✍️ Literary Analysis</a></li>
-            <li><a href="theology.html">🙏 Theology</a></li>
-            <li><a href="timeline.html">📅 Timeline</a></li>
-            <li><a href="nt-usage.html">✝️ NT Usage</a></li>
-            <li><a href="resources.html">📚 Resources</a></li>
-        </ul>
+        <div class="nav-container">
+            <a href="../../index.html" class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Project Context Logo -->
+                        <path d="M 25 15 L 10 15 L 10 85 L 25 85" 
+                              stroke="#0a0a0a" 
+                              stroke-width="4" 
+                              fill="none" 
+                              stroke-linecap="round"/>
+                        <path d="M 75 15 L 90 15 L 90 85 L 75 85" 
+                              stroke="#0a0a0a" 
+                              stroke-width="4" 
+                              fill="none" 
+                              stroke-linecap="round"/>
+                        <ellipse cx="50" cy="50" rx="25" ry="15" 
+                                 stroke="#0a0a0a" 
+                                 stroke-width="3" 
+                                 fill="none"/>
+                        <circle cx="50" cy="50" r="8" 
+                                fill="#00b4d8"/>
+                        <circle cx="50" cy="50" r="3" 
+                                fill="#0a0a0a"/>
+                    </svg>
+                </div>
+                <span class="logo-text">Project Context</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Studies</a></li>
+                <li><a href="#resources">Resources</a></li>
+                <li><a href="../../about.html">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <a href="literary-analysis.html" class="cta-button">Next: Literary Analysis</a>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
     </nav>
 
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Key Hebrew Words</h1>
+            <p class="hero-subtitle">Essential Vocabulary for Understanding Hosea's Message</p>
+        </div>
+    </section>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <div class="breadcrumb-container">
+            <a href="../../index.html">Home</a>
+            <span>›</span>
+            <a href="hosea.html">Hosea Study</a>
+            <span>›</span>
+            <span style="color: var(--primary-dark); font-weight: 600;">Hebrew Words</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
     <div class="container">
-        <section>
-            <h2>Hebrew Vocabulary Overview</h2>
+        <section class="content-section">
+            <h2 class="section-title">
+                <span class="section-icon">📖</span>
+                Hebrew Vocabulary Overview
+            </h2>
             
             <div class="concept-card">
                 <h4>About Hosea's Hebrew</h4>
@@ -344,14 +660,14 @@
             </div>
 
             <div id="by-theme" class="tab-content active">
-                <h3>Hebrew Words Organized by Theme</h3>
+                <h3 style="font-size: 2rem; font-weight: 700; margin-bottom: 2rem; color: var(--primary-dark);">Hebrew Words Organized by Theme</h3>
 
-                <h4>🤝 Covenant Relationship</h4>
+                <h4 style="font-size: 1.5rem; font-weight: 700; margin: 2rem 0 1rem; color: var(--secondary-color);">🤝 Covenant Relationship</h4>
                 <table>
                     <thead>
                         <tr>
-                            <th>Hebrew</th>
                             <th>Transliteration</th>
+                            <th>Hebrew</th>
                             <th>Meaning</th>
                             <th>Key Verses</th>
                             <th>Notes</th>
@@ -359,50 +675,50 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><span class="hebrew">חֶסֶד</span></td>
                             <td>ḥesed</td>
+                            <td><span class="hebrew">חֶסֶד</span></td>
                             <td>Steadfast love, covenant loyalty</td>
                             <td>2:19; 4:1; 6:6; 12:6</td>
                             <td>Central to Hosea's theology; what God desires above sacrifice</td>
                         </tr>
                         <tr>
-                            <td><span class="hebrew">אֱמוּנָה</span></td>
                             <td>ʾemûnāh</td>
+                            <td><span class="hebrew">אֱמוּנָה</span></td>
                             <td>Faithfulness, trustworthiness</td>
                             <td>2:20</td>
                             <td>Part of God's betrothal qualities</td>
                         </tr>
                         <tr>
-                            <td><span class="hebrew">יָדַע</span></td>
                             <td>yādaʿ</td>
+                            <td><span class="hebrew">יָדַע</span></td>
                             <td>To know (relationally)</td>
                             <td>2:20; 4:1,6; 5:4; 6:6; 13:4</td>
                             <td>More than intellectual; implies intimate covenant relationship</td>
                         </tr>
                         <tr>
-                            <td><span class="hebrew">בְּרִית</span></td>
                             <td>berît</td>
+                            <td><span class="hebrew">בְּרִית</span></td>
                             <td>Covenant</td>
                             <td>2:18; 6:7; 8:1</td>
                             <td>Israel transgressed the covenant like Adam</td>
                         </tr>
                         <tr>
-                            <td><span class="hebrew">צֶדֶק</span></td>
                             <td>ṣedeq</td>
+                            <td><span class="hebrew">צֶדֶק</span></td>
                             <td>Righteousness</td>
                             <td>2:19; 10:12</td>
                             <td>Paired with justice in betrothal formula</td>
                         </tr>
                         <tr>
-                            <td><span class="hebrew">מִשְׁפָּט</span></td>
                             <td>mišpāṭ</td>
+                            <td><span class="hebrew">מִשְׁפָּט</span></td>
                             <td>Justice, judgment</td>
                             <td>2:19; 5:1,11; 12:6</td>
                             <td>Both divine attribute and human obligation</td>
                         </tr>
                         <tr>
-                            <td><span class="hebrew">אֱמֶת</span></td>
                             <td>ʾemet</td>
+                            <td><span class="hebrew">אֱמֶת</span></td>
                             <td>Truth, faithfulness</td>
                             <td>4:1</td>
                             <td>Lacking in the land along with ḥesed</td>
@@ -410,12 +726,12 @@
                     </tbody>
                 </table>
 
-                <h4>💔 Sin and Judgment</h4>
+                <h4 style="font-size: 1.5rem; font-weight: 700; margin: 2rem 0 1rem; color: var(--secondary-color);">💔 Sin and Judgment</h4>
                 <table>
                     <thead>
                         <tr>
-                            <th>Hebrew</th>
                             <th>Transliteration</th>
+                            <th>Hebrew</th>
                             <th>Meaning</th>
                             <th>Key Verses</th>
                             <th>Notes</th>
@@ -423,43 +739,43 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><span class="hebrew">זָנָה</span></td>
                             <td>zānāh</td>
+                            <td><span class="hebrew">זָנָה</span></td>
                             <td>To prostitute, commit adultery</td>
                             <td>1:2; 2:5; 4:10,12,15; 5:3</td>
                             <td>Central metaphor for spiritual unfaithfulness</td>
                         </tr>
                         <tr>
-                            <td><span class="hebrew">עָוֹן</span></td>
                             <td>ʿāwōn</td>
+                            <td><span class="hebrew">עָוֹן</span></td>
                             <td>Iniquity, guilt</td>
                             <td>4:8; 5:5; 7:1; 8:13; 9:7,9</td>
                             <td>Emphasizes the weight of accumulated sin</td>
                         </tr>
                         <tr>
-                            <td><span class="hebrew">חֵטְא</span></td>
                             <td>ḥēṭʾ</td>
+                            <td><span class="hebrew">חֵטְא</span></td>
                             <td>Sin, missing the mark</td>
                             <td>4:7; 8:11; 9:9; 10:8; 13:12</td>
                             <td>Often paired with punishment themes</td>
                         </tr>
                         <tr>
-                            <td><span class="hebrew">פֶּשַׁע</span></td>
                             <td>pešaʿ</td>
+                            <td><span class="hebrew">פֶּשַׁע</span></td>
                             <td>Transgression, rebellion</td>
                             <td>7:13; 8:1; 14:9</td>
                             <td>Willful covenant breaking</td>
                         </tr>
                         <tr>
-                            <td><span class="hebrew">רוּחַ זְנוּנִים</span></td>
                             <td>rûaḥ zenûnîm</td>
+                            <td><span class="hebrew">רוּחַ זְנוּנִים</span></td>
                             <td>Spirit of prostitution/whoredom</td>
                             <td>4:12; 5:4</td>
                             <td>Internal force driving Israel's unfaithfulness</td>
                         </tr>
                         <tr>
-                            <td><span class="hebrew">רִיב</span></td>
                             <td>rîḇ</td>
+                            <td><span class="hebrew">רִיב</span></td>
                             <td>Lawsuit, controversy</td>
                             <td>2:2; 4:1; 12:2</td>
                             <td>Legal metaphor for God's case against Israel</td>
@@ -467,12 +783,12 @@
                     </tbody>
                 </table>
 
-                <h4>🌱 Restoration and Hope</h4>
+                <h4 style="font-size: 1.5rem; font-weight: 700; margin: 2rem 0 1rem; color: var(--secondary-color);">🌱 Restoration and Hope</h4>
                 <table>
                     <thead>
                         <tr>
-                            <th>Hebrew</th>
                             <th>Transliteration</th>
+                            <th>Hebrew</th>
                             <th>Meaning</th>
                             <th>Key Verses</th>
                             <th>Notes</th>
@@ -480,43 +796,43 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><span class="hebrew">שׁוּב</span></td>
                             <td>šûḇ</td>
+                            <td><span class="hebrew">שׁוּב</span></td>
                             <td>To return, repent</td>
                             <td>3:5; 6:1; 7:10; 12:6; 14:1-2</td>
                             <td>Key concept for restoration; both human action and divine enabling</td>
                         </tr>
                         <tr>
-                            <td><span class="hebrew">רַחֲמִים</span></td>
                             <td>raḥămîm</td>
+                            <td><span class="hebrew">רַחֲמִים</span></td>
                             <td>Compassion, mercy</td>
                             <td>1:6-7; 2:1,4,19,23; 14:3</td>
                             <td>From רֶחֶם (womb); maternal compassion</td>
                         </tr>
                         <tr>
-                            <td><span class="hebrew">רָפָא</span></td>
                             <td>rāpāʾ</td>
+                            <td><span class="hebrew">רָפָא</span></td>
                             <td>To heal</td>
                             <td>5:13; 6:1; 7:1; 11:3; 14:4</td>
                             <td>God as healer of apostasy and wounds</td>
                         </tr>
                         <tr>
-                            <td><span class="hebrew">אָהַב</span></td>
                             <td>ʾāhaḇ</td>
+                            <td><span class="hebrew">אָהַב</span></td>
                             <td>To love</td>
                             <td>3:1; 11:1,4; 14:4</td>
                             <td>Divine love persists despite betrayal</td>
                         </tr>
                         <tr>
-                            <td><span class="hebrew">פָּדָה</span></td>
                             <td>pādāh</td>
+                            <td><span class="hebrew">פָּדָה</span></td>
                             <td>To ransom, redeem</td>
                             <td>7:13; 13:14</td>
                             <td>God's desire to redeem despite rebellion</td>
                         </tr>
                         <tr>
-                            <td><span class="hebrew">אָרַשׂ</span></td>
                             <td>ʾāraś</td>
+                            <td><span class="hebrew">אָרַשׂ</span></td>
                             <td>To betroth</td>
                             <td>2:19-20 (3x)</td>
                             <td>Triple repetition emphasizes permanence</td>
@@ -524,12 +840,12 @@
                     </tbody>
                 </table>
 
-                <h4>👨‍👩‍👧‍👦 Relational Metaphors</h4>
+                <h4 style="font-size: 1.5rem; font-weight: 700; margin: 2rem 0 1rem; color: var(--secondary-color);">👨‍👩‍👧‍👦 Relational Metaphors</h4>
                 <table>
                     <thead>
                         <tr>
-                            <th>Hebrew</th>
                             <th>Transliteration</th>
+                            <th>Hebrew</th>
                             <th>Meaning</th>
                             <th>Key Verses</th>
                             <th>Notes</th>
@@ -537,36 +853,36 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><span class="hebrew">אִישׁ / אִישִׁי</span></td>
                             <td>ʾîš / ʾîšî</td>
+                            <td><span class="hebrew">אִישׁ / אִישִׁי</span></td>
                             <td>Man / My husband</td>
                             <td>2:7,16</td>
                             <td>Contrasted with בַּעַל (Baal/master)</td>
                         </tr>
                         <tr>
-                            <td><span class="hebrew">בֵּן / בְּנִי</span></td>
                             <td>bēn / benî</td>
+                            <td><span class="hebrew">בֵּן / בְּנִי</span></td>
                             <td>Son / My son</td>
                             <td>1:10; 11:1</td>
                             <td>Israel as God's son, especially in ch. 11</td>
                         </tr>
                         <tr>
-                            <td><span class="hebrew">עַם / עַמִּי</span></td>
                             <td>ʿam / ʿammî</td>
+                            <td><span class="hebrew">עַם / עַמִּי</span></td>
                             <td>People / My people</td>
                             <td>1:9; 2:1,23</td>
                             <td>Covenant formula reversed and restored</td>
                         </tr>
                         <tr>
-                            <td><span class="hebrew">אֵם</span></td>
                             <td>ʾēm</td>
+                            <td><span class="hebrew">אֵם</span></td>
                             <td>Mother</td>
                             <td>2:2,5</td>
                             <td>Corporate Israel as unfaithful mother</td>
                         </tr>
                         <tr>
-                            <td><span class="hebrew">מְאַהֵב</span></td>
                             <td>meʾahēḇ</td>
+                            <td><span class="hebrew">מְאַהֵב</span></td>
                             <td>Lover (illicit)</td>
                             <td>2:5,7,10,12,13</td>
                             <td>The Baals as Israel's paramours</td>
@@ -576,7 +892,7 @@
             </div>
 
             <div id="by-block" class="tab-content">
-                <h3>Hebrew Words by Text Block</h3>
+                <h3 style="font-size: 2rem; font-weight: 700; margin-bottom: 2rem; color: var(--primary-dark);">Hebrew Words by Text Block</h3>
 
                 <div class="block-section">
                     <h4>🔶 Block I: Hosea 1–3 — Marriage Allegory & Covenantal Embodiment</h4>
@@ -771,7 +1087,7 @@
             </div>
 
             <div id="theological" class="tab-content">
-                <h3>Major Theological Terms</h3>
+                <h3 style="font-size: 2rem; font-weight: 700; margin-bottom: 2rem; color: var(--primary-dark);">Major Theological Terms</h3>
 
                 <div class="word-study">
                     <h4><span class="hebrew-large">חֶסֶד</span> Chesed - Steadfast Love</h4>
@@ -840,8 +1156,11 @@
             </div>
         </section>
 
-        <section>
-            <h2>Study Aids</h2>
+        <section class="content-section">
+            <h2 class="section-title">
+                <span class="section-icon">💡</span>
+                Study Aids
+            </h2>
             
             <div class="concept-card">
                 <h4>Tips for Studying Hebrew in Hosea</h4>
@@ -868,6 +1187,10 @@
         </section>
     </div>
 
+    <footer>
+        <p style="position: relative; z-index: 1;">&copy; 2024 Project Context. Empowering faith through understanding.</p>
+    </footer>
+
     <script>
         function showTab(tabName) {
             // Hide all tab contents
@@ -887,6 +1210,38 @@
             
             // Add active class to clicked tab
             event.target.classList.add('active');
+        }
+
+        // Add smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add scroll effect to nav
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.style.background = 'rgba(255, 255, 255, 0.98)';
+                nav.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.1)';
+            } else {
+                nav.style.background = 'rgba(255, 255, 255, 0.95)';
+                nav.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            }
+        });
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            // This would be implemented if you add a mobile menu
+            console.log('Mobile menu toggle - to be implemented');
         }
     </script>
 </body>
