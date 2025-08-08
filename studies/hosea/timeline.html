@@ -5,13 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historical Timeline - Hosea Study Guide</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
-            --primary-color: #2c3e50;
+            --primary-dark: #0a0a0a;
+            --primary-light: #ffffff;
+            --accent-blue: #00b4d8;
+            --accent-purple: #7209b7;
+            --accent-gold: #d4af37;
+            --accent-green: #10b981;
+            --text-gray: #666;
+            --bg-gray: #f5f5f5;
             --secondary-color: #8b4513;
-            --accent-color: #d4af37;
-            --bg-color: #f5f5f0;
-            --text-color: #333;
-            --card-bg: #ffffff;
             --israel-color: #3498db;
             --judah-color: #e74c3c;
             --assyria-color: #9b59b6;
@@ -19,202 +28,373 @@
             --hosea-color: #f39c12;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Georgia', serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--bg-color);
+            color: var(--primary-dark);
+            background: var(--bg-gray);
+            overflow-x: hidden;
         }
 
-        /* Header */
-        header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 2rem 0;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Navigation */
+        /* Navigation - Modern style */
         nav {
-            background-color: var(--primary-color);
-            padding: 1rem 0;
-            position: sticky;
+            position: fixed;
+            width: 100%;
             top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
         }
 
-        nav ul {
-            list-style: none;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 2rem;
+        .nav-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        nav a {
-            color: white;
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
             text-decoration: none;
+            color: var(--primary-dark);
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 500;
+            transition: all 0.3s ease;
             padding: 0.5rem 1rem;
-            border-radius: 4px;
+            border-radius: 8px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-dark);
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-links a.active {
+            color: var(--accent-blue);
+            background-color: rgba(0, 180, 216, 0.1);
+        }
+
+        .cta-button {
+            background: var(--primary-dark);
+            color: var(--primary-light);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
             transition: all 0.3s ease;
         }
 
-        nav a:hover {
-            background-color: rgba(255,255,255,0.1);
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
 
-        nav a.active {
-            background-color: var(--accent-color);
-            color: var(--primary-color);
+        /* Hero Section - Purple gradient matching theology pages */
+        .hero {
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            margin-top: 80px;
+            position: relative;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            overflow: hidden;
         }
 
-        /* Main Content */
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 80%, rgba(212,175,55,0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(114,9,183,0.1) 0%, transparent 50%);
+            animation: float 30s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            z-index: 1;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.8s ease-out;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            opacity: 0.9;
+            font-weight: 300;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Main Container */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 4rem 2rem;
         }
 
-        /* Section Styles */
-        section {
-            background-color: var(--card-bg);
-            padding: 2rem;
+        /* Modern Content Sections */
+        .content-section {
+            background: var(--primary-light);
+            padding: 3rem;
             margin-bottom: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeIn 0.8s ease-out;
         }
 
-        h2 {
-            color: var(--primary-color);
-            margin-bottom: 1.5rem;
-            font-size: 2rem;
-            border-bottom: 3px solid var(--accent-color);
-            padding-bottom: 0.5rem;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid transparent;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+            background-clip: padding-box;
+            border-image: linear-gradient(90deg, var(--accent-purple), var(--accent-blue)) 1;
+        }
+
+        .section-icon {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         h3 {
             color: var(--secondary-color);
             margin: 2rem 0 1rem;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
+            font-weight: 700;
         }
 
-        /* Timeline Visualization */
-        .timeline-container {
-            overflow-x: auto;
-            padding: 2rem 0;
+        /* Concept Cards */
+        .concept-card {
+            background: linear-gradient(135deg, rgba(114, 9, 183, 0.05) 0%, rgba(0, 180, 216, 0.05) 100%);
+            padding: 2rem;
+            border-radius: 16px;
             margin: 2rem 0;
+            border-left: 4px solid;
+            border-image: linear-gradient(180deg, var(--accent-purple), var(--accent-blue)) 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .concept-card h4 {
+            color: var(--secondary-color);
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        /* Timeline Container - Fixed */
+        .timeline-wrapper {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        .timeline-scroll {
+            overflow-x: auto;
+            overflow-y: visible;
+            padding-bottom: 20px;
         }
 
         .timeline-chart {
             position: relative;
-            min-width: 1000px;
-            height: 600px;
+            min-width: 1200px;
+            height: 700px;
             background: linear-gradient(to bottom, 
-                rgba(0,0,0,0.05) 0%, 
-                rgba(0,0,0,0.05) 1px, 
+                rgba(0,0,0,0.03) 0%, 
+                rgba(0,0,0,0.03) 1px, 
                 transparent 1px, 
                 transparent 50px);
             background-size: 100% 50px;
-        }
-
-        /* Year markers */
-        .year-axis {
-            position: absolute;
-            bottom: 0;
-            left: 60px;
-            right: 0;
-            height: 40px;
-            border-top: 2px solid #333;
-        }
-
-        .year-marker {
-            position: absolute;
-            bottom: 30px;
-            transform: translateX(-50%);
-            font-size: 0.9rem;
-            font-weight: bold;
-        }
-
-        .year-tick {
-            position: absolute;
-            bottom: 40px;
-            width: 1px;
-            height: 10px;
-            background-color: #333;
+            margin-left: 80px;
         }
 
         /* Timeline bars */
         .timeline-bar {
             position: absolute;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
+            justify-content: center;
             padding: 0.5rem 1rem;
             color: white;
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
             overflow: hidden;
+            white-space: nowrap;
         }
 
         .timeline-bar:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
             z-index: 10;
         }
 
         .timeline-bar.israel {
-            background-color: var(--israel-color);
+            background: linear-gradient(135deg, var(--israel-color), #2980b9);
         }
 
         .timeline-bar.judah {
-            background-color: var(--judah-color);
+            background: linear-gradient(135deg, var(--judah-color), #c0392b);
         }
 
         .timeline-bar.prophet {
-            background-color: var(--prophet-color);
+            background: linear-gradient(135deg, var(--prophet-color), #229954);
         }
 
         .timeline-bar.hosea {
-            background-color: var(--hosea-color);
-            border: 3px solid var(--accent-color);
+            background: linear-gradient(135deg, var(--hosea-color), #d68910);
+            border: 3px solid var(--accent-gold);
+            font-size: 1.1rem;
+            font-weight: 700;
         }
 
-        .timeline-bar.assyria {
-            background-color: var(--assyria-color);
+        /* Year axis */
+        .year-axis {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            border-top: 3px solid var(--primary-dark);
+            background: linear-gradient(to top, rgba(0,0,0,0.05), transparent);
         }
 
-        /* Labels */
+        .year-marker {
+            position: absolute;
+            bottom: 10px;
+            transform: translateX(-50%);
+            font-weight: 700;
+            color: var(--primary-dark);
+            background: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        /* Timeline labels */
         .timeline-labels {
             position: absolute;
-            left: 0;
+            left: -80px;
             top: 0;
-            width: 60px;
+            width: 70px;
         }
 
         .timeline-label {
             position: absolute;
-            right: 10px;
-            font-weight: bold;
-            font-size: 0.85rem;
-            white-space: nowrap;
+            right: 0;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+            background: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         /* Legend */
@@ -230,15 +410,26 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: white;
+            border-radius: 50px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .legend-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
         }
 
         .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        /* Event Cards */
+        /* Event Grid */
         .event-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -247,126 +438,272 @@
         }
 
         .event-card {
-            background-color: #f9f9f9;
-            padding: 1.5rem;
-            border-radius: 8px;
-            border-left: 4px solid var(--accent-color);
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 2rem;
+            border-radius: 16px;
+            border-left: 4px solid;
+            border-image: linear-gradient(180deg, var(--accent-purple), var(--accent-blue)) 1;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .event-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
         }
 
         .event-card h4 {
-            color: var(--primary-color);
+            color: var(--primary-dark);
             margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+            font-weight: 700;
         }
 
         .event-date {
-            color: var(--secondary-color);
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Info box */
-        .info-box {
-            position: absolute;
-            background-color: rgba(255, 255, 255, 0.95);
-            border: 2px solid var(--primary-color);
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            z-index: 100;
-            max-width: 300px;
-            display: none;
-        }
-
-        .info-box h4 {
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-        }
-
-        .info-box p {
+            color: var(--accent-purple);
+            font-weight: 700;
             margin-bottom: 0.5rem;
             font-size: 0.9rem;
         }
 
-        /* Tables */
+        /* Modern Table */
         table {
             width: 100%;
-            border-collapse: collapse;
-            margin: 1.5rem 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 2rem 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         }
 
         th {
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
             color: white;
-            font-weight: bold;
+            padding: 1.25rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
         }
 
-        tr:hover {
-            background-color: #f5f5f5;
+        td {
+            padding: 1.25rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            background: white;
         }
 
-        /* Concept Cards */
-        .concept-card {
-            background-color: #f9f9f9;
-            border-left: 4px solid var(--accent-color);
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            border-radius: 4px;
+        tr:hover td {
+            background: linear-gradient(135deg, rgba(114, 9, 183, 0.02), rgba(0, 180, 216, 0.02));
         }
 
-        .concept-card h4 {
-            margin-top: 0;
-            color: var(--secondary-color);
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Chaos Period Visual */
+        .chaos-visual {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            padding: 2.5rem;
+            border-radius: 16px;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .period-row {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 1.5rem;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .period-label {
+            text-align: right;
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-size: 1.1rem;
+        }
+
+        .king-boxes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .king-box {
+            background: linear-gradient(135deg, var(--israel-color), #2980b9);
+            padding: 1rem;
+            border-radius: 8px;
+            color: white;
+            text-align: center;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .king-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .king-box strong {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary-dark);
+            color: var(--primary-light);
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 0%, rgba(243, 156, 18, 0.1) 0%, transparent 70%);
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: var(--primary-dark);
+            margin: 5px 0;
+            transition: 0.3s;
+            border-radius: 3px;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
+            .nav-links, .cta-button {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
             .container {
-                padding: 10px;
+                padding: 2rem 1rem;
             }
-            
-            section {
-                padding: 1rem;
+
+            .content-section {
+                padding: 1.5rem;
             }
-            
-            .timeline-container {
-                padding: 1rem 0;
-            }
-            
+
             .event-grid {
                 grid-template-columns: 1fr;
             }
+
+            .period-row {
+                grid-template-columns: 1fr;
+            }
+
+            .period-label {
+                text-align: left;
+            }
+
+            .king-boxes {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            th, td {
+                padding: 0.75rem;
+            }
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Historical Timeline</h1>
-        <p>The Kings, Prophets, and Events of Hosea's Era</p>
-    </header>
-
+    <!-- Navigation -->
     <nav>
-        <ul>
-            <li><a href="hosea.html">🏠 Home</a></li>
-            <li><a href="structure.html">📊 Structure</a></li>
-            <li><a href="hebrew-words.html">📜 Hebrew Words</a></li>
-            <li><a href="literary-analysis.html">✍️ Literary Analysis</a></li>
-            <li><a href="theology.html">🙏 Theology</a></li>
-            <li><a href="timeline.html" class="active">📅 Timeline</a></li>
-            <li><a href="nt-usage.html">✝️ NT Usage</a></li>
-            <li><a href="resources.html">📚 Resources</a></li>
-        </ul>
+        <div class="nav-container">
+            <a href="../../index.html" class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 25 15 L 10 15 L 10 85 L 25 85" 
+                              stroke="#0a0a0a" 
+                              stroke-width="4" 
+                              fill="none" 
+                              stroke-linecap="round"/>
+                        <path d="M 75 15 L 90 15 L 90 85 L 75 85" 
+                              stroke="#0a0a0a" 
+                              stroke-width="4" 
+                              fill="none" 
+                              stroke-linecap="round"/>
+                        <ellipse cx="50" cy="50" rx="25" ry="15" 
+                                 stroke="#0a0a0a" 
+                                 stroke-width="3" 
+                                 fill="none"/>
+                        <circle cx="50" cy="50" r="8" 
+                                fill="#00b4d8"/>
+                        <circle cx="50" cy="50" r="3" 
+                                fill="#0a0a0a"/>
+                    </svg>
+                </div>
+                <span class="logo-text">Project Context</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Studies</a></li>
+                <li><a href="#resources">Resources</a></li>
+                <li><a href="../../about.html">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <a href="hosea.html" class="cta-button">Back to Hosea</a>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
     </nav>
 
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Historical Timeline</h1>
+            <p class="hero-subtitle">The Kings, Prophets, and Events of Hosea's Era (750-720 BCE)</p>
+        </div>
+    </section>
+
     <div class="container">
-        <section>
-            <h2>Visual Timeline of Hosea's Ministry</h2>
+        <!-- Visual Timeline Section -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <span class="section-icon">📅</span>
+                Visual Timeline of Hosea's Ministry
+            </h2>
             
             <div class="concept-card">
                 <h4>Historical Context</h4>
@@ -375,203 +712,211 @@
 
             <div class="legend">
                 <div class="legend-item">
-                    <div class="legend-color" style="background-color: var(--israel-color)"></div>
+                    <div class="legend-color" style="background: linear-gradient(135deg, var(--israel-color), #2980b9)"></div>
                     <span>Northern Kingdom (Israel)</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background-color: var(--judah-color)"></div>
+                    <div class="legend-color" style="background: linear-gradient(135deg, var(--judah-color), #c0392b)"></div>
                     <span>Southern Kingdom (Judah)</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background-color: var(--hosea-color); border: 2px solid var(--accent-color)"></div>
+                    <div class="legend-color" style="background: linear-gradient(135deg, var(--hosea-color), #d68910); border: 2px solid var(--accent-gold)"></div>
                     <span>Hosea's Ministry</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background-color: var(--prophet-color)"></div>
+                    <div class="legend-color" style="background: linear-gradient(135deg, var(--prophet-color), #229954)"></div>
                     <span>Other Prophets</span>
                 </div>
             </div>
 
-            <div class="timeline-container">
-                <div class="timeline-chart" style="height: 800px;">
-                    <!-- Year axis -->
-                    <div class="year-axis"></div>
-                    
-                    <!-- Year markers - focused on Hosea's era -->
-                    <div class="year-marker" style="left: 5%">760 BCE</div>
-                    <div class="year-tick" style="left: 5%"></div>
-                    
-                    <div class="year-marker" style="left: 20%">750 BCE</div>
-                    <div class="year-tick" style="left: 20%"></div>
-                    
-                    <div class="year-marker" style="left: 35%">740 BCE</div>
-                    <div class="year-tick" style="left: 35%"></div>
-                    
-                    <div class="year-marker" style="left: 50%">730 BCE</div>
-                    <div class="year-tick" style="left: 50%"></div>
-                    
-                    <div class="year-marker" style="left: 65%">720 BCE</div>
-                    <div class="year-tick" style="left: 65%"></div>
-                    
-                    <div class="year-marker" style="left: 80%">710 BCE</div>
-                    <div class="year-tick" style="left: 80%"></div>
-                    
-                    <div class="year-marker" style="left: 95%">700 BCE</div>
-                    <div class="year-tick" style="left: 95%"></div>
+            <div class="timeline-wrapper">
+                <div class="timeline-scroll">
+                    <div class="timeline-chart">
+                        <!-- Year axis -->
+                        <div class="year-axis"></div>
+                        
+                        <!-- Year markers -->
+                        <div class="year-marker" style="left: 0%">793 BCE</div>
+                        <div class="year-marker" style="left: 10%">780 BCE</div>
+                        <div class="year-marker" style="left: 20%">760 BCE</div>
+                        <div class="year-marker" style="left: 30%">750 BCE</div>
+                        <div class="year-marker" style="left: 40%">740 BCE</div>
+                        <div class="year-marker" style="left: 50%">730 BCE</div>
+                        <div class="year-marker" style="left: 60%">720 BCE</div>
+                        <div class="year-marker" style="left: 70%">710 BCE</div>
+                        <div class="year-marker" style="left: 80%">700 BCE</div>
+                        <div class="year-marker" style="left: 90%">690 BCE</div>
+                        <div class="year-marker" style="left: 100%">680 BCE</div>
 
-                    <!-- Timeline labels -->
-                    <div class="timeline-labels">
-                        <div class="timeline-label" style="top: 60px;">Israel</div>
-                        <div class="timeline-label" style="top: 300px;">Judah</div>
-                        <div class="timeline-label" style="top: 420px;">Prophets</div>
-                        <div class="timeline-label" style="top: 580px;">HOSEA</div>
-                    </div>
+                        <!-- Timeline labels -->
+                        <div class="timeline-labels">
+                            <div class="timeline-label" style="top: 60px;">Israel</div>
+                            <div class="timeline-label" style="top: 200px;">Judah</div>
+                            <div class="timeline-label" style="top: 340px;">Prophets</div>
+                            <div class="timeline-label" style="top: 500px;">HOSEA</div>
+                        </div>
 
-                    <!-- Northern Kingdom rulers - staggered vertically to avoid overlap -->
-                    <!-- Jeroboam II: 793-753 BCE -->
-                    <div class="timeline-bar israel" style="left: 60px; top: 50px; width: 130px; height: 40px;">
-                        Jeroboam II (793-753)
-                    </div>
-                    
-                    <!-- Year 753: Multiple quick successions - stack them -->
-                    <div class="timeline-bar israel" style="left: 190px; top: 50px; width: 40px; height: 30px; font-size: 0.8rem;">
-                        Zechariah (6mo)
-                    </div>
-                    
-                    <div class="timeline-bar israel" style="left: 190px; top: 85px; width: 40px; height: 30px; font-size: 0.8rem;">
-                        Shallum (1mo)
-                    </div>
-                    
-                    <!-- Menahem: 752-742 BCE -->
-                    <div class="timeline-bar israel" style="left: 235px; top: 50px; width: 130px; height: 40px;">
-                        Menahem (752-742)
-                    </div>
-                    
-                    <!-- Pekahiah: 742-740 BCE -->
-                    <div class="timeline-bar israel" style="left: 365px; top: 100px; width: 35px; height: 40px; font-size: 0.9rem;">
-                        Pekahiah (742-740)
-                    </div>
-                    
-                    <!-- Pekah: 740-732 BCE -->
-                    <div class="timeline-bar israel" style="left: 400px; top: 50px; width: 115px; height: 40px;">
-                        Pekah (740-732)
-                    </div>
-                    
-                    <!-- Hoshea: 732-722 BCE -->
-                    <div class="timeline-bar israel" style="left: 515px; top: 50px; width: 130px; height: 40px;">
-                        Hoshea (732-722)
-                    </div>
-                    
-                    <!-- Fall of Samaria marker -->
-                    <div style="position: absolute; left: 645px; top: 40px; width: 2px; height: 60px; background-color: red;"></div>
-                    <div style="position: absolute; left: 650px; top: 50px; color: red; font-weight: bold; font-size: 0.9rem;">Fall of<br>Samaria<br>722 BCE</div>
+                        <!-- ISRAEL - Northern Kingdom Rulers -->
+                        <!-- Jeroboam II: 793-753 BCE -->
+                        <div class="timeline-bar israel" style="left: 0%; top: 50px; width: 33%; height: 45px;">
+                            Jeroboam II (793-753)
+                        </div>
+                        
+                        <!-- Quick successions in 753-752 -->
+                        <div class="timeline-bar israel" style="left: 33%; top: 50px; width: 2%; height: 40px; font-size: 0.7rem;">
+                            Zech.
+                        </div>
+                        <div class="timeline-bar israel" style="left: 33%; top: 95px; width: 2%; height: 40px; font-size: 0.7rem;">
+                            Shall.
+                        </div>
+                        
+                        <!-- Menahem: 752-742 BCE -->
+                        <div class="timeline-bar israel" style="left: 35%; top: 50px; width: 9%; height: 45px;">
+                            Menahem (752-742)
+                        </div>
+                        
+                        <!-- Pekahiah: 742-740 BCE -->
+                        <div class="timeline-bar israel" style="left: 44%; top: 50px; width: 2%; height: 45px; font-size: 0.8rem;">
+                            Pekahiah
+                        </div>
+                        
+                        <!-- Pekah: 740-732 BCE -->
+                        <div class="timeline-bar israel" style="left: 46%; top: 50px; width: 7%; height: 45px;">
+                            Pekah (740-732)
+                        </div>
+                        
+                        <!-- Hoshea: 732-722 BCE -->
+                        <div class="timeline-bar israel" style="left: 53%; top: 50px; width: 9%; height: 45px;">
+                            Hoshea (732-722)
+                        </div>
+                        
+                        <!-- Fall of Samaria marker -->
+                        <div style="position: absolute; left: 62%; top: 40px; width: 3px; height: 110px; background: linear-gradient(to bottom, red, rgba(255,0,0,0.3));"></div>
+                        <div style="position: absolute; left: 63%; top: 60px; color: red; font-weight: bold; font-size: 0.9rem;">
+                            Fall of<br>Samaria<br>722 BCE
+                        </div>
 
-                    <!-- Southern Kingdom rulers -->
-                    <!-- Uzziah: 792-740 BCE -->
-                    <div class="timeline-bar judah" style="left: 60px; top: 290px; width: 340px; height: 40px;">
-                        Uzziah/Azariah (792-740)
-                    </div>
-                    
-                    <!-- Jotham: 750-732 BCE (co-regent then sole) -->
-                    <div class="timeline-bar judah" style="left: 190px; top: 340px; width: 325px; height: 40px;">
-                        Jotham (750-732) - co-regent then king
-                    </div>
-                    
-                    <!-- Ahaz: 735-715 BCE -->
-                    <div class="timeline-bar judah" style="left: 450px; top: 290px; width: 280px; height: 40px;">
-                        Ahaz (735-715)
-                    </div>
-                    
-                    <!-- Hezekiah: 715-686 BCE -->
-                    <div class="timeline-bar judah" style="left: 730px; top: 290px; width: 200px; height: 40px;">
-                        Hezekiah (715-686)
-                    </div>
+                        <!-- JUDAH - Southern Kingdom Rulers -->
+                        <!-- Uzziah: 792-740 BCE -->
+                        <div class="timeline-bar judah" style="left: 0%; top: 190px; width: 46%; height: 45px;">
+                            Uzziah/Azariah (792-740)
+                        </div>
+                        
+                        <!-- Jotham: 750-732 BCE -->
+                        <div class="timeline-bar judah" style="left: 30%; top: 240px; width: 23%; height: 45px;">
+                            Jotham (750-732)
+                        </div>
+                        
+                        <!-- Ahaz: 735-715 BCE -->
+                        <div class="timeline-bar judah" style="left: 48%; top: 190px; width: 23%; height: 45px;">
+                            Ahaz (735-715)
+                        </div>
+                        
+                        <!-- Hezekiah: 715-686 BCE -->
+                        <div class="timeline-bar judah" style="left: 71%; top: 190px; width: 29%; height: 45px;">
+                            Hezekiah (715-686)
+                        </div>
 
-                    <!-- Other Prophets -->
-                    <!-- Amos: 760-750 BCE -->
-                    <div class="timeline-bar prophet" style="left: 60px; top: 410px; width: 130px; height: 40px;">
-                        Amos (760-750)
-                    </div>
-                    
-                    <!-- Isaiah: 740-681 BCE -->
-                    <div class="timeline-bar prophet" style="left: 400px; top: 410px; width: 500px; height: 40px;">
-                        Isaiah (740-681)
-                    </div>
-                    
-                    <!-- Micah: 735-700 BCE -->
-                    <div class="timeline-bar prophet" style="left: 450px; top: 460px; width: 430px; height: 40px;">
-                        Micah (735-700)
-                    </div>
+                        <!-- PROPHETS -->
+                        <!-- Amos: 760-750 BCE -->
+                        <div class="timeline-bar prophet" style="left: 20%; top: 330px; width: 10%; height: 45px;">
+                            Amos (760-750)
+                        </div>
+                        
+                        <!-- Isaiah: 740-681 BCE -->
+                        <div class="timeline-bar prophet" style="left: 40%; top: 330px; width: 60%; height: 45px;">
+                            Isaiah (740-681)
+                        </div>
+                        
+                        <!-- Micah: 735-700 BCE -->
+                        <div class="timeline-bar prophet" style="left: 48%; top: 380px; width: 42%; height: 45px;">
+                            Micah (735-700)
+                        </div>
 
-                    <!-- Hosea's Ministry - make it prominent -->
-                    <div class="timeline-bar hosea" style="left: 190px; top: 570px; width: 455px; height: 60px; font-size: 1.2rem;">
-                        HOSEA'S MINISTRY (750-720 BCE)
+                        <!-- HOSEA'S MINISTRY - Prominent -->
+                        <div class="timeline-bar hosea" style="left: 30%; top: 490px; width: 32%; height: 55px;">
+                            HOSEA'S MINISTRY (750-720 BCE)
+                        </div>
                     </div>
-                    
-                    <!-- Key events markers -->
-                    <div style="position: absolute; left: 190px; top: 200px; width: 1px; height: 370px; background-color: #999; opacity: 0.5;"></div>
-                    <div style="position: absolute; left: 195px; top: 210px; font-size: 0.8rem; color: #666;">Hosea begins</div>
-                    
-                    <div style="position: absolute; left: 450px; top: 200px; width: 1px; height: 370px; background-color: #999; opacity: 0.5;"></div>
-                    <div style="position: absolute; left: 455px; top: 210px; font-size: 0.8rem; color: #666;">Syro-Ephraimite War</div>
                 </div>
             </div>
+        </section>
+
+        <!-- Chaos Period Visual -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <span class="section-icon">⚡</span>
+                The Chaotic Years (753-722 BCE)
+            </h2>
             
-            <!-- Add a second visual showing just the chaos period -->
-            <h3 style="margin-top: 3rem;">Focus: The Chaotic Years (753-722 BCE)</h3>
             <div class="concept-card">
                 <h4>Political Instability During Hosea's Ministry</h4>
                 <p>After Jeroboam II's death in 753 BCE, Israel experienced unprecedented political chaos. In just 20 years, six different kings ruled, with four being assassinated. This visual focuses on this tumultuous period that Hosea witnessed firsthand.</p>
             </div>
             
-            <div style="background-color: #f9f9f9; padding: 2rem; border-radius: 8px; margin: 2rem 0;">
-                <div style="display: grid; grid-template-columns: 150px 1fr; gap: 1rem; align-items: center;">
-                    <!-- Stable Period -->
-                    <div style="text-align: right; font-weight: bold; color: var(--primary-color);">Stable Period<br>(40 years)</div>
-                    <div style="background-color: var(--israel-color); padding: 1rem; border-radius: 4px; color: white;">
-                        <strong>Jeroboam II (793-753 BCE)</strong> - 40 years of prosperity and expansion
-                    </div>
-                    
-                    <!-- Chaos Period -->
-                    <div style="text-align: right; font-weight: bold; color: var(--secondary-color); margin-top: 2rem;">Chaos Period<br>(20 years)</div>
-                    <div style="margin-top: 2rem;">
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.5rem;">
-                            <div style="background-color: var(--israel-color); padding: 0.5rem; border-radius: 4px; color: white; text-align: center; font-size: 0.9rem;">
-                                <strong>Zechariah</strong><br>6 months<br>❌ Assassinated
-                            </div>
-                            <div style="background-color: var(--israel-color); padding: 0.5rem; border-radius: 4px; color: white; text-align: center; font-size: 0.9rem;">
-                                <strong>Shallum</strong><br>1 month<br>❌ Assassinated
-                            </div>
-                            <div style="background-color: var(--israel-color); padding: 0.5rem; border-radius: 4px; color: white; text-align: center; font-size: 0.9rem;">
-                                <strong>Menahem</strong><br>10 years<br>💰 Paid tribute
-                            </div>
-                            <div style="background-color: var(--israel-color); padding: 0.5rem; border-radius: 4px; color: white; text-align: center; font-size: 0.9rem;">
-                                <strong>Pekahiah</strong><br>2 years<br>❌ Assassinated
-                            </div>
-                            <div style="background-color: var(--israel-color); padding: 0.5rem; border-radius: 4px; color: white; text-align: center; font-size: 0.9rem;">
-                                <strong>Pekah</strong><br>8 years<br>❌ Assassinated
-                            </div>
-                            <div style="background-color: var(--israel-color); padding: 0.5rem; border-radius: 4px; color: white; text-align: center; font-size: 0.9rem;">
-                                <strong>Hoshea</strong><br>9 years<br>🏛️ Last king
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Hosea's Ministry -->
-                    <div style="text-align: right; font-weight: bold; color: var(--hosea-color); margin-top: 2rem;">Hosea's Ministry</div>
-                    <div style="margin-top: 2rem; background-color: var(--hosea-color); padding: 1rem; border-radius: 4px; color: white; border: 3px solid var(--accent-color);">
-                        <strong>Hosea (750-720 BCE)</strong> - Prophesied through the entire chaotic period, from late Jeroboam II through the fall of Samaria
+            <div class="chaos-visual">
+                <div class="period-row">
+                    <div class="period-label">Stable Period<br>(40 years)</div>
+                    <div style="background: linear-gradient(135deg, var(--israel-color), #2980b9); padding: 1.5rem; border-radius: 8px; color: white; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                        <strong>Jeroboam II (793-753 BCE)</strong><br>40 years of prosperity and expansion
                     </div>
                 </div>
                 
-                <div style="margin-top: 2rem; text-align: center; font-style: italic; color: #666;">
+                <div class="period-row">
+                    <div class="period-label">Chaos Period<br>(20 years)</div>
+                    <div class="king-boxes">
+                        <div class="king-box">
+                            <strong>Zechariah</strong>
+                            6 months<br>
+                            ❌ Assassinated
+                        </div>
+                        <div class="king-box">
+                            <strong>Shallum</strong>
+                            1 month<br>
+                            ❌ Assassinated
+                        </div>
+                        <div class="king-box">
+                            <strong>Menahem</strong>
+                            10 years<br>
+                            💰 Paid tribute
+                        </div>
+                        <div class="king-box">
+                            <strong>Pekahiah</strong>
+                            2 years<br>
+                            ❌ Assassinated
+                        </div>
+                        <div class="king-box">
+                            <strong>Pekah</strong>
+                            8 years<br>
+                            ❌ Assassinated
+                        </div>
+                        <div class="king-box">
+                            <strong>Hoshea</strong>
+                            9 years<br>
+                            🏛️ Last king
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="period-row">
+                    <div class="period-label">Hosea's Ministry</div>
+                    <div style="background: linear-gradient(135deg, var(--hosea-color), #d68910); padding: 1.5rem; border-radius: 8px; color: white; border: 3px solid var(--accent-gold); box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                        <strong>Hosea (750-720 BCE)</strong><br>Prophesied through the entire chaotic period, from late Jeroboam II through the fall of Samaria
+                    </div>
+                </div>
+                
+                <div style="margin-top: 2rem; text-align: center; font-style: italic; color: var(--text-gray); padding: 1rem; background: rgba(0,0,0,0.02); border-radius: 8px;">
                     "They set up kings, but not by Me; they made princes, but I did not acknowledge them" - Hosea 8:4
                 </div>
             </div>
         </section>
 
-        <section>
-            <h2>Kings During Hosea's Ministry</h2>
+        <!-- Kings Table -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <span class="section-icon">👑</span>
+                Kings During Hosea's Ministry
+            </h2>
             
             <table>
                 <thead>
@@ -579,7 +924,6 @@
                         <th>King</th>
                         <th>Kingdom</th>
                         <th>Reign</th>
-                        <th>Biblical References</th>
                         <th>Significance for Hosea</th>
                     </tr>
                 </thead>
@@ -588,85 +932,78 @@
                         <td><strong>Jeroboam II</strong></td>
                         <td>Israel</td>
                         <td>793-753 BCE</td>
-                        <td>2 Kings 14:23-29</td>
-                        <td>His long, prosperous reign masked deep spiritual decay. Hosea began prophesying during his final years, highlighting the gap between material prosperity and spiritual bankruptcy.</td>
+                        <td>His long, prosperous reign masked deep spiritual decay. Hosea began prophesying during his final years.</td>
                     </tr>
                     <tr>
                         <td><strong>Zechariah</strong></td>
                         <td>Israel</td>
-                        <td>753-752 BCE (6 months)</td>
-                        <td>2 Kings 15:8-12</td>
-                        <td>Last of Jehu's dynasty. His assassination fulfilled Hosea's prophecy about Jezreel (1:4). Beginning of rapid political chaos.</td>
+                        <td>753-752 BCE</td>
+                        <td>Last of Jehu's dynasty. His assassination fulfilled Hosea's prophecy about Jezreel (1:4).</td>
                     </tr>
                     <tr>
                         <td><strong>Shallum</strong></td>
                         <td>Israel</td>
-                        <td>752 BCE (1 month)</td>
-                        <td>2 Kings 15:13-15</td>
-                        <td>His brief reign exemplified the political instability Hosea condemned. The "heated oven" of conspiracy (7:3-7).</td>
+                        <td>752 BCE</td>
+                        <td>His brief reign exemplified the political instability Hosea condemned.</td>
                     </tr>
                     <tr>
                         <td><strong>Menahem</strong></td>
                         <td>Israel</td>
                         <td>752-742 BCE</td>
-                        <td>2 Kings 15:16-22</td>
-                        <td>Brutal ruler who paid tribute to Assyria. Hosea criticized dependence on foreign powers rather than God (7:11; 8:9).</td>
+                        <td>Brutal ruler who paid tribute to Assyria. Hosea criticized dependence on foreign powers (7:11; 8:9).</td>
                     </tr>
                     <tr>
                         <td><strong>Pekahiah</strong></td>
                         <td>Israel</td>
                         <td>742-740 BCE</td>
-                        <td>2 Kings 15:23-26</td>
                         <td>Another assassination victim. The cycle of violence Hosea described continued (7:7).</td>
                     </tr>
                     <tr>
                         <td><strong>Pekah</strong></td>
                         <td>Israel</td>
                         <td>740-732 BCE</td>
-                        <td>2 Kings 15:27-31</td>
-                        <td>Allied with Aram against Assyria (Syro-Ephraimite War). Lost much territory. Hosea's "silly dove" diplomacy (7:11).</td>
+                        <td>Allied with Aram against Assyria. Lost much territory. Hosea's "silly dove" diplomacy (7:11).</td>
                     </tr>
                     <tr>
                         <td><strong>Hoshea</strong></td>
                         <td>Israel</td>
                         <td>732-722 BCE</td>
-                        <td>2 Kings 17:1-6</td>
-                        <td>Last king of Israel. His rebellion against Assyria led to Samaria's fall. Hosea witnessed the fulfillment of his prophecies.</td>
+                        <td>Last king of Israel. His rebellion against Assyria led to Samaria's fall.</td>
                     </tr>
                     <tr>
                         <td><strong>Uzziah</strong></td>
                         <td>Judah</td>
                         <td>792-740 BCE</td>
-                        <td>2 Kings 15:1-7; 2 Chr 26</td>
-                        <td>Long, prosperous reign but pride led to leprosy. Contemporary with early Hosea. Contrast between Judah's stability and Israel's chaos.</td>
+                        <td>Long, prosperous reign. Contemporary with early Hosea.</td>
                     </tr>
                     <tr>
                         <td><strong>Jotham</strong></td>
                         <td>Judah</td>
                         <td>750-732 BCE</td>
-                        <td>2 Kings 15:32-38</td>
-                        <td>Relatively righteous king. Co-regent with Uzziah. Hosea occasionally references Judah's better spiritual state.</td>
+                        <td>Relatively righteous king. Hosea occasionally references Judah's better spiritual state.</td>
                     </tr>
                     <tr>
                         <td><strong>Ahaz</strong></td>
                         <td>Judah</td>
                         <td>735-715 BCE</td>
-                        <td>2 Kings 16; 2 Chr 28</td>
-                        <td>Wicked king who introduced pagan practices. His alliance with Assyria paralleled Israel's political mistakes Hosea condemned.</td>
+                        <td>His alliance with Assyria paralleled Israel's political mistakes.</td>
                     </tr>
                     <tr>
                         <td><strong>Hezekiah</strong></td>
                         <td>Judah</td>
                         <td>715-686 BCE</td>
-                        <td>2 Kings 18-20</td>
-                        <td>Great reformer king. His reign began as Israel fell, showing the possibility of repentance Hosea longed for.</td>
+                        <td>Great reformer king. His reign began as Israel fell.</td>
                     </tr>
                 </tbody>
             </table>
         </section>
 
-        <section>
-            <h2>Major Events During Hosea's Ministry</h2>
+        <!-- Major Events -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <span class="section-icon">🔥</span>
+                Major Events During Hosea's Ministry
+            </h2>
             
             <div class="event-grid">
                 <div class="event-card">
@@ -707,21 +1044,25 @@
             </div>
         </section>
 
-        <section>
-            <h2>Hosea's Ministry in Context</h2>
+        <!-- Context Section -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <span class="section-icon">🌍</span>
+                Hosea's Ministry in Context
+            </h2>
             
             <div class="concept-card">
                 <h4>Contemporary Prophets</h4>
                 <p><strong>Amos</strong> (760-750 BCE) preceded Hosea slightly, also prophesying to the Northern Kingdom. While Amos emphasized social justice, Hosea focused on covenant loyalty. Together they provide complementary critiques of Israel's failures.</p>
                 
-                <p><strong>Isaiah</strong> (740-681 BCE) began his ministry in Judah as Hosea's was ending in Israel. Isaiah witnessed Samaria's fall and warned Judah to learn from Israel's fate.</p>
+                <p style="margin-top: 1rem;"><strong>Isaiah</strong> (740-681 BCE) began his ministry in Judah as Hosea's was ending in Israel. Isaiah witnessed Samaria's fall and warned Judah to learn from Israel's fate.</p>
                 
-                <p><strong>Micah</strong> (735-700 BCE) prophesied in Judah during Israel's final years. Like Hosea, he used covenant lawsuit language and emphasized God's emotional engagement with His people.</p>
+                <p style="margin-top: 1rem;"><strong>Micah</strong> (735-700 BCE) prophesied in Judah during Israel's final years. Like Hosea, he used covenant lawsuit language and emphasized God's emotional engagement with His people.</p>
             </div>
 
             <div class="concept-card">
                 <h4>Political Climate</h4>
-                <ul>
+                <ul style="margin-left: 1.5rem; line-height: 1.8;">
                     <li><strong>Internal Instability:</strong> Six kings in 20 years, four assassinated</li>
                     <li><strong>External Pressure:</strong> Assyrian empire expanding westward</li>
                     <li><strong>Failed Diplomacy:</strong> Vacillating between Egypt and Assyria for protection</li>
@@ -732,7 +1073,7 @@
 
             <div class="concept-card">
                 <h4>Religious Context</h4>
-                <ul>
+                <ul style="margin-left: 1.5rem; line-height: 1.8;">
                     <li><strong>Baal Worship:</strong> Fertility religion appealed to agricultural society</li>
                     <li><strong>Cultic Prostitution:</strong> Sacred prostitution at shrines</li>
                     <li><strong>Syncretism:</strong> Mixing YHWH worship with Canaanite practices</li>
@@ -741,58 +1082,29 @@
                 </ul>
             </div>
         </section>
-
-        <section>
-            <h2>Chronological Reading of Hosea</h2>
-            
-            <div class="concept-card">
-                <h4>Dating Hosea's Oracles</h4>
-                <p>While the book's final form is thematically arranged rather than chronological, some passages can be tentatively dated:</p>
-            </div>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Approximate Date</th>
-                        <th>Passages</th>
-                        <th>Historical Context</th>
-                        <th>Key Themes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>750-745 BCE</td>
-                        <td>Chapters 1-3</td>
-                        <td>Late Jeroboam II / Early chaos</td>
-                        <td>Marriage metaphor, covenant lawsuit, future hope</td>
-                    </tr>
-                    <tr>
-                        <td>745-740 BCE</td>
-                        <td>Chapters 4-7</td>
-                        <td>Political assassinations, Assyrian threat emerging</td>
-                        <td>Lack of knowledge, corrupt leadership, false repentance</td>
-                    </tr>
-                    <tr>
-                        <td>740-732 BCE</td>
-                        <td>Chapters 8-10</td>
-                        <td>Syro-Ephraimite War, vassalage to Assyria</td>
-                        <td>Failed alliances, coming judgment, historical retrospective</td>
-                    </tr>
-                    <tr>
-                        <td>732-725 BCE</td>
-                        <td>Chapters 11-13</td>
-                        <td>Final years before siege</td>
-                        <td>Divine compassion, Jacob traditions, death imagery</td>
-                    </tr>
-                    <tr>
-                        <td>725-720 BCE</td>
-                        <td>Chapter 14</td>
-                        <td>During or after Samaria's siege</td>
-                        <td>Call to repentance, vision of restoration</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
     </div>
+
+    <footer>
+        <p style="position: relative; z-index: 1;">&copy; 2024 Project Context. Empowering faith through understanding.</p>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            console.log('Mobile menu toggle - to be implemented');
+        }
+
+        // Add scroll effect to navigation
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.style.background = 'rgba(255, 255, 255, 0.98)';
+                nav.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.1)';
+            } else {
+                nav.style.background = 'rgba(255, 255, 255, 0.95)';
+                nav.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            }
+        });
+    </script>
 </body>
 </html>
