@@ -18,6 +18,39 @@ To create a visually compelling, accessible website that makes biblical teaching
 - **Version Control**: GitHub
 - **Biblical Languages**: SBL Hebrew/Greek fonts
 
+## 📋 Character Profile Guidelines v3.3
+
+### Section 1: Overview - Name Field Guidelines
+
+**Old Testament (Tanakh) Characters:**
+- **Hebrew Names ONLY** - Use original Hebrew forms in meta fields
+- Examples: אַבְרָהָם (Abraham), שָׂרָה (Sarah), הָגָר (Hagar)
+
+**New Testament Characters:**
+- **Greek Names ONLY** - Use original Greek forms as primary name in meta fields
+- Examples: Ἰησοῦς (Jesus), Μαρία (Mary), Παῦλος (Paul)
+
+**Important:** Greek (LXX) names should NOT be included for Old Testament characters in meta fields.
+
+### Version History
+- **v3.3 (Current)** - Clarified naming conventions: Hebrew for OT, Greek for NT only
+- **v3.2** - Enhanced complexity guidelines
+- **v3.1** - Added thematic studies integration
+- **v3.0** - Comprehensive template restructure
+
+### Common Pitfalls
+- **Including Greek (LXX) for OT Characters** - OT characters should only have Hebrew names
+- Inconsistent transliteration standards
+- Missing contextual connections
+- Inadequate source attribution
+
+### Changelog
+
+#### Version 3.3 (Current)
+- **Greek Field Clarification**: Removed all references to Greek (LXX) as optional for Old Testament characters
+- **Naming Convention Update**: Established clear Hebrew-only policy for Tanakh characters
+- **Documentation Update**: Updated all template examples to reflect new naming standards
+
 ## 📂 Directory Structure
 
 ```
@@ -274,4 +307,4 @@ For questions or contributions, please open an issue in the GitHub repository.
 ---
 
 *Last Updated: January 2025*
-*Version: 3.0*
+*Version: 3.3*
