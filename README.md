@@ -29,44 +29,75 @@ project-context-site/
 ├── studies/                            ← All study materials
 │   ├── index.html                      ← Studies hub page
 │   │
+│   ├── tanakh/                         ← Hebrew Bible/Old Testament
+│   │   ├── neviim/                     ← Prophets
+│   │   │   ├── minor-prophets/         ← Minor Prophets
+│   │   │   │   ├── hosea/              ← Book of Hosea
+│   │   │   │   │   ├── hosea.html      ← Main Hosea study page
+│   │   │   │   │   ├── structure.html
+│   │   │   │   │   ├── structure-overview.html
+│   │   │   │   │   ├── structure-chiastic.html
+│   │   │   │   │   ├── structure-detailed.html
+│   │   │   │   │   ├── hebrew-words.html
+│   │   │   │   │   ├── literary-analysis.html
+│   │   │   │   │   ├── theology.html
+│   │   │   │   │   ├── theology-covenant.html
+│   │   │   │   │   ├── theology-contemporary.html
+│   │   │   │   │   ├── theology-restoration.html
+│   │   │   │   │   ├── theology-sin-judgment.html
+│   │   │   │   │   ├── timeline.html
+│   │   │   │   │   ├── nt-usage.html
+│   │   │   │   │   └── resources.html
+│   │   │   │   ├── amos/
+│   │   │   │   │   └── amos.html      ← Main Amos study page
+│   │   │   │   ├── joel/
+│   │   │   │   │   └── joel.html      ← Main Joel study page
+│   │   │   │   └── [other minor prophets]/
+│   │   │   │       └── [book-name].html
+│   │   │   └── [major prophets]/
+│   │   └── [other divisions]/
+│   │
 │   ├── characters/                     ← Biblical character profiles
 │   │   ├── index.html                  ← Characters hub
 │   │   ├── README.md                   ← Character profile tracker
 │   │   ├── genesis/
-│   │   │   ├── abraham.html
-│   │   │   ├── sarah.html             ← Complete profile
-│   │   │   ├── hagar.html             ← Complete profile
+│   │   │   ├── abraham/                ← Abraham (multiple pages)
+│   │   │   │   ├── abraham.html        ← Main Abraham profile
+│   │   │   │   ├── covenant.html       ← Abraham's covenant
+│   │   │   │   ├── journey.html        ← Abraham's journey
+│   │   │   │   └── legacy.html         ← Abraham's legacy
+│   │   │   ├── sarah.html             ← Complete profile (single page)
+│   │   │   ├── hagar.html             ← Complete profile (single page)
 │   │   │   ├── eve.html
 │   │   │   ├── rebekah.html
 │   │   │   └── [other characters].html
 │   │   ├── exodus/
-│   │   │   ├── moses.html
+│   │   │   ├── moses/                  ← Moses (multiple pages likely)
+│   │   │   │   ├── moses.html          ← Main Moses profile
+│   │   │   │   ├── exodus-event.html
+│   │   │   │   ├── wilderness.html
+│   │   │   │   └── laws.html
 │   │   │   ├── miriam.html
 │   │   │   └── [other characters].html
 │   │   ├── judges/
-│   │   │   ├── delilah.html           ← Complete profile
-│   │   │   ├── deborah.html
+│   │   │   ├── deborah/                ← Deborah (multiple pages)
+│   │   │   │   ├── deborah.html        ← Main Deborah profile
+│   │   │   │   └── song-of-deborah.html ← Song of Deborah
+│   │   │   ├── delilah.html           ← Complete profile (single page)
 │   │   │   ├── jael.html
 │   │   │   └── [other characters].html
 │   │   └── [other books]/
-│   │       └── [character-name].html
+│   │       └── [character-name].html or [character-name]/
 │   │
 │   ├── women/                          ← Women's studies hub
 │   │   ├── index.html                  ← Women in the Bible hub page
 │   │   └── README.md                   ← Women profiles tracker
 │   │
-│   ├── hosea/                          ← Book study: Hosea
-│   │   ├── index.html                  ← Main Hosea study page
-│   │   ├── structure.html
-│   │   ├── hebrew-words.html
-│   │   ├── literary-analysis.html
-│   │   ├── theology.html
-│   │   ├── timeline.html
-│   │   ├── nt-usage.html
-│   │   └── resources.html
-│   │
-│   └── evolution-of-satan/             ← Thematic study
-│       └── index.html
+│   └── thematic/                       ← Thematic studies
+│       ├── evolution-of-satan/         
+│       │   └── satan-evolution.html    ← Main Satan study page
+│       └── [other themes]/
+│           └── [theme-name].html
 │
 ├── assets/
 │   ├── css/
@@ -86,25 +117,32 @@ project-context-site/
 
 ## 🗂️ Content Organization
 
+### Book Studies (`/studies/tanakh/`)
+- **Structure**: Organized by biblical division, then book subdirectory
+- **URL Pattern**: `/studies/tanakh/[division]/[subdivision]/[book]/[book-name].html`
+- **Example**: `/studies/tanakh/neviim/minor-prophets/hosea/hosea.html`
+- Each book gets its own directory containing the main book file and supporting pages
+- Main entry point is always `[book-name].html` (e.g., `hosea.html`, `amos.html`)
+
 ### Character Profiles (`/studies/characters/`)
-- **Structure**: Organized by biblical book, then character HTML file
-- **URL Pattern**: `/studies/characters/[book]/[character-name].html`
-- **Examples**: 
-  - `/studies/characters/genesis/sarah.html`
-  - `/studies/characters/judges/delilah.html`
-  - `/studies/characters/1samuel/david.html`
+- **Structure**: Organized by biblical book, then character name
+- **Single-page profiles**: Direct HTML file
+  - URL Pattern: `/studies/characters/[book]/[character-name].html`
+  - Example: `/studies/characters/genesis/sarah.html`
+- **Multi-page profiles**: Character directory with multiple files
+  - URL Pattern: `/studies/characters/[book]/[character-name]/[character-name].html`
+  - Example: `/studies/characters/genesis/abraham/abraham.html`
+  - Supporting pages: `/studies/characters/judges/deborah/song-of-deborah.html`
+- Characters with extensive content get their own directory
 
 ### Women's Hub (`/studies/women/`)
 - Special hub page highlighting all female biblical characters
 - Links to individual profiles in `/studies/characters/`
 - Organized by Testament and biblical division (Torah, Prophets, Writings)
 
-### Book Studies (`/studies/[book-name]/`)
-- Comprehensive studies of entire biblical books
-- Multiple pages per study (structure, theology, etc.)
-
-### Thematic Studies (`/studies/[theme-name]/`)
+### Thematic Studies (`/studies/thematic/`)
 - Cross-biblical thematic explorations
+- Each theme gets its own directory
 - Single or multi-page format
 
 ## 📊 Current Status
@@ -118,6 +156,7 @@ project-context-site/
 - [x] Evolution of Satan study
 
 ### 🚧 In Progress
+- [ ] Directory restructuring for book studies
 - [ ] Additional character profiles (see tracker READMEs)
 - [ ] Studies hub page
 - [ ] Navigation improvements
@@ -135,19 +174,22 @@ project-context-site/
 ### Primary Navigation
 - **Home**: `/`
 - **Studies**: `/studies/`
+  - Book Studies: `/studies/tanakh/[division]/[book]/`
   - Characters: `/studies/characters/`
   - Women's Hub: `/studies/women/`
-  - Book Studies: `/studies/[book]/`
-  - Thematic: `/studies/[theme]/`
+  - Thematic: `/studies/thematic/[theme]/`
 - **Resources**: `/resources/`
 - **About**: `/about.html`
 - **Contact**: `/contact.html`
 
-### Character Profile URLs
-All character profiles follow this pattern:
-- `/studies/characters/[biblical-book]/[character-name].html`
-
-The Women's Hub (`/studies/women/`) provides an alternative entry point specifically for female characters, but all profiles live in the main characters directory as individual HTML files.
+### Biblical Book Organization
+Books are organized following the Hebrew Bible structure:
+- **Torah** (Pentateuch)
+- **Neviim** (Prophets)
+  - Former Prophets
+  - Major Prophets
+  - Minor Prophets
+- **Ketuvim** (Writings)
 
 ## 🎨 Design Guidelines
 
@@ -231,5 +273,5 @@ For questions or contributions, please open an issue in the GitHub repository.
 
 ---
 
-*Last Updated: [Current Date]*
-*Version: 2.0*
+*Last Updated: January 2025*
+*Version: 3.0*
