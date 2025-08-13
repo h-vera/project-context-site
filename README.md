@@ -123,7 +123,7 @@ project-context-site/
 │   │       └── [character-name].html or [character-name]/
 │   │
 │   ├── women/                          ← Women's studies hub
-│   │   ├── index.html                  ← Women in the Bible hub page
+│   │   ├── women-bible-hub.html                  ← Women in the Bible hub page
 │   │   └── README.md                   ← Women profiles tracker
 │   │
 │   └── thematic/                       ← Thematic studies
