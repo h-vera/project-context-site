@@ -306,5 +306,5 @@ For questions or contributions, please open an issue in the GitHub repository.
 
 ---
 
-*Last Updated: January 2025*
+*Last Updated: August 2025*
 *Version: 3.3*
