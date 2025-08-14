@@ -91,7 +91,7 @@ project-context-site/
 │   │   └── [other divisions]/
 │   │
 │   ├── characters/                     ← Biblical character profiles
-│   │   ├── index.html                  ← Characters hub
+│   │   ├── characters.html                  ← Characters hub
 │   │   ├── README.md                   ← Character profile tracker
 │   │   ├── genesis/
 │   │   │   ├── abraham/                ← Abraham (multiple pages)
