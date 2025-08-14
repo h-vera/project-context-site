@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Context - Context is Everything</title>
+    <meta name="description" content="Empowering faith through biblical understanding. Comprehensive biblical studies, character profiles, and thematic explorations with historical and theological context.">
+    
     <style>
         * {
             margin: 0;
@@ -17,8 +19,14 @@
             --accent-blue: #00b4d8;
             --accent-purple: #7209b7;
             --accent-rose: #e11d48;
+            --accent-gold: #d4af37;
+            --accent-green: #10b981;
             --text-gray: #666;
             --bg-gray: #f5f5f5;
+            --border-light: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
         }
 
         body {
@@ -28,20 +36,25 @@
             overflow-x: hidden;
         }
 
-        /* Navigation */
+        /* Navigation - Consistent with component */
         nav {
             position: fixed;
             width: 100%;
             top: 0;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(10px);
             z-index: 1000;
             padding: 1rem 2rem;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         }
 
         .nav-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
@@ -54,6 +67,11 @@
             gap: 1rem;
             text-decoration: none;
             color: var(--primary-dark);
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
         }
 
         .logo-icon {
@@ -86,16 +104,32 @@
             text-decoration: none;
             color: var(--text-gray);
             font-weight: 500;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
         }
 
-        .nav-links a:hover {
+        .nav-links a:hover,
+        .nav-links a.active {
             color: var(--primary-dark);
+            background-color: rgba(0, 0, 0, 0.05);
         }
 
-        /* Improved Dropdown Menu */
+        /* Dropdown Menu */
         .dropdown {
             position: relative;
+        }
+
+        .dropdown-toggle::after {
+            content: '▾';
+            font-size: 0.8rem;
+            margin-left: 0.25rem;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown:hover .dropdown-toggle::after {
+            transform: rotate(180deg);
         }
 
         .dropdown-content {
@@ -108,10 +142,10 @@
             z-index: 1;
             top: 100%;
             margin-top: 0.5rem;
-            padding-top: 0.5rem; /* Add padding to prevent gap issues */
+            padding: 0.5rem 0;
+            border: 1px solid var(--border-light);
         }
 
-        /* Add a invisible bridge to prevent mouse from leaving */
         .dropdown-content::before {
             content: '';
             position: absolute;
@@ -132,30 +166,47 @@
         .dropdown-content a:hover {
             background-color: var(--bg-gray);
             color: var(--primary-dark);
+            padding-left: 1.5rem;
         }
 
-        /* Keep dropdown open when hovering over it or the trigger */
         .dropdown:hover .dropdown-content,
         .dropdown-content:hover {
             display: block;
         }
 
-        .cta-button {
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
             background: var(--primary-dark);
-            color: var(--primary-light);
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
             transition: all 0.3s ease;
+            border-radius: 2px;
         }
 
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        .mobile-menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
         }
 
-        /* Hero Section */
+        .mobile-menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Hero Section with Gradient */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -164,7 +215,50 @@
             padding: 2rem;
             margin-top: 80px;
             position: relative;
-            background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+            /* Beautiful gradient inspired by women's hub and sources section */
+            background: linear-gradient(135deg, 
+                #1a1a1a 0%, 
+                #7209b7 25%, 
+                #e11d48 50%, 
+                #7209b7 75%, 
+                #1a1a1a 100%);
+            /* Alternative gradients to consider: */
+            /* Option 2: Warmer sunset gradient
+            background: linear-gradient(135deg, 
+                #0a0a0a 0%, 
+                #7209b7 20%, 
+                #e11d48 40%, 
+                #f97316 60%, 
+                #d4af37 80%, 
+                #0a0a0a 100%);
+            */
+            /* Option 3: Cooler biblical gradient
+            background: linear-gradient(135deg, 
+                #0a0a0a 0%, 
+                #00b4d8 30%, 
+                #7209b7 50%, 
+                #e11d48 70%, 
+                #0a0a0a 100%);
+            */
+            color: white;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 80%, rgba(225,29,72,0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(114,9,183,0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 50%);
+            animation: float 30s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
         }
 
         .hero-logo {
@@ -189,17 +283,33 @@
         .hero-logo svg {
             width: 100%;
             height: 100%;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+        }
+
+        .hero-logo svg path,
+        .hero-logo svg ellipse {
+            stroke: white;
+        }
+
+        .hero-logo svg circle:first-of-type {
+            fill: #00b4d8;
+        }
+
+        .hero-logo svg circle:last-of-type {
+            fill: white;
         }
 
         .hero-content {
             text-align: center;
             max-width: 900px;
             z-index: 1;
+            position: relative;
         }
 
         .featured-tag {
             display: inline-block;
-            background: var(--accent-blue);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
             color: var(--primary-light);
             padding: 0.5rem 1rem;
             border-radius: 50px;
@@ -207,6 +317,7 @@
             font-weight: 600;
             margin-bottom: 2rem;
             animation: fadeInUp 0.8s ease-out;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         @keyframes fadeInUp {
@@ -226,14 +337,16 @@
             line-height: 1.1;
             margin-bottom: 2rem;
             animation: fadeInUp 0.8s ease-out 0.2s both;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .hero-subtitle {
             font-size: clamp(1.25rem, 3vw, 1.75rem);
-            color: var(--text-gray);
+            opacity: 0.95;
             margin-bottom: 3rem;
             font-weight: 400;
             animation: fadeInUp 0.8s ease-out 0.4s both;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         }
 
         .hero-buttons {
@@ -245,8 +358,8 @@
         }
 
         .primary-button {
-            background: var(--primary-dark);
-            color: var(--primary-light);
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--primary-dark);
             padding: 1rem 2rem;
             border-radius: 50px;
             text-decoration: none;
@@ -256,18 +369,20 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            border: 2px solid transparent;
         }
 
         .primary-button:hover {
             transform: translateY(-3px);
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            background: white;
         }
 
         .secondary-button {
             background: transparent;
-            color: var(--primary-dark);
+            color: white;
             padding: 1rem 2rem;
-            border: 2px solid var(--primary-dark);
+            border: 2px solid rgba(255, 255, 255, 0.8);
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
@@ -276,58 +391,10 @@
         }
 
         .secondary-button:hover {
-            background: var(--primary-dark);
-            color: var(--primary-light);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: white;
             transform: translateY(-3px);
-        }
-
-        /* Background Elements */
-        .bg-pattern {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            overflow: hidden;
-            z-index: 0;
-        }
-
-        .floating-element {
-            position: absolute;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-            opacity: 0.1;
-            animation: float 20s ease-in-out infinite;
-        }
-
-        .floating-element:nth-child(1) {
-            width: 300px;
-            height: 300px;
-            top: -150px;
-            right: -150px;
-        }
-
-        .floating-element:nth-child(2) {
-            width: 200px;
-            height: 200px;
-            bottom: -100px;
-            left: -100px;
-            animation-delay: 5s;
-        }
-
-        .floating-element:nth-child(3) {
-            width: 150px;
-            height: 150px;
-            top: 50%;
-            right: 10%;
-            animation-delay: 10s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(30px, -30px) rotate(90deg); }
-            50% { transform: translate(-20px, 20px) rotate(180deg); }
-            75% { transform: translate(-30px, -20px) rotate(270deg); }
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
         }
 
         /* Features Section */
@@ -406,32 +473,71 @@
             background: linear-gradient(135deg, rgba(225, 29, 72, 0.05) 0%, rgba(114, 9, 183, 0.05) 100%);
         }
 
-        /* Mobile Menu Toggle */
-        .mobile-menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0.5rem;
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #2c2c2c 100%);
+            color: var(--primary-light);
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 6rem;
+            position: relative;
+            overflow: hidden;
         }
 
-        .mobile-menu-toggle span {
-            display: block;
-            width: 25px;
-            height: 3px;
-            background: var(--primary-dark);
-            margin: 5px 0;
-            transition: 0.3s;
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 0%, rgba(114, 9, 183, 0.1) 0%, transparent 70%);
         }
 
-        /* Responsive */
+        footer p {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Mobile Responsive */
         @media (max-width: 768px) {
             .nav-links {
-                display: none;
+                position: fixed;
+                top: 65px;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background: white;
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1rem;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+                transition: right 0.3s ease;
+            }
+
+            .nav-links.active {
+                right: 0;
             }
 
             .mobile-menu-toggle {
+                display: flex;
+            }
+
+            .dropdown-content {
+                position: static;
                 display: block;
+                box-shadow: none;
+                background: var(--bg-gray);
+                margin-left: 1rem;
+                margin-top: 0.5rem;
+                border-radius: 0;
+                border: none;
+                border-left: 2px solid var(--border-light);
+            }
+
+            .dropdown-toggle::after {
+                display: none;
             }
 
             .hero-buttons {
@@ -439,15 +545,15 @@
                 align-items: center;
             }
 
-            .cta-button {
-                display: none;
+            .hero-title {
+                font-size: 2.5rem;
             }
         }
     </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav>
+    <nav id="main-nav">
         <div class="nav-container">
             <a href="/" class="logo">
                 <div class="logo-icon">
@@ -483,23 +589,21 @@
                 </div>
                 <span class="logo-text">Project Context</span>
             </a>
-            <ul class="nav-links">
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/" class="active">Home</a></li>
                 <li class="dropdown">
-                    <a href="#studies">Studies</a>
+                    <a href="/studies/" class="dropdown-toggle">Studies</a>
                     <div class="dropdown-content">
                         <a href="/studies/characters/characters-hub.html">Biblical Characters</a>
                         <a href="/studies/women/women-bible-hub.html">Women in the Bible</a>
-                        <a href="/studies/tanakh/">Tanakh Studies</a>
-                        <a href="/studies/nt/">New Testament</a>
-                        <a href="/studies/thematic/">Thematic Studies</a>
+                        <a href="/studies/tanakh/tanakh-hub.html">Tanakh Studies</a>
+                        <a href="/studies/thematic/thematic-hub.html">Thematic Studies</a>
                     </div>
                 </li>
-                <li><a href="#resources">Resources</a></li>
+                <li><a href="/resources/">Resources</a></li>
                 <li><a href="/about.html">About</a></li>
-                <li><a href="#contact">Contact</a></li>
             </ul>
-            <a href="/studies/" class="cta-button">Explore Studies</a>
-            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -507,33 +611,28 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero Section with Gradient -->
     <section class="hero">
-        <div class="bg-pattern">
-            <div class="floating-element"></div>
-            <div class="floating-element"></div>
-            <div class="floating-element"></div>
-        </div>
         <div class="hero-content">
             <div class="hero-logo">
                 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                     <!-- Left bracket -->
                     <path d="M 25 15 L 10 15 L 10 85 L 25 85" 
-                          stroke="#0a0a0a" 
+                          stroke="white" 
                           stroke-width="3" 
                           fill="none" 
                           stroke-linecap="round"/>
                     
                     <!-- Right bracket -->
                     <path d="M 75 15 L 90 15 L 90 85 L 75 85" 
-                          stroke="#0a0a0a" 
+                          stroke="white" 
                           stroke-width="3" 
                           fill="none" 
                           stroke-linecap="round"/>
                     
                     <!-- Eye outline -->
                     <ellipse cx="50" cy="50" rx="25" ry="15" 
-                             stroke="#0a0a0a" 
+                             stroke="white" 
                              stroke-width="2.5" 
                              fill="none"/>
                     
@@ -543,7 +642,7 @@
                     
                     <!-- Pupil -->
                     <circle cx="50" cy="50" r="4" 
-                            fill="#0a0a0a"/>
+                            fill="white"/>
                     
                     <!-- Highlight -->
                     <circle cx="54" cy="46" r="2" 
@@ -616,7 +715,7 @@
                         theological significance, Hebrew/Greek meanings, and redemptive-historical 
                         impact across Scripture.
                     </p>
-                    <a href="/studies/characters/characters-hub.html" class="primary-button" style="margin-top: 1.5rem; font-size: 1rem; padding: 0.75rem 1.5rem;">
+                    <a href="/studies/characters/characters-hub.html" class="primary-button" style="margin-top: 1.5rem; font-size: 1rem; padding: 0.75rem 1.5rem; background: var(--primary-dark); color: white;">
                         Explore Characters →
                     </a>
                 </div>
@@ -628,7 +727,7 @@
                         Prophets, and Writings with historical context, literary analysis, 
                         and theological insights.
                     </p>
-                    <a href="/studies/tanakh/" class="primary-button" style="margin-top: 1.5rem; font-size: 1rem; padding: 0.75rem 1.5rem;">
+                    <a href="/studies/tanakh/tanakh-hub.html" class="primary-button" style="margin-top: 1.5rem; font-size: 1rem; padding: 0.75rem 1.5rem; background: var(--primary-dark); color: white;">
                         Explore Tanakh →
                     </a>
                 </div>
@@ -640,7 +739,7 @@
                         narratives, Hebrew meanings, theological significance, and lasting impact 
                         on redemptive history.
                     </p>
-                    <a href="/studies/women/women-bible-hub.html" class="primary-button" style="margin-top: 1.5rem; font-size: 1rem; padding: 0.75rem 1.5rem;">
+                    <a href="/studies/women/women-bible-hub.html" class="primary-button" style="margin-top: 1.5rem; font-size: 1rem; padding: 0.75rem 1.5rem; background: var(--primary-dark); color: white;">
                         Explore Women →
                     </a>
                 </div>
@@ -652,7 +751,7 @@
                         and spiritual developments throughout Scripture, from Genesis to 
                         Revelation.
                     </p>
-                    <a href="/studies/thematic/" class="primary-button" style="margin-top: 1.5rem; font-size: 1rem; padding: 0.75rem 1.5rem;">
+                    <a href="/studies/thematic/thematic-hub.html" class="primary-button" style="margin-top: 1.5rem; font-size: 1rem; padding: 0.75rem 1.5rem; background: var(--primary-dark); color: white;">
                         Explore Themes →
                     </a>
                 </div>
@@ -673,7 +772,7 @@
                         unwavering love through historical context, Hebrew word studies, 
                         literary analysis, and theological insights.
                     </p>
-                    <a href="/studies/tanakh/neviim/minor-prophets/hosea/hosea.html" class="primary-button" style="margin-top: 1.5rem; font-size: 1rem; padding: 0.75rem 1.5rem;">
+                    <a href="/studies/tanakh/neviim/minor-prophets/hosea/hosea.html" class="primary-button" style="margin-top: 1.5rem; font-size: 1rem; padding: 0.75rem 1.5rem; background: var(--primary-dark); color: white;">
                         Study Hosea →
                     </a>
                 </div>
@@ -685,7 +784,7 @@
                         Scripture and history, examining how understanding of evil has evolved 
                         across cultures and time.
                     </p>
-                    <a href="/studies/thematic/evolution-of-satan/satan-evolution.html" class="primary-button" style="margin-top: 1.5rem; font-size: 1rem; padding: 0.75rem 1.5rem;">
+                    <a href="/studies/thematic/evolution-of-satan/satan-evolution.html" class="primary-button" style="margin-top: 1.5rem; font-size: 1rem; padding: 0.75rem 1.5rem; background: var(--primary-dark); color: white;">
                         Explore Satan →
                     </a>
                 </div>
@@ -693,8 +792,39 @@
         </div>
     </section>
 
+    <footer>
+        <p>&copy; 2024 Project Context. Empowering faith through understanding.</p>
+    </footer>
+
     <script>
-        // Add smooth scrolling
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        mobileMenuToggle?.addEventListener('click', () => {
+            mobileMenuToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#main-nav')) {
+                mobileMenuToggle?.classList.remove('active');
+                navLinks?.classList.remove('active');
+            }
+        });
+
+        // Add scroll effect to nav
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('main-nav');
+            if (window.scrollY > 100) {
+                nav?.classList.add('scrolled');
+            } else {
+                nav?.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -707,24 +837,6 @@
                 }
             });
         });
-
-        // Add scroll effect to nav
-        window.addEventListener('scroll', () => {
-            const nav = document.querySelector('nav');
-            if (window.scrollY > 100) {
-                nav.style.background = 'rgba(255, 255, 255, 0.98)';
-                nav.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.1)';
-            } else {
-                nav.style.background = 'rgba(255, 255, 255, 0.95)';
-                nav.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
-            }
-        });
-
-        // Mobile menu toggle
-        function toggleMobileMenu() {
-            // This would be implemented if you add a mobile menu
-            console.log('Mobile menu toggle - to be implemented');
-        }
     </script>
 </body>
 </html>
