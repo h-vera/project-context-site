@@ -16,11 +16,11 @@
         :root {
             --primary-dark: #0a0a0a;
             --primary-light: #ffffff;
-            --accent-blue: #00b4d8;
+            --accent-blue: #0ea5e9;
             --accent-purple: #7209b7;
             --accent-gold: #d4af37;
             --accent-rose: #e11d48;
-            --text-gray: #666;
+            --text-gray: #6b7280;
             --bg-gray: #f5f5f5;
             --bg-dark: #1a1a1a;
             --border-light: #e5e7eb;
@@ -349,6 +349,86 @@
             background: linear-gradient(135deg, var(--accent-rose) 0%, var(--accent-purple) 100%);
         }
 
+        /* Section Headers */
+        .section-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-gray);
+            font-size: 1rem;
+        }
+
+        /* Featured Characters */
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .character-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-light);
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .character-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .character-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #fafbfc 0%, #f3f4f6 100%);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .character-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .character-hebrew {
+            font-family: 'SBL Hebrew', 'Ezra SIL', 'Times New Roman', serif;
+            color: var(--accent-purple);
+            font-size: 1.1rem;
+            direction: rtl;
+            unicode-bidi: embed;
+        }
+
+        .character-body {
+            padding: 1.5rem;
+        }
+
+        .character-desc {
+            color: var(--text-gray);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .character-meta {
+            font-size: 0.9rem;
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+
         /* Main Tabs Container */
         .main-tabs-container {
             background: white;
@@ -415,143 +495,273 @@
             }
         }
 
-        /* Book Grid */
-        .books-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
+        /* Hebrew Text */
+        .hebrew {
+            font-family: 'SBL Hebrew', 'Ezra SIL', 'Times New Roman', serif;
+            font-size: 1.1em;
+            color: var(--accent-purple);
+            direction: rtl;
+            unicode-bidi: embed;
         }
 
-        .book-card {
-            background: white;
-            border: 2px solid var(--border-light);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-decoration: none;
+        /* Sub-tabs for book categories */
+        .sub-tabs-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .sub-tab-button {
+            padding: 0.55rem 0.9rem;
+            border: 1px solid var(--border-light);
+            border-radius: 9999px;
+            background: #fff;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-gray);
+            transition: all 0.2s ease;
+        }
+
+        .sub-tab-button:hover {
+            background: rgba(0, 180, 216, 0.05);
+            border-color: rgba(0, 180, 216, 0.2);
+        }
+
+        .sub-tab-button.active {
+            background: linear-gradient(135deg, rgba(0, 180, 216, 0.08), rgba(114, 9, 183, 0.08));
+            border-color: rgba(0, 180, 216, 0.25);
+            color: var(--accent-blue);
+        }
+
+        .sub-tab-content {
+            display: none;
+        }
+
+        .sub-tab-content.active {
+            display: block;
+        }
+
+        /* Tanakh Chip */
+        .tanakh-chip {
+            padding: 0.4rem 0.75rem;
+            border: 1px solid var(--border-light);
+            border-radius: 9999px;
+            background: linear-gradient(135deg, rgba(0, 180, 216, 0.06) 0%, rgba(114, 9, 183, 0.06) 100%);
             color: var(--primary-dark);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform .2s ease, box-shadow .2s ease;
+            cursor: pointer;
         }
 
-        .book-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
+        .tanakh-chip:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tanakh-chip.disabled {
+            pointer-events: none;
+            opacity: 0.8;
+            background: linear-gradient(135deg, rgba(0, 180, 216, 0.1) 0%, rgba(114, 9, 183, 0.1) 100%);
+        }
+
+        /* Details/Summary */
+        details {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            margin: 1rem 0;
+            padding: 0.5rem 1rem;
+        }
+
+        summary {
+            cursor: pointer;
+            font-weight: 700;
+            padding: 0.75rem 0;
+            color: var(--primary-dark);
+            font-size: 1.2rem;
+        }
+
+        summary::marker {
+            color: var(--accent-blue);
+        }
+
+        details[open] {
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Tables */
+        table.tanakh {
             width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
+            border-collapse: collapse;
+            margin: 1rem 0;
         }
 
-        .book-card:hover::before {
-            transform: translateX(0);
+        table.tanakh thead th {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 2px solid #e5e7eb;
+            background: #fafbfc;
         }
 
-        .book-card:hover {
+        table.tanakh tbody td {
+            padding: 8px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        table.tanakh tbody tr {
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        table.tanakh tbody tr:hover {
+            background-color: #f9fafb;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Study Card */
+        .study-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--border-light);
+            position: relative;
+        }
+
+        .study-card:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-xl);
             border-color: transparent;
         }
 
-        .book-name {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .book-hebrew {
-            font-family: 'SBL Hebrew', 'Ezra SIL', 'Times New Roman', serif;
-            font-size: 1.1rem;
-            color: var(--accent-purple);
-            direction: rtl;
-            margin-bottom: 0.5rem;
-        }
-
-        .book-stats {
-            font-size: 0.9rem;
-            color: var(--text-gray);
-        }
-
-        /* Section Headers */
-        .section-header {
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--border-light);
-        }
-
-        .section-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .section-subtitle {
-            color: var(--text-gray);
-            font-size: 1rem;
-        }
-
-        /* Featured Characters */
-        .featured-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .character-card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            border: 1px solid var(--border-light);
+        .study-card-link {
             text-decoration: none;
             color: inherit;
             display: block;
         }
 
-        .character-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .character-header {
-            padding: 1.5rem;
+        .study-card-header {
+            padding: 1.5rem 1.5rem 1rem;
             background: linear-gradient(135deg, #fafbfc 0%, #f3f4f6 100%);
             border-bottom: 1px solid var(--border-light);
         }
 
-        .character-name {
+        .study-card-title {
             font-size: 1.3rem;
             font-weight: 700;
             color: var(--primary-dark);
             margin-bottom: 0.5rem;
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
         }
 
-        .character-hebrew {
-            font-family: 'SBL Hebrew', 'Ezra SIL', 'Times New Roman', serif;
+        .study-card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: linear-gradient(135deg, rgba(0, 180, 216, 0.1) 0%, rgba(14, 165, 233, 0.1) 100%);
+            color: var(--accent-blue);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(0, 180, 216, 0.2);
+        }
+
+        .tag.group {
+            background: linear-gradient(135deg, rgba(114, 9, 183, 0.1) 0%, rgba(225, 29, 72, 0.1) 100%);
             color: var(--accent-purple);
-            font-size: 1.1rem;
+            border-color: rgba(114, 9, 183, 0.2);
         }
 
-        .character-body {
+        .tag.warning {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(251, 191, 36, 0.1) 100%);
+            color: #d97706;
+            border-color: rgba(245, 158, 11, 0.2);
+        }
+
+        .study-card-body {
             padding: 1.5rem;
         }
 
-        .character-desc {
+        .study-card-meta {
             color: var(--text-gray);
-            line-height: 1.6;
-            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+            font-weight: 500;
         }
 
-        .character-meta {
-            font-size: 0.9rem;
-            color: var(--accent-blue);
-            font-weight: 600;
+        .study-card-desc {
+            color: var(--primary-dark);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .study-card-arrow {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .study-card:hover .study-card-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .study-card-arrow svg {
+            width: 16px;
+            height: 16px;
+            fill: white;
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border-light);
+            border-top-color: var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         /* Empty State */
@@ -653,11 +863,11 @@
                 gap: 1.5rem;
             }
 
-            .books-grid {
+            .featured-grid {
                 grid-template-columns: 1fr;
             }
 
-            .featured-grid {
+            .cards-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -668,6 +878,20 @@
 
             .container {
                 padding: 2rem 1rem;
+            }
+
+            .tanakh-chip {
+                font-size: 0.85rem;
+                padding: 0.3rem 0.6rem;
+            }
+
+            .sub-tabs-nav {
+                gap: 0.3rem;
+            }
+
+            .sub-tab-button {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.7rem;
             }
         }
     </style>
@@ -844,7 +1068,7 @@
         <div class="main-tabs-container">
             <div class="main-tabs-nav">
                 <button class="main-tab-button active" data-section="tanakh">
-                    תנ״ך Tanakh / Old Testament
+                    תנ״ך Tanakh
                 </button>
                 <button class="main-tab-button" data-section="new-testament">
                     New Testament
@@ -854,141 +1078,349 @@
             <!-- Tanakh Content -->
             <div class="tab-content active" id="tanakh-content">
                 <div class="section-header">
-                    <h3 class="section-title">Torah • תּוֹרָה</h3>
-                    <p class="section-subtitle">The Five Books of Moses</p>
-                </div>
-                
-                <div class="books-grid">
-                    <a href="/studies/characters/genesis/" class="book-card">
-                        <div class="book-name">Genesis</div>
-                        <div class="book-hebrew">בְּרֵאשִׁית</div>
-                        <div class="book-stats">30+ characters</div>
-                    </a>
-                    
-                    <a href="/studies/characters/exodus/" class="book-card">
-                        <div class="book-name">Exodus</div>
-                        <div class="book-hebrew">שְׁמוֹת</div>
-                        <div class="book-stats">15+ characters</div>
-                    </a>
-                    
-                    <a href="/studies/characters/leviticus/" class="book-card">
-                        <div class="book-name">Leviticus</div>
-                        <div class="book-hebrew">וַיִּקְרָא</div>
-                        <div class="book-stats">5+ characters</div>
-                    </a>
-                    
-                    <a href="/studies/characters/numbers/" class="book-card">
-                        <div class="book-name">Numbers</div>
-                        <div class="book-hebrew">בְּמִדְבַּר</div>
-                        <div class="book-stats">10+ characters</div>
-                    </a>
-                    
-                    <a href="/studies/characters/deuteronomy/" class="book-card">
-                        <div class="book-name">Deuteronomy</div>
-                        <div class="book-hebrew">דְּבָרִים</div>
-                        <div class="book-stats">5+ characters</div>
-                    </a>
+                    <h3 class="section-title">תנ״ך • Tanakh — ספרי התורה, הנביאים, הכתובים</h3>
+                    <p class="section-subtitle">Hebrew Bible: Torah (Law), Nevi'im (Prophets), Ketuvim (Writings)</p>
                 </div>
 
-                <div class="section-header" style="margin-top: 3rem;">
-                    <h3 class="section-title">Nevi'im • נְבִיאִים</h3>
-                    <p class="section-subtitle">The Prophets</p>
-                </div>
-                
-                <div class="books-grid">
-                    <a href="/studies/characters/joshua/" class="book-card">
-                        <div class="book-name">Joshua</div>
-                        <div class="book-hebrew">יְהוֹשֻׁעַ</div>
-                        <div class="book-stats">8+ characters</div>
-                    </a>
-                    
-                    <a href="/studies/characters/judges/" class="book-card">
-                        <div class="book-name">Judges</div>
-                        <div class="book-hebrew">שֹׁפְטִים</div>
-                        <div class="book-stats">20+ characters</div>
-                    </a>
-                    
-                    <a href="/studies/characters/samuel/" class="book-card">
-                        <div class="book-name">1-2 Samuel</div>
-                        <div class="book-hebrew">שְׁמוּאֵל</div>
-                        <div class="book-stats">25+ characters</div>
-                    </a>
-                    
-                    <a href="/studies/characters/kings/" class="book-card">
-                        <div class="book-name">1-2 Kings</div>
-                        <div class="book-hebrew">מְלָכִים</div>
-                        <div class="book-stats">30+ characters</div>
-                    </a>
+                <!-- Sub-tabs for categories organized by main divisions -->
+                <div class="sub-tabs-nav">
+                    <span class="tanakh-chip disabled">
+                        <span class="hebrew">תּוֹרָה</span> Torah
+                    </span>
+                    <button class="sub-tab-button active" data-category="torah">Torah Books</button>
                 </div>
 
-                <div class="section-header" style="margin-top: 3rem;">
-                    <h3 class="section-title">Ketuvim • כְּתוּבִים</h3>
-                    <p class="section-subtitle">The Writings</p>
+                <div class="sub-tabs-nav">
+                    <span class="tanakh-chip disabled">
+                        <span class="hebrew">נְבִיאִים</span> Nevi'im (Prophets)
+                    </span>
+                    <button class="sub-tab-button" data-category="neviim-former">Former Prophets</button>
+                    <button class="sub-tab-button" data-category="neviim-latter">Latter Prophets</button>
                 </div>
-                
-                <div class="books-grid">
-                    <a href="/studies/characters/psalms/" class="book-card">
-                        <div class="book-name">Psalms</div>
-                        <div class="book-hebrew">תְּהִלִּים</div>
-                        <div class="book-stats">10+ characters</div>
-                    </a>
-                    
-                    <a href="/studies/characters/proverbs/" class="book-card">
-                        <div class="book-name">Proverbs</div>
-                        <div class="book-hebrew">מִשְׁלֵי</div>
-                        <div class="book-stats">5+ characters</div>
-                    </a>
-                    
-                    <a href="/studies/characters/job/" class="book-card">
-                        <div class="book-name">Job</div>
-                        <div class="book-hebrew">אִיּוֹב</div>
-                        <div class="book-stats">8+ characters</div>
-                    </a>
-                    
-                    <a href="/studies/characters/ruth/" class="book-card">
-                        <div class="book-name">Ruth</div>
-                        <div class="book-hebrew">רוּת</div>
-                        <div class="book-stats">5+ characters</div>
-                    </a>
-                    
-                    <a href="/studies/characters/esther/" class="book-card">
-                        <div class="book-name">Esther</div>
-                        <div class="book-hebrew">אֶסְתֵּר</div>
-                        <div class="book-stats">10+ characters</div>
-                    </a>
+
+                <div class="sub-tabs-nav">
+                    <span class="tanakh-chip disabled">
+                        <span class="hebrew">כְּתוּבִים</span> Ketuvim (Writings)
+                    </span>
+                    <button class="sub-tab-button" data-category="ketuvim-scrolls">Five Scrolls (Megillot)</button>
+                    <button class="sub-tab-button" data-category="ketuvim-wisdom">Wisdom Literature</button>
+                    <button class="sub-tab-button" data-category="ketuvim-other">Other Writings</button>
+                </div>
+
+                <!-- Torah Section -->
+                <div class="sub-tab-content active" id="torah-category">
+                    <details open>
+                        <summary>תּוֹרָה • Torah</summary>
+                        <table class="tanakh">
+                            <thead>
+                                <tr>
+                                    <th>Hebrew Name</th>
+                                    <th>Literal Meaning</th>
+                                    <th>Transliteration</th>
+                                    <th>English Name</th>
+                                    <th>Character Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-book="genesis">
+                                    <td><span class="hebrew">בְּרֵאשִׁית</span></td>
+                                    <td>In the Beginning</td>
+                                    <td>B'reishit</td>
+                                    <td>Genesis</td>
+                                    <td>30+</td>
+                                </tr>
+                                <tr data-book="exodus">
+                                    <td><span class="hebrew">שְׁמוֹת</span></td>
+                                    <td>Names</td>
+                                    <td>Sh'mot</td>
+                                    <td>Exodus</td>
+                                    <td>15+</td>
+                                </tr>
+                                <tr data-book="leviticus">
+                                    <td><span class="hebrew">וַיִּקְרָא</span></td>
+                                    <td>And He Called</td>
+                                    <td>Vayikra</td>
+                                    <td>Leviticus</td>
+                                    <td>5+</td>
+                                </tr>
+                                <tr data-book="numbers">
+                                    <td><span class="hebrew">בְּמִדְבַּר</span></td>
+                                    <td>In the Wilderness</td>
+                                    <td>B'midbar</td>
+                                    <td>Numbers</td>
+                                    <td>10+</td>
+                                </tr>
+                                <tr data-book="deuteronomy">
+                                    <td><span class="hebrew">דְּבָרִים</span></td>
+                                    <td>Words</td>
+                                    <td>D'varim</td>
+                                    <td>Deuteronomy</td>
+                                    <td>5+</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </details>
+
+                    <!-- Book Data Section -->
+                    <div id="book-data-section" style="display: none;">
+                        <div class="loading" id="book-loading">
+                            <div class="loading-spinner"></div>
+                        </div>
+                        <div id="book-data" style="display: none;">
+                            <!-- Book content will be injected here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Former Prophets Section -->
+                <div class="sub-tab-content" id="neviim-former-category">
+                    <details open>
+                        <summary>נְבִיאִים רִאשׁוֹנִים • Former Prophets</summary>
+                        <table class="tanakh">
+                            <thead>
+                                <tr>
+                                    <th>Hebrew Name</th>
+                                    <th>Literal Meaning</th>
+                                    <th>Transliteration</th>
+                                    <th>English Name</th>
+                                    <th>Character Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-book="joshua">
+                                    <td><span class="hebrew">יְהוֹשֻׁעַ</span></td>
+                                    <td>Yahweh is Salvation</td>
+                                    <td>Yehoshua</td>
+                                    <td>Joshua</td>
+                                    <td>8+</td>
+                                </tr>
+                                <tr data-book="judges">
+                                    <td><span class="hebrew">שֹׁפְטִים</span></td>
+                                    <td>Judges</td>
+                                    <td>Shoftim</td>
+                                    <td>Judges</td>
+                                    <td>20+</td>
+                                </tr>
+                                <tr data-book="samuel">
+                                    <td><span class="hebrew">שְׁמוּאֵל</span></td>
+                                    <td>Name of God</td>
+                                    <td>Sh'muel</td>
+                                    <td>1-2 Samuel</td>
+                                    <td>25+</td>
+                                </tr>
+                                <tr data-book="kings">
+                                    <td><span class="hebrew">מְלָכִים</span></td>
+                                    <td>Kings</td>
+                                    <td>M'lakhim</td>
+                                    <td>1-2 Kings</td>
+                                    <td>30+</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </details>
+                </div>
+
+                <!-- Latter Prophets Section -->
+                <div class="sub-tab-content" id="neviim-latter-category">
+                    <details open>
+                        <summary>נְבִיאִים אַחֲרוֹנִים • Latter Prophets</summary>
+                        <table class="tanakh">
+                            <thead>
+                                <tr>
+                                    <th>Hebrew Name</th>
+                                    <th>Literal Meaning</th>
+                                    <th>Transliteration</th>
+                                    <th>English Name</th>
+                                    <th>Character Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-book="isaiah">
+                                    <td><span class="hebrew">יְשַׁעְיָהוּ</span></td>
+                                    <td>Yahweh is Salvation</td>
+                                    <td>Yeshayahu</td>
+                                    <td>Isaiah</td>
+                                    <td>10+</td>
+                                </tr>
+                                <tr data-book="jeremiah">
+                                    <td><span class="hebrew">יִרְמְיָהוּ</span></td>
+                                    <td>Yahweh will Uplift</td>
+                                    <td>Yirmiyahu</td>
+                                    <td>Jeremiah</td>
+                                    <td>8+</td>
+                                </tr>
+                                <tr data-book="ezekiel">
+                                    <td><span class="hebrew">יְחֶזְקֵאל</span></td>
+                                    <td>God will Strengthen</td>
+                                    <td>Yechezkel</td>
+                                    <td>Ezekiel</td>
+                                    <td>5+</td>
+                                </tr>
+                                <tr data-book="hosea">
+                                    <td><span class="hebrew">הוֹשֵׁעַ</span></td>
+                                    <td>Salvation</td>
+                                    <td>Hoshea</td>
+                                    <td>Hosea</td>
+                                    <td>3+</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </details>
+                </div>
+
+                <!-- Five Scrolls Section -->
+                <div class="sub-tab-content" id="ketuvim-scrolls-category">
+                    <details open>
+                        <summary>חָמֵשׁ מְגִלּוֹת • Five Scrolls (Megillot)</summary>
+                        <table class="tanakh">
+                            <thead>
+                                <tr>
+                                    <th>Hebrew Name</th>
+                                    <th>Literal Meaning</th>
+                                    <th>Transliteration</th>
+                                    <th>English Name</th>
+                                    <th>Character Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-book="song-of-songs">
+                                    <td><span class="hebrew">שִׁיר הַשִּׁירִים</span></td>
+                                    <td>Song of Songs</td>
+                                    <td>Shir HaShirim</td>
+                                    <td>Song of Songs</td>
+                                    <td>5+</td>
+                                </tr>
+                                <tr data-book="ruth">
+                                    <td><span class="hebrew">רוּת</span></td>
+                                    <td>Companion</td>
+                                    <td>Rut</td>
+                                    <td>Ruth</td>
+                                    <td>5+</td>
+                                </tr>
+                                <tr data-book="lamentations">
+                                    <td><span class="hebrew">אֵיכָה</span></td>
+                                    <td>How?!</td>
+                                    <td>Eikhah</td>
+                                    <td>Lamentations</td>
+                                    <td>2+</td>
+                                </tr>
+                                <tr data-book="ecclesiastes">
+                                    <td><span class="hebrew">קֹהֶלֶת</span></td>
+                                    <td>Assembler</td>
+                                    <td>Kohelet</td>
+                                    <td>Ecclesiastes</td>
+                                    <td>3+</td>
+                                </tr>
+                                <tr data-book="esther">
+                                    <td><span class="hebrew">אֶסְתֵּר</span></td>
+                                    <td>Esther (Star)</td>
+                                    <td>Ester</td>
+                                    <td>Esther</td>
+                                    <td>10+</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </details>
+                </div>
+
+                <!-- Wisdom Literature Section -->
+                <div class="sub-tab-content" id="ketuvim-wisdom-category">
+                    <details open>
+                        <summary>סִפְרוּת חָכְמָה • Wisdom Literature</summary>
+                        <table class="tanakh">
+                            <thead>
+                                <tr>
+                                    <th>Hebrew Name</th>
+                                    <th>Literal Meaning</th>
+                                    <th>Transliteration</th>
+                                    <th>English Name</th>
+                                    <th>Character Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-book="psalms">
+                                    <td><span class="hebrew">תְּהִלִּים</span></td>
+                                    <td>Praises</td>
+                                    <td>T'hillim</td>
+                                    <td>Psalms</td>
+                                    <td>10+</td>
+                                </tr>
+                                <tr data-book="proverbs">
+                                    <td><span class="hebrew">מִשְׁלֵי</span></td>
+                                    <td>Proverbs</td>
+                                    <td>Mishlei</td>
+                                    <td>Proverbs</td>
+                                    <td>5+</td>
+                                </tr>
+                                <tr data-book="job">
+                                    <td><span class="hebrew">אִיּוֹב</span></td>
+                                    <td>Persecuted</td>
+                                    <td>Iyov</td>
+                                    <td>Job</td>
+                                    <td>8+</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </details>
+                </div>
+
+                <!-- Other Writings Section -->
+                <div class="sub-tab-content" id="ketuvim-other-category">
+                    <details open>
+                        <summary>כְּתוּבִים אֲחֵרִים • Other Writings</summary>
+                        <table class="tanakh">
+                            <thead>
+                                <tr>
+                                    <th>Hebrew Name</th>
+                                    <th>Literal Meaning</th>
+                                    <th>Transliteration</th>
+                                    <th>English Name</th>
+                                    <th>Character Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-book="daniel">
+                                    <td><span class="hebrew">דָּנִיֵּאל</span></td>
+                                    <td>God is My Judge</td>
+                                    <td>Daniel</td>
+                                    <td>Daniel</td>
+                                    <td>10+</td>
+                                </tr>
+                                <tr data-book="ezra">
+                                    <td><span class="hebrew">עֶזְרָא</span></td>
+                                    <td>Help</td>
+                                    <td>Ezra</td>
+                                    <td>Ezra</td>
+                                    <td>5+</td>
+                                </tr>
+                                <tr data-book="nehemiah">
+                                    <td><span class="hebrew">נְחֶמְיָה</span></td>
+                                    <td>Comfort of Yahweh</td>
+                                    <td>Nechemyah</td>
+                                    <td>Nehemiah</td>
+                                    <td>3+</td>
+                                </tr>
+                                <tr data-book="chronicles">
+                                    <td><span class="hebrew">דִּבְרֵי הַיָּמִים</span></td>
+                                    <td>Words of the Days</td>
+                                    <td>Divrei Hayamim</td>
+                                    <td>1-2 Chronicles</td>
+                                    <td>15+</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </details>
                 </div>
             </div>
 
             <!-- New Testament Content -->
             <div class="tab-content" id="new-testament-content">
                 <div class="section-header">
-                    <h3 class="section-title">The Gospels</h3>
-                    <p class="section-subtitle">The Life and Ministry of Jesus</p>
+                    <h3 class="section-title">New Testament</h3>
+                    <p class="section-subtitle">Gospels, Acts, Epistles, and Revelation</p>
                 </div>
                 
-                <div class="books-grid">
-                    <a href="/studies/characters/matthew/" class="book-card">
-                        <div class="book-name">Matthew</div>
-                        <div class="book-stats">Coming Soon</div>
-                    </a>
-                    
-                    <a href="/studies/characters/mark/" class="book-card">
-                        <div class="book-name">Mark</div>
-                        <div class="book-stats">Coming Soon</div>
-                    </a>
-                    
-                    <a href="/studies/characters/luke/" class="book-card">
-                        <div class="book-name">Luke</div>
-                        <div class="book-stats">Coming Soon</div>
-                    </a>
-                    
-                    <a href="/studies/characters/john/" class="book-card">
-                        <div class="book-name">John</div>
-                        <div class="book-stats">Coming Soon</div>
-                    </a>
-                </div>
-
-                <div class="empty-state" style="margin-top: 3rem;">
+                <div class="empty-state">
                     <div class="empty-state-icon">🚧</div>
                     <div class="empty-state-text">New Testament Profiles Coming Soon</div>
                     <div class="empty-state-subtext">We're working on comprehensive profiles for New Testament characters</div>
@@ -1002,6 +1434,17 @@
     </footer>
 
     <script>
+        // Sample character data (you can expand this)
+        const characterData = {
+            genesis: {
+                "book": "Genesis",
+                "entries": [
+                    // Add your Genesis characters here
+                ]
+            }
+            // Add more books as needed
+        };
+
         // Mobile menu toggle
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const navLinks = document.getElementById('navLinks');
@@ -1039,6 +1482,26 @@
             });
         });
 
+        // Sub-tab switching
+        const subTabButtons = document.querySelectorAll('.sub-tab-button');
+        const subTabContents = document.querySelectorAll('.sub-tab-content');
+
+        subTabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const category = button.dataset.category;
+                
+                subTabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                subTabContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === `${category}-category`) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+
         // Add scroll effect to nav
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('main-nav');
@@ -1062,6 +1525,150 @@
                 }
             });
         });
+
+        // Table row click handler
+        const tableRows = document.querySelectorAll('table.tanakh tbody tr[data-book]');
+        tableRows.forEach(row => {
+            row.addEventListener('click', () => {
+                const bookId = row.dataset.book;
+                if (bookId) {
+                    loadBookData(bookId);
+                }
+            });
+        });
+
+        // Function to create slug from ID
+        function toSlug(id) {
+            return id.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        }
+
+        // Function to create a tile/card for each character
+        function createTile(entry, bookName) {
+            const href = `/studies/characters/${bookName}/${toSlug(entry.id)}.html`;
+            const tags = (entry.tags || []).map(tag => {
+                const tagClass = tag.toLowerCase().includes('group') ? 'group' : 
+                               tag.toLowerCase().includes('warning') ? 'warning' : '';
+                return `<span class="tag ${tagClass}">${tag}</span>`;
+            }).join(' ');
+            
+            const script = entry.script?.text ? ` <span class="hebrew">${entry.script.text}</span>` : '';
+            const meta = entry.meaning 
+                ? `${entry.meaning} • ${entry.references?.join('; ') || ''}`
+                : `${entry.references?.join('; ') || ''}`;
+            
+            return `
+                <article class="study-card">
+                    <a class="study-card-link" href="${href}">
+                        <div class="study-card-header">
+                            <h4 class="study-card-title">${entry.display}${script}</h4>
+                            <div class="study-card-tags">${tags}</div>
+                        </div>
+                        <div class="study-card-body">
+                            <p class="study-card-meta">${meta}</p>
+                            <p class="study-card-desc">${entry.summary || ''}</p>
+                        </div>
+                        <div class="study-card-arrow">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </a>
+                </article>`;
+        }
+
+        // Function to load book data
+        function loadBookData(bookId) {
+            const clickedRow = document.querySelector(`tr[data-book="${bookId}"]`);
+            const parentSection = clickedRow?.closest('.sub-tab-content');
+            
+            let bookDataSection, loadingEl, dataEl;
+            
+            if (parentSection) {
+                if (parentSection.id === 'torah-category') {
+                    bookDataSection = document.getElementById('book-data-section');
+                    loadingEl = document.getElementById('book-loading');
+                    dataEl = document.getElementById('book-data');
+                } else {
+                    let genericSection = parentSection.querySelector('.book-data-section-generic');
+                    if (!genericSection) {
+                        const sectionHTML = `
+                            <div class="book-data-section-generic" style="display: none;">
+                                <div class="loading book-loading-generic">
+                                    <div class="loading-spinner"></div>
+                                </div>
+                                <div class="book-data-generic" style="display: none;">
+                                    <!-- Book content will be injected here -->
+                                </div>
+                            </div>
+                        `;
+                        parentSection.insertAdjacentHTML('beforeend', sectionHTML);
+                        genericSection = parentSection.querySelector('.book-data-section-generic');
+                    }
+                    bookDataSection = genericSection;
+                    loadingEl = genericSection.querySelector('.book-loading-generic');
+                    dataEl = genericSection.querySelector('.book-data-generic');
+                }
+            }
+            
+            if (!bookDataSection || !loadingEl || !dataEl) {
+                console.error('Could not find book data section elements');
+                return;
+            }
+            
+            bookDataSection.style.display = 'block';
+            loadingEl.style.display = 'flex';
+            dataEl.style.display = 'none';
+            
+            setTimeout(() => {
+                const bookData = characterData[bookId];
+                
+                if (bookData && bookData.entries && bookData.entries.length > 0) {
+                    const men = bookData.entries.filter(e => e.gender === 'male').sort((a, b) => a.order_in_book - b.order_in_book);
+                    const women = bookData.entries.filter(e => e.gender === 'female').sort((a, b) => a.order_in_book - b.order_in_book);
+                    
+                    let html = `<h3 class="section-title">${bookData.book} Characters</h3>`;
+                    
+                    if (men.length > 0) {
+                        html += `
+                            <div class="section-header">
+                                <h4 class="section-title">Men</h4>
+                                <p class="section-subtitle">${men.length} male characters</p>
+                            </div>
+                            <div class="cards-grid">
+                                ${men.map(entry => createTile(entry, bookId)).join('')}
+                            </div>
+                        `;
+                    }
+                    
+                    if (women.length > 0) {
+                        html += `
+                            <div class="section-header">
+                                <h4 class="section-title">Women</h4>
+                                <p class="section-subtitle">${women.length} female characters</p>
+                            </div>
+                            <div class="cards-grid">
+                                ${women.map(entry => createTile(entry, bookId)).join('')}
+                            </div>
+                        `;
+                    }
+                    
+                    dataEl.innerHTML = html;
+                } else {
+                    dataEl.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📚</div>
+                            <div class="empty-state-text">Coming Soon</div>
+                            <div class="empty-state-subtext">Character profiles for ${bookId.charAt(0).toUpperCase() + bookId.slice(1)} are being prepared</div>
+                        </div>
+                    `;
+                }
+                
+                loadingEl.style.display = 'none';
+                dataEl.style.display = 'block';
+                
+                bookDataSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 800);
+        }
     </script>
 </body>
 </html>
