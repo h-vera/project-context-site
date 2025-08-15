@@ -1502,107 +1502,59 @@
                         "order_in_book": 2
                     }
                 ]
+            },
+            shoftim: {
+                "book": "Judges",
+                "entries": [
+                    {
+                        "id": "deborah",
+                        "type": "named",
+                        "display": "Deborah",
+                        "script": {
+                            "lang": "hebrew",
+                            "text": "דְּבוֹרָה",
+                            "translit": "Devorah"
+                        },
+                        "meaning": "Bee",
+                        "references": ["Judg 4-5"],
+                        "summary": "Prophetess and judge of Israel who led the nation to victory over Canaanite oppression alongside Barak.",
+                        "tags": ["Prophetess", "Judge", "Leader"],
+                        "order_in_book": 1
+                    },
+                    {
+                        "id": "jael",
+                        "type": "named",
+                        "display": "Jael",
+                        "script": {
+                            "lang": "hebrew",
+                            "text": "יָעֵל",
+                            "translit": "Yael"
+                        },
+                        "meaning": "Mountain Goat/Ibex",
+                        "references": ["Judg 4:17-24", "5:6,24-27"],
+                        "summary": "Kenite woman who killed the Canaanite commander Sisera with a tent peg, fulfilling Deborah's prophecy and delivering Israel.",
+                        "tags": ["Deliverer", "Foreign", "Head-crusher"],
+                        "order_in_book": 2
+                    },
+                    {
+                        "id": "delilah",
+                        "type": "named",
+                        "display": "Delilah",
+                        "script": {
+                            "lang": "hebrew",
+                            "text": "דְּלִילָה",
+                            "translit": "Delilah"
+                        },
+                        "meaning": "She who weakens",
+                        "references": ["Judg 16:4-21"],
+                        "summary": "Philistine operative who betrayed Samson for silver by discovering and exploiting the secret of his Nazirite strength.",
+                        "tags": ["Betrayer", "Antagonist", "Foreign"],
+                        "order_in_book": 3
+                    }
+                ]
             }
         };
 
-        // Mobile menu toggle
-        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-        const navLinks = document.getElementById('navLinks');
-
-        mobileMenuToggle?.addEventListener('click', () => {
-            mobileMenuToggle.classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
-
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('#main-nav')) {
-                mobileMenuToggle?.classList.remove('active');
-                navLinks?.classList.remove('active');
-            }
-        });
-
-        // Main tab switching
-        const mainTabButtons = document.querySelectorAll('.main-tab-button');
-        const mainTabContents = document.querySelectorAll('.tab-content');
-
-        mainTabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const section = button.dataset.section;
-                
-                mainTabButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                
-                mainTabContents.forEach(content => {
-                    content.classList.remove('active');
-                    if (content.id === `${section}-content`) {
-                        content.classList.add('active');
-                    }
-                });
-            });
-        });
-
-        // Sub-tab switching
-        const subTabButtons = document.querySelectorAll('.sub-tab-button');
-        const subTabContents = document.querySelectorAll('.sub-tab-content');
-
-        subTabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const category = button.dataset.category;
-                
-                subTabButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                
-                subTabContents.forEach(content => {
-                    content.classList.remove('active');
-                    if (content.id === `${category}-category`) {
-                        content.classList.add('active');
-                    }
-                });
-            });
-        });
-
-        // Add scroll effect to nav
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('main-nav');
-            if (window.scrollY > 100) {
-                nav?.classList.add('scrolled');
-            } else {
-                nav?.classList.remove('scrolled');
-            }
-        });
-
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Table row click handler
-        const tableRows = document.querySelectorAll('table.tanakh tbody tr[data-book]');
-        tableRows.forEach(row => {
-            row.addEventListener('click', () => {
-                const bookId = row.dataset.book;
-                if (bookId) {
-                    loadBookData(bookId);
-                }
-            });
-        });
-
-        // Function to create slug from ID
-        function toSlug(id) {
-            return id.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-        }
-
-        // Function to create a tile/card for each woman
         // Map Hebrew book names to English for file paths
         const bookNameMap = {
             'breishit': 'genesis',
@@ -1643,106 +1595,19 @@
             'divrei-hayamim': 'chronicles'
         };
 
-        function createTile(entry, bookId) {
-            // Convert Hebrew book name to English
-            const englishBookName = bookNameMap[bookId] || bookId;
-            
-            // Generate the correct href based on your file structure
-            const href = `/studies/characters/${englishBookName}/${toSlug(entry.id)}.html`;
-            const tags = (entry.tags || []).map(tag => {
-                const tagClass = tag.toLowerCase().includes('group') ? 'group' : 
-                               tag.toLowerCase().includes('warning') ? 'warning' : '';
-                return `<span class="tag ${tagClass}">${tag}</span>`;
-            }).join(' ');
-            
-            const script = entry.script?.text ? ` <span class="hebrew">${entry.script.text}</span>` : '';
-            const meta = entry.meaning 
-                ? `${entry.meaning} • ${entry.references?.join('; ') || ''}`
-                : `${entry.references?.join('; ') || ''}`;
-            
-            return `
-                <article class="study-card">
-                    <a class="study-card-link" href="${href}">
-                        <div class="study-card-header">
-                            <h4 class="study-card-title">${entry.display}${script}</h4>
-                            <div class="study-card-tags">${tags}</div>
-                        </div>
-                        <div class="study-card-body">
-                            <p class="study-card-meta">${meta}</p>
-                            <p class="study-card-desc">${entry.summary || ''}</p>
-                        </div>
-                        <div class="study-card-arrow">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M9 5l7 7-7 7"/>
-                            </svg>
-                        </div>
-                    </a>
-                </article>`;
-        }
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const navLinks = document.getElementById('navLinks');
 
-        // Function to load book data
-        function loadBookData(bookId) {
-            const bookDataSection = document.getElementById('book-data-section');
-            const loadingEl = document.getElementById('book-loading');
-            const dataEl = document.getElementById('book-data');
-            
-            // Show the book data section
-            bookDataSection.style.display = 'block';
-            loadingEl.style.display = 'flex';
-            dataEl.style.display = 'none';
-            
-            // Simulate loading
-            setTimeout(() => {
-                const bookData = bibleWomenData[bookId];
-                
-                if (bookData) {
-                    const named = bookData.entries.filter(e => e.type === 'named').sort((a, b) => a.order_in_book - b.order_in_book);
-                    const unnamed = bookData.entries.filter(e => e.type === 'unnamed').sort((a, b) => a.order_in_book - b.order_in_book);
-                    
-                    let html = `<h3 class="section-title">${bookData.book} Women</h3>`;
-                    
-                    if (named.length > 0) {
-                        html += `
-                            <div class="section-header">
-                                <h4 class="section-title">Named Women</h4>
-                                <p class="section-subtitle">${named.length} women with recorded names</p>
-                            </div>
-                            <div class="cards-grid">
-                                ${named.map(entry => createTile(entry, bookId)).join('')}
-                            </div>
-                        `;
-                    }
-                    
-                    if (unnamed.length > 0) {
-                        html += `
-                            <div class="section-header">
-                                <h4 class="section-title">Unnamed Women & Groups</h4>
-                                <p class="section-subtitle">${unnamed.length} women identified by role or relationship</p>
-                            </div>
-                            <div class="cards-grid">
-                                ${unnamed.map(entry => createTile(entry, bookId)).join('')}
-                            </div>
-                        `;
-                    }
-                    
-                    dataEl.innerHTML = html;
-                } else {
-                    dataEl.innerHTML = `
-                        <div class="empty-state">
-                            <div class="empty-state-icon">📚</div>
-                            <div class="empty-state-text">Coming Soon</div>
-                            <div class="empty-state-subtext">This book's profiles are being prepared</div>
-                        </div>
-                    `;
-                }
-                
-                loadingEl.style.display = 'none';
-                dataEl.style.display = 'block';
-                
-                // Scroll to the data section
-                bookDataSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 800);
-        }
-    </script>
-</body>
-</html>
+        mobileMenuToggle?.addEventListener('click', () => {
+            mobileMenuToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#main-nav')) {
+                mobileMenuToggle?.classList.remove('active');
+                navLinks?.classList.remove('active');
+            }
+        
