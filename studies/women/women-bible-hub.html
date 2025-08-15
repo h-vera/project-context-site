@@ -956,7 +956,7 @@
                                     <td>Names</td>
                                     <td>Sh'mot</td>
                                     <td>Exodus</td>
-                                    <td>5</td>
+                                    <td>2</td>
                                 </tr>
                                 <tr data-book="vayikra">
                                     <td><span class="hebrew">וַיִּקְרָא</span></td>
@@ -1040,6 +1040,16 @@
                             </tbody>
                         </table>
                     </details>
+
+                    <!-- Book Data Section -->
+                    <div id="book-data-section-neviim-former" style="display: none;">
+                        <div class="loading" id="book-loading-neviim-former">
+                            <div class="loading-spinner"></div>
+                        </div>
+                        <div id="book-data-neviim-former" style="display: none;">
+                            <!-- Book content will be injected here -->
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Latter Prophets Section -->
@@ -1610,4 +1620,234 @@
                 mobileMenuToggle?.classList.remove('active');
                 navLinks?.classList.remove('active');
             }
-        
+        });
+
+        // Main tab switching
+        const mainTabButtons = document.querySelectorAll('.main-tab-button');
+        const mainTabContents = document.querySelectorAll('.tab-content');
+
+        mainTabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const section = button.dataset.section;
+                
+                mainTabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                mainTabContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === `${section}-content`) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Sub-tab switching
+        const subTabButtons = document.querySelectorAll('.sub-tab-button');
+        const subTabContents = document.querySelectorAll('.sub-tab-content');
+
+        subTabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const category = button.dataset.category;
+                
+                subTabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                subTabContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === `${category}-category`) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Add scroll effect to nav
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('main-nav');
+            if (window.scrollY > 100) {
+                nav?.classList.add('scrolled');
+            } else {
+                nav?.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Table row click handler
+        const tableRows = document.querySelectorAll('table.tanakh tbody tr[data-book]');
+        tableRows.forEach(row => {
+            row.addEventListener('click', () => {
+                const bookId = row.dataset.book;
+                if (bookId) {
+                    loadBookData(bookId);
+                }
+            });
+        });
+
+        // Function to create slug from ID
+        function toSlug(id) {
+            return id.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        }
+
+        // Function to create a tile/card for each woman
+        function createTile(entry, bookId) {
+            // Convert Hebrew book name to English
+            const englishBookName = bookNameMap[bookId] || bookId;
+            
+            // Generate the correct href based on your file structure
+            const href = `/studies/characters/${englishBookName}/${toSlug(entry.id)}.html`;
+            const tags = (entry.tags || []).map(tag => {
+                const tagClass = tag.toLowerCase().includes('group') ? 'group' : 
+                               tag.toLowerCase().includes('warning') ? 'warning' : '';
+                return `<span class="tag ${tagClass}">${tag}</span>`;
+            }).join(' ');
+            
+            const script = entry.script?.text ? ` <span class="hebrew">${entry.script.text}</span>` : '';
+            const meta = entry.meaning 
+                ? `${entry.meaning} • ${entry.references?.join('; ') || ''}`
+                : `${entry.references?.join('; ') || ''}`;
+            
+            return `
+                <article class="study-card">
+                    <a class="study-card-link" href="${href}">
+                        <div class="study-card-header">
+                            <h4 class="study-card-title">${entry.display}${script}</h4>
+                            <div class="study-card-tags">${tags}</div>
+                        </div>
+                        <div class="study-card-body">
+                            <p class="study-card-meta">${meta}</p>
+                            <p class="study-card-desc">${entry.summary || ''}</p>
+                        </div>
+                        <div class="study-card-arrow">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </a>
+                </article>`;
+        }
+
+        // Function to load book data
+        function loadBookData(bookId) {
+            // Find which section the book belongs to
+            const clickedRow = document.querySelector(`tr[data-book="${bookId}"]`);
+            const parentSection = clickedRow?.closest('.sub-tab-content');
+            
+            // Determine which book data section to use based on parent
+            let bookDataSection, loadingEl, dataEl;
+            
+            if (parentSection) {
+                // Check if we're in Torah section
+                if (parentSection.id === 'torah-category') {
+                    bookDataSection = document.getElementById('book-data-section');
+                    loadingEl = document.getElementById('book-loading');
+                    dataEl = document.getElementById('book-data');
+                } 
+                // Check if we're in Former Prophets section
+                else if (parentSection.id === 'neviim-former-category') {
+                    bookDataSection = document.getElementById('book-data-section-neviim-former');
+                    loadingEl = document.getElementById('book-loading-neviim-former');
+                    dataEl = document.getElementById('book-data-neviim-former');
+                }
+                // For other sections, use the Torah section as fallback for now
+                else {
+                    // Create a generic book data section if it doesn't exist
+                    let genericSection = parentSection.querySelector('.book-data-section-generic');
+                    if (!genericSection) {
+                        const sectionHTML = `
+                            <div class="book-data-section-generic" style="display: none;">
+                                <div class="loading book-loading-generic">
+                                    <div class="loading-spinner"></div>
+                                </div>
+                                <div class="book-data-generic" style="display: none;">
+                                    <!-- Book content will be injected here -->
+                                </div>
+                            </div>
+                        `;
+                        parentSection.insertAdjacentHTML('beforeend', sectionHTML);
+                        genericSection = parentSection.querySelector('.book-data-section-generic');
+                    }
+                    bookDataSection = genericSection;
+                    loadingEl = genericSection.querySelector('.book-loading-generic');
+                    dataEl = genericSection.querySelector('.book-data-generic');
+                }
+            }
+            
+            if (!bookDataSection || !loadingEl || !dataEl) {
+                console.error('Could not find book data section elements');
+                return;
+            }
+            
+            // Show the book data section
+            bookDataSection.style.display = 'block';
+            loadingEl.style.display = 'flex';
+            dataEl.style.display = 'none';
+            
+            // Simulate loading
+            setTimeout(() => {
+                const bookData = bibleWomenData[bookId];
+                
+                if (bookData) {
+                    const named = bookData.entries.filter(e => e.type === 'named').sort((a, b) => a.order_in_book - b.order_in_book);
+                    const unnamed = bookData.entries.filter(e => e.type === 'unnamed').sort((a, b) => a.order_in_book - b.order_in_book);
+                    
+                    let html = `<h3 class="section-title">${bookData.book} Women</h3>`;
+                    
+                    if (named.length > 0) {
+                        html += `
+                            <div class="section-header">
+                                <h4 class="section-title">Named Women</h4>
+                                <p class="section-subtitle">${named.length} women with recorded names</p>
+                            </div>
+                            <div class="cards-grid">
+                                ${named.map(entry => createTile(entry, bookId)).join('')}
+                            </div>
+                        `;
+                    }
+                    
+                    if (unnamed.length > 0) {
+                        html += `
+                            <div class="section-header">
+                                <h4 class="section-title">Unnamed Women & Groups</h4>
+                                <p class="section-subtitle">${unnamed.length} women identified by role or relationship</p>
+                            </div>
+                            <div class="cards-grid">
+                                ${unnamed.map(entry => createTile(entry, bookId)).join('')}
+                            </div>
+                        `;
+                    }
+                    
+                    dataEl.innerHTML = html;
+                } else {
+                    dataEl.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📚</div>
+                            <div class="empty-state-text">Coming Soon</div>
+                            <div class="empty-state-subtext">This book's profiles are being prepared</div>
+                        </div>
+                    `;
+                }
+                
+                loadingEl.style.display = 'none';
+                dataEl.style.display = 'block';
+                
+                // Scroll to the data section
+                bookDataSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 800);
+        }
+    </script>
+</body>
+</html>
