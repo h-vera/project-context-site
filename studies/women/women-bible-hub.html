@@ -2093,6 +2093,21 @@
             
             // Simulate loading
             setTimeout(() => {
+                // Check if this book has no women
+const womenCount = parseInt(clickedRow?.querySelector('td:last-child').textContent) || 0;
+if (womenCount === 0) {
+    dataEl.innerHTML = `
+        <div class="empty-state">
+            <div class="empty-state-icon">📖</div>
+            <div class="empty-state-text">No Women Recorded</div>
+            <div class="empty-state-subtext">This book does not contain any named or unnamed women</div>
+        </div>
+    `;
+    loadingEl.style.display = 'none';
+    dataEl.style.display = 'block';
+    bookDataSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    return;
+}
                 const bookData = bibleWomenData[bookId];
                 
                 if (bookData) {
