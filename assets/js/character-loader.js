@@ -60,36 +60,137 @@ class CharacterLoader {
         };
     }
 
-    /**
-     * Load character data for a specific book
-     */
-    async loadBook(bookId) {
-        // Check cache first
-        if (this.cache.has(bookId)) {
-            return this.filterData(this.cache.get(bookId));
+/**
+ * Load character data for a specific book
+ */
+async loadBook(bookId) {
+    // Check cache first
+    if (this.cache.has(bookId)) {
+        return this.filterData(this.cache.get(bookId));
+    }
+
+    try {
+        const response = await fetch(`${this.baseUrl}/assets/data/books/${bookId}.json`);
+        if (!response.ok) {
+            throw new Error(`Failed to load book ${bookId}: ${response.status}`);
         }
 
+        // First get the response as text to help with debugging
+        const text = await response.text();
+        let data;
+        
+        try {
+            data = JSON.parse(text);
+        } catch (parseError) {
+            // Log detailed error information for debugging
+            console.error(`JSON parse error in ${bookId}.json:`, parseError);
+            console.error('JSON parse error details:', {
+                bookId: bookId,
+                errorMessage: parseError.message,
+                errorPosition: parseError.message.match(/position (\d+)/) ? 
+                    parseError.message.match(/position (\d+)/)[1] : 'unknown'
+            });
+            
+            // Log a portion of the JSON to help identify the issue
+            if (text.length > 0) {
+                console.error('First 500 characters of JSON:', text.substring(0, 500));
+                console.error('Last 500 characters of JSON:', text.substring(Math.max(0, text.length - 500)));
+            }
+            
+            // Throw a more descriptive error
+            throw new Error(`Invalid JSON in ${bookId}.json: ${parseError.message}`);
+        }
+        
+        // Validate the data structure
+        if (!data || typeof data !== 'object') {
+            throw new Error(`Invalid data structure in ${bookId}.json`);
+        }
+        
+        if (!data.book || !Array.isArray(data.characters)) {
+            console.warn(`Unexpected data structure in ${bookId}.json:`, {
+                hasBook: !!data.book,
+                hasCharacters: !!data.characters,
+                charactersIsArray: Array.isArray(data.characters)
+            });
+        }
+        
+        // Cache the raw data
+        this.cache.set(bookId, data);
+        
+        // Log successful load with character count
+        console.log(`Successfully loaded ${bookId}.json with ${data.characters?.length || 0} characters`);
+        
+        // Return filtered data
+        return this.filterData(data);
+        
+    } catch (error) {
+        console.error(`Error loading book ${bookId}:`, error);
+        
+        // Add a user-friendly alert for debugging (optional - remove in production)
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            console.warn(`Debug mode: Failed to load ${bookId}.json. Check console for details.`);
+        }
+        
+        // Return fallback data for specific books
+        return this.getFallbackBookData(bookId);
+    }
+}
+/**
+ * Debug method to validate all book JSON files
+ */
+async validateAllBooks() {
+    const books = this.getAllBookIds();
+    const results = {
+        valid: [],
+        invalid: [],
+        missing: []
+    };
+    
+    for (const bookId of books) {
         try {
             const response = await fetch(`${this.baseUrl}/assets/data/books/${bookId}.json`);
             if (!response.ok) {
-                throw new Error(`Failed to load book ${bookId}: ${response.status}`);
+                results.missing.push(bookId);
+                continue;
             }
-
-            const data = await response.json();
             
-            // Cache the raw data
-            this.cache.set(bookId, data);
-            
-            // Return filtered data
-            return this.filterData(data);
-            
+            const text = await response.text();
+            try {
+                const data = JSON.parse(text);
+                if (data.book && Array.isArray(data.characters)) {
+                    results.valid.push({
+                        bookId: bookId,
+                        characterCount: data.characters.length,
+                        femaleCount: data.characters.filter(c => c.gender === 'female').length,
+                        maleCount: data.characters.filter(c => c.gender === 'male').length
+                    });
+                } else {
+                    results.invalid.push({
+                        bookId: bookId,
+                        reason: 'Invalid structure'
+                    });
+                }
+            } catch (e) {
+                results.invalid.push({
+                    bookId: bookId,
+                    reason: e.message
+                });
+            }
         } catch (error) {
-            console.error(`Error loading book ${bookId}:`, error);
-            // Return fallback data for specific books
-            return this.getFallbackBookData(bookId);
+            results.missing.push(bookId);
         }
     }
-
+    
+    console.table(results.valid);
+    if (results.invalid.length > 0) {
+        console.error('Invalid JSON files:', results.invalid);
+    }
+    if (results.missing.length > 0) {
+        console.warn('Missing JSON files:', results.missing);
+    }
+    
+    return results;
+}
     /**
      * Filter data based on gender if specified
      */
