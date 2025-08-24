@@ -2,6 +2,7 @@
  * Hub Core JavaScript Module
  * Path: /assets/js/hub-core.js
  * Handles all hub functionality for both characters and women hubs
+ * Updated to handle multi-page character studies with subdirectories
  */
 
 class HubCore {
@@ -233,6 +234,7 @@ class HubCore {
      */
     renderCharacterCards(data, container) {
         const bookName = data.book?.name || 'Book';
+        const bookId = data.book?.id || 'book';
         
         // Separate by gender if we have both
         const men = data.characters.filter(c => c.gender === 'male');
@@ -249,7 +251,7 @@ class HubCore {
                     <p class="section-subtitle">${men.length} male character${men.length > 1 ? 's' : ''}</p>
                 </div>
                 <div class="cards-grid">
-                    ${men.map(char => this.createCharacterCard(char)).join('')}
+                    ${men.map(char => this.createCharacterCard(char, bookId)).join('')}
                 </div>
             `;
         }
@@ -262,7 +264,7 @@ class HubCore {
                     <p class="section-subtitle">${women.length} female character${women.length > 1 ? 's' : ''}</p>
                 </div>
                 <div class="cards-grid">
-                    ${women.map(char => this.createCharacterCard(char)).join('')}
+                    ${women.map(char => this.createCharacterCard(char, bookId)).join('')}
                 </div>
             `;
         }
@@ -275,7 +277,7 @@ class HubCore {
                     <p class="section-subtitle">${unknown.length} character${unknown.length > 1 ? 's' : ''}</p>
                 </div>
                 <div class="cards-grid">
-                    ${unknown.map(char => this.createCharacterCard(char)).join('')}
+                    ${unknown.map(char => this.createCharacterCard(char, bookId)).join('')}
                 </div>
             `;
         }
@@ -287,9 +289,28 @@ class HubCore {
     }
 
     /**
+     * Build the correct path for a character profile
+     * Handles multi-page studies that have subdirectories
+     */
+    buildCharacterPath(character, bookId) {
+        // If character has explicit profilePath, use it
+        if (character.profilePath) {
+            return character.profilePath;
+        }
+        
+        // If character has multiPage flag, it's in a subdirectory
+        if (character.multiPage) {
+            return `/studies/characters/${bookId}/${character.id}/${character.id}.html`;
+        }
+        
+        // Standard single-page character
+        return `/studies/characters/${bookId}/${character.id}.html`;
+    }
+
+    /**
      * Create a single character card HTML
      */
-    createCharacterCard(character) {
+    createCharacterCard(character, bookId) {
         const hebrewText = character.hebrew ? 
             `<span class="hebrew">${character.hebrew}</span>` : '';
         
@@ -304,6 +325,9 @@ class HubCore {
         const meta = character.meaning ? 
             `${character.meaning} • ${references}` : references;
         
+        // Build the correct path
+        const href = this.buildCharacterPath(character, bookId);
+        
         // Add song link for women with songs
         const songLink = character.hasSong && character.songPath ? 
             `<a href="${character.songPath}" class="song-link" title="View Song">
@@ -312,7 +336,7 @@ class HubCore {
         
         return `
             <article class="study-card" style="opacity: 0;">
-                <a href="${character.profilePath || '#'}" class="study-card-link">
+                <a href="${href}" class="study-card-link">
                     <div class="study-card-header">
                         <h4 class="study-card-title">
                             ${character.name} ${hebrewText}
@@ -364,48 +388,92 @@ class HubCore {
 
     /**
      * Load featured characters
+     * Updated to handle multi-page character studies
      */
     async loadFeaturedCharacters() {
         const featuredGrid = document.getElementById('featured-grid');
         if (!featuredGrid) return;
         
-        // Define featured characters
+        // Define featured characters with correct paths
         const featured = [
-            { book: 'genesis', id: 'abraham', name: 'Abraham', hebrew: 'אַבְרָהָם', 
-              desc: 'Father of faith, covenant recipient, and patriarch of Israel. His journey from Ur to Canaan exemplifies faith and obedience.',
-              meta: 'Genesis 11-25 • Multi-page Study' },
-            { book: 'genesis', id: 'sarah', name: 'Sarah', hebrew: 'שָׂרָה',
-              desc: 'Mother of nations, wife of Abraham. Her story demonstrates faith through struggle with infertility and God\'s promise fulfillment.',
-              meta: 'Genesis 11-25 • Complete Profile' },
-            { book: 'exodus', id: 'moses', name: 'Moses', hebrew: 'מֹשֶׁה',
-              desc: 'Prophet, lawgiver, and deliverer of Israel from Egypt. Central figure in the Exodus and covenant at Sinai.',
-              meta: 'Exodus-Deuteronomy • Multi-page Study' },
-            { book: 'judges', id: 'deborah', name: 'Deborah', hebrew: 'דְּבוֹרָה',
-              desc: 'Prophet, judge, and military leader. The only female judge who led Israel to victory over Canaanite oppression.',
-              meta: 'Judges 4-5 • Multi-page Study' },
-            { book: 'genesis', id: 'hagar', name: 'Hagar', hebrew: 'הָגָר',
-              desc: 'Egyptian servant who became mother of Ishmael. Her encounters with God reveal His compassion for the marginalized.',
-              meta: 'Genesis 16, 21 • Complete Profile' },
-            { book: 'judges', id: 'delilah', name: 'Delilah', hebrew: 'דְּלִילָה',
-              desc: 'Philistine woman who betrayed Samson. Her story explores themes of deception, weakness, and divine sovereignty.',
-              meta: 'Judges 16 • Complete Profile' }
+            { 
+                book: 'genesis', 
+                id: 'abraham', 
+                name: 'Abraham', 
+                hebrew: 'אַבְרָהָם',
+                desc: 'Father of faith, covenant recipient, and patriarch of Israel. His journey from Ur to Canaan exemplifies faith and obedience.',
+                meta: 'Genesis 11-25 • Multi-page Study',
+                multiPage: true  // This flag indicates subdirectory structure
+            },
+            { 
+                book: 'genesis', 
+                id: 'sarah', 
+                name: 'Sarah', 
+                hebrew: 'שָׂרָה',
+                desc: 'Mother of nations, wife of Abraham. Her story demonstrates faith through struggle with infertility and God\'s promise fulfillment.',
+                meta: 'Genesis 11-25 • Complete Profile',
+                multiPage: false
+            },
+            { 
+                book: 'exodus', 
+                id: 'moses', 
+                name: 'Moses', 
+                hebrew: 'מֹשֶׁה',
+                desc: 'Prophet, lawgiver, and deliverer of Israel from Egypt. Central figure in the Exodus and covenant at Sinai.',
+                meta: 'Exodus-Deuteronomy • Multi-page Study',
+                multiPage: true
+            },
+            { 
+                book: 'judges', 
+                id: 'deborah', 
+                name: 'Deborah', 
+                hebrew: 'דְּבוֹרָה',
+                desc: 'Prophet, judge, and military leader. The only female judge who led Israel to victory over Canaanite oppression.',
+                meta: 'Judges 4-5 • Multi-page Study',
+                multiPage: true
+            },
+            { 
+                book: 'genesis', 
+                id: 'hagar', 
+                name: 'Hagar', 
+                hebrew: 'הָגָר',
+                desc: 'Egyptian servant who became mother of Ishmael. Her encounters with God reveal His compassion for the marginalized.',
+                meta: 'Genesis 16, 21 • Complete Profile',
+                multiPage: false
+            },
+            { 
+                book: 'judges', 
+                id: 'delilah', 
+                name: 'Delilah', 
+                hebrew: 'דְּלִילָה',
+                desc: 'Philistine woman who betrayed Samson. Her story explores themes of deception, weakness, and divine sovereignty.',
+                meta: 'Judges 16 • Complete Profile',
+                multiPage: false
+            }
         ];
         
-        // Render featured cards
-        const html = featured.map(char => `
-            <a href="https://projectcontext.org/studies/characters/${char.book}/${char.id}.html" class="character-card">
-                <div class="character-header">
-                    <div class="character-name">
-                        ${char.name} 
-                        <span class="character-hebrew">${char.hebrew}</span>
+        // Render featured cards with correct paths
+        const html = featured.map(char => {
+            // Build the correct path based on whether it's multi-page
+            const href = char.multiPage 
+                ? `/studies/characters/${char.book}/${char.id}/${char.id}.html`
+                : `/studies/characters/${char.book}/${char.id}.html`;
+            
+            return `
+                <a href="${href}" class="character-card">
+                    <div class="character-header">
+                        <div class="character-name">
+                            ${char.name} 
+                            <span class="character-hebrew">${char.hebrew}</span>
+                        </div>
                     </div>
-                </div>
-                <div class="character-body">
-                    <p class="character-desc">${char.desc}</p>
-                    <div class="character-meta">${char.meta}</div>
-                </div>
-            </a>
-        `).join('');
+                    <div class="character-body">
+                        <p class="character-desc">${char.desc}</p>
+                        <div class="character-meta">${char.meta}</div>
+                    </div>
+                </a>
+            `;
+        }).join('');
         
         featuredGrid.innerHTML = html;
     }
@@ -509,3 +577,5 @@ if (typeof module !== 'undefined' && module.exports) {
 } else {
     window.HubCore = HubCore;
 }
+
+export default HubCore;
