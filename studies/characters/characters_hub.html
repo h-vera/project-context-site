@@ -208,33 +208,19 @@
                                     <td>Judges</td>
                                     <td>20+</td>
                                 </tr>
-                                <tr data-book="samuel1">
-                                    <td><span class="hebrew">שְׁמוּאֵל א׳</span></td>
+                                <tr data-book="samuel">
+                                    <td><span class="hebrew">שְׁמוּאֵל</span></td>
                                     <td>Name of God</td>
-                                    <td>Sh'muel Alef</td>
-                                    <td>1 Samuel</td>
-                                    <td>15+</td>
+                                    <td>Sh'muel</td>
+                                    <td>1-2 Samuel</td>
+                                    <td>25+</td>
                                 </tr>
-                                <tr data-book="samuel2">
-                                    <td><span class="hebrew">שְׁמוּאֵל ב׳</span></td>
-                                    <td>Name of God</td>
-                                    <td>Sh'muel Bet</td>
-                                    <td>2 Samuel</td>
-                                    <td>10+</td>
-                                </tr>
-                                <tr data-book="kings1">
-                                    <td><span class="hebrew">מְלָכִים א׳</span></td>
+                                <tr data-book="kings">
+                                    <td><span class="hebrew">מְלָכִים</span></td>
                                     <td>Kings</td>
-                                    <td>M'lakhim Alef</td>
-                                    <td>1 Kings</td>
-                                    <td>15+</td>
-                                </tr>
-                                <tr data-book="kings2">
-                                    <td><span class="hebrew">מְלָכִים ב׳</span></td>
-                                    <td>Kings</td>
-                                    <td>M'lakhim Bet</td>
-                                    <td>2 Kings</td>
-                                    <td>15+</td>
+                                    <td>M'lakhim</td>
+                                    <td>1-2 Kings</td>
+                                    <td>30+</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -255,6 +241,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <!-- Major Prophets -->
                                 <tr data-book="isaiah">
                                     <td><span class="hebrew">יְשַׁעְיָהוּ</span></td>
                                     <td>Yahweh is Salvation</td>
@@ -276,6 +263,7 @@
                                     <td>Ezekiel</td>
                                     <td>5+</td>
                                 </tr>
+                                <!-- Minor Prophets (The Twelve) -->
                                 <tr data-book="hosea">
                                     <td><span class="hebrew">הוֹשֵׁעַ</span></td>
                                     <td>Salvation</td>
@@ -502,19 +490,12 @@
                                     <td>Nehemiah</td>
                                     <td>3+</td>
                                 </tr>
-                                <tr data-book="chronicles1">
-                                    <td><span class="hebrew">דִּבְרֵי הַיָּמִים א׳</span></td>
+                                <tr data-book="chronicles">
+                                    <td><span class="hebrew">דִּבְרֵי הַיָּמִים</span></td>
                                     <td>Words of the Days</td>
-                                    <td>Divrei Hayamim Alef</td>
-                                    <td>1 Chronicles</td>
-                                    <td>8+</td>
-                                </tr>
-                                <tr data-book="chronicles2">
-                                    <td><span class="hebrew">דִּבְרֵי הַיָּמִים ב׳</span></td>
-                                    <td>Words of the Days</td>
-                                    <td>Divrei Hayamim Bet</td>
-                                    <td>2 Chronicles</td>
-                                    <td>7+</td>
+                                    <td>Divrei Hayamim</td>
+                                    <td>1-2 Chronicles</td>
+                                    <td>15+</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -542,8 +523,9 @@
         <p>&copy; 2024 Project Context. Empowering faith through understanding.</p>
     </footer>
 
-    <!-- JavaScript Modules -->
+    <!-- JavaScript -->
     <script type="module">
+        // Import the hub core module
         import HubCore from '/assets/js/hub-core.js';
         
         // Initialize the hub
@@ -551,6 +533,159 @@
             type: 'characters',
             filterGender: null // Show all characters
         });
+    </script>
+    
+    <!-- Fallback inline script for basic functionality -->
+    <script>
+        // Basic tab functionality as fallback if module fails
+        document.addEventListener('DOMContentLoaded', function() {
+            // Main tab switching
+            const mainTabButtons = document.querySelectorAll('.main-tab-button');
+            const mainTabContents = document.querySelectorAll('.tab-content');
+            
+            mainTabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const section = button.dataset.section;
+                    
+                    // Update active states
+                    mainTabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    // Show/hide content
+                    mainTabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === `${section}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+            
+            // Sub-tab switching
+            const subTabButtons = document.querySelectorAll('.sub-tab-button');
+            const subTabContents = document.querySelectorAll('.sub-tab-content');
+            
+            subTabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const category = button.dataset.category;
+                    
+                    // Update active states for ALL sub-tabs
+                    subTabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    // Hide ALL sub-tab contents
+                    subTabContents.forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Show the selected category
+                    const targetContent = document.getElementById(`${category}-category`);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                });
+            });
+            
+            // Load featured characters (if module fails)
+            if (!window.HubCore) {
+                loadFeaturedCharacters();
+            }
+            
+            // Mobile menu toggle
+            const mobileToggle = document.getElementById('mobileMenuToggle');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (mobileToggle) {
+                mobileToggle.addEventListener('click', () => {
+                    mobileToggle.classList.toggle('active');
+                    navLinks.classList.toggle('active');
+                });
+            }
+            
+            // Animate stats
+            document.querySelectorAll('[data-target]').forEach(stat => {
+                const target = parseInt(stat.dataset.target);
+                if (!isNaN(target)) {
+                    let current = 0;
+                    const increment = target / 50;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            stat.textContent = target + '+';
+                            clearInterval(timer);
+                        } else {
+                            stat.textContent = Math.floor(current);
+                        }
+                    }, 30);
+                }
+            });
+        });
+        
+        // Fallback featured characters loader
+        function loadFeaturedCharacters() {
+            const featuredGrid = document.getElementById('featured-grid');
+            if (!featuredGrid) return;
+            
+            const featured = [
+                {
+                    name: 'Abraham',
+                    hebrew: 'אַבְרָהָם',
+                    desc: 'Father of faith, covenant recipient, and patriarch of Israel. His journey from Ur to Canaan exemplifies faith and obedience.',
+                    meta: 'Genesis 11-25 • Multi-page Study',
+                    href: '/studies/characters/genesis/abraham.html'
+                },
+                {
+                    name: 'Sarah',
+                    hebrew: 'שָׂרָה',
+                    desc: 'Mother of nations, wife of Abraham. Her story demonstrates faith through struggle with infertility and God\'s promise fulfillment.',
+                    meta: 'Genesis 11-25 • Complete Profile',
+                    href: '/studies/characters/genesis/sarah.html'
+                },
+                {
+                    name: 'Moses',
+                    hebrew: 'מֹשֶׁה',
+                    desc: 'Prophet, lawgiver, and deliverer of Israel from Egypt. Central figure in the Exodus and covenant at Sinai.',
+                    meta: 'Exodus-Deuteronomy • Multi-page Study',
+                    href: '/studies/characters/exodus/moses.html'
+                },
+                {
+                    name: 'Deborah',
+                    hebrew: 'דְּבוֹרָה',
+                    desc: 'Prophet, judge, and military leader. The only female judge who led Israel to victory over Canaanite oppression.',
+                    meta: 'Judges 4-5 • Multi-page Study',
+                    href: '/studies/characters/judges/deborah.html'
+                },
+                {
+                    name: 'Hagar',
+                    hebrew: 'הָגָר',
+                    desc: 'Egyptian servant who became mother of Ishmael. Her encounters with God reveal His compassion for the marginalized.',
+                    meta: 'Genesis 16, 21 • Complete Profile',
+                    href: '/studies/characters/genesis/hagar.html'
+                },
+                {
+                    name: 'Delilah',
+                    hebrew: 'דְּלִילָה',
+                    desc: 'Philistine woman who betrayed Samson. Her story explores themes of deception, weakness, and divine sovereignty.',
+                    meta: 'Judges 16 • Complete Profile',
+                    href: '/studies/characters/judges/delilah.html'
+                }
+            ];
+            
+            featuredGrid.innerHTML = featured.map(char => `
+                <a href="${char.href}" class="character-card">
+                    <div class="character-header">
+                        <div class="character-name">
+                            ${char.name} 
+                            <span class="character-hebrew">${char.hebrew}</span>
+                        </div>
+                    </div>
+                    <div class="character-body">
+                        <p class="character-desc">${char.desc}</p>
+                        <div class="character-meta">${char.meta}</div>
+                    </div>
+                </a>
+            `).join('');
+        }
     </script>
 </body>
 </html>
