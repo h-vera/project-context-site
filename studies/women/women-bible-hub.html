@@ -591,32 +591,77 @@
         import HubCore from 'https://projectcontext.org/assets/js/hub-core.js';
         import CharacterLoader from 'https://projectcontext.org/assets/js/character-loader.js';
         
-        // Initialize the hub for women only
+        // Initialize the hub for women only - this ensures only female characters show
         const hub = new HubCore({
             type: 'women',
-            filterGender: 'female'
+            filterGender: 'female'  // CRITICAL: This filters to show only gender: "female"
         });
         
-        // Initialize the loader for women's data
+        // Initialize the loader for women's data only
         const loader = new CharacterLoader({
             baseUrl: 'https://projectcontext.org',
-            filterGender: 'female'
+            filterGender: 'female'  // CRITICAL: This filters to show only gender: "female"
         });
         
-        // Load featured women
+        // Load featured women - only female characters will be shown
         async function loadFeaturedWomen() {
             const featuredGrid = document.getElementById('featured-grid');
             if (!featuredGrid) return;
             
+            // Try to load from JSON first, with hardcoded fallback
+            try {
+                await loader.initialize();
+                const womenFromBooks = [];
+                
+                // Get featured women from specific books
+                const booksToCheck = ['genesis', 'exodus', 'judges', 'ruth'];
+                for (const bookId of booksToCheck) {
+                    const bookData = await loader.loadBook(bookId);
+                    if (bookData && bookData.characters) {
+                        const women = bookData.characters.filter(c => c.gender === 'female' && c.hasProfile);
+                        womenFromBooks.push(...women.map(w => ({
+                            ...w,
+                            bookId: bookId
+                        })));
+                    }
+                }
+                
+                // Select specific featured women
+                const featuredIds = ['deborah', 'ruth', 'miriam', 'sarah', 'hannah', 'esther'];
+                const featured = featuredIds.map(id => {
+                    const woman = womenFromBooks.find(w => w.id === id);
+                    if (woman) {
+                        return {
+                            name: woman.name,
+                            hebrew: woman.hebrew,
+                            desc: woman.summary,
+                            meta: woman.references.join(', '),
+                            href: woman.profilePath,
+                            hasSong: woman.hasSong || false,
+                            songHref: woman.songPath || null
+                        };
+                    }
+                    return null;
+                }).filter(Boolean);
+                
+                // If we got data from JSON, use it
+                if (featured.length > 0) {
+                    return featured;
+                }
+            } catch (error) {
+                console.log('Could not load from JSON, using fallback data');
+            }
+            
+            // Fallback hardcoded data if JSON loading fails
             const featured = [
                 {
                     name: 'Deborah',
                     hebrew: 'דְּבוֹרָה',
                     desc: 'Prophet, judge, and military leader. The only female judge who led Israel to victory over Canaanite oppression.',
                     meta: 'Judges 4-5 • Prophetess & Judge',
-                    href: '/studies/characters/judges/deborah/deborah.html',
+                    href: '/studies/characters/judges/deborah.html',
                     hasSong: true,
-                    songHref: '/studies/characters/judges/deborah/Song_of_Deborah.html'
+                    songHref: '/studies/women/songs/deborah-song.html'
                 },
                 {
                     name: 'Esther',
@@ -639,7 +684,7 @@
                     meta: '1 Samuel 1-2 • Mother & Worshipper',
                     href: '/studies/characters/samuel1/hannah.html',
                     hasSong: true,
-                    songHref: '/studies/characters/samuel1/Song_of_Hannah.html'
+                    songHref: '/studies/women/songs/hannah-song.html'
                 },
                 {
                     name: 'Miriam',
@@ -648,7 +693,7 @@
                     meta: 'Exodus 15 • Prophetess & Leader',
                     href: '/studies/characters/exodus/miriam.html',
                     hasSong: true,
-                    songHref: '/studies/characters/exodus/Song_of_Miriam.html'
+                    songHref: '/studies/women/songs/miriam-song.html'
                 },
                 {
                     name: 'Sarah',
