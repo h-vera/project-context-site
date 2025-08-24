@@ -8,7 +8,7 @@
 class HubCore {
     constructor(options = {}) {
         this.type = options.type || 'characters'; // 'characters' or 'women'
-        this.filterGender = options.filterGender || null;
+        this.filterGender = options.filterGender || null; // null, 'male', or 'female'
         this.loader = null;
         this.currentBook = null;
         this.initialized = false;
@@ -185,15 +185,27 @@ class HubCore {
         this.isLoading = true;
         
         try {
-            // Load book data
+            // Load book data (already filtered by CharacterLoader if filterGender is set)
             const data = await this.loader.loadBook(bookId);
             
             if (!data || !data.characters || data.characters.length === 0) {
+                // Customize message based on filter
+                let emptyMessage = 'No Characters Found';
+                let emptySubtext = 'This book doesn\'t have any character profiles yet';
+                
+                if (this.filterGender === 'female') {
+                    emptyMessage = 'No Women Recorded';
+                    emptySubtext = 'This book does not contain any women profiles';
+                } else if (this.filterGender === 'male') {
+                    emptyMessage = 'No Men Recorded';
+                    emptySubtext = 'This book does not contain any men profiles';
+                }
+                
                 dataEl.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-state-icon">📚</div>
-                        <div class="empty-state-text">No Characters Found</div>
-                        <div class="empty-state-subtext">This book doesn't have any character profiles yet</div>
+                        <div class="empty-state-text">${emptyMessage}</div>
+                        <div class="empty-state-subtext">${emptySubtext}</div>
                     </div>
                 `;
             } else {
@@ -231,55 +243,130 @@ class HubCore {
 
     /**
      * Render character cards in the data element
+     * FIXED: Now properly respects the filterGender setting
      */
     renderCharacterCards(data, container) {
         const bookName = data.book?.name || 'Book';
         const bookId = data.book?.id || 'book';
         
-        // Separate by gender if we have both
-        const men = data.characters.filter(c => c.gender === 'male');
-        const women = data.characters.filter(c => c.gender === 'female');
-        const unknown = data.characters.filter(c => !c.gender || c.gender === 'unknown');
+        // CRITICAL FIX: Respect the gender filter
+        // If filterGender is set, only show that gender
+        // If not set, show all characters separated by gender
         
-        let html = `<h3 class="section-title">${bookName} Characters</h3>`;
+        let html = '';
         
-        // Render men section if exists
-        if (men.length > 0) {
-            html += `
-                <div class="section-header">
-                    <h4 class="section-title">Men</h4>
-                    <p class="section-subtitle">${men.length} male character${men.length > 1 ? 's' : ''}</p>
-                </div>
-                <div class="cards-grid">
-                    ${men.map(char => this.createCharacterCard(char, bookId)).join('')}
-                </div>
-            `;
-        }
-        
-        // Render women section if exists
-        if (women.length > 0) {
-            html += `
-                <div class="section-header">
-                    <h4 class="section-title">Women</h4>
-                    <p class="section-subtitle">${women.length} female character${women.length > 1 ? 's' : ''}</p>
-                </div>
-                <div class="cards-grid">
-                    ${women.map(char => this.createCharacterCard(char, bookId)).join('')}
-                </div>
-            `;
-        }
-        
-        // Render unknown/other section if exists
-        if (unknown.length > 0) {
-            html += `
-                <div class="section-header">
-                    <h4 class="section-title">Other Characters</h4>
-                    <p class="section-subtitle">${unknown.length} character${unknown.length > 1 ? 's' : ''}</p>
-                </div>
-                <div class="cards-grid">
-                    ${unknown.map(char => this.createCharacterCard(char, bookId)).join('')}
-                </div>
-            `;
+        if (this.filterGender === 'female') {
+            // Women's hub - only show women
+            const women = data.characters.filter(c => c.gender === 'female');
+            
+            if (women.length === 0) {
+                html = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📖</div>
+                        <div class="empty-state-text">No Women in ${bookName}</div>
+                        <div class="empty-state-subtext">This book does not contain any women profiles</div>
+                    </div>
+                `;
+            } else {
+                // Separate named and unnamed women
+                const named = women.filter(w => !w.tags?.includes('Unnamed'));
+                const unnamed = women.filter(w => w.tags?.includes('Unnamed'));
+                
+                html = `<h3 class="section-title">Women in ${bookName}</h3>`;
+                
+                if (named.length > 0) {
+                    html += `
+                        <div class="section-header">
+                            <h4 class="section-title">Named Women</h4>
+                            <p class="section-subtitle">${named.length} women with recorded names</p>
+                        </div>
+                        <div class="cards-grid">
+                            ${named.map(char => this.createCharacterCard(char, bookId)).join('')}
+                        </div>
+                    `;
+                }
+                
+                if (unnamed.length > 0) {
+                    html += `
+                        <div class="section-header">
+                            <h4 class="section-title">Unnamed Women</h4>
+                            <p class="section-subtitle">${unnamed.length} women identified by role or relationship</p>
+                        </div>
+                        <div class="cards-grid">
+                            ${unnamed.map(char => this.createCharacterCard(char, bookId)).join('')}
+                        </div>
+                    `;
+                }
+            }
+            
+        } else if (this.filterGender === 'male') {
+            // Men only filter - only show men
+            const men = data.characters.filter(c => c.gender === 'male');
+            
+            html = `<h3 class="section-title">Men in ${bookName}</h3>`;
+            
+            if (men.length > 0) {
+                html += `
+                    <div class="cards-grid">
+                        ${men.map(char => this.createCharacterCard(char, bookId)).join('')}
+                    </div>
+                `;
+            } else {
+                html = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📖</div>
+                        <div class="empty-state-text">No Men in ${bookName}</div>
+                        <div class="empty-state-subtext">This book does not contain any men profiles</div>
+                    </div>
+                `;
+            }
+            
+        } else {
+            // No filter - show all characters separated by gender (original behavior)
+            const men = data.characters.filter(c => c.gender === 'male');
+            const women = data.characters.filter(c => c.gender === 'female');
+            const unknown = data.characters.filter(c => !c.gender || c.gender === 'unknown');
+            
+            html = `<h3 class="section-title">${bookName} Characters</h3>`;
+            
+            // Render men section if exists
+            if (men.length > 0) {
+                html += `
+                    <div class="section-header">
+                        <h4 class="section-title">Men</h4>
+                        <p class="section-subtitle">${men.length} male character${men.length > 1 ? 's' : ''}</p>
+                    </div>
+                    <div class="cards-grid">
+                        ${men.map(char => this.createCharacterCard(char, bookId)).join('')}
+                    </div>
+                `;
+            }
+            
+            // Render women section if exists
+            if (women.length > 0) {
+                html += `
+                    <div class="section-header">
+                        <h4 class="section-title">Women</h4>
+                        <p class="section-subtitle">${women.length} female character${women.length > 1 ? 's' : ''}</p>
+                    </div>
+                    <div class="cards-grid">
+                        ${women.map(char => this.createCharacterCard(char, bookId)).join('')}
+                    </div>
+                `;
+            }
+            
+            // Render unknown/other section if exists
+            if (unknown.length > 0) {
+                html += `
+                    <div class="section-header">
+                        <h4 class="section-title">Other Characters</h4>
+                        <p class="section-subtitle">${unknown.length} character${unknown.length > 1 ? 's' : ''}</p>
+                    </div>
+                    <div class="cards-grid">
+                        ${unknown.map(char => this.createCharacterCard(char, bookId)).join('')}
+                    </div>
+                `;
+            }
         }
         
         container.innerHTML = html;
@@ -388,69 +475,131 @@ class HubCore {
 
     /**
      * Load featured characters
-     * Updated to handle multi-page character studies
+     * Updated to respect gender filter
      */
     async loadFeaturedCharacters() {
         const featuredGrid = document.getElementById('featured-grid');
         if (!featuredGrid) return;
         
-        // Define featured characters with correct paths
-        const featured = [
-            { 
-                book: 'genesis', 
-                id: 'abraham', 
-                name: 'Abraham', 
-                hebrew: 'אַבְרָהָם',
-                desc: 'Father of faith, covenant recipient, and patriarch of Israel. His journey from Ur to Canaan exemplifies faith and obedience.',
-                meta: 'Genesis 11-25 • Multi-page Study',
-                multiPage: true  // This flag indicates subdirectory structure
-            },
-            { 
-                book: 'genesis', 
-                id: 'sarah', 
-                name: 'Sarah', 
-                hebrew: 'שָׂרָה',
-                desc: 'Mother of nations, wife of Abraham. Her story demonstrates faith through struggle with infertility and God\'s promise fulfillment.',
-                meta: 'Genesis 11-25 • Complete Profile',
-                multiPage: false
-            },
-            { 
-                book: 'exodus', 
-                id: 'moses', 
-                name: 'Moses', 
-                hebrew: 'מֹשֶׁה',
-                desc: 'Prophet, lawgiver, and deliverer of Israel from Egypt. Central figure in the Exodus and covenant at Sinai.',
-                meta: 'Exodus-Deuteronomy • Multi-page Study',
-                multiPage: true
-            },
-            { 
-                book: 'judges', 
-                id: 'deborah', 
-                name: 'Deborah', 
-                hebrew: 'דְּבוֹרָה',
-                desc: 'Prophet, judge, and military leader. The only female judge who led Israel to victory over Canaanite oppression.',
-                meta: 'Judges 4-5 • Multi-page Study',
-                multiPage: true
-            },
-            { 
-                book: 'genesis', 
-                id: 'hagar', 
-                name: 'Hagar', 
-                hebrew: 'הָגָר',
-                desc: 'Egyptian servant who became mother of Ishmael. Her encounters with God reveal His compassion for the marginalized.',
-                meta: 'Genesis 16, 21 • Complete Profile',
-                multiPage: false
-            },
-            { 
-                book: 'judges', 
-                id: 'delilah', 
-                name: 'Delilah', 
-                hebrew: 'דְּלִילָה',
-                desc: 'Philistine woman who betrayed Samson. Her story explores themes of deception, weakness, and divine sovereignty.',
-                meta: 'Judges 16 • Complete Profile',
-                multiPage: false
-            }
-        ];
+        let featured = [];
+        
+        if (this.filterGender === 'female') {
+            // Women-only featured characters
+            featured = [
+                { 
+                    book: 'judges', 
+                    id: 'deborah', 
+                    name: 'Deborah', 
+                    hebrew: 'דְּבוֹרָה',
+                    desc: 'Prophet, judge, and military leader. The only female judge who led Israel to victory over Canaanite oppression.',
+                    meta: 'Judges 4-5 • Multi-page Study',
+                    multiPage: true
+                },
+                { 
+                    book: 'genesis', 
+                    id: 'sarah', 
+                    name: 'Sarah', 
+                    hebrew: 'שָׂרָה',
+                    desc: 'Mother of nations, wife of Abraham. Her story demonstrates faith through struggle with infertility and God\'s promise fulfillment.',
+                    meta: 'Genesis 11-25 • Complete Profile',
+                    multiPage: false
+                },
+                { 
+                    book: 'ruth', 
+                    id: 'ruth', 
+                    name: 'Ruth', 
+                    hebrew: 'רוּת',
+                    desc: 'Moabite woman whose loyalty and faithfulness led to her becoming great-grandmother of King David.',
+                    meta: 'Book of Ruth • Complete Profile',
+                    multiPage: false
+                },
+                { 
+                    book: 'exodus', 
+                    id: 'miriam', 
+                    name: 'Miriam', 
+                    hebrew: 'מִרְיָם',
+                    desc: 'Prophetess and sister of Moses who led women in worship after crossing the Red Sea.',
+                    meta: 'Exodus • Complete Profile',
+                    multiPage: false
+                },
+                { 
+                    book: 'genesis', 
+                    id: 'hagar', 
+                    name: 'Hagar', 
+                    hebrew: 'הָגָר',
+                    desc: 'Egyptian servant who became mother of Ishmael. Her encounters with God reveal His compassion for the marginalized.',
+                    meta: 'Genesis 16, 21 • Complete Profile',
+                    multiPage: false
+                },
+                { 
+                    book: 'judges', 
+                    id: 'delilah', 
+                    name: 'Delilah', 
+                    hebrew: 'דְּלִילָה',
+                    desc: 'Philistine woman who betrayed Samson. Her story explores themes of deception, weakness, and divine sovereignty.',
+                    meta: 'Judges 16 • Complete Profile',
+                    multiPage: false
+                }
+            ];
+        } else {
+            // Default featured characters (mixed gender or all)
+            featured = [
+                { 
+                    book: 'genesis', 
+                    id: 'abraham', 
+                    name: 'Abraham', 
+                    hebrew: 'אַבְרָהָם',
+                    desc: 'Father of faith, covenant recipient, and patriarch of Israel. His journey from Ur to Canaan exemplifies faith and obedience.',
+                    meta: 'Genesis 11-25 • Multi-page Study',
+                    multiPage: true
+                },
+                { 
+                    book: 'genesis', 
+                    id: 'sarah', 
+                    name: 'Sarah', 
+                    hebrew: 'שָׂרָה',
+                    desc: 'Mother of nations, wife of Abraham. Her story demonstrates faith through struggle with infertility and God\'s promise fulfillment.',
+                    meta: 'Genesis 11-25 • Complete Profile',
+                    multiPage: false
+                },
+                { 
+                    book: 'exodus', 
+                    id: 'moses', 
+                    name: 'Moses', 
+                    hebrew: 'מֹשֶׁה',
+                    desc: 'Prophet, lawgiver, and deliverer of Israel from Egypt. Central figure in the Exodus and covenant at Sinai.',
+                    meta: 'Exodus-Deuteronomy • Multi-page Study',
+                    multiPage: true
+                },
+                { 
+                    book: 'judges', 
+                    id: 'deborah', 
+                    name: 'Deborah', 
+                    hebrew: 'דְּבוֹרָה',
+                    desc: 'Prophet, judge, and military leader. The only female judge who led Israel to victory over Canaanite oppression.',
+                    meta: 'Judges 4-5 • Multi-page Study',
+                    multiPage: true
+                },
+                { 
+                    book: 'genesis', 
+                    id: 'hagar', 
+                    name: 'Hagar', 
+                    hebrew: 'הָגָר',
+                    desc: 'Egyptian servant who became mother of Ishmael. Her encounters with God reveal His compassion for the marginalized.',
+                    meta: 'Genesis 16, 21 • Complete Profile',
+                    multiPage: false
+                },
+                { 
+                    book: 'judges', 
+                    id: 'delilah', 
+                    name: 'Delilah', 
+                    hebrew: 'דְּלִילָה',
+                    desc: 'Philistine woman who betrayed Samson. Her story explores themes of deception, weakness, and divine sovereignty.',
+                    meta: 'Judges 16 • Complete Profile',
+                    multiPage: false
+                }
+            ];
+        }
         
         // Render featured cards with correct paths
         const html = featured.map(char => {
