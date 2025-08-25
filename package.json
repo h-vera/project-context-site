@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build:js": "esbuild assets/js/mobile-menu.js assets/js/character-page.js --bundle --minify --outdir=public/assets/js --format=iife --sourcemap",
-    "build:css": "esbuild assets/css/global-v2.css --minify --outfile=public/assets/css/global-v2.css",
-    "build": "npm run build:js && npm run build:css"
+    "build:js": "esbuild assets/js/mobile-menu.js assets/js/character-page.js assets/js/hub-common.js assets/js/character-loader.js --bundle --minify --outdir=public/assets/js --format=iife --sourcemap",
+    "build:css:base": "esbuild assets/css/global-v2.css assets/css/hub-base.css --minify --outdir=public/assets/css",
+    "build:css:hubs": "cat assets/css/hub-base.css assets/css/hub-thematic.css | esbuild --loader=css --minify > public/assets/css/hub-thematic-combined.css",
+    "build:css": "npm run build:css:base",
+    "build": "npm run build:js && npm run build:css",
+    "clean": "rm -rf public",
+    "prebuild": "npm run clean && mkdir -p public/assets/css public/assets/js"
   },
   "devDependencies": {
     "esbuild": "^0.25.9"
