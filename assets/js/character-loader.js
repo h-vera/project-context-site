@@ -284,15 +284,16 @@ async validateAllBooks() {
     /**
      * Get featured characters
      */
-    async getFeaturedCharacters(limit = 6) {
+    async getFeaturedCharacters(limit = 7) {
         // Define featured character IDs
         const featuredIds = [
+             { book: 'genesis', id: 'eve' },
             { book: 'genesis', id: 'abraham' },
             { book: 'genesis', id: 'sarah' },
-            { book: 'exodus', id: 'moses' },
-            { book: 'judges', id: 'deborah' },
             { book: 'genesis', id: 'hagar' },
+            { book: 'judges', id: 'deborah' },
             { book: 'judges', id: 'delilah' }
+            { book: 'ruth', id: 'ruth' },
         ];
 
         const featured = [];
