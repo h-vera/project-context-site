@@ -292,7 +292,7 @@ async validateAllBooks() {
             { book: 'genesis', id: 'sarah' },
             { book: 'genesis', id: 'hagar' },
             { book: 'judges', id: 'deborah' },
-            { book: 'judges', id: 'delilah' }
+            { book: 'judges', id: 'delilah' },
             { book: 'ruth', id: 'ruth' },
         ];
 
