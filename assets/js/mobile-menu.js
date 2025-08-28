@@ -249,5 +249,74 @@ document.addEventListener('DOMContentLoaded', function() {
 if (!('classList' in document.createElement('_'))) {
     console.error('This browser does not support classList. Please update your browser.');
 }
+(() => {
+  // ===== Mobile Nav – Update Section =====
+  // Safe handles for optional hamburger & drawer (adjust selectors to your HTML)
+  const menuToggle = document.querySelector('#menuToggle, .menu-toggle');
+  const drawer     = document.querySelector('#mobileNav, .mobile-nav, .nav-drawer');
 
+  // Close the drawer safely (no-ops if not present)
+  function closeMenu() {
+    if (menuToggle) menuToggle.classList.remove('active');
+    if (drawer)     drawer.classList.remove('open', 'active', 'visible');
+    // Also collapse any open dropdowns inside the nav
+    document.querySelectorAll('.nav-links .dropdown.open').forEach(li => {
+      li.classList.remove('open');
+      li.querySelector('.dropdown-toggle')?.setAttribute('aria-expanded', 'false');
+      const panel = li.querySelector('.dropdown-content');
+      if (panel) panel.style.display = '';
+    });
+  }
+
+  // --- Progressive enhancement: mobile dropdown toggle ---
+  document.querySelectorAll('.nav-links .dropdown > .dropdown-toggle').forEach((toggle) => {
+    toggle.addEventListener('click', (e) => {
+      if (window.matchMedia('(max-width: 768px)').matches) {
+        e.preventDefault();
+        const li = toggle.closest('.dropdown');
+        const panel = li?.querySelector('.dropdown-content');
+        const open = li?.classList.toggle('open');
+        if (open != null) toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (panel) panel.style.display = open ? 'block' : 'none';
+      }
+    });
+  });
+
+  // --- Reset states when crossing mobile/desktop boundary ---
+  const mq = window.matchMedia('(max-width: 768px)');
+  const handleViewportChange = () => {
+    if (!mq.matches) {
+      // We are now on desktop: clear any mobile-only states
+      closeMenu();
+    }
+  };
+  // Fire once on load and again whenever the breakpoint is crossed
+  handleViewportChange();
+  mq.addEventListener ? mq.addEventListener('change', handleViewportChange)
+                      : mq.addListener(handleViewportChange); // old Safari fallback
+
+  // --- Performance: passive listeners & defensive cleanups ---
+  document.addEventListener('scroll', () => {
+    // Auto-close menu on scroll if desired
+    // if (menuToggle?.classList.contains('active') && window.scrollY > 100) closeMenu();
+  }, { passive: true });
+
+  window.addEventListener('beforeunload', () => {
+    // Clean up any open states on navigation
+    closeMenu();
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden && menuToggle?.classList.contains('active')) {
+      closeMenu();
+    }
+  });
+
+  // --- Debug ---
+  console.log('Mobile menu initialized successfully with iOS fixes & resize resets');
+
+  // --- Fallback for very old browsers (classList) ---
+  if (!('classList' in document.createElement('_'))) {
+    console.error('This browser lacks classList support. Please update your browser.');
+  }
 })(); // End IIFE

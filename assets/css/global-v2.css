@@ -1793,4 +1793,87 @@ footer p {
       .indent-3 { padding-left: 3rem; }
       .indent-4 { padding-left: 4rem; }
     }
-  
+  /* --- Mobile nav fixes (append at end of global-v2.css) --- */
+
+/* 1) Make dropdowns tap-friendly on mobile using :focus-within
+   (works without changing HTML/JS) */
+@media (max-width: 768px) {
+  /* Default: keep submenu hidden in the drawer */
+  .nav-links .dropdown .dropdown-content {
+    display: none;
+    margin: 0.25rem 0 0.5rem 0;
+    padding: 0.25rem 0;
+    border-left: 3px solid var(--border-light);
+    background: #fafafa;
+  }
+
+  /* Show submenu when the parent gets focus (tap on the toggle) */
+  .nav-links .dropdown:focus-within .dropdown-content {
+    display: block;
+  }
+
+  /* Make the top-level toggle clearly tappable */
+  .nav-links .dropdown > .dropdown-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 48px;
+    padding: 0.75rem 0.75rem;
+    background: #fff;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+  }
+
+  /* Add an inline caret that rotates when focused */
+  .nav-links .dropdown > .dropdown-toggle::after {
+    content: '▸';
+    margin-left: 0.5rem;
+    transition: transform .2s ease;
+  }
+  .nav-links .dropdown:focus-within > .dropdown-toggle::after {
+    transform: rotate(90deg);
+  }
+
+  /* Submenu items look like a simple list in the drawer */
+  .nav-links .dropdown .dropdown-content a {
+    padding: 0.6rem 0.75rem 0.6rem 1.25rem;
+    border-radius: 6px;
+    margin: 0.15rem 0;
+  }
+
+  /* Improve vertical rhythm & touch area inside the drawer */
+  .nav-links a {
+    min-height: 48px;
+    padding: 0.75rem;
+  }
+
+  /* Prevent long menus from pushing content horizontally */
+  .nav-links {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* 2) Tighten the fixed header overlap on small screens
+   (so the first card isn’t cramped under the nav) */
+@media (max-width: 768px) {
+  .content-section {
+    padding-top: 6.5rem; /* was 5rem in base; gives more breathing room */
+  }
+}
+
+/* 3) Page Navigation card (on Eve pages) — make it extra-mobile friendly */
+@media (max-width: 768px) {
+  .page-navigation {
+    border-top: 1px solid #d0d8ff;
+    border-bottom: 1px solid #d0d8ff;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+    margin-left: -1rem;
+    margin-right: -1rem;
+  }
+  .page-nav-item {
+    text-align: left;
+  }
+}
