@@ -320,3 +320,4 @@ if (!('classList' in document.createElement('_'))) {
     console.error('This browser lacks classList support. Please update your browser.');
   }
 })(); // End IIFE
+})(); // End outer IIFE
