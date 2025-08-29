@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Small Group Discussion Guides | Project Context</title>
+  <meta name="description" content="Mobile-friendly Bible talk guides for small groups, Sunday school, and personal study. 20-minute discussions with practical application.">
+  
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="Small Group Discussion Guides">
+  <meta property="og:description" content="Free, mobile-friendly Bible discussion guides for groups and personal study">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://projectcontext.org/resources/discussion-guides/">
+  
+  <!-- Performance: DNS Prefetch & Preconnect -->
+  <link rel="dns-prefetch" href="https://projectcontext.org">
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/assets/css/global-v2.css">
+  
+  <style>
+    /* Hub-specific styles */
+    .hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 40vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      margin-top: 80px;
+      color: white;
+      text-align: center;
+    }
+    
+    .hero-content {
+      max-width: 900px;
+    }
+    
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      margin-bottom: 1rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.2rem;
+      opacity: 0.95;
+      margin-bottom: 2rem;
+    }
+    
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.9;
+    }
+    
+    .filters {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 3rem 0 2rem;
+    }
+    
+    .filter-btn {
+      padding: 0.75rem 1.5rem;
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: #666;
+    }
+    
+    .filter-btn:hover {
+      background: #f5f5f5;
+      border-color: #667eea;
+    }
+    
+    .filter-btn.active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-color: transparent;
+    }
+    
+    .guides-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .guide-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      position: relative;
+    }
+    
+    .guide-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+    
+    .guide-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 1.5rem;
+      position: relative;
+    }
+    
+    .guide-category {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .guide-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin: 0.5rem 0;
+    }
+    
+    .guide-scripture {
+      opacity: 0.95;
+      font-size: 0.95rem;
+    }
+    
+    .guide-body {
+      padding: 1.5rem;
+    }
+    
+    .guide-description {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    
+    .guide-meta {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e5e7eb;
+    }
+    
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .meta-icon {
+      font-size: 1.2rem;
+    }
+    
+    .new-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: #10b981;
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    
+    .coming-soon {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    
+    .coming-soon .guide-header {
+      background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+    }
+    
+    .coming-soon-badge {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #f3f4f6;
+      color: #6b7280;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      z-index: 1;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: #666;
+    }
+    
+    .empty-state-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.3;
+    }
+    
+    @media (max-width: 768px) {
+      .hero {
+        min-height: 30vh;
+        margin-top: 60px;
+      }
+      
+      .hero-stats {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .guides-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      
+      .filters {
+        gap: 0.5rem;
+      }
+      
+      .filter-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav id="main-nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="40" height="40">
+            <path d="M 25 15 L 10 15 L 10 85 L 25 85" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <path d="M 75 15 L 90 15 L 90 85 L 75 85" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <ellipse cx="50" cy="50" rx="25" ry="15" stroke="#0a0a0a" stroke-width="3" fill="none"/>
+            <circle cx="50" cy="50" r="8" fill="#00b4d8"/>
+            <circle cx="50" cy="50" r="3" fill="#0a0a0a"/>
+          </svg>
+        </div>
+        <span class="logo-text">Project Context</span>
+      </a>
+      <ul class="nav-links" id="navLinks" aria-label="Main navigation">
+        <li><a href="/">Home</a></li>
+        <li class="dropdown">
+          <a href="/studies/" class="dropdown-toggle">Studies</a>
+          <div class="dropdown-content">
+            <a href="/studies/characters/characters_hub.html">Biblical Characters</a>
+            <a href="/studies/women/women-bible-hub.html">Women in the Bible</a>
+            <a href="/studies/tanakh/tanakh-hub.html">Tanakh Studies</a>
+            <a href="/studies/thematic/thematic-hub.html">Thematic Studies</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="/resources/" class="dropdown-toggle active">Resources</a>
+          <div class="dropdown-content">
+            <a href="/resources/discussion-guides/" class="active">Discussion Guides</a>
+            <a href="/resources/study-tools/">Study Tools</a>
+            <a href="/resources/downloads/">Downloads</a>
+          </div>
+        </li>
+        <li><a href="/about/">About</a></li>
+      </ul>
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Small Group Discussion Guides</h1>
+      <p class="hero-subtitle">
+        Mobile-friendly 20-minute Bible talks designed for small groups, Sunday school, or personal study
+      </p>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-number" data-target="20">20</div>
+          <div class="stat-label">Minutes</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-target="5">5-7</div>
+          <div class="stat-label">Questions</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-target="8">8-12</div>
+          <div class="stat-label">People</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="content-section">
+    <div class="container">
+      <!-- Filters -->
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all">All Guides</button>
+        <button class="filter-btn" data-filter="pentateuch">Pentateuch</button>
+        <button class="filter-btn" data-filter="historical">Historical</button>
+        <button class="filter-btn" data-filter="wisdom">Wisdom</button>
+        <button class="filter-btn" data-filter="prophets">Prophets</button>
+        <button class="filter-btn" data-filter="gospels">Gospels</button>
+        <button class="filter-btn" data-filter="epistles">Epistles</button>
+      </div>
+
+      <!-- Guides Grid -->
+      <div class="guides-grid" id="guidesGrid">
+        <!-- Active Guide: Daughters of Zelophehad -->
+        <a href="/resources/discussion-guides/pentateuch/numbers/daughters-zelophehad-talk.html" 
+           class="guide-card" 
+           data-category="pentateuch">
+          <div class="guide-header">
+            <div class="new-badge">NEW</div>
+            <div class="guide-category">Pentateuch • Numbers</div>
+            <h3 class="guide-title">When God Updates the Law</h3>
+            <p class="guide-scripture">Numbers 27:1-11 • Galatians 3:28-29</p>
+          </div>
+          <div class="guide-body">
+            <p class="guide-description">
+              Explore how five courageous sisters advocated for justice within God's system, leading to divine affirmation and legal reform. Discover principles of faithful advocacy and cultural negotiation.
+            </p>
+            <div class="guide-meta">
+              <div class="meta-item">
+                <span class="meta-icon">⏱️</span>
+                <span>20 min</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-icon">💭</span>
+                <span>7 questions</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-icon">📱</span>
+                <span>Mobile-friendly</span>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <!-- Coming Soon Examples -->
+        <div class="guide-card coming-soon" data-category="pentateuch">
+          <div class="coming-soon-badge">Coming Soon</div>
+          <div class="guide-header">
+            <div class="guide-category">Pentateuch • Genesis</div>
+            <h3 class="guide-title">Faith in the Waiting</h3>
+            <p class="guide-scripture">Genesis 15:1-6 • Romans 4:18-25</p>
+          </div>
+          <div class="guide-body">
+            <p class="guide-description">
+              Abraham's journey of faith through years of waiting for God's promise. Learn how to trust God when His timing doesn't match our expectations.
+            </p>
+            <div class="guide-meta">
+              <div class="meta-item">
+                <span class="meta-icon">⏱️</span>
+                <span>20 min</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-icon">💭</span>
+                <span>6 questions</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-card coming-soon" data-category="historical">
+          <div class="coming-soon-badge">Coming Soon</div>
+          <div class="guide-header">
+            <div class="guide-category">Historical • Ruth</div>
+            <h3 class="guide-title">Loyalty That Transforms</h3>
+            <p class="guide-scripture">Ruth 1:16-17 • Matthew 1:5</p>
+          </div>
+          <div class="guide-body">
+            <p class="guide-description">
+              Ruth's radical loyalty to Naomi becomes a picture of covenant faithfulness. Explore how God uses ordinary faithfulness for extraordinary purposes.
+            </p>
+            <div class="guide-meta">
+              <div class="meta-item">
+                <span class="meta-icon">⏱️</span>
+                <span>20 min</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-icon">💭</span>
+                <span>5 questions</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-card coming-soon" data-category="wisdom">
+          <div class="coming-soon-badge">Coming Soon</div>
+          <div class="guide-header">
+            <div class="guide-category">Wisdom • Psalms</div>
+            <h3 class="guide-title">Honest Prayer</h3>
+            <p class="guide-scripture">Psalm 13 • Philippians 4:6-7</p>
+          </div>
+          <div class="guide-body">
+            <p class="guide-description">
+              David's raw honesty in prayer shows us how to bring our real emotions to God. Learn the pattern of lament that leads to trust.
+            </p>
+            <div class="guide-meta">
+              <div class="meta-item">
+                <span class="meta-icon">⏱️</span>
+                <span>20 min</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-icon">💭</span>
+                <span>6 questions</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-card coming-soon" data-category="prophets">
+          <div class="coming-soon-badge">Coming Soon</div>
+          <div class="guide-header">
+            <div class="guide-category">Prophets • Isaiah</div>
+            <h3 class="guide-title">Comfort in Crisis</h3>
+            <p class="guide-scripture">Isaiah 40:1-11 • 2 Corinthians 1:3-4</p>
+          </div>
+          <div class="guide-body">
+            <p class="guide-description">
+              God's message of comfort to exiled Israel speaks to our own seasons of displacement. Discover how divine comfort empowers us to comfort others.
+            </p>
+            <div class="guide-meta">
+              <div class="meta-item">
+                <span class="meta-icon">⏱️</span>
+                <span>20 min</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-icon">💭</span>
+                <span>7 questions</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-card coming-soon" data-category="gospels">
+          <div class="coming-soon-badge">Coming Soon</div>
+          <div class="guide-header">
+            <div class="guide-category">Gospels • Luke</div>
+            <h3 class="guide-title">The Excluded Become Family</h3>
+            <p class="guide-scripture">Luke 14:15-24 • Ephesians 2:11-22</p>
+          </div>
+          <div class="guide-body">
+            <p class="guide-description">
+              Jesus' parable of the great banquet reveals God's heart for the marginalized. See how the gospel creates a new family from the excluded.
+            </p>
+            <div class="guide-meta">
+              <div class="meta-item">
+                <span class="meta-icon">⏱️</span>
+                <span>20 min</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-icon">💭</span>
+                <span>6 questions</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-card coming-soon" data-category="epistles">
+          <div class="coming-soon-badge">Coming Soon</div>
+          <div class="guide-header">
+            <div class="guide-category">Epistles • James</div>
+            <h3 class="guide-title">Faith That Works</h3>
+            <p class="guide-scripture">James 2:14-26 • Matthew 25:31-46</p>
+          </div>
+          <div class="guide-body">
+            <p class="guide-description">
+              James challenges us to move beyond intellectual faith to active love. Explore how genuine faith naturally produces acts of mercy and justice.
+            </p>
+            <div class="guide-meta">
+              <div class="meta-item">
+                <span class="meta-icon">⏱️</span>
+                <span>20 min</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-icon">💭</span>
+                <span>7 questions</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State (hidden by default) -->
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <div class="empty-state-icon">🔍</div>
+        <h3>No guides found</h3>
+        <p>Try selecting a different category or check back soon for new content!</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Project Context. All discussion guides are free to use and share.</p>
+  </footer>
+
+  <script src="/assets/js/mobile-menu.js" defer></script>
+  <script>
+    // Filter functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const guideCards = document.querySelectorAll('.guide-card');
+      const emptyState = document.getElementById('emptyState');
+      const guidesGrid = document.getElementById('guidesGrid');
+
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          // Update active button
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          button.classList.add('active');
+          
+          // Filter cards
+          const filter = button.dataset.filter;
+          let visibleCount = 0;
+          
+          guideCards.forEach(card => {
+            if (filter === 'all' || card.dataset.category === filter) {
+              card.style.display = 'block';
+              visibleCount++;
+            } else {
+              card.style.display = 'none';
+            }
+          });
+          
+          // Show/hide empty state
+          if (visibleCount === 0) {
+            guidesGrid.style.display = 'none';
+            emptyState.style.display = 'block';
+          } else {
+            guidesGrid.style.display = 'grid';
+            emptyState.style.display = 'none';
+          }
+        });
+      });
+
+      // Dynamic guide loader (for future implementation)
+      async function loadGuides() {
+        try {
+          // This would fetch from a JSON file or API endpoint
+          const response = await fetch('/assets/data/discussion-guides.json');
+          if (!response.ok) {
+            console.log('No dynamic guides file found, using static content');
+            return;
+          }
+          
+          const guides = await response.json();
+          // Render guides dynamically here
+          renderGuides(guides);
+        } catch (error) {
+          console.log('Using static guide content');
+        }
+      }
+
+      function renderGuides(guides) {
+        // This function would dynamically create guide cards
+        // For now, we're using static HTML
+      }
+
+      // Optional: Load guides on page load
+      // loadGuides();
+    });
+
+    // Smooth scroll for navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

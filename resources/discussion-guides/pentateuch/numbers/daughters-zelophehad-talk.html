@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Bible Talk: When God Updates the Law | Numbers 27:1-11</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', sans-serif;
+      line-height: 1.6;
+      color: #2c3e50;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    
+    /* View Toggle Styles */
+    .view-toggle {
+      margin: 2rem auto;
+      max-width: 300px;
+      background: white;
+      border-radius: 30px;
+      padding: 5px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+    }
+    
+    .view-btn {
+      padding: 8px 16px;
+      border: none;
+      background: transparent;
+      border-radius: 25px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      color: #667eea;
+    }
+    
+    .view-btn.active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    /* Speaker-only content */
+    .speaker-only {
+      background: #fef3c7;
+      border-left: 3px solid #f59e0b;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+      color: #78350f; /* Dark brown text for readability */
+    }
+    
+    .speaker-only strong {
+      color: #92400e; /* Slightly darker brown for emphasis */
+    }
+    
+    .speaker-only.hidden {
+      display: none;
+    }
+    
+    .speaker-note {
+      display: inline-block;
+      background: #fbbf24;
+      color: #78350f;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-left: 5px;
+    }
+    
+    /* Participant view adjustments */
+    body.participant-view .question {
+      font-size: 1.1rem;
+    }
+    
+    body.participant-view .sub-points {
+      display: none;
+    }
+    
+    body.participant-view .timer-note {
+      display: none;
+    }
+    
+    body.participant-view .card {
+      padding: 25px;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .header h1 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    
+    .header .subtitle {
+      font-size: 1.1rem;
+      opacity: 0.95;
+    }
+    
+    .time-indicator {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      padding: 5px 15px;
+      border-radius: 20px;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .card h2 {
+      color: #764ba2;
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .card h3 {
+      color: #667eea;
+      font-size: 1.1rem;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    
+    .ice-breaker {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+    }
+    
+    .ice-breaker h2 {
+      color: white;
+    }
+    
+    .scripture-ref {
+      background: #f8f9fa;
+      padding: 15px;
+      border-left: 4px solid #667eea;
+      margin: 15px 0;
+      border-radius: 5px;
+    }
+    
+    .scripture-ref .verse {
+      font-style: italic;
+      color: #495057;
+      margin-top: 5px;
+    }
+    
+    .question {
+      background: #f1f3f5;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .question-number {
+      display: inline-block;
+      background: #667eea;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 30px;
+      margin-right: 10px;
+      font-weight: bold;
+    }
+    
+    .sub-points {
+      margin-left: 40px;
+      margin-top: 10px;
+    }
+    
+    .sub-points li {
+      margin-bottom: 8px;
+      color: #6c757d;
+    }
+    
+    .chiasm {
+      background: #fff3cd;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+    }
+    
+    .chiasm-line {
+      margin: 5px 0;
+    }
+    
+    .chiasm-center {
+      text-align: center;
+      font-weight: bold;
+      color: #764ba2;
+      margin: 10px 0;
+      padding: 10px;
+      background: rgba(118, 75, 162, 0.1);
+      border-radius: 5px;
+    }
+    
+    .indent-1 { margin-left: 20px; }
+    .indent-2 { margin-left: 40px; }
+    
+    .theme-box {
+      display: flex;
+      gap: 10px;
+      margin: 15px 0;
+    }
+    
+    .theme-item {
+      flex: 1;
+      padding: 10px;
+      background: #e9ecef;
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .theme-item .icon {
+      font-size: 1.5rem;
+      margin-bottom: 5px;
+    }
+    
+    .theme-item .label {
+      font-size: 0.85rem;
+      color: #495057;
+    }
+    
+    .timer-note {
+      background: #d4edda;
+      color: #155724;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+    
+    .key-insight {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+    }
+    
+    .hebrew {
+      font-family: 'SBL Hebrew', 'Times New Roman', serif;
+      font-size: 1.1em;
+      direction: rtl;
+    }
+    
+    .footer {
+      text-align: center;
+      color: white;
+      margin-top: 30px;
+      padding: 20px;
+      opacity: 0.9;
+    }
+    
+    @media (max-width: 480px) {
+      .container {
+        padding: 10px;
+      }
+      
+      .header h1 {
+        font-size: 1.5rem;
+      }
+      
+      .card {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>When God Updates the Law</h1>
+      <div class="subtitle">The Daughters of Zelophehad • Numbers 27:1-11</div>
+      <div class="time-indicator speaker-only">⏱️ 20-Minute Discussion</div>
+    </div>
+
+    <!-- Ice Breaker -->
+    <div class="card ice-breaker">
+      <h2>🎯 Ice Breaker</h2>
+      <div class="speaker-only">
+        <strong>Timing:</strong> 3 minutes (2 min pair-share, 1 min group share)<br>
+        <strong>Instructions:</strong> Have people share with the person next to them first, then hear 2-3 examples from the group.
+      </div>
+      <p><strong>Think about a time when you had to advocate for change within a system (work, school, church, family):</strong></p>
+      <ul style="margin-top: 10px; padding-left: 20px;">
+        <li>Did you work within the system or try to overthrow it?</li>
+        <li>What gave you courage to speak up?</li>
+        <li>How did authority figures respond?</li>
+      </ul>
+      <div class="speaker-only">
+        <strong>Looking for:</strong> Examples of respectful advocacy. If someone shares about rebellion, gently redirect to how working within systems can be more effective. This sets up the daughters' approach.
+      </div>
+    </div>
+
+    <!-- Scripture Context -->
+    <div class="card">
+      <h2>📖 Scripture Reading</h2>
+      <div class="scripture-ref">
+        <strong>Numbers 27:1-11</strong>
+        <div class="verse">Focus: Five sisters approach Moses at the tent of meeting to request their father's inheritance since he had no sons.</div>
+      </div>
+      <div class="speaker-only">
+        <strong>Instructions:</strong> Have someone read aloud (2 minutes). Consider having 2-3 people read different sections to keep engagement. After reading, give 30 seconds of silence for reflection before moving to questions.
+      </div>
+    </div>
+
+    <!-- Question 1 -->
+    <div class="card">
+      <h2>💭 Discussion Questions</h2>
+      
+      <div class="question">
+        <div><span class="question-number">1</span><strong>Setting the Scene</strong></div>
+        <div class="speaker-only" style="margin: 5px 0;">⏱️ 2 minutes</div>
+        <p style="margin-top: 10px;">What details in verses 1-2 show these women understood protocol and respect for authority?</p>
+        <ul class="sub-points">
+          <li>Where did they stand? (entrance of tent of meeting)</li>
+          <li>Who was present? (Moses, Eleazar, leaders, whole assembly)</li>
+          <li>What does this public setting suggest about their approach?</li>
+        </ul>
+        <div class="speaker-only">
+          <strong>Looking for:</strong> They didn't sneak around or complain privately. They went through proper channels, showing respect for God's order. This validates working within systems rather than against them.
+        </div>
+      </div>
+
+      <div class="question">
+        <div><span class="question-number">2</span><strong>The Case They Made</strong></div>
+        <div class="speaker-only" style="margin: 5px 0;">⏱️ 3 minutes</div>
+        <p style="margin-top: 10px;">Read verses 3-4 carefully. How did the daughters frame their argument?</p>
+        <ul class="sub-points">
+          <li>What did they say about their father? (died for own sin, not in Korah's rebellion)</li>
+          <li>What injustice did they identify? (family name would disappear)</li>
+          <li>Notice: They didn't attack the law itself—what did they request instead?</li>
+        </ul>
+        <div class="speaker-only">
+          <strong>Key insight:</strong> They honored the existing law while pointing out an unintended consequence. They appealed to the spirit of the law (preserving family names) rather than attacking its letter.
+        </div>
+      </div>
+
+      <div class="question">
+        <div><span class="question-number">3</span><strong>God's Response</strong></div>
+        <div class="speaker-only" style="margin: 5px 0;">⏱️ 3 minutes</div>
+        <p style="margin-top: 10px;">Verses 5-7 show Moses consulting God. What's remarkable about God's answer?</p>
+        <ul class="sub-points">
+          <li>God says "What Zelophehad's daughters say is <strong>right</strong>" - How might this have surprised everyone?</li>
+          <li>God doesn't just grant an exception—He updates the law for all Israel (v. 8-11)</li>
+          <li>What does this teach about the nature of biblical law?</li>
+        </ul>
+        <div class="speaker-only">
+          <strong>Key Point:</strong> God validates their concern completely. He doesn't say "I'll make an exception" but "they are RIGHT." This shows God's law isn't rigid legalism but wisdom that applies justice to new situations. If someone suggests the Bible never changes, point to this story!
+        </div>
+      </div>
+    </div>
+
+    <!-- Literary Structure -->
+    <div class="card">
+      <h2>🔍 Literary Pattern</h2>
+      <div class="chiasm">
+        <div class="chiasm-line">A Problem: No male heir (27:1-4)</div>
+        <div class="chiasm-line indent-1">B Petition to Moses (27:5)</div>
+        <div class="chiasm-line indent-2">C Specific ruling (27:6-7a)</div>
+        <div class="chiasm-center">CENTER: Law expanded for all Israel (27:7b-11)</div>
+        <div class="chiasm-line indent-2">C′ Tribal concern (36:1-4)</div>
+        <div class="chiasm-line indent-1">B′ Second ruling (36:5-9)</div>
+        <div class="chiasm-line">A′ Resolution: Daughters marry within clan (36:10-12)</div>
+      </div>
+      <p style="margin-top: 10px;"><strong>Notice:</strong> The center emphasizes how one family's crisis becomes instruction for all God's people.</p>
+    </div>
+
+    <!-- Theological Themes -->
+    <div class="card">
+      <h2>🌟 Key Themes</h2>
+      
+      <div class="question">
+        <div><span class="question-number">4</span><strong>Eden Echoes & Fall Patterns</strong></div>
+        <div class="speaker-only" style="margin: 5px 0;">⏱️ 3 minutes</div>
+        
+        <div class="theme-box">
+          <div class="theme-item">
+            <div class="icon">🌿</div>
+            <div class="label">Eden Echo</div>
+          </div>
+          <div class="theme-item">
+            <div class="icon">🍎</div>
+            <div class="label">Fall Pattern</div>
+          </div>
+        </div>
+        
+        <p><strong>Eden Echo:</strong> Genesis 1:27-28 shows male AND female given dominion over land together. How do the daughters' request echo this original design?</p>
+        
+        <p style="margin-top: 10px;"><strong>Fall Pattern:</strong> The existing law's blind spot (excluding daughters) reflects fallen, broken systems. How does God's response begin restoration?</p>
+        
+        <div class="speaker-only">
+          <strong>Teaching moment:</strong> Connect this to how sin creates systems that exclude people from God's original intentions. The daughters' advocacy and God's response show redemption happening within broken systems.
+        </div>
+      </div>
+
+      <div class="question">
+        <div><span class="question-number">5</span><strong>Law as Living Wisdom</strong></div>
+        <div class="speaker-only" style="margin: 5px 0;">⏱️ 2 minutes</div>
+        <p style="margin-top: 10px;">This story shows Torah as "covenant wisdom" not rigid legislation. Discuss:</p>
+        <ul class="sub-points">
+          <li>Why didn't God include this provision in the original law?</li>
+          <li>What does this teach about applying biblical principles to new situations?</li>
+          <li>How does this balance honoring tradition with pursuing justice?</li>
+        </ul>
+        <div class="speaker-only">
+          <strong>Guide discussion toward:</strong> God's law provides wisdom principles that must be applied contextually. The Bible isn't a rigid rulebook but living wisdom that addresses new situations while maintaining core principles.
+        </div>
+      </div>
+    </div>
+
+    <!-- New Testament Connection -->
+    <div class="card">
+      <h2>✨ New Testament Connection</h2>
+      
+      <div class="scripture-ref">
+        <strong>Galatians 3:28-29</strong>
+        <div class="verse">"There is neither Jew nor Gentile, neither slave nor free, nor is there male and female, for you are all one in Christ Jesus. If you belong to Christ, then you are Abraham's seed, and heirs according to the promise."</div>
+      </div>
+      
+      <div class="question">
+        <div><span class="question-number">6</span><strong>From Daughters to All Heirs</strong></div>
+        <div class="speaker-only" style="margin: 5px 0;">⏱️ 3 minutes</div>
+        <p style="margin-top: 10px;">How does the daughters' story anticipate Paul's teaching?</p>
+        <ul class="sub-points">
+          <li>Numbers 27: Daughters become heirs alongside sons</li>
+          <li>Galatians 3: ALL become heirs through Christ</li>
+          <li>Both passages: God expands access to inheritance</li>
+          <li>What "inheritance" do we receive in Christ?</li>
+        </ul>
+        <div class="speaker-only">
+          <strong>Connection to make:</strong> The trajectory from Numbers to Galatians shows God progressively expanding inclusion. What started with five women asking for land becomes ALL people inheriting eternal life through Christ.
+        </div>
+      </div>
+    </div>
+
+    <!-- Application -->
+    <div class="card">
+      <h2>🎯 Application</h2>
+      
+      <div class="question">
+        <div><span class="question-number">7</span><strong>For Our Lives Today</strong></div>
+        <div class="speaker-only" style="margin: 5px 0;">⏱️ 3 minutes</div>
+        <p style="margin-top: 10px;"><strong>Personal:</strong> Where might God be calling you to respectfully advocate for justice?</p>
+        <p style="margin-top: 10px;"><strong>Community:</strong> What "gaps" in our church/community structures might exclude people who should be included?</p>
+        <p style="margin-top: 10px;"><strong>Key Principle:</strong> The daughters model "faithful reform"—working within God's order while advocating for necessary change. They didn't abandon the system or attack Moses—they brought their case with wisdom and respect.</p>
+        
+        <div class="speaker-only">
+          <strong>Application focus:</strong> Help people identify specific situations where they can advocate for positive change. Emphasize the "how" as much as the "what"—respectful, proper channels, honoring authority while seeking justice.
+        </div>
+      </div>
+
+      <div class="key-insight">
+        <strong>Remember:</strong> God Himself declared the daughters "right." Sometimes the most faithful thing is to respectfully point out where current practice falls short of God's justice and inclusion. The question isn't "Should things ever change?" but "How do we pursue needed change in a way that honors God and builds up the community?"
+      </div>
+    </div>
+
+    <!-- Closing -->
+    <div class="card">
+      <h2>🙏 Closing Reflection</h2>
+      <div class="speaker-only" style="margin-bottom: 10px;">
+        <strong>⏱️ 1 minute</strong><br>
+        <strong>Instructions:</strong> Read these points aloud, then close in prayer. Ask God for wisdom to know when and how to advocate for justice in our contexts.
+      </div>
+      <p>The daughters of Zelophehad remind us that:</p>
+      <ul style="margin-top: 10px; padding-left: 20px;">
+        <li>✓ God listens to those who feel excluded</li>
+        <li>✓ Respectful advocacy can bring needed change</li>
+        <li>✓ Biblical justice includes updating applications while preserving principles</li>
+        <li>✓ In Christ, all barriers to inheritance are removed</li>
+      </ul>
+      
+      <div class="speaker-only" style="margin-top: 15px;">
+        <strong>Prayer focus:</strong> Wisdom for discernment, courage for advocacy, humility in approach, trust in God's justice. Consider having 2-3 people pray briefly rather than just the leader.
+      </div>
+    </div>
+
+    <!-- Related Profiles -->
+    <div class="card">
+      <h2>📚 Related Character Studies</h2>
+      <p style="margin-bottom: 15px;">Explore these in-depth profiles for deeper study:</p>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <a href="/studies/characters/numbers/daughters-zelophehad.html" 
+           style="padding: 12px; background: #f8f9fa; border-radius: 8px; text-decoration: none; color: #667eea; font-weight: 600; border-left: 3px solid #667eea; transition: all 0.3s;">
+          → Daughters of Zelophehad - Full Profile
+        </a>
+        <a href="/studies/characters/numbers/moses.html" 
+           style="padding: 12px; background: #f8f9fa; border-radius: 8px; text-decoration: none; color: #667eea; font-weight: 600; border-left: 3px solid #667eea; transition: all 0.3s;">
+          → Moses in Numbers
+        </a>
+        <a href="/studies/characters/genesis/abraham.html" 
+           style="padding: 12px; background: #f8f9fa; border-radius: 8px; text-decoration: none; color: #667eea; font-weight: 600; border-left: 3px solid #667eea; transition: all 0.3s;">
+          → Abraham - Faith & Covenant
+        </a>
+      </div>
+      <p style="margin-top: 15px; font-size: 0.9rem; color: #6c757d;">
+        These comprehensive profiles include Hebrew word studies, Ancient Near Eastern context, and detailed theological analysis.
+      </p>
+    </div>
+
+    <!-- View Toggle -->
+    <div class="view-toggle">
+      <button class="view-btn" id="speakerBtn" onclick="setView('speaker')">Speaker View</button>
+      <button class="view-btn active" id="participantBtn" onclick="setView('participant')">Participant View</button>
+    </div>
+
+    <div class="footer">
+      <p>📱 Mobile-friendly format for group discussion</p>
+      <p style="font-size: 0.9rem; margin-top: 5px;">Based on Numbers 27:1-11 & Galatians 3:28-29</p>
+    </div>
+  </div>
+  
+  <script>
+    // View toggle functionality
+    function setView(view) {
+      const speakerBtn = document.getElementById('speakerBtn');
+      const participantBtn = document.getElementById('participantBtn');
+      const speakerElements = document.querySelectorAll('.speaker-only');
+      const timerNotes = document.querySelectorAll('.timer-note');
+      const subPoints = document.querySelectorAll('.sub-points');
+      const speakerNotes = document.querySelectorAll('.speaker-note');
+      
+      if (view === 'participant') {
+        // Switch to participant view
+        participantBtn.classList.add('active');
+        speakerBtn.classList.remove('active');
+        document.body.classList.add('participant-view');
+        
+        // Hide speaker-only content
+        speakerElements.forEach(el => el.classList.add('hidden'));
+        timerNotes.forEach(el => el.style.display = 'none');
+        speakerNotes.forEach(el => el.style.display = 'none');
+        
+        // Simplify questions - hide sub-points
+        subPoints.forEach(el => el.style.display = 'none');
+        
+      } else {
+        // Switch to speaker view
+        speakerBtn.classList.add('active');
+        participantBtn.classList.remove('active');
+        document.body.classList.remove('participant-view');
+        
+        // Show speaker-only content
+        speakerElements.forEach(el => el.classList.remove('hidden'));
+        timerNotes.forEach(el => el.style.display = '');
+        speakerNotes.forEach(el => el.style.display = '');
+        
+        // Show sub-points
+        subPoints.forEach(el => el.style.display = '');
+      }
+      
+      // Save preference
+      localStorage.setItem('discussionView', view);
+    }
+    
+    // Load saved preference on page load (default to participant view)
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedView = localStorage.getItem('discussionView');
+      if (savedView === 'speaker') {
+        setView('speaker');
+      } else {
+        // Default to participant view
+        setView('participant');
+      }
+    });
+    
+    // Keyboard shortcut to toggle views (Ctrl/Cmd + Shift + V)
+    document.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'V') {
+        const currentView = document.body.classList.contains('participant-view') ? 'participant' : 'speaker';
+        setView(currentView === 'speaker' ? 'participant' : 'speaker');
+      }
+    });
+  </script>
+</body>
+</html>
