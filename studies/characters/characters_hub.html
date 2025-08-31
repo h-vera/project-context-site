@@ -587,77 +587,55 @@
 <!-- JavaScript -->
     <script type="module" src="/assets/js/hub-init.js"></script>
     <script src="/assets/js/mobile-menu.js"></script>
+
+<!-- Enhanced Search Module -->
+<script type="module" src="/assets/js/search-module.js"></script>
+
+<!-- App Initializer (Dark mode, shortcuts, service worker) -->
 <script>
-// Fix search button after everything loads
-window.addEventListener('load', function() {
-    const searchButton = document.getElementById('searchButton');
-    const searchInput = document.getElementById('searchInput');
-    const clearButton = document.getElementById('clearSearch');
+(function() {
+    'use strict';
     
-    if (!searchButton || !searchInput) return;
-    
-    // Override the search button click
-    searchButton.onclick = async function(e) {
-        e.preventDefault();
-        const query = searchInput.value.trim().toLowerCase();
-        
-        if (!query) return;
-        
-        // Show clear button
-        if (clearButton) clearButton.style.display = 'flex';
-        
-        const resultsDiv = document.getElementById('searchResults');
-        const resultsCount = document.getElementById('searchResultsCount');
-        
-        // Show loading
-        resultsDiv.innerHTML = '<div class="search-loading"></div>';
-        
-        try {
-            // Search using the hub loader
-            const results = await window.hub.loader.searchCharacters(query);
-            console.log(`Found ${results.length} results for "${query}"`);
-            
-            // Display results using hubCommon's method
-            if (window.hubCommon && window.hubCommon.displayCharacterResults) {
-                window.hubCommon.displayCharacterResults(results, query, resultsDiv, resultsCount);
-            } else {
-                // Fallback display
-                if (results.length > 0) {
-                    resultsDiv.innerHTML = '<div class="section-header"><h3>Found ' + results.length + ' results</h3></div>';
-                    results.forEach(r => {
-                        resultsDiv.innerHTML += '<div class="study-card">' + r.name + ' - ' + (r.book?.name || 'Unknown Book') + '</div>';
-                    });
-                } else {
-                    resultsDiv.innerHTML = '<div class="empty-state">No results found</div>';
-                }
-            }
-        } catch (error) {
-            console.error('Search error:', error);
-            resultsDiv.innerHTML = '<div class="empty-state">Search error occurred</div>';
-        }
-    }; // <-- THIS CLOSING BRACE WAS MISSING
-    
-    // Also make Enter key work
-    searchInput.onkeypress = function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            searchButton.click();
-        }
-    };
-    
-    // Clear button
-    if (clearButton) {
-        clearButton.onclick = function() {
-            searchInput.value = '';
-            clearButton.style.display = 'none';
-            document.getElementById('searchResults').innerHTML = '';
-            const resultsCount = document.getElementById('searchResultsCount');
-            if (resultsCount) resultsCount.style.display = 'none';
-        };
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+        initApp();
     }
     
-    console.log('✓ Search button connected to hub.loader');
-});
+    function initApp() {
+        console.log('🚀 Initializing app features...');
+        
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW failed:', err));
+        }
+        
+        // Dark Mode Toggle
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') document.body.classList.add('dark-mode');
+        
+        const darkBtn = document.createElement('button');
+        darkBtn.className = 'dark-mode-toggle';
+        darkBtn.innerHTML = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+        darkBtn.onclick = () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            darkBtn.innerHTML = isDark ? '☀️' : '🌙';
+        };
+        document.body.appendChild(darkBtn);
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('searchInput')?.focus();
+            }
+        });
+        
+        console.log('✅ Ready!');
+    }
+})();
 </script>
 </body>
 </html>
