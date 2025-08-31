@@ -587,5 +587,77 @@
 <!-- JavaScript -->
     <script type="module" src="/assets/js/hub-init.js"></script>
     <script src="/assets/js/mobile-menu.js"></script>
+<script>
+// Fix search button after everything loads
+window.addEventListener('load', function() {
+    const searchButton = document.getElementById('searchButton');
+    const searchInput = document.getElementById('searchInput');
+    const clearButton = document.getElementById('clearSearch');
+    
+    if (!searchButton || !searchInput) return;
+    
+    // Override the search button click
+    searchButton.onclick = async function(e) {
+        e.preventDefault();
+        const query = searchInput.value.trim().toLowerCase();
+        
+        if (!query) return;
+        
+        // Show clear button
+        if (clearButton) clearButton.style.display = 'flex';
+        
+        const resultsDiv = document.getElementById('searchResults');
+        const resultsCount = document.getElementById('searchResultsCount');
+        
+        // Show loading
+        resultsDiv.innerHTML = '<div class="search-loading"></div>';
+        
+        try {
+            // Search using the hub loader
+            const results = await window.hub.loader.searchCharacters(query);
+            console.log(`Found ${results.length} results for "${query}"`);
+            
+            // Display results using hubCommon's method
+            if (window.hubCommon && window.hubCommon.displayCharacterResults) {
+                window.hubCommon.displayCharacterResults(results, query, resultsDiv, resultsCount);
+            } else {
+                // Fallback display
+                if (results.length > 0) {
+                    resultsDiv.innerHTML = '<div class="section-header"><h3>Found ' + results.length + ' results</h3></div>';
+                    results.forEach(r => {
+                        resultsDiv.innerHTML += '<div class="study-card">' + r.name + ' - ' + (r.book?.name || 'Unknown Book') + '</div>';
+                    });
+                } else {
+                    resultsDiv.innerHTML = '<div class="empty-state">No results found</div>';
+                }
+            }
+        } catch (error) {
+            console.error('Search error:', error);
+            resultsDiv.innerHTML = '<div class="empty-state">Search error occurred</div>';
+        }
+    }; // <-- THIS CLOSING BRACE WAS MISSING
+    
+    // Also make Enter key work
+    searchInput.onkeypress = function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            searchButton.click();
+        }
+    };
+    
+    // Clear button
+    if (clearButton) {
+        clearButton.onclick = function() {
+            searchInput.value = '';
+            clearButton.style.display = 'none';
+            document.getElementById('searchResults').innerHTML = '';
+            const resultsCount = document.getElementById('searchResultsCount');
+            if (resultsCount) resultsCount.style.display = 'none';
+        };
+    }
+    
+    console.log('✓ Search button connected to hub.loader');
+});
+</script>
 </body>
 </html>
