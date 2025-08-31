@@ -2,7 +2,7 @@
  * Hub Common JavaScript Module
  * Path: /assets/js/hub-common.js
  * Purpose: Shared functionality for all hub pages
- * Version: 1.0.0
+ * Version: 1.0.1 - Updated with working search
  */
 
 class HubCommon {
@@ -209,39 +209,176 @@ class HubCommon {
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => this.performSearch(), 300);
         });
+        
+        // Initialize clear button functionality
+        this.initSearchClear();
     }
 
     /**
-     * Perform search
+     * Initialize search clear button
      */
-    performSearch() {
+    initSearchClear() {
+        const clearButton = document.getElementById('clearSearch');
         const searchInput = document.getElementById('searchInput');
-        const searchTerm = searchInput?.value.toLowerCase() || '';
         const resultsDiv = document.getElementById('searchResults');
+        const resultsCount = document.getElementById('searchResultsCount');
+        
+        if (clearButton && searchInput) {
+            clearButton.addEventListener('click', () => {
+                searchInput.value = '';
+                clearButton.style.display = 'none';
+                if (resultsDiv) resultsDiv.innerHTML = '';
+                if (resultsCount) resultsCount.style.display = 'none';
+                searchInput.focus();
+            });
+        }
+    }
+
+    /**
+     * Perform search - UPDATED VERSION
+     */
+    async performSearch() {
+        const searchInput = document.getElementById('searchInput');
+        const searchTerm = searchInput?.value.toLowerCase().trim() || '';
+        const resultsDiv = document.getElementById('searchResults');
+        const resultsCount = document.getElementById('searchResultsCount');
+        const clearButton = document.getElementById('clearSearch');
+        
+        // Show/hide clear button
+        if (clearButton) {
+            clearButton.style.display = searchTerm ? 'flex' : 'none';
+        }
         
         if (!searchTerm) {
             if (resultsDiv) resultsDiv.innerHTML = '';
+            if (resultsCount) resultsCount.style.display = 'none';
             return;
         }
         
-        const searchableItems = document.querySelectorAll('.study-item, .book-card, .featured-card');
-        const matches = [];
+        // Show loading state
+        if (resultsDiv) {
+            resultsDiv.innerHTML = '<div class="search-loading"></div>';
+        }
         
-        searchableItems.forEach(item => {
-            const text = item.textContent.toLowerCase();
-            if (text.includes(searchTerm)) {
-                matches.push({
-                    element: item.cloneNode(true),
-                    relevance: this.calculateRelevance(text, searchTerm)
+        try {
+            let matches = [];
+            
+            // Check if we have the hub instance with loader
+            if (window.hub && window.hub.loader) {
+                // Search through all loaded character data
+                const allCharacters = await window.hub.loader.searchCharacters(searchTerm);
+                matches = allCharacters;
+                
+                // Display character results
+                this.displayCharacterResults(matches, searchTerm, resultsDiv, resultsCount);
+            } else {
+                // Fallback: Search DOM elements (current page only)
+                const searchableItems = document.querySelectorAll('.study-card, .character-card, .featured-card');
+                
+                searchableItems.forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        matches.push({
+                            element: item.cloneNode(true),
+                            relevance: this.calculateRelevance(text, searchTerm)
+                        });
+                    }
                 });
+                
+                // Sort by relevance
+                matches.sort((a, b) => b.relevance - a.relevance);
+                
+                // Display DOM results
+                this.displaySearchResults(matches, searchTerm, resultsDiv);
             }
-        });
+            
+        } catch (error) {
+            console.error('Search error:', error);
+            if (resultsDiv) {
+                resultsDiv.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⚠️</div>
+                        <div class="empty-state-text">Search Error</div>
+                        <div class="empty-state-subtext">Please try again</div>
+                    </div>
+                `;
+            }
+        }
+    }
+
+    /**
+     * Display character search results
+     */
+    displayCharacterResults(characters, searchTerm, resultsDiv, resultsCount) {
+        if (!resultsDiv) return;
         
-        // Sort by relevance
-        matches.sort((a, b) => b.relevance - a.relevance);
-        
-        // Display results
-        this.displaySearchResults(matches, searchTerm, resultsDiv);
+        if (characters.length > 0) {
+            // Update count
+            if (resultsCount) {
+                resultsCount.querySelector('.results-number').textContent = characters.length;
+                resultsCount.style.display = 'block';
+            }
+            
+            // Build results HTML
+            let html = `
+                <div class="section-header">
+                    <h3 class="section-title">Search Results</h3>
+                    <p class="section-subtitle">${characters.length} result${characters.length !== 1 ? 's' : ''} for "${searchTerm}"</p>
+                </div>
+                <div class="studies-list cards-grid">
+            `;
+            
+            characters.forEach(char => {
+                const bookId = char.book?.id || 'unknown';
+                const profilePath = char.profilePath || `#`;
+                const hebrewText = char.hebrew ? `<span class="hebrew">${char.hebrew}</span>` : '';
+                const tags = (char.tags || []).map(tag => {
+                    const tagClass = tag.toLowerCase().includes('unnamed') ? 'group' : '';
+                    return `<span class="tag ${tagClass}">${tag}</span>`;
+                }).join('');
+                const references = Array.isArray(char.references) ? char.references.join(', ') : '';
+                
+                html += `
+                    <article class="study-card">
+                        <a href="${profilePath}" class="study-card-link">
+                            <div class="study-card-header">
+                                <h4 class="study-card-title">
+                                    ${char.name} ${hebrewText}
+                                </h4>
+                                <div class="study-card-tags">${tags}</div>
+                            </div>
+                            <div class="study-card-body">
+                                <p class="study-card-meta">${char.meaning || ''} • ${references}</p>
+                                <p class="study-card-desc">${char.summary || ''}</p>
+                                <p class="study-card-meta" style="margin-top: 0.5rem;">
+                                    <strong>Book:</strong> ${char.book?.name || 'Unknown'}
+                                </p>
+                            </div>
+                            <div class="study-card-arrow">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none"/>
+                                </svg>
+                            </div>
+                        </a>
+                    </article>
+                `;
+            });
+            
+            html += '</div>';
+            resultsDiv.innerHTML = html;
+            
+        } else {
+            // No results
+            if (resultsCount) resultsCount.style.display = 'none';
+            
+            resultsDiv.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">🔍</div>
+                    <div class="empty-state-text">No Results Found</div>
+                    <div class="empty-state-subtext">Try searching for different keywords</div>
+                </div>
+            `;
+        }
     }
 
     /**
@@ -269,7 +406,7 @@ class HubCommon {
     }
 
     /**
-     * Display search results
+     * Display search results (DOM fallback)
      */
     displaySearchResults(matches, searchTerm, resultsDiv) {
         if (!resultsDiv) return;
