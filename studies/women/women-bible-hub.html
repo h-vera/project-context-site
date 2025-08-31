@@ -958,6 +958,63 @@
         });
     </script>
 
+   <!-- Enhanced Search Module -->
+    <script type="module" src="/assets/js/search-module.js"></script>
+    
+    <!-- App Initializer (Dark mode, shortcuts, service worker) -->
+    <script>
+    (function() {
+        'use strict';
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+            initApp();
+        }
+        
+        function initApp() {
+            console.log('🚀 Initializing Women\'s Hub features...');
+            
+            // Register Service Worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(() => console.log('✅ Offline support enabled'))
+                    .catch(err => console.log('SW registration failed:', err));
+            }
+            
+            // Dark Mode Toggle
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') document.body.classList.add('dark-mode');
+            
+            const darkBtn = document.createElement('button');
+            darkBtn.className = 'dark-mode-toggle';
+            darkBtn.innerHTML = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+            darkBtn.title = 'Toggle dark mode (Alt+D)';
+            darkBtn.onclick = () => {
+                document.body.classList.toggle('dark-mode');
+                const isDark = document.body.classList.contains('dark-mode');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                darkBtn.innerHTML = isDark ? '☀️' : '🌙';
+            };
+            document.body.appendChild(darkBtn);
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    document.getElementById('searchInput')?.focus();
+                }
+                if (e.altKey && e.key === 'd') {
+                    e.preventDefault();
+                    darkBtn.click();
+                }
+            });
+            
+            console.log('✅ Women\'s Hub ready!');
+        }
+    })();
+    </script>
+    
     <!-- Mobile Menu JavaScript -->
     <script src="/assets/js/mobile-menu.js"></script>
 </body>
