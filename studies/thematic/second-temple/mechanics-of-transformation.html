@@ -34,14 +34,43 @@
     .header {
       background: linear-gradient(135deg, var(--primary), var(--secondary));
       color: white;
-      padding: 3rem 2rem;
+      padding: 4rem 2rem 3rem;
       text-align: center;
+      position: relative;
     }
     
     .header h1 {
       font-size: 2.5rem;
       margin-bottom: 1rem;
       font-weight: 800;
+    }
+    
+    .home-button {
+      position: absolute;
+      left: 1rem;
+      top: 1rem;
+      z-index: 10;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(255,255,255,0.15);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+    
+    .home-button:hover {
+      background: rgba(255,255,255,0.25);
+    }
+    
+    .home-button svg {
+      filter: brightness(0) invert(1);
+    }
+    
+    .home-button span {
+      color: white;
+      font-weight: 600;
     }
     
     .nav-tabs {
@@ -65,6 +94,8 @@
       font-weight: 600;
       border-radius: 8px;
       transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
     }
     
     .nav-tab:hover {
@@ -85,10 +116,6 @@
     }
     
     .page {
-      display: none;
-    }
-    
-    .page.active {
       display: block;
       animation: fadeIn 0.5s;
     }
@@ -301,21 +328,31 @@
 </head>
 <body>
   <header class="header">
+    <a href="/" class="home-button">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="40" height="40">
+        <path d="M 25 15 L 10 15 L 10 85 L 25 85" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M 75 15 L 90 15 L 90 85 L 75 85" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <ellipse cx="50" cy="50" rx="25" ry="15" stroke="currentColor" stroke-width="3" fill="none"/>
+        <circle cx="50" cy="50" r="8" fill="currentColor"/>
+        <circle cx="50" cy="50" r="3" fill="white"/>
+      </svg>
+      <span>Project Context</span>
+    </a>
     <h1>Mechanics of Transformation</h1>
     <p style="font-size: 1.2rem; opacity: 0.95;">How New Testament Authors Transform Second Temple Jewish Traditions</p>
   </header>
 
   <nav class="nav-tabs">
-    <button class="nav-tab active" onclick="showPage('overview')">Overview</button>
-    <button class="nav-tab" onclick="showPage('jesus')">Jesus/Gospels</button>
-    <button class="nav-tab" onclick="showPage('paul')">Paul</button>
-    <button class="nav-tab" onclick="showPage('others')">Other NT Writers</button>
+    <a href="mechanics-of-transformation.html" class="nav-tab active">Overview</a>
+    <a href="second-temple-mechanics-jesus.html" class="nav-tab">Jesus/Gospels</a>
+    <a href="second-temple-mechanics-paul.html" class="nav-tab">Paul</a>
+    <a href="second-temple-mechanics-others.html" class="nav-tab">Other NT Writers</a>
   </nav>
 
   <div class="content">
     
     <!-- PAGE 1: OVERVIEW -->
-    <div id="overview" class="page active">
+    <div id="overview" class="page">
       <div class="card">
         <h2>What Is Second Temple Literature?</h2>
         <p style="font-size: 1.1rem; color: var(--mid); margin-bottom: 2rem;">Not a catalog of texts, but the interpretive furniture already in the room when Jesus and the apostles arrived.</p>
@@ -658,39 +695,6 @@
         </details>
       </div>
     </div>
-
-    <!-- Other pages remain the same but I'll include them for completeness -->
-    <div id="jesus" class="page">
-      <!-- Jesus/Gospels content - keeping as is -->
-    </div>
-
-    <div id="paul" class="page">
-      <!-- Paul content - keeping as is -->
-    </div>
-
-    <div id="others" class="page">
-      <!-- Other NT Writers content - keeping as is -->
-    </div>
   </div>
-
-  <script>
-    function showPage(pageId) {
-      // Hide all pages
-      document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-      });
-      
-      // Remove active class from all tabs
-      document.querySelectorAll('.nav-tab').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      
-      // Show selected page
-      document.getElementById(pageId).classList.add('active');
-      
-      // Mark corresponding tab as active
-      event.target.classList.add('active');
-    }
-  </script>
 </body>
 </html>
