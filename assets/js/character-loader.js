@@ -1,196 +1,139 @@
 /**
  * Character Loader Module
  * Path: /assets/js/character-loader.js
- * Purpose: Loads character data from JSON files for the hub pages
+ * Purpose: Loads and manages biblical character data
+ * Version: 1.0.0
  */
 
 class CharacterLoader {
     constructor(options = {}) {
-        this.baseUrl = options.baseUrl || 'https://projectcontext.org';
-        this.filterGender = options.filterGender || null; // null, 'male', or 'female'
+        // Use relative path to work on any domain
+        this.baseUrl = options.baseUrl || '';
+        this.filterGender = options.filterGender || null;
         this.manifest = null;
-        this.cache = new Map(); // Cache loaded book data
+        this.cache = new Map();
         this.initialized = false;
     }
 
     /**
-     * Initialize the loader by fetching the manifest
+     * Initialize the loader and get manifest
      */
     async initialize() {
         if (this.initialized) return this.manifest;
         
         try {
-            const response = await fetch(`${this.baseUrl}/assets/data/manifest.json`);
+            // Try to load manifest, but use fallback if it doesn't exist
+            const manifestUrl = `${this.baseUrl}/assets/data/manifest.json`;
+            console.log('Loading manifest from:', manifestUrl);
+            
+            const response = await fetch(manifestUrl);
             if (!response.ok) {
-                throw new Error(`Failed to load manifest: ${response.status}`);
+                console.warn(`Manifest not found (${response.status}), using fallback`);
+                this.manifest = this.getDefaultManifest();
+            } else {
+                this.manifest = await response.json();
             }
             
-            this.manifest = await response.json();
             this.initialized = true;
+            console.log('✓ CharacterLoader initialized');
             return this.manifest;
             
         } catch (error) {
-            console.error('Error loading manifest:', error);
-            // Return fallback structure if manifest fails
-            return this.getFallbackManifest();
+            console.warn('Error loading manifest, using fallback:', error.message);
+            this.manifest = this.getDefaultManifest();
+            this.initialized = true;
+            return this.manifest;
         }
     }
 
     /**
-     * Get fallback manifest structure if loading fails
+     * Get default manifest if loading fails
      */
-    getFallbackManifest() {
+    getDefaultManifest() {
         return {
-            version: "1.0",
-            lastUpdated: new Date().toISOString(),
-            totalCharacters: 300,
-            books: {
-                tanakh: {
-                    torah: ["genesis", "exodus", "leviticus", "numbers", "deuteronomy"],
-                    neviim: ["joshua", "judges", "samuel", "kings", "isaiah", "jeremiah", "ezekiel"],
-                    ketuvim: ["psalms", "proverbs", "job", "ruth", "esther", "daniel", "chronicles"]
-                },
-                newTestament: {
-                    gospels: ["matthew", "mark", "luke", "john"],
-                    history: ["acts"],
-                    epistles: ["romans", "corinthians", "galatians"],
-                    prophecy: ["revelation"]
-                }
-            }
+            books: [
+                { id: 'genesis', file: 'genesis.json', name: 'Genesis' },
+                { id: 'exodus', file: 'exodus.json', name: 'Exodus' },
+                { id: 'leviticus', file: 'leviticus.json', name: 'Leviticus' },
+                { id: 'numbers', file: 'numbers.json', name: 'Numbers' },
+                { id: 'deuteronomy', file: 'deuteronomy.json', name: 'Deuteronomy' },
+                { id: 'joshua', file: 'joshua.json', name: 'Joshua' },
+                { id: 'judges', file: 'judges.json', name: 'Judges' },
+                { id: 'ruth', file: 'ruth.json', name: 'Ruth' },
+                { id: 'samuel', file: 'samuel.json', name: '1-2 Samuel' },
+                { id: 'kings', file: 'kings.json', name: '1-2 Kings' },
+                { id: 'chronicles', file: 'chronicles.json', name: '1-2 Chronicles' },
+                { id: 'ezra', file: 'ezra.json', name: 'Ezra' },
+                { id: 'nehemiah', file: 'nehemiah.json', name: 'Nehemiah' },
+                { id: 'esther', file: 'esther.json', name: 'Esther' },
+                { id: 'job', file: 'job.json', name: 'Job' },
+                { id: 'psalms', file: 'psalms.json', name: 'Psalms' },
+                { id: 'proverbs', file: 'proverbs.json', name: 'Proverbs' },
+                { id: 'ecclesiastes', file: 'ecclesiastes.json', name: 'Ecclesiastes' },
+                { id: 'song-of-songs', file: 'song-of-songs.json', name: 'Song of Songs' },
+                { id: 'isaiah', file: 'isaiah.json', name: 'Isaiah' },
+                { id: 'jeremiah', file: 'jeremiah.json', name: 'Jeremiah' },
+                { id: 'lamentations', file: 'lamentations.json', name: 'Lamentations' },
+                { id: 'ezekiel', file: 'ezekiel.json', name: 'Ezekiel' },
+                { id: 'daniel', file: 'daniel.json', name: 'Daniel' },
+                { id: 'hosea', file: 'hosea.json', name: 'Hosea' },
+                { id: 'joel', file: 'joel.json', name: 'Joel' },
+                { id: 'amos', file: 'amos.json', name: 'Amos' },
+                { id: 'obadiah', file: 'obadiah.json', name: 'Obadiah' },
+                { id: 'jonah', file: 'jonah.json', name: 'Jonah' },
+                { id: 'micah', file: 'micah.json', name: 'Micah' },
+                { id: 'nahum', file: 'nahum.json', name: 'Nahum' },
+                { id: 'habakkuk', file: 'habakkuk.json', name: 'Habakkuk' },
+                { id: 'zephaniah', file: 'zephaniah.json', name: 'Zephaniah' },
+                { id: 'haggai', file: 'haggai.json', name: 'Haggai' },
+                { id: 'zechariah', file: 'zechariah.json', name: 'Zechariah' },
+                { id: 'malachi', file: 'malachi.json', name: 'Malachi' }
+            ]
         };
     }
 
-/**
- * Load character data for a specific book
- */
-async loadBook(bookId) {
-    // Check cache first
-    if (this.cache.has(bookId)) {
-        return this.filterData(this.cache.get(bookId));
-    }
-
-    try {
-        const response = await fetch(`${this.baseUrl}/assets/data/books/${bookId}.json`);
-        if (!response.ok) {
-            throw new Error(`Failed to load book ${bookId}: ${response.status}`);
+    /**
+     * Load character data for a specific book
+     */
+    async loadBook(bookId) {
+        // Check cache first
+        if (this.cache.has(bookId)) {
+            return this.filterData(this.cache.get(bookId));
         }
 
-        // First get the response as text to help with debugging
-        const text = await response.text();
-        let data;
-        
         try {
-            data = JSON.parse(text);
-        } catch (parseError) {
-            // Log detailed error information for debugging
-            console.error(`JSON parse error in ${bookId}.json:`, parseError);
-            console.error('JSON parse error details:', {
-                bookId: bookId,
-                errorMessage: parseError.message,
-                errorPosition: parseError.message.match(/position (\d+)/) ? 
-                    parseError.message.match(/position (\d+)/)[1] : 'unknown'
-            });
+            const url = `${this.baseUrl}/assets/data/books/${bookId}.json`;
+            console.log(`Loading book data from: ${url}`);
             
-            // Log a portion of the JSON to help identify the issue
-            if (text.length > 0) {
-                console.error('First 500 characters of JSON:', text.substring(0, 500));
-                console.error('Last 500 characters of JSON:', text.substring(Math.max(0, text.length - 500)));
-            }
-            
-            // Throw a more descriptive error
-            throw new Error(`Invalid JSON in ${bookId}.json: ${parseError.message}`);
-        }
-        
-        // Validate the data structure
-        if (!data || typeof data !== 'object') {
-            throw new Error(`Invalid data structure in ${bookId}.json`);
-        }
-        
-        if (!data.book || !Array.isArray(data.characters)) {
-            console.warn(`Unexpected data structure in ${bookId}.json:`, {
-                hasBook: !!data.book,
-                hasCharacters: !!data.characters,
-                charactersIsArray: Array.isArray(data.characters)
-            });
-        }
-        
-        // Cache the raw data
-        this.cache.set(bookId, data);
-        
-        // Log successful load with character count
-        console.log(`Successfully loaded ${bookId}.json with ${data.characters?.length || 0} characters`);
-        
-        // Return filtered data
-        return this.filterData(data);
-        
-    } catch (error) {
-        console.error(`Error loading book ${bookId}:`, error);
-        
-        // Add a user-friendly alert for debugging (optional - remove in production)
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            console.warn(`Debug mode: Failed to load ${bookId}.json. Check console for details.`);
-        }
-        
-        // Return fallback data for specific books
-        return this.getFallbackBookData(bookId);
-    }
-}
-/**
- * Debug method to validate all book JSON files
- */
-async validateAllBooks() {
-    const books = this.getAllBookIds();
-    const results = {
-        valid: [],
-        invalid: [],
-        missing: []
-    };
-    
-    for (const bookId of books) {
-        try {
-            const response = await fetch(`${this.baseUrl}/assets/data/books/${bookId}.json`);
+            const response = await fetch(url);
             if (!response.ok) {
-                results.missing.push(bookId);
-                continue;
+                console.warn(`Book ${bookId} not found (${response.status}), using fallback`);
+                return this.getFallbackBookData(bookId);
+            }
+
+            // Parse JSON
+            const data = await response.json();
+            
+            // Validate the data structure
+            if (!data || typeof data !== 'object') {
+                console.warn(`Invalid data structure in ${bookId}.json, using fallback`);
+                return this.getFallbackBookData(bookId);
             }
             
-            const text = await response.text();
-            try {
-                const data = JSON.parse(text);
-                if (data.book && Array.isArray(data.characters)) {
-                    results.valid.push({
-                        bookId: bookId,
-                        characterCount: data.characters.length,
-                        femaleCount: data.characters.filter(c => c.gender === 'female').length,
-                        maleCount: data.characters.filter(c => c.gender === 'male').length
-                    });
-                } else {
-                    results.invalid.push({
-                        bookId: bookId,
-                        reason: 'Invalid structure'
-                    });
-                }
-            } catch (e) {
-                results.invalid.push({
-                    bookId: bookId,
-                    reason: e.message
-                });
-            }
+            // Cache the raw data
+            this.cache.set(bookId, data);
+            
+            console.log(`✓ Loaded ${bookId} with ${data.characters?.length || 0} characters`);
+            
+            // Return filtered data
+            return this.filterData(data);
+            
         } catch (error) {
-            results.missing.push(bookId);
+            console.error(`Error loading book ${bookId}:`, error.message);
+            return this.getFallbackBookData(bookId);
         }
     }
-    
-    console.table(results.valid);
-    if (results.invalid.length > 0) {
-        console.error('Invalid JSON files:', results.invalid);
-    }
-    if (results.missing.length > 0) {
-        console.warn('Missing JSON files:', results.missing);
-    }
-    
-    return results;
-}
+
     /**
      * Filter data based on gender if specified
      */
@@ -208,63 +151,6 @@ async validateAllBooks() {
     }
 
     /**
-     * Get all characters across all books (filtered if needed)
-     */
-    async getAllCharacters() {
-        if (!this.manifest) {
-            await this.initialize();
-        }
-
-        const allCharacters = [];
-        const books = this.getAllBookIds();
-
-        for (const bookId of books) {
-            try {
-                const bookData = await this.loadBook(bookId);
-                if (bookData.characters) {
-                    allCharacters.push(...bookData.characters.map(char => ({
-                        ...char,
-                        book: bookData.book
-                    })));
-                }
-            } catch (error) {
-                console.error(`Failed to load ${bookId}:`, error);
-            }
-        }
-
-        return allCharacters;
-    }
-
-    /**
-     * Get all book IDs from manifest
-     */
-    getAllBookIds() {
-        const ids = [];
-        
-        if (this.manifest?.books) {
-            // Tanakh books
-            if (this.manifest.books.tanakh) {
-                Object.values(this.manifest.books.tanakh).forEach(category => {
-                    if (Array.isArray(category)) {
-                        ids.push(...category);
-                    }
-                });
-            }
-            
-            // New Testament books
-            if (this.manifest.books.newTestament) {
-                Object.values(this.manifest.books.newTestament).forEach(category => {
-                    if (Array.isArray(category)) {
-                        ids.push(...category);
-                    }
-                });
-            }
-        }
-        
-        return ids;
-    }
-
-    /**
      * Search characters by query
      */
     async searchCharacters(query) {
@@ -274,7 +160,6 @@ async validateAllBooks() {
         return allCharacters.filter(char => {
             return char.name?.toLowerCase().includes(lowerQuery) ||
                    char.hebrew?.includes(query) ||
-                   char.greek?.includes(query) ||
                    char.meaning?.toLowerCase().includes(lowerQuery) ||
                    char.summary?.toLowerCase().includes(lowerQuery) ||
                    char.tags?.some(tag => tag.toLowerCase().includes(lowerQuery));
@@ -282,121 +167,44 @@ async validateAllBooks() {
     }
 
     /**
-     * Get featured characters
+     * Get all characters across all books
      */
-    async getFeaturedCharacters(limit = 7) {
-        // Define featured character IDs
-        const featuredIds = [
-             { book: 'genesis', id: 'eve' },
-            { book: 'genesis', id: 'abraham' },
-            { book: 'genesis', id: 'sarah' },
-            { book: 'genesis', id: 'hagar' },
-            { book: 'judges', id: 'deborah' },
-            { book: 'judges', id: 'delilah' },
-            { book: 'ruth', id: 'ruth' },
-        ];
-
-        const featured = [];
-        
-        for (const item of featuredIds.slice(0, limit)) {
-            try {
-                const bookData = await this.loadBook(item.book);
-                const character = bookData.characters?.find(c => c.id === item.id);
-                if (character) {
-                    featured.push({
-                        ...character,
-                        book: bookData.book
-                    });
-                }
-            } catch (error) {
-                console.error(`Failed to load featured character ${item.id}:`, error);
-            }
-        }
-
-        return featured;
-    }
-
-    /**
-     * Get statistics about the characters
-     */
-    async getStatistics() {
+    async getAllCharacters() {
         if (!this.manifest) {
             await this.initialize();
         }
 
-        const stats = {
-            totalCharacters: 0,
-            totalBooks: 0,
-            byGender: { male: 0, female: 0, unknown: 0 },
-            byTestament: { tanakh: 0, newTestament: 0 }
-        };
+        const allCharacters = [];
+        const books = this.manifest.books || [];
 
-        const books = this.getAllBookIds();
-        stats.totalBooks = books.length;
-
-        for (const bookId of books) {
+        for (const bookInfo of books) {
             try {
-                const bookData = await this.loadBook(bookId);
+                const bookData = await this.loadBook(bookInfo.id);
                 if (bookData.characters) {
-                    stats.totalCharacters += bookData.characters.length;
-                    
-                    bookData.characters.forEach(char => {
-                        const gender = char.gender || 'unknown';
-                        stats.byGender[gender] = (stats.byGender[gender] || 0) + 1;
-                        
-                        // Determine testament based on book
-                        const testament = this.getTestament(bookId);
-                        if (testament) {
-                            stats.byTestament[testament]++;
-                        }
-                    });
+                    allCharacters.push(...bookData.characters.map(char => ({
+                        ...char,
+                        book: bookData.book
+                    })));
                 }
             } catch (error) {
-                console.error(`Failed to get stats for ${bookId}:`, error);
+                console.error(`Failed to load ${bookInfo.id}:`, error);
             }
         }
 
-        return stats;
-    }
-
-    /**
-     * Determine which testament a book belongs to
-     */
-    getTestament(bookId) {
-        if (!this.manifest?.books) return null;
-        
-        // Check Tanakh
-        if (this.manifest.books.tanakh) {
-            for (const category of Object.values(this.manifest.books.tanakh)) {
-                if (Array.isArray(category) && category.includes(bookId)) {
-                    return 'tanakh';
-                }
-            }
-        }
-        
-        // Check New Testament
-        if (this.manifest.books.newTestament) {
-            for (const category of Object.values(this.manifest.books.newTestament)) {
-                if (Array.isArray(category) && category.includes(bookId)) {
-                    return 'newTestament';
-                }
-            }
-        }
-        
-        return null;
+        return allCharacters;
     }
 
     /**
      * Get fallback data for a specific book
      */
     getFallbackBookData(bookId) {
-        // Provide sample fallback data for key books
         const fallbackData = {
             genesis: {
                 book: {
                     id: "genesis",
                     name: "Genesis",
                     hebrew: "בְּרֵאשִׁית",
+                    hebrewTranslit: "B'reishit",
                     characterCount: 30
                 },
                 characters: [
@@ -407,8 +215,9 @@ async validateAllBooks() {
                         gender: "male",
                         profilePath: "/studies/characters/genesis/abraham.html",
                         references: ["Gen 11-25"],
+                        meaning: "Father of multitudes",
                         summary: "Father of faith and patriarch of Israel",
-                        tags: ["Patriarch", "Covenant"]
+                        tags: ["Patriarch", "Covenant", "Faith"]
                     },
                     {
                         id: "sarah",
@@ -417,8 +226,180 @@ async validateAllBooks() {
                         gender: "female",
                         profilePath: "/studies/characters/genesis/sarah.html",
                         references: ["Gen 11-25"],
+                        meaning: "Princess",
                         summary: "Mother of nations, wife of Abraham",
-                        tags: ["Matriarch"]
+                        tags: ["Matriarch", "Faith", "Mother"]
+                    },
+                    {
+                        id: "isaac",
+                        name: "Isaac",
+                        hebrew: "יִצְחָק",
+                        gender: "male",
+                        profilePath: "/studies/characters/genesis/isaac.html",
+                        references: ["Gen 21-35"],
+                        meaning: "He laughs",
+                        summary: "Son of promise, second patriarch",
+                        tags: ["Patriarch", "Promise", "Covenant"]
+                    },
+                    {
+                        id: "rebekah",
+                        name: "Rebekah",
+                        hebrew: "רִבְקָה",
+                        gender: "female",
+                        profilePath: "/studies/characters/genesis/rebekah.html",
+                        references: ["Gen 24-27"],
+                        meaning: "To bind",
+                        summary: "Wife of Isaac, mother of Jacob and Esau",
+                        tags: ["Matriarch", "Mother", "Prophecy"]
+                    },
+                    {
+                        id: "jacob",
+                        name: "Jacob",
+                        hebrew: "יַעֲקֹב",
+                        gender: "male",
+                        profilePath: "/studies/characters/genesis/jacob.html",
+                        references: ["Gen 25-50"],
+                        meaning: "Supplanter",
+                        summary: "Father of the twelve tribes of Israel",
+                        tags: ["Patriarch", "Israel", "Twelve Tribes"]
+                    }
+                ]
+            },
+            kings: {
+                book: {
+                    id: "kings",
+                    name: "1-2 Kings",
+                    hebrew: "מְלָכִים",
+                    hebrewTranslit: "M'lakhim",
+                    characterCount: 28
+                },
+                characters: [
+                    {
+                        id: "elijah",
+                        name: "Elijah",
+                        hebrew: "אֵלִיָּהוּ",
+                        gender: "male",
+                        profilePath: "/studies/characters/kings/elijah.html",
+                        references: ["1 Kings 17-19", "2 Kings 1-2"],
+                        meaning: "My God is Yahweh",
+                        summary: "Greatest prophet of northern kingdom, confronted Ahab and Jezebel",
+                        tags: ["Prophet", "Miracle Worker", "Mount Carmel"],
+                        multiPage: true
+                    },
+                    {
+                        id: "jezebel",
+                        name: "Jezebel",
+                        hebrew: "אִיזֶבֶל",
+                        gender: "female",
+                        profilePath: "/studies/characters/kings/jezebel.html",
+                        references: ["1 Kings 16:31", "1 Kings 21", "2 Kings 9"],
+                        meaning: "Where is the prince?",
+                        summary: "Ahab's wife, promoted Baal worship, enemy of Elijah",
+                        tags: ["Queen", "Idolatry", "Power", "Judgment"],
+                        hasProfile: true
+                    },
+                    {
+                        id: "elisha",
+                        name: "Elisha",
+                        hebrew: "אֱלִישָׁע",
+                        gender: "male",
+                        profilePath: "/studies/characters/kings/elisha.html",
+                        references: ["1 Kings 19:16-21", "2 Kings 2-13"],
+                        meaning: "God is salvation",
+                        summary: "Elijah's successor, performed many miracles",
+                        tags: ["Prophet", "Miracle Worker", "Double Portion"],
+                        multiPage: true
+                    },
+                    {
+                        id: "hezekiah",
+                        name: "Hezekiah",
+                        hebrew: "חִזְקִיָּהוּ",
+                        gender: "male",
+                        profilePath: "/studies/characters/kings/hezekiah.html",
+                        references: ["2 Kings 18-20"],
+                        meaning: "Yahweh strengthens",
+                        summary: "Righteous king who trusted God against Assyrian invasion",
+                        tags: ["King", "Reformer", "Faith"],
+                        hasProfile: true
+                    },
+                    {
+                        id: "widow-zarephath",
+                        name: "Widow of Zarephath",
+                        hebrew: "אַלְמָנָה צָרְפַת",
+                        gender: "female",
+                        profilePath: "/studies/characters/kings/widow-zarephath.html",
+                        references: ["1 Kings 17:7-24"],
+                        meaning: "Widow of refining place",
+                        summary: "Fed Elijah during famine, son raised from dead",
+                        tags: ["Widow", "Faith", "Miracle", "Hospitality"]
+                    }
+                ]
+            },
+            samuel: {
+                book: {
+                    id: "samuel",
+                    name: "1-2 Samuel",
+                    hebrew: "שְׁמוּאֵל",
+                    hebrewTranslit: "Sh'muel",
+                    characterCount: 47
+                },
+                characters: [
+                    {
+                        id: "samuel",
+                        name: "Samuel",
+                        hebrew: "שְׁמוּאֵל",
+                        gender: "male",
+                        profilePath: "/studies/characters/samuel/samuel.html",
+                        references: ["1 Sam 1-25"],
+                        meaning: "Name of God/Asked of God",
+                        summary: "Last judge and first prophet, anointed both Saul and David",
+                        tags: ["Prophet", "Judge", "Priest", "Kingmaker"]
+                    },
+                    {
+                        id: "hannah",
+                        name: "Hannah",
+                        hebrew: "חַנָּה",
+                        gender: "female",
+                        profilePath: "/studies/characters/samuel/hannah.html",
+                        references: ["1 Sam 1-2"],
+                        meaning: "Grace, favor",
+                        summary: "Barren woman whose fervent prayer led to Samuel's birth",
+                        tags: ["Mother", "Prayer Warrior", "Worshipper"],
+                        hasSong: true,
+                        songPath: "/studies/women/song-of-songs/song-of-hannah.html"
+                    },
+                    {
+                        id: "david",
+                        name: "David",
+                        hebrew: "דָּוִד",
+                        gender: "male",
+                        profilePath: "/studies/characters/samuel/david.html",
+                        references: ["1 Sam 16 - 2 Sam 24"],
+                        meaning: "Beloved",
+                        summary: "Shepherd boy anointed as king, giant-killer, man after God's own heart",
+                        tags: ["King", "Shepherd", "Musician", "Warrior"]
+                    },
+                    {
+                        id: "bathsheba",
+                        name: "Bathsheba",
+                        hebrew: "בַּת־שֶׁבַע",
+                        gender: "female",
+                        profilePath: "/studies/characters/samuel/bathsheba.html",
+                        references: ["2 Sam 11-12"],
+                        meaning: "Daughter of oath/seven",
+                        summary: "Woman David took in adultery, became his wife and mother of Solomon",
+                        tags: ["David's Wife", "Solomon's Mother", "Tragedy"]
+                    },
+                    {
+                        id: "abigail",
+                        name: "Abigail",
+                        hebrew: "אֲבִיגַיִל",
+                        gender: "female",
+                        profilePath: "/studies/characters/samuel/abigail.html",
+                        references: ["1 Sam 25"],
+                        meaning: "My father's joy",
+                        summary: "Wise woman who prevented David from sinning by interceding for her foolish husband",
+                        tags: ["Wise Woman", "Intercessor", "Peacemaker"]
                     }
                 ]
             },
@@ -427,6 +408,7 @@ async validateAllBooks() {
                     id: "exodus",
                     name: "Exodus",
                     hebrew: "שְׁמוֹת",
+                    hebrewTranslit: "Sh'mot",
                     characterCount: 15
                 },
                 characters: [
@@ -437,8 +419,10 @@ async validateAllBooks() {
                         gender: "male",
                         profilePath: "/studies/characters/exodus/moses.html",
                         references: ["Exodus-Deuteronomy"],
-                        summary: "Prophet, lawgiver, and deliverer of Israel",
-                        tags: ["Prophet", "Leader"]
+                        meaning: "Drawn out",
+                        summary: "Prophet, lawgiver, and deliverer of Israel from Egypt",
+                        tags: ["Prophet", "Leader", "Lawgiver"],
+                        multiPage: true
                     },
                     {
                         id: "miriam",
@@ -447,17 +431,165 @@ async validateAllBooks() {
                         gender: "female",
                         profilePath: "/studies/characters/exodus/miriam.html",
                         references: ["Ex 2, 15"],
-                        summary: "Prophetess and sister of Moses",
-                        tags: ["Prophetess"]
+                        meaning: "Bitter/Rebellious",
+                        summary: "Prophetess and sister of Moses who led women in worship",
+                        tags: ["Prophetess", "Worship Leader"]
+                    },
+                    {
+                        id: "aaron",
+                        name: "Aaron",
+                        hebrew: "אַהֲרֹן",
+                        gender: "male",
+                        profilePath: "/studies/characters/exodus/aaron.html",
+                        references: ["Ex 4-40", "Lev", "Num"],
+                        meaning: "Exalted/Mountain of strength",
+                        summary: "First high priest and Moses' spokesman",
+                        tags: ["High Priest", "Leader"]
+                    },
+                    {
+                        id: "pharaoh-daughter",
+                        name: "Pharaoh's Daughter",
+                        hebrew: "בַּת־פַּרְעֹה",
+                        gender: "female",
+                        profilePath: "/studies/characters/exodus/pharaoh-daughter.html",
+                        references: ["Ex 2:5-10"],
+                        meaning: "Daughter of Pharaoh",
+                        summary: "Egyptian princess who rescued and adopted Moses",
+                        tags: ["Princess", "Rescuer", "Adoptive Mother"]
+                    }
+                ]
+            },
+            judges: {
+                book: {
+                    id: "judges",
+                    name: "Judges",
+                    hebrew: "שֹׁפְטִים",
+                    hebrewTranslit: "Shoftim",
+                    characterCount: 20
+                },
+                characters: [
+                    {
+                        id: "deborah",
+                        name: "Deborah",
+                        hebrew: "דְּבוֹרָה",
+                        gender: "female",
+                        profilePath: "/studies/characters/judges/deborah.html",
+                        references: ["Judges 4-5"],
+                        meaning: "Bee",
+                        summary: "Prophet, judge, and military leader who led Israel to victory",
+                        tags: ["Judge", "Prophetess", "Leader"],
+                        multiPage: true,
+                        hasSong: true
+                    },
+                    {
+                        id: "gideon",
+                        name: "Gideon",
+                        hebrew: "גִּדְעוֹן",
+                        gender: "male",
+                        profilePath: "/studies/characters/judges/gideon.html",
+                        references: ["Judges 6-8"],
+                        meaning: "Mighty warrior/Hewer",
+                        summary: "Reluctant judge who defeated Midianites with 300 men",
+                        tags: ["Judge", "Warrior", "Faith"]
+                    },
+                    {
+                        id: "samson",
+                        name: "Samson",
+                        hebrew: "שִׁמְשׁוֹן",
+                        gender: "male",
+                        profilePath: "/studies/characters/judges/samson.html",
+                        references: ["Judges 13-16"],
+                        meaning: "Sun/Service",
+                        summary: "Nazirite judge with supernatural strength, betrayed by Delilah",
+                        tags: ["Judge", "Nazirite", "Strength"]
+                    },
+                    {
+                        id: "delilah",
+                        name: "Delilah",
+                        hebrew: "דְּלִילָה",
+                        gender: "female",
+                        profilePath: "/studies/characters/judges/delilah.html",
+                        references: ["Judges 16"],
+                        meaning: "Delicate/Weak",
+                        summary: "Philistine woman who betrayed Samson for silver",
+                        tags: ["Betrayer", "Philistine"]
+                    },
+                    {
+                        id: "jael",
+                        name: "Jael",
+                        hebrew: "יָעֵל",
+                        gender: "female",
+                        profilePath: "/studies/characters/judges/jael.html",
+                        references: ["Judges 4:17-22", "Judges 5:24-27"],
+                        meaning: "Mountain goat",
+                        summary: "Kenite woman who killed Sisera and fulfilled Deborah's prophecy",
+                        tags: ["Heroine", "Courage", "Prophecy"]
+                    }
+                ]
+            },
+            ruth: {
+                book: {
+                    id: "ruth",
+                    name: "Ruth",
+                    hebrew: "רוּת",
+                    hebrewTranslit: "Rut",
+                    characterCount: 5
+                },
+                characters: [
+                    {
+                        id: "ruth",
+                        name: "Ruth",
+                        hebrew: "רוּת",
+                        gender: "female",
+                        profilePath: "/studies/characters/ruth/ruth.html",
+                        references: ["Book of Ruth"],
+                        meaning: "Friend/Companion",
+                        summary: "Moabite woman whose loyalty led to becoming David's great-grandmother",
+                        tags: ["Loyalty", "Faith", "Moabite", "Ancestor"]
+                    },
+                    {
+                        id: "naomi",
+                        name: "Naomi",
+                        hebrew: "נָעֳמִי",
+                        gender: "female",
+                        profilePath: "/studies/characters/ruth/naomi.html",
+                        references: ["Book of Ruth"],
+                        meaning: "Pleasant",
+                        summary: "Ruth's mother-in-law who returned to Bethlehem from Moab",
+                        tags: ["Mother-in-law", "Survivor", "Wisdom"]
+                    },
+                    {
+                        id: "boaz",
+                        name: "Boaz",
+                        hebrew: "בֹּעַז",
+                        gender: "male",
+                        profilePath: "/studies/characters/ruth/boaz.html",
+                        references: ["Ruth 2-4"],
+                        meaning: "In him is strength",
+                        summary: "Kinsman-redeemer who married Ruth",
+                        tags: ["Redeemer", "Righteous", "Ancestor"]
+                    },
+                    {
+                        id: "orpah",
+                        name: "Orpah",
+                        hebrew: "עָרְפָּה",
+                        gender: "female",
+                        profilePath: "/studies/characters/ruth/orpah.html",
+                        references: ["Ruth 1:4-14"],
+                        meaning: "Back of the neck",
+                        summary: "Naomi's daughter-in-law who returned to Moab",
+                        tags: ["Daughter-in-law", "Moabite"]
                     }
                 ]
             }
         };
 
+        // Return the specific book if available, otherwise generic fallback
         return fallbackData[bookId] || {
             book: {
                 id: bookId,
                 name: bookId.charAt(0).toUpperCase() + bookId.slice(1),
+                hebrew: "",
                 characterCount: 0
             },
             characters: []
