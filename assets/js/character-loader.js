@@ -2,17 +2,18 @@
  * Character Loader Module
  * Path: /assets/js/character-loader.js
  * Purpose: Loads and manages biblical character data
- * Version: 1.0.0
+ * Version: 2.0.0 - Using embedded data with external fetch fallback
  */
 
 class CharacterLoader {
     constructor(options = {}) {
-        // Use relative path to work on any domain
         this.baseUrl = options.baseUrl || '';
         this.filterGender = options.filterGender || null;
         this.manifest = null;
         this.cache = new Map();
         this.initialized = false;
+        // Embed the actual data directly
+        this.embeddedData = this.getEmbeddedData();
     }
 
     /**
@@ -22,24 +23,23 @@ class CharacterLoader {
         if (this.initialized) return this.manifest;
         
         try {
-            // Try to load manifest, but use fallback if it doesn't exist
+            // Try to load manifest
             const manifestUrl = `${this.baseUrl}/assets/data/manifest.json`;
-            console.log('Loading manifest from:', manifestUrl);
-            
             const response = await fetch(manifestUrl);
-            if (!response.ok) {
-                console.warn(`Manifest not found (${response.status}), using fallback`);
-                this.manifest = this.getDefaultManifest();
-            } else {
+            
+            if (response.ok) {
                 this.manifest = await response.json();
+                console.log('✓ Loaded manifest from server');
+            } else {
+                this.manifest = this.getDefaultManifest();
+                console.log('✓ Using default manifest');
             }
             
             this.initialized = true;
-            console.log('✓ CharacterLoader initialized');
             return this.manifest;
             
         } catch (error) {
-            console.warn('Error loading manifest, using fallback:', error.message);
+            console.warn('Error loading manifest, using default:', error.message);
             this.manifest = this.getDefaultManifest();
             this.initialized = true;
             return this.manifest;
@@ -47,48 +47,19 @@ class CharacterLoader {
     }
 
     /**
-     * Get default manifest if loading fails
+     * Get default manifest structure
      */
     getDefaultManifest() {
         return {
-            books: [
-                { id: 'genesis', file: 'genesis.json', name: 'Genesis' },
-                { id: 'exodus', file: 'exodus.json', name: 'Exodus' },
-                { id: 'leviticus', file: 'leviticus.json', name: 'Leviticus' },
-                { id: 'numbers', file: 'numbers.json', name: 'Numbers' },
-                { id: 'deuteronomy', file: 'deuteronomy.json', name: 'Deuteronomy' },
-                { id: 'joshua', file: 'joshua.json', name: 'Joshua' },
-                { id: 'judges', file: 'judges.json', name: 'Judges' },
-                { id: 'ruth', file: 'ruth.json', name: 'Ruth' },
-                { id: 'samuel', file: 'samuel.json', name: '1-2 Samuel' },
-                { id: 'kings', file: 'kings.json', name: '1-2 Kings' },
-                { id: 'chronicles', file: 'chronicles.json', name: '1-2 Chronicles' },
-                { id: 'ezra', file: 'ezra.json', name: 'Ezra' },
-                { id: 'nehemiah', file: 'nehemiah.json', name: 'Nehemiah' },
-                { id: 'esther', file: 'esther.json', name: 'Esther' },
-                { id: 'job', file: 'job.json', name: 'Job' },
-                { id: 'psalms', file: 'psalms.json', name: 'Psalms' },
-                { id: 'proverbs', file: 'proverbs.json', name: 'Proverbs' },
-                { id: 'ecclesiastes', file: 'ecclesiastes.json', name: 'Ecclesiastes' },
-                { id: 'song-of-songs', file: 'song-of-songs.json', name: 'Song of Songs' },
-                { id: 'isaiah', file: 'isaiah.json', name: 'Isaiah' },
-                { id: 'jeremiah', file: 'jeremiah.json', name: 'Jeremiah' },
-                { id: 'lamentations', file: 'lamentations.json', name: 'Lamentations' },
-                { id: 'ezekiel', file: 'ezekiel.json', name: 'Ezekiel' },
-                { id: 'daniel', file: 'daniel.json', name: 'Daniel' },
-                { id: 'hosea', file: 'hosea.json', name: 'Hosea' },
-                { id: 'joel', file: 'joel.json', name: 'Joel' },
-                { id: 'amos', file: 'amos.json', name: 'Amos' },
-                { id: 'obadiah', file: 'obadiah.json', name: 'Obadiah' },
-                { id: 'jonah', file: 'jonah.json', name: 'Jonah' },
-                { id: 'micah', file: 'micah.json', name: 'Micah' },
-                { id: 'nahum', file: 'nahum.json', name: 'Nahum' },
-                { id: 'habakkuk', file: 'habakkuk.json', name: 'Habakkuk' },
-                { id: 'zephaniah', file: 'zephaniah.json', name: 'Zephaniah' },
-                { id: 'haggai', file: 'haggai.json', name: 'Haggai' },
-                { id: 'zechariah', file: 'zechariah.json', name: 'Zechariah' },
-                { id: 'malachi', file: 'malachi.json', name: 'Malachi' }
-            ]
+            version: "1.0",
+            books: {
+                tanakh: {
+                    torah: ["genesis", "exodus", "leviticus", "numbers", "deuteronomy"],
+                    neviimFormer: ["joshua", "judges", "samuel", "kings"],
+                    neviimLatter: ["isaiah", "jeremiah", "ezekiel"],
+                    ketuvim: ["psalms", "proverbs", "job", "ruth", "esther"]
+                }
+            }
         };
     }
 
@@ -96,42 +67,82 @@ class CharacterLoader {
      * Load character data for a specific book
      */
     async loadBook(bookId) {
+        // Normalize book IDs (e.g., "samuel1" -> "samuel", "kings1" -> "kings")
+        const normalizedId = bookId.replace(/[12]$/, '');
+        
         // Check cache first
-        if (this.cache.has(bookId)) {
-            return this.filterData(this.cache.get(bookId));
+        if (this.cache.has(normalizedId)) {
+            return this.filterData(this.cache.get(normalizedId));
         }
 
+        // First check embedded data
+        if (this.embeddedData[normalizedId]) {
+            const data = this.embeddedData[normalizedId];
+            this.cache.set(normalizedId, data);
+            console.log(`✓ Loaded ${normalizedId} from embedded data with ${data.characters?.length || 0} characters`);
+            return this.filterData(data);
+        }
+
+        // If not in embedded data, try to fetch
         try {
-            const url = `${this.baseUrl}/assets/data/books/${bookId}.json`;
-            console.log(`Loading book data from: ${url}`);
+            const url = `${this.baseUrl}/assets/data/books/${normalizedId}.json`;
+            console.log(`Attempting to fetch: ${url}`);
             
             const response = await fetch(url);
             if (!response.ok) {
-                console.warn(`Book ${bookId} not found (${response.status}), using fallback`);
-                return this.getFallbackBookData(bookId);
+                throw new Error(`HTTP ${response.status}`);
             }
 
-            // Parse JSON
             const data = await response.json();
-            
-            // Validate the data structure
-            if (!data || typeof data !== 'object') {
-                console.warn(`Invalid data structure in ${bookId}.json, using fallback`);
-                return this.getFallbackBookData(bookId);
-            }
-            
-            // Cache the raw data
-            this.cache.set(bookId, data);
-            
-            console.log(`✓ Loaded ${bookId} with ${data.characters?.length || 0} characters`);
-            
-            // Return filtered data
+            this.cache.set(normalizedId, data);
+            console.log(`✓ Loaded ${normalizedId} from server with ${data.characters?.length || 0} characters`);
             return this.filterData(data);
             
         } catch (error) {
-            console.error(`Error loading book ${bookId}:`, error.message);
-            return this.getFallbackBookData(bookId);
+            console.warn(`Could not load ${normalizedId} from server: ${error.message}`);
+            // Return empty structure
+            return {
+                book: {
+                    id: normalizedId,
+                    name: this.getBookName(normalizedId),
+                    characterCount: 0
+                },
+                characters: []
+            };
         }
+    }
+
+    /**
+     * Get friendly book name
+     */
+    getBookName(bookId) {
+        const names = {
+            'genesis': 'Genesis',
+            'exodus': 'Exodus',
+            'leviticus': 'Leviticus',
+            'numbers': 'Numbers',
+            'deuteronomy': 'Deuteronomy',
+            'joshua': 'Joshua',
+            'judges': 'Judges',
+            'ruth': 'Ruth',
+            'samuel': '1-2 Samuel',
+            'kings': '1-2 Kings',
+            'chronicles': '1-2 Chronicles',
+            'ezra': 'Ezra',
+            'nehemiah': 'Nehemiah',
+            'esther': 'Esther',
+            'job': 'Job',
+            'psalms': 'Psalms',
+            'proverbs': 'Proverbs',
+            'ecclesiastes': 'Ecclesiastes',
+            'song-of-songs': 'Song of Songs',
+            'isaiah': 'Isaiah',
+            'jeremiah': 'Jeremiah',
+            'lamentations': 'Lamentations',
+            'ezekiel': 'Ezekiel',
+            'daniel': 'Daniel'
+        };
+        return names[bookId] || bookId.charAt(0).toUpperCase() + bookId.slice(1);
     }
 
     /**
@@ -170,121 +181,57 @@ class CharacterLoader {
      * Get all characters across all books
      */
     async getAllCharacters() {
-        if (!this.manifest) {
-            await this.initialize();
-        }
-
         const allCharacters = [];
-        const books = this.manifest.books || [];
-
-        for (const bookInfo of books) {
-            try {
-                const bookData = await this.loadBook(bookInfo.id);
-                if (bookData.characters) {
-                    allCharacters.push(...bookData.characters.map(char => ({
-                        ...char,
-                        book: bookData.book
-                    })));
-                }
-            } catch (error) {
-                console.error(`Failed to load ${bookInfo.id}:`, error);
+        
+        // Get all book IDs from embedded data
+        const bookIds = Object.keys(this.embeddedData);
+        
+        for (const bookId of bookIds) {
+            const bookData = await this.loadBook(bookId);
+            if (bookData.characters) {
+                allCharacters.push(...bookData.characters.map(char => ({
+                    ...char,
+                    book: bookData.book
+                })));
             }
         }
-
+        
         return allCharacters;
     }
 
     /**
-     * Get fallback data for a specific book
+     * Get embedded character data
+     * This is the actual data from your JSON files
      */
-    getFallbackBookData(bookId) {
-        const fallbackData = {
-            genesis: {
-                book: {
-                    id: "genesis",
-                    name: "Genesis",
-                    hebrew: "בְּרֵאשִׁית",
-                    hebrewTranslit: "B'reishit",
-                    characterCount: 30
-                },
-                characters: [
-                    {
-                        id: "abraham",
-                        name: "Abraham",
-                        hebrew: "אַבְרָהָם",
-                        gender: "male",
-                        profilePath: "/studies/characters/genesis/abraham.html",
-                        references: ["Gen 11-25"],
-                        meaning: "Father of multitudes",
-                        summary: "Father of faith and patriarch of Israel",
-                        tags: ["Patriarch", "Covenant", "Faith"]
-                    },
-                    {
-                        id: "sarah",
-                        name: "Sarah",
-                        hebrew: "שָׂרָה",
-                        gender: "female",
-                        profilePath: "/studies/characters/genesis/sarah.html",
-                        references: ["Gen 11-25"],
-                        meaning: "Princess",
-                        summary: "Mother of nations, wife of Abraham",
-                        tags: ["Matriarch", "Faith", "Mother"]
-                    },
-                    {
-                        id: "isaac",
-                        name: "Isaac",
-                        hebrew: "יִצְחָק",
-                        gender: "male",
-                        profilePath: "/studies/characters/genesis/isaac.html",
-                        references: ["Gen 21-35"],
-                        meaning: "He laughs",
-                        summary: "Son of promise, second patriarch",
-                        tags: ["Patriarch", "Promise", "Covenant"]
-                    },
-                    {
-                        id: "rebekah",
-                        name: "Rebekah",
-                        hebrew: "רִבְקָה",
-                        gender: "female",
-                        profilePath: "/studies/characters/genesis/rebekah.html",
-                        references: ["Gen 24-27"],
-                        meaning: "To bind",
-                        summary: "Wife of Isaac, mother of Jacob and Esau",
-                        tags: ["Matriarch", "Mother", "Prophecy"]
-                    },
-                    {
-                        id: "jacob",
-                        name: "Jacob",
-                        hebrew: "יַעֲקֹב",
-                        gender: "male",
-                        profilePath: "/studies/characters/genesis/jacob.html",
-                        references: ["Gen 25-50"],
-                        meaning: "Supplanter",
-                        summary: "Father of the twelve tribes of Israel",
-                        tags: ["Patriarch", "Israel", "Twelve Tribes"]
-                    }
-                ]
-            },
+    getEmbeddedData() {
+        return {
+            // 1-2 Kings data
             kings: {
                 book: {
                     id: "kings",
                     name: "1-2 Kings",
                     hebrew: "מְלָכִים",
                     hebrewTranslit: "M'lakhim",
-                    characterCount: 28
+                    testament: "tanakh",
+                    category: "neviim-former",
+                    characterCount: {
+                        total: 28,
+                        women: 20,
+                        men: 8
+                    }
                 },
                 characters: [
                     {
-                        id: "elijah",
-                        name: "Elijah",
-                        hebrew: "אֵלִיָּהוּ",
-                        gender: "male",
-                        profilePath: "/studies/characters/kings/elijah.html",
-                        references: ["1 Kings 17-19", "2 Kings 1-2"],
-                        meaning: "My God is Yahweh",
-                        summary: "Greatest prophet of northern kingdom, confronted Ahab and Jezebel",
-                        tags: ["Prophet", "Miracle Worker", "Mount Carmel"],
-                        multiPage: true
+                        id: "bathsheba-kings",
+                        name: "Bathsheba",
+                        hebrew: "בַּת־שֶׁבַע",
+                        gender: "female",
+                        profilePath: "/studies/characters/kings/bathsheba.html",
+                        references: ["1 Kings 1:11-31", "1 Kings 2:13-25"],
+                        meaning: "Daughter of oath/seven",
+                        summary: "David's wife, Solomon's mother, secures throne for her son",
+                        tags: ["Queen Mother", "Influence", "Succession"],
+                        hasProfile: false
                     },
                     {
                         id: "jezebel",
@@ -292,35 +239,12 @@ class CharacterLoader {
                         hebrew: "אִיזֶבֶל",
                         gender: "female",
                         profilePath: "/studies/characters/kings/jezebel.html",
-                        references: ["1 Kings 16:31", "1 Kings 21", "2 Kings 9"],
+                        references: ["1 Kings 16:31", "1 Kings 18:4-19", "1 Kings 19:1-2", "1 Kings 21:1-25", "2 Kings 9:7-37"],
                         meaning: "Where is the prince?",
-                        summary: "Ahab's wife, promoted Baal worship, enemy of Elijah",
-                        tags: ["Queen", "Idolatry", "Power", "Judgment"],
-                        hasProfile: true
-                    },
-                    {
-                        id: "elisha",
-                        name: "Elisha",
-                        hebrew: "אֱלִישָׁע",
-                        gender: "male",
-                        profilePath: "/studies/characters/kings/elisha.html",
-                        references: ["1 Kings 19:16-21", "2 Kings 2-13"],
-                        meaning: "God is salvation",
-                        summary: "Elijah's successor, performed many miracles",
-                        tags: ["Prophet", "Miracle Worker", "Double Portion"],
+                        summary: "Ahab's wife, promoted Baal worship, enemy of Elijah, killed by Jehu's command",
+                        tags: ["Queen", "Idolatry", "Persecution", "Power", "Judgment"],
+                        hasProfile: true,
                         multiPage: true
-                    },
-                    {
-                        id: "hezekiah",
-                        name: "Hezekiah",
-                        hebrew: "חִזְקִיָּהוּ",
-                        gender: "male",
-                        profilePath: "/studies/characters/kings/hezekiah.html",
-                        references: ["2 Kings 18-20"],
-                        meaning: "Yahweh strengthens",
-                        summary: "Righteous king who trusted God against Assyrian invasion",
-                        tags: ["King", "Reformer", "Faith"],
-                        hasProfile: true
                     },
                     {
                         id: "widow-zarephath",
@@ -331,64 +255,203 @@ class CharacterLoader {
                         references: ["1 Kings 17:7-24"],
                         meaning: "Widow of refining place",
                         summary: "Fed Elijah during famine, son raised from dead",
-                        tags: ["Widow", "Faith", "Miracle", "Hospitality"]
+                        tags: ["Widow", "Faith", "Miracle", "Hospitality", "Resurrection"],
+                        hasProfile: false
+                    },
+                    {
+                        id: "athaliah",
+                        name: "Athaliah",
+                        hebrew: "עֲתַלְיָה",
+                        gender: "female",
+                        profilePath: "/studies/characters/kings/athaliah.html",
+                        references: ["2 Kings 8:18, 26", "2 Kings 11:1-20"],
+                        meaning: "Yahweh has shown his might",
+                        summary: "Daughter of Ahab/Jezebel, usurper queen of Judah, killed royal seed",
+                        tags: ["Queen", "Usurper", "Violence", "Judgment"],
+                        hasProfile: true
+                    },
+                    {
+                        id: "jehosheba",
+                        name: "Jehosheba",
+                        hebrew: "יְהוֹשֶׁבַע",
+                        gender: "female",
+                        profilePath: "/studies/characters/kings/jehosheba.html",
+                        references: ["2 Kings 11:2-3"],
+                        meaning: "Yahweh is an oath",
+                        summary: "Daughter of King Joram, saved baby Joash from Athaliah",
+                        tags: ["Princess", "Rescuer", "Courage", "Covenant keeper"],
+                        hasProfile: true
+                    },
+                    {
+                        id: "shunammite-woman",
+                        name: "Shunammite Woman",
+                        hebrew: "הַשּׁוּנַמִּית",
+                        gender: "female",
+                        profilePath: "/studies/characters/kings/shunammite-woman.html",
+                        references: ["2 Kings 4:8-37", "2 Kings 8:1-6"],
+                        meaning: "Woman from Shunem",
+                        summary: "Wealthy patron of Elisha, son raised from dead",
+                        tags: ["Patron", "Faith", "Hospitality", "Resurrection", "Mother"],
+                        hasProfile: true,
+                        hasChiasm: true
+                    },
+                    {
+                        id: "servant-girl-naaman",
+                        name: "Naaman's Wife's Servant Girl",
+                        hebrew: "נַעֲרָה קְטַנָּה",
+                        gender: "female",
+                        profilePath: "/studies/characters/kings/servant-girl-naaman.html",
+                        references: ["2 Kings 5:2-4"],
+                        meaning: "Young girl/little maiden",
+                        summary: "Israelite captive who directed Naaman to Elisha for healing",
+                        tags: ["Captive", "Child", "Faith", "Witness", "Forgiveness"],
+                        hasProfile: true
+                    },
+                    {
+                        id: "huldah",
+                        name: "Huldah",
+                        hebrew: "חֻלְדָּה",
+                        gender: "female",
+                        profilePath: "/studies/characters/kings/huldah.html",
+                        references: ["2 Kings 22:14-20"],
+                        meaning: "Weasel",
+                        summary: "Prophetess consulted by King Josiah about the Book of the Law",
+                        tags: ["Prophetess", "Authority", "Reform", "Judgment"],
+                        hasProfile: false
+                    },
+                    {
+                        id: "elijah",
+                        name: "Elijah",
+                        hebrew: "אֵלִיָּהוּ",
+                        gender: "male",
+                        profilePath: "/studies/characters/kings/elijah.html",
+                        references: ["1 Kings 17:1-24", "1 Kings 18:1-46", "1 Kings 19:1-21", "1 Kings 21:17-29", "2 Kings 1:1-18", "2 Kings 2:1-11"],
+                        meaning: "My God is Yahweh",
+                        summary: "Greatest prophet of northern kingdom, confronted Ahab and Jezebel, taken to heaven in whirlwind",
+                        tags: ["Prophet", "Miracle Worker", "Mount Carmel", "Translation"],
+                        hasProfile: true,
+                        multiPage: true
+                    },
+                    {
+                        id: "elisha",
+                        name: "Elisha",
+                        hebrew: "אֱלִישָׁע",
+                        gender: "male",
+                        profilePath: "/studies/characters/kings/elisha.html",
+                        references: ["1 Kings 19:16-21", "2 Kings 2:1-25", "2 Kings 4:1-44", "2 Kings 5:1-27", "2 Kings 6:1-33", "2 Kings 13:14-21"],
+                        meaning: "God is salvation",
+                        summary: "Elijah's successor, performed many miracles and helped common people",
+                        tags: ["Prophet", "Miracle Worker", "Successor", "Double Portion"],
+                        hasProfile: true,
+                        multiPage: true
+                    },
+                    {
+                        id: "jehu",
+                        name: "Jehu",
+                        hebrew: "יֵהוּא",
+                        gender: "male",
+                        profilePath: "/studies/characters/kings/jehu.html",
+                        references: ["2 Kings 9:1-37", "2 Kings 10:1-36"],
+                        meaning: "Yahweh is he",
+                        summary: "Anointed king who destroyed Ahab's dynasty and killed Jezebel",
+                        tags: ["King", "Reformer", "Divine Agent", "Judgment"],
+                        hasProfile: true
+                    },
+                    {
+                        id: "hezekiah",
+                        name: "Hezekiah",
+                        hebrew: "חִזְקִיָּהוּ",
+                        gender: "male",
+                        profilePath: "/studies/characters/kings/hezekiah.html",
+                        references: ["2 Kings 18:1-37", "2 Kings 19:1-37", "2 Kings 20:1-21"],
+                        meaning: "Yahweh strengthens",
+                        summary: "Righteous king who trusted God against Assyrian invasion",
+                        tags: ["King", "Reformer", "Faith", "Miraculous Deliverance"],
+                        hasProfile: true,
+                        multiPage: true
+                    },
+                    {
+                        id: "josiah",
+                        name: "Josiah",
+                        hebrew: "יֹאשִׁיָּהוּ",
+                        gender: "male",
+                        profilePath: "/studies/characters/kings/josiah.html",
+                        references: ["2 Kings 22:1-20", "2 Kings 23:1-30"],
+                        meaning: "Yahweh supports",
+                        summary: "Great reformer king who discovered the Book of the Law",
+                        tags: ["King", "Reformer", "Law Discovery", "Passover Revival"],
+                        hasProfile: true,
+                        multiPage: true
+                    },
+                    {
+                        id: "naaman",
+                        name: "Naaman",
+                        hebrew: "נַעֲמָן",
+                        gender: "male",
+                        profilePath: "/studies/characters/kings/naaman.html",
+                        references: ["2 Kings 5:1-27"],
+                        meaning: "Pleasant",
+                        summary: "Syrian commander healed of leprosy by following Elisha's instructions",
+                        tags: ["Syrian", "Military Leader", "Healing", "Conversion"],
+                        hasProfile: true
                     }
                 ]
             },
+            
+            // 1-2 Samuel data
             samuel: {
                 book: {
                     id: "samuel",
                     name: "1-2 Samuel",
                     hebrew: "שְׁמוּאֵל",
                     hebrewTranslit: "Sh'muel",
-                    characterCount: 47
+                    testament: "tanakh",
+                    category: "neviim-former",
+                    characterCount: {
+                        total: 47,
+                        women: 14,
+                        men: 33
+                    }
                 },
                 characters: [
-                    {
-                        id: "samuel",
-                        name: "Samuel",
-                        hebrew: "שְׁמוּאֵל",
-                        gender: "male",
-                        profilePath: "/studies/characters/samuel/samuel.html",
-                        references: ["1 Sam 1-25"],
-                        meaning: "Name of God/Asked of God",
-                        summary: "Last judge and first prophet, anointed both Saul and David",
-                        tags: ["Prophet", "Judge", "Priest", "Kingmaker"]
-                    },
                     {
                         id: "hannah",
                         name: "Hannah",
                         hebrew: "חַנָּה",
                         gender: "female",
                         profilePath: "/studies/characters/samuel/hannah.html",
-                        references: ["1 Sam 1-2"],
+                        references: ["1 Sam 1:1-28", "1 Sam 2:1-11", "1 Sam 2:18-21"],
                         meaning: "Grace, favor",
-                        summary: "Barren woman whose fervent prayer led to Samuel's birth",
-                        tags: ["Mother", "Prayer Warrior", "Worshipper"],
+                        summary: "Barren woman whose fervent prayer led to Samuel's birth. Her song of praise became a model for the Magnificat.",
+                        tags: ["Mother", "Worshipper", "Prayer Warrior", "Barren Woman", "Prophetess"],
+                        hasProfile: true,
+                        multiPage: true,
                         hasSong: true,
                         songPath: "/studies/women/song-of-songs/song-of-hannah.html"
                     },
                     {
-                        id: "david",
-                        name: "David",
-                        hebrew: "דָּוִד",
-                        gender: "male",
-                        profilePath: "/studies/characters/samuel/david.html",
-                        references: ["1 Sam 16 - 2 Sam 24"],
-                        meaning: "Beloved",
-                        summary: "Shepherd boy anointed as king, giant-killer, man after God's own heart",
-                        tags: ["King", "Shepherd", "Musician", "Warrior"]
+                        id: "peninnah",
+                        name: "Peninnah",
+                        hebrew: "פְּנִנָּה",
+                        gender: "female",
+                        profilePath: "/studies/characters/samuel/peninnah.html",
+                        references: ["1 Sam 1:2-7"],
+                        meaning: "Pearl, coral",
+                        summary: "Elkanah's second wife who had children and provoked Hannah's barrenness",
+                        tags: ["Rival Wife", "Mother", "Provocation"],
+                        hasProfile: true
                     },
                     {
-                        id: "bathsheba",
-                        name: "Bathsheba",
-                        hebrew: "בַּת־שֶׁבַע",
+                        id: "medium-endor",
+                        name: "Medium of En-dor",
+                        hebrew: "בַּעֲלַת־אוֹב",
                         gender: "female",
-                        profilePath: "/studies/characters/samuel/bathsheba.html",
-                        references: ["2 Sam 11-12"],
-                        meaning: "Daughter of oath/seven",
-                        summary: "Woman David took in adultery, became his wife and mother of Solomon",
-                        tags: ["David's Wife", "Solomon's Mother", "Tragedy"]
+                        profilePath: "/studies/characters/samuel/medium-endor.html",
+                        references: ["1 Sam 28:3-25"],
+                        meaning: "Mistress of the spirit",
+                        summary: "Necromancer consulted by Saul who summoned Samuel's spirit before his final battle",
+                        tags: ["Occult", "Necromancer", "Forbidden Practice"],
+                        hasProfile: true
                     },
                     {
                         id: "abigail",
@@ -396,203 +459,161 @@ class CharacterLoader {
                         hebrew: "אֲבִיגַיִל",
                         gender: "female",
                         profilePath: "/studies/characters/samuel/abigail.html",
-                        references: ["1 Sam 25"],
+                        references: ["1 Sam 25:1-44", "2 Sam 2:2", "2 Sam 3:3"],
                         meaning: "My father's joy",
-                        summary: "Wise woman who prevented David from sinning by interceding for her foolish husband",
-                        tags: ["Wise Woman", "Intercessor", "Peacemaker"]
-                    }
-                ]
-            },
-            exodus: {
-                book: {
-                    id: "exodus",
-                    name: "Exodus",
-                    hebrew: "שְׁמוֹת",
-                    hebrewTranslit: "Sh'mot",
-                    characterCount: 15
-                },
-                characters: [
-                    {
-                        id: "moses",
-                        name: "Moses",
-                        hebrew: "מֹשֶׁה",
-                        gender: "male",
-                        profilePath: "/studies/characters/exodus/moses.html",
-                        references: ["Exodus-Deuteronomy"],
-                        meaning: "Drawn out",
-                        summary: "Prophet, lawgiver, and deliverer of Israel from Egypt",
-                        tags: ["Prophet", "Leader", "Lawgiver"],
+                        summary: "Wise woman who prevented David from sinning by interceding for her foolish husband Nabal",
+                        tags: ["Wise Woman", "Intercessor", "David's Wife", "Peacemaker"],
+                        hasProfile: true,
                         multiPage: true
                     },
                     {
-                        id: "miriam",
-                        name: "Miriam",
-                        hebrew: "מִרְיָם",
+                        id: "michal",
+                        name: "Michal",
+                        hebrew: "מִיכַל",
                         gender: "female",
-                        profilePath: "/studies/characters/exodus/miriam.html",
-                        references: ["Ex 2, 15"],
-                        meaning: "Bitter/Rebellious",
-                        summary: "Prophetess and sister of Moses who led women in worship",
-                        tags: ["Prophetess", "Worship Leader"]
+                        profilePath: "/studies/characters/samuel/michal.html",
+                        references: ["1 Sam 14:49", "1 Sam 18:17-29", "1 Sam 19:11-17", "1 Sam 25:44"],
+                        meaning: "Who is like God?",
+                        summary: "Saul's daughter who loved David, helped him escape, later given to another man",
+                        tags: ["Princess", "David's Wife", "Love", "Protector"],
+                        hasProfile: true
                     },
                     {
-                        id: "aaron",
-                        name: "Aaron",
-                        hebrew: "אַהֲרֹן",
+                        id: "bathsheba",
+                        name: "Bathsheba",
+                        hebrew: "בַּת־שֶׁבַע",
+                        gender: "female",
+                        profilePath: "/studies/characters/samuel/bathsheba.html",
+                        references: ["2 Sam 11:1-27", "2 Sam 12:15-25"],
+                        meaning: "Daughter of oath/seven",
+                        summary: "Woman David took in adultery, became his wife and mother of Solomon",
+                        tags: ["David's Wife", "Adultery", "Solomon's Mother", "Tragedy"],
+                        hasProfile: true,
+                        multiPage: true
+                    },
+                    {
+                        id: "tamar-david-daughter",
+                        name: "Tamar",
+                        hebrew: "תָּמָר",
+                        gender: "female",
+                        profilePath: "/studies/characters/samuel/tamar-daughter-of-david.html",
+                        references: ["2 Sam 13:1-22"],
+                        meaning: "Palm tree",
+                        summary: "David's daughter raped by her half-brother Amnon, avenged by Absalom",
+                        tags: ["Princess", "Victim", "Amnon's Sister", "Beautiful"],
+                        hasProfile: true
+                    },
+                    {
+                        id: "rizpah",
+                        name: "Rizpah",
+                        hebrew: "רִצְפָּה",
+                        gender: "female",
+                        profilePath: "/studies/characters/samuel/rizpah.html",
+                        references: ["2 Sam 3:7", "2 Sam 21:8-11"],
+                        meaning: "Hot stone",
+                        summary: "Saul's concubine who protected her sons' bodies after execution",
+                        tags: ["Concubine", "Mother", "Protector"],
+                        hasProfile: true
+                    },
+                    {
+                        id: "woman-of-tekoa",
+                        name: "Woman of Tekoa",
+                        hebrew: "אִשָּׁה תְקוֹעַ",
+                        gender: "female",
+                        profilePath: "/studies/characters/samuel/woman-of-tekoa.html",
+                        references: ["2 Sam 14:1-24"],
+                        meaning: "Woman from Tekoa",
+                        summary: "Woman hired by Joab to convince David to bring back Absalom through a parable",
+                        tags: ["Wise Woman", "Parable Teller", "Mediator", "Tekoa"],
+                        hasProfile: true
+                    },
+                    {
+                        id: "samuel",
+                        name: "Samuel",
+                        hebrew: "שְׁמוּאֵל",
                         gender: "male",
-                        profilePath: "/studies/characters/exodus/aaron.html",
-                        references: ["Ex 4-40", "Lev", "Num"],
-                        meaning: "Exalted/Mountain of strength",
-                        summary: "First high priest and Moses' spokesman",
-                        tags: ["High Priest", "Leader"]
+                        profilePath: "/studies/characters/samuel/samuel.html",
+                        references: ["1 Sam 1:20", "1 Sam 3:1-21", "1 Sam 7:3-17", "1 Sam 8:1-22", "1 Sam 15:10-35", "1 Sam 16:1-13"],
+                        meaning: "Name of God/Asked of God",
+                        summary: "Last judge and first prophet, anointed both Saul and David as kings",
+                        tags: ["Prophet", "Judge", "Priest", "Kingmaker", "Nazarite"],
+                        hasProfile: true,
+                        multiPage: true
                     },
                     {
-                        id: "pharaoh-daughter",
-                        name: "Pharaoh's Daughter",
-                        hebrew: "בַּת־פַּרְעֹה",
-                        gender: "female",
-                        profilePath: "/studies/characters/exodus/pharaoh-daughter.html",
-                        references: ["Ex 2:5-10"],
-                        meaning: "Daughter of Pharaoh",
-                        summary: "Egyptian princess who rescued and adopted Moses",
-                        tags: ["Princess", "Rescuer", "Adoptive Mother"]
-                    }
-                ]
-            },
-            judges: {
-                book: {
-                    id: "judges",
-                    name: "Judges",
-                    hebrew: "שֹׁפְטִים",
-                    hebrewTranslit: "Shoftim",
-                    characterCount: 20
-                },
-                characters: [
-                    {
-                        id: "deborah",
-                        name: "Deborah",
-                        hebrew: "דְּבוֹרָה",
-                        gender: "female",
-                        profilePath: "/studies/characters/judges/deborah.html",
-                        references: ["Judges 4-5"],
-                        meaning: "Bee",
-                        summary: "Prophet, judge, and military leader who led Israel to victory",
-                        tags: ["Judge", "Prophetess", "Leader"],
-                        multiPage: true,
-                        hasSong: true
-                    },
-                    {
-                        id: "gideon",
-                        name: "Gideon",
-                        hebrew: "גִּדְעוֹן",
+                        id: "saul",
+                        name: "Saul",
+                        hebrew: "שָׁאוּל",
                         gender: "male",
-                        profilePath: "/studies/characters/judges/gideon.html",
-                        references: ["Judges 6-8"],
-                        meaning: "Mighty warrior/Hewer",
-                        summary: "Reluctant judge who defeated Midianites with 300 men",
-                        tags: ["Judge", "Warrior", "Faith"]
+                        profilePath: "/studies/characters/samuel/saul.html",
+                        references: ["1 Sam 9:1-27", "1 Sam 10:1-27", "1 Sam 11:1-15", "1 Sam 13:1-23", "1 Sam 15:1-35", "1 Sam 28:3-25", "1 Sam 31:1-13"],
+                        meaning: "Asked for/Requested",
+                        summary: "First king of Israel, chosen by people's demand, rejected by God for disobedience",
+                        tags: ["King", "Tragic Figure", "Disobedient", "Rejected"],
+                        hasProfile: false
                     },
                     {
-                        id: "samson",
-                        name: "Samson",
-                        hebrew: "שִׁמְשׁוֹן",
+                        id: "david",
+                        name: "David",
+                        hebrew: "דָּוִד",
                         gender: "male",
-                        profilePath: "/studies/characters/judges/samson.html",
-                        references: ["Judges 13-16"],
-                        meaning: "Sun/Service",
-                        summary: "Nazirite judge with supernatural strength, betrayed by Delilah",
-                        tags: ["Judge", "Nazirite", "Strength"]
+                        profilePath: "/studies/characters/samuel/david.html",
+                        references: ["1 Sam 16:1-23", "1 Sam 17:1-58", "2 Sam 1:1-24:25"],
+                        meaning: "Beloved",
+                        summary: "Shepherd boy anointed as king, giant-killer, musician, man after God's own heart who fell into sin",
+                        tags: ["King", "Shepherd", "Musician", "Giant-killer", "Anointed", "Adulterer", "Repentant"],
+                        hasProfile: false
                     },
                     {
-                        id: "delilah",
-                        name: "Delilah",
-                        hebrew: "דְּלִילָה",
-                        gender: "female",
-                        profilePath: "/studies/characters/judges/delilah.html",
-                        references: ["Judges 16"],
-                        meaning: "Delicate/Weak",
-                        summary: "Philistine woman who betrayed Samson for silver",
-                        tags: ["Betrayer", "Philistine"]
-                    },
-                    {
-                        id: "jael",
-                        name: "Jael",
-                        hebrew: "יָעֵל",
-                        gender: "female",
-                        profilePath: "/studies/characters/judges/jael.html",
-                        references: ["Judges 4:17-22", "Judges 5:24-27"],
-                        meaning: "Mountain goat",
-                        summary: "Kenite woman who killed Sisera and fulfilled Deborah's prophecy",
-                        tags: ["Heroine", "Courage", "Prophecy"]
-                    }
-                ]
-            },
-            ruth: {
-                book: {
-                    id: "ruth",
-                    name: "Ruth",
-                    hebrew: "רוּת",
-                    hebrewTranslit: "Rut",
-                    characterCount: 5
-                },
-                characters: [
-                    {
-                        id: "ruth",
-                        name: "Ruth",
-                        hebrew: "רוּת",
-                        gender: "female",
-                        profilePath: "/studies/characters/ruth/ruth.html",
-                        references: ["Book of Ruth"],
-                        meaning: "Friend/Companion",
-                        summary: "Moabite woman whose loyalty led to becoming David's great-grandmother",
-                        tags: ["Loyalty", "Faith", "Moabite", "Ancestor"]
-                    },
-                    {
-                        id: "naomi",
-                        name: "Naomi",
-                        hebrew: "נָעֳמִי",
-                        gender: "female",
-                        profilePath: "/studies/characters/ruth/naomi.html",
-                        references: ["Book of Ruth"],
-                        meaning: "Pleasant",
-                        summary: "Ruth's mother-in-law who returned to Bethlehem from Moab",
-                        tags: ["Mother-in-law", "Survivor", "Wisdom"]
-                    },
-                    {
-                        id: "boaz",
-                        name: "Boaz",
-                        hebrew: "בֹּעַז",
+                        id: "jonathan",
+                        name: "Jonathan",
+                        hebrew: "יְהוֹנָתָן",
                         gender: "male",
-                        profilePath: "/studies/characters/ruth/boaz.html",
-                        references: ["Ruth 2-4"],
-                        meaning: "In him is strength",
-                        summary: "Kinsman-redeemer who married Ruth",
-                        tags: ["Redeemer", "Righteous", "Ancestor"]
+                        profilePath: "/studies/characters/samuel/jonathan.html",
+                        references: ["1 Sam 13:2-3", "1 Sam 14:1-46", "1 Sam 18:1-4", "1 Sam 19:1-7", "1 Sam 20:1-42", "1 Sam 23:16-18"],
+                        meaning: "Yahweh has given",
+                        summary: "Saul's son and David's loyal friend who chose friendship over succession",
+                        tags: ["Prince", "Friend", "Loyal", "Warrior", "Covenant"],
+                        hasProfile: false
                     },
                     {
-                        id: "orpah",
-                        name: "Orpah",
-                        hebrew: "עָרְפָּה",
-                        gender: "female",
-                        profilePath: "/studies/characters/ruth/orpah.html",
-                        references: ["Ruth 1:4-14"],
-                        meaning: "Back of the neck",
-                        summary: "Naomi's daughter-in-law who returned to Moab",
-                        tags: ["Daughter-in-law", "Moabite"]
+                        id: "goliath",
+                        name: "Goliath",
+                        hebrew: "גָּלְיָת",
+                        gender: "male",
+                        profilePath: "/studies/characters/samuel/goliath.html",
+                        references: ["1 Sam 17:1-58"],
+                        meaning: "Exile/Uncovered",
+                        summary: "Philistine giant champion defeated by David with a sling and stone",
+                        tags: ["Giant", "Philistine", "Enemy", "Champion"],
+                        hasProfile: false
+                    },
+                    {
+                        id: "absalom",
+                        name: "Absalom",
+                        hebrew: "אַבְשָׁלוֹם",
+                        gender: "male",
+                        profilePath: "/studies/characters/samuel/absalom.html",
+                        references: ["2 Sam 13:1-39", "2 Sam 14:1-33", "2 Sam 15:1-37", "2 Sam 16:1-23", "2 Sam 17:1-29", "2 Sam 18:1-33"],
+                        meaning: "Father is peace",
+                        summary: "David's third son who rebelled against his father and was killed by Joab",
+                        tags: ["Prince", "Rebel", "Avenger", "Beautiful", "Dead"],
+                        hasProfile: false
+                    },
+                    {
+                        id: "nathan-prophet",
+                        name: "Nathan the Prophet",
+                        hebrew: "נָתָן",
+                        gender: "male",
+                        profilePath: "/studies/characters/samuel/nathan.html",
+                        references: ["2 Sam 7:1-29", "2 Sam 12:1-25"],
+                        meaning: "Gift",
+                        summary: "Prophet who gave David the covenant promises and confronted him about his sin with Bathsheba",
+                        tags: ["Prophet", "Confronter", "Covenant Bearer"],
+                        hasProfile: false
                     }
                 ]
             }
-        };
-
-        // Return the specific book if available, otherwise generic fallback
-        return fallbackData[bookId] || {
-            book: {
-                id: bookId,
-                name: bookId.charAt(0).toUpperCase() + bookId.slice(1),
-                hebrew: "",
-                characterCount: 0
-            },
-            characters: []
         };
     }
 
@@ -601,14 +622,6 @@ class CharacterLoader {
      */
     clearCache() {
         this.cache.clear();
-    }
-
-    /**
-     * Preload specific books into cache
-     */
-    async preloadBooks(bookIds) {
-        const promises = bookIds.map(bookId => this.loadBook(bookId));
-        await Promise.all(promises);
     }
 }
 
