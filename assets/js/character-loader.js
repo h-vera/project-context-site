@@ -70,9 +70,16 @@ class CharacterLoader {
         // Normalize book IDs (e.g., "samuel1" -> "samuel", "kings1" -> "kings")
         const normalizedId = bookId.replace(/[12]$/, '');
         
+        console.log(`LoadBook called for: ${bookId}, normalized to: ${normalizedId}`);
+        
         // Check cache first
         if (this.cache.has(normalizedId)) {
-            return this.filterData(this.cache.get(normalizedId));
+            console.log(`Returning ${normalizedId} from cache`);
+            const data = this.filterData(this.cache.get(normalizedId));
+            
+            // Force display update
+            this.forceDisplayUpdate();
+            return data;
         }
 
         // First check embedded data
@@ -80,6 +87,9 @@ class CharacterLoader {
             const data = this.embeddedData[normalizedId];
             this.cache.set(normalizedId, data);
             console.log(`✓ Loaded ${normalizedId} from embedded data with ${data.characters?.length || 0} characters`);
+            
+            // Force display update
+            this.forceDisplayUpdate();
             return this.filterData(data);
         }
 
@@ -205,20 +215,13 @@ class CharacterLoader {
      */
     getEmbeddedData() {
         return {
-            // 1-2 Kings data
+            // 1-2 Kings data (matching expected structure)
             kings: {
                 book: {
                     id: "kings",
                     name: "1-2 Kings",
                     hebrew: "מְלָכִים",
-                    hebrewTranslit: "M'lakhim",
-                    testament: "tanakh",
-                    category: "neviim-former",
-                    characterCount: {
-                        total: 28,
-                        women: 20,
-                        men: 8
-                    }
+                    hebrewTranslit: "M'lakhim"
                 },
                 characters: [
                     {
@@ -398,20 +401,13 @@ class CharacterLoader {
                 ]
             },
             
-            // 1-2 Samuel data
+            // 1-2 Samuel data (matching expected structure)
             samuel: {
                 book: {
                     id: "samuel",
                     name: "1-2 Samuel",
                     hebrew: "שְׁמוּאֵל",
-                    hebrewTranslit: "Sh'muel",
-                    testament: "tanakh",
-                    category: "neviim-former",
-                    characterCount: {
-                        total: 47,
-                        women: 14,
-                        men: 33
-                    }
+                    hebrewTranslit: "Sh'muel"
                 },
                 characters: [
                     {
@@ -516,15 +512,51 @@ class CharacterLoader {
                         hasProfile: true
                     },
                     {
-                        id: "woman-of-tekoa",
-                        name: "Woman of Tekoa",
-                        hebrew: "אִשָּׁה תְקוֹעַ",
+                        id: "woman-of-abel-beth-maacah",
+                        name: "Woman of Abel Beth-maacah",
+                        hebrew: "אִשָּׁה חֲכָמָה",
                         gender: "female",
-                        profilePath: "/studies/characters/samuel/woman-of-tekoa.html",
-                        references: ["2 Sam 14:1-24"],
-                        meaning: "Woman from Tekoa",
-                        summary: "Woman hired by Joab to convince David to bring back Absalom through a parable",
-                        tags: ["Wise Woman", "Parable Teller", "Mediator", "Tekoa"],
+                        profilePath: "/studies/characters/samuel/woman-of-abel-beth-maacah.html",
+                        references: ["2 Sam 20:15-22"],
+                        meaning: "Wise woman",
+                        summary: "Wise woman who saved her city by handing over Sheba's head to Joab",
+                        tags: ["Wise Woman", "City Savior", "Negotiator"],
+                        hasProfile: true
+                    },
+                    {
+                        id: "ahinoam-jezreel",
+                        name: "Ahinoam of Jezreel",
+                        hebrew: "אֲחִינֹעַם",
+                        gender: "female",
+                        profilePath: "/studies/characters/samuel/ahinoam-jezreel.html",
+                        references: ["1 Sam 25:43", "1 Sam 27:3", "1 Sam 30:5"],
+                        meaning: "My brother is pleasant",
+                        summary: "One of David's wives, taken captive by Amalekites and rescued",
+                        tags: ["David's Wife", "Captive", "Jezreel"],
+                        hasProfile: false
+                    },
+                    {
+                        id: "merab",
+                        name: "Merab",
+                        hebrew: "מֵרַב",
+                        gender: "female",
+                        profilePath: "/studies/characters/samuel/merab.html",
+                        references: ["1 Sam 14:49", "1 Sam 18:17-19"],
+                        meaning: "Increase",
+                        summary: "Saul's eldest daughter, promised to David but given to Adriel",
+                        tags: ["Princess", "Saul's Daughter"],
+                        hasProfile: true
+                    },
+                    {
+                        id: "tamar-absalom-daughter",
+                        name: "Tamar (Absalom's daughter)",
+                        hebrew: "תָּמָר",
+                        gender: "female",
+                        profilePath: "/studies/characters/samuel/tamar-daughter-of-absalom.html",
+                        references: ["2 Sam 14:27"],
+                        meaning: "Palm tree",
+                        summary: "Absalom's beautiful daughter, named after his sister",
+                        tags: ["Princess", "Beautiful", "Absalom's Daughter"],
                         hasProfile: true
                     },
                     {
@@ -615,6 +647,27 @@ class CharacterLoader {
                 ]
             }
         };
+    }
+
+    /**
+     * Force display update after data load
+     */
+    forceDisplayUpdate() {
+        // Make sure the book data section is visible
+        setTimeout(() => {
+            const bookSection = document.getElementById('book-data-section');
+            const bookData = document.getElementById('book-data');
+            const loading = document.getElementById('book-loading');
+            
+            if (bookSection && bookData && loading) {
+                bookSection.style.display = 'block';
+                loading.style.display = 'none';
+                bookData.style.display = 'block';
+                
+                // Scroll to the section
+                bookSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }, 100);
     }
 
     /**
