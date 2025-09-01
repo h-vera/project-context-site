@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tanakh Books Management System - Project Context</title>
+    <style>
+        /* Admin Panel Styles */
+        :root {
+            --primary: #0a0a0a;
+            --accent: #d4af37;
+            --bronze: #b08d57;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray: #6b7280;
+            --light: #f3f4f6;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #d4af37 0%, #b08d57 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .hebrew {
+            font-family: 'SBL Hebrew', 'Ezra SIL', 'Times New Roman', serif;
+            font-size: 1.2em;
+            direction: rtl;
+            unicode-bidi: embed;
+        }
+
+        .management-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--accent), var(--bronze));
+            color: var(--white);
+            padding: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            background: var(--light);
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 1rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--gray);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .tab.active {
+            color: var(--accent);
+            background: var(--white);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent);
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Form Styles */
+        .form-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-row-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--bronze));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(212,175,55,0.3);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--primary);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Book List */
+        .book-list {
+            display: grid;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .book-item {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--light);
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+
+        .book-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .book-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+        }
+
+        .book-info {
+            flex: 1;
+        }
+
+        .book-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .book-hebrew {
+            color: var(--accent);
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .book-meta {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .book-division {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            background: white;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--bronze);
+            margin-right: 0.5rem;
+        }
+
+        .book-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .icon-btn {
+            width: 35px;
+            height: 35px;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .icon-btn.edit {
+            background: var(--warning);
+            color: white;
+        }
+
+        .icon-btn.delete {
+            background: var(--danger);
+            color: white;
+        }
+
+        .icon-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Export/Import Section */
+        .export-section {
+            padding: 2rem;
+            background: var(--light);
+            border-radius: 15px;
+            margin-top: 2rem;
+        }
+
+        .code-output {
+            background: var(--primary);
+            color: #10b981;
+            padding: 1.5rem;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .success-message {
+            padding: 1rem;
+            background: #10b98120;
+            border: 2px solid var(--success);
+            color: var(--success);
+            border-radius: 10px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        /* Stats Dashboard */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), var(--bronze));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Emoji Picker */
+        .emoji-picker {
+            background: white;
+            border: 2px solid var(--accent);
+            border-radius: 15px;
+            padding: 1rem;
+            margin-top: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .emoji-category {
+            margin-bottom: 1rem;
+        }
+
+        .emoji-category-title {
+            font-weight: 700;
+            color: var(--bronze);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .emoji-btn {
+            width: 45px;
+            height: 45px;
+            border: 2px solid transparent;
+            background: var(--light);
+            border-radius: 10px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .emoji-btn:hover {
+            background: white;
+            border-color: var(--accent);
+            transform: scale(1.15);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .emoji-btn.selected {
+            background: linear-gradient(135deg, var(--accent), var(--bronze));
+            border-color: var(--accent);
+        }
+
+        #icon {
+            font-size: 2rem;
+            text-align: center;
+            background: var(--light);
+            transition: all 0.3s;
+        }
+
+        #icon:hover {
+            background: white;
+            border-color: var(--accent);
+        }
+
+        #emojiSearch {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+
+        /* Division breakdown */
+        .division-breakdown {
+            margin-top: 2rem;
+        }
+
+        .division-section {
+            background: var(--light);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .division-header {
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-row, .form-row-3 {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="management-container">
+        <div class="header">
+            <h1>📜 Tanakh Books Management System</h1>
+            <p>Add, edit, and manage books for the Project Context Tanakh Studies hub</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('add')">➕ Add Book</button>
+            <button class="tab" onclick="switchTab('manage')">📋 Manage Books</button>
+            <button class="tab" onclick="switchTab('export')">💾 Export/Import</button>
+            <button class="tab" onclick="switchTab('dashboard')">📊 Dashboard</button>
+        </div>
+
+        <div class="content">
+            <!-- Add Book Tab -->
+            <div id="add-tab" class="tab-content active">
+                <h2>Add New Book</h2>
+                <form id="addBookForm" class="form-grid">
+                    <div class="form-row-3">
+                        <div class="form-group">
+                            <label for="bookName">Book Name (English)*</label>
+                            <input type="text" id="bookName" required placeholder="e.g., Genesis">
+                        </div>
+                        <div class="form-group">
+                            <label for="hebrewName">Hebrew Name*</label>
+                            <input type="text" id="hebrewName" class="hebrew" required placeholder="e.g., בְּרֵאשִׁית">
+                        </div>
+                        <div class="form-group">
+                            <label for="icon">Icon (optional)</label>
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <input type="text" id="icon" placeholder="📖" maxlength="2" style="flex: 1; text-align: center; font-size: 1.5rem;">
+                                <button type="button" class="btn btn-secondary" onclick="toggleEmojiPicker()" title="Browse icon library" style="padding: 0.75rem 1rem;">
+                                    📋 Browse
+                                </button>
+                            </div>
+                            <small style="color: var(--gray); display: block; margin-top: 0.25rem;">Select from library or paste/type your own emoji</small>
+                            <div id="emojiPicker" class="emoji-picker">
+                                <input type="text" id="emojiSearch" placeholder="🔍 Search (e.g., torah, psalm, prophet, temple...)" onkeyup="searchEmojis()">
+                                <div id="emojiCategories">
+                                    <!-- Icon categories will be inserted here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="division">Division*</label>
+                            <select id="division" required onchange="updateSubdivisions()">
+                                <option value="">Select Division</option>
+                                <option value="torah">Torah (תּוֹרָה)</option>
+                                <option value="neviim">Nevi'im (נְבִיאִים)</option>
+                                <option value="ketuvim">Ketuvim (כְּתוּבִים)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="subdivision">Subdivision</label>
+                            <select id="subdivision">
+                                <option value="">Select subdivision (if applicable)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row-3">
+                        <div class="form-group">
+                            <label for="chapters">Number of Chapters*</label>
+                            <input type="number" id="chapters" required placeholder="e.g., 50">
+                        </div>
+                        <div class="form-group">
+                            <label for="theme">Main Theme</label>
+                            <input type="text" id="theme" placeholder="e.g., Creation">
+                        </div>
+                        <div class="form-group">
+                            <label for="status">Status*</label>
+                            <select id="status" required>
+                                <option value="coming-soon">Coming Soon</option>
+                                <option value="in-development">In Development</option>
+                                <option value="complete">Complete</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description*</label>
+                        <textarea id="description" required placeholder="Brief description of the book's content and themes..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="url">URL Path*</label>
+                        <input type="text" id="url" required placeholder="/studies/tanakh/torah/genesis/genesis.html">
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="featured"> Featured Book
+                        </label>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">Add Book</button>
+                        <button type="reset" class="btn btn-secondary">Clear Form</button>
+                    </div>
+                </form>
+
+                <div class="success-message" id="addSuccess">
+                    ✅ Book added successfully!
+                </div>
+            </div>
+
+            <!-- Manage Books Tab -->
+            <div id="manage-tab" class="tab-content">
+                <h2>Manage Existing Books</h2>
+                
+                <div class="form-group" style="max-width: 300px; margin-bottom: 2rem;">
+                    <label for="filterDivision">Filter by Division:</label>
+                    <select id="filterDivision" onchange="filterBooks()">
+                        <option value="all">All Books</option>
+                        <option value="torah">Torah</option>
+                        <option value="neviim">Nevi'im</option>
+                        <option value="ketuvim">Ketuvim</option>
+                    </select>
+                </div>
+                
+                <div class="book-list" id="bookList">
+                    <!-- Books will be dynamically loaded here -->
+                </div>
+            </div>
+
+            <!-- Export/Import Tab -->
+            <div id="export-tab" class="tab-content">
+                <h2>Export/Import Books</h2>
+                
+                <div class="export-section">
+                    <h3>Export HTML Code</h3>
+                    <p>Generate HTML code for your Tanakh hub page:</p>
+                    <select id="exportDivision" style="margin: 1rem 0;">
+                        <option value="all">Export All Books</option>
+                        <option value="torah">Torah Only</option>
+                        <option value="neviim">Nevi'im Only</option>
+                        <option value="ketuvim">Ketuvim Only</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="generateExport()">Generate Export Code</button>
+                    <div class="code-output" id="exportCode" style="display: none;">
+                        <!-- Export code will appear here -->
+                    </div>
+                </div>
+
+                <div class="export-section">
+                    <h3>Batch Import</h3>
+                    <p>Import multiple books from JSON:</p>
+                    <textarea id="importData" placeholder="Paste JSON data here..." style="width: 100%; height: 150px; margin-top: 1rem;"></textarea>
+                    <button class="btn btn-primary" onclick="importBooks()" style="margin-top: 1rem;">Import Books</button>
+                </div>
+
+                <div class="export-section">
+                    <h3>Download/Upload Database</h3>
+                    <button class="btn btn-secondary" onclick="downloadDatabase()">📥 Download All Data (JSON)</button>
+                    <input type="file" id="uploadFile" accept=".json" style="display: none;" onchange="uploadDatabase(event)">
+                    <button class="btn btn-secondary" onclick="document.getElementById('uploadFile').click()">📤 Upload Data File</button>
+                </div>
+            </div>
+
+            <!-- Dashboard Tab -->
+            <div id="dashboard-tab" class="tab-content">
+                <h2>Book Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalBooks">0</div>
+                        <div class="stat-label">Total Books</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="torahCount">0</div>
+                        <div class="stat-label">Torah</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="neviimCount">0</div>
+                        <div class="stat-label">Nevi'im</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="ketuvimCount">0</div>
+                        <div class="stat-label">Ketuvim</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="completeCount">0</div>
+                        <div class="stat-label">Complete</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="featuredCount">0</div>
+                        <div class="stat-label">Featured</div>
+                    </div>
+                </div>
+
+                <h3>Books by Division</h3>
+                <div class="division-breakdown" id="divisionBreakdown">
+                    <!-- Division breakdown will appear here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Book icons for Tanakh - organized by category
+        const bookIconCategories = {
+            '⭐ Torah Books': ['🌍', '🔥', '🕊️', '🏜️', '📜'],
+            '📖 Most Popular': ['📜', '📖', '📚', '👑', '🕊️', '🔥', '💔', '⚔️', '🏛️', '🎵', '✡️', '🦁', '⚖️', '🌊', '🏔️', '💎'],
+            'Books & Writing': ['📜', '📖', '📚', '📃', '📝', '✍️', '🖋️', '📔', '📕', '📗', '📘', '📙', '📑', '🗞️'],
+            'Religious Symbols': ['✝️', '✡️', '🕎', '🛐', '⛪', '🕍', '🕌', '⛩️', '🏛️', '📿', '🙏', '☦️'],
+            'Nature & Creation': ['🌍', '🌎', '🌏', '🌈', '☀️', '🌙', '⭐', '✨', '🌟', '💫', '🌊', '🏔️', '🌳', '🌿', '🍃', '🌾', '🌱', '🌸', '🌺', '🌻', '🏜️', '🏞️'],
+            'People & Figures': ['👑', '👤', '👥', '👨‍👩‍👧‍👦', '👶', '🧔', '👨‍⚖️', '💂', '🤴', '👸', '😇', '👼', '🧙‍♂️', '👵', '👴'],
+            'Animals': ['🕊️', '🦅', '🦁', '🐑', '🐏', '🐐', '🐪', '🐍', '🐴', '🐄', '🐂', '🦌', '🐠', '🐋', '🦢'],
+            'Emotions & Hearts': ['❤️', '💔', '💖', '💝', '💗', '💓', '💕', '💞', '💘', '🖤', '🤍', '💜', '💙', '💚'],
+            'Fire & Light': ['🔥', '🕯️', '💡', '🔦', '🏮', '✨', '💥', '⚡', '🌟', '☄️', '🌞', '💫'],
+            'War & Conflict': ['⚔️', '🗡️', '🛡️', '🏹', '🔱', '⚰️', '💀', '🩸', '⚒️', '🪓'],
+            'Music & Celebration': ['🎵', '🎶', '🎼', '🎺', '🎷', '🥁', '🎻', '🪕', '📯', '🔔', '🎉', '🎊', '🎭'],
+            'Objects & Symbols': ['💎', '🏺', '⚖️', '🔑', '🚪', '🧱', '🪜', '⛓️', '🪙', '👁️', '🗿', '⚱️', '🏆', '💰'],
+            'Food & Harvest': ['🍞', '🍷', '🍇', '🫒', '🌾', '🍯', '🥛', '🧂', '🐟', '🍎', '🌽', '🍈'],
+            'Time & Eternity': ['⏰', '⏳', '⌛', '📅', '🗓️', '♾️', '🔄', '🔁', '⏱️'],
+            'Weather & Elements': ['☁️', '🌧️', '⛈️', '🌪️', '🌊', '💧', '❄️', '🌬️', '🌀'],
+            'Directional & Abstract': ['⬆️', '⬇️', '↗️', '↖️', '🔺', '🔻', '🔷', '🔶', '✡️', '☯️', '♈', '☸️']
+        };
+
+        // Flatten all icons for backward compatibility
+        const bookIcons = Object.values(bookIconCategories).flat();
+
+        // Subdivision options
+        const subdivisions = {
+            torah: [''],
+            neviim: ['Former Prophets', 'Major Prophets', 'Minor Prophets'],
+            ketuvim: ['Wisdom Literature', 'Five Megillot', 'Historical Books']
+        };
+
+        // Initialize emoji picker with categories
+        function initEmojiPicker() {
+            const categoriesContainer = document.getElementById('emojiCategories');
+            let html = '';
+            
+            for (const [category, emojis] of Object.entries(bookIconCategories)) {
+                html += `
+                    <div class="emoji-category" data-category="${category}">
+                        <div class="emoji-category-title">${category}</div>
+                        <div class="emoji-grid">
+                            ${emojis.map(emoji => `
+                                <button type="button" class="emoji-btn" onclick="selectEmoji('${emoji}')" data-emoji="${emoji}" title="Click to select">${emoji}</button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            categoriesContainer.innerHTML = html;
+        }
+
+        // Search emojis
+        function searchEmojis() {
+            const searchTerm = document.getElementById('emojiSearch').value.toLowerCase();
+            const categories = document.querySelectorAll('.emoji-category');
+            
+            if (searchTerm === '') {
+                categories.forEach(cat => cat.style.display = 'block');
+                document.querySelectorAll('.emoji-btn').forEach(btn => btn.style.display = 'flex');
+                return;
+            }
+            
+            categories.forEach(category => {
+                const categoryName = category.dataset.category.toLowerCase();
+                const buttons = category.querySelectorAll('.emoji-btn');
+                let hasVisibleEmojis = false;
+                
+                buttons.forEach(btn => {
+                    const emoji = btn.dataset.emoji;
+                    const emojiKeywords = getEmojiKeywords(emoji).toLowerCase();
+                    
+                    if (categoryName.includes(searchTerm) || emojiKeywords.includes(searchTerm)) {
+                        btn.style.display = 'flex';
+                        hasVisibleEmojis = true;
+                    } else {
+                        btn.style.display = 'none';
+                    }
+                });
+                
+                category.style.display = hasVisibleEmojis ? 'block' : 'none';
+            });
+        }
+
+        // Get emoji keywords for search
+        function getEmojiKeywords(emoji) {
+            const keywords = {
+                '📜': 'scroll torah ancient parchment manuscript law moses five books pentateuch',
+                '📖': 'book open bible scripture read study tanakh testament',
+                '📚': 'books library collection wisdom knowledge writings ketuvim',
+                '✍️': 'write writing scribe author ezra chronicles',
+                '🖋️': 'pen writing quill scribe author',
+                '✡️': 'star david jewish judaism israel magen shield',
+                '🕎': 'menorah hanukkah candelabra temple light seven branches',
+                '👑': 'crown king kingdom royal david solomon saul monarchy',
+                '🕊️': 'dove peace spirit holy bird noah jonah baptism',
+                '🦅': 'eagle bird soar isaiah exodus deuteronomy',
+                '🦁': 'lion judah beast daniel courage tribe strength',
+                '🐑': 'sheep lamb flock shepherd sacrifice passover isaac',
+                '🐍': 'snake serpent eden temptation evil genesis numbers',
+                '🔥': 'fire flame burning bush elijah spirit pentecost sinai',
+                '💔': 'broken heart hosea love betrayal lament jeremiah',
+                '⚔️': 'sword battle war david fight joshua judges',
+                '🛡️': 'shield protection defense armor faith psalms',
+                '🏛️': 'temple building solomon sanctuary ezekiel zechariah',
+                '🎵': 'music song psalm david worship praise hymn',
+                '🎺': 'trumpet horn jericho jubilee feast revelation',
+                '💎': 'gem jewel precious treasure proverbs wisdom',
+                '🏔️': 'mountain sinai zion horeb ararat moriah carmel',
+                '🌊': 'water wave sea moses flood jordan red sea exodus',
+                '🌈': 'rainbow promise noah covenant genesis flood',
+                '☀️': 'sun light day creation psalm ecclesiastes',
+                '🌙': 'moon night creation psalm genesis',
+                '⭐': 'star abraham promise heaven creation genesis',
+                '🌳': 'tree life eden knowledge good evil genesis psalm',
+                '🍇': 'grapes vine vineyard wine israel numbers song',
+                '🍞': 'bread manna food provision life exodus john',
+                '👁️': 'eye seeing prophet vision watch ezekiel zechariah',
+                '⚖️': 'scales justice balance law righteousness leviticus deuteronomy',
+                '🗡️': 'dagger sword weapon battle hebrews word',
+                '🪜': 'ladder jacob dream heaven angels genesis bethel',
+                '🔑': 'key david kingdom authority isaiah revelation',
+                '🚪': 'door gate entrance way path psalm proverbs',
+                '⛓️': 'chains bondage slavery egypt freedom exodus',
+                '📯': 'horn shofar trumpet jubilee leviticus joel',
+                '🕯️': 'candle light menorah temple revelation',
+                '🙏': 'prayer praying hands worship devotion psalms',
+                '😇': 'angel holy righteous good blessed matthew',
+                '👼': 'cherub angel messenger gabriel michael genesis exodus',
+                '🧔': 'beard man prophet moses abraham elder patriarch',
+                '👶': 'baby child moses samuel isaac birth exodus',
+                '🌾': 'wheat grain harvest ruth field leviticus',
+                '🫒': 'olive oil anointing tree israel mount olives',
+                '🍯': 'honey sweet promised land milk exodus',
+                '🐟': 'fish jonah multiply disciples sea leviathan',
+                '🦌': 'deer hart psalm thirst water songs',
+                '🐪': 'camel desert abraham isaac jacob genesis job',
+                '🐂': 'ox bull calf golden sacrifice altar exodus leviticus',
+                '🏹': 'bow arrow hunter esau ishmael genesis jonathan',
+                '💀': 'skull death valley ezekiel bones numbers',
+                '🌪️': 'whirlwind elijah storm wind spirit job kings',
+                '❤️': 'heart love god commandment soul deuteronomy song',
+                '🤍': 'white heart pure clean holy righteous psalm',
+                '💜': 'purple heart royal majesty king esther',
+                '🌍': 'earth world creation genesis beginning foundation',
+                '🏜️': 'desert wilderness wandering israel numbers exodus',
+                '🐋': 'whale jonah great fish sea nineveh',
+                '🌽': 'corn grain joseph egypt pharaoh genesis',
+                '⚱️': 'urn jar vessel elijah widow kings',
+                '🏆': 'trophy victory triumph joshua david',
+                '💰': 'money wealth solomon proverbs ecclesiastes',
+                '🗿': 'moai stone tablet commandments moses',
+                '☁️': 'cloud presence glory exodus wilderness',
+                '⛈️': 'storm thunder lightning sinai elijah job',
+                '🌀': 'cyclone ezekiel wheel vision',
+                '🔄': 'cycle repeat ecclesiastes time seasons',
+                '♾️': 'infinity eternal forever god psalm',
+                '🎭': 'masks purim esther feast celebration',
+                '🥁': 'drum timbrel miriam exodus music'
+            };
+            return keywords[emoji] || '';
+        }
+
+        function toggleEmojiPicker() {
+            const picker = document.getElementById('emojiPicker');
+            const isShowing = picker.style.display === 'block';
+            picker.style.display = isShowing ? 'none' : 'block';
+            
+            // Clear search when opening
+            if (!isShowing) {
+                document.getElementById('emojiSearch').value = '';
+                searchEmojis();
+                
+                // Highlight currently selected emoji
+                const currentEmoji = document.getElementById('icon').value;
+                if (currentEmoji) {
+                    document.querySelectorAll('.emoji-btn').forEach(btn => {
+                        if (btn.dataset.emoji === currentEmoji) {
+                            btn.classList.add('selected');
+                        } else {
+                            btn.classList.remove('selected');
+                        }
+                    });
+                }
+            }
+        }
+
+        function selectEmoji(emoji) {
+            document.getElementById('icon').value = emoji;
+            
+            // Remove previous selection
+            document.querySelectorAll('.emoji-btn.selected').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Add selected class to current emoji
+            document.querySelectorAll('.emoji-btn').forEach(btn => {
+                if (btn.dataset.emoji === emoji) {
+                    btn.classList.add('selected');
+                }
+            });
+            
+            document.getElementById('emojiPicker').style.display = 'none';
+            document.getElementById('emojiSearch').value = '';
+            searchEmojis();
+        }
+
+        function updateSubdivisions() {
+            const division = document.getElementById('division').value;
+            const subdivisionSelect = document.getElementById('subdivision');
+            
+            subdivisionSelect.innerHTML = '<option value="">Select subdivision (if applicable)</option>';
+            
+            if (division && subdivisions[division]) {
+                subdivisions[division].forEach(sub => {
+                    if (sub) {
+                        const option = document.createElement('option');
+                        option.value = sub;
+                        option.textContent = sub;
+                        subdivisionSelect.appendChild(option);
+                    }
+                });
+            }
+        }
+
+        // Tanakh Book Manager Class
+        class TanakhBookManager {
+            constructor() {
+                this.books = [];
+                this.loadBooks();
+                this.initEventListeners();
+                this.updateUI();
+            }
+
+            loadBooks() {
+                const saved = localStorage.getItem('tanakhBooks');
+                if (saved) {
+                    this.books = JSON.parse(saved);
+                } else {
+                    // Initialize with Hosea as example
+                    this.books = [
+                        {
+                            id: this.generateId(),
+                            bookName: 'Hosea',
+                            hebrewName: 'הוֹשֵׁעַ',
+                            icon: '💔',
+                            division: 'neviim',
+                            subdivision: 'Minor Prophets',
+                            chapters: 14,
+                            theme: 'Divine love',
+                            status: 'complete',
+                            description: 'God\'s unfailing love illustrated through prophetic marriage to unfaithful Gomer.',
+                            url: '/studies/tanakh/neviim/minor-prophets/hosea/hosea.html',
+                            featured: true,
+                            dateAdded: new Date().toISOString()
+                        }
+                    ];
+                    this.saveBooks();
+                }
+            }
+
+            saveBooks() {
+                localStorage.setItem('tanakhBooks', JSON.stringify(this.books));
+                this.updateUI();
+                this.updateDashboard();
+            }
+
+            generateId() {
+                return 'book_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            }
+
+            addBook(bookData) {
+                const book = {
+                    id: this.generateId(),
+                    ...bookData,
+                    dateAdded: new Date().toISOString()
+                };
+                this.books.push(book);
+                this.saveBooks();
+                return book;
+            }
+
+            updateBook(id, updates) {
+                const index = this.books.findIndex(b => b.id === id);
+                if (index !== -1) {
+                    this.books[index] = { ...this.books[index], ...updates };
+                    this.saveBooks();
+                }
+            }
+
+            deleteBook(id) {
+                this.books = this.books.filter(b => b.id !== id);
+                this.saveBooks();
+            }
+
+            initEventListeners() {
+                document.getElementById('addBookForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleAddBook();
+                });
+            }
+
+            handleAddBook() {
+                const form = document.getElementById('addBookForm');
+                
+                const bookData = {
+                    bookName: form.bookName.value,
+                    hebrewName: form.hebrewName.value,
+                    icon: form.icon.value || '📖',
+                    division: form.division.value,
+                    subdivision: form.subdivision.value,
+                    chapters: parseInt(form.chapters.value),
+                    theme: form.theme.value,
+                    status: form.status.value,
+                    description: form.description.value,
+                    url: form.url.value,
+                    featured: form.featured.checked
+                };
+
+                this.addBook(bookData);
+                form.reset();
+                
+                // Show success message
+                const successMsg = document.getElementById('addSuccess');
+                successMsg.classList.add('show');
+                setTimeout(() => successMsg.classList.remove('show'), 3000);
+            }
+
+            updateUI() {
+                this.renderBookList();
+            }
+
+            renderBookList(filter = 'all') {
+                const listContainer = document.getElementById('bookList');
+                if (!listContainer) return;
+
+                const filteredBooks = filter === 'all' 
+                    ? this.books 
+                    : this.books.filter(b => b.division === filter);
+
+                if (filteredBooks.length === 0) {
+                    listContainer.innerHTML = '<p>No books yet. Add your first book!</p>';
+                    return;
+                }
+
+                // Group by division
+                const grouped = {};
+                filteredBooks.forEach(book => {
+                    if (!grouped[book.division]) grouped[book.division] = [];
+                    grouped[book.division].push(book);
+                });
+
+                let html = '';
+                for (const [division, books] of Object.entries(grouped)) {
+                    html += `<h3 style="color: var(--accent); margin: 1rem 0;">${division.charAt(0).toUpperCase() + division.slice(1)}</h3>`;
+                    html += books.map(book => `
+                        <div class="book-item">
+                            <div class="book-icon">${book.icon}</div>
+                            <div class="book-info">
+                                <div class="book-title">
+                                    ${book.bookName}
+                                    <span class="book-hebrew hebrew">${book.hebrewName}</span>
+                                </div>
+                                <div class="book-meta">
+                                    <span class="book-division">${book.division}</span>
+                                    ${book.subdivision ? `<span class="book-division">${book.subdivision}</span>` : ''}
+                                    📖 ${book.chapters} chapters • 
+                                    ${book.theme ? `${book.theme} • ` : ''}
+                                    Status: ${book.status}
+                                </div>
+                            </div>
+                            <div class="book-actions">
+                                <button class="icon-btn edit" onclick="manager.editBook('${book.id}')">✏️</button>
+                                <button class="icon-btn delete" onclick="manager.confirmDelete('${book.id}')">🗑️</button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+                listContainer.innerHTML = html;
+            }
+
+            editBook(id) {
+                const book = this.books.find(b => b.id === id);
+                if (!book) return;
+
+                // Populate form
+                const form = document.getElementById('addBookForm');
+                form.bookName.value = book.bookName;
+                form.hebrewName.value = book.hebrewName;
+                form.icon.value = book.icon;
+                form.division.value = book.division;
+                updateSubdivisions();
+                form.subdivision.value = book.subdivision;
+                form.chapters.value = book.chapters;
+                form.theme.value = book.theme || '';
+                form.status.value = book.status;
+                form.description.value = book.description;
+                form.url.value = book.url;
+                form.featured.checked = book.featured;
+
+                // Switch to add tab
+                switchTab('add');
+            }
+
+            confirmDelete(id) {
+                const book = this.books.find(b => b.id === id);
+                if (confirm(`Delete "${book.bookName}"?`)) {
+                    this.deleteBook(id);
+                }
+            }
+
+            updateDashboard() {
+                // Update stats
+                document.getElementById('totalBooks').textContent = this.books.length;
+                document.getElementById('torahCount').textContent = this.books.filter(b => b.division === 'torah').length;
+                document.getElementById('neviimCount').textContent = this.books.filter(b => b.division === 'neviim').length;
+                document.getElementById('ketuvimCount').textContent = this.books.filter(b => b.division === 'ketuvim').length;
+                document.getElementById('completeCount').textContent = this.books.filter(b => b.status === 'complete').length;
+                document.getElementById('featuredCount').textContent = this.books.filter(b => b.featured).length;
+
+                // Division breakdown
+                const breakdown = document.getElementById('divisionBreakdown');
+                const divisions = ['torah', 'neviim', 'ketuvim'];
+                
+                breakdown.innerHTML = divisions.map(div => {
+                    const divBooks = this.books.filter(b => b.division === div);
+                    if (divBooks.length === 0) return '';
+                    
+                    return `
+                        <div class="division-section">
+                            <div class="division-header">${div.charAt(0).toUpperCase() + div.slice(1)} (${divBooks.length} books)</div>
+                            ${divBooks.map(b => `
+                                <div style="padding: 0.5rem; background: white; border-radius: 8px; margin-bottom: 0.5rem;">
+                                    ${b.icon} ${b.bookName} - ${b.chapters} chapters
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            exportToHTML(filter = 'all') {
+                const filteredBooks = filter === 'all' 
+                    ? this.books 
+                    : this.books.filter(b => b.division === filter);
+
+                return filteredBooks.map(book => `
+<a href="${book.url}" class="book-card">
+    <div class="book-card-header">
+        <div class="book-name">${book.bookName}</div>
+        <span class="book-status ${book.status === 'coming-soon' ? 'coming-soon' : ''}">${book.status === 'complete' ? 'Complete' : book.status === 'in-development' ? 'In Dev' : 'Coming'}</span>
+    </div>
+    <div class="book-hebrew">${book.hebrewName}</div>
+    <div class="book-info">
+        <span class="book-info-item">📖 ${book.chapters} chapters</span>
+        ${book.theme ? `<span class="book-info-item">${book.icon} ${book.theme}</span>` : ''}
+    </div>
+    <p class="book-description">${book.description}</p>
+</a>`).join('\n');
+            }
+
+            exportToJSON() {
+                return JSON.stringify(this.books, null, 2);
+            }
+
+            importFromJSON(jsonString) {
+                try {
+                    const imported = JSON.parse(jsonString);
+                    if (Array.isArray(imported)) {
+                        imported.forEach(book => {
+                            if (!book.id) book.id = this.generateId();
+                            if (!book.dateAdded) book.dateAdded = new Date().toISOString();
+                        });
+                        this.books = [...this.books, ...imported];
+                        this.saveBooks();
+                        return true;
+                    }
+                } catch (e) {
+                    console.error('Import failed:', e);
+                    return false;
+                }
+            }
+        }
+
+        // Initialize manager
+        const manager = new TanakhBookManager();
+
+        // Initialize on DOM load
+        document.addEventListener('DOMContentLoaded', function() {
+            initEmojiPicker();
+            
+            // Close emoji picker when clicking outside
+            document.addEventListener('click', function(event) {
+                const picker = document.getElementById('emojiPicker');
+                const iconInput = document.getElementById('icon');
+                const toggleButton = event.target.closest('button[onclick*="toggleEmojiPicker"]');
+                const emojiSearch = document.getElementById('emojiSearch');
+                
+                if (!picker.contains(event.target) && 
+                    event.target !== iconInput && 
+                    event.target !== emojiSearch &&
+                    !toggleButton &&
+                    picker.style.display === 'block') {
+                    picker.style.display = 'none';
+                }
+            });
+        });
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target?.classList.add('active') || document.querySelector(`.tab:nth-child(${['add', 'manage', 'export', 'dashboard'].indexOf(tabName) + 1})`).classList.add('active');
+
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+
+            // Update dashboard when switching to it
+            if (tabName === 'dashboard') {
+                manager.updateDashboard();
+            }
+            if (tabName === 'manage') {
+                manager.renderBookList();
+            }
+        }
+
+        // Filter books
+        function filterBooks() {
+            const filter = document.getElementById('filterDivision').value;
+            manager.renderBookList(filter);
+        }
+
+        // Export functionality
+        function generateExport() {
+            const filter = document.getElementById('exportDivision').value;
+            const exportCode = document.getElementById('exportCode');
+            exportCode.textContent = manager.exportToHTML(filter);
+            exportCode.style.display = 'block';
+        }
+
+        // Import functionality
+        function importBooks() {
+            const importData = document.getElementById('importData').value;
+            if (!importData) {
+                alert('Please paste JSON data to import');
+                return;
+            }
+
+            if (manager.importFromJSON(importData)) {
+                alert('Books imported successfully!');
+                document.getElementById('importData').value = '';
+                manager.updateUI();
+            } else {
+                alert('Import failed. Please check the JSON format.');
+            }
+        }
+
+        // Download database
+        function downloadDatabase() {
+            const dataStr = manager.exportToJSON();
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = 'tanakh-books-' + new Date().toISOString().slice(0,10) + '.json';
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        }
+
+        // Upload database
+        function uploadDatabase(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                if (manager.importFromJSON(content)) {
+                    alert('Database uploaded successfully!');
+                    manager.updateUI();
+                } else {
+                    alert('Failed to upload database. Please check the file format.');
+                }
+            };
+            reader.readAsText(file);
+        }
+    </script>
+</body>
+</html>
