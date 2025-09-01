@@ -6,100 +6,545 @@
     <title>Thematic Studies - Project Context</title>
     <meta name="description" content="Cross-biblical explorations of major themes, theological concepts, and spiritual developments throughout Scripture from Genesis to Revelation.">
     
-    <!-- Critical CSS Inline for Fast First Paint -->
     <style>
-        /* Critical above-the-fold CSS */
-        :root{--primary-dark:#0a0a0a;--hub-accent-primary:#e94560;--hub-accent-secondary:#533483}
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:system-ui,-apple-system,sans-serif;line-height:1.6;color:#0a0a0a;background:#f5f5f5}
-        nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,.98);backdrop-filter:blur(10px);z-index:1000;padding:1rem 2rem;box-shadow:0 4px 6px -1px rgba(0,0,0,.1)}
-        .nav-container{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
-        .hero{min-height:60vh;display:flex;align-items:center;justify-content:center;padding:2rem;margin-top:80px;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);color:#fff;position:relative;overflow:hidden}
-        .hero-content{text-align:center;max-width:900px;z-index:1;position:relative}
-        .hero-title{font-size:clamp(2.5rem,6vw,4rem);font-weight:900;line-height:1.1;margin-bottom:1.5rem}
-        .container{max-width:1400px;margin:0 auto;padding:4rem 2rem}
-        .loading{display:none}
+        /* Reset and Variables */
+        :root {
+            --primary-dark: #0a0a0a;
+            --primary-light: #ffffff;
+            --accent-blue: #00b4d8;
+            --accent-purple: #7209b7;
+            --accent-red: #dc2626;
+            --accent-gold: #d4af37;
+            --accent-green: #10b981;
+            --text-gray: #666;
+            --bg-gray: #f5f5f5;
+            --border: #e5e7eb;
+            --shadow: rgba(0,0,0,.08);
+            --gradient-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent-red), var(--accent-purple));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: var(--primary-dark);
+            background: var(--bg-gray);
+        }
+
+        /* Navigation - Fixed */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255,255,255,.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,.06);
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 0.75rem 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--primary-dark);
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        .logo svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 0.5rem;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--accent-red);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 2rem 3rem;
+            margin-top: 60px;
+            background: var(--gradient-primary);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: -20%;
+            background: radial-gradient(circle at 20% 80%, rgba(220,38,38,.15) 0%, transparent 55%),
+                        radial-gradient(circle at 80% 20%, rgba(255,255,255,.08) 0%, transparent 55%);
+            animation: swirl 30s linear infinite;
+        }
+
+        @keyframes swirl {
+            50% { transform: rotate(180deg) scale(1.1); }
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            opacity: 0.95;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent-gold);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Quick Links Navigation */
+        .quick-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,.05);
+        }
+
+        .quick-link {
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-gray);
+            border: 2px solid transparent;
+            border-radius: 30px;
+            text-decoration: none;
+            color: var(--primary-dark);
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .quick-link:hover {
+            background: white;
+            border-color: var(--accent-red);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220,38,38,.15);
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+        }
+
+        /* Category Cards Grid */
+        .theme-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 5rem;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,.08);
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-accent);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,.12);
+        }
+
+        .category-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        .category-count {
+            color: var(--accent-red);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .category-description {
+            color: var(--text-gray);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .category-topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .topic-tag {
+            padding: 0.25rem 0.75rem;
+            background: var(--bg-gray);
+            border-radius: 15px;
+            font-size: 0.85rem;
+            color: var(--primary-dark);
+        }
+
+        /* Featured Studies Grid */
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 5rem;
+        }
+
+        .study-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.75rem;
+            text-decoration: none;
+            color: var(--primary-dark);
+            box-shadow: 0 10px 30px rgba(0,0,0,.08);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .study-card.featured {
+            grid-column: span 2;
+            background: var(--gradient-accent);
+            color: white;
+        }
+
+        .study-card.featured .study-card-category,
+        .study-card.featured .study-card-desc,
+        .study-card.featured .study-card-meta {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .study-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,.15);
+        }
+
+        .study-card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .study-card-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .study-card-category {
+            font-size: 0.85rem;
+            color: var(--accent-purple);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .study-card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .study-card-body {
+            flex: 1;
+        }
+
+        .study-card-desc {
+            color: var(--text-gray);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .study-card-meta {
+            font-size: 0.85rem;
+            color: var(--accent-red);
+            font-weight: 600;
+        }
+
+        /* Studies Filter */
+        .studies-filter {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .filter-button {
+            padding: 0.75rem 1.5rem;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .filter-button:hover {
+            border-color: var(--accent-red);
+            background: var(--bg-gray);
+        }
+
+        .filter-button.active {
+            background: var(--gradient-accent);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Studies List */
+        .studies-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .study-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--primary-dark);
+            box-shadow: 0 5px 15px rgba(0,0,0,.05);
+            transition: all 0.3s;
+        }
+
+        .study-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,.1);
+        }
+
+        .study-item-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .study-item-content {
+            flex: 1;
+        }
+
+        .study-item-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .study-item-desc {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+        }
+
+        .study-item-arrow {
+            font-size: 1.5rem;
+            color: var(--accent-red);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--primary-dark);
+            color: white;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .study-card.featured {
+                grid-column: span 1;
+            }
+            
+            .hero-stats {
+                gap: 2rem;
+            }
+            
+            .theme-categories {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
-
-    <!-- Preload Critical Resources -->
-    <link rel="preload" href="/assets/css/hub-base.css" as="style">
-    <link rel="preload" href="/assets/css/hub-thematic-v2.css" as="style">
-    <link rel="preload" as="font" href="/assets/fonts/system-ui.woff2" type="font/woff2" crossorigin>
-    
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="/assets/css/hub-base.css">
-    <link rel="stylesheet" href="/assets/css/hub-thematic-v2.css">
-
-    <!-- DNS Prefetch for External Resources -->
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
 </head>
-<body class="thematic-hub">
+<body>
     <!-- Navigation -->
-    <nav id="main-nav" role="navigation" aria-label="Main navigation">
+    <nav id="main-nav">
         <div class="nav-container">
-            <a href="/" class="logo" aria-label="Project Context Home">
-                <div class="logo-icon">
-                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="40" height="40">
-                        <!-- Left bracket -->
-                        <path d="M 25 15 L 10 15 L 10 85 L 25 85" 
-                              stroke="#0a0a0a" 
-                              stroke-width="4" 
-                              fill="none" 
-                              stroke-linecap="round"/>
-                        <!-- Right bracket -->
-                        <path d="M 75 15 L 90 15 L 90 85 L 75 85" 
-                              stroke="#0a0a0a" 
-                              stroke-width="4" 
-                              fill="none" 
-                              stroke-linecap="round"/>
-                        <!-- Eye outline -->
-                        <ellipse cx="50" cy="50" rx="25" ry="15" 
-                                 stroke="#0a0a0a" 
-                                 stroke-width="3" 
-                                 fill="none"/>
-                        <!-- Iris -->
-                        <circle cx="50" cy="50" r="8" 
-                                fill="#00b4d8"/>
-                        <!-- Pupil -->
-                        <circle cx="50" cy="50" r="3" 
-                                fill="#0a0a0a"/>
-                    </svg>
-                </div>
-                <span class="logo-text">Project Context</span>
+            <a href="/" class="logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M 25 15 L 10 15 L 10 85 L 25 85" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    <path d="M 75 15 L 90 15 L 90 85 L 75 85" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    <ellipse cx="50" cy="50" rx="25" ry="15" stroke="#0a0a0a" stroke-width="3" fill="none"/>
+                    <circle cx="50" cy="50" r="8" fill="#00b4d8"/>
+                    <circle cx="50" cy="50" r="3" fill="#0a0a0a"/>
+                </svg>
+                <span>Project Context</span>
             </a>
-            <ul class="nav-links" id="navLinks">
+            <ul class="nav-links">
                 <li><a href="/">Home</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle active" aria-haspopup="true" aria-expanded="false">Studies</a>
-                    <div class="dropdown-content" role="menu">
-                        <a href="/studies/characters/characters-hub.html" role="menuitem">Biblical Characters</a>
-                        <a href="/studies/women/women-bible-hub.html" role="menuitem">Women in the Bible</a>
-                        <a href="/studies/tanakh/tanakh-hub.html" role="menuitem">Tanakh Studies</a>
-                        <a href="/studies/thematic/thematic-hub.html" class="active" role="menuitem">Thematic Studies</a>
-                    </div>
-                </li>
-                <li><a href="/resources/">Resources</a></li>
-                <li><a href="/about.html">About</a></li>
+                <li><a href="/studies" class="active">Studies</a></li>
+                <li><a href="/resources">Resources</a></li>
+                <li><a href="/about">About</a></li>
             </ul>
-            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation" aria-expanded="false">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero" role="banner">
+    <section class="hero">
         <div class="hero-content">
             <h1 class="hero-title">Thematic Studies</h1>
             <p class="hero-subtitle">Cross-biblical explorations of major themes, theological concepts, and spiritual developments throughout Scripture</p>
             <div class="hero-stats">
                 <div class="stat-item">
-                    <div class="stat-number" data-target="50">50+</div>
+                    <div class="stat-number" data-target="50">50</div>
                     <div class="stat-label">Major Themes</div>
                 </div>
                 <div class="stat-item">
@@ -115,21 +560,23 @@
     </section>
 
     <!-- Main Content -->
-    <main class="container" role="main">
+    <main class="container">
         <!-- Quick Links -->
-        <nav class="quick-links" role="navigation" aria-label="Quick navigation">
+        <nav class="quick-links">
             <a href="#theological" class="quick-link">⚡ Theological Concepts</a>
-            <a href="#spiritual" class="quick-link">🔥 Spiritual Beings</a>
+            <a href="#spiritual-disciplines" class="quick-link">🙏 Spiritual Disciplines</a>
+            <a href="#spiritual-beings" class="quick-link">🔥 Spiritual Beings</a>
             <a href="#covenant" class="quick-link">📜 Covenant & Law</a>
             <a href="#prophetic" class="quick-link">👁️ Prophetic Themes</a>
             <a href="#wisdom" class="quick-link">💎 Wisdom & Poetry</a>
+            <a href="#creation" class="quick-link">🌍 Creation & Cosmology</a>
             <a href="#intertestamental" class="quick-link">🏛️ Intertestamental</a>
         </nav>
 
         <!-- Theme Categories -->
-        <section aria-labelledby="categories-heading">
+        <section>
             <div class="section-header">
-                <h2 id="categories-heading" class="section-title">Study Categories</h2>
+                <h2 class="section-title">Study Categories</h2>
                 <p class="section-subtitle">Explore biblical themes organized by major categories</p>
             </div>
 
@@ -147,7 +594,21 @@
                     </div>
                 </div>
 
-                <div class="category-card" data-category="spiritual" id="spiritual">
+                <div class="category-card" data-category="spiritual-disciplines" id="spiritual-disciplines">
+                    <div class="category-icon">🙏</div>
+                    <h3 class="category-title">Spiritual Disciplines</h3>
+                    <p class="category-count">8 Studies Available</p>
+                    <p class="category-description">Biblical practices for spiritual growth including prayer, fasting, meditation, and worship throughout Scripture.</p>
+                    <div class="category-topics">
+                        <span class="topic-tag">Prayer</span>
+                        <span class="topic-tag">Fasting</span>
+                        <span class="topic-tag">Meditation</span>
+                        <span class="topic-tag">Worship</span>
+                        <span class="topic-tag">Sabbath</span>
+                    </div>
+                </div>
+
+                <div class="category-card" data-category="spiritual-beings" id="spiritual-beings">
                     <div class="category-icon">🔥</div>
                     <h3 class="category-title">Spiritual Beings</h3>
                     <p class="category-count">12 Studies Available</p>
@@ -210,7 +671,6 @@
                     </div>
                 </div>
 
-                <!-- NEW: Intertestamental Category -->
                 <div class="category-card" data-category="intertestamental" id="intertestamental">
                     <div class="category-icon">🏛️</div>
                     <h3 class="category-title">Intertestamental Studies</h3>
@@ -227,22 +687,38 @@
         </section>
 
         <!-- Featured Studies Section -->
-        <section aria-labelledby="featured-heading">
+        <section>
             <div class="section-header">
-                <h2 id="featured-heading" class="section-title">Featured Studies</h2>
+                <h2 class="section-title">Featured Studies</h2>
                 <p class="section-subtitle">Popular and recently updated thematic explorations</p>
             </div>
 
             <div class="featured-grid">
-                <!-- NEW: Second Temple Study (Featured Position) -->
+                <!-- Featured Lord's Prayer Study -->
+                <a href="/studies/thematic/lords-prayer/lords-prayer.html" class="study-card featured">
+                    <div class="study-card-header">
+                        <div class="study-card-icon">🙏</div>
+                        <div>
+                            <div class="study-card-category">Spiritual Disciplines</div>
+                            <h3 class="study-card-title">The Lord's Prayer: Jesus' Model for Prayer</h3>
+                        </div>
+                    </div>
+                    <div class="study-card-body">
+                        <p class="study-card-desc">A comprehensive study of Jesus' model prayer (Matthew 6:9–13): translation, structure at the heart of the Sermon on the Mount, theological themes, Old Testament echoes, and formative practice for Christian life. Explore how this prayer shapes disciples into kingdom people.</p>
+                        <div class="study-card-meta">★ New Study • Comprehensive Analysis • Interactive Design</div>
+                    </div>
+                </a>
+
                 <a href="/studies/thematic/second-temple/mechanics-of-transformation.html" class="study-card">
                     <div class="study-card-header">
                         <div class="study-card-icon">🏛️</div>
-                        <div class="study-card-category">Intertestamental Studies</div>
-                        <h3 class="study-card-title">Second Temple Literature & NT</h3>
+                        <div>
+                            <div class="study-card-category">Intertestamental Studies</div>
+                            <h3 class="study-card-title">Second Temple Literature & NT</h3>
+                        </div>
                     </div>
                     <div class="study-card-body">
-                        <p class="study-card-desc">Explore how New Testament authors transform Second Temple Jewish traditions through specific textual and rhetorical techniques. Understand the "interpretive furniture" that shaped first-century biblical interpretation.</p>
+                        <p class="study-card-desc">Explore how New Testament authors transform Second Temple Jewish traditions through specific textual and rhetorical techniques.</p>
                         <div class="study-card-meta">Comprehensive Study • 4-Page Analysis</div>
                     </div>
                 </a>
@@ -250,11 +726,13 @@
                 <a href="/studies/thematic/evolution-of-satan/satan-evolution.html" class="study-card">
                     <div class="study-card-header">
                         <div class="study-card-icon">😈</div>
-                        <div class="study-card-category">Spiritual Beings</div>
-                        <h3 class="study-card-title">The Evolution of Satan</h3>
+                        <div>
+                            <div class="study-card-category">Spiritual Beings</div>
+                            <h3 class="study-card-title">The Evolution of Satan</h3>
+                        </div>
                     </div>
                     <div class="study-card-body">
-                        <p class="study-card-desc">Trace the development of the concept of Satan from Hebrew Bible through New Testament, examining how understanding of evil evolved across cultures and time.</p>
+                        <p class="study-card-desc">Trace the development of the concept of Satan from Hebrew Bible through New Testament.</p>
                         <div class="study-card-meta">Comprehensive Study • Multi-page</div>
                     </div>
                 </a>
@@ -262,35 +740,27 @@
                 <a href="/studies/thematic/image-of-god/image-of-god.html" class="study-card">
                     <div class="study-card-header">
                         <div class="study-card-icon">👤</div>
-                        <div class="study-card-category">Creation & Cosmology</div>
-                        <h3 class="study-card-title">Image of God</h3>
+                        <div>
+                            <div class="study-card-category">Creation & Cosmology</div>
+                            <h3 class="study-card-title">Image of God</h3>
+                        </div>
                     </div>
                     <div class="study-card-body">
-                        <p class="study-card-desc">Explore what it means to be created in God's image, from Genesis through the New Testament understanding of Christ as the perfect image.</p>
+                        <p class="study-card-desc">What it means to be created in God's image, from Genesis through Christ as the perfect image.</p>
                         <div class="study-card-meta">In-depth Analysis</div>
-                    </div>
-                </a>
-
-                <a href="/studies/thematic/covenant-progression/" class="study-card">
-                    <div class="study-card-header">
-                        <div class="study-card-icon">📜</div>
-                        <div class="study-card-category">Covenant & Law</div>
-                        <h3 class="study-card-title">Covenant Progression</h3>
-                    </div>
-                    <div class="study-card-body">
-                        <p class="study-card-desc">Follow the development of God's covenants from Noah through the New Covenant, seeing how each builds upon the previous.</p>
-                        <div class="study-card-meta">Historical Overview</div>
                     </div>
                 </a>
 
                 <a href="/studies/thematic/temple-theology/" class="study-card">
                     <div class="study-card-header">
-                        <div class="study-card-icon">🏛️</div>
-                        <div class="study-card-category">Creation & Cosmology</div>
-                        <h3 class="study-card-title">Temple Theology</h3>
+                        <div class="study-card-icon">⛩️</div>
+                        <div>
+                            <div class="study-card-category">Creation & Cosmology</div>
+                            <h3 class="study-card-title">Temple Theology</h3>
+                        </div>
                     </div>
                     <div class="study-card-body">
-                        <p class="study-card-desc">Understanding the temple as cosmic mountain, meeting place between heaven and earth, and its fulfillment in Christ and the church.</p>
+                        <p class="study-card-desc">The temple as cosmic mountain, meeting place between heaven and earth.</p>
                         <div class="study-card-meta">Theological Deep Dive</div>
                     </div>
                 </a>
@@ -298,49 +768,77 @@
                 <a href="/studies/thematic/kingdom-of-god/" class="study-card">
                     <div class="study-card-header">
                         <div class="study-card-icon">👑</div>
-                        <div class="study-card-category">Prophetic Themes</div>
-                        <h3 class="study-card-title">Kingdom of God</h3>
+                        <div>
+                            <div class="study-card-category">Prophetic Themes</div>
+                            <h3 class="study-card-title">Kingdom of God</h3>
+                        </div>
                     </div>
                     <div class="study-card-body">
-                        <p class="study-card-desc">The central theme of Jesus' teaching - explore the already/not yet nature of God's kingdom throughout Scripture.</p>
+                        <p class="study-card-desc">The central theme of Jesus' teaching - the already/not yet nature of God's kingdom.</p>
                         <div class="study-card-meta">NT Focus Study</div>
-                    </div>
-                </a>
-
-                <a href="/studies/thematic/divine-council/" class="study-card">
-                    <div class="study-card-header">
-                        <div class="study-card-icon">⚡</div>
-                        <div class="study-card-category">Spiritual Beings</div>
-                        <h3 class="study-card-title">The Divine Council</h3>
-                    </div>
-                    <div class="study-card-body">
-                        <p class="study-card-desc">Explore the biblical worldview of God's heavenly assembly, the "sons of God," and their role in divine governance.</p>
-                        <div class="study-card-meta">Ancient Near East Context</div>
                     </div>
                 </a>
             </div>
         </section>
 
         <!-- All Studies Section -->
-        <section class="all-studies" aria-labelledby="all-studies-heading">
+        <section class="all-studies">
             <div class="section-header">
-                <h2 id="all-studies-heading" class="section-title">All Thematic Studies</h2>
+                <h2 class="section-title">All Thematic Studies</h2>
                 <p class="section-subtitle">Browse our complete collection of thematic biblical studies</p>
             </div>
 
-            <div class="studies-filter" role="group" aria-label="Filter studies by category">
-                <button class="filter-button active" data-filter="all" aria-pressed="true">All Themes</button>
-                <button class="filter-button" data-filter="theological" aria-pressed="false">Theological</button>
-                <button class="filter-button" data-filter="spiritual" aria-pressed="false">Spiritual Beings</button>
-                <button class="filter-button" data-filter="covenant" aria-pressed="false">Covenant</button>
-                <button class="filter-button" data-filter="prophetic" aria-pressed="false">Prophetic</button>
-                <button class="filter-button" data-filter="wisdom" aria-pressed="false">Wisdom</button>
-                <button class="filter-button" data-filter="creation" aria-pressed="false">Creation</button>
-                <button class="filter-button" data-filter="intertestamental" aria-pressed="false">Intertestamental</button>
+            <div class="studies-filter">
+                <button class="filter-button active" data-filter="all">All Themes</button>
+                <button class="filter-button" data-filter="theological">Theological</button>
+                <button class="filter-button" data-filter="spiritual-disciplines">Spiritual Disciplines</button>
+                <button class="filter-button" data-filter="spiritual-beings">Spiritual Beings</button>
+                <button class="filter-button" data-filter="covenant">Covenant</button>
+                <button class="filter-button" data-filter="prophetic">Prophetic</button>
+                <button class="filter-button" data-filter="wisdom">Wisdom</button>
+                <button class="filter-button" data-filter="creation">Creation</button>
+                <button class="filter-button" data-filter="intertestamental">Intertestamental</button>
             </div>
 
-            <div class="studies-list">
-                <!-- NEW: Second Temple in All Studies -->
+            <div class="studies-list" id="studiesList">
+                <!-- Spiritual Disciplines Studies -->
+                <a href="/studies/thematic/lords-prayer/lords-prayer.html" class="study-item" data-category="spiritual-disciplines">
+                    <div class="study-item-icon">🙏</div>
+                    <div class="study-item-content">
+                        <h4 class="study-item-title">The Lord's Prayer</h4>
+                        <p class="study-item-desc">Jesus' model prayer - structure, theology, and practice for spiritual formation.</p>
+                    </div>
+                    <div class="study-item-arrow">→</div>
+                </a>
+
+                <a href="/studies/thematic/biblical-meditation/" class="study-item" data-category="spiritual-disciplines">
+                    <div class="study-item-icon">🧘</div>
+                    <div class="study-item-content">
+                        <h4 class="study-item-title">Biblical Meditation</h4>
+                        <p class="study-item-desc">The practice of meditating on God's Word day and night as taught in Psalms.</p>
+                    </div>
+                    <div class="study-item-arrow">→</div>
+                </a>
+
+                <a href="/studies/thematic/fasting-scripture/" class="study-item" data-category="spiritual-disciplines">
+                    <div class="study-item-icon">🍃</div>
+                    <div class="study-item-content">
+                        <h4 class="study-item-title">Fasting in Scripture</h4>
+                        <p class="study-item-desc">Biblical teaching on fasting as spiritual discipline from Moses to Jesus.</p>
+                    </div>
+                    <div class="study-item-arrow">→</div>
+                </a>
+
+                <a href="/studies/thematic/sabbath-rest/" class="study-item" data-category="spiritual-disciplines theological">
+                    <div class="study-item-icon">🕊️</div>
+                    <div class="study-item-content">
+                        <h4 class="study-item-title">Sabbath and Rest</h4>
+                        <p class="study-item-desc">From creation's seventh day to the eternal rest promised in Hebrews.</p>
+                    </div>
+                    <div class="study-item-arrow">→</div>
+                </a>
+
+                <!-- Intertestamental Studies -->
                 <a href="/studies/thematic/second-temple/mechanics-of-transformation.html" class="study-item" data-category="intertestamental">
                     <div class="study-item-icon">🏛️</div>
                     <div class="study-item-content">
@@ -350,56 +848,41 @@
                     <div class="study-item-arrow">→</div>
                 </a>
 
+                <!-- Spiritual Beings -->
+                <a href="/studies/thematic/evolution-of-satan/satan-evolution.html" class="study-item" data-category="spiritual-beings">
+                    <div class="study-item-icon">😈</div>
+                    <div class="study-item-content">
+                        <h4 class="study-item-title">The Evolution of Satan</h4>
+                        <p class="study-item-desc">Development of Satan concept from Hebrew Bible through New Testament.</p>
+                    </div>
+                    <div class="study-item-arrow">→</div>
+                </a>
+
+                <a href="/studies/thematic/divine-council/" class="study-item" data-category="spiritual-beings">
+                    <div class="study-item-icon">⚡</div>
+                    <div class="study-item-content">
+                        <h4 class="study-item-title">The Divine Council</h4>
+                        <p class="study-item-desc">God's heavenly assembly and the "sons of God" in divine governance.</p>
+                    </div>
+                    <div class="study-item-arrow">→</div>
+                </a>
+
+                <!-- Theological Studies -->
+                <a href="/studies/thematic/holy-spirit/" class="study-item" data-category="theological spiritual-beings">
+                    <div class="study-item-icon">🔥</div>
+                    <div class="study-item-content">
+                        <h4 class="study-item-title">The Holy Spirit</h4>
+                        <p class="study-item-desc">God's Spirit from Genesis hovering over waters to Pentecost and beyond.</p>
+                    </div>
+                    <div class="study-item-arrow">→</div>
+                </a>
+
+                <!-- Wisdom Studies -->
                 <a href="/studies/thematic/suffering-theodicy/" class="study-item" data-category="wisdom">
                     <div class="study-item-icon">💔</div>
                     <div class="study-item-content">
                         <h4 class="study-item-title">Suffering and Theodicy</h4>
-                        <p class="study-item-desc">Why do the righteous suffer? Explore biblical responses from Job through Revelation.</p>
-                    </div>
-                    <div class="study-item-arrow">→</div>
-                </a>
-
-                <a href="/studies/thematic/sabbath-rest/" class="study-item" data-category="covenant theological">
-                    <div class="study-item-icon">🕊️</div>
-                    <div class="study-item-content">
-                        <h4 class="study-item-title">Sabbath and Rest</h4>
-                        <p class="study-item-desc">From creation's seventh day to the eternal rest promised in Hebrews.</p>
-                    </div>
-                    <div class="study-item-arrow">→</div>
-                </a>
-
-                <a href="/studies/thematic/exile-return/" class="study-item" data-category="prophetic">
-                    <div class="study-item-icon">🏃</div>
-                    <div class="study-item-content">
-                        <h4 class="study-item-title">Exile and Return</h4>
-                        <p class="study-item-desc">The pattern of exile and restoration as a theological motif throughout Scripture.</p>
-                    </div>
-                    <div class="study-item-arrow">→</div>
-                </a>
-
-                <a href="/studies/thematic/water-symbolism/" class="study-item" data-category="creation theological">
-                    <div class="study-item-icon">💧</div>
-                    <div class="study-item-content">
-                        <h4 class="study-item-title">Water Symbolism</h4>
-                        <p class="study-item-desc">From chaos waters to living water - the theological significance of water in Scripture.</p>
-                    </div>
-                    <div class="study-item-arrow">→</div>
-                </a>
-
-                <a href="/studies/thematic/holy-spirit/" class="study-item" data-category="theological spiritual">
-                    <div class="study-item-icon">🔥</div>
-                    <div class="study-item-content">
-                        <h4 class="study-item-title">The Holy Spirit</h4>
-                        <p class="study-item-desc">Tracing the work of God's Spirit from Genesis hovering over waters to Pentecost and beyond.</p>
-                    </div>
-                    <div class="study-item-arrow">→</div>
-                </a>
-
-                <a href="/studies/thematic/apocalyptic-literature/" class="study-item" data-category="intertestamental prophetic">
-                    <div class="study-item-icon">📖</div>
-                    <div class="study-item-content">
-                        <h4 class="study-item-title">Apocalyptic Literature</h4>
-                        <p class="study-item-desc">Understanding biblical apocalyptic from Daniel through Revelation, including Second Temple influences.</p>
+                        <p class="study-item-desc">Why do the righteous suffer? Biblical responses from Job through Revelation.</p>
                     </div>
                     <div class="study-item-arrow">→</div>
                 </a>
@@ -408,7 +891,73 @@
                     <div class="study-item-icon">✨</div>
                     <div class="study-item-content">
                         <h4 class="study-item-title">Wisdom Christology</h4>
-                        <p class="study-item-desc">How personified Wisdom in Proverbs and Wisdom of Solomon shapes NT understanding of Christ.</p>
+                        <p class="study-item-desc">How personified Wisdom in Proverbs shapes NT understanding of Christ.</p>
+                    </div>
+                    <div class="study-item-arrow">→</div>
+                </a>
+
+                <!-- Creation & Cosmology -->
+                <a href="/studies/thematic/image-of-god/image-of-god.html" class="study-item" data-category="creation">
+                    <div class="study-item-icon">👤</div>
+                    <div class="study-item-content">
+                        <h4 class="study-item-title">Image of God</h4>
+                        <p class="study-item-desc">Created in God's image - from Genesis through Christ as the perfect image.</p>
+                    </div>
+                    <div class="study-item-arrow">→</div>
+                </a>
+
+                <a href="/studies/thematic/temple-theology/" class="study-item" data-category="creation">
+                    <div class="study-item-icon">⛩️</div>
+                    <div class="study-item-content">
+                        <h4 class="study-item-title">Temple Theology</h4>
+                        <p class="study-item-desc">Temple as cosmic mountain and meeting place between heaven and earth.</p>
+                    </div>
+                    <div class="study-item-arrow">→</div>
+                </a>
+
+                <a href="/studies/thematic/water-symbolism/" class="study-item" data-category="creation theological">
+                    <div class="study-item-icon">💧</div>
+                    <div class="study-item-content">
+                        <h4 class="study-item-title">Water Symbolism</h4>
+                        <p class="study-item-desc">From chaos waters to living water - theological significance of water.</p>
+                    </div>
+                    <div class="study-item-arrow">→</div>
+                </a>
+
+                <!-- Prophetic Themes -->
+                <a href="/studies/thematic/kingdom-of-god/" class="study-item" data-category="prophetic">
+                    <div class="study-item-icon">👑</div>
+                    <div class="study-item-content">
+                        <h4 class="study-item-title">Kingdom of God</h4>
+                        <p class="study-item-desc">Jesus' central teaching - the already/not yet nature of God's kingdom.</p>
+                    </div>
+                    <div class="study-item-arrow">→</div>
+                </a>
+
+                <a href="/studies/thematic/exile-return/" class="study-item" data-category="prophetic">
+                    <div class="study-item-icon">🏃</div>
+                    <div class="study-item-content">
+                        <h4 class="study-item-title">Exile and Return</h4>
+                        <p class="study-item-desc">The pattern of exile and restoration as theological motif.</p>
+                    </div>
+                    <div class="study-item-arrow">→</div>
+                </a>
+
+                <!-- Covenant Studies -->
+                <a href="/studies/thematic/covenant-progression/" class="study-item" data-category="covenant">
+                    <div class="study-item-icon">📜</div>
+                    <div class="study-item-content">
+                        <h4 class="study-item-title">Covenant Progression</h4>
+                        <p class="study-item-desc">Development of God's covenants from Noah through the New Covenant.</p>
+                    </div>
+                    <div class="study-item-arrow">→</div>
+                </a>
+
+                <a href="/studies/thematic/apocalyptic-literature/" class="study-item" data-category="intertestamental prophetic">
+                    <div class="study-item-icon">📖</div>
+                    <div class="study-item-content">
+                        <h4 class="study-item-title">Apocalyptic Literature</h4>
+                        <p class="study-item-desc">Biblical apocalyptic from Daniel through Revelation, including Second Temple influences.</p>
                     </div>
                     <div class="study-item-arrow">→</div>
                 </a>
@@ -420,15 +969,18 @@
         <p>&copy; 2024 Project Context. Empowering faith through understanding.</p>
     </footer>
 
-    <!-- Optimized JavaScript Loading -->
-    <script src="/assets/js/mobile-menu.js" defer></script>
-    
-    <!-- Inline Critical JavaScript -->
     <script>
-        // Critical inline JS for immediate functionality
-        document.documentElement.classList.add('js');
-        
-        // Simple stats animation (lightweight version)
+        // Navigation scroll effect
+        window.addEventListener('scroll', function() {
+            const nav = document.getElementById('main-nav');
+            if (window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Stats animation
         function animateStats() {
             const stats = document.querySelectorAll('[data-target]');
             stats.forEach(stat => {
@@ -448,143 +1000,172 @@
                 }
             });
         }
-        
-        // Run stats animation when visible
+
+        // Intersection Observer for animations
         if ('IntersectionObserver' in window) {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        animateStats();
-                        observer.disconnect();
+                        if (entry.target.classList.contains('hero-stats')) {
+                            animateStats();
+                            observer.unobserve(entry.target);
+                        } else {
+                            entry.target.classList.add('fade-in');
+                        }
                     }
                 });
-            }, { threshold: 0.5 });
-            
+            }, { threshold: 0.1 });
+
+            // Observe hero stats
             const heroStats = document.querySelector('.hero-stats');
             if (heroStats) observer.observe(heroStats);
-        } else {
-            // Fallback for older browsers
-            window.addEventListener('load', animateStats);
+
+            // Observe cards for animation
+            document.querySelectorAll('.category-card, .study-card').forEach(card => {
+                observer.observe(card);
+            });
         }
-        
-        // Quick navigation scroll
-        document.addEventListener('DOMContentLoaded', function() {
-            // Smooth scroll for quick links
-            document.querySelectorAll('.quick-link').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    const target = document.querySelector(targetId);
-                    if (target) {
-                        const offset = 100;
-                        window.scrollTo({
-                            top: target.offsetTop - offset,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-            
-            // Filter functionality
-            const filterButtons = document.querySelectorAll('.filter-button');
-            const studyItems = document.querySelectorAll('.study-item');
-            
-            filterButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const filter = this.dataset.filter;
-                    
-                    // Update active button
-                    filterButtons.forEach(btn => {
-                        btn.classList.remove('active');
-                        btn.setAttribute('aria-pressed', 'false');
-                    });
-                    this.classList.add('active');
-                    this.setAttribute('aria-pressed', 'true');
-                    
-                    // Filter items
-                    studyItems.forEach(item => {
-                        if (filter === 'all') {
-                            item.style.display = '';
-                            item.classList.add('fade-in');
-                        } else {
-                            const categories = item.dataset.category ? item.dataset.category.split(' ') : [];
-                            if (categories.includes(filter)) {
-                                item.style.display = '';
-                                item.classList.add('fade-in');
-                            } else {
-                                item.style.display = 'none';
-                            }
-                        }
-                    });
-                });
-            });
-            
-            // Category card click to filter
-            document.querySelectorAll('.category-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    const categoryId = this.dataset.category;
-                    if (categoryId) {
-                        const filterBtn = document.querySelector(`.filter-button[data-filter="${categoryId}"]`);
-                        if (filterBtn) {
-                            filterBtn.click();
-                            // Scroll to studies list
-                            document.querySelector('.all-studies').scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
-                        }
-                    }
-                });
-            });
-            
-            // Add intersection observer for animations
-            if ('IntersectionObserver' in window) {
-                const animateObserver = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('animate-in');
-                            animateObserver.unobserve(entry.target);
-                        }
-                    });
-                }, {
-                    threshold: 0.1,
-                    rootMargin: '50px'
-                });
+
+        // Filter functionality
+        const filterButtons = document.querySelectorAll('.filter-button');
+        const studyItems = document.querySelectorAll('.study-item');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const filter = this.dataset.filter;
                 
-                // Observe all cards
-                document.querySelectorAll('.study-card, .category-card').forEach(card => {
-                    animateObserver.observe(card);
+                // Update active button
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Filter items
+                studyItems.forEach(item => {
+                    if (filter === 'all') {
+                        item.style.display = '';
+                    } else {
+                        const categories = item.dataset.category ? item.dataset.category.split(' ') : [];
+                        if (categories.includes(filter)) {
+                            item.style.display = '';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+
+        // Quick links smooth scroll
+        document.querySelectorAll('.quick-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const target = document.querySelector(targetId);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+        });
+
+        // Category card click to filter
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const category = this.dataset.category;
+                const filterBtn = document.querySelector(`.filter-button[data-filter="${category}"]`);
+                if (filterBtn) {
+                    filterBtn.click();
+                    document.querySelector('.all-studies').scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Dynamic Article Loader System
+        class ArticleManager {
+            constructor() {
+                this.articles = new Map();
+                this.init();
+            }
+
+            init() {
+                // Load articles from localStorage or default set
+                this.loadArticles();
+                this.setupEventListeners();
+            }
+
+            loadArticles() {
+                // Check localStorage for saved articles
+                const saved = localStorage.getItem('thematicArticles');
+                if (saved) {
+                    const articles = JSON.parse(saved);
+                    articles.forEach(article => this.articles.set(article.id, article));
+                }
+            }
+
+            addArticle(article) {
+                // Add new article to collection
+                this.articles.set(article.id, article);
+                this.saveArticles();
+                this.renderNewArticle(article);
+            }
+
+            saveArticles() {
+                const articlesArray = Array.from(this.articles.values());
+                localStorage.setItem('thematicArticles', JSON.stringify(articlesArray));
+            }
+
+            renderNewArticle(article) {
+                const studiesList = document.getElementById('studiesList');
+                const articleElement = this.createArticleElement(article);
+                
+                // Add with animation
+                articleElement.style.opacity = '0';
+                studiesList.insertBefore(articleElement, studiesList.firstChild);
+                
+                setTimeout(() => {
+                    articleElement.style.transition = 'opacity 0.5s';
+                    articleElement.style.opacity = '1';
+                }, 100);
+            }
+
+            createArticleElement(article) {
+                const link = document.createElement('a');
+                link.href = article.url;
+                link.className = 'study-item';
+                link.dataset.category = article.categories.join(' ');
+                
+                link.innerHTML = `
+                    <div class="study-item-icon">${article.icon}</div>
+                    <div class="study-item-content">
+                        <h4 class="study-item-title">${article.title}</h4>
+                        <p class="study-item-desc">${article.description}</p>
+                    </div>
+                    <div class="study-item-arrow">→</div>
+                `;
+                
+                return link;
+            }
+
+            setupEventListeners() {
+                // Listen for custom events to add new articles
+                window.addEventListener('addThematicArticle', (e) => {
+                    this.addArticle(e.detail);
                 });
             }
-            
-            // Scroll effects for navigation
-            let lastScroll = 0;
-            window.addEventListener('scroll', function() {
-                const currentScroll = window.pageYOffset;
-                const nav = document.getElementById('main-nav');
-                
-                if (currentScroll > 100) {
-                    nav.classList.add('scrolled');
-                } else {
-                    nav.classList.remove('scrolled');
-                }
-                
-                lastScroll = currentScroll;
-            }, { passive: true });
-        });
-    </script>
-    
-    <!-- Optional: Load enhanced features for modern browsers -->
-    <script type="module">
-        // Load enhanced features only if needed
-        if (window.matchMedia('(min-width: 768px)').matches) {
-            // Desktop enhancements could be loaded here
-            import('/assets/js/hub-common.js').then(module => {
-                console.log('Enhanced features loaded');
-            }).catch(err => {
-                console.warn('Enhanced features not available:', err);
-            });
         }
+
+        // Initialize Article Manager
+        const articleManager = new ArticleManager();
+
+        // Example: Adding a new article programmatically
+        // window.dispatchEvent(new CustomEvent('addThematicArticle', {
+        //     detail: {
+        //         id: 'unique-id',
+        //         title: 'New Study Title',
+        //         description: 'Study description',
+        //         icon: '📚',
+        //         url: '/studies/thematic/new-study/',
+        //         categories: ['theological', 'wisdom']
+        //     }
+        // }));
     </script>
 </body>
 </html>
