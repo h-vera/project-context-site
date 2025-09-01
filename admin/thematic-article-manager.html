@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article Management System - Project Context</title>
+    <style>
+        /* Admin Panel Styles */
+        :root {
+            --primary: #0a0a0a;
+            --accent: #dc2626;
+            --purple: #7209b7;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray: #6b7280;
+            --light: #f3f4f6;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .management-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            color: var(--white);
+            padding: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            background: var(--light);
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 1rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--gray);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .tab.active {
+            color: var(--accent);
+            background: var(--white);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent);
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Form Styles */
+        .form-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .category-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .category-checkbox {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background: var(--light);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-checkbox:hover {
+            background: #e5e7eb;
+        }
+
+        .category-checkbox input {
+            margin-right: 0.5rem;
+            cursor: pointer;
+        }
+
+        .category-checkbox.selected {
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            color: white;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(220,38,38,0.3);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--primary);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Article List */
+        .article-list {
+            display: grid;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .article-item {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--light);
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+
+        .article-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .article-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+        }
+
+        .article-info {
+            flex: 1;
+        }
+
+        .article-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .article-meta {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .article-categories {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .article-category {
+            padding: 0.2rem 0.6rem;
+            background: white;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--purple);
+        }
+
+        .article-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .icon-btn {
+            width: 35px;
+            height: 35px;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .icon-btn.edit {
+            background: var(--warning);
+            color: white;
+        }
+
+        .icon-btn.delete {
+            background: var(--danger);
+            color: white;
+        }
+
+        .icon-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Export/Import Section */
+        .export-section {
+            padding: 2rem;
+            background: var(--light);
+            border-radius: 15px;
+            margin-top: 2rem;
+        }
+
+        .code-output {
+            background: var(--primary);
+            color: #10b981;
+            padding: 1.5rem;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .success-message {
+            padding: 1rem;
+            background: #10b98120;
+            border: 2px solid var(--success);
+            color: var(--success);
+            border-radius: 10px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        /* Stats Dashboard */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+        }
+
+        /* Emoji Picker Styles */
+        .emoji-picker {
+            background: white;
+            border: 2px solid var(--accent);
+            border-radius: 15px;
+            padding: 1rem;
+            margin-top: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            position: relative;
+        }
+
+        #emojiSearch {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        #emojiCategories {
+            margin-top: 0.5rem;
+        }
+
+        .emoji-category {
+            margin-bottom: 1rem;
+        }
+
+        .emoji-category-title {
+            font-weight: 700;
+            color: var(--purple);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .emoji-btn {
+            width: 45px;
+            height: 45px;
+            border: 2px solid transparent;
+            background: var(--light);
+            border-radius: 10px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .emoji-btn:hover {
+            background: white;
+            border-color: var(--accent);
+            transform: scale(1.15);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .emoji-btn.selected {
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            color: white;
+            border-color: var(--accent);
+        }
+
+        #icon {
+            font-size: 2rem;
+            text-align: center;
+            background: var(--light);
+            transition: all 0.3s;
+        }
+
+        #icon:hover {
+            background: white;
+            border-color: var(--accent);
+        }
+
+        #icon:focus {
+            background: white;
+            border-color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="management-container">
+        <div class="header">
+            <h1>📚 Thematic Studies Article Manager</h1>
+            <p>Add, edit, and manage articles for the Project Context Thematic Studies hub</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('add')">➕ Add Article</button>
+            <button class="tab" onclick="switchTab('manage')">📋 Manage Articles</button>
+            <button class="tab" onclick="switchTab('export')">💾 Export/Import</button>
+            <button class="tab" onclick="switchTab('dashboard')">📊 Dashboard</button>
+        </div>
+
+        <div class="content">
+            <!-- Add Article Tab -->
+            <div id="add-tab" class="tab-content active">
+                <h2>Add New Article</h2>
+                <form id="addArticleForm" class="form-grid">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="title">Article Title*</label>
+                            <input type="text" id="title" required placeholder="e.g., The Lord's Prayer">
+                        </div>
+                        <div class="form-group">
+                            <label for="icon">Icon Emoji*</label>
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <input type="text" id="icon" required placeholder="📚 Click to select or type" maxlength="2" style="flex: 1; text-align: center; font-size: 1.5rem;">
+                                <button type="button" class="btn btn-secondary" onclick="toggleEmojiPicker()" title="Browse icon library" style="padding: 0.75rem 1rem;">
+                                    📋 Browse
+                                </button>
+                            </div>
+                            <small style="color: var(--gray); margin-top: 0.25rem; display: block;">Select from library or paste/type your own emoji</small>
+                            <div id="emojiPicker" class="emoji-picker" style="display: none;">
+                                <input type="text" id="emojiSearch" placeholder="🔍 Search (e.g., prayer, book, cross, heart...)" onkeyup="searchEmojis()" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem; border: 1px solid #e5e7eb; border-radius: 8px;">
+                                <div id="emojiCategories">
+                                    <!-- Emoji categories will be inserted here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description*</label>
+                        <textarea id="description" required placeholder="Brief description of the study..."></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="url">URL Path*</label>
+                            <input type="text" id="url" required placeholder="/studies/thematic/...">
+                        </div>
+                        <div class="form-group">
+                            <label for="studyType">Study Type</label>
+                            <select id="studyType">
+                                <option value="comprehensive">Comprehensive Study</option>
+                                <option value="deep-dive">Deep Dive</option>
+                                <option value="overview">Overview</option>
+                                <option value="analysis">In-depth Analysis</option>
+                                <option value="focus">Focus Study</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Categories* (Select at least one)</label>
+                        <div class="category-selector">
+                            <label class="category-checkbox">
+                                <input type="checkbox" value="theological"> Theological
+                            </label>
+                            <label class="category-checkbox">
+                                <input type="checkbox" value="spiritual-disciplines"> Spiritual Disciplines
+                            </label>
+                            <label class="category-checkbox">
+                                <input type="checkbox" value="spiritual-beings"> Spiritual Beings
+                            </label>
+                            <label class="category-checkbox">
+                                <input type="checkbox" value="covenant"> Covenant & Law
+                            </label>
+                            <label class="category-checkbox">
+                                <input type="checkbox" value="prophetic"> Prophetic
+                            </label>
+                            <label class="category-checkbox">
+                                <input type="checkbox" value="wisdom"> Wisdom
+                            </label>
+                            <label class="category-checkbox">
+                                <input type="checkbox" value="creation"> Creation
+                            </label>
+                            <label class="category-checkbox">
+                                <input type="checkbox" value="intertestamental"> Intertestamental
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="featured">
+                            <input type="checkbox" id="featured"> Featured Article (Will appear in featured section)
+                        </label>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">Add Article</button>
+                        <button type="reset" class="btn btn-secondary">Clear Form</button>
+                    </div>
+                </form>
+
+                <div class="success-message" id="addSuccess">
+                    ✅ Article added successfully!
+                </div>
+            </div>
+
+            <!-- Manage Articles Tab -->
+            <div id="manage-tab" class="tab-content">
+                <h2>Manage Existing Articles</h2>
+                <div class="article-list" id="articleList">
+                    <!-- Articles will be dynamically loaded here -->
+                </div>
+            </div>
+
+            <!-- Export/Import Tab -->
+            <div id="export-tab" class="tab-content">
+                <h2>Export/Import Articles</h2>
+                
+                <div class="export-section">
+                    <h3>Export HTML Code</h3>
+                    <p>Copy this code to add the article to your thematic hub page:</p>
+                    <button class="btn btn-primary" onclick="generateExport()">Generate Export Code</button>
+                    <div class="code-output" id="exportCode" style="display: none;">
+                        <!-- Export code will appear here -->
+                    </div>
+                </div>
+
+                <div class="export-section">
+                    <h3>Batch Import</h3>
+                    <p>Import multiple articles from JSON:</p>
+                    <textarea id="importData" placeholder="Paste JSON data here..." style="width: 100%; height: 150px; margin-top: 1rem;"></textarea>
+                    <button class="btn btn-primary" onclick="importArticles()" style="margin-top: 1rem;">Import Articles</button>
+                </div>
+            </div>
+
+            <!-- Dashboard Tab -->
+            <div id="dashboard-tab" class="tab-content">
+                <h2>Article Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalArticles">0</div>
+                        <div class="stat-label">Total Articles</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="featuredCount">0</div>
+                        <div class="stat-label">Featured</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="categoryCount">0</div>
+                        <div class="stat-label">Categories</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="recentCount">0</div>
+                        <div class="stat-label">Added This Week</div>
+                    </div>
+                </div>
+
+                <h3>Articles by Category</h3>
+                <div id="categoryBreakdown" class="article-list">
+                    <!-- Category breakdown will appear here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Emoji Data for Biblical/Theological Studies
+        const emojiCategories = {
+            '⭐ Most Popular': ['🙏', '📖', '✝️', '🕊️', '👑', '💎', '🔥', '⛪', '📜', '✨', '❤️', '🌟'],
+            'Spiritual & Prayer': ['🙏', '✝️', '⛪', '📿', '🕊️', '✨', '🌟', '💫', '⭐', '🕯️', '🛐'],
+            'Scripture & Study': ['📖', '📚', '📜', '📃', '📝', '✍️', '🔍', '💭', '🧠', '📌', '🔖'],
+            'People & Figures': ['👤', '👥', '👨‍👩‍👧‍👦', '👶', '🧔', '👑', '😇', '👼', '🧙‍♂️', '💂', '🤴'],
+            'Nature & Creation': ['🌍', '🌎', '🌏', '🌈', '☀️', '🌙', '⭐', '🌊', '🏔️', '🌳', '🌿', '🌾', '🍃', '🔥', '💧'],
+            'Symbols & Objects': ['💎', '🏺', '🗿', '⚖️', '🔑', '🚪', '🛡️', '⚔️', '🏹', '🎺', '🏛️', '⛩️', '🕌', '🛤️'],
+            'Hearts & Love': ['❤️', '🧡', '💛', '💚', '💙', '💜', '🤍', '💔', '❤️‍🔥', '💝', '💖'],
+            'Evil & Conflict': ['😈', '👹', '🐍', '🔥', '⚡', '💀', '☠️', '🗡️', '⚔️', '🛡️'],
+            'Time & Eternity': ['⏰', '⏳', '⌛', '🕐', '📅', '🗓️', '♾️', '🔄', '🔁'],
+            'Celebration': ['🎉', '🎊', '🎁', '🎵', '🎶', '🎺', '🥳', '✨', '🌟'],
+            'Directional': ['⬆️', '⬇️', '➡️', '⬅️', '↗️', '↖️', '↘️', '↙️', '🔝', '🔚', '🔙', '🔜'],
+            'Abstract Concepts': ['☯️', '✡️', '☪️', '🕎', '♈', '♉', '♊', '🔯', '☸️', '🕉️']
+        };
+
+        // Initialize emoji picker
+        function initEmojiPicker() {
+            const categoriesContainer = document.getElementById('emojiCategories');
+            let html = '';
+            
+            for (const [category, emojis] of Object.entries(emojiCategories)) {
+                html += `
+                    <div class="emoji-category" data-category="${category}">
+                        <div class="emoji-category-title">${category}</div>
+                        <div class="emoji-grid">
+                            ${emojis.map(emoji => `
+                                <button type="button" class="emoji-btn" onclick="selectEmoji('${emoji}')" data-emoji="${emoji}" title="Click to select">${emoji}</button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            categoriesContainer.innerHTML = html;
+        }
+
+        // Search emojis
+        function searchEmojis() {
+            const searchTerm = document.getElementById('emojiSearch').value.toLowerCase();
+            const categories = document.querySelectorAll('.emoji-category');
+            
+            if (searchTerm === '') {
+                categories.forEach(cat => cat.style.display = 'block');
+                document.querySelectorAll('.emoji-btn').forEach(btn => btn.style.display = 'flex');
+                return;
+            }
+            
+            categories.forEach(category => {
+                const categoryName = category.dataset.category.toLowerCase();
+                const buttons = category.querySelectorAll('.emoji-btn');
+                let hasVisibleEmojis = false;
+                
+                buttons.forEach(btn => {
+                    // Search by category name or common emoji keywords
+                    const emoji = btn.dataset.emoji;
+                    const emojiKeywords = getEmojiKeywords(emoji).toLowerCase();
+                    
+                    if (categoryName.includes(searchTerm) || emojiKeywords.includes(searchTerm)) {
+                        btn.style.display = 'flex';
+                        hasVisibleEmojis = true;
+                    } else {
+                        btn.style.display = 'none';
+                    }
+                });
+                
+                category.style.display = hasVisibleEmojis ? 'block' : 'none';
+            });
+        }
+
+        // Get emoji keywords for search
+        function getEmojiKeywords(emoji) {
+            const keywords = {
+                '🙏': 'pray prayer hands',
+                '📖': 'book bible scripture read',
+                '✝️': 'cross christian christ',
+                '🕊️': 'dove spirit peace holy',
+                '👑': 'crown king kingdom royal',
+                '💎': 'gem diamond treasure precious',
+                '🔥': 'fire flame spirit power',
+                '⛪': 'church building worship',
+                '📜': 'scroll scripture ancient',
+                '✨': 'sparkle magic divine',
+                '❤️': 'heart love',
+                '🌟': 'star bright light',
+                '👤': 'person people human',
+                '🌍': 'earth world creation globe',
+                '😈': 'devil satan evil demon',
+                '⚔️': 'sword battle war fight',
+                '🛡️': 'shield protect defense armor',
+                '🏛️': 'temple building ancient',
+                '💧': 'water drop baptism',
+                '🌈': 'rainbow promise covenant',
+                '🍃': 'leaf nature creation',
+                '📿': 'beads rosary prayer',
+                '🕯️': 'candle light worship',
+                '👼': 'angel cherub heavenly',
+                '😇': 'angel halo holy good'
+            };
+            return keywords[emoji] || '';
+        }
+
+        // Toggle emoji picker visibility
+        function toggleEmojiPicker() {
+            const picker = document.getElementById('emojiPicker');
+            const isShowing = picker.style.display === 'block';
+            picker.style.display = isShowing ? 'none' : 'block';
+            
+            // Clear search when opening
+            if (!isShowing) {
+                document.getElementById('emojiSearch').value = '';
+                searchEmojis();
+                
+                // Highlight currently selected emoji
+                const currentEmoji = document.getElementById('icon').value;
+                if (currentEmoji) {
+                    document.querySelectorAll('.emoji-btn').forEach(btn => {
+                        if (btn.dataset.emoji === currentEmoji) {
+                            btn.classList.add('selected');
+                        } else {
+                            btn.classList.remove('selected');
+                        }
+                    });
+                }
+            }
+        }
+
+        // Select emoji
+        function selectEmoji(emoji) {
+            document.getElementById('icon').value = emoji;
+            
+            // Remove previous selection
+            document.querySelectorAll('.emoji-btn.selected').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Add selected class to current emoji
+            document.querySelectorAll('.emoji-btn').forEach(btn => {
+                if (btn.dataset.emoji === emoji) {
+                    btn.classList.add('selected');
+                }
+            });
+            
+            document.getElementById('emojiPicker').style.display = 'none';
+            document.getElementById('emojiSearch').value = '';
+            searchEmojis();
+        }
+
+        // Initialize on DOM load
+        document.addEventListener('DOMContentLoaded', function() {
+            initEmojiPicker();
+            
+            // Close emoji picker when clicking outside
+            document.addEventListener('click', function(event) {
+                const picker = document.getElementById('emojiPicker');
+                const iconInput = document.getElementById('icon');
+                const toggleButton = event.target.closest('button[onclick*="toggleEmojiPicker"]');
+                const emojiSearch = document.getElementById('emojiSearch');
+                
+                if (!picker.contains(event.target) && 
+                    event.target !== iconInput && 
+                    event.target !== emojiSearch &&
+                    !toggleButton &&
+                    picker.style.display === 'block') {
+                    picker.style.display = 'none';
+                }
+            });
+        });
+
+        // Article Management System
+        class ThematicArticleManager {
+            constructor() {
+                this.articles = [];
+                this.loadArticles();
+                this.initEventListeners();
+                this.updateUI();
+            }
+
+            loadArticles() {
+                const saved = localStorage.getItem('thematicArticles');
+                if (saved) {
+                    this.articles = JSON.parse(saved);
+                } else {
+                    // Initialize with some default articles
+                    this.articles = [
+                        {
+                            id: this.generateId(),
+                            title: "The Lord's Prayer",
+                            icon: "🙏",
+                            description: "Jesus' model prayer - structure, theology, and practice for spiritual formation.",
+                            url: "/studies/thematic/lords-prayer/lords-prayer.html",
+                            categories: ["spiritual-disciplines"],
+                            studyType: "comprehensive",
+                            featured: true,
+                            dateAdded: new Date().toISOString()
+                        }
+                    ];
+                    this.saveArticles();
+                }
+            }
+
+            saveArticles() {
+                localStorage.setItem('thematicArticles', JSON.stringify(this.articles));
+                this.updateUI();
+                this.updateDashboard();
+            }
+
+            generateId() {
+                return 'article_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            }
+
+            addArticle(articleData) {
+                const article = {
+                    id: this.generateId(),
+                    ...articleData,
+                    dateAdded: new Date().toISOString()
+                };
+                this.articles.push(article);
+                this.saveArticles();
+                return article;
+            }
+
+            updateArticle(id, updates) {
+                const index = this.articles.findIndex(a => a.id === id);
+                if (index !== -1) {
+                    this.articles[index] = { ...this.articles[index], ...updates };
+                    this.saveArticles();
+                }
+            }
+
+            deleteArticle(id) {
+                this.articles = this.articles.filter(a => a.id !== id);
+                this.saveArticles();
+            }
+
+            initEventListeners() {
+                // Form submission
+                document.getElementById('addArticleForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleAddArticle();
+                });
+
+                // Category checkboxes
+                document.querySelectorAll('.category-checkbox input').forEach(checkbox => {
+                    checkbox.addEventListener('change', function() {
+                        this.parentElement.classList.toggle('selected', this.checked);
+                    });
+                });
+            }
+
+            handleAddArticle() {
+                const form = document.getElementById('addArticleForm');
+                const categories = Array.from(form.querySelectorAll('.category-checkbox input:checked'))
+                    .map(cb => cb.value);
+
+                if (categories.length === 0) {
+                    alert('Please select at least one category');
+                    return;
+                }
+
+                const articleData = {
+                    title: form.title.value,
+                    icon: form.icon.value,
+                    description: form.description.value,
+                    url: form.url.value,
+                    categories: categories,
+                    studyType: form.studyType.value,
+                    featured: form.featured.checked
+                };
+
+                this.addArticle(articleData);
+                form.reset();
+                document.getElementById('icon').value = ''; // Clear emoji
+                
+                // Show success message
+                const successMsg = document.getElementById('addSuccess');
+                successMsg.classList.add('show');
+                setTimeout(() => successMsg.classList.remove('show'), 3000);
+
+                // Clear selected categories
+                document.querySelectorAll('.category-checkbox').forEach(cb => {
+                    cb.classList.remove('selected');
+                });
+            }
+
+            updateUI() {
+                this.renderArticleList();
+            }
+
+            renderArticleList() {
+                const listContainer = document.getElementById('articleList');
+                if (!listContainer) return;
+
+                if (this.articles.length === 0) {
+                    listContainer.innerHTML = '<p>No articles yet. Add your first article!</p>';
+                    return;
+                }
+
+                listContainer.innerHTML = this.articles.map(article => `
+                    <div class="article-item">
+                        <div class="article-icon">${article.icon}</div>
+                        <div class="article-info">
+                            <div class="article-title">${article.title}</div>
+                            <div class="article-meta">${article.url} • ${article.studyType}</div>
+                            <div class="article-categories">
+                                ${article.categories.map(cat => `
+                                    <span class="article-category">${cat}</span>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div class="article-actions">
+                            <button class="icon-btn edit" onclick="manager.editArticle('${article.id}')">✏️</button>
+                            <button class="icon-btn delete" onclick="manager.confirmDelete('${article.id}')">🗑️</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            editArticle(id) {
+                const article = this.articles.find(a => a.id === id);
+                if (!article) return;
+
+                // Populate form with article data
+                const form = document.getElementById('addArticleForm');
+                form.title.value = article.title;
+                document.getElementById('icon').value = article.icon; // Set emoji properly
+                form.description.value = article.description;
+                form.url.value = article.url;
+                form.studyType.value = article.studyType;
+                form.featured.checked = article.featured;
+
+                // Set categories
+                document.querySelectorAll('.category-checkbox input').forEach(cb => {
+                    cb.checked = article.categories.includes(cb.value);
+                    cb.parentElement.classList.toggle('selected', cb.checked);
+                });
+
+                // Switch to add tab
+                switchTab('add');
+
+                // Update form to edit mode
+                // (You could add additional logic here to update instead of add)
+            }
+
+            confirmDelete(id) {
+                const article = this.articles.find(a => a.id === id);
+                if (confirm(`Delete "${article.title}"?`)) {
+                    this.deleteArticle(id);
+                }
+            }
+
+            updateDashboard() {
+                // Update stats
+                document.getElementById('totalArticles').textContent = this.articles.length;
+                document.getElementById('featuredCount').textContent = this.articles.filter(a => a.featured).length;
+                
+                // Count unique categories
+                const uniqueCategories = new Set();
+                this.articles.forEach(a => a.categories.forEach(c => uniqueCategories.add(c)));
+                document.getElementById('categoryCount').textContent = uniqueCategories.size;
+
+                // Recent articles (last 7 days)
+                const weekAgo = new Date();
+                weekAgo.setDate(weekAgo.getDate() - 7);
+                const recentArticles = this.articles.filter(a => new Date(a.dateAdded) > weekAgo);
+                document.getElementById('recentCount').textContent = recentArticles.length;
+
+                // Category breakdown
+                const categoryBreakdown = {};
+                this.articles.forEach(article => {
+                    article.categories.forEach(cat => {
+                        if (!categoryBreakdown[cat]) categoryBreakdown[cat] = [];
+                        categoryBreakdown[cat].push(article);
+                    });
+                });
+
+                const breakdownHtml = Object.entries(categoryBreakdown).map(([cat, articles]) => `
+                    <div class="article-item">
+                        <div class="article-info">
+                            <div class="article-title">${cat.replace('-', ' ').toUpperCase()}</div>
+                            <div class="article-meta">${articles.length} articles</div>
+                        </div>
+                    </div>
+                `).join('');
+
+                const breakdownContainer = document.getElementById('categoryBreakdown');
+                if (breakdownContainer) {
+                    breakdownContainer.innerHTML = breakdownHtml;
+                }
+            }
+
+            exportToHTML() {
+                return this.articles.map(article => `
+<a href="${article.url}" class="study-item" data-category="${article.categories.join(' ')}">
+    <div class="study-item-icon">${article.icon}</div>
+    <div class="study-item-content">
+        <h4 class="study-item-title">${article.title}</h4>
+        <p class="study-item-desc">${article.description}</p>
+    </div>
+    <div class="study-item-arrow">→</div>
+</a>`).join('\n');
+            }
+
+            exportToJSON() {
+                return JSON.stringify(this.articles, null, 2);
+            }
+
+            importFromJSON(jsonString) {
+                try {
+                    const imported = JSON.parse(jsonString);
+                    if (Array.isArray(imported)) {
+                        imported.forEach(article => {
+                            if (!article.id) article.id = this.generateId();
+                            if (!article.dateAdded) article.dateAdded = new Date().toISOString();
+                        });
+                        this.articles = [...this.articles, ...imported];
+                        this.saveArticles();
+                        return true;
+                    }
+                } catch (e) {
+                    console.error('Import failed:', e);
+                    return false;
+                }
+            }
+        }
+
+        // Initialize manager
+        const manager = new ThematicArticleManager();
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target?.classList.add('active');
+
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+
+            // Update dashboard when switching to it
+            if (tabName === 'dashboard') {
+                manager.updateDashboard();
+            }
+        }
+
+        // Export functionality
+        function generateExport() {
+            const exportCode = document.getElementById('exportCode');
+            exportCode.textContent = manager.exportToHTML();
+            exportCode.style.display = 'block';
+        }
+
+        // Import functionality
+        function importArticles() {
+            const importData = document.getElementById('importData').value;
+            if (!importData) {
+                alert('Please paste JSON data to import');
+                return;
+            }
+
+            if (manager.importFromJSON(importData)) {
+                alert('Articles imported successfully!');
+                document.getElementById('importData').value = '';
+                manager.updateUI();
+            } else {
+                alert('Import failed. Please check the JSON format.');
+            }
+        }
+
+        // Copy to clipboard helper
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard!');
+            });
+        }
+
+        // Auto-save notification
+        window.addEventListener('beforeunload', () => {
+            manager.saveArticles();
+        });
+    </script>
+</body>
+</html>
