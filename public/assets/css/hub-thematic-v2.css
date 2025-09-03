@@ -1,0 +1,552 @@
+/* ============================================
+   THEMATIC HUB STYLESHEET V2 (OPTIMIZED)
+   Path: /assets/css/hub-thematic-v2.css
+   Dependencies: hub-base.css (must be loaded first)
+   Version: 2.0.0
+   Last Updated: 2024
+   
+   This file contains ONLY thematic-specific styles.
+   All base styles are in hub-base.css
+   ============================================ */
+
+/* ============================================
+   THEMATIC COLOR SCHEME
+   ============================================ */
+:root {
+    /* Override hub colors for thematic theme */
+    --hub-gradient-start: #1a1a2e;
+    --hub-gradient-middle: #16213e;
+    --hub-gradient-end: #0f3460;
+    --hub-accent-primary: #e94560;
+    --hub-accent-secondary: #533483;
+    
+    /* Additional thematic colors */
+    --theme-gold: #d4af37;
+    --theme-purple: #7209b7;
+    --theme-blue: #00b4d8;
+    --theme-theological: #7209b7;
+    --theme-spiritual: #e94560;
+    --theme-covenant: #d4af37;
+    --theme-prophetic: #00b4d8;
+    --theme-wisdom: #10b981;
+    --theme-creation: #f97316;
+}
+
+/* ============================================
+   THEME CATEGORIES (Unique to Thematic Hub)
+   ============================================ */
+.theme-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+    gap: clamp(1rem, 2vw, 2rem);
+    margin: 3rem 0;
+    container-type: inline-size;
+}
+
+.category-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    border: 2px solid var(--border-light, #e5e7eb);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+}
+
+.category-card::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background: linear-gradient(90deg, 
+        var(--hub-accent-primary) 0%, 
+        var(--hub-accent-secondary) 100%);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.category-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, 
+        transparent 0%, 
+        rgba(233, 69, 96, 0.03) 50%, 
+        rgba(83, 52, 131, 0.03) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-color: var(--hub-accent-primary);
+}
+
+.category-card:hover::before {
+    transform: scaleX(1);
+}
+
+.category-card:hover::after {
+    opacity: 1;
+}
+
+.category-icon {
+    font-size: clamp(2.5rem, 4vw, 3rem);
+    margin-bottom: 1rem;
+    display: inline-block;
+    filter: grayscale(0.2);
+    transition: all 0.3s ease;
+}
+
+.category-card:hover .category-icon {
+    filter: grayscale(0);
+    animation: pulse 0.6s ease;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.category-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-dark, #0a0a0a);
+    margin-bottom: 0.5rem;
+}
+
+.category-count {
+    color: var(--hub-accent-primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.category-description {
+    color: var(--text-gray, #666);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.category-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: auto;
+}
+
+.topic-tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: var(--bg-gray, #f5f5f5);
+    color: var(--primary-dark, #0a0a0a);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.category-card:hover .topic-tag {
+    background: linear-gradient(135deg, 
+        rgba(233, 69, 96, 0.1) 0%, 
+        rgba(83, 52, 131, 0.1) 100%);
+}
+
+/* Category-specific colors */
+.category-card[data-category="theological"] .category-icon { color: var(--theme-theological); }
+.category-card[data-category="spiritual"] .category-icon { color: var(--theme-spiritual); }
+.category-card[data-category="covenant"] .category-icon { color: var(--theme-covenant); }
+.category-card[data-category="prophetic"] .category-icon { color: var(--theme-prophetic); }
+.category-card[data-category="wisdom"] .category-icon { color: var(--theme-wisdom); }
+.category-card[data-category="creation"] .category-icon { color: var(--theme-creation); }
+
+/* ============================================
+   ENHANCED STUDY CARDS (Thematic-specific)
+   ============================================ */
+.study-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.study-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, 
+        transparent 0%, 
+        rgba(233, 69, 96, 0.02) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.study-card:hover::after {
+    opacity: 1;
+}
+
+.study-card-icon {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 2rem;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.study-card:hover .study-card-icon {
+    transform: scale(1.1) rotate(5deg);
+    opacity: 1;
+}
+
+.study-card-category {
+    color: var(--hub-accent-primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   STUDY ITEM LIST (Thematic-specific)
+   ============================================ */
+.study-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border-light, #e5e7eb);
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.study-item::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    background: linear-gradient(180deg, 
+        var(--hub-accent-primary) 0%, 
+        var(--hub-accent-secondary) 100%);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.study-item:hover {
+    transform: translateX(10px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    border-color: var(--hub-accent-primary);
+}
+
+.study-item:hover::before {
+    transform: scaleY(1);
+}
+
+.study-item-icon {
+    font-size: clamp(2rem, 3vw, 2.5rem);
+    flex-shrink: 0;
+}
+
+.study-item-content {
+    flex: 1;
+}
+
+.study-item-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-dark, #0a0a0a);
+    margin-bottom: 0.25rem;
+}
+
+.study-item-desc {
+    color: var(--text-gray, #666);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.study-item-arrow {
+    font-size: 1.5rem;
+    color: var(--hub-accent-primary);
+    font-weight: 300;
+    transition: transform 0.3s ease;
+}
+
+.study-item:hover .study-item-arrow {
+    transform: translateX(5px);
+}
+
+/* ============================================
+   FILTERS (Thematic-specific styling)
+   ============================================ */
+.studies-filter {
+    display: flex;
+    gap: 1rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.filter-button {
+    position: relative;
+    overflow: hidden;
+}
+
+.filter-button::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, 
+        var(--hub-accent-primary) 0%, 
+        var(--hub-accent-secondary) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+.filter-button:hover::after {
+    opacity: 0.1;
+}
+
+.filter-button.active {
+    background: linear-gradient(135deg, 
+        var(--hub-accent-primary) 0%, 
+        var(--hub-accent-secondary) 100%);
+    color: white;
+    border-color: transparent;
+}
+
+/* ============================================
+   ANIMATIONS & INTERACTIONS
+   ============================================ */
+.animate-in {
+    animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.4s ease-out both;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Stagger animations for lists */
+.studies-list .study-item:nth-child(1) { animation-delay: 0.05s; }
+.studies-list .study-item:nth-child(2) { animation-delay: 0.1s; }
+.studies-list .study-item:nth-child(3) { animation-delay: 0.15s; }
+.studies-list .study-item:nth-child(4) { animation-delay: 0.2s; }
+.studies-list .study-item:nth-child(5) { animation-delay: 0.25s; }
+
+/* ============================================
+   HERO SECTION (Thematic-specific)
+   ============================================ */
+.thematic-hub .hero {
+    background: linear-gradient(135deg, 
+        var(--hub-gradient-start) 0%, 
+        var(--hub-gradient-middle) 50%, 
+        var(--hub-gradient-end) 100%);
+}
+
+.thematic-hub .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.4;
+    animation: float 20s linear infinite;
+}
+
+@keyframes float {
+    from { transform: translateX(0) translateY(0); }
+    to { transform: translateX(-60px) translateY(-60px); }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+    .theme-categories {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .category-card {
+        min-height: auto;
+        padding: 1.5rem;
+    }
+    
+    .study-item {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: 1.25rem;
+    }
+    
+    .study-item:hover {
+        transform: translateY(-5px) translateX(0);
+    }
+    
+    .study-item-icon {
+        margin-bottom: 0.5rem;
+    }
+    
+    .study-item-arrow {
+        display: none;
+    }
+    
+    .studies-filter {
+        gap: 0.5rem;
+    }
+    
+    .filter-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Tablet adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .theme-categories {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY & PREFERENCES
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .category-card,
+    .study-card,
+    .study-item {
+        border-width: 2px;
+        border-color: currentColor;
+    }
+    
+    .filter-button.active {
+        outline: 2px solid currentColor;
+        outline-offset: 2px;
+    }
+}
+
+/* Dark mode support (if implemented) */
+@media (prefers-color-scheme: dark) {
+    /* Add dark mode overrides here if needed */
+}
+
+/* ============================================
+   CONTAINER QUERIES
+   ============================================ */
+@container (max-width: 400px) {
+    .category-icon {
+        font-size: 2rem;
+    }
+    
+    .category-card {
+        padding: 1.5rem;
+    }
+    
+    .category-title {
+        font-size: 1.25rem;
+    }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+    .category-card::before,
+    .category-card::after,
+    .study-item::before,
+    .study-card::after {
+        display: none;
+    }
+    
+    .theme-categories {
+        display: block;
+    }
+    
+    .category-card,
+    .study-card,
+    .study-item {
+        page-break-inside: avoid;
+        border: 1px solid #000;
+        margin-bottom: 1rem;
+        box-shadow: none;
+    }
+    
+    .studies-filter,
+    .study-item-arrow {
+        display: none;
+    }
+}
+
+/* ============================================
+   UTILITY CLASSES (Thematic-specific)
+   ============================================ */
+.thematic-gradient-text {
+    background: linear-gradient(135deg, 
+        var(--hub-accent-primary) 0%, 
+        var(--hub-accent-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.thematic-shadow {
+    box-shadow: 0 10px 30px rgba(233, 69, 96, 0.1);
+}
+
+.thematic-border {
+    border: 2px solid transparent;
+    background: linear-gradient(white, white) padding-box,
+                linear-gradient(135deg, 
+                    var(--hub-accent-primary) 0%, 
+                    var(--hub-accent-secondary) 100%) border-box;
+}
+.reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--hub-accent-primary), var(--hub-accent-secondary));
+    width: 0%;
+    z-index: 1001;
+    transition: width 0.2s;
+}
