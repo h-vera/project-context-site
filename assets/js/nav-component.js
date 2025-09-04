@@ -67,53 +67,53 @@ class NavigationComponent {
         `;
     }
 
-    /**
-     * Determine if a nav item should be active
-     */
-    getActiveClass(section) {
-        const currentPage = this.options.currentPage;
-        const hubType = this.options.hubType;
-        
-        // Home page
-        if (section === 'home' && (currentPage === 'home' || currentPage === '')) {
-            return 'class="active"';
-        }
-        
-        // Studies section (main dropdown)
-        if (section === 'studies' && (
-            currentPage.includes('studies') || 
-            currentPage.includes('characters') || 
-            currentPage.includes('women') || 
-            currentPage.includes('tanakh') || 
-            currentPage.includes('thematic')
-        )) {
-            return 'class="active"';
-        }
-        
-        // Specific hub types
-        if (section === 'characters' && (hubType === 'characters' || currentPage.includes('characters'))) {
-            return 'class="active"';
-        }
-        if (section === 'women' && (hubType === 'women' || currentPage.includes('women'))) {
-            return 'class="active"';
-        }
-        if (section === 'tanakh' && (hubType === 'tanakh' || currentPage.includes('tanakh'))) {
-            return 'class="active"';
-        }
-        if (section === 'thematic' && (hubType === 'thematic' || currentPage.includes('thematic'))) {
-            return 'class="active"';
-        }
-        
-        // Other sections
-        if (section === 'resources' && currentPage.includes('resources')) {
-            return 'class="active"';
-        }
-        if (section === 'about' && currentPage.includes('about')) {
-            return 'class="active"';
-        }
-        
-        return '';
+   /**
+ * Determine if a nav item should be active
+ */
+getActiveClass(section) {
+    const currentPage = this.options.currentPage;
+    const hubType = this.options.hubType;
+    
+    // Home page
+    if (section === 'home' && (currentPage === 'home' || currentPage === '')) {
+        return 'active';  // ← CHANGE: removed 'class="..."'
     }
+    
+    // Studies section (main dropdown)
+    if (section === 'studies' && (
+        currentPage.includes('studies') || 
+        currentPage.includes('characters') || 
+        currentPage.includes('women') || 
+        currentPage.includes('tanakh') || 
+        currentPage.includes('thematic')
+    )) {
+        return 'active';  // ← CHANGE: removed 'class="..."'
+    }
+    
+    // Specific hub types
+    if (section === 'characters' && (hubType === 'characters' || currentPage.includes('characters'))) {
+        return 'active';  // ← CHANGE: removed 'class="..."'
+    }
+    if (section === 'women' && (hubType === 'women' || currentPage.includes('women'))) {
+        return 'active';  // ← CHANGE: removed 'class="..."'
+    }
+    if (section === 'tanakh' && (hubType === 'tanakh' || currentPage.includes('tanakh'))) {
+        return 'active';  // ← CHANGE: removed 'class="..."'
+    }
+    if (section === 'thematic' && (hubType === 'thematic' || currentPage.includes('thematic'))) {
+        return 'active';  // ← CHANGE: removed 'class="..."'
+    }
+    
+    // Other sections
+    if (section === 'resources' && currentPage.includes('resources')) {
+        return 'active';  // ← CHANGE: removed 'class="..."'
+    }
+    if (section === 'about' && currentPage.includes('about')) {
+        return 'active';  // ← CHANGE: removed 'class="..."'
+    }
+    
+    return '';
+}
 
     /**
      * Initialize the navigation
