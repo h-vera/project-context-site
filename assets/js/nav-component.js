@@ -319,3 +319,22 @@ window.initializeNavigation = function(options = {}) {
 
 // Export for ES6 modules
 export default NavigationComponent;
+// Add this after navigation initialization
+document.addEventListener('DOMContentLoaded', function() {
+  const dropdowns = document.querySelectorAll('.dropdown');
+  
+  dropdowns.forEach(dropdown => {
+    let timeout;
+    
+    dropdown.addEventListener('mouseenter', function() {
+      clearTimeout(timeout);
+      this.classList.add('active');
+    });
+    
+    dropdown.addEventListener('mouseleave', function() {
+      timeout = setTimeout(() => {
+        this.classList.remove('active');
+      }, 100); // Small delay before closing
+    });
+  });
+});
