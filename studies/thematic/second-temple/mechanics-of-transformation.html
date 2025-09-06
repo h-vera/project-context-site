@@ -338,43 +338,67 @@
       margin-top: 0;
     }
 
-   .timeline {
-      position: relative;
-      padding-left: 2rem;
-      margin: 2rem 0;
-    }
+   /* Enhanced timeline with hover effects */
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+  margin: 2rem 0;
+}
 
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 3px;
-      background: linear-gradient(to bottom, var(--primary), var(--secondary));
-    }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(to bottom, var(--primary), var(--secondary));
+}
 
-    .timeline-item {
-      position: relative;
-      margin-bottom: 1.5rem;
-      padding-left: 1rem;
-    }
+.timeline-item {
+  position: relative;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1rem 1rem 1.5rem;
+  /* Add left border for hover effect */
+  border-left: 3px solid transparent;
+  /* Add subtle background */
+  background: rgba(248, 250, 252, 0.5);
+  border-radius: 0 8px 8px 0;
+  /* Fix visibility issue */
+  opacity: 1;
+  transform: translateX(0);
+  /* Smooth transition for hover */
+  transition: all 0.3s ease;
+}
 
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: -2.05rem;
-      top: 0.5rem;
-      width: 10px;
-      height: 10px;
-      background: var(--accent);
-      border-radius: 50%;
-    }
+/* The timeline dot */
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -2.05rem;
+  top: 1.3rem;
+  width: 10px;
+  height: 10px;
+  background: var(--accent);
+  border: 3px solid white;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+  transition: all 0.3s ease;
+}
 
+/* Hover effect */
 .timeline-item:hover {
   background: white;
-  box-shadow: 0 2px 4px var(--shadow);
+  box-shadow: 0 4px 12px var(--shadow);
   border-left-color: var(--accent);
+  transform: translateX(5px);
+}
+
+/* Make the dot glow on hover */
+.timeline-item:hover::before {
+  background: var(--secondary);
+  transform: scale(1.3);
+  box-shadow: 0 0 0 5px rgba(225, 29, 72, 0.2);
 }
 
 .timeline-item strong {
@@ -383,6 +407,29 @@
   margin-bottom: 0.5rem;
   font-size: 1.1rem;
 }
+
+/* Optional: Add animation on page load */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.timeline-item {
+  animation: slideInLeft 0.6s ease-out backwards;
+}
+
+/* Stagger the animation */
+.timeline-item:nth-child(1) { animation-delay: 0.1s; }
+.timeline-item:nth-child(2) { animation-delay: 0.2s; }
+.timeline-item:nth-child(3) { animation-delay: 0.3s; }
+.timeline-item:nth-child(4) { animation-delay: 0.4s; }
+.timeline-item:nth-child(5) { animation-delay: 0.5s; }
 
     .comparison-table {
       width: 100%;
