@@ -6,6 +6,25 @@
   <title>Second Temple Literature & NT: Mechanics of Transformation</title>
   <meta name="description" content="Understanding how New Testament authors transform Second Temple Jewish traditions through specific textual and rhetorical techniques.">
 
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="Mechanics of Transformation - Second Temple Literature">
+  <meta property="og:description" content="How New Testament authors transform Second Temple Jewish traditions through specific techniques.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://projectcontext.org/studies/thematic/second-temple/mechanics-of-transformation.html">
+
+  <!-- Performance: DNS Prefetch & Preconnect -->
+  <link rel="dns-prefetch" href="https://projectcontext.org">
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+
+  <!-- Preload Critical Resources -->
+  <link rel="preload" href="/assets/css/global-v2.css" as="style">
+
+  <!-- Global Stylesheet (if using centralized styles) -->
+  <link rel="stylesheet" href="/assets/css/global-v2.css">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://projectcontext.org/studies/thematic/second-temple/mechanics-of-transformation.html">
+
   <style>
     :root {
       --primary: #7209b7;
@@ -31,6 +50,34 @@
       line-height: 1.7;
     }
 
+    /* Skip Link for Accessibility */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--primary);
+      color: white;
+      padding: 8px;
+      text-decoration: none;
+      z-index: 100;
+    }
+
+    .skip-link:focus {
+      top: 0;
+    }
+
+    /* Reading Progress Bar */
+    .reading-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      width: 0%;
+      z-index: 1000;
+      transition: width 0.3s ease;
+    }
+
     .header {
       background: linear-gradient(135deg, var(--primary), var(--secondary));
       color: white;
@@ -45,44 +92,36 @@
       font-weight: 800;
     }
 
-    .home-button {
-      position: absolute;
-      left: 1rem;
-      top: 1rem;
-      z-index: 10;
+    /* Breadcrumbs */
+    .breadcrumbs {
+      padding: 1rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      color: var(--mid);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--mid);
       text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      background: rgba(255,255,255,0.15);
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      transition: background 0.3s;
+      transition: color 0.3s;
     }
 
-    .home-button:hover {
-      background: rgba(255,255,255,0.25);
+    .breadcrumbs a:hover {
+      color: var(--primary);
     }
 
-    .home-button svg {
-      filter: brightness(0) invert(1);
-    }
-
-    .home-button span {
-      color: white;
-      font-weight: 600;
-    }
-
+    /* Modified Tab Navigation for Subpages */
     .nav-tabs {
       background: white;
       box-shadow: 0 2px 4px var(--shadow);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      position: relative;
+      z-index: 10;
       display: flex;
       justify-content: center;
       padding: 1rem;
       gap: 1rem;
+      flex-wrap: wrap;
     }
 
     .nav-tab {
@@ -107,6 +146,65 @@
       background: var(--primary);
       color: white;
       border-color: var(--primary);
+    }
+
+    /* Quick Navigation Sidebar */
+    .quick-nav-sidebar {
+      position: fixed;
+      right: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .quick-nav-item {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--border);
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .quick-nav-item:hover {
+      background: var(--primary);
+      transform: scale(1.2);
+    }
+
+    .quick-nav-item.active {
+      background: var(--primary);
+    }
+
+    .quick-nav-item::after {
+      content: attr(data-label);
+      position: absolute;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--dark);
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .quick-nav-item:hover::after {
+      opacity: 1;
+    }
+
+    /* Hide quick nav on mobile */
+    @media (max-width: 768px) {
+      .quick-nav-sidebar {
+        display: none;
+      }
     }
 
     .content {
@@ -324,23 +422,127 @@
       font-weight: 600;
       margin-right: 0.5rem;
     }
+
+    /* Back to Top Button */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--primary);
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 1.5rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      z-index: 100;
+      box-shadow: 0 4px 6px var(--shadow);
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .back-to-top:hover {
+      background: var(--secondary);
+      transform: translateY(-3px);
+    }
+
+    /* Mobile Menu Overlay */
+    .mobile-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 998;
+      display: none;
+    }
+
+    .mobile-menu-overlay.active {
+      display: block;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .nav-tabs {
+        padding: 0.5rem;
+        gap: 0.5rem;
+      }
+
+      .nav-tab {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+
+      .header h1 {
+        font-size: 1.8rem;
+      }
+
+      .content {
+        padding: 1rem;
+      }
+
+      .bibliography-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .expand-indicator {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .bibliography-section[open] .expand-indicator {
+        transform: translateY(-50%) rotate(180deg);
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- Accessibility Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress"></div>
+
+  <!-- Navigation will be inserted here by JavaScript (centralized) -->
+
+  <!-- Quick Navigation Sidebar -->
+  <div class="quick-nav-sidebar" aria-label="Section navigation">
+    <div class="quick-nav-item" data-label="What Is" data-target="#what-is"></div>
+    <div class="quick-nav-item" data-label="Corpus" data-target="#corpus"></div>
+    <div class="quick-nav-item" data-label="Geography" data-target="#geography"></div>
+    <div class="quick-nav-item" data-label="Concepts" data-target="#concepts"></div>
+    <div class="quick-nav-item" data-label="Assumptions" data-target="#assumptions"></div>
+    <div class="quick-nav-item" data-label="Recognition" data-target="#recognition"></div>
+    <div class="quick-nav-item" data-label="Pattern" data-target="#pattern"></div>
+    <div class="quick-nav-item" data-label="Strategy" data-target="#strategy"></div>
+  </div>
+
   <header class="header">
-    <a href="/" class="home-button">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="40" height="40">
-        <path d="M 25 15 L 10 15 L 10 85 L 25 85" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/>
-        <path d="M 75 15 L 90 15 L 90 85 L 75 85" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/>
-        <ellipse cx="50" cy="50" rx="25" ry="15" stroke="currentColor" stroke-width="3" fill="none"/>
-        <circle cx="50" cy="50" r="8" fill="currentColor"/>
-        <circle cx="50" cy="50" r="3" fill="white"/>
-      </svg>
-      <span>Project Context</span>
-    </a>
     <h1>Mechanics of Transformation</h1>
     <p style="font-size: 1.2rem; opacity: 0.95;">How New Testament Authors Transform Second Temple Jewish Traditions</p>
   </header>
+
+  <!-- Breadcrumbs -->
+  <div class="breadcrumbs">
+    <a href="/">Home</a> ›
+    <a href="/studies/">Studies</a> ›
+    <a href="/studies/thematic/">Thematic Studies</a> ›
+    <a href="/studies/thematic/second-temple/">Second Temple</a> ›
+    Mechanics of Transformation
+  </div>
 
   <nav class="nav-tabs">
     <a href="mechanics-of-transformation.html" class="nav-tab active">Overview</a>
@@ -349,18 +551,18 @@
     <a href="second-temple-mechanics-others.html" class="nav-tab">Other NT Writers</a>
   </nav>
 
-  <div class="content">
+  <main id="main-content" class="content">
 
     <!-- PAGE 1: OVERVIEW -->
     <div id="overview" class="page">
       <div class="card">
-        <h2>What Is Second Temple Literature?</h2>
+        <h2 id="what-is">What Is Second Temple Literature?</h2>
         <p style="font-size: 1.1rem; color: var(--mid); margin-bottom: 2rem;">Not a catalog of texts, but the interpretive furniture already in the room when Jesus and the apostles arrived.</p>
 
         <h3>The Historical Frame: 516 BCE – 70 CE</h3>
         <p>From temple reconstruction to temple destruction, Jews developed rich interpretive traditions under Persian, Greek, and Roman rule. These texts weren't Scripture, but they shaped how Scripture was read. They created <strong>assumed knowledge</strong> that NT authors could exploit.</p>
 
-        <h3>The Corpus: Which Texts Matter and Why</h3>
+        <h3 id="corpus">The Corpus: Which Texts Matter and Why</h3>
         <div class="mechanics-box">
           <h4>Not About Canon, But About Influence</h4>
           <p>These texts weren't Scripture for most Jews, but they were the <strong>interpretive lens</strong> through which Scripture was read. Think of them as the cultural commentary everyone knew—like how modern readers might know Narnia isn't Bible but still shapes how many imagine spiritual warfare.</p>
@@ -409,7 +611,7 @@
           </div>
         </div>
 
-        <h3>The Geography of Ideas: Where These Traditions Lived</h3>
+        <h3 id="geography">The Geography of Ideas: Where These Traditions Lived</h3>
         <div class="grid grid-3">
           <div class="panel">
             <h4>📜 Synagogue Reading</h4>
@@ -443,7 +645,7 @@
           </div>
         </div>
 
-        <h3>The Furniture in the Room: Conceptual Developments</h3>
+        <h3 id="concepts">The Furniture in the Room: Conceptual Developments</h3>
         <div class="grid grid-3">
           <div class="panel">
             <h4>Cosmic Architecture</h4>
@@ -477,7 +679,7 @@
           </div>
         </div>
 
-        <h3>The Interpretive Assumptions: What Everyone "Knew"</h3>
+        <h3 id="assumptions">The Interpretive Assumptions: What Everyone "Knew"</h3>
         <div class="key-insight">
           <strong>What NT Authors Could Assume Readers Knew:</strong>
           <ul>
@@ -576,7 +778,7 @@
           </table>
         </div>
 
-        <h3>How to Spot Second Temple Influence in the NT</h3>
+        <h3 id="recognition">How to Spot Second Temple Influence in the NT</h3>
         <div class="key-insight">
           <strong>Recognition Markers:</strong> When reading the NT, watch for these signs of Second Temple tradition at work:
         </div>
@@ -624,7 +826,7 @@
           </ul>
         </div>
 
-        <h3>The Transformation Pattern</h3>
+        <h3 id="pattern">The Transformation Pattern</h3>
         <div class="key-insight">
           <strong>The Consistent Move Across All NT Authors:</strong>
           <p>Every Second Temple tradition undergoes the same basic transformation:</p>
@@ -650,7 +852,7 @@
           </ul>
         </div>
 
-        <h3>Reading Strategy for the Following Pages</h3>
+        <h3 id="strategy">Reading Strategy for the Following Pages</h3>
         <div class="mechanics-box">
           <h4>What to Watch For:</h4>
           <p>As you read the mechanics on the following pages, notice:</p>
@@ -664,37 +866,246 @@
           <p>Each author has signature moves, but all are playing the same game: using shared tradition to proclaim something new.</p>
         </div>
 
-        <details style="background: white; border: 1px solid var(--border); border-radius: 12px; margin: 2rem 0; overflow: hidden;">
-          <summary style="background: linear-gradient(135deg, #f8f9ff, #fef3f2); padding: 1.5rem; cursor: pointer; font-weight: 600; color: var(--dark);">
-            📚 Bibliography for Second Temple Literature Overview
-          </summary>
-          <div style="padding: 2rem;">
-            <h4 style="color: var(--primary); margin-bottom: 1rem;">Primary Sources & Translations</h4>
-            <ul style="margin-bottom: 2rem;">
-              <li><strong>Charlesworth, James H., ed.</strong> <em>The Old Testament Pseudepigrapha</em>. 2 vols. New York: Doubleday, 1983–1985.</li>
-              <li><strong>García Martínez, Florentino, and Eibert J.C. Tigchelaar.</strong> <em>The Dead Sea Scrolls Study Edition</em>. 2 vols. Leiden: Brill, 1997-1998.</li>
-              <li><strong>Nickelsburg, George W.E., and James C. VanderKam.</strong> <em>1 Enoch: The Hermeneia Translation</em>. Minneapolis: Fortress, 2012.</li>
-              <li><strong>Vermes, Geza.</strong> <em>The Complete Dead Sea Scrolls in English</em>. London: Penguin, 2004.</li>
-            </ul>
-
-            <h4 style="color: var(--primary); margin-bottom: 1rem;">Second Temple Judaism Studies</h4>
-            <ul style="margin-bottom: 2rem;">
-              <li><strong>Collins, John J.</strong> <em>The Apocalyptic Imagination: An Introduction to Jewish Apocalyptic Literature</em>. 3rd ed. Grand Rapids: Eerdmans, 2016.</li>
-              <li><strong>Nickelsburg, George W.E.</strong> <em>Jewish Literature Between the Bible and the Mishnah</em>. 2nd ed. Minneapolis: Fortress, 2005.</li>
-              <li><strong>VanderKam, James C.</strong> <em>An Introduction to Early Judaism</em>. Grand Rapids: Eerdmans, 2001.</li>
-              <li><strong>Stone, Michael E.</strong> <em>Ancient Judaism: New Visions and Views</em>. Grand Rapids: Eerdmans, 2011.</li>
-              <li><strong>Boccaccini, Gabriele.</strong> <em>Middle Judaism: Jewish Thought 300 B.C.E. to 200 C.E.</em> Minneapolis: Fortress, 1991.</li>
-            </ul>
-
-            <h4 style="color: var(--primary); margin-bottom: 1rem;">Reference Works</h4>
-            <ul>
-              <li><strong>Collins, John J., and Daniel C. Harlow, eds.</strong> <em>The Eerdmans Dictionary of Early Judaism</em>. Grand Rapids: Eerdmans, 2010.</li>
-              <li><strong>Evans, Craig A., and Stanley E. Porter, eds.</strong> <em>Dictionary of New Testament Background</em>. Downers Grove: IVP, 2000.</li>
-            </ul>
-          </div>
-        </details>
+        <details class="bibliography-section">
+  <summary>
+    <div class="bibliography-header">
+      <div class="bibliography-inner">
+        <span class="bibliography-icon">📚</span>
+        <div class="bibliography-text">
+          <h3 class="bibliography-title">Bibliography & Sources</h3>
+          <p class="bibliography-subtitle">Academic references for Second Temple Literature studies</p>
+        </div>
+      </div>
+      <div class="expand-indicator">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
       </div>
     </div>
+  </summary>
+  <div class="bibliography-content">
+    <div class="source-category">
+      <h4>Primary Sources & Translations</h4>
+      <div class="source-entry">
+        <div class="source-citation">
+          <strong>Charlesworth, James H., ed.</strong> <em>The Old Testament Pseudepigrapha</em>. 2 vols. New York: Doubleday, 1983–1985.
+        </div>
+        <div class="source-usage">
+          <span class="usage-tag">Primary Text</span>
+          <span class="usage-note">Essential collection of Second Temple texts</span>
+        </div>
+      </div>
+      <div class="source-entry">
+        <div class="source-citation">
+          <strong>García Martínez, Florentino, and Eibert J.C. Tigchelaar.</strong> <em>The Dead Sea Scrolls Study Edition</em>. 2 vols. Leiden: Brill, 1997-1998.
+        </div>
+        <div class="source-usage">
+          <span class="usage-tag">Qumran Texts</span>
+          <span class="usage-note">Complete DSS corpus with translations</span>
+        </div>
+      </div>
+      <div class="source-entry">
+        <div class="source-citation">
+          <strong>Nickelsburg, George W.E., and James C. VanderKam.</strong> <em>1 Enoch: The Hermeneia Translation</em>. Minneapolis: Fortress, 2012.
+        </div>
+        <div class="source-usage">
+          <span class="usage-tag">1 Enoch</span>
+          <span class="usage-note">Critical edition of most influential pseudepigraph</span>
+        </div>
+      </div>
+      <div class="source-entry">
+        <div class="source-citation">
+          <strong>Vermes, Geza.</strong> <em>The Complete Dead Sea Scrolls in English</em>. London: Penguin, 2004.
+        </div>
+        <div class="source-usage">
+          <span class="usage-tag">Accessible Translation</span>
+          <span class="usage-note">Reader-friendly DSS edition</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-category">
+      <h4>Second Temple Judaism Studies</h4>
+      <div class="source-entry">
+        <div class="source-citation">
+          <strong>Collins, John J.</strong> <em>The Apocalyptic Imagination: An Introduction to Jewish Apocalyptic Literature</em>. 3rd ed. Grand Rapids: Eerdmans, 2016.
+        </div>
+        <div class="source-usage">
+          <span class="usage-tag">Apocalyptic</span>
+          <span class="usage-note">Comprehensive survey of apocalyptic traditions</span>
+        </div>
+      </div>
+      <div class="source-entry">
+        <div class="source-citation">
+          <strong>Nickelsburg, George W.E.</strong> <em>Jewish Literature Between the Bible and the Mishnah</em>. 2nd ed. Minneapolis: Fortress, 2005.
+        </div>
+        <div class="source-usage">
+          <span class="usage-tag">Literary History</span>
+          <span class="usage-note">Historical development of Jewish texts</span>
+        </div>
+      </div>
+      <div class="source-entry">
+        <div class="source-citation">
+          <strong>VanderKam, James C.</strong> <em>An Introduction to Early Judaism</em>. Grand Rapids: Eerdmans, 2001.
+        </div>
+        <div class="source-usage">
+          <span class="usage-tag">Introduction</span>
+          <span class="usage-note">Accessible overview of period</span>
+        </div>
+      </div>
+      <div class="source-entry">
+        <div class="source-citation">
+          <strong>Stone, Michael E.</strong> <em>Ancient Judaism: New Visions and Views</em>. Grand Rapids: Eerdmans, 2011.
+        </div>
+        <div class="source-usage">
+          <span class="usage-tag">New Perspectives</span>
+          <span class="usage-note">Recent scholarly developments</span>
+        </div>
+      </div>
+      <div class="source-entry">
+        <div class="source-citation">
+          <strong>Boccaccini, Gabriele.</strong> <em>Middle Judaism: Jewish Thought 300 B.C.E. to 200 C.E.</em> Minneapolis: Fortress, 1991.
+        </div>
+        <div class="source-usage">
+          <span class="usage-tag">Middle Judaism</span>
+          <span class="usage-note">Framework for understanding period</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-category">
+      <h4>Reference Works</h4>
+      <div class="source-entry">
+        <div class="source-citation">
+          <strong>Collins, John J., and Daniel C. Harlow, eds.</strong> <em>The Eerdmans Dictionary of Early Judaism</em>. Grand Rapids: Eerdmans, 2010.
+        </div>
+        <div class="source-usage">
+          <span class="usage-tag">Dictionary</span>
+          <span class="usage-note">Comprehensive reference for all topics</span>
+        </div>
+      </div>
+      <div class="source-entry">
+        <div class="source-citation">
+          <strong>Evans, Craig A., and Stanley E. Porter, eds.</strong> <em>Dictionary of New Testament Background</em>. Downers Grove: IVP, 2000.
+        </div>
+        <div class="source-usage">
+          <span class="usage-tag">NT Background</span>
+          <span class="usage-note">Jewish context for NT interpretation</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="citation-note">
+      <p><strong>Note on Sources:</strong></p>
+      <p>This bibliography focuses on essential works for understanding Second Temple literature and its influence on New Testament interpretation. These sources provide both primary texts and scholarly analysis necessary for recognizing the "mechanics of transformation" discussed in this study.</p>
+      
+      <p><strong>Citation Format:</strong> Chicago Manual of Style, 17th edition</p>
+    </div>
   </div>
+</details>
+      </div>
+    </div>
+  </main>
+
+  <!-- Back to Top Button -->
+  <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
+
+  <!-- Mobile Menu Overlay (for nav component) -->
+  <div class="mobile-menu-overlay"></div>
+
+  <!-- ======================================
+       JAVASCRIPT - Navigation & Interactions
+       ====================================== -->
+  
+  <!-- Navigation Component -->
+  <script type="module">
+    import NavigationComponent from '/assets/js/nav-component.js';
+    
+    // Initialize centralized navigation
+    const navigation = new NavigationComponent({
+      currentPage: 'thematic',
+      hubType: 'second-temple'
+    });
+  </script>
+
+  <!-- Page Functionality -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Reading Progress Bar
+      const progressBar = document.querySelector('.reading-progress');
+      
+      function updateProgress() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const progress = (scrollTop / scrollHeight) * 100;
+        progressBar.style.width = progress + '%';
+      }
+      
+      window.addEventListener('scroll', updateProgress);
+      
+      // Back to Top Button
+      const backToTop = document.querySelector('.back-to-top');
+      
+      window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      
+      backToTop.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+      
+      // Quick Navigation
+      const quickNavItems = document.querySelectorAll('.quick-nav-item');
+      const sections = document.querySelectorAll('[id]');
+      
+      quickNavItems.forEach(item => {
+        item.addEventListener('click', function() {
+          const target = document.querySelector(this.dataset.target);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      });
+      
+      // Update active quick nav on scroll
+      function updateActiveNav() {
+        const scrollPos = window.pageYOffset + 100;
+        
+        sections.forEach(section => {
+          const top = section.offsetTop;
+          const height = section.offsetHeight;
+          const id = section.getAttribute('id');
+          
+          if (scrollPos >= top && scrollPos < top + height) {
+            quickNavItems.forEach(item => {
+              item.classList.remove('active');
+              if (item.dataset.target === '#' + id) {
+                item.classList.add('active');
+              }
+            });
+          }
+        });
+      }
+      
+      window.addEventListener('scroll', updateActiveNav);
+      updateActiveNav();
+      
+      // Mobile menu handling (will be managed by nav component)
+      const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
+      
+      mobileMenuOverlay.addEventListener('click', function() {
+        this.classList.remove('active');
+        // Close mobile menu (handled by nav component)
+      });
+    });
+  </script>
 </body>
 </html>
