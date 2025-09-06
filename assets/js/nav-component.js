@@ -334,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function() {
     dropdown.addEventListener('mouseleave', function() {
       timeout = setTimeout(() => {
         this.classList.remove('active');
-      }, 100); // Small delay before closing
+      }, 300); // Small delay before closing
     });
   });
 });
