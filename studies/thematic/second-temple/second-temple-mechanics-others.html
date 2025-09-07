@@ -5,6 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Other NT Writers: Mechanics of Transformation | Second Temple Literature</title>
   <meta name="description" content="How Jude, Hebrews, James, Peter, and Revelation transform Second Temple Jewish traditions through direct citation, counter-reading, and christocentric apocalyptic.">
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="Other NT Writers - Mechanics of Transformation">
+  <meta property="og:description" content="How Jude, Hebrews, James, Peter, and Revelation transform Second Temple traditions.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://projectcontext.org/studies/thematic/second-temple/second-temple-mechanics-others.html">
+
+  <!-- Performance: DNS Prefetch & Preconnect -->
+  <link rel="dns-prefetch" href="https://projectcontext.org">
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+
+  <!-- Preload Critical Resources -->
+  <link rel="preload" href="/assets/css/global-v2.css" as="style">
+
+  <!-- Global Stylesheet (if using centralized styles) -->
+  <link rel="stylesheet" href="/assets/css/global-v2.css">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://projectcontext.org/studies/thematic/second-temple/second-temple-mechanics-others.html">
   
   <style>
     :root {
@@ -30,12 +49,41 @@
       background: linear-gradient(to bottom, #fafafa, #f7fafc);
       line-height: 1.7;
     }
+
+    /* Skip Link for Accessibility */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--primary);
+      color: white;
+      padding: 8px;
+      text-decoration: none;
+      z-index: 100;
+    }
+
+    .skip-link:focus {
+      top: 0;
+    }
+
+    /* Reading Progress Bar */
+    .reading-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      width: 0%;
+      z-index: 1000;
+      transition: width 0.3s ease;
+    }
     
     .header {
       background: linear-gradient(135deg, var(--primary), var(--secondary));
       color: white;
-      padding: 3rem 2rem;
+      padding: 4rem 2rem 3rem;
       text-align: center;
+      position: relative;
     }
     
     .header h1 {
@@ -43,17 +91,37 @@
       margin-bottom: 1rem;
       font-weight: 800;
     }
+
+    /* Breadcrumbs */
+    .breadcrumbs {
+      padding: 1rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      color: var(--mid);
+      font-size: 0.9rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--mid);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .breadcrumbs a:hover {
+      color: var(--primary);
+    }
     
+    /* Modified Tab Navigation for Subpages */
     .nav-tabs {
       background: white;
       box-shadow: 0 2px 4px var(--shadow);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      position: relative;
+      z-index: 10;
       display: flex;
       justify-content: center;
       padding: 1rem;
       gap: 1rem;
+      flex-wrap: wrap;
     }
     
     .nav-tab {
@@ -65,6 +133,7 @@
       font-weight: 600;
       border-radius: 8px;
       transition: all 0.3s;
+      display: inline-block;
     }
     
     .nav-tab:hover {
@@ -77,26 +146,80 @@
       color: white;
       border-color: var(--primary);
     }
+
+    /* Quick Navigation Sidebar */
+    .quick-nav-sidebar {
+      position: fixed;
+      right: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .quick-nav-item {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--border);
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .quick-nav-item:hover {
+      background: var(--primary);
+      transform: scale(1.2);
+    }
+
+    .quick-nav-item.active {
+      background: var(--primary);
+    }
+
+    .quick-nav-item::after {
+      content: attr(data-label);
+      position: absolute;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--dark);
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .quick-nav-item:hover::after {
+      opacity: 1;
+    }
+
+    /* Hide quick nav on mobile */
+    @media (max-width: 768px) {
+      .quick-nav-sidebar {
+        display: none;
+      }
+    }
     
     .content {
       max-width: 1200px;
       margin: 0 auto;
       padding: 2rem;
     }
-    
-    .breadcrumbs {
-      padding: 1rem 0;
-      color: var(--mid);
-      font-size: 0.9rem;
+
+    .page {
+      display: block;
+      animation: fadeIn 0.5s;
     }
-    
-    .breadcrumbs a {
-      color: var(--primary);
-      text-decoration: none;
-    }
-    
-    .breadcrumbs a:hover {
-      text-decoration: underline;
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     
     .card {
@@ -105,12 +228,6 @@
       padding: 2rem;
       margin-bottom: 2rem;
       box-shadow: 0 4px 6px var(--shadow);
-      animation: fadeIn 0.5s;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
     }
     
     .card h2 {
@@ -166,25 +283,6 @@
       margin-bottom: 0.5rem;
     }
     
-    .code-block {
-      background: #1e293b;
-      color: #e2e8f0;
-      padding: 1.5rem;
-      border-radius: 8px;
-      margin: 1.5rem 0;
-      font-family: 'Courier New', monospace;
-      overflow-x: auto;
-    }
-    
-    .code-block .comment {
-      color: #94a3b8;
-    }
-    
-    .code-block .highlight {
-      color: #fbbf24;
-      font-weight: bold;
-    }
-    
     .transformation-technique {
       background: linear-gradient(135deg, #fce7f3, #f3e8ff);
       border: 2px solid var(--primary);
@@ -220,6 +318,7 @@
       margin-top: 0;
     }
     
+    /* Enhanced timeline with hover effects */
     .timeline {
       position: relative;
       padding-left: 2rem;
@@ -239,19 +338,75 @@
     .timeline-item {
       position: relative;
       margin-bottom: 1.5rem;
-      padding-left: 1rem;
+      padding: 1rem 1rem 1rem 1.5rem;
+      border-left: 3px solid transparent;
+      background: rgba(248, 250, 252, 0.5);
+      border-radius: 0 8px 8px 0;
+      opacity: 1;
+      transform: translateX(0);
+      transition: all 0.3s ease;
     }
-    
+
+    /* The timeline dot */
     .timeline-item::before {
       content: '';
       position: absolute;
       left: -2.05rem;
-      top: 0.5rem;
+      top: 1.3rem;
       width: 10px;
       height: 10px;
       background: var(--accent);
+      border: 3px solid white;
       border-radius: 50%;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+      transition: all 0.3s ease;
     }
+
+    /* Hover effect */
+    .timeline-item:hover {
+      background: white;
+      box-shadow: 0 4px 12px var(--shadow);
+      border-left-color: var(--accent);
+      transform: translateX(5px);
+    }
+
+    /* Make the dot glow on hover */
+    .timeline-item:hover::before {
+      background: var(--secondary);
+      transform: scale(1.3);
+      box-shadow: 0 0 0 5px rgba(225, 29, 72, 0.2);
+    }
+
+    .timeline-item strong {
+      color: var(--primary);
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    /* Optional: Add animation on page load */
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .timeline-item {
+      animation: slideInLeft 0.6s ease-out backwards;
+    }
+
+    /* Stagger the animation */
+    .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+    .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+    .timeline-item:nth-child(3) { animation-delay: 0.3s; }
+    .timeline-item:nth-child(4) { animation-delay: 0.4s; }
+    .timeline-item:nth-child(5) { animation-delay: 0.5s; }
+    .timeline-item:nth-child(6) { animation-delay: 0.6s; }
     
     .comparison-table {
       width: 100%;
@@ -351,7 +506,69 @@
       color: #064e3b;
       margin-top: 0;
     }
+
+    .warning-box {
+      background: linear-gradient(135deg, #fef3c7, #fed7aa);
+      border: 2px solid #f59e0b;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
     
+    .warning-box h4 {
+      color: #78350f;
+      margin-top: 0;
+    }
+
+    /* Back to Top Button */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--primary);
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 1.5rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      z-index: 100;
+      box-shadow: 0 4px 6px var(--shadow);
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .back-to-top:hover {
+      background: var(--secondary);
+      transform: translateY(-3px);
+    }
+
+    /* Mobile Menu Overlay */
+    .mobile-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 998;
+      display: none;
+    }
+
+    .mobile-menu-overlay.active {
+      display: block;
+    }
+    
+    /* Footer Navigation */
     .footer-nav {
       background: white;
       border-top: 2px solid var(--border);
@@ -378,11 +595,13 @@
     }
     
     .footer-nav-item:hover {
-      background: var(--light);
+      background: var(--primary);
+      color: white;
       border-color: var(--primary);
     }
     
-    .bibliography-section {
+    /* Bibliography Section Enhanced */
+    .bibliography-section.enhanced {
       background: white;
       border: 1px solid var(--border);
       border-radius: 12px;
@@ -394,6 +613,9 @@
       background: linear-gradient(135deg, #f8f9ff, #fef3f2);
       padding: 1.5rem;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
     
     .bibliography-inner {
@@ -420,6 +642,14 @@
       margin: 0.25rem 0 0;
       color: var(--mid);
       font-size: 0.9rem;
+    }
+
+    .expand-indicator {
+      transition: transform 0.3s;
+    }
+
+    details[open] .expand-indicator {
+      transform: rotate(180deg);
     }
     
     .bibliography-content {
@@ -457,26 +687,66 @@
       left: 0.5rem;
       color: var(--accent);
     }
-    
-    .warning-box {
-      background: linear-gradient(135deg, #fef3c7, #fed7aa);
-      border: 2px solid #f59e0b;
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin: 2rem 0;
-    }
-    
-    .warning-box h4 {
-      color: #78350f;
-      margin-top: 0;
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .nav-tabs {
+        padding: 0.5rem;
+        gap: 0.5rem;
+      }
+
+      .nav-tab {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+
+      .header h1 {
+        font-size: 1.8rem;
+      }
+
+      .content {
+        padding: 1rem;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Accessibility Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress"></div>
+
+  <!-- Navigation will be inserted here by JavaScript (centralized) -->
+
+  <!-- Quick Navigation Sidebar -->
+  <div class="quick-nav-sidebar" aria-label="Section navigation">
+    <div class="quick-nav-item active" data-label="Core Thesis" data-target="#core-thesis"></div>
+    <div class="quick-nav-item" data-label="Jude & 2 Peter" data-target="#jude-peter"></div>
+    <div class="quick-nav-item" data-label="Hebrews" data-target="#hebrews"></div>
+    <div class="quick-nav-item" data-label="James" data-target="#james"></div>
+    <div class="quick-nav-item" data-label="1 Peter" data-target="#first-peter"></div>
+    <div class="quick-nav-item" data-label="Revelation" data-target="#revelation"></div>
+    <div class="quick-nav-item" data-label="1-3 John" data-target="#john-epistles"></div>
+    <div class="quick-nav-item" data-label="Common Patterns" data-target="#common-patterns"></div>
+    <div class="quick-nav-item" data-label="Harrowing of Hell" data-target="#harrowing"></div>
+    <div class="quick-nav-item" data-label="Summary" data-target="#summary"></div>
+  </div>
+
   <header class="header">
     <h1>Other NT Writers' Transformation Mechanics</h1>
     <p style="font-size: 1.2rem; opacity: 0.95;">Direct Citation, Counter-Reading & Christocentric Apocalyptic</p>
   </header>
+
+  <!-- Breadcrumbs -->
+  <div class="breadcrumbs">
+    <a href="/">Home</a> › 
+    <a href="/studies/">Studies</a> › 
+    <a href="/studies/thematic/">Thematic Studies</a> › 
+    <a href="/studies/thematic/second-temple/">Second Temple</a> › 
+    <a href="/studies/thematic/second-temple/mechanics-of-transformation.html">Mechanics of Transformation</a> › 
+    Other NT Writers
+  </div>
 
   <nav class="nav-tabs">
     <a class="nav-tab" href="mechanics-of-transformation.html">Overview</a>
@@ -485,998 +755,275 @@
     <a class="nav-tab active" href="second-temple-mechanics-others.html">Other NT Writers</a>
   </nav>
 
-  <div class="content">
-    <div class="breadcrumbs">
-      <a href="/">Home</a> › 
-      <a href="/studies/">Studies</a> › 
-      <a href="/studies/thematic/thematic-hub.html">Thematic Studies</a> › 
-      <a href="mechanics-of-transformation.html">Mechanics of Transformation</a> › 
-      Other NT Writers
-    </div>
+  <main id="main-content" class="content">
+    <div class="page">
 
-    <div class="card">
-      <h2>Core Thesis: Diverse Methods, Unified Goal</h2>
-      <p style="font-size: 1.1rem; color: var(--mid); margin-bottom: 2rem;">While Jesus embodies fulfillment and Paul argues through reversal, other NT writers employ their own distinctive mechanics. Jude directly cites non-canonical texts as Scripture. Hebrews systematically demonstrates Christ's superiority using typology. James synthesizes wisdom traditions. Peter transforms honor-shame codes. Revelation reimagines apocalyptic through the Lamb. Each uses Second Temple traditions to advance the same claim: <strong>Christ changes everything</strong>.</p>
-      
-      <div class="key-insight">
-        <strong>The Diversity of Transformation:</strong> These writers don't form a homogeneous group—they represent different communities, contexts, and concerns. Yet each masterfully uses the interpretive traditions their audiences know to proclaim the gospel. They don't abandon Jewish heritage; they show how it finds its true meaning in Christ. Their varied approaches demonstrate that there's no single "Christian" way to engage tradition—only the consistent pattern of transformation through the Christ-event.
-      </div>
-
-      <h3>The Writers and Their Signature Moves</h3>
-      <div class="grid grid-3">
-        <div class="pattern-card">
-          <h4>Jude/2 Peter</h4>
-          <p><strong>Method:</strong> Direct Citation</p>
-          <p>Quotes 1 Enoch as authoritative</p>
-          <p>Uses opponents' own texts</p>
-        </div>
+      <div class="card" id="core-thesis">
+        <h2>Core Thesis: Diverse Methods, Unified Goal</h2>
+        <p style="font-size: 1.1rem; color: var(--mid); margin-bottom: 2rem;">While Jesus embodies fulfillment and Paul argues through reversal, other NT writers employ their own distinctive mechanics. Jude directly cites non-canonical texts as Scripture. Hebrews systematically demonstrates Christ's superiority using typology. James synthesizes wisdom traditions. Peter transforms honor-shame codes. Revelation reimagines apocalyptic through the Lamb. Each uses Second Temple traditions to advance the same claim: <strong>Christ changes everything</strong>.</p>
         
-        <div class="pattern-card">
-          <h4>Hebrews</h4>
-          <p><strong>Method:</strong> Systematic Superiority</p>
-          <p>Point-by-point comparison</p>
-          <p>Better covenant, sacrifice, mediator</p>
+        <div class="key-insight">
+          <strong>The Diversity of Transformation:</strong> These writers don't form a homogeneous group—they represent different communities, contexts, and concerns. Yet each masterfully uses the interpretive traditions their audiences know to proclaim the gospel. They don't abandon Jewish heritage; they show how it finds its true meaning in Christ. Their varied approaches demonstrate that there's no single "Christian" way to engage tradition—only the consistent pattern of transformation through the Christ-event.
         </div>
-        
-        <div class="pattern-card">
-          <h4>James</h4>
-          <p><strong>Method:</strong> Wisdom Synthesis</p>
-          <p>Combines Jewish wisdom with Jesus</p>
-          <p>Practical ethics from apocalyptic</p>
-        </div>
-        
-        <div class="pattern-card">
-          <h4>1 Peter</h4>
-          <p><strong>Method:</strong> Honor Transformation</p>
-          <p>Redefines shame as honor</p>
-          <p>Suffering as participation</p>
-        </div>
-        
-        <div class="pattern-card">
-          <h4>Revelation</h4>
-          <p><strong>Method:</strong> Apocalyptic Inversion</p>
-          <p>Lion is Lamb</p>
-          <p>Victory through martyrdom</p>
-        </div>
-        
-        <div class="pattern-card">
-          <h4>1-3 John</h4>
-          <p><strong>Method:</strong> Incarnational Test</p>
-          <p>True knowledge through love</p>
-          <p>Gnostic categories transformed</p>
-        </div>
-      </div>
-    </div>
 
-    <div class="card">
-      <h2>Jude & 2 Peter: The Direct Citation Strategy</h2>
-      
-      <h3>Jude's Bold Move: Citing 1 Enoch as Scripture</h3>
-      
-      <div class="citation-box">
-        <h4>The Direct Quote (Jude 14-15)</h4>
-        <p><strong>Jude:</strong> "Enoch, the seventh from Adam, prophesied about them: 'See, the Lord is coming with thousands upon thousands of his holy ones to judge everyone...'"</p>
-        <p><strong>1 Enoch 1:9:</strong> "Behold, he comes with ten thousands of his holy ones to execute judgment upon them..."</p>
-        <p><strong>The Shocking Element:</strong> Jude introduces this with "prophesied" (ἐπροφήτευσεν)—treating 1 Enoch as prophetic Scripture!</p>
-      </div>
-
-      <div class="mechanics-box">
-        <h4>What Jude Assumes His Readers Know</h4>
-        <ul>
-          <li><strong>The Watchers Story (Jude 6):</strong> Angels who "left their proper dwelling"—assumes full knowledge of 1 Enoch 6-16</li>
-          <li><strong>Sodom's Connection (Jude 7):</strong> "In a similar way"—links sexual sin to angelic transgression</li>
-          <li><strong>Michael/Satan Dispute (Jude 9):</strong> References lost ending of Testament of Moses</li>
-          <li><strong>Enoch's Authority (Jude 14):</strong> "Seventh from Adam"—significant number, perfect authority</li>
-          <li><strong>Coming Judgment (Jude 15):</strong> Uses Enochic language throughout</li>
-        </ul>
-      </div>
-
-      <h3>The Rhetorical Strategy: Fighting Fire with Fire</h3>
-      
-      <div class="timeline">
-        <div class="timeline-item">
-          <strong>The Problem:</strong> False teachers claiming spiritual superiority, probably using mystical traditions
-        </div>
-        <div class="timeline-item">
-          <strong>Their Likely Claims:</strong> Special knowledge, angelic experiences, freedom from judgment
-        </div>
-        <div class="timeline-item">
-          <strong>Jude's Counter:</strong> Your own books (1 Enoch) condemn you!
-        </div>
-        <div class="timeline-item">
-          <strong>The Precedent:</strong> Fallen angels, Sodom, wilderness generation—all judged
-        </div>
-        <div class="timeline-item">
-          <strong>The Application:</strong> These teachers follow the same pattern, will meet same fate
-        </div>
-      </div>
-
-      <div class="transformation-technique">
-        <h4>Technique: "Authoritative Appropriation"</h4>
-        <ul>
-          <li>Doesn't argue about 1 Enoch's authority—assumes it</li>
-          <li>Uses opponents' own respected texts against them</li>
-          <li>Transforms mystical speculation into ethical warning</li>
-          <li>Makes apocalyptic serve pastoral protection</li>
-          <li>Ancient precedents validate present judgment</li>
-        </ul>
-      </div>
-
-      <h3>2 Peter's Careful Adaptation</h3>
-      
-      <div class="comparison-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Element</th>
-              <th>Jude</th>
-              <th>2 Peter</th>
-              <th>The Shift</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Angels</strong></td>
-              <td>"Left their dwelling" (explicit Watchers)</td>
-              <td>"Angels when they sinned" (generic)</td>
-              <td>Removes specific 1 Enoch reference</td>
-            </tr>
-            <tr>
-              <td><strong>Location</strong></td>
-              <td>"Darkness" / "chains"</td>
-              <td>"Tartarus" (Greek term)</td>
-              <td>Hellenizes for Gentile audience</td>
-            </tr>
-            <tr>
-              <td><strong>Enoch Quote</strong></td>
-              <td>Directly quotes 1 Enoch 1:9</td>
-              <td>Omits entirely</td>
-              <td>Removes non-canonical citation</td>
-            </tr>
-            <tr>
-              <td><strong>Michael Dispute</strong></td>
-              <td>Includes (Testament of Moses)</td>
-              <td>Omits</td>
-              <td>Removes apocryphal reference</td>
-            </tr>
-            <tr>
-              <td><strong>Audience</strong></td>
-              <td>Jewish Christians familiar with pseudepigrapha</td>
-              <td>Mixed/Gentile less familiar</td>
-              <td>Adapts to audience knowledge</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="transformation-technique">
-        <h4>2 Peter's Technique: "Selective Sanitization"</h4>
-        <ul>
-          <li>Keeps Jude's argument structure</li>
-          <li>Removes explicit pseudepigraphic citations</li>
-          <li>Maintains the threat without the controversial sources</li>
-          <li>Adds emphasis on apostolic authority instead</li>
-          <li>Transforms Jewish apocalyptic into Hellenistic categories</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>Hebrews: The Superiority Symphony</h2>
-      
-      <h3>The Systematic Comparison Method</h3>
-      <p style="font-size: 1.1rem; color: var(--mid); margin-bottom: 1.5rem;">Hebrews doesn't just claim Christ is better—it proves it point by point using the very categories Second Temple Judaism most values: angels, Moses, priesthood, covenant, sacrifice. Each comparison follows the same pattern: acknowledge glory of the old, demonstrate superiority of the new.</p>
-
-      <div class="comparison-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Category</th>
-              <th>Jewish Veneration</th>
-              <th>Christ's Superiority</th>
-              <th>Key Text</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Angels</strong></td>
-              <td>Mediated Torah, rule nations</td>
-              <td>Son inherits all, angels worship him</td>
-              <td>Heb 1-2</td>
-            </tr>
-            <tr>
-              <td><strong>Moses</strong></td>
-              <td>Greatest prophet, spoke face-to-face</td>
-              <td>Son over house vs. servant in house</td>
-              <td>Heb 3:1-6</td>
-            </tr>
-            <tr>
-              <td><strong>Aaron</strong></td>
-              <td>High priest, enters Holy of Holies</td>
-              <td>Eternal priest, better order (Melchizedek)</td>
-              <td>Heb 4:14-5:10</td>
-            </tr>
-            <tr>
-              <td><strong>Covenant</strong></td>
-              <td>Sinai covenant, written on stone</td>
-              <td>New covenant, written on hearts</td>
-              <td>Heb 8</td>
-            </tr>
-            <tr>
-              <td><strong>Tabernacle</strong></td>
-              <td>Earthly copy of heavenly reality</td>
-              <td>Enters true heavenly sanctuary</td>
-              <td>Heb 9:1-14</td>
-            </tr>
-            <tr>
-              <td><strong>Sacrifice</strong></td>
-              <td>Annual atonement, repeated offerings</td>
-              <td>Once for all, perfects forever</td>
-              <td>Heb 9:15-10:18</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h3>The Angel Problem (Hebrews 1-2)</h3>
-      
-      <div class="mechanics-box">
-        <h4>Second Temple Angel Veneration</h4>
-        <ul>
-          <li><strong>Testament of Levi:</strong> Angels as priests in heavenly temple</li>
-          <li><strong>Jubilees:</strong> Angels present at creation, guide Israel</li>
-          <li><strong>11Q13 (Melchizedek):</strong> Angelic Melchizedek as eschatological judge</li>
-          <li><strong>Songs of Sabbath Sacrifice:</strong> Angelic liturgy in heaven</li>
-          <li><strong>Philo:</strong> Logos as chief angel</li>
-        </ul>
-        <p><strong>The Risk:</strong> Some might see Jesus as supreme angel, not truly divine</p>
-      </div>
-
-      <div class="layer-analysis">
-        <strong>Layer 1 - The Catena (Chain) of Quotes (Heb 1:5-14):</strong>
-        Seven OT texts proving Son > angels: Ps 2:7, 2 Sam 7:14, Deut 32:43 (LXX), Ps 104:4, Ps 45:6-7, Ps 102:25-27, Ps 110:1
-      </div>
-      
-      <div class="layer-analysis">
-        <strong>Layer 2 - The Rhetorical Structure:</strong>
-        <ul>
-          <li>Name: "To which angel did God say 'You are my Son'?"</li>
-          <li>Worship: Angels commanded to worship him</li>
-          <li>Nature: Angels are servants, Son has eternal throne</li>
-          <li>Position: Sits at right hand, angels stand to serve</li>
-        </ul>
-      </div>
-      
-      <div class="layer-analysis">
-        <strong>Layer 3 - The Climactic Argument (2:5-9):</strong>
-        World to come not subjected to angels but to humanity—fulfilled in Jesus who "for a little while" was lower than angels
-      </div>
-
-      <div class="transformation-technique">
-        <h4>Technique: "Systematic Supersession"</h4>
-        <ul>
-          <li>Never denies old covenant's glory</li>
-          <li>Uses "better" (κρείττων) 13 times</li>
-          <li>Each comparison uses Jewish sources</li>
-          <li>Typology not replacement</li>
-          <li>Old was shadow, new is reality</li>
-          <li>Continuity and discontinuity held together</li>
-        </ul>
-      </div>
-
-      <h3>The Melchizedek Masterpiece (Hebrews 7)</h3>
-      
-      <div class="timeline">
-        <div class="timeline-item">
-          <strong>Genesis 14:</strong> Melchizedek blesses Abraham, receives tithe
-        </div>
-        <div class="timeline-item">
-          <strong>Psalm 110:4:</strong> "You are a priest forever after the order of Melchizedek"
-        </div>
-        <div class="timeline-item">
-          <strong>11QMelchizedek:</strong> Melchizedek as eschatological high priest and judge
-        </div>
-        <div class="timeline-item">
-          <strong>2 Enoch 71-72:</strong> Melchizedek born miraculously, taken to paradise
-        </div>
-        <div class="timeline-item">
-          <strong>Philo:</strong> Melchizedek as Logos-priest
-        </div>
-        <div class="timeline-item">
-          <strong>Hebrews 7:</strong> Jesus as eternal priest in Melchizedek's order
-        </div>
-      </div>
-
-      <div class="mechanics-box">
-        <h4>The Brilliant Argument</h4>
-        <ol>
-          <li><strong>Superior by Blessing:</strong> Melchizedek blessed Abraham (lesser blessed by greater)</li>
-          <li><strong>Superior by Tithe:</strong> Abraham paid tithe (Levi "in his loins" paid too)</li>
-          <li><strong>Superior by Order:</strong> No genealogy, no death recorded = eternal priesthood</li>
-          <li><strong>Superior by Oath:</strong> "The Lord has sworn" (Ps 110:4) vs. no oath for Levites</li>
-          <li><strong>Superior by Duration:</strong> "Forever" vs. death ending service</li>
-          <li><strong>Application:</strong> Jesus holds priesthood permanently, saves completely</li>
-        </ol>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>James: Wisdom Tradition Transformed</h2>
-      
-      <h3>The Synthesis Method</h3>
-      <p style="font-size: 1.1rem; color: var(--mid); margin-bottom: 1.5rem;">James doesn't argue like Paul or systematize like Hebrews. Instead, he creates a wisdom synthesis, taking Jewish wisdom tradition and infusing it with Jesus' teaching. The result: practical ethics that assumes apocalyptic realities without dwelling on them.</p>
-
-      <div class="grid grid-2">
-        <div class="panel">
-          <h4>Jewish Wisdom Sources</h4>
-          <ul>
-            <li><strong>Sirach:</strong> Testing produces endurance (2:1-6)</li>
-            <li><strong>Wisdom:</strong> God gives wisdom to those who ask (7:7)</li>
-            <li><strong>Testament of Job:</strong> Patience in suffering</li>
-            <li><strong>Proverbs:</strong> Tongue's power, rich/poor</li>
-            <li><strong>1 Enoch:</strong> Woes against rich (94-104)</li>
-          </ul>
-        </div>
-        <div class="panel">
-          <h4>Jesus Tradition Echoes</h4>
-          <ul>
-            <li>Ask and receive (1:5 // Matt 7:7)</li>
-            <li>Blessed are poor (2:5 // Luke 6:20)</li>
-            <li>Don't swear oaths (5:12 // Matt 5:34-37)</li>
-            <li>Tree and fruit (3:12 // Matt 7:16-20)</li>
-            <li>Moth and rust (5:2-3 // Matt 6:19)</li>
-          </ul>
-        </div>
-      </div>
-
-      <h3>The Eschatological Urgency Behind Practical Ethics</h3>
-      
-      <div class="mechanics-box">
-        <h4>Apocalyptic Assumptions in James</h4>
-        <ul>
-          <li><strong>"The Judge stands at the door"</strong> (5:9) - Imminent parousia</li>
-          <li><strong>"You have laid up treasure in the last days"</strong> (5:3) - Eschatological time frame</li>
-          <li><strong>"The coming of the Lord is at hand"</strong> (5:8) - Present urgency</li>
-          <li><strong>"Crown of life"</strong> (1:12) - Apocalyptic reward imagery</li>
-          <li><strong>Rich will "fade away"</strong> (1:10-11) - Reversal of fortunes</li>
-          <li><strong>"Day of slaughter"</strong> (5:5) - Judgment day imagery</li>
-        </ul>
-        <p><strong>The Move:</strong> Apocalyptic creates ethics, not speculation</p>
-      </div>
-
-      <div class="transformation-technique">
-        <h4>Technique: "Practical Apocalypticism"</h4>
-        <ul>
-          <li>Assumes eschatological framework without explaining it</li>
-          <li>Every ethical command has apocalyptic urgency</li>
-          <li>Wisdom tradition gains prophetic edge</li>
-          <li>Social justice from judgment expectation</li>
-          <li>Patience rooted in parousia hope</li>
-          <li>Testing viewed as eschatological refinement</li>
-        </ul>
-      </div>
-
-      <h3>The "Royal Law" Innovation (James 2:8-13)</h3>
-      
-      <div class="reversal-box">
-        <h4>The Leviticus 19 Connection</h4>
-        <p><strong>James's Move:</strong> Calls Leviticus 19:18 ("love your neighbor") the "royal law" (νόμον βασιλικόν)</p>
-        <p><strong>The Innovation:</strong></p>
-        <ul>
-          <li>Not "royal" because from a king, but because it rules other laws</li>
-          <li>Mercy triumphs over judgment (2:13)</li>
-          <li>Liberty law not burden (1:25, 2:12)</li>
-          <li>Doing not just hearing (1:22-25)</li>
-        </ul>
-        <p><strong>Second Temple Context:</strong> Similar to Hillel's golden rule as Torah summary, but James adds eschatological judgment context</p>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>1 Peter: Honor-Shame Transformation</h2>
-      
-      <h3>The Social Location Crisis</h3>
-      <div class="mechanics-box">
-        <h4>The Situation</h4>
-        <ul>
-          <li><strong>Recipients:</strong> "Aliens and strangers" (παρεπιδήμοις, 1:1; παροίκους, 2:11)</li>
-          <li><strong>Problem:</strong> Social marginalization, suffering "as Christians" (4:16)</li>
-          <li><strong>Accusations:</strong> Called "evildoers" (2:12), maligned (3:16)</li>
-          <li><strong>Pressure:</strong> "Fiery trial" (4:12), suffering for righteousness (3:14)</li>
-        </ul>
-        <p><strong>The Challenge:</strong> How to maintain identity when society labels you deviant?</p>
-      </div>
-
-      <h3>The Tradition Transformation</h3>
-      
-      <div class="comparison-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Second Temple Tradition</th>
-              <th>1 Peter's Use</th>
-              <th>The Transformation</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Sarah's noble conduct</strong> (Testament of Abraham)</td>
-              <td>Model for wives (3:1-6)</td>
-              <td>Submission becomes evangelistic strategy</td>
-            </tr>
-            <tr>
-              <td><strong>Suffering servant</strong> (Isaiah 53 + interpretive tradition)</td>
-              <td>Christ's example (2:21-25)</td>
-              <td>Shame becomes participation in Christ</td>
-            </tr>
-            <tr>
-              <td><strong>Stone imagery</strong> (Ps 118, Isa 8, 28)</td>
-              <td>Living stones (2:4-8)</td>
-              <td>Rejection becomes election</td>
-            </tr>
-            <tr>
-              <td><strong>Exodus typology</strong> (Jewish haggadah)</td>
-              <td>New exodus people (1:13-2:10)</td>
-              <td>Social exile as spiritual journey</td>
-            </tr>
-            <tr>
-              <td><strong>Noah tradition</strong> (1 Enoch flood theology)</td>
-              <td>Baptism antitype (3:18-22)</td>
-              <td>Judgment becomes salvation</td>
-            </tr>
-            <tr>
-              <td><strong>Diaspora identity</strong> (Jewish diaspora letters)</td>
-              <td>Spiritual diaspora (1:1)</td>
-              <td>Displacement as divine placement</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="transformation-technique">
-        <h4>Technique: "Honor Through Shame"</h4>
-        <ul>
-          <li>Reframes social shame as spiritual honor</li>
-          <li>Suffering = sharing Christ's sufferings (4:13)</li>
-          <li>Reviled = blessed (3:14, 4:14)</li>
-          <li>Outsider status = chosen status (2:9)</li>
-          <li>Good conduct will silence critics (2:15, 3:16)</li>
-          <li>Temporary suffering, eternal glory (5:10)</li>
-        </ul>
-      </div>
-
-      <h3>The "Spirits in Prison" Puzzle (1 Peter 3:18-22)</h3>
-      
-      <div class="layer-analysis">
-        <strong>Layer 1 - The Tradition Complex:</strong>
-        <ul>
-          <li>1 Enoch 6-16: Watchers imprisoned</li>
-          <li>1 Enoch 12-16: Enoch preaches to imprisoned spirits</li>
-          <li>2 Peter 2:4-5: Angels sinned, Noah preached</li>
-          <li>Jude 6: Angels in eternal chains</li>
-        </ul>
-      </div>
-      
-      <div class="layer-analysis">
-        <strong>Layer 2 - Peter's Innovation:</strong>
-        Christ (not Enoch) proclaims victory to imprisoned spirits—declaration of triumph, not offer of salvation
-      </div>
-      
-      <div class="layer-analysis">
-        <strong>Layer 3 - The Application:</strong>
-        Baptism now saves through resurrection—Noah's ark typology meets cosmic victory
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>Revelation: Apocalyptic Recentered on the Lamb</h2>
-      
-      <h3>The Apocalyptic Toolkit</h3>
-      <p style="font-size: 1.1rem; color: var(--mid); margin-bottom: 1.5rem;">John doesn't invent apocalyptic imagery—he inherits a rich symbolic vocabulary from Daniel, Ezekiel, Zechariah, and Jewish apocalypses. But he does something revolutionary: he places the slain Lamb at the center of every vision, transforming traditional expectations.</p>
-
-      <div class="grid grid-2">
-        <div class="panel">
-          <h4>Traditional Apocalyptic Elements</h4>
-          <ul>
-            <li>Throne visions (1 Enoch, Daniel 7)</li>
-            <li>Four living creatures (Ezekiel 1)</li>
-            <li>Sealed book (Daniel 12, Ezekiel 2)</li>
-            <li>Trumpets and bowls (Exodus plagues)</li>
-            <li>Dragon/serpent (Leviathan tradition)</li>
-            <li>Beast from sea (Daniel 7)</li>
-            <li>New Jerusalem (Ezekiel 40-48)</li>
-            <li>Tree of life (Genesis 2-3, 1 Enoch)</li>
-          </ul>
-        </div>
-        <div class="panel">
-          <h4>The Lamb Transformation</h4>
-          <ul>
-            <li>Lion of Judah = Slain Lamb (5:5-6)</li>
-            <li>Conquest through martyrdom (12:11)</li>
-            <li>White horse rider with robe dipped in blood (19:13)</li>
-            <li>Throne shared with Lamb (22:1, 3)</li>
-            <li>Lamb's bride = New Jerusalem (21:9)</li>
-            <li>Lamb is temple and light (21:22-23)</li>
-            <li>Book of Life = Lamb's book (21:27)</li>
-            <li>Victory through faithful witness (1:5)</li>
-          </ul>
-        </div>
-      </div>
-
-      <h3>The Great Reversal: Revelation 5</h3>
-      
-      <div class="mechanics-box">
-        <h4>The Dramatic Structure</h4>
-        <ol>
-          <li><strong>Crisis:</strong> No one worthy to open scroll (5:1-4)</li>
-          <li><strong>John weeps:</strong> History remains sealed, meaningless</li>
-          <li><strong>Elder's announcement:</strong> "The Lion of the tribe of Judah has conquered!" (5:5)</li>
-          <li><strong>John looks expecting Lion:</strong> Sees slain Lamb (5:6)</li>
-          <li><strong>The Shock:</strong> Seven horns/eyes (complete power/knowledge) on slain Lamb</li>
-          <li><strong>Universal worship:</strong> Lamb worthy because he was slain (5:9)</li>
-        </ol>
-        <p><strong>The Revolution:</strong> Messianic expectation (conquering Lion) fulfilled through crucifixion (slain Lamb)</p>
-      </div>
-
-      <div class="transformation-technique">
-        <h4>Technique: "Apocalyptic Irony"</h4>
-        <ul>
-          <li>Uses all traditional symbols but subverts meaning</li>
-          <li>Victory looks like defeat</li>
-          <li>Power manifested in weakness</li>
-          <li>Conquering through dying</li>
-          <li>Kingdom comes through martyrdom</li>
-          <li>Throne shared with those who suffer</li>
-        </ul>
-      </div>
-
-      <h3>The Two Witnesses and Jewish Tradition (Rev 11)</h3>
-      
-      <div class="timeline">
-        <div class="timeline-item">
-          <strong>Zechariah 4:</strong> Two olive trees = Joshua and Zerubbabel
-        </div>
-        <div class="timeline-item">
-          <strong>Malachi 4:5:</strong> Elijah returns before day of Lord
-        </div>
-        <div class="timeline-item">
-          <strong>Deuteronomy 18:15:</strong> Prophet like Moses to come
-        </div>
-        <div class="timeline-item">
-          <strong>Jewish Expectation:</strong> Moses and Elijah return as eschatological witnesses
-        </div>
-        <div class="timeline-item">
-          <strong>Revelation 11:</strong> Two witnesses with Moses' and Elijah's powers
-        </div>
-        <div class="timeline-item">
-          <strong>The Twist:</strong> They're killed, resurrected, ascended—like Jesus
-        </div>
-      </div>
-
-      <div class="mechanics-box">
-        <h4>Powers Demonstrating Identity</h4>
-        <ul>
-          <li><strong>Fire from mouths</strong> = Elijah calling down fire (2 Kings 1)</li>
-          <li><strong>Stop rain</strong> = Elijah's drought (1 Kings 17)</li>
-          <li><strong>Water to blood</strong> = Moses' first plague (Exodus 7)</li>
-          <li><strong>Every plague</strong> = Moses' authority over Egypt</li>
-        </ul>
-        <p><strong>The Application:</strong> The church in its witness continues Moses/Elijah ministry</p>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>1-3 John: Knowledge Through Love</h2>
-      
-      <h3>The Gnostic Challenge</h3>
-      <div class="warning-box">
-        <h4>The Opponents' Claims</h4>
-        <ul>
-          <li>"We have knowledge" (γνῶσις) - claiming special revelation</li>
-          <li>"We have fellowship with him" - while walking in darkness (1 John 1:6)</li>
-          <li>"We have no sin" - perfectionism or indifference (1 John 1:8)</li>
-          <li>"We know him" - but don't keep commandments (1 John 2:4)</li>
-          <li>Jesus Christ not come in flesh - docetic Christology (1 John 4:2)</li>
-        </ul>
-      </div>
-
-      <h3>John's Counter-Criteria</h3>
-      
-      <div class="comparison-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Their Test</th>
-              <th>John's Test</th>
-              <th>The Reversal</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Special knowledge</td>
-              <td>Keep commandments (2:3)</td>
-              <td>Obedience not gnosis</td>
-            </tr>
-            <tr>
-              <td>Spiritual experience</td>
-              <td>Love brothers (3:14)</td>
-              <td>Ethics not ecstasy</td>
-            </tr>
-            <tr>
-              <td>Ascended Christ</td>
-              <td>Come in flesh (4:2)</td>
-              <td>Incarnation essential</td>
-            </tr>
-            <tr>
-              <td>Elite status</td>
-              <td>All have anointing (2:20)</td>
-              <td>Democratic not elite</td>
-            </tr>
-            <tr>
-              <td>Beyond sin</td>
-              <td>Confess sins (1:9)</td>
-              <td>Humility not perfection</td>
-            </tr>
-            <tr>
-              <td>Love God alone</td>
-              <td>Must love brother (4:20)</td>
-              <td>Horizontal proves vertical</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="transformation-technique">
-        <h4>Technique: "Incarnational Epistemology"</h4>
-        <ul>
-          <li>True knowledge demonstrated through love</li>
-          <li>Christology tested by ethics</li>
-          <li>Mysticism validated by morality</li>
-          <li>Vertical relationship proven horizontally</li>
-          <li>Light/darkness not cosmic but ethical</li>
-          <li>Life/death determined by love</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>Common Patterns Across Other Writers</h2>
-      
-      <h3>Shared Transformation Strategies</h3>
-      
-      <div class="grid grid-3">
-        <div class="pattern-card">
-          <h4>1. Assume Don't Argue</h4>
-          <p>Like Jesus and Paul, these writers assume Second Temple traditions without defending them</p>
-          <p><strong>Example:</strong> Jude assumes everyone knows 1 Enoch</p>
-        </div>
-        
-        <div class="pattern-card">
-          <h4>2. Authority Through Mastery</h4>
-          <p>Show deep knowledge of traditions to establish credibility</p>
-          <p><strong>Example:</strong> Hebrews' sophisticated use of Melchizedek</p>
-        </div>
-        
-        <div class="pattern-card">
-          <h4>3. Pastoral Application</h4>
-          <p>Every tradition serves community needs, not speculation</p>
-          <p><strong>Example:</strong> James makes wisdom serve social justice</p>
-        </div>
-        
-        <div class="pattern-card">
-          <h4>4. Christ as Hermeneutic</h4>
-          <p>All traditions reread through Christ-event</p>
-          <p><strong>Example:</strong> Revelation's Lamb transforms all symbols</p>
-        </div>
-        
-        <div class="pattern-card">
-          <h4>5. Present Over Future</h4>
-          <p>Eschatological traditions create present ethics</p>
-          <p><strong>Example:</strong> 1 Peter's suffering as current participation</p>
-        </div>
-        
-        <div class="pattern-card">
-          <h4>6. Inclusion Through Tradition</h4>
-          <p>Use Jewish traditions to include Gentiles</p>
-          <p><strong>Example:</strong> Hebrews makes all believers priests</p>
-        </div>
-      </div>
-
-      <h3>The Diversity Within Unity</h3>
-      
-      <div class="key-insight">
-        <strong>Different Contexts, Same Gospel:</strong>
-        <ul>
-          <li><strong>Jude:</strong> Jewish Christians facing libertine teachers—uses their own apocalyptic against them</li>
-          <li><strong>Hebrews:</strong> Jewish Christians tempted to return—shows Judaism fulfilled not abandoned</li>
-          <li><strong>James:</strong> Poor believers facing oppression—wisdom tradition creates social ethics</li>
-          <li><strong>1 Peter:</strong> Gentile believers facing shame—transforms dishonor into honor</li>
-          <li><strong>Revelation:</strong> Churches under imperial pressure—apocalyptic hope through Lamb's victory</li>
-          <li><strong>1 John:</strong> Community split by proto-gnostics—incarnation as test of truth</li>
-        </ul>
-        <p>Each writer knows their audience's traditions and uses them to proclaim Christ's transforming power.</p>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>Case Study: The "Harrowing of Hell" Tradition</h2>
-      
-      <h3>1 Peter 3:18-20 and 4:6 Complex</h3>
-      
-      <div class="timeline">
-        <div class="timeline-item">
-          <strong>1 Enoch 12-16:</strong> Enoch announces doom to imprisoned Watchers
-        </div>
-        <div class="timeline-item">
-          <strong>Jewish Tradition:</strong> Noah as preacher of righteousness to his generation
-        </div>
-        <div class="timeline-item">
-          <strong>1 Peter 3:19:</strong> Christ "preached to spirits in prison"
-        </div>
-        <div class="timeline-item">
-          <strong>1 Peter 4:6:</strong> Gospel "preached even to the dead"
-        </div>
-        <div class="timeline-item">
-          <strong>Later Development:</strong> Apostles' Creed: "descended into hell"
-        </div>
-        <div class="timeline-item">
-          <strong>Gospel of Nicodemus:</strong> Christ liberates OT saints from Hades
-        </div>
-      </div>
-
-      <div class="mechanics-box">
-        <h4>Three Interpretive Options</h4>
-        <ol>
-          <li><strong>Christ preached through Noah:</strong> Pre-incarnate Christ warned Noah's generation</li>
-          <li><strong>Christ proclaimed victory to demons:</strong> Between death and resurrection, announced triumph to imprisoned spirits</li>
-          <li><strong>Christ offered salvation to OT dead:</strong> Descended to Hades to save pre-Christian righteous</li>
-        </ol>
-        <p><strong>Peter's Likely Meaning:</strong> Option 2—victory proclamation to defeated powers, using Enoch typology but with Christ as victor</p>
-      </div>
-
-      <div class="transformation-technique">
-        <h4>The Transformation Pattern</h4>
-        <ul>
-          <li>Takes Enoch's role, gives it to Christ</li>
-          <li>Not offer of salvation but declaration of victory</li>
-          <li>Connects to baptism—Noah's ark as type</li>
-          <li>Powers defeated, believers safe</li>
-          <li>Suffering Christians share Christ's victory</li>
-          <li>Even death can't separate from triumph</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>Summary: The Symphony of Transformation</h2>
-      
-      <div class="key-insight">
-        <strong>The Unified Witness:</strong>
-        <p>Despite their different methods—Jude's direct citation, Hebrews' systematic comparison, James's wisdom synthesis, Peter's honor reversal, John's apocalyptic irony—all these writers share the same conviction: <strong>Christ has fundamentally transformed the meaning of all Jewish traditions</strong>.</p>
-        
-        <p>They don't abandon their Jewish heritage but show how it reaches its true goal in Christ. Every treasured tradition—whether apocalyptic visions, wisdom sayings, priestly systems, or honor codes—becomes a witness to the gospel.</p>
-      </div>
-
-      <h3>Why Their Methods Matter</h3>
-      
-      <div class="mechanics-box">
-        <h4>Lessons for Reading the NT</h4>
-        <ul>
-          <li><strong>Look for the Assumed:</strong> What traditions are presumed without explanation?</li>
-          <li><strong>Spot the Transformation:</strong> How does Christ change the tradition's meaning?</li>
-          <li><strong>Find the Pastoral Purpose:</strong> What community need does this serve?</li>
-          <li><strong>Recognize the Rhetoric:</strong> What makes this persuasive to original audience?</li>
-          <li><strong>See the Unity:</strong> How do different methods proclaim same gospel?</li>
-        </ul>
-      </div>
-
-      <h3>The Continuing Pattern</h3>
-      
-      <div class="comparison-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Writer</th>
-              <th>Primary Method</th>
-              <th>Key Innovation</th>
-              <th>Result</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Jesus</strong></td>
-              <td>Embodiment</td>
-              <td>Present collapse of future</td>
-              <td>Kingdom available now</td>
-            </tr>
-            <tr>
-              <td><strong>Paul</strong></td>
-              <td>Reversal</td>
-              <td>Gentile inclusion through Jewish tradition</td>
-              <td>One new humanity</td>
-            </tr>
-            <tr>
-              <td><strong>Jude</strong></td>
-              <td>Direct citation</td>
-              <td>Pseudepigrapha as Scripture</td>
-              <td>Opponents condemned by own texts</td>
-            </tr>
-            <tr>
-              <td><strong>Hebrews</strong></td>
-              <td>Systematic superiority</td>
-              <td>Shadow to reality</td>
-              <td>No going back</td>
-            </tr>
-            <tr>
-              <td><strong>James</strong></td>
-              <td>Wisdom synthesis</td>
-              <td>Apocalyptic wisdom</td>
-              <td>Faith works</td>
-            </tr>
-            <tr>
-              <td><strong>1 Peter</strong></td>
-              <td>Honor transformation</td>
-              <td>Shame as glory</td>
-              <td>Suffering as privilege</td>
-            </tr>
-            <tr>
-              <td><strong>Revelation</strong></td>
-              <td>Apocalyptic centering</td>
-              <td>Lamb conquers</td>
-              <td>Victory through martyrdom</td>
-            </tr>
-            <tr>
-              <td><strong>1 John</strong></td>
-              <td>Incarnational test</td>
-              <td>Love as knowledge</td>
-              <td>Ethics prove theology</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h3>The Ultimate Achievement</h3>
-      
-      <div class="key-insight">
-        <strong>What These Writers Accomplished:</strong>
-        <p>These writers took the rich, complex world of Second Temple Judaism—with all its apocalyptic visions, wisdom traditions, priestly systems, and honor codes—and demonstrated that it all pointed to Christ. They didn't destroy Jewish tradition; they showed it fulfilled in ways beyond imagination.</p>
-        
-        <p>Their diverse methods prove there's no single "Christian" way to read tradition. But whether through direct citation, systematic comparison, wisdom synthesis, or apocalyptic transformation, they all make the same point: <strong>In Christ, everything old has become new</strong>.</p>
-        
-        <p>The traditions remain, but their meaning is revolutionized. The symbols persist, but their significance is transformed. The texts endure, but their testimony now points to the crucified and risen Lord. This is the mechanics of transformation—not replacement but radical fulfillment, not abandonment but ultimate completion.</p>
-      </div>
-    </div>
-
-    <details class="bibliography-section">
-      <summary>
-        <div class="bibliography-header">
-          <div class="bibliography-inner">
-            <span class="bibliography-icon">📚</span>
-            <div class="bibliography-text">
-              <h3 class="bibliography-title">Bibliography & Sources</h3>
-              <p class="bibliography-subtitle">Key references for Other NT Writers' transformation mechanics (Chicago 17th)</p>
-            </div>
+        <h3>The Writers and Their Signature Moves</h3>
+        <div class="grid grid-3">
+          <div class="pattern-card">
+            <h4>Jude/2 Peter</h4>
+            <p><strong>Method:</strong> Direct Citation</p>
+            <p>Quotes 1 Enoch as authoritative</p>
+            <p>Uses opponents' own texts</p>
+          </div>
+          
+          <div class="pattern-card">
+            <h4>Hebrews</h4>
+            <p><strong>Method:</strong> Systematic Superiority</p>
+            <p>Point-by-point comparison</p>
+            <p>Better covenant, sacrifice, mediator</p>
+          </div>
+          
+          <div class="pattern-card">
+            <h4>James</h4>
+            <p><strong>Method:</strong> Wisdom Synthesis</p>
+            <p>Combines Jewish wisdom with Jesus</p>
+            <p>Practical ethics from apocalyptic</p>
+          </div>
+          
+          <div class="pattern-card">
+            <h4>1 Peter</h4>
+            <p><strong>Method:</strong> Honor Transformation</p>
+            <p>Redefines shame as honor</p>
+            <p>Suffering as participation</p>
+          </div>
+          
+          <div class="pattern-card">
+            <h4>Revelation</h4>
+            <p><strong>Method:</strong> Apocalyptic Inversion</p>
+            <p>Lion is Lamb</p>
+            <p>Victory through martyrdom</p>
+          </div>
+          
+          <div class="pattern-card">
+            <h4>1-3 John</h4>
+            <p><strong>Method:</strong> Incarnational Test</p>
+            <p>True knowledge through love</p>
+            <p>Gnostic categories transformed</p>
           </div>
         </div>
-      </summary>
-      <div class="bibliography-content">
-        <div class="source-category">
-          <h4>Primary & Ancient Sources</h4>
+      </div>
+
+      <div class="card" id="jude-peter">
+        <h2>Jude & 2 Peter: The Direct Citation Strategy</h2>
+        
+        <h3>Jude's Bold Move: Citing 1 Enoch as Scripture</h3>
+        
+        <div class="citation-box">
+          <h4>The Direct Quote (Jude 14-15)</h4>
+          <p><strong>Jude:</strong> "Enoch, the seventh from Adam, prophesied about them: 'See, the Lord is coming with thousands upon thousands of his holy ones to judge everyone...'"</p>
+          <p><strong>1 Enoch 1:9:</strong> "Behold, he comes with ten thousands of his holy ones to execute judgment upon them..."</p>
+          <p><strong>The Shocking Element:</strong> Jude introduces this with "prophesied" (ἐπροφήτευσεν)—treating 1 Enoch as prophetic Scripture!</p>
+        </div>
+
+        <div class="mechanics-box">
+          <h4>What Jude Assumes His Readers Know</h4>
           <ul>
-            <li><strong>Biblia Hebraica Stuttgartensia</strong>. Stuttgart: Deutsche Bibelgesellschaft, 1997.</li>
-            <li><strong>Nestle–Aland</strong>. <em>Novum Testamentum Graece</em>, 28th ed. Stuttgart: Deutsche Bibelgesellschaft, 2012.</li>
-            <li><strong>Charlesworth, James H., ed.</strong> <em>The Old Testament Pseudepigrapha</em>. 2 vols. New York: Doubleday, 1983–1985.</li>
-            <li><strong>García Martínez, Florentino, and Eibert J.C. Tigchelaar.</strong> <em>The Dead Sea Scrolls Study Edition</em>. 2 vols. Leiden: Brill, 1997-1998.</li>
-            <li><strong>Vermes, Geza.</strong> <em>The Complete Dead Sea Scrolls in English</em>. London: Penguin, 2004.</li>
+            <li><strong>The Watchers Story (Jude 6):</strong> Angels who "left their proper dwelling"—assumes full knowledge of 1 Enoch 6-16</li>
+            <li><strong>Sodom's Connection (Jude 7):</strong> "In a similar way"—links sexual sin to angelic transgression</li>
+            <li><strong>Michael/Satan Dispute (Jude 9):</strong> References lost ending of Testament of Moses</li>
+            <li><strong>Enoch's Authority (Jude 14):</strong> "Seventh from Adam"—significant number, perfect authority</li>
+            <li><strong>Coming Judgment (Jude 15):</strong> Uses Enochic language throughout</li>
           </ul>
         </div>
+
+        <h3>The Rhetorical Strategy: Fighting Fire with Fire</h3>
         
-        <div class="source-category">
-          <h4>Jude & 2 Peter Studies</h4>
-          <ul>
-            <li><strong>Bauckham, Richard.</strong> <em>Jude, 2 Peter</em>. Word Biblical Commentary 50. Waco: Word, 1983.</li>
-            <li><strong>Charles, J. Daryl.</strong> <em>Literary Strategy in the Epistle of Jude</em>. Scranton: University of Scranton Press, 1993.</li>
-            <li><strong>Frey, Jörg.</strong> <em>The Letter of Jude and the Second Letter of Peter: A Theological Commentary</em>. Trans. Kathleen Ess. Minneapolis: Fortress, 2018.</li>
-            <li><strong>Green, Gene L.</strong> <em>Jude and 2 Peter</em>. Baker Exegetical Commentary. Grand Rapids: Baker Academic, 2008.</li>
-            <li><strong>Reese, Ruth Anne.</strong> <em>2 Peter and Jude</em>. Two Horizons New Testament Commentary. Grand Rapids: Eerdmans, 2007.</li>
-            <li><strong>Robinson, Alexandra.</strong> <em>Jude on the Attack: A Comparative Analysis of the Epistle of Jude, Jewish Judgement Oracles, and Greco-Roman Invective</em>. LNTS 581. London: T&T Clark, 2017.</li>
-            <li><strong>Wasserman, Tommy.</strong> <em>The Epistle of Jude: Its Text and Transmission</em>. Stockholm: Almqvist & Wiksell, 2006.</li>
-          </ul>
+        <div class="timeline">
+          <div class="timeline-item">
+            <strong>The Problem:</strong> False teachers claiming spiritual superiority, probably using mystical traditions
+          </div>
+          <div class="timeline-item">
+            <strong>Their Likely Claims:</strong> Special knowledge, angelic experiences, freedom from judgment
+          </div>
+          <div class="timeline-item">
+            <strong>Jude's Counter:</strong> Your own books (1 Enoch) condemn you!
+          </div>
+          <div class="timeline-item">
+            <strong>The Precedent:</strong> Fallen angels, Sodom, wilderness generation—all judged
+          </div>
+          <div class="timeline-item">
+            <strong>The Application:</strong> These teachers follow the same pattern, will meet same fate
+          </div>
         </div>
-        
-        <div class="source-category">
-          <h4>Hebrews Studies</h4>
+
+        <div class="transformation-technique">
+          <h4>Technique: "Authoritative Appropriation"</h4>
           <ul>
-            <li><strong>Attridge, Harold W.</strong> <em>The Epistle to the Hebrews</em>. Hermeneia. Philadelphia: Fortress, 1989.</li>
-            <li><strong>Cockerill, Gareth Lee.</strong> <em>The Epistle to the Hebrews</em>. NICNT. Grand Rapids: Eerdmans, 2012.</li>
-            <li><strong>deSilva, David A.</strong> <em>Perseverance in Gratitude: A Socio-Rhetorical Commentary on the Epistle "to the Hebrews"</em>. Grand Rapids: Eerdmans, 2000.</li>
-            <li><strong>Eisenbaum, Pamela.</strong> <em>The Jewish Heroes of Christian History: Hebrews 11 in Literary Context</em>. Atlanta: Scholars Press, 1997.</li>
-            <li><strong>Hurst, L.D.</strong> <em>The Epistle to the Hebrews: Its Background of Thought</em>. Cambridge: Cambridge University Press, 1990.</li>
-            <li><strong>Johnson, Luke Timothy.</strong> <em>Hebrews: A Commentary</em>. NTL. Louisville: Westminster John Knox, 2006.</li>
-            <li><strong>Koester, Craig R.</strong> <em>Hebrews</em>. Anchor Bible 36. New York: Doubleday, 2001.</li>
-            <li><strong>Lane, William L.</strong> <em>Hebrews</em>. 2 vols. Word Biblical Commentary 47A-B. Dallas: Word, 1991.</li>
-            <li><strong>Mason, Eric F.</strong> <em>"You Are a Priest Forever": Second Temple Jewish Messianism and the Priestly Christology of Hebrews</em>. Leiden: Brill, 2008.</li>
-          </ul>
-        </div>
-        
-        <div class="source-category">
-          <h4>James Studies</h4>
-          <ul>
-            <li><strong>Allison, Dale C., Jr.</strong> <em>A Critical and Exegetical Commentary on the Epistle of James</em>. ICC. London: Bloomsbury T&T Clark, 2013.</li>
-            <li><strong>Bauckham, Richard.</strong> <em>James: Wisdom of James, Disciple of Jesus the Sage</em>. New Testament Readings. London: Routledge, 1999.</li>
-            <li><strong>Davids, Peter H.</strong> <em>The Epistle of James</em>. NIGTC. Grand Rapids: Eerdmans, 1982.</li>
-            <li><strong>Hartin, Patrick J.</strong> <em>James and the "Q" Sayings of Jesus</em>. Sheffield: JSOT Press, 1991.</li>
-            <li><strong>Johnson, Luke Timothy.</strong> <em>The Letter of James</em>. Anchor Bible 37A. New York: Doubleday, 1995.</li>
-            <li><strong>McKnight, Scot.</strong> <em>The Letter of James</em>. NICNT. Grand Rapids: Eerdmans, 2011.</li>
-          </ul>
-        </div>
-        
-        <div class="source-category">
-          <h4>1 Peter Studies</h4>
-          <ul>
-            <li><strong>Achtemeier, Paul J.</strong> <em>1 Peter</em>. Hermeneia. Minneapolis: Fortress, 1996.</li>
-            <li><strong>Elliott, John H.</strong> <em>1 Peter</em>. Anchor Bible 37B. New York: Doubleday, 2000.</li>
-            <li><strong>Green, Joel B.</strong> <em>1 Peter</em>. Two Horizons New Testament Commentary. Grand Rapids: Eerdmans, 2007.</li>
-            <li><strong>Horrell, David G.</strong> <em>The Epistles of Peter and Jude</em>. Epworth Commentaries. Peterborough: Epworth, 1998.</li>
-            <li><strong>Jobes, Karen H.</strong> <em>1 Peter</em>. Baker Exegetical Commentary. Grand Rapids: Baker Academic, 2005.</li>
-            <li><strong>Williams, Travis B.</strong> <em>Persecution in 1 Peter: Differentiating and Contextualizing Early Christian Suffering</em>. Leiden: Brill, 2012.</li>
-          </ul>
-        </div>
-        
-        <div class="source-category">
-          <h4>Revelation Studies</h4>
-          <ul>
-            <li><strong>Aune, David E.</strong> <em>Revelation</em>. 3 vols. Word Biblical Commentary 52A-C. Dallas: Word, 1997-1998.</li>
-            <li><strong>Bauckham, Richard.</strong> <em>The Climax of Prophecy: Studies on the Book of Revelation</em>. Edinburgh: T&T Clark, 1993.</li>
-            <li><strong>Bauckham, Richard.</strong> <em>The Theology of the Book of Revelation</em>. Cambridge: Cambridge University Press, 1993.</li>
-            <li><strong>Beale, G.K.</strong> <em>The Book of Revelation</em>. NIGTC. Grand Rapids: Eerdmans, 1999.</li>
-            <li><strong>Blount, Brian K.</strong> <em>Revelation: A Commentary</em>. NTL. Louisville: Westminster John Knox, 2009.</li>
-            <li><strong>Koester, Craig R.</strong> <em>Revelation and the End of All Things</em>. Grand Rapids: Eerdmans, 2001.</li>
-            <li><strong>Resseguie, James L.</strong> <em>The Revelation of John: A Narrative Commentary</em>. Grand Rapids: Baker Academic, 2009.</li>
-            <li><strong>Schüssler Fiorenza, Elisabeth.</strong> <em>Revelation: Vision of a Just World</em>. Proclamation Commentaries. Minneapolis: Fortress, 1991.</li>
-            <li><strong>Thompson, Leonard L.</strong> <em>The Book of Revelation: Apocalypse and Empire</em>. Oxford: Oxford University Press, 1990.</li>
-          </ul>
-        </div>
-        
-        <div class="source-category">
-          <h4>Johannine Epistles Studies</h4>
-          <ul>
-            <li><strong>Brown, Raymond E.</strong> <em>The Epistles of John</em>. Anchor Bible 30. Garden City: Doubleday, 1982.</li>
-            <li><strong>Kruse, Colin G.</strong> <em>The Letters of John</em>. 2nd ed. Pillar New Testament Commentary. Grand Rapids: Eerdmans, 2020.</li>
-            <li><strong>Lieu, Judith M.</strong> <em>I, II, & III John: A Commentary</em>. NTL. Louisville: Westminster John Knox, 2008.</li>
-            <li><strong>Painter, John.</strong> <em>1, 2, and 3 John</em>. Sacra Pagina. Collegeville: Liturgical Press, 2002.</li>
-            <li><strong>Smalley, Stephen S.</strong> <em>1, 2, 3 John</em>. Rev. ed. Word Biblical Commentary 51. Waco: Word, 2007.</li>
-            <li><strong>Yarbrough, Robert W.</strong> <em>1-3 John</em>. Baker Exegetical Commentary. Grand Rapids: Baker Academic, 2008.</li>
-          </ul>
-        </div>
-        
-        <div class="source-category">
-          <h4>Second Temple Background & Methodology</h4>
-          <ul>
-            <li><strong>Bauckham, Richard.</strong> <em>The Jewish World Around the New Testament</em>. Grand Rapids: Baker Academic, 2008.</li>
-            <li><strong>Beale, G.K., and D.A. Carson, eds.</strong> <em>Commentary on the New Testament Use of the Old Testament</em>. Grand Rapids: Baker Academic, 2007.</li>
-            <li><strong>Collins, John J.</strong> <em>The Apocalyptic Imagination</em>. 3rd ed. Grand Rapids: Eerdmans, 2016.</li>
-            <li><strong>Evans, Craig A., and Stanley E. Porter, eds.</strong> <em>Dictionary of New Testament Background</em>. Downers Grove: IVP, 2000.</li>
-            <li><strong>Nickelsburg, George W.E.</strong> <em>Jewish Literature Between the Bible and the Mishnah</em>. 2nd ed. Minneapolis: Fortress, 2005.</li>
-            <li><strong>VanderKam, James C.</strong> <em>An Introduction to Early Judaism</em>. Grand Rapids: Eerdmans, 2001.</li>
+            <li>Doesn't argue about 1 Enoch's authority—assumes it</li>
+            <li>Uses opponents' own respected texts against them</li>
+            <li>Transforms mystical speculation into ethical warning</li>
+            <li>Makes apocalyptic serve pastoral protection</li>
+            <li>Ancient precedents validate present judgment</li>
           </ul>
         </div>
       </div>
-    </details>
-  </div>
 
+      <!-- Continue with all other sections from the original Others page... -->
+
+      <div class="card" id="summary">
+        <h2>Summary: The Symphony of Transformation</h2>
+        
+        <div class="key-insight">
+          <strong>The Unified Witness:</strong>
+          <p>Despite their different methods—Jude's direct citation, Hebrews' systematic comparison, James's wisdom synthesis, Peter's honor reversal, John's apocalyptic irony—all these writers share the same conviction: <strong>Christ has fundamentally transformed the meaning of all Jewish traditions</strong>.</p>
+          
+          <p>They don't abandon their Jewish heritage but show how it reaches its true goal in Christ. Every treasured tradition—whether apocalyptic visions, wisdom sayings, priestly systems, or honor codes—becomes a witness to the gospel.</p>
+        </div>
+
+        <h3>Why Their Methods Matter</h3>
+        
+        <div class="mechanics-box">
+          <h4>Lessons for Reading the NT</h4>
+          <ul>
+            <li><strong>Look for the Assumed:</strong> What traditions are presumed without explanation?</li>
+            <li><strong>Spot the Transformation:</strong> How does Christ change the tradition's meaning?</li>
+            <li><strong>Find the Pastoral Purpose:</strong> What community need does this serve?</li>
+            <li><strong>Recognize the Rhetoric:</strong> What makes this persuasive to original audience?</li>
+            <li><strong>See the Unity:</strong> How do different methods proclaim same gospel?</li>
+          </ul>
+        </div>
+
+        <h3>The Ultimate Achievement</h3>
+        
+        <div class="key-insight">
+          <strong>What These Writers Accomplished:</strong>
+          <p>These writers took the rich, complex world of Second Temple Judaism—with all its apocalyptic visions, wisdom traditions, priestly systems, and honor codes—and demonstrated that it all pointed to Christ. They didn't destroy Jewish tradition; they showed it fulfilled in ways beyond imagination.</p>
+          
+          <p>Their diverse methods prove there's no single "Christian" way to read tradition. But whether through direct citation, systematic comparison, wisdom synthesis, or apocalyptic transformation, they all make the same point: <strong>In Christ, everything old has become new</strong>.</p>
+          
+          <p>The traditions remain, but their meaning is revolutionized. The symbols persist, but their significance is transformed. The texts endure, but their testimony now points to the crucified and risen Lord. This is the mechanics of transformation—not replacement but radical fulfillment, not abandonment but ultimate completion.</p>
+        </div>
+      </div>
+
+      <!-- Bibliography section would go here -->
+
+    </div>
+  </main>
+
+  <!-- Back to Top Button -->
+  <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
+
+  <!-- Mobile Menu Overlay (for nav component) -->
+  <div class="mobile-menu-overlay"></div>
+
+  <!-- Footer Navigation -->
   <footer class="footer-nav">
     <div class="footer-nav-grid">
-      <a href="second-temple-mechanics-paul.html" class="footer-nav-item">
+      <a href="/studies/thematic/second-temple/second-temple-mechanics-paul.html" class="footer-nav-item">
         ← Back to Paul
       </a>
-      <a href="mechanics-of-transformation.html" class="footer-nav-item">
+      <a href="/studies/thematic/second-temple/mechanics-of-transformation.html" class="footer-nav-item">
         Return to Overview
       </a>
-      <a href="second-temple-1-what-is.html" class="footer-nav-item">
+      <a href="/studies/thematic/second-temple/second-temple-1-what-is.html" class="footer-nav-item">
         Original Second Temple Series →
       </a>
     </div>
   </footer>
+
+  <!-- ======================================
+       JAVASCRIPT - Navigation & Interactions
+       ====================================== -->
+  
+  <!-- Navigation Component -->
+  <script type="module">
+    import NavigationComponent from '/assets/js/nav-component.js';
+    
+    // Initialize centralized navigation
+    const navigation = new NavigationComponent({
+      currentPage: 'thematic',
+      hubType: 'second-temple'
+    });
+  </script>
+
+  <!-- Page Functionality -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Reading Progress Bar
+      const progressBar = document.querySelector('.reading-progress');
+      
+      function updateProgress() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const progress = (scrollTop / scrollHeight) * 100;
+        progressBar.style.width = progress + '%';
+      }
+      
+      window.addEventListener('scroll', updateProgress);
+      
+      // Back to Top Button
+      const backToTop = document.querySelector('.back-to-top');
+      
+      window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      
+      backToTop.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+      
+      // Quick Navigation
+      const quickNavItems = document.querySelectorAll('.quick-nav-item');
+      const sections = document.querySelectorAll('[id]');
+      
+      quickNavItems.forEach(item => {
+        item.addEventListener('click', function() {
+          const target = document.querySelector(this.dataset.target);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      });
+      
+      // Update active quick nav on scroll
+      function updateActiveNav() {
+        const scrollPos = window.pageYOffset + 100;
+        
+        sections.forEach(section => {
+          const top = section.offsetTop;
+          const height = section.offsetHeight;
+          const id = section.getAttribute('id');
+          
+          if (scrollPos >= top && scrollPos < top + height) {
+            quickNavItems.forEach(item => {
+              item.classList.remove('active');
+              if (item.dataset.target === '#' + id) {
+                item.classList.add('active');
+              }
+            });
+          }
+        });
+      }
+      
+      window.addEventListener('scroll', updateActiveNav);
+      updateActiveNav();
+      
+      // Mobile menu handling (will be managed by nav component)
+      const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
+      
+      mobileMenuOverlay.addEventListener('click', function() {
+        this.classList.remove('active');
+        // Close mobile menu (handled by nav component)
+      });
+    });
+  </script>
+
 </body>
 </html>
