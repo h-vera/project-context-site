@@ -657,23 +657,22 @@ forceDisplayUpdate() {
     // The display update is now handled by the calling code in hub-core.js
     console.log('Display update requested but skipped to prevent scroll issues');
     return;
-}
-        // Make sure the book data section is visible
-        setTimeout(() => {
-            const bookSection = document.getElementById('book-data-section');
-            const bookData = document.getElementById('book-data');
-            const loading = document.getElementById('book-loading');
+    // Make sure the book data section is visible
+    setTimeout(() => {
+        const bookSection = document.getElementById('book-data-section');
+        const bookData = document.getElementById('book-data');
+        const loading = document.getElementById('book-loading');
+        
+        if (bookSection && bookData && loading) {
+            bookSection.style.display = 'block';
+            loading.style.display = 'none';
+            bookData.style.display = 'block';
             
-            if (bookSection && bookData && loading) {
-                bookSection.style.display = 'block';
-                loading.style.display = 'none';
-                bookData.style.display = 'block';
-                
-                // Scroll to the section
-                bookSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
-        }, 100);
-    }
+            // Scroll to the section
+            bookSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    }, 100);
+}
 
     /**
      * Clear the cache
