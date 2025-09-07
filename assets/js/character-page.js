@@ -72,8 +72,8 @@
       observer.observe(card);
     });
 
-// Timeline item animation
-
+// Timeline item animation - COMMENT THIS OUT OR REMOVE
+/*
     const timelineObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -86,6 +86,7 @@
     document.querySelectorAll('.timeline-item').forEach(item => {
       timelineObserver.observe(item);
     });
+*/
 
 // Smooth scrolling for anchor links
 
