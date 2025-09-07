@@ -1,347 +1,549 @@
-/**
- * Search Core Module - Optimized Replacement
- * Path: /assets/js/search-module.js (replaces the bloated version)
- * Purpose: Lightweight search functionality  
- * Version: 3.0.0 - Optimized from 35KB to 8KB
- * Size: ~8KB (down from 35KB = 77% reduction)
- */
+// search-module.js
+// Enhanced Search Module for Biblical Characters and Women's Hub
+// Version: 2.0.0 - Fixed scrolling issues
 
-class SearchCore {
-    constructor(options = {}) {
-        this.config = {
-            debounceDelay: 300,
-            maxResults: 50,
-            cacheLimit: 20,
-            ...options
-        };
-        
-        this.currentQuery = '';
-        this.isSearching = false;
-        this.cache = new Map();
-        
-        this.init();
+(function() {
+    'use strict';
+    
+    // Search configuration
+    const CONFIG = {
+        MIN_SEARCH_LENGTH: 2,
+        DEBOUNCE_DELAY: 300,
+        MAX_RESULTS: 50,
+        SEARCH_FIELDS: ['name', 'hebrew', 'meaning', 'summary', 'tags', 'book'],
+        HIGHLIGHT_CLASS: 'search-highlight'
+    };
+    
+    // Search data cache
+    let searchIndex = [];
+    let indexLoaded = false;
+    let loadingPromise = null;
+    
+    // Determine which hub we're on
+    const isWomenHub = window.location.pathname.includes('women');
+    const isCharacterHub = window.location.pathname.includes('characters');
+    
+    // Initialize search when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeSearch);
+    } else {
+        initializeSearch();
     }
-
-    async init() {
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => this.setupUI());
-        } else {
-            this.setupUI();
-        }
-    }
-
-    setupUI() {
+    
+    function initializeSearch() {
+        console.log('🔍 Initializing Enhanced Search Module...');
+        
         const searchInput = document.getElementById('searchInput');
-        const searchButton = document.getElementById('searchButton') || document.querySelector('.search-button');
-        const clearButton = document.getElementById('clearSearch') || document.querySelector('.clear-search');
+        const searchButton = document.getElementById('searchButton');
+        const clearButton = document.getElementById('clearSearch');
+        const searchResults = document.getElementById('searchResults');
+        const resultsCount = document.getElementById('searchResultsCount');
         
-        if (!searchInput) return;
-        
-        // Debounced search handler
-        const debouncedSearch = this.debounce(() => this.performSearch(), this.config.debounceDelay);
-        
-        // Input handler for live search
-        searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.trim();
-            
-            // Show/hide clear button
-            if (clearButton) {
-                clearButton.style.display = query ? 'flex' : 'none';
-            }
-            
-            if (query.length >= 2) {
-                debouncedSearch();
-            } else if (query.length === 0) {
-                this.clearResults();
-            }
-        });
-        
-        // Search button click
-        if (searchButton) {
-            searchButton.addEventListener('click', () => this.performSearch());
+        if (!searchInput || !searchResults) {
+            console.warn('Search elements not found on this page');
+            return;
         }
         
-        // Enter key to search
+        // Load search index
+        loadSearchIndex();
+        
+        // Event listeners with prevention of scrolling
+        searchInput.addEventListener('input', debounce(handleSearch, CONFIG.DEBOUNCE_DELAY));
         searchInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
-                this.performSearch();
+                e.stopPropagation();
+                handleSearch();
+                return false;
             }
         });
         
-        // Clear button
-        if (clearButton) {
-            clearButton.addEventListener('click', () => {
-                searchInput.value = '';
-                clearButton.style.display = 'none';
-                this.clearResults();
-                searchInput.focus();
+        if (searchButton) {
+            searchButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleSearch();
+                return false;
             });
         }
+        
+        if (clearButton) {
+            clearButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                clearSearch();
+                return false;
+            });
+        }
+        
+        // Handle URL parameters for direct search
+        const urlParams = new URLSearchParams(window.location.search);
+        const searchQuery = urlParams.get('search');
+        if (searchQuery) {
+            searchInput.value = searchQuery;
+            handleSearch();
+        }
+        
+        console.log('✅ Search module initialized');
     }
-
-    async performSearch() {
-        const searchInput = document.getElementById('searchInput');
-        const query = searchInput?.value.trim().toLowerCase();
-        
-        if (!query || query.length < 2 || this.currentQuery === query || this.isSearching) {
-            return;
+    
+    async function loadSearchIndex() {
+        if (indexLoaded || loadingPromise) {
+            return loadingPromise;
         }
         
-        this.currentQuery = query;
-        this.isSearching = true;
-        
-        const resultsDiv = document.getElementById('searchResults');
-        const resultsCount = document.getElementById('searchResultsCount');
-        
-        // Show loading state
-        if (resultsDiv) {
-            resultsDiv.innerHTML = `
-                <div class="search-loading">
-                    <div class="loading-spinner"></div>
-                    <p>Searching...</p>
-                </div>
-            `;
-        }
+        loadingPromise = buildSearchIndex();
         
         try {
-            // Check cache first
-            const cacheKey = `search_${query}`;
-            let results = this.cache.get(cacheKey);
-            
-            if (!results) {
-                // Use character loader if available, otherwise DOM search
-                if (window.hub && window.hub.loader) {
-                    results = await window.hub.loader.searchCharacters(query);
-                } else if (window.hub && window.hub.searchCharacters) {
-                    results = await window.hub.searchCharacters(query);
-                } else {
-                    results = this.searchDOM(query);
-                }
-                
-                // Cache results (with size limit)
-                this.cacheResults(cacheKey, results);
-            }
-            
-            // Display results
-            this.displayResults(results, query, resultsDiv, resultsCount);
-            
+            await loadingPromise;
+            indexLoaded = true;
+            console.log(`✅ Search index loaded with ${searchIndex.length} entries`);
         } catch (error) {
-            console.error('Search error:', error);
-            this.displayError(resultsDiv, 'Search failed. Please try again.');
-        } finally {
-            this.isSearching = false;
+            console.error('Failed to load search index:', error);
+        }
+        
+        return loadingPromise;
+    }
+    
+    async function buildSearchIndex() {
+        searchIndex = [];
+        
+        // Try to load from a pre-built index first (if you create one later)
+        try {
+            const indexPath = isWomenHub ? 
+                '/assets/data/women-search-index.json' : 
+                '/assets/data/characters-search-index.json';
+            
+            const response = await fetch(indexPath);
+            if (response.ok) {
+                searchIndex = await response.json();
+                return;
+            }
+        } catch (e) {
+            console.log('No pre-built index found, building from available data...');
+        }
+        
+        // Build index from available sources
+        await buildIndexFromSources();
+    }
+    
+    async function buildIndexFromSources() {
+        const entries = [];
+        
+        // 1. Try to load from book JSON files (for books that exist)
+        const books = getBooksList();
+        for (const book of books) {
+            try {
+                const response = await fetch(`/assets/data/books/${book.id}.json`);
+                if (response.ok) {
+                    const bookData = await response.json();
+                    const characters = isWomenHub ? 
+                        bookData.characters.filter(c => c.gender === 'female') :
+                        bookData.characters;
+                    
+                    characters.forEach(char => {
+                        entries.push({
+                            ...char,
+                            book: bookData.book.name,
+                            bookId: book.id,
+                            source: 'book-json'
+                        });
+                    });
+                }
+            } catch (e) {
+                // Book JSON doesn't exist yet, skip silently
+            }
+        }
+        
+        // 2. Parse from featured sections if they exist
+        const featuredGrid = document.getElementById('featured-grid');
+        if (featuredGrid) {
+            const featuredCards = featuredGrid.querySelectorAll('.study-card, .woman-card');
+            featuredCards.forEach(card => {
+                const entry = parseCardElement(card);
+                if (entry && !entries.find(e => e.name === entry.name)) {
+                    entries.push({ ...entry, source: 'featured' });
+                }
+            });
+        }
+        
+        // 3. Add hardcoded popular characters as fallback
+        const fallbackCharacters = getFallbackCharacters();
+        fallbackCharacters.forEach(char => {
+            if (!entries.find(e => e.name === char.name)) {
+                entries.push({ ...char, source: 'fallback' });
+            }
+        });
+        
+        searchIndex = entries;
+        console.log(`Built search index with ${searchIndex.length} entries`);
+    }
+    
+    function parseCardElement(card) {
+        try {
+            const link = card.querySelector('a');
+            const title = card.querySelector('.study-card-title, .woman-card-name');
+            const hebrew = card.querySelector('.hebrew');
+            const meta = card.querySelector('.study-card-meta, .woman-card-meta');
+            const desc = card.querySelector('.study-card-desc, .woman-card-desc');
+            const tags = Array.from(card.querySelectorAll('.tag')).map(t => t.textContent.trim());
+            
+            if (!title) return null;
+            
+            return {
+                name: title.textContent.replace(/[^\w\s'-]/g, '').trim(),
+                hebrew: hebrew?.textContent.trim(),
+                profilePath: link?.href,
+                meaning: meta?.textContent.split('•')[0]?.trim(),
+                references: meta?.textContent.split('•')[1]?.trim(),
+                summary: desc?.textContent.trim(),
+                tags: tags.length > 0 ? tags : undefined
+            };
+        } catch (e) {
+            console.warn('Error parsing card element:', e);
+            return null;
         }
     }
-
-    displayResults(results, query, resultsDiv, resultsCount) {
-        if (!resultsDiv) return;
+    
+    function getBooksList() {
+        // List of all biblical books with their IDs
+        return [
+            // Torah
+            { id: 'genesis', name: 'Genesis' },
+            { id: 'exodus', name: 'Exodus' },
+            { id: 'leviticus', name: 'Leviticus' },
+            { id: 'numbers', name: 'Numbers' },
+            { id: 'deuteronomy', name: 'Deuteronomy' },
+            // Former Prophets
+            { id: 'joshua', name: 'Joshua' },
+            { id: 'judges', name: 'Judges' },
+            { id: 'samuel', name: '1-2 Samuel' },
+            { id: 'kings', name: '1-2 Kings' },
+            // Add more books as needed
+            { id: 'ruth', name: 'Ruth' },
+            { id: 'esther', name: 'Esther' },
+            // ... etc
+        ];
+    }
+    
+    function getFallbackCharacters() {
+        // Hardcoded popular characters as fallback
+        const characters = [
+            {
+                name: 'Boaz',
+                hebrew: 'בֹּעַז',
+                meaning: 'In Him is Strength',
+                book: 'Ruth',
+                references: 'Ruth 2-4',
+                summary: 'Kinsman-redeemer who married Ruth, ancestor of David and Jesus',
+                profilePath: '/studies/characters/ruth/boaz.html',
+                tags: ['Redeemer', 'Ancestor of David'],
+                gender: 'male'
+            },
+            {
+                name: 'Ruth',
+                hebrew: 'רוּת',
+                meaning: 'Friend, Companion',
+                book: 'Ruth',
+                references: 'Ruth 1-4',
+                summary: 'Moabite woman who showed loyalty to Naomi and became ancestor of David',
+                profilePath: '/studies/women/ruth/ruth.html',
+                tags: ['Moabite', 'Ancestor of David'],
+                gender: 'female'
+            },
+            {
+                name: 'David',
+                hebrew: 'דָּוִד',
+                meaning: 'Beloved',
+                book: '1-2 Samuel',
+                references: '1 Samuel 16 - 1 Kings 2',
+                summary: 'Second king of Israel, "man after God\'s own heart", ancestor of Jesus',
+                profilePath: '/studies/characters/samuel/david.html',
+                tags: ['King', 'Psalmist', 'Warrior'],
+                gender: 'male'
+            },
+            {
+                name: 'Deborah',
+                hebrew: 'דְּבוֹרָה',
+                meaning: 'Bee',
+                book: 'Judges',
+                references: 'Judges 4-5',
+                summary: 'Prophet and judge who led Israel to victory over Canaanites',
+                profilePath: '/studies/women/judges/deborah.html',
+                tags: ['Prophet', 'Judge', 'Warrior'],
+                gender: 'female'
+            },
+            {
+                name: 'Esther',
+                hebrew: 'אֶסְתֵּר',
+                meaning: 'Star',
+                book: 'Esther',
+                references: 'Esther 1-10',
+                summary: 'Jewish queen of Persia who saved her people from destruction',
+                profilePath: '/studies/women/esther/esther.html',
+                tags: ['Queen', 'Heroine'],
+                gender: 'female'
+            },
+            {
+                name: 'Abraham',
+                hebrew: 'אַבְרָהָם',
+                meaning: 'Father of Many Nations',
+                book: 'Genesis',
+                references: 'Genesis 11-25',
+                summary: 'Father of faith and patriarch of Israel, received God\'s covenant promises',
+                profilePath: '/studies/characters/genesis/abraham.html',
+                tags: ['Patriarch', 'Father of Faith'],
+                gender: 'male'
+            },
+            {
+                name: 'Moses',
+                hebrew: 'מֹשֶׁה',
+                meaning: 'Drawn Out',
+                book: 'Exodus',
+                references: 'Exodus 2 - Deuteronomy 34',
+                summary: 'Prophet and lawgiver who led Israel out of Egypt and received the Ten Commandments',
+                profilePath: '/studies/characters/exodus/moses.html',
+                tags: ['Prophet', 'Lawgiver', 'Leader'],
+                gender: 'male'
+            },
+            {
+                name: 'Sarah',
+                hebrew: 'שָׂרָה',
+                meaning: 'Princess',
+                book: 'Genesis',
+                references: 'Genesis 11-23',
+                summary: 'Wife of Abraham and mother of Isaac, matriarch of Israel',
+                profilePath: '/studies/women/genesis/sarah.html',
+                tags: ['Matriarch', 'Mother of Nations'],
+                gender: 'female'
+            }
+        ];
         
-        if (!results || results.length === 0) {
-            resultsDiv.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-icon">🔍</div>
-                    <div class="empty-state-text">No Results Found</div>
-                    <div class="empty-state-subtext">Try different keywords</div>
-                </div>
-            `;
-            if (resultsCount) resultsCount.style.display = 'none';
+        // Filter based on which hub we're on
+        return isWomenHub ? 
+            characters.filter(c => c.gender === 'female') :
+            characters;
+    }
+    
+    async function handleSearch() {
+        const searchInput = document.getElementById('searchInput');
+        const query = searchInput.value.trim();
+        
+        if (query.length < CONFIG.MIN_SEARCH_LENGTH) {
+            clearSearchResults();
             return;
         }
         
-        // Update count
-        if (resultsCount) {
-            const countEl = resultsCount.querySelector('.results-number');
-            if (countEl) countEl.textContent = results.length;
-            resultsCount.style.display = 'block';
+        console.log('🔍 Searching for:', query);
+        
+        // Show clear button
+        const clearButton = document.getElementById('clearSearch');
+        if (clearButton) {
+            clearButton.style.display = 'block';
         }
         
-        // Limit results for performance
-        const displayResults = results.slice(0, this.config.maxResults);
+        // Hide any open book data section to prevent interference
+        const bookSection = document.getElementById('book-data-section');
+        if (bookSection) {
+            bookSection.style.display = 'none';
+        }
         
-        // Build results HTML
-        let html = `
-            <div class="section-header">
-                <h3 class="section-title">Search Results</h3>
-                <p class="section-subtitle">${results.length} result${results.length !== 1 ? 's' : ''} for "${this.escapeHtml(query)}"</p>
-            </div>
-            <div class="search-results-grid studies-list cards-grid">
-        `;
+        // Ensure index is loaded
+        await loadSearchIndex();
         
-        displayResults.forEach(character => {
-            html += this.createResultCard(character, query);
+        // Perform search
+        const results = performSearch(query);
+        console.log('📊 Found', results.length, 'results');
+        
+        // Display results
+        displayResults(results, query);
+        
+        // Update URL without reload
+        const url = new URL(window.location);
+        url.searchParams.set('search', query);
+        window.history.replaceState({}, '', url);
+        
+        // Prevent any default scrolling behavior
+        return false;
+    }
+    
+    function performSearch(query) {
+        const searchTerms = query.toLowerCase().split(/\s+/);
+        const results = [];
+        
+        searchIndex.forEach(entry => {
+            let score = 0;
+            const matchedTerms = new Set();
+            
+            searchTerms.forEach(term => {
+                // Check each search field
+                CONFIG.SEARCH_FIELDS.forEach(field => {
+                    const value = entry[field];
+                    if (!value) return;
+                    
+                    const fieldValue = Array.isArray(value) ? 
+                        value.join(' ').toLowerCase() : 
+                        value.toString().toLowerCase();
+                    
+                    if (fieldValue.includes(term)) {
+                        matchedTerms.add(term);
+                        
+                        // Score based on field importance
+                        if (field === 'name') {
+                            score += fieldValue === term ? 100 : 50;
+                        } else if (field === 'hebrew') {
+                            score += 40;
+                        } else if (field === 'meaning') {
+                            score += 30;
+                        } else if (field === 'tags') {
+                            score += 25;
+                        } else {
+                            score += 10;
+                        }
+                    }
+                });
+            });
+            
+            // Only include if all terms matched
+            if (matchedTerms.size === searchTerms.length) {
+                results.push({ ...entry, searchScore: score });
+            }
         });
         
-        html += '</div>';
-        resultsDiv.innerHTML = html;
+        // Sort by score
+        results.sort((a, b) => b.searchScore - a.searchScore);
         
-        // Scroll to results
-        setTimeout(() => {
-            resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 100);
+        // Limit results
+        return results.slice(0, CONFIG.MAX_RESULTS);
     }
-
-    createResultCard(character, query) {
-        // Handle both full character objects and simplified ones
-        const name = character.name || 'Unknown';
-        const bookId = character.book?.id || 'unknown';
-        const profilePath = character.profilePath || character.href || '#';
-        const hebrewText = character.hebrew ? `<span class="hebrew">${character.hebrew}</span>` : '';
+    
+    function displayResults(results, query) {
+        const searchResults = document.getElementById('searchResults');
+        const resultsCount = document.getElementById('searchResultsCount');
         
-        // Handle tags
-        let tags = '';
-        if (character.tags && Array.isArray(character.tags)) {
-            tags = character.tags.map(tag => {
-                const tagClass = this.getTagClass(tag);
-                return `<span class="tag ${tagClass}">${this.escapeHtml(tag)}</span>`;
-            }).join('');
+        if (!searchResults) {
+            console.error('Search results container not found');
+            return;
         }
         
-        // Handle references
-        const references = Array.isArray(character.references) ? 
-            character.references.join(', ') : (character.references || '');
+        // Prevent any automatic focus or scroll
+        const currentScrollY = window.scrollY;
         
-        // Build meta text
-        const meta = character.meaning ? 
-            `${character.meaning} • ${references}` : references;
+        if (results.length === 0) {
+            searchResults.innerHTML = `
+                <div class="no-results">
+                    <div class="no-results-icon">🔍</div>
+                    <div class="no-results-text">No results found for "${escapeHtml(query)}"</div>
+                    <div class="no-results-suggestions">
+                        Try different keywords or check the spelling
+                    </div>
+                </div>
+            `;
+            
+            if (resultsCount) {
+                resultsCount.style.display = 'none';
+            }
+        } else {
+            // Update count
+            if (resultsCount) {
+                resultsCount.querySelector('.results-number').textContent = results.length;
+                resultsCount.style.display = 'block';
+            }
+            
+            // Build results HTML
+            const resultsHTML = results.map(result => createResultCard(result, query)).join('');
+            searchResults.innerHTML = `
+                <div class="search-results-grid">
+                    ${resultsHTML}
+                </div>
+            `;
+        }
         
-        // Highlight search terms
-        const highlightedName = this.highlightText(name, query);
-        const highlightedSummary = this.highlightText(character.summary || character.description || '', query);
+        // Restore scroll position if it changed
+        if (window.scrollY !== currentScrollY) {
+            window.scrollTo(0, currentScrollY);
+        }
+        
+        // Display results - no automatic scrolling
+        console.log('✅ Results displayed, no scrolling');
+    }
+    
+    function createResultCard(result, query) {
+        const highlightedName = highlightText(result.name, query);
+        const highlightedSummary = result.summary ? 
+            highlightText(truncateText(result.summary, 150), query) : '';
+        
+        const tags = (result.tags || []).map(tag => 
+            `<span class="tag">${escapeHtml(tag)}</span>`
+        ).join(' ');
+        
+        const hebrew = result.hebrew ? 
+            `<span class="hebrew">${escapeHtml(result.hebrew)}</span>` : '';
+        
+        const meta = [
+            result.meaning,
+            result.book,
+            result.references
+        ].filter(Boolean).join(' • ');
+        
+        const profilePath = result.profilePath || '#';
         
         return `
-            <article class="study-card">
-                <a href="${profilePath}" class="study-card-link">
-                    <div class="study-card-header">
-                        <h4 class="study-card-title">
-                            ${highlightedName} ${hebrewText}
-                        </h4>
-                        ${tags ? `<div class="study-card-tags">${tags}</div>` : ''}
+            <article class="search-result-card">
+                <a href="${escapeHtml(profilePath)}" class="result-link">
+                    <div class="result-header">
+                        <h4 class="result-title">${highlightedName} ${hebrew}</h4>
+                        ${tags ? `<div class="result-tags">${tags}</div>` : ''}
                     </div>
-                    <div class="study-card-body">
-                        ${meta ? `<p class="study-card-meta">${this.escapeHtml(meta)}</p>` : ''}
-                        ${highlightedSummary ? `<p class="study-card-desc">${highlightedSummary}</p>` : ''}
-                        ${character.book?.name ? `<p class="study-card-meta"><strong>Book:</strong> ${character.book.name}</p>` : ''}
+                    <div class="result-body">
+                        ${meta ? `<div class="result-meta">${escapeHtml(meta)}</div>` : ''}
+                        ${highlightedSummary ? `<div class="result-summary">${highlightedSummary}</div>` : ''}
                     </div>
-                    <div class="study-card-arrow">
-                        <svg viewBox="0 0 24 24" width="16" height="16">
-                            <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none"/>
-                        </svg>
+                    <div class="result-source">
+                        <span class="source-label">${result.source === 'book-json' ? '📖' : 
+                                                     result.source === 'featured' ? '⭐' : '📚'}</span>
                     </div>
                 </a>
             </article>
         `;
     }
-
-    /**
-     * Fallback DOM search for when no character loader is available
-     */
-    searchDOM(query) {
-        const results = [];
-        const elements = document.querySelectorAll('.study-card, .character-card, .featured-card, .woman-card');
+    
+    function clearSearch() {
+        const searchInput = document.getElementById('searchInput');
+        const clearButton = document.getElementById('clearSearch');
         
-        elements.forEach(el => {
-            const text = el.textContent.toLowerCase();
-            if (text.includes(query)) {
-                // Extract info from DOM element
-                const titleEl = el.querySelector('.study-card-title, .character-name, .featured-card-title, .woman-card-name');
-                const descEl = el.querySelector('.study-card-desc, .character-desc, .featured-card-desc, .woman-card-desc');
-                const linkEl = el.querySelector('a');
-                
-                if (titleEl) {
-                    results.push({
-                        name: titleEl.textContent.trim(),
-                        summary: descEl?.textContent.trim() || '',
-                        profilePath: linkEl?.href || '#',
-                        book: { name: 'Current Page' },
-                        relevance: this.calculateRelevance(text, query)
-                    });
-                }
-            }
-        });
-        
-        return results.sort((a, b) => (b.relevance || 0) - (a.relevance || 0));
-    }
-
-    calculateRelevance(text, query) {
-        let score = 0;
-        const lowerText = text.toLowerCase();
-        const lowerQuery = query.toLowerCase();
-        
-        // Exact match
-        if (lowerText === lowerQuery) score += 100;
-        
-        // Starts with search term
-        if (lowerText.startsWith(lowerQuery)) score += 50;
-        
-        // Contains search term
-        if (lowerText.includes(lowerQuery)) score += 25;
-        
-        // Word boundary match
-        try {
-            const regex = new RegExp(`\\b${this.escapeRegex(lowerQuery)}\\b`, 'i');
-            if (regex.test(text)) score += 30;
-        } catch (e) {
-            // Ignore regex errors for special characters
+        if (searchInput) {
+            searchInput.value = '';
+            searchInput.focus();
         }
         
-        return score;
-    }
-
-    highlightText(text, query) {
-        if (!query || !text) return this.escapeHtml(text);
+        if (clearButton) {
+            clearButton.style.display = 'none';
+        }
         
-        try {
-            const regex = new RegExp(`(${this.escapeRegex(query)})`, 'gi');
-            return this.escapeHtml(text).replace(regex, '<mark class="search-highlight">$1</mark>');
-        } catch (e) {
-            // If regex fails, return escaped text without highlighting
-            return this.escapeHtml(text);
-        }
+        clearSearchResults();
+        
+        // Clear URL parameter
+        const url = new URL(window.location);
+        url.searchParams.delete('search');
+        window.history.replaceState({}, '', url);
     }
-
-    getTagClass(tag) {
-        const lowerTag = tag.toLowerCase();
-        if (lowerTag.includes('group') || lowerTag.includes('unnamed')) {
-            return 'group';
-        }
-        if (lowerTag.includes('warning') || lowerTag.includes('antagonist')) {
-            return 'warning';
-        }
-        return '';
-    }
-
-    displayError(container, message = 'Search error occurred') {
-        if (container) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-icon">⚠️</div>
-                    <div class="empty-state-text">Error</div>
-                    <div class="empty-state-subtext">${this.escapeHtml(message)}</div>
-                </div>
-            `;
-        }
-    }
-
-    clearResults() {
-        const resultsDiv = document.getElementById('searchResults');
+    
+    function clearSearchResults() {
+        const searchResults = document.getElementById('searchResults');
         const resultsCount = document.getElementById('searchResultsCount');
-        if (resultsDiv) resultsDiv.innerHTML = '';
-        if (resultsCount) resultsCount.style.display = 'none';
-        this.currentQuery = '';
-    }
-
-    cacheResults(key, data) {
-        // Implement simple LRU cache with size limit
-        if (this.cache.size >= this.config.cacheLimit) {
-            const firstKey = this.cache.keys().next().value;
-            this.cache.delete(firstKey);
+        
+        if (searchResults) {
+            searchResults.innerHTML = '';
         }
-        this.cache.set(key, data);
+        
+        if (resultsCount) {
+            resultsCount.style.display = 'none';
+        }
     }
-
+    
     // Utility functions
-    debounce(func, wait) {
+    function debounce(func, wait) {
         let timeout;
         return function executedFunction(...args) {
             const later = () => {
@@ -352,44 +554,47 @@ class SearchCore {
             timeout = setTimeout(later, wait);
         };
     }
-
-    escapeHtml(unsafe) {
-        if (typeof unsafe !== 'string') return '';
-        return unsafe
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+    
+    function escapeHtml(text) {
+        const map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return text.replace(/[&<>"']/g, m => map[m]);
     }
-
-    escapeRegex(string) {
+    
+    function highlightText(text, query) {
+        if (!text || !query) return escapeHtml(text || '');
+        
+        const escaped = escapeHtml(text);
+        const terms = query.split(/\s+/).filter(t => t.length > 0);
+        let highlighted = escaped;
+        
+        terms.forEach(term => {
+            const regex = new RegExp(`(${escapeRegExp(term)})`, 'gi');
+            highlighted = highlighted.replace(regex, `<mark class="${CONFIG.HIGHLIGHT_CLASS}">$1</mark>`);
+        });
+        
+        return highlighted;
+    }
+    
+    function escapeRegExp(string) {
         return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
-}
-
-// Auto-initialize when DOM is ready
-if (typeof window !== 'undefined') {
-    let searchInstance;
     
-    function initializeSearch() {
-        if (!searchInstance) {
-            searchInstance = new SearchCore();
-            
-            // Make it available globally for debugging
-            window.searchCore = searchInstance;
-            console.log('✓ Search Core initialized (optimized version)');
-        }
+    function truncateText(text, maxLength) {
+        if (!text || text.length <= maxLength) return text;
+        return text.substring(0, maxLength).trim() + '...';
     }
     
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initializeSearch);
-    } else {
-        initializeSearch();
-    }
-}
-
-// Make available globally
-if (typeof window !== 'undefined') {
-    window.SearchCore = SearchCore;
-}
+    // Export for use in other modules if needed
+    window.BiblicalSearch = {
+        search: performSearch,
+        loadIndex: loadSearchIndex,
+        clearSearch: clearSearch
+    };
+    
+})();
