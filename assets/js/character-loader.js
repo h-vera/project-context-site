@@ -650,9 +650,14 @@ class CharacterLoader {
     }
 
     /**
-     * Force display update after data load
-     */
-    forceDisplayUpdate() {
+ * Force display update after data load
+ */
+forceDisplayUpdate() {
+    // DISABLED - This was causing unwanted scrolling during search
+    // The display update is now handled by the calling code in hub-core.js
+    console.log('Display update requested but skipped to prevent scroll issues');
+    return;
+}
         // Make sure the book data section is visible
         setTimeout(() => {
             const bookSection = document.getElementById('book-data-section');
