@@ -500,16 +500,30 @@
             font-weight: 700;
         }
 
-        /* Study Guide Link Panels */
-        .study-link {
-            text-decoration: none;
-            color: inherit;
-            display: block;
+        /* Study Guide Link Wrappers */
+        .study-link-wrapper {
             position: relative;
-            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .study-link::before {
+        .study-link-wrapper:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(114,9,183,0.15);
+            border-color: var(--accent-purple);
+        }
+
+        .study-link-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            text-decoration: none;
+        }
+
+        .study-link-wrapper::before {
             content: '';
             position: absolute;
             top: 0;
@@ -519,20 +533,14 @@
             background: linear-gradient(135deg, rgba(114,9,183,0.05), rgba(0,180,216,0.05));
             opacity: 0;
             transition: opacity 0.3s ease;
+            z-index: 0;
         }
 
-        .study-link:hover::before {
+        .study-link-wrapper:hover::before {
             opacity: 1;
         }
 
-        .study-link:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(114,9,183,0.15);
-            border-color: var(--accent-purple);
-        }
-
-        .study-link::after {
-            content: '→';
+        .link-arrow {
             position: absolute;
             top: 1.5rem;
             right: 1.5rem;
@@ -541,9 +549,10 @@
             opacity: 0;
             transform: translateX(-10px);
             transition: all 0.3s ease;
+            z-index: 0;
         }
 
-        .study-link:hover::after {
+        .study-link-wrapper:hover .link-arrow {
             opacity: 1;
             transform: translateX(0);
         }
