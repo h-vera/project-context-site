@@ -14,8 +14,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // ============================================
     
     const config = {
-        longChapters: [4, 5, 6, 7, 8, 9, 10, 11],
+        longChapters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], // All 14 chapters
         keyVerses: {
+            1: ['1:2', '1:10-2:1'],
+            2: ['2:14-23', '2:19-20'],
+            3: ['3:1', '3:5'],
             4: ['4:1-3', '4:6'],
             5: ['5:4', '5:15'],
             6: ['6:6'],
@@ -23,7 +26,10 @@ document.addEventListener('DOMContentLoaded', function() {
             8: ['8:7', '8:14'],
             9: ['9:10', '9:17'],
             10: ['10:12', '10:13'],
-            11: ['11:1', '11:8-9']
+            11: ['11:1', '11:8-9'],
+            12: ['12:6'],
+            13: ['13:14'],
+            14: ['14:1-3', '14:4-8']
         },
         hebrewTranslations: {
             'חֶסֶד': 'steadfast love',
@@ -50,41 +56,48 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function enhanceLongChapters() {
         config.longChapters.forEach(chapterNum => {
-            // Find the chapter section (try multiple selectors)
-            const chapterSection = 
-                document.querySelector(`.chapter-section:has(.chapter-title:contains("${chapterNum}"))`) ||
-                document.querySelector(`[id*="chapter-${chapterNum}"]`) ||
-                document.querySelector(`.chapter-${chapterNum}`) ||
-                document.querySelector(`#chapter-${chapterNum}`);
+            // Find all verse groups that belong to this chapter
+            const allVerseGroups = document.querySelectorAll('.verse-group');
+            const chapterVerseGroups = [];
             
-            if (!chapterSection) {
-                console.log(`Chapter ${chapterNum} section not found`);
+            // Filter verse groups for this specific chapter
+            allVerseGroups.forEach(group => {
+                const verseRef = group.querySelector('.verse-ref');
+                if (verseRef) {
+                    const refText = verseRef.textContent.trim();
+                    // Check if this verse belongs to the current chapter (e.g., "10:1-8" starts with "10:")
+                    if (refText.startsWith(`${chapterNum}:`)) {
+                        chapterVerseGroups.push(group);
+                    }
+                }
+            });
+            
+            if (chapterVerseGroups.length === 0) {
+                console.log(`No verse groups found for chapter ${chapterNum}`);
                 return;
             }
             
-            const chapterContent = chapterSection.querySelector('.chapter-content');
-            if (!chapterContent) {
-                console.log(`Chapter ${chapterNum} content not found`);
-                return;
-            }
-            
-            // Add dense content marker
-            chapterContent.classList.add('dense-content');
-            
-            // Get all verse groups in this chapter
-            const verseGroups = chapterContent.querySelectorAll('.verse-group');
-            console.log(`Found ${verseGroups.length} verse groups in chapter ${chapterNum}`);
+            console.log(`Found ${chapterVerseGroups.length} verse groups in chapter ${chapterNum}`);
             
             // Process each verse group
-            verseGroups.forEach((group, index) => {
+            chapterVerseGroups.forEach((group, index) => {
                 // Add staggered animation
                 group.style.animationDelay = `${index * 0.05}s`;
                 
+                // Check if this verse group has 4+ sub-points for special treatment
+                const subPoints = group.querySelectorAll('.sub-point');
+                if (subPoints.length >= 4) {
+                    group.classList.add('dense-content');
+                    group.classList.add('major-section');
+                    console.log(`Verse group ${index + 1} in chapter ${chapterNum} has ${subPoints.length} sub-points - enhanced styling applied`);
+                }
+                
                 // Insert visual divider every 3rd verse group
-                if ((index + 1) % 3 === 0 && index < verseGroups.length - 1) {
+                if ((index + 1) % 3 === 0 && index < chapterVerseGroups.length - 1) {
                     const divider = document.createElement('div');
                     divider.className = 'chapter-divider';
                     group.insertAdjacentElement('afterend', divider);
+                    console.log(`Added divider after verse group ${index + 1} in chapter ${chapterNum}`);
                 }
                 
                 // Mark key verses
@@ -94,18 +107,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 addContentTypeClasses(group);
             });
             
-            // Add mini navigation for chapters with 5+ verse groups
-            if (verseGroups.length > 5) {
-                addChapterNavigation(chapterContent, verseGroups, chapterNum);
+            // For navigation and progress bars, we need a container
+            // Find the parent container of these verse groups
+            if (chapterVerseGroups.length > 0) {
+                const firstVerseGroup = chapterVerseGroups[0];
+                const parentContainer = firstVerseGroup.parentElement;
+                
+                // Add mini navigation for chapters with 5+ verse groups
+                if (chapterVerseGroups.length > 5) {
+                    addChapterNavigation(parentContainer, chapterVerseGroups, chapterNum);
+                }
+                
+                // Add progress bar for chapters with 8+ verse groups
+                if (chapterVerseGroups.length > 8) {
+                    addProgressBar(parentContainer);
+                }
+                
+                // Create collapsible sections for dense content
+                chapterVerseGroups.forEach(group => {
+                    createCollapsibleSectionsForGroup(group);
+                });
             }
-            
-            // Add progress bar for chapters with 8+ verse groups
-            if (verseGroups.length > 8) {
-                addProgressBar(chapterContent);
-            }
-            
-            // Create collapsible sections for dense content
-            createCollapsibleSections(chapterContent);
         });
     }
     
@@ -249,43 +271,39 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // ============================================
-    // CREATE COLLAPSIBLE SECTIONS
+    // CREATE COLLAPSIBLE SECTIONS FOR A SINGLE GROUP
     // ============================================
     
-    function createCollapsibleSections(chapterContent) {
-        const verseGroups = chapterContent.querySelectorAll('.verse-group');
+    function createCollapsibleSectionsForGroup(verseGroup) {
+        const subPoints = verseGroup.querySelectorAll('.sub-point');
         
-        verseGroups.forEach(group => {
-            const subPoints = group.querySelectorAll('.sub-point');
+        // If there are more than 4 sub-points, make them collapsible
+        if (subPoints.length > 4) {
+            let currentSection = null;
+            let sectionCount = 0;
             
-            // If there are more than 5 sub-points, make them collapsible
-            if (subPoints.length > 5) {
-                let currentSection = null;
-                let sectionCount = 0;
-                
-                subPoints.forEach((point, index) => {
-                    // Create new section every 4 sub-points
-                    if (index % 4 === 0) {
-                        currentSection = document.createElement('div');
-                        currentSection.className = 'verse-subsection';
-                        
-                        const header = document.createElement('h5');
-                        header.textContent = `Details ${++sectionCount}`;
-                        header.addEventListener('click', function() {
-                            currentSection.classList.toggle('collapsed');
-                        });
-                        
-                        currentSection.appendChild(header);
-                        point.parentNode.insertBefore(currentSection, point);
-                    }
+            subPoints.forEach((point, index) => {
+                // Create new section every 3 sub-points (changed from 4)
+                if (index % 3 === 0) {
+                    currentSection = document.createElement('div');
+                    currentSection.className = 'verse-subsection';
                     
-                    // Move sub-point into current section
-                    if (currentSection) {
-                        currentSection.appendChild(point);
-                    }
-                });
-            }
-        });
+                    const header = document.createElement('h5');
+                    header.textContent = `Details ${++sectionCount}`;
+                    header.addEventListener('click', function() {
+                        currentSection.classList.toggle('collapsed');
+                    });
+                    
+                    currentSection.appendChild(header);
+                    point.parentNode.insertBefore(currentSection, point);
+                }
+                
+                // Move sub-point into current section
+                if (currentSection) {
+                    currentSection.appendChild(point);
+                }
+            });
+        }
     }
     
     // ============================================
