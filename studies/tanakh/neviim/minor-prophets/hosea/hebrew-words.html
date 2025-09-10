@@ -1,4 +1,49 @@
-<!DOCTYPE html>
+<body>
+  <!-- Navigation placeholder - will be replaced by JavaScript -->
+  <nav id="main-nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="40" height="40">
+            <path d="M 25 15 L 10 15 L 10 85 L 25 85" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <path d="M 75 15 L 90 15 L 90 85 L 75 85" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <ellipse cx="50" cy="50" rx="25" ry="15" stroke="#0a0a0a" stroke-width="3" fill="none"/>
+            <circle cx="50" cy="50" r="8" fill="#00b4d8"/>
+            <circle cx="50" cy="50" r="3" fill="#0a0a0a"/>
+          </svg>
+        </div>
+        <span class="logo-text">Project Context</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/">Home</a></li>
+        <li class="dropdown">
+          <a href="/studies/" class="dropdown-toggle">Studies</a>
+          <div class="dropdown-content">
+            <a href="/studies/characters/characters_hub.html">Biblical Characters</a>
+            <a href="/studies/women/women-bible-hub.html">Women in the Bible</a>
+            <a href="/studies/tanakh/tanakh-hub.html">Tanakh Studies</a>
+            <a href="/studies/thematic/thematic-hub.html">Thematic Studies</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="/resources/" class="dropdown-toggle">Resources</a>
+          <div class="dropdown-content">
+            <a href="/resources/discussion-guides/">Discussion Guides</a>
+            <a href="/resources/study-tools/">Study Tools</a>
+            <a href="/resources/downloads/">Downloads</a>
+          </div>
+        </li>
+        <li><a href="/about/">About</a></li>
+      </ul>
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="content-section"><!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -11,6 +56,160 @@
 
   <!-- Complete inline styles to ensure everything works -->
   <style>
+    /* Navigation Styles */
+    nav {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    nav.scrolled {
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: #0a0a0a;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #666;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+    }
+
+    .nav-links a:hover {
+      color: #0a0a0a;
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-toggle::after {
+      content: '▾';
+      font-size: 0.8rem;
+      margin-left: 0.25rem;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: white;
+      min-width: 200px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      z-index: 1;
+      top: 100%;
+      margin-top: 0.5rem;
+      padding: 0.5rem 0;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .dropdown-content a {
+      color: #666;
+      padding: 0.75rem 1rem;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f5f5f5;
+      color: #0a0a0a;
+    }
+
+    .mobile-menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .mobile-menu-toggle span {
+      display: block;
+      width: 25px;
+      height: 3px;
+      background: #0a0a0a;
+      transition: all 0.3s ease;
+      border-radius: 2px;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        position: fixed;
+        top: 65px;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background: white;
+        flex-direction: column;
+        padding: 2rem;
+        gap: 1rem;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        transition: right 0.3s ease;
+      }
+
+      .nav-links.active {
+        right: 0;
+      }
+
+      .mobile-menu-toggle {
+        display: flex;
+      }
+    }
+
     /* Core Layout */
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
