@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contemporary Application - Hosea Study</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-dark: #0a0a0a;
+            --primary-light: #ffffff;
+            --accent-blue: #00b4d8;
+            --accent-purple: #7209b7;
+            --accent-gold: #d4af37;
+            --accent-green: #10b981;
+            --text-gray: #666;
+            --bg-gray: #f5f5f5;
+            --secondary-color: #8b4513;
+            --hebrew-font: 'SBL Hebrew', 'Ezra SIL', 'Noto Sans Hebrew', serif;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--primary-dark);
+            background: var(--bg-gray);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--primary-dark);
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-dark);
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-links a.active {
+            color: var(--accent-purple);
+            background-color: rgba(114, 9, 183, 0.1);
+        }
+
+        .cta-button {
+            background: var(--primary-dark);
+            color: var(--primary-light);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            margin-top: 80px;
+            position: relative;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 80%, rgba(212,175,55,0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(114,9,183,0.1) 0%, transparent 50%);
+            animation: float 30s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            z-index: 1;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.8s ease-out;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            opacity: 0.9;
+            font-weight: 300;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Theology Navigation */
+        .theology-nav {
+            background: white;
+            padding: 1.5rem;
+            margin: -2rem auto 2rem;
+            max-width: 1200px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .theology-nav-inner {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .theology-nav-item {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 50px;
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .theology-nav-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent-purple);
+            color: var(--accent-purple);
+        }
+
+        .theology-nav-item.active {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            color: white;
+            box-shadow: 0 4px 15px rgba(114, 9, 183, 0.3);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 2rem 4rem;
+        }
+
+        /* Content Section */
+        .content-section {
+            background: var(--primary-light);
+            padding: 3rem;
+            margin-bottom: 2rem;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Theology Cards */
+        .theology-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 2.5rem;
+            margin: 2rem 0;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .theology-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent-purple), var(--accent-blue));
+        }
+
+        .theology-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .theology-card h2 {
+            color: var(--primary-dark);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .theology-card h3 {
+            color: var(--accent-purple);
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem;
+            font-weight: 600;
+        }
+
+        /* Theme Grid */
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .theme-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-box:hover::after {
+            transform: scaleX(1);
+        }
+
+        .theme-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-box h4 {
+            color: var(--accent-purple);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* Scripture Quote */
+        .scripture-quote {
+            background: linear-gradient(135deg, rgba(114, 9, 183, 0.05), rgba(0, 180, 216, 0.05));
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 16px;
+            border-left: 4px solid;
+            border-image: linear-gradient(180deg, var(--accent-purple), var(--accent-blue)) 1;
+            font-style: italic;
+            position: relative;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .scripture-quote::before {
+            content: '"';
+            font-size: 4rem;
+            color: var(--accent-purple);
+            opacity: 0.2;
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-family: Georgia, serif;
+        }
+
+        .verse-ref {
+            display: block;
+            text-align: right;
+            margin-top: 1rem;
+            font-style: normal;
+            color: var(--accent-purple);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(212, 175, 55, 0.1));
+            border: 2px solid var(--accent-green);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .highlight-box::before {
+            content: '💡';
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 2rem;
+            opacity: 0.5;
+        }
+
+        .highlight-box h3 {
+            color: var(--accent-green);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            color: var(--text-gray);
+        }
+
+        .theology-card li strong {
+            color: var(--primary-dark);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #2c2c2c 100%);
+            color: var(--primary-light);
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 0%, rgba(114, 9, 183, 0.1) 0%, transparent 70%);
+        }
+
+        footer p {
+            position: relative;
+            z-index: 1;
+            opacity: 0.9;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links, .cta-button {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .content-section {
+                padding: 2rem;
+            }
+            
+            .theology-nav-inner {
+                gap: 0.5rem;
+            }
+            
+            .theology-nav-item {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .theme-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="../../../../../index.html" class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 25 15 L 10 15 L 10 85 L 25 85" 
+                              stroke="#0a0a0a" 
+                              stroke-width="4" 
+                              fill="none" 
+                              stroke-linecap="round"/>
+                        <path d="M 75 15 L 90 15 L 90 85 L 75 85" 
+                              stroke="#0a0a0a" 
+                              stroke-width="4" 
+                              fill="none" 
+                              stroke-linecap="round"/>
+                        <ellipse cx="50" cy="50" rx="25" ry="15" 
+                                 stroke="#0a0a0a" 
+                                 stroke-width="3" 
+                                 fill="none"/>
+                        <circle cx="50" cy="50" r="8" 
+                                fill="#00b4d8"/>
+                        <circle cx="50" cy="50" r="3" 
+                                fill="#0a0a0a"/>
+                    </svg>
+                </div>
+                <span class="logo-text">Project Context</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="hosea.html">Overview</a></li>
+                <li><a href="#" class="active">Studies</a></li>
+                <li><a href="#resources">Resources</a></li>
+                <li><a href="../../../../../about.html">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <a href="hosea.html" class="cta-button">Back to Hosea</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Contemporary Application</h1>
+            <p class="hero-subtitle">Hosea's Message for Today's Church and World</p>
+        </div>
+    </section>
+
+    <!-- Theology Navigation -->
+    <div class="theology-nav">
+        <div class="theology-nav-inner">
+            <a href="theology.html" class="theology-nav-item">Character of God</a>
+            <a href="theology-covenant.html" class="theology-nav-item">Covenant Theology</a>
+            <a href="theology-sin-judgment.html" class="theology-nav-item">Sin & Judgment</a>
+            <a href="theology-restoration.html" class="theology-nav-item">Hope & Restoration</a>
+            <a href="theology-contemporary.html" class="theology-nav-item active">Contemporary Application</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <section class="content-section">
+            <div class="theology-card">
+                <h2>1. Religious Authenticity</h2>
+                <p>Hosea's critique of worship divorced from ethics challenges contemporary faith:</p>
+                
+                <h3>Ancient Israel's Error:</h3>
+                <ul>
+                    <li>Ritual performance without relational fidelity</li>
+                    <li>Sacrifice without steadfast love</li>
+                    <li>Religious activity masking injustice</li>
+                    <li>Knowledge about God without knowing God</li>
+                </ul>
+                
+                <h3>Contemporary Parallels:</h3>
+                <ul>
+                    <li>Church attendance without life transformation</li>
+                    <li>Doctrinal correctness without love</li>
+                    <li>Religious performance on social media</li>
+                    <li>Worship services ignoring social justice</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    <h3>Hosea's Challenge</h3>
+                    <p>"For I desire steadfast love and not sacrifice, the knowledge of God rather than burnt offerings" (6:6)</p>
+                    <p style="margin-top: 1rem;"><strong>Questions for reflection:</strong></p>
+                    <ul>
+                        <li>Does our worship produce covenant loyalty?</li>
+                        <li>Is our faith primarily ritual or relational?</li>
+                        <li>How does knowing about God differ from knowing God?</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="theology-card">
+                <h2>2. Political Idolatry</h2>
+                <p>Hosea's warning against seeking ultimate security in political solutions remains relevant:</p>
+                
+                <h3>Israel's Political Idolatry:</h3>
+                <ul>
+                    <li>Alliances with Egypt and Assyria</li>
+                    <li>Trust in military might</li>
+                    <li>King-making without divine guidance</li>
+                    <li>"Silly dove" diplomacy</li>
+                </ul>
+                
+                <h3>Contemporary Applications:</h3>
+                <ul>
+                    <li>Expecting political leaders to provide ultimate salvation</li>
+                    <li>Placing ideology above kingdom values</li>
+                    <li>Fear-based political engagement</li>
+                    <li>Compromising faith for political power</li>
+                </ul>
+                
+                <p style="margin-top: 1.5rem;"><strong>Hosea's Alternative:</strong> Trust in God's sovereignty while engaging responsibly in political life</p>
+            </div>
+
+            <div class="theology-card">
+                <h2>3. Divine Suffering and Theodicy</h2>
+                <p>Hosea's portrayal of divine pathos reframes discussions of suffering:</p>
+                
+                <h3>Traditional Theodicy Questions:</h3>
+                <ul>
+                    <li>Why does God allow suffering?</li>
+                    <li>Is God distant from human pain?</li>
+                    <li>How can God be good if evil exists?</li>
+                </ul>
+                
+                <h3>Hosea's Contribution:</h3>
+                <ul>
+                    <li>God suffers with and because of human choices</li>
+                    <li>Divine vulnerability in relationship</li>
+                    <li>Judgment causes God pain</li>
+                    <li>Love persists through betrayal</li>
+                </ul>
+                
+                <div class="scripture-quote">
+                    How can I give you up, O Ephraim?... 
+                    My heart recoils within me
+                    <span class="verse-ref">Hosea 11:8</span>
+                </div>
+            </div>
+
+            <div class="theology-card">
+                <h2>4. Ecological Theology</h2>
+                <p>Hosea connects human sin with creation's disorder:</p>
+                
+                <div class="scripture-quote">
+                    Therefore the land mourns, 
+                    and all who dwell in it languish, 
+                    and also the beasts of the field 
+                    and the birds of the heavens, 
+                    and even the fish of the sea are taken away.
+                    <span class="verse-ref">Hosea 4:3</span>
+                </div>
+                
+                <h3>Ecological Insights:</h3>
+                <ul>
+                    <li>Human sin affects entire creation</li>
+                    <li>Covenant breaking has cosmic consequences</li>
+                    <li>Restoration includes environmental healing</li>
+                    <li>New covenant encompasses all creatures</li>
+                </ul>
+                
+                <p style="margin-top: 1.5rem;">This ecological dimension challenges modern Christians to see environmental stewardship as integral to covenant faithfulness, not optional activism.</p>
+            </div>
+
+            <div class="theology-card">
+                <h2>5. Restorative Justice</h2>
+                <p>Hosea's vision of judgment serving redemption offers an alternative justice model:</p>
+                
+                <div class="theme-grid">
+                    <div class="theme-box">
+                        <h4>Retributive Justice</h4>
+                        <ul>
+                            <li>Punishment as payment</li>
+                            <li>Focus on past wrongs</li>
+                            <li>Separation of offender</li>
+                            <li>Justice as balance</li>
+                        </ul>
+                    </div>
+                    <div class="theme-box">
+                        <h4>Hosea's Restorative Vision</h4>
+                        <ul>
+                            <li>Punishment as pathway</li>
+                            <li>Focus on future relationship</li>
+                            <li>Pursuit of the wayward</li>
+                            <li>Justice as restoration</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <p style="margin-top: 1.5rem;">This has implications for criminal justice reform, church discipline, and interpersonal reconciliation.</p>
+            </div>
+
+            <div class="theology-card">
+                <h2>6. The Challenge of Divine Vulnerability</h2>
+                <p>Hosea's God challenges comfortable theological categories:</p>
+                
+                <h3>Uncomfortable Truths:</h3>
+                <ul>
+                    <li>God can be hurt by human choices</li>
+                    <li>Divine love involves risk</li>
+                    <li>Relationship with God affects both parties</li>
+                    <li>Faith involves genuine intimacy, not just obedience</li>
+                </ul>
+                
+                <h3>Implications for Faith:</h3>
+                <ul>
+                    <li>Prayer as real communication with affected party</li>
+                    <li>Sin as personal betrayal, not just rule-breaking</li>
+                    <li>Worship as response to vulnerable love</li>
+                    <li>Discipleship as covenant partnership</li>
+                </ul>
+                
+                <p style="margin-top: 2rem;">This vulnerable God invites us into genuine relationship rather than religious performance, calling for a faith that transforms rather than merely conforms.</p>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Final Reflection</h3>
+                <p>Hosea's message confronts every generation with the same fundamental questions:</p>
+                <ul>
+                    <li>Will we know God or merely know about God?</li>
+                    <li>Will our religion produce justice and mercy?</li>
+                    <li>Will we trust political power or divine sovereignty?</li>
+                    <li>Will we accept God's vulnerable love?</li>
+                </ul>
+                <p style="margin-top: 1rem;">The book's enduring relevance lies not in specific applications but in its revelation of a God whose holiness is inseparable from wounded love—a truth that challenges and transforms every age.</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Project Context. Empowering faith through understanding.</p>
+    </footer>
+
+    <script>
+        // Add scroll effect to navigation
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.style.background = 'rgba(255, 255, 255, 0.98)';
+                nav.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.1)';
+            } else {
+                nav.style.background = 'rgba(255, 255, 255, 0.95)';
+                nav.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            }
+        });
+    </script>
+</body>
+</html>
