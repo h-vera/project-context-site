@@ -282,14 +282,82 @@ document.addEventListener('DOMContentLoaded', function() {
             let currentSection = null;
             let sectionCount = 0;
             
+            // Get the main verse reference for context
+            const mainVerseRef = verseGroup.querySelector('.verse-ref');
+            const mainRef = mainVerseRef ? mainVerseRef.textContent.trim() : '';
+            
             subPoints.forEach((point, index) => {
-                // Create new section every 3 sub-points (changed from 4)
+                // Create new section every 3 sub-points
                 if (index % 3 === 0) {
                     currentSection = document.createElement('div');
                     currentSection.className = 'verse-subsection';
                     
                     const header = document.createElement('h5');
-                    header.textContent = `Details ${++sectionCount}`;
+                    
+                    // Try multiple patterns to extract verse numbers
+                    const pointText = point.textContent;
+                    let verseStart = null;
+                    let verseEnd = null;
+                    
+                    // Pattern 1: "v.1" or "v.1-3"
+                    const vMatch = pointText.match(/v\.(\d+)(?:-(\d+))?/);
+                    if (vMatch) {
+                        verseStart = vMatch[1];
+                        verseEnd = vMatch[2] || verseStart;
+                    }
+                    
+                    // Pattern 2: numbered list items "1. " "2. " etc.
+                    if (!verseStart) {
+                        const numMatch = pointText.match(/^\s*(\d+)\.\s/);
+                        if (numMatch) {
+                            verseStart = numMatch[1];
+                        }
+                    }
+                    
+                    // Pattern 3: bullet with description containing verse
+                    if (!verseStart) {
+                        const bulletMatch = pointText.match(/•\s*.*?(\d+):(\d+)/);
+                        if (bulletMatch) {
+                            verseStart = bulletMatch[2];
+                        }
+                    }
+                    
+                    // If we found verse numbers, try to find the end verse
+                    if (verseStart) {
+                        const endIndex = Math.min(index + 2, subPoints.length - 1);
+                        for (let i = endIndex; i > index; i--) {
+                            if (subPoints[i]) {
+                                const endText = subPoints[i].textContent;
+                                const endVMatch = endText.match(/v\.(\d+)/);
+                                const endNumMatch = endText.match(/^\s*(\d+)\.\s/);
+                                
+                                if (endVMatch) {
+                                    verseEnd = endVMatch[1];
+                                    break;
+                                } else if (endNumMatch) {
+                                    verseEnd = endNumMatch[1];
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        // Create the header text
+                        if (verseEnd && verseEnd !== verseStart) {
+                            header.textContent = `vv. ${verseStart}-${verseEnd}`;
+                        } else if (verseStart) {
+                            header.textContent = `v. ${verseStart}`;
+                        }
+                    }
+                    
+                    // Fallback: use the main verse reference with section number
+                    if (!header.textContent) {
+                        if (mainRef) {
+                            header.textContent = `${mainRef} (Part ${++sectionCount})`;
+                        } else {
+                            header.textContent = `Section ${++sectionCount}`;
+                        }
+                    }
+                    
                     header.addEventListener('click', function() {
                         currentSection.classList.toggle('collapsed');
                     });
