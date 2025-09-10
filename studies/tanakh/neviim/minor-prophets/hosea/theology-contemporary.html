@@ -1,108 +1,612 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Contemporary Application - Hosea</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contemporary Application - Hosea Study | Project Context</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #1a202c;
+            background: linear-gradient(to bottom, #fafafa 0%, #f3f4f6 100%);
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: #0a0a0a;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #6b7280;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: #0a0a0a;
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 2rem;
+            margin-top: 70px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 80%, rgba(212,175,55,0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
+            animation: float 30s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: rotate(0deg) scale(1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+        }
+        
+        /* Theology Navigation Pills */
+        .tab-nav-container {
+            background: white;
+            padding: 1.5rem;
+            margin: -2rem auto 3rem;
+            max-width: 1100px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .tab-nav {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .tab-button {
+            padding: 0.6rem 1.25rem;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            color: #6b7280;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .tab-button:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tab-button.active {
+            background: linear-gradient(135deg, #e11d48, #7209b7);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(225, 29, 72, 0.25);
+        }
+        
+        /* Content Container */
+        .content-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Back Button */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(135deg, #7209b7, #e11d48);
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(114, 9, 183, 0.3);
+        }
+        
+        /* Theology Cards */
+        .theology-card {
+            background: white;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.05);
+            position: relative;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            border-image: linear-gradient(180deg, #7209b7, #00b4d8) 1;
+        }
+        
+        .theology-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+        }
+        
+        .theology-card h2 {
+            color: #1a202c;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .theology-card h3 {
+            color: #7209b7;
+            font-size: 1.2rem;
+            margin: 1.5rem 0 1rem;
+            font-weight: 600;
+        }
+        
+        .theology-card p {
+            color: #4a5568;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        
+        .theology-card ul {
+            margin: 1rem 0 1rem 1.5rem;
+            color: #4a5568;
+        }
+        
+        .theology-card li {
+            margin-bottom: 0.5rem;
+            line-height: 1.7;
+        }
+        
+        /* Grid Layout */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .panel {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .panel h4 {
+            color: #7209b7;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        /* Scripture Quote */
+        .scripture-quote {
+            background: linear-gradient(135deg, rgba(114,9,183,0.05), rgba(0,180,216,0.05));
+            padding: 2rem;
+            margin: 2rem 0;
+            border-left: 4px solid #7209b7;
+            border-radius: 8px;
+            font-style: italic;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            position: relative;
+        }
+        
+        .scripture-quote::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-size: 4rem;
+            color: #7209b7;
+            opacity: 0.15;
+            font-family: Georgia, serif;
+        }
+        
+        .verse-ref {
+            display: block;
+            text-align: right;
+            margin-top: 1rem;
+            font-style: normal;
+            color: #7209b7;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        /* Key Insight */
+        .key-insight {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-left: 4px solid #3b82f6;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        
+        .key-insight strong {
+            color: #1e40af;
+        }
+        
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(212, 175, 55, 0.1));
+            border: 2px solid #10b981;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 16px;
+            position: relative;
+        }
+        
+        .highlight-box::after {
+            content: '💡';
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 2rem;
+            opacity: 0.5;
+        }
+        
+        .highlight-box h3 {
+            color: #10b981;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #0a0a0a 0%, #2c2c2c 100%);
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .tab-nav-container {
+                margin: -1rem 1rem 2rem;
+                padding: 1rem;
+            }
+            
+            .tab-button {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .theology-card {
+                padding: 1.5rem;
+            }
+            
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
-<body style="font-family: Arial; max-width: 800px; margin: 0 auto; padding: 20px;">
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <span>📖</span>
+                <span>Project Context</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/hosea.html">Hosea Study</a></li>
+                <li><a href="/studies/">Studies</a></li>
+                <li><a href="/resources/">Resources</a></li>
+                <li><a href="/about/">About</a></li>
+            </ul>
+        </div>
+    </nav>
     
-    <div style="background: purple; color: white; padding: 30px; text-align: center;">
-        <h1>Contemporary Application</h1>
-        <p>Hosea's Message for Today's Church and World</p>
-    </div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Contemporary Application</h1>
+            <p>Hosea's Message for Today's Church and World</p>
+        </div>
+    </section>
     
-    <div style="background: white; padding: 20px; margin: 20px 0; border: 1px solid #ddd;">
-        <h2>1. Religious Authenticity</h2>
-        <p>Hosea's critique of worship divorced from ethics challenges contemporary faith:</p>
-        
-        <h3>Ancient Israel's Error:</h3>
-        <ul>
-            <li>Ritual performance without relational fidelity</li>
-            <li>Sacrifice without steadfast love</li>
-            <li>Religious activity masking injustice</li>
-            <li>Knowledge about God without knowing God</li>
-        </ul>
-        
-        <h3>Contemporary Parallels:</h3>
-        <ul>
-            <li>Church attendance without life transformation</li>
-            <li>Doctrinal correctness without love</li>
-            <li>Religious performance on social media</li>
-            <li>Worship services ignoring social justice</li>
-        </ul>
-        
-        <div style="background: #f0f0f0; padding: 15px; margin: 20px 0;">
-            <p><strong>"For I desire steadfast love and not sacrifice, the knowledge of God rather than burnt offerings" - Hosea 6:6</strong></p>
+    <!-- Theology Navigation Pills -->
+    <div class="tab-nav-container">
+        <div class="tab-nav">
+            <a href="theology.html" class="tab-button">Character of God</a>
+            <a href="theology-covenant.html" class="tab-button">Covenant Theology</a>
+            <a href="theology-sin-judgment.html" class="tab-button">Sin & Judgment</a>
+            <a href="theology-restoration.html" class="tab-button">Hope & Restoration</a>
+            <a href="theology-contemporary.html" class="tab-button active">Contemporary Application</a>
         </div>
     </div>
     
-    <div style="background: white; padding: 20px; margin: 20px 0; border: 1px solid #ddd;">
-        <h2>2. Political Idolatry</h2>
-        <p>Hosea's warning against seeking ultimate security in political solutions remains relevant:</p>
+    <!-- Main Content -->
+    <div class="content-container">
+        <!-- Back Button -->
+        <a href="hosea.html" class="back-button">← Back to Hosea Overview</a>
         
-        <h3>Israel's Political Idolatry:</h3>
-        <ul>
-            <li>Alliances with Egypt and Assyria</li>
-            <li>Trust in military might</li>
-            <li>King-making without divine guidance</li>
-            <li>"Silly dove" diplomacy (7:11)</li>
-        </ul>
-        
-        <h3>Contemporary Applications:</h3>
-        <ul>
-            <li>Expecting political leaders to provide ultimate salvation</li>
-            <li>Placing ideology above kingdom values</li>
-            <li>Fear-based political engagement</li>
-            <li>Compromising faith for political power</li>
-        </ul>
-    </div>
-    
-    <div style="background: white; padding: 20px; margin: 20px 0; border: 1px solid #ddd;">
-        <h2>3. Divine Suffering and Theodicy</h2>
-        <p>Hosea's portrayal of divine pathos reframes discussions of suffering:</p>
-        
-        <div style="background: #f0f0f0; padding: 15px; margin: 20px 0;">
-            <p><strong>"How can I give you up, O Ephraim?... My heart recoils within me" - Hosea 11:8</strong></p>
+        <!-- Section 1: Religious Authenticity -->
+        <div class="theology-card">
+            <h2>1. Religious Authenticity</h2>
+            <p>Hosea's critique of worship divorced from ethics challenges contemporary faith:</p>
+            
+            <h3>Ancient Israel's Error:</h3>
+            <ul>
+                <li>Ritual performance without relational fidelity</li>
+                <li>Sacrifice without steadfast love</li>
+                <li>Religious activity masking injustice</li>
+                <li>Knowledge about God without knowing God</li>
+            </ul>
+            
+            <h3>Contemporary Parallels:</h3>
+            <ul>
+                <li>Church attendance without life transformation</li>
+                <li>Doctrinal correctness without love</li>
+                <li>Religious performance on social media</li>
+                <li>Worship services ignoring social justice</li>
+            </ul>
+            
+            <div class="highlight-box">
+                <h3>Hosea's Challenge</h3>
+                <div class="scripture-quote">
+                    For I desire steadfast love and not sacrifice, the knowledge of God rather than burnt offerings
+                    <span class="verse-ref">Hosea 6:6</span>
+                </div>
+                <p><strong>Questions for reflection:</strong></p>
+                <ul>
+                    <li>Does our worship produce covenant loyalty?</li>
+                    <li>Is our faith primarily ritual or relational?</li>
+                    <li>How does knowing about God differ from knowing God?</li>
+                </ul>
+            </div>
         </div>
-        
-        <p>God suffers with and because of human choices. Divine vulnerability in relationship. Love persists through betrayal.</p>
+
+        <!-- Section 2: Political Idolatry -->
+        <div class="theology-card">
+            <h2>2. Political Idolatry</h2>
+            <p>Hosea's warning against seeking ultimate security in political solutions remains relevant:</p>
+            
+            <h3>Israel's Political Idolatry:</h3>
+            <ul>
+                <li>Alliances with Egypt and Assyria</li>
+                <li>Trust in military might</li>
+                <li>King-making without divine guidance</li>
+                <li>"Silly dove" diplomacy (7:11)</li>
+            </ul>
+            
+            <h3>Contemporary Applications:</h3>
+            <ul>
+                <li>Expecting political leaders to provide ultimate salvation</li>
+                <li>Placing ideology above kingdom values</li>
+                <li>Fear-based political engagement</li>
+                <li>Compromising faith for political power</li>
+            </ul>
+            
+            <div class="key-insight">
+                <strong>Hosea's Alternative:</strong> Trust in God's sovereignty while engaging responsibly in political life—neither withdrawal nor idolatry.
+            </div>
+        </div>
+
+        <!-- Section 3: Divine Suffering and Theodicy -->
+        <div class="theology-card">
+            <h2>3. Divine Suffering and Theodicy</h2>
+            <p>Hosea's portrayal of divine pathos reframes discussions of suffering:</p>
+            
+            <div class="grid-2">
+                <div class="panel">
+                    <h4>Traditional Theodicy Questions</h4>
+                    <ul style="margin-left: 0; padding-left: 1.2rem;">
+                        <li>Why does God allow suffering?</li>
+                        <li>Is God distant from human pain?</li>
+                        <li>How can God be good if evil exists?</li>
+                    </ul>
+                </div>
+                <div class="panel">
+                    <h4>Hosea's Contribution</h4>
+                    <ul style="margin-left: 0; padding-left: 1.2rem;">
+                        <li>God suffers with and because of human choices</li>
+                        <li>Divine vulnerability in relationship</li>
+                        <li>Judgment causes God pain</li>
+                        <li>Love persists through betrayal</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="scripture-quote">
+                How can I give you up, O Ephraim?... 
+                My heart recoils within me; 
+                my compassion grows warm and tender.
+                <span class="verse-ref">Hosea 11:8</span>
+            </div>
+        </div>
+
+        <!-- Section 4: Ecological Theology -->
+        <div class="theology-card">
+            <h2>4. Ecological Theology</h2>
+            <p>Hosea connects human sin with creation's disorder:</p>
+            
+            <div class="scripture-quote">
+                Therefore the land mourns, 
+                and all who dwell in it languish, 
+                and also the beasts of the field 
+                and the birds of the heavens, 
+                and even the fish of the sea are taken away.
+                <span class="verse-ref">Hosea 4:3</span>
+            </div>
+            
+            <h3>Ecological Insights:</h3>
+            <ul>
+                <li>Human sin affects entire creation</li>
+                <li>Covenant breaking has cosmic consequences</li>
+                <li>Restoration includes environmental healing</li>
+                <li>New covenant encompasses all creatures (2:18)</li>
+            </ul>
+            
+            <div class="key-insight">
+                <strong>Contemporary Challenge:</strong> This ecological dimension challenges modern Christians to see environmental stewardship as integral to covenant faithfulness, not optional activism.
+            </div>
+        </div>
+
+        <!-- Section 5: Restorative Justice -->
+        <div class="theology-card">
+            <h2>5. Restorative Justice</h2>
+            <p>Hosea's vision of judgment serving redemption offers an alternative justice model:</p>
+            
+            <div class="grid-2">
+                <div class="panel">
+                    <h4>Retributive Justice</h4>
+                    <ul style="margin-left: 0; padding-left: 1.2rem;">
+                        <li>Punishment as payment</li>
+                        <li>Focus on past wrongs</li>
+                        <li>Separation of offender</li>
+                        <li>Justice as balance</li>
+                    </ul>
+                </div>
+                <div class="panel">
+                    <h4>Hosea's Restorative Vision</h4>
+                    <ul style="margin-left: 0; padding-left: 1.2rem;">
+                        <li>Punishment as pathway</li>
+                        <li>Focus on future relationship</li>
+                        <li>Pursuit of the wayward</li>
+                        <li>Justice as restoration</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <p>This has implications for criminal justice reform, church discipline, and interpersonal reconciliation.</p>
+        </div>
+
+        <!-- Section 6: Divine Vulnerability -->
+        <div class="theology-card">
+            <h2>6. The Challenge of Divine Vulnerability</h2>
+            <p>Hosea's God challenges comfortable theological categories:</p>
+            
+            <h3>Uncomfortable Truths:</h3>
+            <ul>
+                <li>God can be hurt by human choices</li>
+                <li>Divine love involves risk</li>
+                <li>Relationship with God affects both parties</li>
+                <li>Faith involves genuine intimacy, not just obedience</li>
+            </ul>
+            
+            <h3>Implications for Faith:</h3>
+            <ul>
+                <li>Prayer as real communication with affected party</li>
+                <li>Sin as personal betrayal, not just rule-breaking</li>
+                <li>Worship as response to vulnerable love</li>
+                <li>Discipleship as covenant partnership</li>
+            </ul>
+            
+            <div class="key-insight">
+                <strong>Transformative Truth:</strong> This vulnerable God invites us into genuine relationship rather than religious performance, calling for a faith that transforms rather than merely conforms.
+            </div>
+        </div>
+
+        <!-- Final Reflection -->
+        <div class="highlight-box">
+            <h3>Final Reflection</h3>
+            <p>Hosea's message confronts every generation with the same fundamental questions:</p>
+            <ul>
+                <li>Will we know God or merely know about God?</li>
+                <li>Will our religion produce justice and mercy?</li>
+                <li>Will we trust political power or divine sovereignty?</li>
+                <li>Will we accept God's vulnerable love?</li>
+            </ul>
+            <p style="margin-top: 1.5rem;"><strong>The book's enduring relevance lies not in specific applications but in its revelation of a God whose holiness is inseparable from wounded love—a truth that challenges and transforms every age.</strong></p>
+        </div>
     </div>
-    
-    <div style="background: white; padding: 20px; margin: 20px 0; border: 1px solid #ddd;">
-        <h2>4. Ecological Theology</h2>
-        <p>Hosea connects human sin with creation's disorder:</p>
-        
-        <ul>
-            <li>Human sin affects entire creation</li>
-            <li>Covenant breaking has cosmic consequences</li>
-            <li>Restoration includes environmental healing</li>
-            <li>New covenant encompasses all creatures</li>
-        </ul>
-    </div>
-    
-    <div style="background: white; padding: 20px; margin: 20px 0; border: 1px solid #ddd;">
-        <h2>5. Restorative Justice</h2>
-        <p>Hosea's vision of judgment serving redemption offers an alternative justice model:</p>
-        
-        <p><strong>Retributive Justice:</strong> Punishment as payment, focus on past wrongs</p>
-        <p><strong>Hosea's Restorative Vision:</strong> Punishment as pathway, focus on future relationship</p>
-    </div>
-    
-    <div style="background: white; padding: 20px; margin: 20px 0; border: 1px solid #ddd;">
-        <h2>6. The Challenge of Divine Vulnerability</h2>
-        <p>Hosea's God challenges comfortable theological categories:</p>
-        
-        <ul>
-            <li>God can be hurt by human choices</li>
-            <li>Divine love involves risk</li>
-            <li>Relationship with God affects both parties</li>
-            <li>Faith involves genuine intimacy, not just obedience</li>
-        </ul>
-    </div>
-    
-    <div style="background: #ffffcc; padding: 20px; margin: 20px 0; border: 2px solid #ffcc00;">
-        <h2>Final Reflection</h2>
-        <p>Hosea's message confronts every generation with fundamental questions about knowing God vs knowing about God, whether our religion produces justice and mercy, and if we will accept God's vulnerable love.</p>
-    </div>
-    
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Project Context. Empowering faith through understanding.</p>
+    </footer>
 </body>
 </html>
