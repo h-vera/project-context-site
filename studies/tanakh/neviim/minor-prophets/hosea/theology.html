@@ -661,105 +661,15 @@
         <p>&copy; 2025 Project Context. Empowering faith through understanding.</p>
     </footer>
 
-    <!-- Load navigation component - try multiple possible paths -->
-    <script>
-        // Debug: Check which path works for nav-component.js
-        const possiblePaths = [
-            'nav-component.js',
-            '../nav-component.js',
-            '../../nav-component.js',
-            '../../../nav-component.js',
-            '../../../../nav-component.js',
-            '../../../../../nav-component.js',
-            '/nav-component.js',
-            '/js/nav-component.js',
-            '/assets/js/nav-component.js'
-        ];
-
-        let scriptLoaded = false;
-
-        // Try to load the nav component from various paths
-        function loadNavComponent() {
-            const tryNextPath = (index) => {
-                if (index >= possiblePaths.length) {
-                    console.error('Could not find nav-component.js in any expected location');
-                    createFallbackNav();
-                    return;
-                }
-
-                const script = document.createElement('script');
-                script.src = possiblePaths[index];
-                script.onload = () => {
-                    console.log('Successfully loaded nav-component.js from:', possiblePaths[index]);
-                    scriptLoaded = true;
-                    // Initialize navigation after successful load
-                    if (typeof initializeNav === 'function') {
-                        initializeNav({
-                            brand: 'Project Context',
-                            tagline: 'Biblical Studies',
-                            menuItems: [
-                                { text: 'Home', href: '../../../../../index.html' },
-                                { text: 'Studies', href: '#' },
-                                { text: 'Resources', href: '#resources' },
-                                { text: 'About', href: '../../../../../about.html' },
-                                { text: 'Contact', href: '#contact' }
-                            ]
-                        });
-                    }
-                };
-                script.onerror = () => {
-                    console.log('Failed to load from:', possiblePaths[index]);
-                    tryNextPath(index + 1);
-                };
-                document.head.appendChild(script);
-            };
-
-            tryNextPath(0);
-        }
-
-        // Create fallback navigation if script doesn't load
-        function createFallbackNav() {
-            console.warn('Using fallback navigation - nav-component.js not found');
-            const nav = document.getElementById('main-nav');
-            if (nav) {
-                nav.innerHTML = `
-                    <div style="max-width: 1200px; margin: 0 auto; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <div style="font-size: 1.5rem; font-weight: 700; color: #0a0a0a;">Project Context</div>
-                            <div style="font-size: 0.75rem; color: #666;">Biblical Studies</div>
-                        </div>
-                        <div style="display: flex; gap: 2rem; align-items: center;">
-                            <a href="../../../../../index.html" style="text-decoration: none; color: #666; font-weight: 500; padding: 0.5rem 1rem; border-radius: 4px; transition: all 0.3s;">Home</a>
-                            <a href="#" style="text-decoration: none; color: #666; font-weight: 500; padding: 0.5rem 1rem; border-radius: 4px; transition: all 0.3s;">Studies</a>
-                            <a href="#resources" style="text-decoration: none; color: #666; font-weight: 500; padding: 0.5rem 1rem; border-radius: 4px; transition: all 0.3s;">Resources</a>
-                            <a href="../../../../../about.html" style="text-decoration: none; color: #666; font-weight: 500; padding: 0.5rem 1rem; border-radius: 4px; transition: all 0.3s;">About</a>
-                            <a href="#contact" style="text-decoration: none; color: #666; font-weight: 500; padding: 0.5rem 1rem; border-radius: 4px; transition: all 0.3s;">Contact</a>
-                        </div>
-                    </div>
-                `;
-                nav.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); box-shadow: 0 2px 20px rgba(0,0,0,0.1); z-index: 1000; padding: 0.5rem 0;';
-                
-                // Add hover effects
-                const links = nav.querySelectorAll('a');
-                links.forEach(link => {
-                    link.addEventListener('mouseenter', () => {
-                        link.style.color = '#0a0a0a';
-                        link.style.background = 'rgba(0,0,0,0.05)';
-                    });
-                    link.addEventListener('mouseleave', () => {
-                        link.style.color = '#666';
-                        link.style.background = 'transparent';
-                    });
-                });
-            }
-        }
-
-        // Start loading when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', loadNavComponent);
-        } else {
-            loadNavComponent();
-        }
+    <!-- Scripts -->
+    <script type="module">
+        import NavigationComponent from '/assets/js/nav-component.js';
+        
+        // Initialize centralized navigation
+        const navigation = new NavigationComponent({
+            currentPage: 'studies',
+            hubType: 'tanakh'
+        });
     </script>
 </body>
 </html>
