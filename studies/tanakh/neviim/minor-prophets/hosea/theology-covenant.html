@@ -9,11 +9,10 @@
     <!-- Global styles for common elements -->
     <link rel="stylesheet" href="/assets/css/global-v2.css">
     
-    <!-- Theology Pages Shared Styles - Copy this block to all theology pages -->
+    <!-- Theology Pages Shared Styles -->
     <style>
         /* ============================================
            THEOLOGY PAGES SHARED STYLES
-           Keep inline to avoid bloating global CSS
            ============================================ */
         
         /* Hero Section Override */
@@ -22,7 +21,7 @@
             margin-top: 80px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 3rem 2rem 4rem;
+            padding: 3rem 2rem 6rem; /* Increased bottom padding for nav pills */
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -80,11 +79,11 @@
             }
         }
         
-        /* Theology Navigation Pills */
+        /* Theology Navigation Pills - Fixed positioning */
         .theology-nav {
             background: white;
             padding: 1.5rem;
-            margin: -3rem auto 2rem;
+            margin: -4rem auto 3rem; /* Properly positioned outside hero */
             max-width: 1200px;
             width: calc(100% - 4rem);
             border-radius: 16px;
@@ -98,14 +97,15 @@
             justify-content: center;
             background: transparent;
             padding: 0;
+            margin: 0;
         }
         
-        /* Back to Hosea Button Override */
+        /* Back to Hosea Button */
         .back-button {
-            position: absolute;
+            position: fixed;
             top: 100px;
             right: 2rem;
-            background: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.95);
             color: var(--accent-purple);
             padding: 0.75rem 1.5rem;
             border-radius: 50px;
@@ -114,13 +114,92 @@
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
             border: 2px solid rgba(114,9,183,0.3);
-            z-index: 10;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         
         .back-button:hover {
             background: white;
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(114,9,183,0.2);
+        }
+        
+        /* Main content container */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1rem 4rem;
+        }
+        
+        /* Content section wrapper */
+        .content-section {
+            background: transparent;
+            padding: 0;
+        }
+        
+        /* Enhanced Theology Card Styling */
+        .theology-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 2.5rem;
+            margin: 2rem 0;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .theology-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #7209b7, #00b4d8);
+        }
+        
+        .theology-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .theology-card h2 {
+            color: #0a0a0a;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        .theology-card h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #7209b7, #00b4d8);
+            border-radius: 2px;
+        }
+        
+        .theology-card h3 {
+            color: #7209b7;
+            font-size: 1.4rem;
+            margin: 2rem 0 1rem;
+            font-weight: 600;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .theology-card h3::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #00b4d8;
+            font-size: 1.2rem;
         }
         
         /* Scripture Quote Boxes */
@@ -135,6 +214,13 @@
             position: relative;
             font-size: 1.1rem;
             line-height: 1.8;
+            box-shadow: 0 4px 12px rgba(114,9,183,0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .scripture-quote:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(114,9,183,0.12);
         }
         
         .scripture-quote::before {
@@ -179,27 +265,31 @@
             box-shadow: 0 4px 12px rgba(139,69,19,0.2);
         }
         
-        /* Theme Grid Override for Theology */
+        /* Enhanced Theme Grid */
         .theology-card .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
             margin: 2rem 0;
         }
         
         .theology-card .theme-box {
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-            padding: 2rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+            padding: 1.8rem;
             border-radius: 16px;
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid rgba(114,9,183,0.1);
             transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
             position: relative;
             overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         
-        .theology-card .theme-box::after {
+        .theology-card .theme-box::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
+            right: 0;
             height: 3px;
             background: linear-gradient(90deg, #7209b7, #00b4d8);
             transform: scaleX(0);
@@ -207,40 +297,94 @@
             transition: transform 0.3s ease;
         }
         
-        .theology-card .theme-box:hover::after {
+        .theology-card .theme-box:hover::before {
             transform: scaleX(1);
         }
         
         .theology-card .theme-box:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(114,9,183,0.15);
+            border-color: rgba(114,9,183,0.3);
+            background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
         }
         
         .theology-card .theme-box h4 {
             color: #7209b7;
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-            font-weight: 600;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
         
-        /* Ensure proper list styling in theology cards */
+        .theology-card .theme-box p {
+            color: #4a5568;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+        
+        /* Enhanced lists in theology cards */
         .theology-card ul, .theology-card ol {
-            margin-left: 1.5rem;
-            margin-bottom: 1rem;
+            margin: 1rem 0 1rem 1.5rem;
             line-height: 1.8;
         }
         
         .theology-card li {
-            margin-bottom: 0.5rem;
-            color: #666;
+            margin-bottom: 0.75rem;
+            color: #4a5568;
+            position: relative;
+            padding-left: 0.5rem;
+        }
+        
+        .theology-card ul li::before {
+            content: '•';
+            position: absolute;
+            left: -1rem;
+            color: #00b4d8;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .theology-card ol {
+            counter-reset: theology-list;
+        }
+        
+        .theology-card ol li {
+            counter-increment: theology-list;
+        }
+        
+        .theology-card ol li::before {
+            content: counter(theology-list) '.';
+            position: absolute;
+            left: -1.5rem;
+            color: #7209b7;
+            font-weight: bold;
         }
         
         .theology-card li strong {
-            color: #0a0a0a;
+            color: #1a202c;
+            font-weight: 600;
+        }
+        
+        /* Section-specific enhancements */
+        .theology-card p {
+            color: #2d3748;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+        
+        .theology-card p + .theme-grid,
+        .theology-card p + h3,
+        .theology-card p + ul,
+        .theology-card p + ol {
+            margin-top: 1.5rem;
         }
         
         /* Mobile Responsive Overrides */
         @media (max-width: 768px) {
+            .hero {
+                padding: 2rem 1rem 5rem;
+            }
+            
             .hero-title {
                 font-size: 2rem;
             }
@@ -253,8 +397,9 @@
             }
             
             .theology-nav {
-                margin: -1rem 1rem 2rem;
+                margin: -2.5rem 1rem 2rem;
                 padding: 1rem;
+                width: calc(100% - 2rem);
             }
             
             .theology-nav .tab-nav {
@@ -270,419 +415,33 @@
                 padding: 1.5rem;
             }
             
+            .theology-card {
+                padding: 1.5rem;
+            }
+            
             .theology-card .theme-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .theology-card h2 {
+                font-size: 1.6rem;
+            }
+            
+            .theology-card h3 {
+                font-size: 1.2rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
         }
     </style>
-    <!-- Enhanced Theology Pages Shared Styles -->
-<style>
-    /* ============================================
-       THEOLOGY PAGES SHARED STYLES
-       Keep inline to avoid bloating global CSS
-       ============================================ */
-    
-    /* Hero Section Override */
-    .hero {
-        min-height: 50vh;
-        margin-top: 80px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 3rem 2rem;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .hero::before {
-        content: '';
-        position: absolute;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(circle at 20% 80%, rgba(212,175,55,0.2) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%),
-                    radial-gradient(circle at 40% 40%, rgba(114,9,183,0.1) 0%, transparent 50%);
-        animation: float 30s infinite linear;
-    }
-    
-    @keyframes float {
-        0% { transform: rotate(0deg) scale(1); }
-        50% { transform: rotate(180deg) scale(1.1); }
-        100% { transform: rotate(360deg) scale(1); }
-    }
-    
-    .hero-content {
-        position: relative;
-        z-index: 1;
-        max-width: 900px;
-        margin: 0 auto;
-    }
-    
-    .hero-title {
-        font-size: clamp(2.5rem, 6vw, 4rem);
-        font-weight: 900;
-        margin-bottom: 1rem;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        animation: fadeInUp 0.8s ease-out;
-    }
-    
-    .hero-subtitle {
-        font-size: clamp(1rem, 2.5vw, 1.5rem);
-        opacity: 0.9;
-        font-weight: 300;
-        max-width: 700px;
-        margin: 0 auto;
-        animation: fadeInUp 0.8s ease-out 0.2s both;
-    }
-    
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    /* Theology Navigation Pills */
-    .theology-nav {
-        background: white;
-        padding: 1.5rem;
-        margin: -2rem auto 2rem;
-        max-width: 1200px;
-        border-radius: 16px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        position: relative;
-        z-index: 2;
-    }
-    
-    .theology-nav .tab-nav {
-        justify-content: center;
-        background: transparent;
-        padding: 0;
-    }
-    
-    /* Back to Hosea Button Override */
-    .back-button {
-        position: absolute;
-        top: 100px;
-        right: 2rem;
-        background: rgba(255,255,255,0.9);
-        color: var(--accent-purple);
-        padding: 0.75rem 1.5rem;
-        border-radius: 50px;
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
-        border: 2px solid rgba(114,9,183,0.3);
-        z-index: 10;
-    }
-    
-    .back-button:hover {
-        background: white;
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(114,9,183,0.2);
-    }
-    
-    /* Enhanced Theology Card Styling */
-    .theology-card {
-        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-        padding: 2.5rem;
-        margin: 2rem 0;
-        border-radius: 20px;
-        position: relative;
-        overflow: hidden;
-        border: 1px solid rgba(0, 0, 0, 0.05);
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    }
-    
-    .theology-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 4px;
-        height: 100%;
-        background: linear-gradient(180deg, #7209b7, #00b4d8);
-    }
-    
-    .theology-card:hover {
-        transform: translateX(5px);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-    }
-    
-    .theology-card h2 {
-        color: #0a0a0a;
-        font-size: 2rem;
-        margin-bottom: 1.5rem;
-        font-weight: 700;
-        position: relative;
-        padding-bottom: 1rem;
-    }
-    
-    .theology-card h2::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 60px;
-        height: 3px;
-        background: linear-gradient(90deg, #7209b7, #00b4d8);
-        border-radius: 2px;
-    }
-    
-    .theology-card h3 {
-        color: #7209b7;
-        font-size: 1.4rem;
-        margin: 2rem 0 1rem;
-        font-weight: 600;
-        position: relative;
-        padding-left: 1.5rem;
-    }
-    
-    .theology-card h3::before {
-        content: '▸';
-        position: absolute;
-        left: 0;
-        color: #00b4d8;
-        font-size: 1.2rem;
-    }
-    
-    /* Scripture Quote Boxes */
-    .scripture-quote {
-        background: linear-gradient(135deg, rgba(114,9,183,0.05), rgba(0,180,216,0.05));
-        padding: 2rem;
-        margin: 2rem 0;
-        border-radius: 16px;
-        border-left: 4px solid;
-        border-image: linear-gradient(180deg, #7209b7, #00b4d8) 1;
-        font-style: italic;
-        position: relative;
-        font-size: 1.1rem;
-        line-height: 1.8;
-        box-shadow: 0 4px 12px rgba(114,9,183,0.08);
-        transition: all 0.3s ease;
-    }
-    
-    .scripture-quote:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(114,9,183,0.12);
-    }
-    
-    .scripture-quote::before {
-        content: '"';
-        font-size: 4rem;
-        color: #7209b7;
-        opacity: 0.2;
-        position: absolute;
-        top: -10px;
-        left: 20px;
-        font-family: Georgia, serif;
-    }
-    
-    .verse-ref {
-        display: block;
-        text-align: right;
-        margin-top: 1rem;
-        font-style: normal;
-        color: #7209b7;
-        font-weight: 600;
-        font-size: 0.95rem;
-    }
-    
-    /* Hebrew Text Inline */
-    .hebrew {
-        font-family: 'SBL Hebrew', 'Ezra SIL', 'Times New Roman', serif;
-        font-size: 1.3em;
-        direction: rtl;
-        unicode-bidi: embed;
-        color: #8b4513;
-        background: linear-gradient(135deg, rgba(139,69,19,0.1), rgba(212,175,55,0.1));
-        padding: 0.3rem 0.8rem;
-        border-radius: 6px;
-        display: inline-block;
-        margin: 0 0.5rem;
-        border: 1px solid rgba(139,69,19,0.2);
-        transition: all 0.3s ease;
-    }
-    
-    .hebrew:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 12px rgba(139,69,19,0.2);
-    }
-    
-    /* Enhanced Theme Grid for Section 1 */
-    .theology-card .theme-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 1.5rem;
-        margin: 2rem 0;
-    }
-    
-    .theology-card .theme-box {
-        background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
-        padding: 1.8rem;
-        border-radius: 16px;
-        border: 1px solid rgba(114,9,183,0.1);
-        transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-    
-    .theology-card .theme-box::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: linear-gradient(90deg, #7209b7, #00b4d8);
-        transform: scaleX(0);
-        transform-origin: left;
-        transition: transform 0.3s ease;
-    }
-    
-    .theology-card .theme-box:hover::before {
-        transform: scaleX(1);
-    }
-    
-    .theology-card .theme-box:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(114,9,183,0.15);
-        border-color: rgba(114,9,183,0.3);
-        background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
-    }
-    
-    .theology-card .theme-box h4 {
-        color: #7209b7;
-        margin-bottom: 0.75rem;
-        font-size: 1.1rem;
-        font-weight: 700;
-        letter-spacing: -0.5px;
-    }
-    
-    .theology-card .theme-box p {
-        color: #4a5568;
-        line-height: 1.6;
-        font-size: 0.95rem;
-    }
-    
-    /* Enhanced lists in theology cards */
-    .theology-card ul, .theology-card ol {
-        margin: 1rem 0 1rem 1.5rem;
-        line-height: 1.8;
-    }
-    
-    .theology-card li {
-        margin-bottom: 0.75rem;
-        color: #4a5568;
-        position: relative;
-        padding-left: 0.5rem;
-    }
-    
-    .theology-card ul li::before {
-        content: '•';
-        position: absolute;
-        left: -1rem;
-        color: #00b4d8;
-        font-weight: bold;
-        font-size: 1.2rem;
-    }
-    
-    .theology-card ol {
-        counter-reset: theology-list;
-    }
-    
-    .theology-card ol li {
-        counter-increment: theology-list;
-    }
-    
-    .theology-card ol li::before {
-        content: counter(theology-list) '.';
-        position: absolute;
-        left: -1.5rem;
-        color: #7209b7;
-        font-weight: bold;
-    }
-    
-    .theology-card li strong {
-        color: #1a202c;
-        font-weight: 600;
-    }
-    
-    /* Section-specific enhancements */
-    .theology-card p {
-        color: #2d3748;
-        line-height: 1.8;
-        font-size: 1.05rem;
-    }
-    
-    .theology-card p + .theme-grid,
-    .theology-card p + h3,
-    .theology-card p + ul,
-    .theology-card p + ol {
-        margin-top: 1.5rem;
-    }
-    
-    /* Mobile Responsive Overrides */
-    @media (max-width: 768px) {
-        .hero-title {
-            font-size: 2rem;
-        }
-        
-        .back-button {
-            top: 85px;
-            right: 1rem;
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-        }
-        
-        .theology-nav {
-            margin: -1rem 1rem 2rem;
-            padding: 1rem;
-        }
-        
-        .theology-nav .tab-nav {
-            gap: 0.5rem;
-        }
-        
-        .theology-nav .tab-button {
-            padding: 0.6rem 1rem;
-            font-size: 0.9rem;
-        }
-        
-        .scripture-quote {
-            padding: 1.5rem;
-        }
-        
-        .theology-card {
-            padding: 1.5rem;
-        }
-        
-        .theology-card .theme-grid {
-            grid-template-columns: 1fr;
-        }
-        
-        .theology-card h2 {
-            font-size: 1.6rem;
-        }
-        
-        .theology-card h3 {
-            font-size: 1.2rem;
-        }
-    }
-</style>
 </head>
 <body>
     <!-- Reading Progress Bar -->
     <div class="reading-progress"></div>
 
-    <!-- Navigation - Uses your existing nav component -->
+    <!-- Navigation will be inserted here by JavaScript -->
     <nav id="main-nav"></nav>
     
     <!-- Back to Hosea Button -->
@@ -696,7 +455,7 @@
         </div>
     </section>
     
-    <!-- Theology Navigation Pills -->
+    <!-- Theology Navigation Pills - Now properly outside hero -->
     <div class="theology-nav">
         <div class="tab-nav">
             <a href="theology.html" class="tab-button">Character of God</a>
@@ -707,20 +466,21 @@
         </div>
     </div>
     
+    <!-- Quick Navigation Sidebar -->
     <div class="quick-nav-sidebar" aria-label="Section navigation">
-    <div class="quick-nav-item" data-label="Knowledge of God" data-target="#knowledge"></div>
-    <div class="quick-nav-item" data-label="Relationship Model" data-target="#relationship"></div>
-    <div class="quick-nav-item" data-label="Covenant Lawsuit" data-target="#lawsuit"></div>
-    <div class="quick-nav-item" data-label="Renewal Vision" data-target="#renewal"></div>
+        <div class="quick-nav-item" data-label="Knowledge of God" data-target="#knowledge"></div>
+        <div class="quick-nav-item" data-label="Relationship Model" data-target="#relationship"></div>
+        <div class="quick-nav-item" data-label="Covenant Lawsuit" data-target="#lawsuit"></div>
+        <div class="quick-nav-item" data-label="Renewal Vision" data-target="#renewal"></div>
     </div>
 
     <!-- Main Content -->
     <div class="container">
         <section class="content-section" id="main-content">
             <!-- Card 1: Knowledge of God -->
-        <div class="theology-card" id="knowledge">
-            <h2>1. Knowledge of God (דַּעַת אֱלֹהִים)</h2>
-            <p>Central to Hosea's covenant theology is the concept of "knowledge of God," which goes far beyond intellectual understanding:</p>
+            <div class="theology-card animate-on-scroll" id="knowledge">
+                <h2>1. Knowledge of God (דַּעַת אֱלֹהִים)</h2>
+                <p>Central to Hosea's covenant theology is the concept of "knowledge of God," which goes far beyond intellectual understanding:</p>
                 
                 <div class="theme-grid">
                     <div class="theme-box">
@@ -764,9 +524,9 @@
             </div>
 
             <!-- Card 2: Covenant as Relationship -->
-        <div class="theology-card" id="relationship">
-            <h2>2. Covenant as Relationship, Not Contract</h2>
-            <p>Hosea transforms covenant understanding from legal contract to living relationship:</p>
+            <div class="theology-card animate-on-scroll" id="relationship">
+                <h2>2. Covenant as Relationship, Not Contract</h2>
+                <p>Hosea transforms covenant understanding from legal contract to living relationship:</p>
                 
                 <h3>Contract Model (ANE Treaties)</h3>
                 <ul>
@@ -794,9 +554,9 @@
             </div>
 
             <!-- Card 3: Covenant Lawsuit -->
-        <div class="theology-card" id="lawsuit">
-            <h2>3. Covenant Lawsuit (רִיב)</h2>
-            <p>Hosea employs the covenant lawsuit genre but transforms it with divine pathos:</p>
+            <div class="theology-card animate-on-scroll" id="lawsuit">
+                <h2>3. Covenant Lawsuit (רִיב)</h2>
+                <p>Hosea employs the covenant lawsuit genre but transforms it with divine pathos:</p>
                 
                 <h3>Traditional Lawsuit Elements:</h3>
                 <ol>
@@ -816,9 +576,9 @@
             </div>
 
             <!-- Card 4: Covenant Renewal -->
-        <div class="theology-card" id="renewal">
-            <h2>4. Covenant Renewal Vision</h2>
-            <p>Hosea envisions a new covenant that transcends the broken one:</p>
+            <div class="theology-card animate-on-scroll" id="renewal">
+                <h2>4. Covenant Renewal Vision</h2>
+                <p>Hosea envisions a new covenant that transcends the broken one:</p>
                 
                 <div class="scripture-quote">
                     And I will make for them a covenant on that day with the beasts of the field, 
@@ -827,8 +587,6 @@
                     and I will make you lie down in safety.
                     <span class="verse-ref">Hosea 2:18</span>
                 </div>
-        </section>
-    </div>
                 
                 <h3>Features of the New Covenant:</h3>
                 <ul>
@@ -844,7 +602,10 @@
     </div>
 
     <!-- Back to Top Button -->
-    <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
+    <a href="#main-nav" class="back-to-top" aria-label="Back to top">↑</a>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay"></div>
 
     <footer>
         <p>&copy; 2025 Project Context. Empowering faith through understanding.</p>
@@ -852,31 +613,117 @@
     
     <!-- Scripts -->
     <script src="/assets/js/nav-component.js"></script>
-<script>
-    // Initialize navigation using global function
-    document.addEventListener('DOMContentLoaded', function() {
-        // Use the global initialization function
-        if (typeof initializeNavigation === 'function') {
-            initializeNavigation({
-                currentPage: 'tanakh',
-                hubType: 'tanakh'
-            });
-        }
-        
-        // Add scroll effect to navigation
-        window.addEventListener('scroll', () => {
-            const nav = document.querySelector('nav');
-            if (nav) {
-                if (window.scrollY > 100) {
-                    nav.style.background = 'rgba(255, 255, 255, 0.98)';
-                    nav.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.1)';
-                } else {
-                    nav.style.background = 'rgba(255, 255, 255, 0.95)';
-                    nav.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+    <script src="/assets/js/mobile-menu.js"></script>
+    
+    <script>
+        // Initialize navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize centralized navigation
+            if (typeof initializeNavigation === 'function') {
+                initializeNavigation({
+                    currentPage: 'tanakh',
+                    hubType: 'tanakh'
+                });
+            }
+            
+            // Reading progress bar
+            function updateProgressBar() {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                const progressBar = document.querySelector('.reading-progress');
+                if (progressBar) {
+                    progressBar.style.width = scrolled + '%';
                 }
             }
+            
+            // Back to top button visibility
+            function handleBackToTop() {
+                const backToTop = document.querySelector('.back-to-top');
+                if (backToTop) {
+                    if (window.scrollY > 300) {
+                        backToTop.classList.add('visible');
+                    } else {
+                        backToTop.classList.remove('visible');
+                    }
+                }
+            }
+            
+            // Quick nav sidebar
+            function updateQuickNav() {
+                const sections = document.querySelectorAll('.theology-card[id]');
+                const quickNavItems = document.querySelectorAll('.quick-nav-item');
+                
+                let currentSection = '';
+                sections.forEach(section => {
+                    const rect = section.getBoundingClientRect();
+                    if (rect.top <= 150 && rect.bottom >= 150) {
+                        currentSection = section.id;
+                    }
+                });
+                
+                quickNavItems.forEach(item => {
+                    const target = item.getAttribute('data-target');
+                    if (target === '#' + currentSection) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Quick nav click handlers
+            document.querySelectorAll('.quick-nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    const element = document.querySelector(target);
+                    if (element) {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+            
+            // Animate on scroll
+            function animateOnScroll() {
+                const elements = document.querySelectorAll('.animate-on-scroll');
+                elements.forEach(element => {
+                    const rect = element.getBoundingClientRect();
+                    if (rect.top < window.innerHeight && rect.bottom > 0) {
+                        element.classList.add('visible');
+                    }
+                });
+            }
+            
+            // Add scroll event listeners
+            let scrollTimeout;
+            window.addEventListener('scroll', () => {
+                if (scrollTimeout) {
+                    window.cancelAnimationFrame(scrollTimeout);
+                }
+                scrollTimeout = window.requestAnimationFrame(() => {
+                    updateProgressBar();
+                    handleBackToTop();
+                    updateQuickNav();
+                    animateOnScroll();
+                    
+                    // Update nav on scroll
+                    const nav = document.querySelector('nav');
+                    if (nav) {
+                        if (window.scrollY > 100) {
+                            nav.classList.add('scrolled');
+                        } else {
+                            nav.classList.remove('scrolled');
+                        }
+                    }
+                });
+            }, { passive: true });
+            
+            // Initial calls
+            updateProgressBar();
+            handleBackToTop();
+            updateQuickNav();
+            animateOnScroll();
         });
-    });
-</script>
+    </script>
 </body>
 </html>
