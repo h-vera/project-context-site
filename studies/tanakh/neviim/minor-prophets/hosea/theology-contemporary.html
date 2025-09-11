@@ -625,23 +625,66 @@
                 });
                 console.log('Navigation initialized successfully');
             } else {
-                console.error('Navigation component not loaded. Check if /assets/js/nav-component.js exists');
-                // Fallback: create basic navigation if component fails
+                console.error('Navigation component not loaded. Using fallback navigation');
+                // Fallback: create navigation with mobile menu
                 const nav = document.getElementById('main-nav');
                 if (nav) {
                     nav.innerHTML = `
                         <div class="nav-container">
                             <a href="/" class="logo">
-                                <span>📖</span>
-                                <span>Project Context</span>
+                                <div class="logo-icon">
+                                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="40" height="40">
+                                        <path d="M 25 15 L 10 15 L 10 85 L 25 85" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                        <path d="M 75 15 L 90 15 L 90 85 L 75 85" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                        <ellipse cx="50" cy="50" rx="25" ry="15" stroke="#0a0a0a" stroke-width="3" fill="none"/>
+                                        <circle cx="50" cy="50" r="8" fill="#00b4d8"/>
+                                        <circle cx="50" cy="50" r="3" fill="#0a0a0a"/>
+                                    </svg>
+                                </div>
+                                <span class="logo-text">Project Context</span>
                             </a>
-                            <ul class="nav-links">
+                            <ul class="nav-links" id="navLinks">
                                 <li><a href="/studies/tanakh/neviim/minor-prophets/hosea/hosea.html">Hosea Study</a></li>
-                                <li><a href="/studies/">Studies</a></li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle">Studies</a>
+                                    <div class="dropdown-content">
+                                        <a href="/studies/characters/characters_hub.html">Biblical Characters</a>
+                                        <a href="/studies/women/women-bible-hub.html">Women in the Bible</a>
+                                        <a href="/studies/tanakh/tanakh-hub.html">Tanakh Studies</a>
+                                        <a href="/studies/thematic/thematic-hub.html">Thematic Studies</a>
+                                    </div>
+                                </li>
+                                <li><a href="/resources/">Resources</a></li>
                                 <li><a href="/about/">About</a></li>
                             </ul>
+                            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </button>
                         </div>
                     `;
+                    
+                    // Add mobile menu functionality
+                    const menuToggle = document.getElementById('mobileMenuToggle');
+                    const navLinks = document.getElementById('navLinks');
+                    
+                    if (menuToggle && navLinks) {
+                        menuToggle.addEventListener('click', function() {
+                            menuToggle.classList.toggle('active');
+                            navLinks.classList.toggle('active');
+                            document.body.classList.toggle('menu-open');
+                        });
+                        
+                        // Close menu when clicking outside
+                        document.addEventListener('click', function(e) {
+                            if (!nav.contains(e.target) && navLinks.classList.contains('active')) {
+                                menuToggle.classList.remove('active');
+                                navLinks.classList.remove('active');
+                                document.body.classList.remove('menu-open');
+                            }
+                        });
+                    }
                 }
             }
         });
