@@ -9,97 +9,342 @@
     <!-- Global styles for common elements -->
     <link rel="stylesheet" href="/assets/css/global-v2.css">
     
-    <!-- Theology Pages Shared Styles -->
+    <!-- Page-specific styles matching other Hosea pages -->
     <style>
-        /* ============================================
-           THEOLOGY PAGES SHARED STYLES
-           ============================================ */
-        
-        /* Hero Section Override */
-        .hero {
-            min-height: 50vh;
-            margin-top: 80px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        /* Core Layout */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #0a0a0a;
+            background: #fafafa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .content-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumbs a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .breadcrumbs a:hover {
+            color: #00b4d8;
+        }
+
+        /* Cards */
+        .theology-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .theology-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .theology-card h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .theology-card h3 {
+            color: #555;
+            margin: 1.5rem 0 1rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .theology-card p {
+            color: #444;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .theology-card ul, .theology-card ol {
+            margin: 1rem 0 1rem 1.5rem;
+            line-height: 1.8;
+        }
+
+        .theology-card li {
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+
+        .theology-card li strong {
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* Key Insight */
+        .key-insight {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border: 1px solid #0284c7;
+        }
+
+        .key-insight strong {
+            color: #0c4a6e;
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Progress Bar */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #7209b7, #e11d48);
+            z-index: 1001;
+            transition: width 0.2s ease;
+            width: 0%;
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, #7209b7 0%, #e11d48 100%);
             color: white;
-            padding: 3rem 2rem 6rem; /* Increased bottom padding for nav pills */
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(114, 9, 183, 0.3);
+            z-index: 999;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(114, 9, 183, 0.4);
+        }
+
+        /* Quick Navigation Sidebar */
+        .quick-nav-sidebar {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: none;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 500;
+        }
+
+        @media (min-width: 1400px) {
+            .quick-nav-sidebar {
+                display: flex;
+            }
+        }
+
+        .quick-nav-item {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .quick-nav-item:hover,
+        .quick-nav-item.active {
+            background: linear-gradient(135deg, #7209b7 0%, #e11d48 100%);
+            transform: scale(1.5);
+        }
+
+        .quick-nav-item::before {
+            content: attr(data-label);
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #0a0a0a;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .quick-nav-item:hover::before {
+            opacity: 1;
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #0a0a0a 0%, #2c2c2c 100%);
+            color: white;
             text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
             position: relative;
             overflow: hidden;
         }
-        
-        .hero::before {
+
+        footer::before {
             content: '';
             position: absolute;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 20% 80%, rgba(212,175,55,0.2) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%),
-                        radial-gradient(circle at 40% 40%, rgba(114,9,183,0.1) 0%, transparent 50%);
-            animation: float 30s infinite linear;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 0%, rgba(114, 9, 183, 0.1) 0%, transparent 70%);
         }
-        
-        @keyframes float {
-            0% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(180deg) scale(1.1); }
-            100% { transform: rotate(360deg) scale(1); }
-        }
-        
-        .hero-content {
+
+        footer p {
             position: relative;
             z-index: 1;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        
-        .hero-title {
-            font-size: clamp(2.5rem, 6vw, 4rem);
-            font-weight: 900;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            animation: fadeInUp 0.8s ease-out;
-        }
-        
-        .hero-subtitle {
-            font-size: clamp(1rem, 2.5vw, 1.5rem);
             opacity: 0.9;
-            font-weight: 300;
-            max-width: 700px;
-            margin: 0 auto;
-            animation: fadeInUp 0.8s ease-out 0.2s both;
         }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+
+        /* Animation Classes */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
-        
-        /* Theology Navigation Pills - Fixed positioning */
-        .theology-nav {
-            background: white;
-            padding: 1.5rem;
-            margin: -4rem auto 3rem; /* Properly positioned outside hero */
-            max-width: 1200px;
-            width: calc(100% - 4rem);
-            border-radius: 16px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-            position: relative;
-            z-index: 10;
-            border: 2px solid rgba(255,255,255,0.9);
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
-        
-        .theology-nav .tab-nav {
-            justify-content: center;
-            background: transparent;
-            padding: 0;
+
+        /* Cross References */
+        .cross-ref {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%);
+            color: #4a5fff;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .cross-ref:hover {
+            background: linear-gradient(135deg, #4a5fff 0%, #7209b7 100%);
+            color: white;
+            transform: translateY(-2px);
+        }
+        /* Page Header - Matching other Hosea pages */
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        .page-header h1 {
             margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
         }
-        
+
+        .page-header .section-icon {
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        .subtitle {
+            margin-top: 0.5rem;
+            opacity: 0.95;
+            font-size: 1.1rem;
+            color: white;
+        }
+
+        /* Study Navigation Tabs - Matching other Hosea pages */
+        .study-nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .study-nav-tabs .tab-button {
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            color: #666;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .study-nav-tabs .tab-button:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .study-nav-tabs .tab-button.active {
+            background: linear-gradient(135deg, #e11d48, #7209b7);
+            color: white;
+            font-weight: 600;
+        }
+
         /* Back to Hosea Button */
         .back-button {
             position: fixed;
@@ -123,85 +368,7 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(114,9,183,0.2);
         }
-        
-        /* Main content container */
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 2rem 1rem 4rem;
-        }
-        
-        /* Content section wrapper */
-        .content-section {
-            background: transparent;
-            padding: 0;
-        }
-        
-        /* Enhanced Theology Card Styling */
-        .theology-card {
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-            padding: 2.5rem;
-            margin: 2rem 0;
-            border-radius: 20px;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        }
-        
-        .theology-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(180deg, #7209b7, #00b4d8);
-        }
-        
-        .theology-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-        }
-        
-        .theology-card h2 {
-            color: #0a0a0a;
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-            position: relative;
-            padding-bottom: 1rem;
-        }
-        
-        .theology-card h2::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(90deg, #7209b7, #00b4d8);
-            border-radius: 2px;
-        }
-        
-        .theology-card h3 {
-            color: #7209b7;
-            font-size: 1.4rem;
-            margin: 2rem 0 1rem;
-            font-weight: 600;
-            position: relative;
-            padding-left: 1.5rem;
-        }
-        
-        .theology-card h3::before {
-            content: '▸';
-            position: absolute;
-            left: 0;
-            color: #00b4d8;
-            font-size: 1.2rem;
-        }
-        
+
         /* Scripture Quote Boxes */
         .scripture-quote {
             background: linear-gradient(135deg, rgba(114,9,183,0.05), rgba(0,180,216,0.05));
@@ -264,16 +431,16 @@
             transform: scale(1.05);
             box-shadow: 0 4px 12px rgba(139,69,19,0.2);
         }
-        
-        /* Enhanced Theme Grid */
-        .theology-card .theme-grid {
+
+        /* Theme Grid */
+        .theme-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.5rem;
             margin: 2rem 0;
         }
         
-        .theology-card .theme-box {
+        .theme-box {
             background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
             padding: 1.8rem;
             border-radius: 16px;
@@ -284,7 +451,7 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         
-        .theology-card .theme-box::before {
+        .theme-box::before {
             content: '';
             position: absolute;
             top: 0;
@@ -297,18 +464,18 @@
             transition: transform 0.3s ease;
         }
         
-        .theology-card .theme-box:hover::before {
+        .theme-box:hover::before {
             transform: scaleX(1);
         }
         
-        .theology-card .theme-box:hover {
+        .theme-box:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(114,9,183,0.15);
             border-color: rgba(114,9,183,0.3);
             background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
         }
         
-        .theology-card .theme-box h4 {
+        .theme-box h4 {
             color: #7209b7;
             margin-bottom: 0.75rem;
             font-size: 1.1rem;
@@ -316,77 +483,21 @@
             letter-spacing: -0.5px;
         }
         
-        .theology-card .theme-box p {
+        .theme-box p {
             color: #4a5568;
             line-height: 1.6;
             font-size: 0.95rem;
         }
-        
-        /* Enhanced lists in theology cards */
-        .theology-card ul, .theology-card ol {
-            margin: 1rem 0 1rem 1.5rem;
-            line-height: 1.8;
-        }
-        
-        .theology-card li {
-            margin-bottom: 0.75rem;
-            color: #4a5568;
-            position: relative;
-            padding-left: 0.5rem;
-        }
-        
-        .theology-card ul li::before {
-            content: '•';
-            position: absolute;
-            left: -1rem;
-            color: #00b4d8;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-        
-        .theology-card ol {
-            counter-reset: theology-list;
-        }
-        
-        .theology-card ol li {
-            counter-increment: theology-list;
-        }
-        
-        .theology-card ol li::before {
-            content: counter(theology-list) '.';
-            position: absolute;
-            left: -1.5rem;
-            color: #7209b7;
-            font-weight: bold;
-        }
-        
-        .theology-card li strong {
-            color: #1a202c;
-            font-weight: 600;
-        }
-        
-        /* Section-specific enhancements */
-        .theology-card p {
-            color: #2d3748;
-            line-height: 1.8;
-            font-size: 1.05rem;
-        }
-        
-        .theology-card p + .theme-grid,
-        .theology-card p + h3,
-        .theology-card p + ul,
-        .theology-card p + ol {
-            margin-top: 1.5rem;
-        }
-        
-        /* Mobile Responsive Overrides */
+
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .hero {
-                padding: 2rem 1rem 5rem;
+            .page-header {
+                margin-top: 80px;
+                padding: 2rem 1rem;
             }
             
-            .hero-title {
-                font-size: 2rem;
+            .page-header h1 {
+                font-size: 1.8rem;
             }
             
             .back-button {
@@ -396,43 +507,12 @@
                 font-size: 0.9rem;
             }
             
-            .theology-nav {
-                margin: -2.5rem 1rem 2rem;
-                padding: 1rem;
-                width: calc(100% - 2rem);
-            }
-            
-            .theology-nav .tab-nav {
-                gap: 0.5rem;
-            }
-            
-            .theology-nav .tab-button {
-                padding: 0.6rem 1rem;
-                font-size: 0.9rem;
+            .theme-grid {
+                grid-template-columns: 1fr;
             }
             
             .scripture-quote {
                 padding: 1.5rem;
-            }
-            
-            .theology-card {
-                padding: 1.5rem;
-            }
-            
-            .theology-card .theme-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .theology-card h2 {
-                font-size: 1.6rem;
-            }
-            
-            .theology-card h3 {
-                font-size: 1.2rem;
-            }
-            
-            .container {
-                padding: 1rem;
             }
         }
     </style>
@@ -447,25 +527,6 @@
     <!-- Back to Hosea Button -->
     <a href="hosea.html" class="back-button">← Back to Hosea</a>
     
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">Covenant Theology</h1>
-            <p class="hero-subtitle">Knowledge of God and Relational Faith in Hosea</p>
-        </div>
-    </section>
-    
-    <!-- Theology Navigation Pills - Now properly outside hero -->
-    <div class="theology-nav">
-        <div class="tab-nav">
-            <a href="theology.html" class="tab-button">Character of God</a>
-            <a href="theology-covenant.html" class="tab-button active">Covenant Theology</a>
-            <a href="theology-sin-judgment.html" class="tab-button">Sin & Judgment</a>
-            <a href="theology-restoration.html" class="tab-button">Hope & Restoration</a>
-            <a href="theology-contemporary.html" class="tab-button">Contemporary Application</a>
-        </div>
-    </div>
-    
     <!-- Quick Navigation Sidebar -->
     <div class="quick-nav-sidebar" aria-label="Section navigation">
         <div class="quick-nav-item" data-label="Knowledge of God" data-target="#knowledge"></div>
@@ -474,9 +535,41 @@
         <div class="quick-nav-item" data-label="Renewal Vision" data-target="#renewal"></div>
     </div>
 
-    <!-- Main Content -->
-    <div class="container">
-        <section class="content-section" id="main-content">
+    <main class="content-section">
+        <!-- Breadcrumbs -->
+        <div class="breadcrumbs">
+            <a href="/">Home</a> ›
+            <a href="/studies/">Studies</a> ›
+            <a href="/studies/biblical-books/">Biblical Books</a> ›
+            <a href="/studies/tanakh/neviim/">Prophets</a> ›
+            <a href="/studies/tanakh/neviim/minor-prophets/hosea/">Hosea</a> ›
+            Covenant Theology
+        </div>
+
+        <!-- Page Header - Simple like other Hosea pages -->
+        <div class="page-header">
+            <h1>
+                <span class="section-icon">📖</span>
+                Covenant Theology
+            </h1>
+            <p class="subtitle">Knowledge of God and Relational Faith in Hosea</p>
+        </div>
+        
+        <!-- Study Navigation Tabs -->
+        <div class="study-nav-tabs">
+            <a href="hosea.html" class="tab-button">Overview</a>
+            <a href="structure.html" class="tab-button">Structure</a>
+            <a href="hebrew-words.html" class="tab-button">Hebrew Words</a>
+            <a href="literary-analysis.html" class="tab-button">Literary Analysis</a>
+            <a href="theology.html" class="tab-button">Theology</a>
+            <a href="theology-covenant.html" class="tab-button active">Covenant Theology</a>
+            <a href="theology-sin-judgment.html" class="tab-button">Sin & Judgment</a>
+            <a href="theology-restoration.html" class="tab-button">Hope & Restoration</a>
+            <a href="theology-contemporary.html" class="tab-button">Contemporary</a>
+        </div>
+        
+        <!-- Main Content -->
+        <div id="main-content">
             <!-- Card 1: Knowledge of God -->
             <div class="theology-card animate-on-scroll" id="knowledge">
                 <h2>1. Knowledge of God (דַּעַת אֱלֹהִים)</h2>
@@ -598,8 +691,8 @@
                     <li><strong>Grace-based:</strong> God initiates and sustains</li>
                 </ul>
             </div>
-        </section>
-    </div>
+        </div>
+    </main>
 
     <!-- Back to Top Button -->
     <a href="#main-nav" class="back-to-top" aria-label="Back to top">↑</a>
@@ -612,20 +705,19 @@
     </footer>
     
     <!-- Scripts -->
-    <script src="/assets/js/nav-component.js"></script>
-    <script src="/assets/js/mobile-menu.js"></script>
+    <script type="module">
+        import NavigationComponent from '/assets/js/nav-component.js';
+        
+        // Initialize centralized navigation
+        const navigation = new NavigationComponent({
+            currentPage: 'hosea',
+            hubType: 'tanakh'
+        });
+    </script>
     
     <script>
-        // Initialize navigation
+        // Additional page functionality
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize centralized navigation
-            if (typeof initializeNavigation === 'function') {
-                initializeNavigation({
-                    currentPage: 'tanakh',
-                    hubType: 'tanakh'
-                });
-            }
-            
             // Reading progress bar
             function updateProgressBar() {
                 const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
@@ -705,16 +797,6 @@
                     handleBackToTop();
                     updateQuickNav();
                     animateOnScroll();
-                    
-                    // Update nav on scroll
-                    const nav = document.querySelector('nav');
-                    if (nav) {
-                        if (window.scrollY > 100) {
-                            nav.classList.add('scrolled');
-                        } else {
-                            nav.classList.remove('scrolled');
-                        }
-                    }
                 });
             }, { passive: true });
             
