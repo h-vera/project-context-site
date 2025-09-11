@@ -2,7 +2,7 @@
  * Centralized Navigation Component
  * Path: /assets/js/nav-component.js
  * Purpose: Single source of truth for navigation across all pages
- * Version: 1.0.0
+ * Version: 1.0.1 - Fixed class attribute handling
  */
 
 class NavigationComponent {
@@ -37,14 +37,14 @@ class NavigationComponent {
                         <span class="logo-text">Project Context</span>
                     </a>
                     <ul class="nav-links" id="navLinks" aria-label="Main navigation">
-                        <li><a href="/" ${this.getActiveClass('home')}>Home</a></li>
+                        <li><a href="/" class="${this.getActiveClass('home')}">Home</a></li>
                         <li class="dropdown">
                             <a href="/studies/" class="dropdown-toggle ${this.getActiveClass('studies')}">Studies</a>
                             <div class="dropdown-content">
-                                <a href="/studies/characters/characters_hub.html" ${this.getActiveClass('characters')}>Biblical Characters</a>
-                                <a href="/studies/women/women-bible-hub.html" ${this.getActiveClass('women')}>Women in the Bible</a>
-                                <a href="/studies/tanakh/tanakh-hub.html" ${this.getActiveClass('tanakh')}>Tanakh Studies</a>
-                                <a href="/studies/thematic/thematic-hub.html" ${this.getActiveClass('thematic')}>Thematic Studies</a>
+                                <a href="/studies/characters/characters_hub.html" class="${this.getActiveClass('characters')}">Biblical Characters</a>
+                                <a href="/studies/women/women-bible-hub.html" class="${this.getActiveClass('women')}">Women in the Bible</a>
+                                <a href="/studies/tanakh/tanakh-hub.html" class="${this.getActiveClass('tanakh')}">Tanakh Studies</a>
+                                <a href="/studies/thematic/thematic-hub.html" class="${this.getActiveClass('thematic')}">Thematic Studies</a>
                             </div>
                         </li>
                         <li class="dropdown">
@@ -55,7 +55,7 @@ class NavigationComponent {
                                 <a href="/resources/downloads/">Downloads</a>
                             </div>
                         </li>
-                        <li><a href="/about/" ${this.getActiveClass('about')}>About</a></li>
+                        <li><a href="/about/" class="${this.getActiveClass('about')}">About</a></li>
                     </ul>
                     <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation" aria-expanded="false">
                         <span></span>
@@ -67,53 +67,54 @@ class NavigationComponent {
         `;
     }
 
-   /**
- * Determine if a nav item should be active
- */
-getActiveClass(section) {
-    const currentPage = this.options.currentPage;
-    const hubType = this.options.hubType;
-    
-    // Home page
-    if (section === 'home' && (currentPage === 'home' || currentPage === '')) {
-        return 'active';  // ← CHANGE: removed 'class="..."'
+    /**
+     * Determine if a nav item should be active
+     * FIXED: Now returns just the class name, not the full attribute
+     */
+    getActiveClass(section) {
+        const currentPage = this.options.currentPage;
+        const hubType = this.options.hubType;
+        
+        // Home page
+        if (section === 'home' && (currentPage === 'home' || currentPage === '')) {
+            return 'active';
+        }
+        
+        // Studies section (main dropdown)
+        if (section === 'studies' && (
+            currentPage.includes('studies') || 
+            currentPage.includes('characters') || 
+            currentPage.includes('women') || 
+            currentPage.includes('tanakh') || 
+            currentPage.includes('thematic')
+        )) {
+            return 'active';
+        }
+        
+        // Specific hub types
+        if (section === 'characters' && (hubType === 'characters' || currentPage.includes('characters'))) {
+            return 'active';
+        }
+        if (section === 'women' && (hubType === 'women' || currentPage.includes('women'))) {
+            return 'active';
+        }
+        if (section === 'tanakh' && (hubType === 'tanakh' || currentPage.includes('tanakh'))) {
+            return 'active';
+        }
+        if (section === 'thematic' && (hubType === 'thematic' || currentPage.includes('thematic'))) {
+            return 'active';
+        }
+        
+        // Other sections
+        if (section === 'resources' && currentPage.includes('resources')) {
+            return 'active';
+        }
+        if (section === 'about' && currentPage.includes('about')) {
+            return 'active';
+        }
+        
+        return '';
     }
-    
-    // Studies section (main dropdown)
-    if (section === 'studies' && (
-        currentPage.includes('studies') || 
-        currentPage.includes('characters') || 
-        currentPage.includes('women') || 
-        currentPage.includes('tanakh') || 
-        currentPage.includes('thematic')
-    )) {
-        return 'active';  // ← CHANGE: removed 'class="..."'
-    }
-    
-    // Specific hub types
-    if (section === 'characters' && (hubType === 'characters' || currentPage.includes('characters'))) {
-        return 'active';  // ← CHANGE: removed 'class="..."'
-    }
-    if (section === 'women' && (hubType === 'women' || currentPage.includes('women'))) {
-        return 'active';  // ← CHANGE: removed 'class="..."'
-    }
-    if (section === 'tanakh' && (hubType === 'tanakh' || currentPage.includes('tanakh'))) {
-        return 'active';  // ← CHANGE: removed 'class="..."'
-    }
-    if (section === 'thematic' && (hubType === 'thematic' || currentPage.includes('thematic'))) {
-        return 'active';  // ← CHANGE: removed 'class="..."'
-    }
-    
-    // Other sections
-    if (section === 'resources' && currentPage.includes('resources')) {
-        return 'active';  // ← CHANGE: removed 'class="..."'
-    }
-    if (section === 'about' && currentPage.includes('about')) {
-        return 'active';  // ← CHANGE: removed 'class="..."'
-    }
-    
-    return '';
-}
 
     /**
      * Initialize the navigation
@@ -156,6 +157,9 @@ getActiveClass(section) {
         
         // Initialize scroll effects
         this.initializeScrollEffects();
+        
+        // Initialize dropdown functionality
+        this.initializeDropdowns();
     }
 
     /**
@@ -302,6 +306,28 @@ getActiveClass(section) {
     }
 
     /**
+     * Initialize dropdown functionality
+     */
+    initializeDropdowns() {
+        const dropdowns = document.querySelectorAll('.dropdown');
+        
+        dropdowns.forEach(dropdown => {
+            let timeout;
+            
+            dropdown.addEventListener('mouseenter', function() {
+                clearTimeout(timeout);
+                this.classList.add('active');
+            });
+            
+            dropdown.addEventListener('mouseleave', function() {
+                timeout = setTimeout(() => {
+                    this.classList.remove('active');
+                }, 300); // Small delay before closing
+            });
+        });
+    }
+
+    /**
      * Update navigation for current page (can be called after page load)
      */
     updateCurrentPage(currentPage, hubType = '') {
@@ -319,22 +345,3 @@ window.initializeNavigation = function(options = {}) {
 
 // Export for ES6 modules
 export default NavigationComponent;
-// Add this after navigation initialization
-document.addEventListener('DOMContentLoaded', function() {
-  const dropdowns = document.querySelectorAll('.dropdown');
-  
-  dropdowns.forEach(dropdown => {
-    let timeout;
-    
-    dropdown.addEventListener('mouseenter', function() {
-      clearTimeout(timeout);
-      this.classList.add('active');
-    });
-    
-    dropdown.addEventListener('mouseleave', function() {
-      timeout = setTimeout(() => {
-        this.classList.remove('active');
-      }, 300); // Small delay before closing
-    });
-  });
-});
