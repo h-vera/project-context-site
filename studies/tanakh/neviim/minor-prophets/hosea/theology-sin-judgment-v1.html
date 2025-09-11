@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sin & Judgment - Hosea Study</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-dark: #0a0a0a;
+            --primary-light: #ffffff;
+            --accent-blue: #00b4d8;
+            --accent-purple: #7209b7;
+            --accent-gold: #d4af37;
+            --accent-green: #10b981;
+            --text-gray: #666;
+            --bg-gray: #f5f5f5;
+            --secondary-color: #8b4513;
+            --hebrew-font: 'SBL Hebrew', 'Ezra SIL', 'Noto Sans Hebrew', serif;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--primary-dark);
+            background: var(--bg-gray);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--primary-dark);
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-dark);
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-links a.active {
+            color: var(--accent-purple);
+            background-color: rgba(114, 9, 183, 0.1);
+        }
+
+        .cta-button {
+            background: var(--primary-dark);
+            color: var(--primary-light);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            margin-top: 80px;
+            position: relative;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 80%, rgba(212,175,55,0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(114,9,183,0.1) 0%, transparent 50%);
+            animation: float 30s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            z-index: 1;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.8s ease-out;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            opacity: 0.9;
+            font-weight: 300;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Theology Navigation */
+        .theology-nav {
+            background: white;
+            padding: 1.5rem;
+            margin: -2rem auto 2rem;
+            max-width: 1200px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .theology-nav-inner {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .theology-nav-item {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 50px;
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .theology-nav-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent-purple);
+            color: var(--accent-purple);
+        }
+
+        .theology-nav-item.active {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            color: white;
+            box-shadow: 0 4px 15px rgba(114, 9, 183, 0.3);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 2rem 4rem;
+        }
+
+        /* Content Section */
+        .content-section {
+            background: var(--primary-light);
+            padding: 3rem;
+            margin-bottom: 2rem;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Theology Cards */
+        .theology-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 2.5rem;
+            margin: 2rem 0;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .theology-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent-purple), var(--accent-blue));
+        }
+
+        .theology-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .theology-card h2 {
+            color: var(--primary-dark);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .theology-card h3 {
+            color: var(--accent-purple);
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem;
+            font-weight: 600;
+        }
+
+        /* Theme Grid */
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .theme-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-box:hover::after {
+            transform: scaleX(1);
+        }
+
+        .theme-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-box h4 {
+            color: var(--accent-purple);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* Scripture Quote */
+        .scripture-quote {
+            background: linear-gradient(135deg, rgba(114, 9, 183, 0.05), rgba(0, 180, 216, 0.05));
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 16px;
+            border-left: 4px solid;
+            border-image: linear-gradient(180deg, var(--accent-purple), var(--accent-blue)) 1;
+            font-style: italic;
+            position: relative;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .scripture-quote::before {
+            content: '"';
+            font-size: 4rem;
+            color: var(--accent-purple);
+            opacity: 0.2;
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-family: Georgia, serif;
+        }
+
+        .verse-ref {
+            display: block;
+            text-align: right;
+            margin-top: 1rem;
+            font-style: normal;
+            color: var(--accent-purple);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        /* Hebrew Text */
+        .hebrew {
+            font-family: var(--hebrew-font);
+            font-size: 1.3em;
+            direction: rtl;
+            unicode-bidi: embed;
+            color: var(--secondary-color);
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.1), rgba(212, 175, 55, 0.1));
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            display: inline-block;
+            margin: 0 0.5rem;
+            border: 1px solid rgba(139, 69, 19, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .hebrew:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.2);
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(212, 175, 55, 0.1));
+            border: 2px solid var(--accent-green);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .highlight-box::before {
+            content: '💡';
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 2rem;
+            opacity: 0.5;
+        }
+
+        .highlight-box h3 {
+            color: var(--accent-green);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            color: var(--text-gray);
+        }
+
+        .theology-card li strong {
+            color: var(--primary-dark);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #2c2c2c 100%);
+            color: var(--primary-light);
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 0%, rgba(114, 9, 183, 0.1) 0%, transparent 70%);
+        }
+
+        footer p {
+            position: relative;
+            z-index: 1;
+            opacity: 0.9;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links, .cta-button {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .content-section {
+                padding: 2rem;
+            }
+            
+            .theology-nav-inner {
+                gap: 0.5rem;
+            }
+            
+            .theology-nav-item {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .theme-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="../../../../../index.html" class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 25 15 L 10 15 L 10 85 L 25 85" 
+                              stroke="#0a0a0a" 
+                              stroke-width="4" 
+                              fill="none" 
+                              stroke-linecap="round"/>
+                        <path d="M 75 15 L 90 15 L 90 85 L 75 85" 
+                              stroke="#0a0a0a" 
+                              stroke-width="4" 
+                              fill="none" 
+                              stroke-linecap="round"/>
+                        <ellipse cx="50" cy="50" rx="25" ry="15" 
+                                 stroke="#0a0a0a" 
+                                 stroke-width="3" 
+                                 fill="none"/>
+                        <circle cx="50" cy="50" r="8" 
+                                fill="#00b4d8"/>
+                        <circle cx="50" cy="50" r="3" 
+                                fill="#0a0a0a"/>
+                    </svg>
+                </div>
+                <span class="logo-text">Project Context</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Studies</a></li>
+                <li><a href="#resources">Resources</a></li>
+                <li><a href="../../../../../about.html">About</a></li>
+                 <li><a href="#contact">Contact</a></li>
+            </ul>
+            <a href="hosea.html" class="cta-button">Back to Hosea</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Sin and Judgment</h1>
+            <p class="hero-subtitle">Betrayal, Divine Discipline, and Redemptive Purpose</p>
+        </div>
+    </section>
+
+    <!-- Theology Navigation -->
+    <div class="theology-nav">
+        <div class="theology-nav-inner">
+            <a href="theology.html" class="theology-nav-item">Character of God</a>
+            <a href="theology-covenant.html" class="theology-nav-item">Covenant Theology</a>
+            <a href="theology-sin-judgment.html" class="theology-nav-item active">Sin & Judgment</a>
+            <a href="theology-restoration.html" class="theology-nav-item">Hope & Restoration</a>
+            <a href="theology-contemporary.html" class="theology-nav-item">Contemporary Application</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <section class="content-section">
+            <div class="theology-card">
+                <h2>1. The Nature of Sin</h2>
+                <p>Hosea's understanding of sin transcends legal violation to relational betrayal:</p>
+                
+                <h3>Sin as Adultery/Prostitution</h3>
+                <ul>
+                    <li><strong>Personal betrayal:</strong> Not just breaking rules but breaking hearts</li>
+                    <li><strong>Covenant unfaithfulness:</strong> Violation of exclusive relationship</li>
+                    <li><strong>Pursuit of other lovers:</strong> Seeking security/satisfaction elsewhere</li>
+                    <li><strong>Forgetting the true spouse:</strong> Loss of covenant memory</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    <h3>The Spirit of Prostitution (רוּחַ זְנוּנִים)</h3>
+                    <p>Hosea identifies an internal compulsion toward unfaithfulness (4:12; 5:4):</p>
+                    <ul>
+                        <li>Not just external temptation but internal drive</li>
+                        <li>Prevents return to God</li>
+                        <li>Clouds judgment and perception</li>
+                        <li>Creates addiction to idolatry</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="theology-card">
+                <h2>2. Dimensions of Israel's Sin</h2>
+                
+                <div class="theme-grid">
+                    <div class="theme-box">
+                        <h4>Religious Syncretism</h4>
+                        <ul>
+                            <li>Baal worship alongside YHWH</li>
+                            <li>Cultic prostitution</li>
+                            <li>Meaningless rituals</li>
+                            <li>Corrupt priesthood</li>
+                        </ul>
+                    </div>
+                    <div class="theme-box">
+                        <h4>Social Injustice</h4>
+                        <ul>
+                            <li>Violence and bloodshed</li>
+                            <li>Lying and deception</li>
+                            <li>Economic exploitation</li>
+                            <li>Breakdown of community</li>
+                        </ul>
+                    </div>
+                    <div class="theme-box">
+                        <h4>Political Idolatry</h4>
+                        <ul>
+                            <li>Foreign alliances over divine trust</li>
+                            <li>"Silly dove" diplomacy</li>
+                            <li>King-making without God</li>
+                            <li>Military trust over covenant</li>
+                        </ul>
+                    </div>
+                    <div class="theme-box">
+                        <h4>Willful Ignorance</h4>
+                        <ul>
+                            <li>Rejecting knowledge of God</li>
+                            <li>Forgetting divine history</li>
+                            <li>Suppressing prophetic word</li>
+                            <li>Self-deception about condition</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="theology-card">
+                <h2>3. The Purpose of Judgment</h2>
+                <p>In Hosea, divine judgment serves redemptive rather than purely punitive purposes:</p>
+                
+                <h3>Judgment as Discipline</h3>
+                <ul>
+                    <li><strong>Withdrawal to create longing:</strong> "I will return to my place until they acknowledge their guilt" (5:15)</li>
+                    <li><strong>Frustration to produce reflection:</strong> Hedging paths, thwarting plans</li>
+                    <li><strong>Exposure to bring shame:</strong> Revealing true condition</li>
+                    <li><strong>Exile to recreate exodus:</strong> Return to wilderness for renewal</li>
+                </ul>
+                
+                <h3>Judgment as Revelation</h3>
+                <div class="scripture-quote">
+                    It is time to seek the LORD, 
+                    that he may come and rain righteousness upon you.
+                    <span class="verse-ref">Hosea 10:12</span>
+                </div>
+                
+                <p>Judgment reveals:</p>
+                <ul>
+                    <li>The futility of false securities</li>
+                    <li>The emptiness of idols</li>
+                    <li>The consequences of covenant breaking</li>
+                    <li>The persistence of divine love</li>
+                </ul>
+            </div>
+
+            <div class="theology-card">
+                <h2>4. The Inevitability Yet Reluctance of Judgment</h2>
+                <p>Hosea presents the tension between necessary judgment and divine reluctance:</p>
+                
+                <div class="scripture-quote">
+                    What shall I do with you, O Ephraim? 
+                    What shall I do with you, O Judah? 
+                    Your love is like a morning cloud, 
+                    like the dew that goes early away.
+                    <span class="verse-ref">Hosea 6:4</span>
+                </div>
+                
+                <h3>Divine Struggle:</h3>
+                <ul>
+                    <li>Emotional conflict over judgment</li>
+                    <li>Multiple attempts at restoration</li>
+                    <li>Delayed execution of justice</li>
+                    <li>Judgment mixed with promise</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Project Context. Empowering faith through understanding.</p>
+    </footer>
+
+    <script>
+        // Add scroll effect to navigation
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.style.background = 'rgba(255, 255, 255, 0.98)';
+                nav.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.1)';
+            } else {
+                nav.style.background = 'rgba(255, 255, 255, 0.95)';
+                nav.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            }
+        });
+    </script>
+</body>
+</html>
