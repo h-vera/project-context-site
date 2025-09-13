@@ -1041,17 +1041,164 @@ details[open] .expand-indicator {
   }
 }
 
-/* Animation */
-@keyframes slideDown {
+/* ============================================
+   ANIMATIONS - CONSOLIDATED SECTION
+   Place this single section in global-v2.css
+   Remove all duplicate keyframe definitions
+   ============================================ */
+
+/* === KEYFRAME DEFINITIONS === */
+
+/* Vertical slide animations */
+@keyframes fadeSlideDown {
+  from { 
+    opacity: 0; 
+    transform: translateY(var(--slide-distance, 20px)); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+/* Horizontal slide animations */
+@keyframes fadeSlideLeft {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateX(-30px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
   }
 }
+
+/* Fade only animation */
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+  }
+  to { 
+    opacity: 1; 
+  }
+}
+
+/* Loading spinner */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Skeleton loading */
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* === ANIMATION CLASSES === */
+
+/* Scroll-triggered animations */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  will-change: transform, opacity;
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Direct animation applications */
+.fade-in {
+  animation: fadeSlideDown 0.6s ease-out;
+}
+
+.fade-slide-down {
+  animation: fadeSlideDown 0.6s ease-out;
+}
+
+.fade-slide-left {
+  animation: fadeSlideLeft 0.6s ease-out;
+}
+
+/* Timeline specific animations */
+.timeline-item {
+  position: relative;
+  padding: 1rem 1rem 1rem 1.5rem;
+  margin-bottom: 1rem;
+  opacity: 1;
+  transform: translateX(0);
+  border-left: 3px solid transparent;
+  background: rgba(248, 250, 252, 0.5);
+  border-radius: 0 8px 8px 0;
+  transition: all 0.3s ease;
+  animation: fadeSlideLeft 0.6s ease-out backwards;
+}
+
+/* Stagger animation for timeline items */
+.timeline-item:nth-child(1) { animation-delay: 0.1s; }
+.timeline-item:nth-child(2) { animation-delay: 0.2s; }
+.timeline-item:nth-child(3) { animation-delay: 0.3s; }
+.timeline-item:nth-child(4) { animation-delay: 0.4s; }
+.timeline-item:nth-child(5) { animation-delay: 0.5s; }
+.timeline-item:nth-child(6) { animation-delay: 0.6s; }
+.timeline-item:nth-child(7) { animation-delay: 0.7s; }
+.timeline-item:nth-child(8) { animation-delay: 0.8s; }
+
+/* Tab content animation */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+  animation: fadeIn 0.5s ease-in;
+}
+
+/* Bibliography content animation */
+.bibliography-content {
+  padding: 2rem 0;
+  animation: fadeSlideDown 0.3s ease-out;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Loading animations */
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid var(--border-light);
+  border-top-color: var(--accent-blue);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+/* === ANIMATION UTILITIES === */
+
+/* Delay utilities */
+.animation-delay-100 { animation-delay: 0.1s; }
+.animation-delay-200 { animation-delay: 0.2s; }
+.animation-delay-300 { animation-delay: 0.3s; }
+.animation-delay-400 { animation-delay: 0.4s; }
+.animation-delay-500 { animation-delay: 0.5s; }
+
+/* Duration utilities */
+.animation-fast { animation-duration: 0.3s; }
+.animation-normal { animation-duration: 0.6s; }
+.animation-slow { animation-duration: 1s; }
+
+/* Easing utilities */
+.animation-ease-in { animation-timing-function: ease-in; }
+.animation-ease-out { animation-timing-function: ease-out; }
+.animation-ease-in-out { animation-timing-function: ease-in-out; }
+
 
 /* ========================================
    PATTERN CARDS (for consistency)
@@ -1140,36 +1287,6 @@ details[open] .expand-indicator {
   .nav-footer-grid {
     grid-template-columns: 1fr;
   }
-}
-
-/* ============================================
-   ANIMATIONS
-   ============================================ */
-.animate-on-scroll {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-  will-change: transform, opacity;
-}
-
-.animate-on-scroll.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@keyframes fadeSlide {
-  from { 
-    opacity: 0; 
-    transform: translateY(var(--slide-distance, 20px)); 
-  }
-  to { 
-    opacity: 1; 
-    transform: translateY(0); 
-  }
-}
-
-.fade-in {
-  animation: fadeSlide 0.6s ease-out;
 }
 
 /* ============================================
@@ -1671,35 +1788,6 @@ footer p {
   width: 3px;
   background: linear-gradient(180deg, var(--accent-purple) 0%, var(--accent-rose) 100%);
   border-radius: 2px;
-}
-
-/* Animation definition - ADD THIS */
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.timeline-item {
-  position: relative;
-  padding: 1rem 1rem 1rem 1.5rem;
-  margin-bottom: 1rem;
-  /* Start visible and animate in */
-  opacity: 1;
-  transform: translateX(0);
-  /* Add background for hover effect */
-  border-left: 3px solid transparent;
-  background: rgba(248, 250, 252, 0.5);
-  border-radius: 0 8px 8px 0;
-  /* Smooth transitions */
-  transition: all 0.3s ease;
-  /* Animate immediately on page load */
-  animation: slideInLeft 0.6s ease-out backwards;
 }
 
 /* Keep loaded class for backward compatibility */
@@ -2266,22 +2354,3 @@ body.menu-open {
         transform: rotate(180deg);
     }
 }
-/* ============================================
-   TAB SYSTEM - Enhanced with prominent buttons
-   Add this section to global-v2.css
-   ============================================ */
-
-/* Tab Container */
-.tab-container {
-  margin: 2rem 0;
-}
-
-.tab-nav {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  padding-bottom: 0;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
