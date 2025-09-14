@@ -8,7 +8,7 @@
 
   <!-- Page Metadata -->
   <meta name="profile-type" content="multi-page">
-  <meta name="template-version" content="5.7">
+  <meta name="template-version" content="5.7-optimized">
   <meta name="book-id" content="ruth">
   <meta name="study-type" content="book-overview">
 
@@ -16,7 +16,7 @@
   <meta property="og:title" content="Hebrew Wordplay & Motifs — Book of Ruth Overview">
   <meta property="og:description" content="Hebrew wordplay and motifs in Ruth (ḥesed, shuv, kanaph, go'el), name reversals, and matched titles that shape the book's meaning.">
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://projectcontext.org/studies/tanakh/ketuvim/ruth/ruth-wordplay.html">
+  <meta property="og:url" content="https://projectcontext.org/studies/books/ruth/ruth-wordplay.html">
 
   <!-- Preload Critical Resources -->
   <link rel="preload" href="/assets/css/global-v2.css" as="style">
@@ -26,11 +26,135 @@
   <link rel="stylesheet" href="/assets/css/global-v2.css">
 
   <!-- Canonical URL -->
-  <link rel="canonical" href="https://projectcontext.org/studies/tanakh/ketuvim/ruth/ruth-wordplay.html">
+  <link rel="canonical" href="https://projectcontext.org/studies/books/ruth/ruth-wordplay.html">
 
-  <!-- Page-specific styles -->
+  <!-- Page-specific styles for Hebrew wordplay visualization -->
   <style>
-    /* Hebrew Wordplay Page Specific Styles */
+    /* Enhanced Word Chips with Hover Glosses */
+    .word-chip-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .word-chip {
+      display: inline-block;
+      position: relative;
+      background: white;
+      border: 2px solid #7209b7;
+      border-radius: 30px;
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .word-chip:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(114, 9, 183, 0.25);
+      background: linear-gradient(135deg, #faf5ff 0%, #f0f4ff 100%);
+    }
+
+    .word-chip .hebrew-word {
+      font-family: 'SBL Hebrew', 'Ezra SIL', serif;
+      font-size: 2rem;
+      color: #7209b7;
+      direction: rtl;
+      unicode-bidi: embed;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .word-chip .transliteration {
+      font-style: italic;
+      color: #6b7280;
+      font-size: 0.95rem;
+      display: block;
+    }
+
+    /* Popover Gloss */
+    .word-gloss {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%) scale(0);
+      background: white;
+      border: 2px solid #7209b7;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 0.5rem;
+      min-width: 200px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .word-chip:hover .word-gloss {
+      transform: translateX(-50%) scale(1);
+      opacity: 1;
+    }
+
+    .word-gloss strong {
+      color: #7209b7;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .word-gloss small {
+      color: #6b7280;
+      line-height: 1.4;
+    }
+
+    /* Mini Wings Icon for Kanaph */
+    .mini-wings {
+      position: relative;
+      width: 40px;
+      height: 25px;
+      display: inline-block;
+    }
+
+    .mini-wing-left,
+    .mini-wing-right {
+      position: absolute;
+      width: 18px;
+      height: 22px;
+      background: linear-gradient(135deg, 
+        rgba(114, 9, 183, 0.3) 0%, 
+        rgba(225, 29, 72, 0.3) 100%);
+      border: 1px solid rgba(114, 9, 183, 0.3);
+    }
+
+    .mini-wing-left {
+      left: 0;
+      border-radius: 50% 10% 50% 20%;
+      transform: rotate(-15deg);
+    }
+
+    .mini-wing-right {
+      right: 0;
+      border-radius: 10% 50% 20% 50%;
+      transform: rotate(15deg);
+    }
+
+    /* Name Reversal Styling */
+    .name-reversal {
+      text-align: center;
+      padding: 0.75rem 1.25rem;
+      background: white;
+      border-radius: 20px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .name-reversal:hover {
+      border-color: #7209b7;
+      background: #faf5ff;
+    }
+
+    /* Title Pairs */
+    .title-pair {
+      text-align: center;
+    }
     
     /* Word Pattern Cards */
     .word-pattern-card {
@@ -82,32 +206,6 @@
     .translation {
       font-size: 1.2rem;
       color: #6b7280;
-    }
-    
-    /* Word Usage Timeline */
-    .word-usage-timeline {
-      border-left: 3px solid #7209b7;
-      padding-left: 2rem;
-      margin: 2rem 0;
-    }
-    
-    .usage-point {
-      position: relative;
-      padding: 1rem 0;
-      margin-bottom: 1.5rem;
-    }
-    
-    .usage-point::before {
-      content: '';
-      position: absolute;
-      left: -2.35rem;
-      top: 1.5rem;
-      width: 12px;
-      height: 12px;
-      background: #7209b7;
-      border: 3px solid white;
-      border-radius: 50%;
-      box-shadow: 0 0 0 3px rgba(114, 9, 183, 0.2);
     }
     
     /* Name Meaning Cards */
@@ -241,168 +339,6 @@
       box-shadow: 0 10px 20px rgba(114, 9, 183, 0.3);
       color: white;
     }
-    
-    .cta-button.current-page {
-      background: linear-gradient(135deg, #6b7280, #4b5563);
-      cursor: default;
-      pointer-events: none;
-      position: relative;
-    }
-    
-    .cta-button.current-page::after {
-      content: 'Current Page';
-      position: absolute;
-      bottom: -25px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 0.75em;
-      color: #6b7280;
-      font-weight: normal;
-    }
-    /* Enhanced Word Chips with Hover Glosses */
-.word-chip-link {
-  text-decoration: none;
-  color: inherit;
-}
-
-.word-chip {
-  display: inline-block;
-  position: relative;
-  background: white;
-  border: 2px solid #7209b7;
-  border-radius: 30px;
-  padding: 1rem 1.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: center;
-}
-
-.word-chip:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(114, 9, 183, 0.25);
-  background: linear-gradient(135deg, #faf5ff 0%, #f0f4ff 100%);
-}
-
-.word-chip .hebrew-word {
-  font-family: 'SBL Hebrew', 'Ezra SIL', serif;
-  font-size: 2rem;
-  color: #7209b7;
-  direction: rtl;
-  unicode-bidi: embed;
-  display: block;
-  margin-bottom: 0.25rem;
-}
-
-.word-chip .transliteration {
-  font-style: italic;
-  color: #6b7280;
-  font-size: 0.95rem;
-  display: block;
-}
-
-/* Popover Gloss */
-.word-gloss {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%) scale(0);
-  background: white;
-  border: 2px solid #7209b7;
-  border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 0.5rem;
-  min-width: 200px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-  opacity: 0;
-  transition: all 0.3s ease;
-  pointer-events: none;
-  z-index: 10;
-}
-
-.word-chip:hover .word-gloss {
-  transform: translateX(-50%) scale(1);
-  opacity: 1;
-}
-
-.word-gloss strong {
-  color: #7209b7;
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-.word-gloss small {
-  color: #6b7280;
-  line-height: 1.4;
-}
-
-/* Mini Wings Icon for Kanaph */
-.mini-wings {
-  position: relative;
-  width: 40px;
-  height: 25px;
-  display: inline-block;
-}
-
-.mini-wing-left,
-.mini-wing-right {
-  position: absolute;
-  width: 18px;
-  height: 22px;
-  background: linear-gradient(135deg, 
-    rgba(114, 9, 183, 0.3) 0%, 
-    rgba(225, 29, 72, 0.3) 100%);
-  border: 1px solid rgba(114, 9, 183, 0.3);
-}
-
-.mini-wing-left {
-  left: 0;
-  border-radius: 50% 10% 50% 20%;
-  transform: rotate(-15deg);
-}
-
-.mini-wing-right {
-  right: 0;
-  border-radius: 10% 50% 20% 50%;
-  transform: rotate(15deg);
-}
-
-/* Name Reversal Styling */
-.name-reversal {
-  text-align: center;
-  padding: 0.75rem 1.25rem;
-  background: white;
-  border-radius: 20px;
-  border: 1px solid #e5e7eb;
-}
-
-.name-reversal:hover {
-  border-color: #7209b7;
-  background: #faf5ff;
-}
-
-/* Title Pairs */
-.title-pair {
-  text-align: center;
-}
-
-/* Current Page Indication for Navigation */
-.cta-button.current-page {
-  background: linear-gradient(135deg, #6b7280, #4b5563);
-  cursor: default;
-  pointer-events: none;
-  position: relative;
-}
-
-.cta-button.current-page::after {
-  content: 'Current Page';
-  position: absolute;
-  bottom: -25px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.75em;
-  color: #6b7280;
-  font-weight: normal;
-}
   </style>
 </head>
 <body class="book-overview" dir="ltr">
@@ -456,6 +392,7 @@
 
   <!-- Quick Navigation Sidebar -->
   <div class="quick-nav-sidebar" aria-label="Section navigation">
+    <div class="quick-nav-item" data-label="Quick Ref" data-target="#word-chips-quick"></div>
     <div class="quick-nav-item" data-label="Key Words" data-target="#key-words"></div>
     <div class="quick-nav-item" data-label="Return" data-target="#shuv"></div>
     <div class="quick-nav-item" data-label="Loyal Love" data-target="#hesed"></div>
@@ -485,114 +422,112 @@
       <span class="hebrew-large">רוּת</span>
     </h2>
 
-    <!-- Key Hebrew Words Overview -->
-<!-- Add this right after the section title and before the first theology-card -->
-
-<!-- Visual Word Chips Section - Quick Reference -->
-<div class="theology-card" id="word-chips-quick">
-  <h3>Key Hebrew Terms - Visual Quick Reference</h3>
-  <p style="text-align: center; color: #6b7280; margin-bottom: 2rem;">
-    <em>Hover over each term for expanded meaning • Click to jump to detailed analysis</em>
-  </p>
-  
-  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 2rem 0;">
-    <!-- Hesed Chip -->
-    <a href="#hesed" class="word-chip-link">
-      <div class="word-chip">
-        <span class="hebrew-word">חֶסֶד</span>
-        <span class="transliteration">ḥesed</span>
-        <div class="word-gloss">
-          <strong>Loyal Love / Covenant Faithfulness</strong><br>
-          <small>Ruth → Naomi (1:8)<br>
-          Boaz → Ruth (3:10)<br>
-          Divine character in human action</small>
-        </div>
+    <!-- Visual Word Chips Section - Quick Reference -->
+    <div class="theology-card" id="word-chips-quick">
+      <h3>Key Hebrew Terms - Visual Quick Reference</h3>
+      <p style="text-align: center; color: #6b7280; margin-bottom: 2rem;">
+        <em>Hover over each term for expanded meaning • Click to jump to detailed analysis</em>
+      </p>
+      
+      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 2rem 0;">
+        <!-- Hesed Chip -->
+        <a href="#hesed" class="word-chip-link">
+          <div class="word-chip">
+            <span class="hebrew-word">חֶסֶד</span>
+            <span class="transliteration">ḥesed</span>
+            <div class="word-gloss">
+              <strong>Loyal Love / Covenant Faithfulness</strong><br>
+              <small>Ruth → Naomi (1:8)<br>
+              Boaz → Ruth (3:10)<br>
+              Divine character in human action</small>
+            </div>
+          </div>
+        </a>
+        
+        <!-- Goel Chip -->
+        <a href="#goel" class="word-chip-link">
+          <div class="word-chip">
+            <span class="hebrew-word">גֹּאֵל</span>
+            <span class="transliteration">go'el</span>
+            <div class="word-gloss">
+              <strong>Kinsman-Redeemer</strong><br>
+              <small>Family repossession logic<br>
+              Legal gate scene (ch. 4)<br>
+              Cost & public witness</small>
+            </div>
+          </div>
+        </a>
+        
+        <!-- Shuv Chip -->
+        <a href="#shuv" class="word-chip-link">
+          <div class="word-chip">
+            <span class="hebrew-word">שׁוּב</span>
+            <span class="transliteration">shuv</span>
+            <div class="word-gloss">
+              <strong>Return / Turn Back</strong><br>
+              <small>12x in chapter 1<br>
+              Exile → Restoration<br>
+              Spiritual "turning" subtext</small>
+            </div>
+          </div>
+        </a>
+        
+        <!-- Kanaph Chip with Wing Icon -->
+        <a href="#wings" class="word-chip-link">
+          <div class="word-chip">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span class="hebrew-word">כָּנָף</span>
+              <!-- Small wings visual -->
+              <div class="mini-wings">
+                <div class="mini-wing-left"></div>
+                <div class="mini-wing-right"></div>
+              </div>
+            </div>
+            <span class="transliteration">kanaph</span>
+            <div class="word-gloss">
+              <strong>Wing / Garment Edge</strong><br>
+              <small>Boaz's prayer (2:12) →<br>
+              Ruth's request (3:9)<br>
+              Sanctuary imagery (Ps 91)</small>
+            </div>
+          </div>
+        </a>
       </div>
-    </a>
-    
-    <!-- Goel Chip -->
-    <a href="#goel" class="word-chip-link">
-      <div class="word-chip">
-        <span class="hebrew-word">גֹּאֵל</span>
-        <span class="transliteration">go'el</span>
-        <div class="word-gloss">
-          <strong>Kinsman-Redeemer</strong><br>
-          <small>Family repossession logic<br>
-          Legal gate scene (ch. 4)<br>
-          Cost & public witness</small>
-        </div>
-      </div>
-    </a>
-    
-    <!-- Shuv Chip -->
-    <a href="#shuv" class="word-chip-link">
-      <div class="word-chip">
-        <span class="hebrew-word">שׁוּב</span>
-        <span class="transliteration">shuv</span>
-        <div class="word-gloss">
-          <strong>Return / Turn Back</strong><br>
-          <small>12x in chapter 1<br>
-          Exile → Restoration<br>
-          Spiritual "turning" subtext</small>
-        </div>
-      </div>
-    </a>
-    
-    <!-- Kanaph Chip with Wing Icon -->
-    <a href="#wings" class="word-chip-link">
-      <div class="word-chip">
-        <div style="display: flex; align-items: center; gap: 0.5rem;">
-          <span class="hebrew-word">כָּנָף</span>
-          <!-- Small wings visual -->
-          <div class="mini-wings">
-            <div class="mini-wing-left"></div>
-            <div class="mini-wing-right"></div>
+      
+      <!-- Matched Titles Row -->
+      <div style="background: #f8fafc; border-radius: 12px; padding: 1.5rem; margin-top: 2rem;">
+        <h4 style="text-align: center; margin-bottom: 1rem; color: #7209b7;">Matched Titles</h4>
+        <div style="display: flex; justify-content: center; align-items: center; gap: 2rem; flex-wrap: wrap;">
+          <div class="title-pair">
+            <strong>Ruth:</strong> <span class="hebrew-inline">אֵשֶׁת חַיִל</span><br>
+            <small>"woman of noble character" (3:11 ~ Prov 31)</small>
+          </div>
+          <span style="font-size: 2rem; color: #7209b7;">↔</span>
+          <div class="title-pair">
+            <strong>Boaz:</strong> <span class="hebrew-inline">גִּבּוֹר חַיִל</span><br>
+            <small>"man of substance" (2:1)</small>
           </div>
         </div>
-        <span class="transliteration">kanaph</span>
-        <div class="word-gloss">
-          <strong>Wing / Garment Edge</strong><br>
-          <small>Boaz's prayer (2:12) →<br>
-          Ruth's request (3:9)<br>
-          Sanctuary imagery (Ps 91)</small>
+      </div>
+      
+      <!-- Name Reversals Quick View -->
+      <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 2rem; flex-wrap: wrap;">
+        <div class="name-reversal">
+          <span class="hebrew-inline">נָעֳמִי</span> ⇄ <span class="hebrew-inline">מָרָא</span><br>
+          <small>Pleasant → Bitter → Joy</small>
+        </div>
+        <div class="name-reversal">
+          <span class="hebrew-inline">בֹּעַז</span><br>
+          <small>"In him is strength"</small>
+        </div>
+        <div class="name-reversal">
+          <span class="hebrew-inline">עוֹבֵד</span><br>
+          <small>"Servant" (serves restoration)</small>
         </div>
       </div>
-    </a>
-  </div>
-  
-  <!-- Matched Titles Row -->
-  <div style="background: #f8fafc; border-radius: 12px; padding: 1.5rem; margin-top: 2rem;">
-    <h4 style="text-align: center; margin-bottom: 1rem; color: #7209b7;">Matched Titles</h4>
-    <div style="display: flex; justify-content: center; align-items: center; gap: 2rem; flex-wrap: wrap;">
-      <div class="title-pair">
-        <strong>Ruth:</strong> <span class="hebrew-inline">אֵשֶׁת חַיִל</span><br>
-        <small>"woman of noble character" (3:11 ~ Prov 31)</small>
-      </div>
-      <span style="font-size: 2rem; color: #7209b7;">↔</span>
-      <div class="title-pair">
-        <strong>Boaz:</strong> <span class="hebrew-inline">גִּבּוֹר חַיִל</span><br>
-        <small>"man of substance" (2:1)</small>
-      </div>
     </div>
-  </div>
-  
-  <!-- Name Reversals Quick View -->
-  <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 2rem; flex-wrap: wrap;">
-    <div class="name-reversal">
-      <span class="hebrew-inline">נָעֳמִי</span> ⇄ <span class="hebrew-inline">מָרָא</span><br>
-      <small>Pleasant → Bitter → Joy</small>
-    </div>
-    <div class="name-reversal">
-      <span class="hebrew-inline">בֹּעַז</span><br>
-      <small>"In him is strength"</small>
-    </div>
-    <div class="name-reversal">
-      <span class="hebrew-inline">עוֹבֵד</span><br>
-      <small>"Servant" (serves restoration)</small>
-    </div>
-  </div>
-</div>
 
+    <!-- Key Hebrew Words Overview -->
     <div class="theology-card" id="key-words">
       <h3>Key Hebrew Words & Their Theological Weight</h3>
       
@@ -666,18 +601,25 @@
         <div class="translation">"to return, turn back, repent"</div>
       </div>
       
-      <div class="word-usage-timeline">
-        <div class="usage-point">
-          <strong>1:6 — Divine Initiative:</strong> "She had heard...that the LORD had <em>visited</em> (פָּקַד paqad) his people"—prompting Naomi to "return" (שׁוּב). The LORD's turning toward his people enables human return.
+      <div class="timeline">
+        <div class="timeline-item">
+          <strong>1:6 — Divine Initiative:</strong>
+          "She had heard...that the LORD had <em>visited</em> (<span class="hebrew-inline">פָּקַד</span> paqad) his people"—prompting Naomi to "return" (<span class="hebrew-inline">שׁוּב</span>). The LORD's turning toward his people enables human return. This establishes the theological principle: divine grace precedes human repentance.
         </div>
-        <div class="usage-point">
-          <strong>1:7-15 — Repeated Urging:</strong> Naomi tells her daughters-in-law to "return" (שׁוּב) eight times. The repetition creates narrative tension: who will truly return, and to what?
+        
+        <div class="timeline-item">
+          <strong>1:7-15 — Repeated Urging (8x):</strong>
+          Naomi tells her daughters-in-law to "return" (<span class="hebrew-inline">שׁוּב</span>) eight times. The repetitive drumbeat creates narrative tension: who will truly return, and to what? The word becomes almost oppressive in its repetition, forcing readers to consider what "return" really means.
         </div>
-        <div class="usage-point">
-          <strong>1:16 — Ruth's Counter-Return:</strong> "Do not urge me to leave you or to <em>return</em> (שׁוּב) from following you." Ruth redefines return—not to Moab but to covenant commitment.
+        
+        <div class="timeline-item">
+          <strong>1:16 — Ruth's Counter-Return:</strong>
+          "Do not urge me to leave you or to <em>return</em> (<span class="hebrew-inline">שׁוּב</span>) from following you." Ruth redefines return—not geographic reversal to Moab but covenant commitment forward. Her "non-return" becomes the truest return of all.
         </div>
-        <div class="usage-point">
-          <strong>1:22 — Theological Climax:</strong> "So Naomi <em>returned</em> (שׁוּב), and Ruth...with her, who <em>returned</em> (שׁוּב) from the country of Moab." The double use marks both physical and spiritual homecoming.
+        
+        <div class="timeline-item">
+          <strong>1:22 — Theological Climax:</strong>
+          "So Naomi <em>returned</em> (<span class="hebrew-inline">שׁוּב</span>), and Ruth...with her, who <em>returned</em> (<span class="hebrew-inline">שׁוּב</span>) from the country of Moab." The double use marks both physical and spiritual homecoming. Ruth "returns" to a land she's never known—a profound statement about conversion and belonging.
         </div>
       </div>
       
@@ -945,7 +887,7 @@
         </div>
         
         <div class="motif-item">
-          <span class="motif-icon">🦅</span>
+          <span class="motif-icon">🕊️</span>
           <h4>Wings/Garment</h4>
           <p>Divine protection → human embodiment → marriage covenant</p>
         </div>
@@ -1118,70 +1060,6 @@
             <div class="source-usage">
               <span class="usage-tag">Names Analysis</span>
               <span class="usage-note">Etymology and significance of character names, pp. 624-628</span>
-            </div>
-          </div>
-          <div class="source-entry">
-            <div class="source-citation">
-              <strong>Bush, Frederic W.</strong> <em>Ruth, Esther.</em> WBC 9. Dallas: Word Books, 1996.
-            </div>
-            <div class="source-usage">
-              <span class="usage-tag">Literary Patterns</span>
-              <span class="usage-note">Detailed analysis of verbal repetitions and motifs</span>
-            </div>
-          </div>
-          <div class="source-entry">
-            <div class="source-citation">
-              <strong>Lau, Peter H. W. and David W. Baker.</strong> <em>Ruth.</em> ZECOT. Grand Rapids: Zondervan, 2015.
-            </div>
-            <div class="source-usage">
-              <span class="usage-tag">Chiastic Structure</span>
-              <span class="usage-note">Analysis of word patterns within larger literary structure</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Specialized Studies -->
-        <div class="source-category">
-          <h4>Specialized Studies on Wordplay</h4>
-          <div class="source-entry">
-            <div class="source-citation">
-              <strong>Sakenfeld, Katharine Doob.</strong> <em>The Meaning of Hesed in the Hebrew Bible.</em> HSM 17. Missoula: Scholars Press, 1978.
-            </div>
-            <div class="source-usage">
-              <span class="usage-tag">חֶסֶד Study</span>
-              <span class="usage-note">Definitive study on covenant loyalty in Ruth</span>
-            </div>
-          </div>
-          <div class="source-entry">
-            <div class="source-citation">
-              <strong>Holmstedt, Robert D.</strong> <em>Ruth: A Handbook on the Hebrew Text.</em> Waco: Baylor University Press, 2010.
-            </div>
-            <div class="source-usage">
-              <span class="usage-tag">Hebrew Grammar</span>
-              <span class="usage-note">Detailed linguistic analysis of wordplay patterns</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Articles -->
-        <div class="source-category">
-          <h4>Journal Articles</h4>
-          <div class="source-entry">
-            <div class="source-citation">
-              <strong>Gow, Murray D.</strong> "The Significance of Literary Structure for the Translation of the Book of Ruth." <em>Bible Translator</em> 35 (1984): 309-320.
-            </div>
-            <div class="source-usage">
-              <span class="usage-tag">Chiasm</span>
-              <span class="usage-note">Word patterns in chiastic structure, especially 2:12 ↔ 3:9 connection</span>
-            </div>
-          </div>
-          <div class="source-entry">
-            <div class="source-citation">
-              <strong>Hubbard, Robert L. Jr.</strong> "פְּלֹנִי אַלְמֹנִי: A Clue to the Structure of Ruth 4:1-12?" <em>Bulletin for Biblical Research</em> 1 (1991): 77-88.
-            </div>
-            <div class="source-usage">
-              <span class="usage-tag">Namelessness</span>
-              <span class="usage-note">Analysis of the unnamed kinsman's literary function</span>
             </div>
           </div>
         </div>
