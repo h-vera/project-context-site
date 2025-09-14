@@ -1055,27 +1055,58 @@
   </div>
 </details>
 
-    <!-- Back to Top Button -->
-    <a href="#main-content" class="back-to-top" id="back-to-top" aria-label="Back to top">↑</a>
-  </main>
+  <!-- Back to Top Button -->
+<a href="#main-content" class="back-to-top" id="back-to-top" aria-label="Back to top">↑</a>
+</main>
 
-  <script>
+<!-- Mobile Menu Overlay (for nav component) -->
+<div class="mobile-menu-overlay"></div>
+
+<!-- ======================================
+     JAVASCRIPT - NON-MINIFIED VERSIONS
+     Using centralized navigation component
+     ====================================== -->
+
+<!-- Navigation Component - NON-MINIFIED VERSION -->
+<script type="module">
+  import NavigationComponent from '/assets/js/nav-component.js';
+  
+  // Initialize centralized navigation
+  const navigation = new NavigationComponent({
+    currentPage: 'tanakh',  // Since this is in tanakh/ketuvim/ruth/
+    hubType: 'tanakh'
+  });
+</script>
+
+<!-- Character Page Functionality - NON-MINIFIED VERSION -->
+<script src="/assets/js/character-page.js" defer></script>
+
+<!-- Page-specific functionality -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('Ruth Overview – Template Version: 5.7-enhanced');
+    
     // Reading progress bar
     window.addEventListener('scroll', () => {
       const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
       const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       const scrolled = (winScroll / height) * 100;
-      document.getElementById('progress-bar').style.width = scrolled + '%';
+      const progressBar = document.getElementById('progress-bar');
+      if (progressBar) {
+        progressBar.style.width = scrolled + '%';
+      }
       
       // Back to top button visibility
       const backToTop = document.getElementById('back-to-top');
-      if (winScroll > 300) {
-        backToTop.classList.add('visible');
-      } else {
-        backToTop.classList.remove('visible');
+      if (backToTop) {
+        if (winScroll > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
       }
       
-      // Update active nav dot
+      // Update active nav dots (Quick Navigation Sidebar)
       const sections = document.querySelectorAll('.theology-card, .hook-section, .transformation-ribbon, .chiasm-card');
       const navItems = document.querySelectorAll('.quick-nav-item');
       const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
@@ -1105,7 +1136,7 @@
     // Quick navigation functionality
     document.querySelectorAll('.quick-nav-item').forEach(item => {
       item.addEventListener('click', (e) => {
-        const target = document.querySelector(e.target.dataset.target);
+        const target = document.querySelector(e.currentTarget.dataset.target);
         if (target) {
           target.scrollIntoView({ behavior: 'smooth' });
         }
@@ -1124,10 +1155,25 @@
     });
 
     // Back to top smooth scroll
-    document.getElementById('back-to-top').addEventListener('click', (e) => {
-      e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  </script>
+    const backToTopBtn = document.getElementById('back-to-top');
+    if (backToTopBtn) {
+      backToTopBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+    
+    // Bibliography expand/collapse enhancement
+    const bibliography = document.querySelector('.bibliography-section');
+    if (bibliography) {
+      const indicator = bibliography.querySelector('.expand-indicator');
+      bibliography.addEventListener('toggle', () => {
+        if (indicator) {
+          indicator.style.transform = bibliography.open ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+      });
+    }
+  });
+</script>
 </body>
 </html>
