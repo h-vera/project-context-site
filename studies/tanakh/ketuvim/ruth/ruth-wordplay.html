@@ -259,6 +259,150 @@
       color: #6b7280;
       font-weight: normal;
     }
+    /* Enhanced Word Chips with Hover Glosses */
+.word-chip-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.word-chip {
+  display: inline-block;
+  position: relative;
+  background: white;
+  border: 2px solid #7209b7;
+  border-radius: 30px;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.word-chip:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(114, 9, 183, 0.25);
+  background: linear-gradient(135deg, #faf5ff 0%, #f0f4ff 100%);
+}
+
+.word-chip .hebrew-word {
+  font-family: 'SBL Hebrew', 'Ezra SIL', serif;
+  font-size: 2rem;
+  color: #7209b7;
+  direction: rtl;
+  unicode-bidi: embed;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.word-chip .transliteration {
+  font-style: italic;
+  color: #6b7280;
+  font-size: 0.95rem;
+  display: block;
+}
+
+/* Popover Gloss */
+.word-gloss {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  background: white;
+  border: 2px solid #7209b7;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  min-width: 200px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.word-chip:hover .word-gloss {
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
+}
+
+.word-gloss strong {
+  color: #7209b7;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.word-gloss small {
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+/* Mini Wings Icon for Kanaph */
+.mini-wings {
+  position: relative;
+  width: 40px;
+  height: 25px;
+  display: inline-block;
+}
+
+.mini-wing-left,
+.mini-wing-right {
+  position: absolute;
+  width: 18px;
+  height: 22px;
+  background: linear-gradient(135deg, 
+    rgba(114, 9, 183, 0.3) 0%, 
+    rgba(225, 29, 72, 0.3) 100%);
+  border: 1px solid rgba(114, 9, 183, 0.3);
+}
+
+.mini-wing-left {
+  left: 0;
+  border-radius: 50% 10% 50% 20%;
+  transform: rotate(-15deg);
+}
+
+.mini-wing-right {
+  right: 0;
+  border-radius: 10% 50% 20% 50%;
+  transform: rotate(15deg);
+}
+
+/* Name Reversal Styling */
+.name-reversal {
+  text-align: center;
+  padding: 0.75rem 1.25rem;
+  background: white;
+  border-radius: 20px;
+  border: 1px solid #e5e7eb;
+}
+
+.name-reversal:hover {
+  border-color: #7209b7;
+  background: #faf5ff;
+}
+
+/* Title Pairs */
+.title-pair {
+  text-align: center;
+}
+
+/* Current Page Indication for Navigation */
+.cta-button.current-page {
+  background: linear-gradient(135deg, #6b7280, #4b5563);
+  cursor: default;
+  pointer-events: none;
+  position: relative;
+}
+
+.cta-button.current-page::after {
+  content: 'Current Page';
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75em;
+  color: #6b7280;
+  font-weight: normal;
+}
   </style>
 </head>
 <body class="book-overview" dir="ltr">
@@ -342,6 +486,113 @@
     </h2>
 
     <!-- Key Hebrew Words Overview -->
+<!-- Add this right after the section title and before the first theology-card -->
+
+<!-- Visual Word Chips Section - Quick Reference -->
+<div class="theology-card" id="word-chips-quick">
+  <h3>Key Hebrew Terms - Visual Quick Reference</h3>
+  <p style="text-align: center; color: #6b7280; margin-bottom: 2rem;">
+    <em>Hover over each term for expanded meaning • Click to jump to detailed analysis</em>
+  </p>
+  
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 2rem 0;">
+    <!-- Hesed Chip -->
+    <a href="#hesed" class="word-chip-link">
+      <div class="word-chip">
+        <span class="hebrew-word">חֶסֶד</span>
+        <span class="transliteration">ḥesed</span>
+        <div class="word-gloss">
+          <strong>Loyal Love / Covenant Faithfulness</strong><br>
+          <small>Ruth → Naomi (1:8)<br>
+          Boaz → Ruth (3:10)<br>
+          Divine character in human action</small>
+        </div>
+      </div>
+    </a>
+    
+    <!-- Goel Chip -->
+    <a href="#goel" class="word-chip-link">
+      <div class="word-chip">
+        <span class="hebrew-word">גֹּאֵל</span>
+        <span class="transliteration">go'el</span>
+        <div class="word-gloss">
+          <strong>Kinsman-Redeemer</strong><br>
+          <small>Family repossession logic<br>
+          Legal gate scene (ch. 4)<br>
+          Cost & public witness</small>
+        </div>
+      </div>
+    </a>
+    
+    <!-- Shuv Chip -->
+    <a href="#shuv" class="word-chip-link">
+      <div class="word-chip">
+        <span class="hebrew-word">שׁוּב</span>
+        <span class="transliteration">shuv</span>
+        <div class="word-gloss">
+          <strong>Return / Turn Back</strong><br>
+          <small>12x in chapter 1<br>
+          Exile → Restoration<br>
+          Spiritual "turning" subtext</small>
+        </div>
+      </div>
+    </a>
+    
+    <!-- Kanaph Chip with Wing Icon -->
+    <a href="#wings" class="word-chip-link">
+      <div class="word-chip">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span class="hebrew-word">כָּנָף</span>
+          <!-- Small wings visual -->
+          <div class="mini-wings">
+            <div class="mini-wing-left"></div>
+            <div class="mini-wing-right"></div>
+          </div>
+        </div>
+        <span class="transliteration">kanaph</span>
+        <div class="word-gloss">
+          <strong>Wing / Garment Edge</strong><br>
+          <small>Boaz's prayer (2:12) →<br>
+          Ruth's request (3:9)<br>
+          Sanctuary imagery (Ps 91)</small>
+        </div>
+      </div>
+    </a>
+  </div>
+  
+  <!-- Matched Titles Row -->
+  <div style="background: #f8fafc; border-radius: 12px; padding: 1.5rem; margin-top: 2rem;">
+    <h4 style="text-align: center; margin-bottom: 1rem; color: #7209b7;">Matched Titles</h4>
+    <div style="display: flex; justify-content: center; align-items: center; gap: 2rem; flex-wrap: wrap;">
+      <div class="title-pair">
+        <strong>Ruth:</strong> <span class="hebrew-inline">אֵשֶׁת חַיִל</span><br>
+        <small>"woman of noble character" (3:11 ~ Prov 31)</small>
+      </div>
+      <span style="font-size: 2rem; color: #7209b7;">↔</span>
+      <div class="title-pair">
+        <strong>Boaz:</strong> <span class="hebrew-inline">גִּבּוֹר חַיִל</span><br>
+        <small>"man of substance" (2:1)</small>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Name Reversals Quick View -->
+  <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 2rem; flex-wrap: wrap;">
+    <div class="name-reversal">
+      <span class="hebrew-inline">נָעֳמִי</span> ⇄ <span class="hebrew-inline">מָרָא</span><br>
+      <small>Pleasant → Bitter → Joy</small>
+    </div>
+    <div class="name-reversal">
+      <span class="hebrew-inline">בֹּעַז</span><br>
+      <small>"In him is strength"</small>
+    </div>
+    <div class="name-reversal">
+      <span class="hebrew-inline">עוֹבֵד</span><br>
+      <small>"Servant" (serves restoration)</small>
+    </div>
+  </div>
+</div>
+
     <div class="theology-card" id="key-words">
       <h3>Key Hebrew Words & Their Theological Weight</h3>
       
@@ -767,7 +1018,7 @@
         <a href="/studies/tanakh/ketuvim/ruth/ruth-literary.html" class="cta-button">
           📜 Literary Design & Structure
         </a>
-        <a href="/studies/tanakh/ketuvim/ruth/ruth-wordplay.html" class="cta-button current-page">
+        <a href="/studies/tanakh/ketuvim/ruth/ruth-wordplay.html" class="cta-button">
           ✍️ Hebrew Wordplay Analysis
         </a>
         <a href="/studies/tanakh/ketuvim/ruth/ruth-intertextuality.html" class="cta-button">
