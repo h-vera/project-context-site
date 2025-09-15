@@ -8,7 +8,7 @@
 
   <!-- Page Metadata -->
   <meta name="profile-type" content="multi-page">
-  <meta name="template-version" content="5.7-optimized">
+  <meta name="template-version" content="5.8-enhanced">
   <meta name="book-id" content="ruth">
   <meta name="study-type" content="book-overview">
 
@@ -24,9 +24,6 @@
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="/assets/css/global-v2.css">
-
-  <!-- Canonical URL -->
-  <link rel="canonical" href="https://projectcontext.org/studies/books/ruth/ruth-wordplay.html">
 
   <!-- Page-specific styles for Hebrew wordplay visualization -->
   <style>
@@ -104,6 +101,20 @@
     .word-gloss small {
       color: #6b7280;
       line-height: 1.4;
+    }
+
+    /* Enhanced Name Analysis Card */
+    .name-insight {
+      background: linear-gradient(135deg, #fef3f2 0%, #faf5ff 100%);
+      border-left: 4px solid #e11d48;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      border-radius: 8px;
+    }
+    
+    .name-insight h5 {
+      color: #e11d48;
+      margin-bottom: 0.75rem;
     }
 
     /* Mini Wings Icon for Kanaph */
@@ -313,6 +324,49 @@
       font-size: 1.5rem;
       margin: 0 1rem;
     }
+
+    /* Enhancement Indicator Badge */
+    .enhancement-indicator {
+      display: inline-block;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: 0.75rem;
+      vertical-align: middle;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Providence Note Enhancement */
+    .providence-note {
+      background: var(--panel);
+      padding: 25px;
+      border-radius: 12px;
+      margin: 20px 0;
+      border: 1px dashed var(--accent-purple);
+    }
+
+    .providence-note h4 {
+      color: var(--accent-purple);
+      margin-bottom: 10px;
+    }
+
+    /* Word Study Enhancement */
+    .word-study {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      margin: 1rem 0;
+    }
+
+    .word-study h4 {
+      color: #7209b7;
+      margin-bottom: 1rem;
+    }
     
     /* CTA Grid matching Overview page */
     .cta-grid {
@@ -338,6 +392,97 @@
       transform: translateY(-3px);
       box-shadow: 0 10px 20px rgba(114, 9, 183, 0.3);
       color: white;
+    }
+
+    /* Mobile Bottom Navigation Tabs */
+    .mobile-section-tabs {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 2px solid #e5e7eb;
+      padding: 0;
+      z-index: 1000;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+    }
+
+    .tabs-container {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0;
+      max-width: 100%;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .tabs-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 4px;
+      background: none;
+      border: none;
+      color: #6b7280;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-width: 60px;
+      position: relative;
+    }
+
+    .tab-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%) scaleX(0);
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(135deg, #7209b7 0%, #e11d48 100%);
+      transition: transform 0.3s ease;
+    }
+
+    .tab-item.active::before,
+    .tab-item:active::before {
+      transform: translateX(-50%) scaleX(1);
+    }
+
+    .tab-item.active {
+      color: #7209b7;
+    }
+
+    .tab-icon {
+      font-size: 1.3rem;
+      margin-bottom: 2px;
+    }
+
+    .tab-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    @media (max-width: 768px) {
+      .mobile-section-tabs {
+        display: block;
+      }
+      
+      main {
+        padding-bottom: 70px;
+      }
+      
+      .quick-nav-sidebar {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -399,6 +544,7 @@
     <div class="quick-nav-item" data-label="Wings" data-target="#wings"></div>
     <div class="quick-nav-item" data-label="Redeem" data-target="#goel"></div>
     <div class="quick-nav-item" data-label="Names" data-target="#names"></div>
+    <div class="quick-nav-item" data-label="Providence" data-target="#providence-words"></div>
     <div class="quick-nav-item" data-label="Titles" data-target="#titles"></div>
     <div class="quick-nav-item" data-label="Irony" data-target="#irony"></div>
     <div class="quick-nav-item" data-label="Motifs" data-target="#motif-map"></div>
@@ -639,9 +785,11 @@
       </div>
     </div>
 
-    <!-- Hesed Analysis -->
+    <!-- Enhanced Hesed Analysis with Progression -->
     <div class="word-pattern-card" id="hesed">
-      <h3>חֶסֶד (Ḥesed): The Heart of Covenant Loyalty</h3>
+      <h3>חֶסֶד (Ḥesed): The Heart of Covenant Loyalty
+        <span class="enhancement-indicator">Enhanced</span>
+      </h3>
       
       <div class="hebrew-display">
         <div class="hebrew-main">חֶסֶד</div>
@@ -649,30 +797,33 @@
         <div class="translation">"loyal love, covenant faithfulness, steadfast love"</div>
       </div>
       
-      <p>Though appearing only three times, חֶסֶד provides the theological heartbeat of Ruth:</p>
+      <p>Though appearing only three times, חֶסֶד provides the theological heartbeat of Ruth, with each occurrence marking an escalation:</p>
       
       <div class="grid-3">
         <div class="panel">
           <h4>1:8 — Naomi's Blessing</h4>
           <p>"May the LORD deal kindly (<span class="hebrew-inline">חֶסֶד</span>) with you, as you have dealt with the dead and with me."</p>
+          <p><strong>Level 1:</strong> Basic loyalty to family</p>
           <p><strong>Context:</strong> Human חֶסֶד reflects divine חֶסֶד</p>
         </div>
         
         <div class="panel">
           <h4>2:20 — Recognition</h4>
           <p>"May he be blessed by the LORD, whose <span class="hebrew-inline">חֶסֶד</span> has not forsaken the living or the dead!"</p>
-          <p><strong>Ambiguity:</strong> Is it Boaz's or the LORD's חֶסֶד? Both!</p>
+          <p><strong>Level 2:</strong> Providence recognized</p>
+          <p><strong>Ambiguity:</strong> Is it Boaz's or the LORD's חֶסֶד? Both—Boaz embodies divine חֶסֶד!</p>
         </div>
         
         <div class="panel">
           <h4>3:10 — Escalation</h4>
           <p>"This last <span class="hebrew-inline">חֶסֶד</span> is greater than the first."</p>
-          <p><strong>Progression:</strong> Ruth's loyalty deepens from care to covenant risk</p>
+          <p><strong>Level 3:</strong> Covenant risk</p>
+          <p><strong>Progression:</strong> From care (ch.1) → provision (ch.2) → covenant commitment (ch.3)</p>
         </div>
       </div>
       
       <div class="key-insight">
-        <strong>Covenant Framework:</strong> חֶסֶד in Ruth operates beyond mere kindness—it represents covenant loyalty that transcends obligation. Ruth and Boaz embody חֶסֶד toward those who cannot reciprocate, mirroring God's unmerited covenant love. This transforms social ethics into theological proclamation.
+        <strong>חֶסֶד as Character Identifier:</strong> Both Ruth and Boaz are defined by their חֶסֶד that exceeds obligation. Ruth's evolves from basic care to risky covenant proposal. Boaz's transforms from legal minimum (gleaning laws) to costly redemption (marriage to a Moabite). This human חֶסֶד becomes the vehicle through which divine חֶסֶד operates—God's covenant love incarnated in human relationships.
       </div>
     </div>
 
@@ -767,9 +918,11 @@
       </div>
     </div>
 
-    <!-- Name Meanings & Reversals -->
+    <!-- Enhanced Name Meanings & Reversals -->
     <div class="theology-card" id="names">
-      <h3>Name Meanings & Narrative Reversals</h3>
+      <h3>Name Meanings & Narrative Reversals
+        <span class="enhancement-indicator">Enhanced</span>
+      </h3>
       
       <div class="grid-2">
         <div class="name-card">
@@ -777,24 +930,44 @@
           <p><strong>Meaning:</strong> "Pleasant" → "Bitter"</p>
           <p><strong>Reversal:</strong> "Do not call me Naomi; call me Mara, for the Almighty has dealt very bitterly with me" (1:20)</p>
           <p><strong>Resolution:</strong> Restored to joy through Obed: "Blessed be the LORD!" (4:14)</p>
+          
+          <div class="name-insight">
+            <h5>Literary Insight</h5>
+            <p>The women of Bethlehem never actually call her "Mara"—they maintain hope by continuing to use "Naomi." Her silent transformation back from bitter to pleasant in chapter 4 (she doesn't speak after 3:18) shows redemption received through grace, not self-effort. This name journey represents Israel's own exile-to-restoration pattern.</p>
+          </div>
         </div>
         
         <div class="name-card">
           <h4><span class="name-hebrew">רוּת</span> Ruth</h4>
           <p><strong>Meaning:</strong> Debated—possibly "friend" or "refreshment" (from רָוָה, "saturate")</p>
           <p><strong>Function:</strong> She literally refreshes/saturates the emptied Naomi with new life</p>
+          
+          <div class="name-insight">
+            <h5>Narrative Function</h5>
+            <p>Ruth's name may connect to "saturation/refreshment"—she becomes the means by which empty Naomi is filled. The ambiguity of her name's meaning mirrors her liminal status as foreign-yet-family.</p>
+          </div>
         </div>
         
         <div class="name-card">
           <h4><span class="name-hebrew">בֹּעַז</span> Boaz</h4>
-          <p><strong>Meaning:</strong> "In him is strength" or "swiftness"</p>
+          <p><strong>Meaning:</strong> "In him is strength" (בּוֹ + עַז)</p>
           <p><strong>Character:</strong> Described as <span class="hebrew-inline">גִּבּוֹר חַיִל</span> (mighty man of valor/wealth)</p>
+          
+          <div class="name-insight">
+            <h5>Name-Role Connection</h5>
+            <p>His name literally embodies his function—the strength (עַז) in him becomes the vehicle for divine protection. When he becomes Yahweh's "wings" (3:9), his name's meaning is fulfilled: strength used for shelter.</p>
+          </div>
         </div>
         
         <div class="name-card">
           <h4><span class="name-hebrew">עָרְפָּה</span> Orpah</h4>
           <p><strong>Meaning:</strong> Related to עֹרֶף (oreph, "back of neck")</p>
           <p><strong>Action:</strong> She turns her back (1:14), fulfilling her name's meaning</p>
+          
+          <div class="name-insight">
+            <h5>Narrative Function</h5>
+            <p>Her linguistic disappearance after 1:14 creates a presence through absence—everything Ruth gains represents what Orpah forfeited. The narrator uses her "turning back" as the pivot that makes Ruth's "clinging" (דָּבַק) extraordinary.</p>
+          </div>
         </div>
         
         <div class="name-card">
@@ -812,6 +985,31 @@
       
       <div class="key-insight">
         <strong>Names as Destiny:</strong> In Hebrew narrative, names often encode character destiny. The progression from death-names (Mahlon, Chilion) through bitterness (Mara) to service (Obed) traces the redemptive arc. Significantly, the nearer kinsman becomes <span class="hebrew-inline">פְּלֹנִי אַלְמֹנִי</span> (peloni almoni, "so-and-so")—nameless because he refused the redemptive role.
+      </div>
+    </div>
+
+    <!-- Enhanced Providence Wordplay -->
+    <div class="theology-card" id="providence-words">
+      <h3>Providence Through "Accidental" Language
+        <span class="enhancement-indicator">New</span>
+      </h3>
+      
+      <div class="grid-2">
+        <div class="word-study">
+          <h4>מִקְרֶה (miqreh) - "Chance"</h4>
+          <p><strong>2:3:</strong> וַיִּקֶר מִקְרֶהָ - "her chance chanced upon"</p>
+          <p>The redundant construction is deeply ironic. The narrator layers "happening" upon "happening" to signal the opposite—divine orchestration masquerading as coincidence.</p>
+        </div>
+        
+        <div class="word-study">
+          <h4>הִנֵּה (hineh) - "Behold!"</h4>
+          <p><strong>4:1:</strong> "And behold, the kinsman was passing by"</p>
+          <p>This attention-grabber appears at moments of perfect timing—Boaz sits at the gate and "behold!"—exactly the right person appears. Providence hiding in plain sight.</p>
+        </div>
+      </div>
+      
+      <div class="key-insight">
+        <strong>The Narrator's Wink:</strong> Through these "accidental" terms, the narrator creates theological irony—the more random something appears, the more divine it actually is. This trains readers to see God's hand in life's "coincidences."
       </div>
     </div>
 
@@ -949,6 +1147,32 @@
       </div>
     </div>
 
+    <!-- Mobile Bottom Navigation Tabs -->
+    <nav class="mobile-section-tabs" aria-label="Section navigation" role="navigation">
+      <div class="tabs-container">
+        <button class="tab-item active" data-target="#word-chips-quick" aria-label="Quick Reference">
+          <span class="tab-icon">🔤</span>
+          <span class="tab-label">Quick</span>
+        </button>
+        <button class="tab-item" data-target="#shuv" aria-label="Return Pattern">
+          <span class="tab-icon">↩️</span>
+          <span class="tab-label">Return</span>
+        </button>
+        <button class="tab-item" data-target="#hesed" aria-label="Covenant Love">
+          <span class="tab-icon">💝</span>
+          <span class="tab-label">Ḥesed</span>
+        </button>
+        <button class="tab-item" data-target="#wings" aria-label="Wings Motif">
+          <span class="tab-icon">🦅</span>
+          <span class="tab-label">Wings</span>
+        </button>
+        <button class="tab-item" data-target="#names" aria-label="Names">
+          <span class="tab-icon">📛</span>
+          <span class="tab-label">Names</span>
+        </button>
+      </div>
+    </nav>
+
     <!-- Continue Your Ruth Study Section -->
     <div class="theology-card" id="further-study">
       <h3>Continue Your Ruth Study</h3>
@@ -975,97 +1199,6 @@
       </div>
     </div>
 
-    <!-- Bibliography Section -->
-    <details class="bibliography-section enhanced">
-      <summary>
-        <div class="bibliography-header">
-          <div class="bibliography-inner">
-            <span class="bibliography-icon">📚</span>
-            <div class="bibliography-text">
-              <h3 class="bibliography-title">Bibliography & Sources</h3>
-              <p class="bibliography-subtitle">Academic references for Hebrew wordplay analysis in Ruth</p>
-            </div>
-            <div class="expand-indicator">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </summary>
-      <div class="bibliography-content">
-        <!-- Video Resources -->
-        <div class="source-category">
-          <h4>Video & Audio Resources</h4>
-          <div class="source-entry">
-            <div class="source-citation">
-              <strong>The Bible Project.</strong> "Book of Ruth Summary: A Complete Animated Overview." YouTube, 2016.
-            </div>
-            <div class="source-usage">
-              <span class="usage-tag">Visual Overview</span>
-              <span class="usage-note">Key word patterns, especially שׁוּב repetition and chiastic structure</span>
-            </div>
-          </div>
-          <div class="source-entry">
-            <div class="source-citation">
-              <strong>The Bible Project.</strong> "Redemption E4: Ruth." Podcast transcript, 2023.
-            </div>
-            <div class="source-usage">
-              <span class="usage-tag">גֹּאֵל Analysis</span>
-              <span class="usage-note">Detailed exploration of redemption vocabulary and covenant themes</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Primary Sources -->
-        <div class="source-category">
-          <h4>Primary Sources & Lexicons</h4>
-          <div class="source-entry">
-            <div class="source-citation">
-              <strong>Biblia Hebraica Stuttgartensia.</strong> Stuttgart: Deutsche Bibelgesellschaft, 1997.
-            </div>
-            <div class="source-usage">
-              <span class="usage-tag">Hebrew Text</span>
-              <span class="usage-note">All Hebrew citations and wordplay analysis</span>
-            </div>
-          </div>
-          <div class="source-entry">
-            <div class="source-citation">
-              <strong>Brown, Francis, S.R. Driver, and Charles A. Briggs.</strong> <em>The Brown-Driver-Briggs Hebrew and English Lexicon.</em> Peabody: Hendrickson, 2014.
-            </div>
-            <div class="source-usage">
-              <span class="usage-tag">Etymology</span>
-              <span class="usage-note">Semantic ranges for חֶסֶד, שׁוּב, כָּנָף, גָּאַל</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Major Commentaries -->
-        <div class="source-category">
-          <h4>Major Commentaries</h4>
-          <div class="source-entry">
-            <div class="source-citation">
-              <strong>Hubbard, Robert L. Jr.</strong> <em>The Book of Ruth.</em> NICOT. Grand Rapids: Eerdmans, 1988.
-            </div>
-            <div class="source-usage">
-              <span class="usage-tag">Wordplay Analysis</span>
-              <span class="usage-tag">חֶסֶד Study</span>
-              <span class="usage-note">Comprehensive Hebrew wordplay, pp. 116-124 on שׁוּב pattern</span>
-            </div>
-          </div>
-          <div class="source-entry">
-            <div class="source-citation">
-              <strong>Block, Daniel I.</strong> <em>Judges, Ruth.</em> NAC 6. Nashville: Broadman & Holman, 1999.
-            </div>
-            <div class="source-usage">
-              <span class="usage-tag">Names Analysis</span>
-              <span class="usage-note">Etymology and significance of character names, pp. 624-628</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </details>
-
     <!-- Back to Top Button -->
     <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
   </main>
@@ -1086,7 +1219,7 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('Ruth Hebrew Wordplay & Motifs – Template Version: 5.7');
+      console.log('Ruth Hebrew Wordplay & Motifs – Template Version: 5.8-enhanced');
       
       // Reading progress bar
       window.addEventListener('scroll', () => {
@@ -1129,6 +1262,51 @@
           const target = document.querySelector(e.currentTarget.dataset.target);
           if (target) {
             target.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      });
+
+      // Mobile tabs functionality
+      const tabItems = document.querySelectorAll('.tab-item');
+      
+      tabItems.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+          // Remove active from all tabs
+          tabItems.forEach(t => t.classList.remove('active'));
+          // Add active to clicked tab
+          tab.classList.add('active');
+          
+          // Scroll to target section
+          const target = document.querySelector(tab.dataset.target);
+          if (target) {
+            // Account for fixed header and mobile tabs
+            const offset = 80;
+            const targetPosition = target.getBoundingClientRect().top + window.scrollY - offset;
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+      
+      // Update active tab on scroll
+      window.addEventListener('scroll', () => {
+        const sections = document.querySelectorAll('.theology-card, .word-pattern-card');
+        const scrollPosition = window.scrollY + 150;
+        
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.offsetHeight;
+          const sectionId = section.getAttribute('id');
+          
+          if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+            tabItems.forEach(tab => {
+              tab.classList.remove('active');
+              if (tab.dataset.target === `#${sectionId}`) {
+                tab.classList.add('active');
+              }
+            });
           }
         });
       });
