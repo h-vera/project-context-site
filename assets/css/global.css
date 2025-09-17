@@ -2,6 +2,7 @@
  * Global Stylesheet for Project Context
  * Path: /assets/css/global.css
  * Used by: index.html and other root-level pages
+ * Updated: Added glossy effects, mobile overlay, back-to-top button
  */
 
 * {
@@ -203,6 +204,25 @@ nav.scrolled {
     transform: rotate(-45deg) translate(7px, -6px);
 }
 
+/* Mobile Menu Overlay */
+.mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mobile-menu-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
 /* Hero Section with Gradient */
 .hero {
     min-height: 100vh;
@@ -233,10 +253,32 @@ nav.scrolled {
     animation: float 30s infinite linear;
 }
 
+/* Optional: Enhanced glass effect for hero */
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: 10%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(40px);
+    animation: float-reverse 25s infinite linear;
+    pointer-events: none;
+}
+
 @keyframes float {
     0% { transform: rotate(0deg) scale(1); }
     50% { transform: rotate(180deg) scale(1.1); }
     100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes float-reverse {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(30px, -30px) rotate(120deg); }
+    66% { transform: translate(-20px, 20px) rotate(240deg); }
+    100% { transform: translate(0, 0) rotate(360deg); }
 }
 
 .hero-logo {
@@ -446,6 +488,76 @@ nav.scrolled {
     line-height: 1.8;
 }
 
+/* Glossy Effects for Featured Section Only */
+#featured .feature-card {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Conservative approach: glossy only on hover */
+#featured .feature-card.featured-glossy:hover {
+    background: linear-gradient(135deg, 
+        rgba(255,255,255,0.98) 0%, 
+        rgba(248,248,248,0.95) 100%);
+    box-shadow: 
+        0 15px 40px 0 rgba(31, 38, 135, 0.2),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+    transform: translateY(-8px) scale(1.02);
+    border: 1px solid rgba(255,255,255,0.6);
+}
+
+/* Subtle glass sheen on hover */
+#featured .feature-card.featured-glossy::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, 
+        rgba(255,255,255,0) 0%, 
+        rgba(255,255,255,0) 100%);
+    pointer-events: none;
+    transition: all 0.4s ease;
+}
+
+#featured .feature-card.featured-glossy:hover::before {
+    background: linear-gradient(180deg, 
+        rgba(255,255,255,0.4) 0%, 
+        rgba(255,255,255,0) 100%);
+}
+
+/* Back to Top Button */
+.back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-rose) 100%);
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 1.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(114, 9, 183, 0.3);
+    z-index: 999;
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.back-to-top:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(114, 9, 183, 0.4);
+}
+
 /* Special styling for Women's Hub card */
 .feature-card:has(.feature-icon:contains("👩")) {
     background: linear-gradient(135deg, rgba(225, 29, 72, 0.05) 0%, rgba(114, 9, 183, 0.05) 100%);
@@ -492,6 +604,7 @@ footer p {
         gap: 1rem;
         box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
         transition: right 0.3s ease;
+        z-index: 999;
     }
 
     .nav-links.active {
@@ -526,14 +639,31 @@ footer p {
     .hero-title {
         font-size: 2.5rem;
     }
+
+    /* Featured cards stay subtle on mobile (no hover states) */
+    #featured .feature-card.featured-glossy {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .back-to-top {
+        bottom: 1rem;
+        right: 1rem;
+        width: 45px;
+        height: 45px;
+    }
 }
-/* Optional: subtle hero treatment just for About */
-body.about-page .section-title {
-  background: linear-gradient(135deg, var(--bg-soft, #f0f4ff), #e8eeff);
-  border: 2px solid var(--accent-blue, #4a5fff);
-  padding: 1rem 1.25rem;
-  border-radius: 1rem;
+
+/* Optional: Add subtle loading animation for featured cards */
+#featured .feature-card {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
 }
+
+#featured .feature-card:nth-child(1) { animation-delay: 0.1s; }
+#featured .feature-card:nth-child(2) { animation-delay: 0.2s; }
+#featured .feature-card:nth-child(3) { animation-delay: 0.3s; }
+#featured .feature-card:nth-child(4) { animation-delay: 0.4s; }
+
 /* === Project Context v5.5 Elements (for About page & profiles) === */
 
 /* Card containers */
@@ -615,4 +745,12 @@ body.about-page .section-title {
   padding: .9rem 1rem;
   border-radius: 8px;
   margin-top: .75rem;
+}
+
+/* Optional: subtle hero treatment just for About */
+body.about-page .section-title {
+  background: linear-gradient(135deg, var(--bg-soft, #f0f4ff), #e8eeff);
+  border: 2px solid var(--accent-blue, #4a5fff);
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
 }
