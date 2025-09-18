@@ -8,7 +8,10 @@
 })();
 
 // character-page.js — page utilities for character profiles
-// Version: 2.0 - Now with dynamic mobile tab generation
+// Version: 2.1 - Fixed iOS blank content issue
+
+// Detect iOS early
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
 // Reading progress indicator
 window.addEventListener('scroll', () => {
@@ -47,25 +50,27 @@ window.addEventListener('scroll', () => {
   });
 });
 
-// Intersection Observer for section animations
-const observerOptions = {
-  threshold: 0.1,
-  rootMargin: '0px 0px -50px 0px'
-};
+// Intersection Observer for section animations (SKIP ON iOS)
+if (!isIOS) {
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
 
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
-    }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  // Apply to all cards
+  document.querySelectorAll('.animate-on-scroll').forEach(card => {
+    observer.observe(card);
   });
-}, observerOptions);
-
-// Apply to all cards
-document.querySelectorAll('.animate-on-scroll').forEach(card => {
-  observer.observe(card);
-});
+}
 
 // Smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -198,8 +203,8 @@ if (bibliographyDetails) {
 }
 
 // ============================================
-// DYNAMIC MOBILE SECTION TABS - VERSION 2.0
-// Automatically generates tabs based on present sections
+// DYNAMIC MOBILE SECTION TABS - VERSION 2.1
+// Fixed for iOS blank content issue
 // ============================================
 
 function generateMobileTabs() {
@@ -207,11 +212,16 @@ function generateMobileTabs() {
   if (document.querySelector('.mobile-section-tabs')) return;
   
   // Define section selectors and their priority order
-  // Priority is important for selecting which tabs to show when many sections exist
   const sectionConfig = [
     { id: 'overview', icon: '📋', label: 'Overview', priority: 1 },
     { id: 'narrative', icon: '📖', label: 'Journey', priority: 2 },
     { id: 'literary-context', icon: '📚', label: 'Literary', priority: 3 },
+    { id: 'providence', icon: '👁️', label: 'Providence', priority: 1 },
+    { id: 'redemption', icon: '💰', label: 'Redemption', priority: 2 },
+    { id: 'inclusion', icon: '🌍', label: 'Inclusion', priority: 3 },
+    { id: 'fullness', icon: '📈', label: 'Fullness', priority: 4 },
+    { id: 'hiddenness', icon: '🔍', label: 'Hiddenness', priority: 5 },
+    { id: 'synthesis', icon: '✨', label: 'Synthesis', priority: 4 },
     { id: 'major-chiasm', icon: '🔍', label: 'Chiasm', priority: 4 },
     { id: 'literary-artistry', icon: '🎨', label: 'Artistry', priority: 5 },
     { id: 'themes', icon: '💡', label: 'Themes', priority: 3 },
@@ -226,7 +236,8 @@ function generateMobileTabs() {
     { id: 'intertext', icon: '🔗', label: 'Intertext', priority: 4 },
     { id: 'songs', icon: '🎵', label: 'Songs', priority: 5 },
     { id: 'application', icon: '🎯', label: 'Apply', priority: 2 },
-    { id: 'questions', icon: '❓', label: 'Q&A', priority: 4 }
+    { id: 'questions', icon: '❓', label: 'Q&A', priority: 4 },
+    { id: 'further-study', icon: '📚', label: 'More', priority: 5 }
   ];
   
   // Find which sections actually exist in the document
@@ -277,6 +288,11 @@ function generateMobileTabs() {
   mobileNav.setAttribute('aria-label', 'Section navigation');
   mobileNav.setAttribute('role', 'navigation');
   
+  // FOR iOS: Force tabs to always be visible
+  if (isIOS) {
+    mobileNav.style.cssText = 'display: block !important; transform: none !important; position: fixed !important; bottom: 0 !important; opacity: 1 !important; visibility: visible !important;';
+  }
+  
   const tabsContainer = document.createElement('div');
   tabsContainer.className = 'tabs-container';
   
@@ -303,15 +319,12 @@ function generateMobileTabs() {
   initializeMobileTabs();
 }
 
+// SINGLE, FIXED VERSION of initializeMobileTabs
 function initializeMobileTabs() {
   const mobileTabsNav = document.querySelector('.mobile-section-tabs');
   const tabItems = document.querySelectorAll('.mobile-section-tabs .tab-item');
   
   if (!mobileTabsNav || !tabItems.length) return;
-  
-  // Track scroll position for hide/show behavior
-  let lastScrollTop = 0;
-  let scrollTimer = null;
   
   // Function to update active tab based on scroll position
   function updateActiveTab() {
@@ -352,260 +365,36 @@ function initializeMobileTabs() {
       const targetElement = document.querySelector(targetId);
       
       if (targetElement) {
-        // Calculate offset for fixed elements
         const navHeight = document.querySelector('nav')?.offsetHeight || 65;
         const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - navHeight - 10;
         
-        // Smooth scroll to section
         window.scrollTo({
           top: targetPosition,
           behavior: 'smooth'
         });
         
-        // Update active state immediately
         tabItems.forEach(t => t.classList.remove('active'));
         this.classList.add('active');
       }
     });
   });
   
-  // Scroll event handler for mobile tabs
-  let mobileTabScrollHandler = function() {
-    // Update active tab
-    if (scrollTimer) {
-      clearTimeout(scrollTimer);
-    }
-    
-    scrollTimer = setTimeout(updateActiveTab, 100);
-    
-    // Hide/show tabs based on scroll direction (mobile only)
-    if (window.innerWidth <= 768) {
-      const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      
-      if (currentScrollTop > lastScrollTop && currentScrollTop > 100) {
-        // Scrolling down - hide tabs
-        mobileTabsNav.classList.add('hidden');
-      } else {
-        // Scrolling up - show tabs
-        mobileTabsNav.classList.remove('hidden');
-      }
-      
-      lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
-    }
-  };
-  
-  // Add scroll listener
-  window.addEventListener('scroll', mobileTabScrollHandler);
-  
-  // Initial active tab setup
-  updateActiveTab();
-  
-  // Handle orientation change
-  window.addEventListener('orientationchange', function() {
-    setTimeout(updateActiveTab, 300);
-  });
-  
-  // Optional: Swipe gestures for tab navigation
-  let touchStartX = 0;
-  let touchEndX = 0;
-  
-  if (mobileTabsNav) {
-    mobileTabsNav.addEventListener('touchstart', function(e) {
-      touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
-    
-    mobileTabsNav.addEventListener('touchend', function(e) {
-      touchEndX = e.changedTouches[0].screenX;
-      handleSwipe();
-    }, { passive: true });
-  }
-  
-  function handleSwipe() {
-    const swipeThreshold = 50;
-    const diff = touchStartX - touchEndX;
-    
-    if (Math.abs(diff) > swipeThreshold) {
-      const activeTab = document.querySelector('.mobile-section-tabs .tab-item.active');
-      const activeIndex = Array.from(tabItems).indexOf(activeTab);
-      
-      if (diff > 0 && activeIndex < tabItems.length - 1) {
-        // Swipe left - next section
-        tabItems[activeIndex + 1].click();
-      } else if (diff < 0 && activeIndex > 0) {
-        // Swipe right - previous section
-        tabItems[activeIndex - 1].click();
-      }
-    }
-  }
-  
-  // Enhanced Intersection Observer for mobile tabs (more precise)
-  if ('IntersectionObserver' in window && window.innerWidth <= 768) {
-    const mobileObserverOptions = {
-      root: null,
-      rootMargin: '-30% 0px -50% 0px',
-      threshold: 0
-    };
-    
-    const mobileSectionObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const sectionId = '#' + entry.target.id;
-          tabItems.forEach(tab => {
-            if (tab.dataset.target === sectionId) {
-              tab.classList.add('active');
-            } else {
-              tab.classList.remove('active');
-            }
-          });
-        }
-      });
-    }, mobileObserverOptions);
-    
-    // Observe all sections that have tabs
-    tabItems.forEach(tab => {
-      const targetId = tab.dataset.target;
-      const targetElement = document.querySelector(targetId);
-      if (targetElement) {
-        mobileSectionObserver.observe(targetElement);
-      }
-    });
-  }
-}
-
-// Initialize everything on DOM ready
-document.addEventListener('DOMContentLoaded', function() {
-  // Only generate mobile tabs on mobile devices
-  if (window.innerWidth <= 768) {
-    generateMobileTabs();
-  }
-  
-  // Handle resize events to add/remove mobile tabs
-  window.addEventListener('resize', () => {
-    const mobileTabs = document.querySelector('.mobile-section-tabs');
-    if (window.innerWidth <= 768 && !mobileTabs) {
-      generateMobileTabs();
-    } else if (window.innerWidth > 768 && mobileTabs) {
-      mobileTabs.remove();
-    }
-  });
-  
-  // Log initialization for debugging
-  console.log('Character page utilities initialized');
-  console.log('Mobile tabs:', window.innerWidth <= 768 ? 'Generated' : 'Not needed (desktop)');
-});
-// ============================================
-// iOS SCROLL FIX
-// Add this section to character-page.js after DOMContentLoaded
-// ============================================
-
-document.addEventListener('DOMContentLoaded', function() {
-  // Detect iOS
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-  
+  // CRITICAL FIX: Different behavior for iOS vs others
   if (isIOS) {
-    // Add iOS class to body for CSS targeting
-    document.body.classList.add('ios-device');
+    console.log('iOS detected - keeping mobile tabs always visible');
     
-    // Option 1: Disable all scroll animations on iOS
-    const animatedElements = document.querySelectorAll('.animate-on-scroll');
-    animatedElements.forEach(el => {
-      el.classList.remove('animate-on-scroll');
-      el.classList.add('visible');
-      el.style.opacity = '1';
-      el.style.transform = 'none';
-    });
-    
-    // Option 2: Simplify mobile tab behavior on iOS
-    const mobileTabs = document.querySelector('.mobile-section-tabs');
-    if (mobileTabs) {
-      let scrollTimer = null;
-      let lastScrollY = window.scrollY;
-      
-      // Debounced scroll handler for iOS
-      window.addEventListener('scroll', function() {
-        if (scrollTimer) {
-          clearTimeout(scrollTimer);
-        }
-        
-        scrollTimer = setTimeout(function() {
-          const currentScrollY = window.scrollY;
-          
-          // Only hide/show if scroll distance is significant
-          if (Math.abs(currentScrollY - lastScrollY) > 50) {
-            if (currentScrollY > lastScrollY && currentScrollY > 100) {
-              mobileTabs.classList.add('hidden');
-            } else {
-              mobileTabs.classList.remove('hidden');
-            }
-            lastScrollY = currentScrollY;
-          }
-        }, 100); // Debounce delay
-      }, { passive: true });
-    }
-    
-    // Option 3: Force repaint on problematic elements
-    const fixFlickering = () => {
-      const cards = document.querySelectorAll('.theology-card, .study-card');
-      cards.forEach(card => {
-        // Force a repaint by accessing offsetHeight
-        card.style.display = 'block';
-        card.offsetHeight; // Trigger reflow
-      });
-    };
-    
-    // Run after a delay to ensure layout is complete
-    setTimeout(fixFlickering, 100);
-    
-    // Option 4: Disable Intersection Observer on iOS
-    if (window.observer) {
-      window.observer.disconnect();
-    }
-  }
-});
-
-// Alternative: Replace the existing Intersection Observer with a simpler version for iOS
-if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-  // Simple visibility check without animations
-  window.addEventListener('scroll', function() {
-    const elements = document.querySelectorAll('.theology-card, .study-card');
-    elements.forEach(element => {
-      const rect = element.getBoundingClientRect();
-      if (rect.top < window.innerHeight && rect.bottom > 0) {
-        element.style.opacity = '1';
-        element.style.visibility = 'visible';
-      }
-    });
-  }, { passive: true });
-} else {
-  // Keep existing Intersection Observer for non-iOS devices
-  // ... existing observer code ...
-}
-// ============================================
-// FIX FOR iOS BLANK CONTENT ON SCROLL UP
-// Replace the mobile tab scroll handler in character-page.js
-// ============================================
-
-// Find this section in character-page.js and REPLACE the scroll handler:
-function initializeMobileTabs() {
-  const mobileTabsNav = document.querySelector('.mobile-section-tabs');
-  const tabItems = document.querySelectorAll('.mobile-section-tabs .tab-item');
-  
-  if (!mobileTabsNav || !tabItems.length) return;
-  
-  // SOLUTION 1: Keep mobile tabs always visible on iOS
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-  
-  if (isIOS) {
-    // On iOS, never hide the tabs - just keep them fixed
+    // Force tabs to stay visible on iOS
     mobileTabsNav.classList.remove('hidden');
+    mobileTabsNav.style.transform = 'none';
+    mobileTabsNav.style.display = 'block';
+    mobileTabsNav.style.opacity = '1';
+    mobileTabsNav.style.visibility = 'visible';
     
-    // Only update active state on scroll
-    window.addEventListener('scroll', function() {
-      updateActiveTab();
-    }, { passive: true });
+    // Simple scroll listener for iOS - ONLY update active tab
+    window.addEventListener('scroll', updateActiveTab, { passive: true });
     
   } else {
-    // Original hide/show behavior for Android and other devices
+    // Original hide/show behavior for non-iOS devices
     let lastScrollTop = 0;
     let scrollTimer = null;
     
@@ -619,7 +408,6 @@ function initializeMobileTabs() {
         
         const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
         
-        // Only hide/show on non-iOS devices
         if (currentScrollTop > lastScrollTop && currentScrollTop > 100) {
           mobileTabsNav.classList.add('hidden');
         } else {
@@ -631,79 +419,58 @@ function initializeMobileTabs() {
     }, { passive: true });
   }
   
-  // ... rest of the initializeMobileTabs function stays the same ...
+  // Initial active tab setup
+  updateActiveTab();
+  
+  // Handle orientation change
+  window.addEventListener('orientationchange', function() {
+    setTimeout(updateActiveTab, 300);
+  });
 }
 
-// SOLUTION 2: Alternative - Disable hide/show entirely
-// If Solution 1 doesn't work, try this simpler approach:
-function initializeMobileTabsSimple() {
-  const mobileTabsNav = document.querySelector('.mobile-section-tabs');
-  const tabItems = document.querySelectorAll('.mobile-section-tabs .tab-item');
+// SINGLE DOMContentLoaded handler
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('Character page utilities initializing...');
+  console.log('iOS detected:', isIOS);
   
-  if (!mobileTabsNav || !tabItems.length) return;
-  
-  // Never hide the tabs - always visible
-  mobileTabsNav.classList.remove('hidden');
-  mobileTabsNav.style.transform = 'translateY(0)';
-  mobileTabsNav.style.position = 'fixed';
-  mobileTabsNav.style.bottom = '0';
-  
-  // Only handle active state updates
-  function updateActiveTab() {
-    const sections = [];
-    tabItems.forEach(tab => {
-      const targetId = tab.dataset.target;
-      const targetElement = document.querySelector(targetId);
-      if (targetElement) {
-        sections.push({ tab, element: targetElement });
-      }
+  // iOS-specific fixes FIRST
+  if (isIOS) {
+    document.body.classList.add('ios-device');
+    
+    // Disable all scroll animations on iOS
+    const animatedElements = document.querySelectorAll('.animate-on-scroll');
+    animatedElements.forEach(el => {
+      el.classList.remove('animate-on-scroll');
+      el.classList.add('visible');
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+      el.style.visibility = 'visible';
     });
     
-    const scrollPosition = window.scrollY + window.innerHeight / 3;
-    
-    let activeSection = null;
-    
-    sections.forEach(({ tab, element }) => {
-      const rect = element.getBoundingClientRect();
-      const absoluteTop = rect.top + window.scrollY;
-      
-      if (absoluteTop <= scrollPosition) {
-        activeSection = { tab, element };
-      }
+    // Force all cards to be visible
+    const cards = document.querySelectorAll('.theology-card, .study-card, .chiasm-card');
+    cards.forEach(card => {
+      card.style.opacity = '1';
+      card.style.visibility = 'visible';
+      card.style.transform = 'none';
     });
+  }
+  
+  // Generate mobile tabs if on mobile
+  if (window.innerWidth <= 768) {
+    generateMobileTabs();
     
-    if (activeSection) {
-      tabItems.forEach(t => t.classList.remove('active'));
-      activeSection.tab.classList.add('active');
+    // Extra iOS fix for mobile tabs
+    if (isIOS) {
+      const mobileTabs = document.querySelector('.mobile-section-tabs');
+      if (mobileTabs) {
+        // Nuclear option - force visibility
+        mobileTabs.style.cssText = 'display: block !important; transform: none !important; position: fixed !important; bottom: 0 !important; opacity: 1 !important; visibility: visible !important; z-index: 1000 !important;';
+        mobileTabs.classList.remove('hidden');
+      }
     }
   }
   
-  // Simple scroll listener
-  window.addEventListener('scroll', updateActiveTab, { passive: true });
-  
-  // Tab click handlers stay the same
-  tabItems.forEach(tab => {
-    tab.addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      const targetId = this.dataset.target;
-      const targetElement = document.querySelector(targetId);
-      
-      if (targetElement) {
-        const navHeight = document.querySelector('nav')?.offsetHeight || 65;
-        const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - navHeight - 10;
-        
-        window.scrollTo({
-          top: targetPosition,
-          behavior: 'smooth'
-        });
-        
-        tabItems.forEach(t => t.classList.remove('active'));
-        this.classList.add('active');
-      }
-    });
-  });
-  
-  // Initial setup
-  updateActiveTab();
-}
+  console.log('Mobile tabs:', window.innerWidth <= 768 ? 'Generated' : 'Not needed (desktop)');
+  console.log('Initialization complete');
+});
