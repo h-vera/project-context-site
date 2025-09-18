@@ -2585,3 +2585,161 @@ body.menu-open {
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
+/* ============================================
+   iOS SCROLL FLICKERING FIXES
+   Add these to the END of global-v2.css
+   ============================================ */
+
+/* Fix 1: Disable animations on mobile for smoother scrolling */
+@media (max-width: 768px) {
+  /* Disable scroll animations on mobile */
+  .animate-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  /* Remove will-change to prevent layer creation issues */
+  * {
+    will-change: auto !important;
+  }
+}
+
+/* Fix 2: Force hardware acceleration more carefully */
+.theology-card,
+.character-card,
+.study-card,
+.chiasm-card {
+  /* Use 3D transform to trigger hardware acceleration */
+  transform: translate3d(0, 0, 0);
+  /* Prevent flickering */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  /* Smooth out animations */
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
+}
+
+/* Fix 3: Stabilize mobile section tabs */
+.mobile-section-tabs {
+  /* Force GPU layer */
+  transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  /* Smoother transition */
+  transition: transform 0.2s ease-out;
+}
+
+.mobile-section-tabs.hidden {
+  /* Use transform instead of changing display/visibility */
+  transform: translate3d(0, 100%, 0);
+}
+
+/* Fix 4: iOS-specific momentum scrolling fix */
+@supports (-webkit-overflow-scrolling: touch) {
+  main.content-section {
+    -webkit-overflow-scrolling: touch;
+    /* Create stacking context */
+    z-index: 1;
+    position: relative;
+  }
+  
+  /* Prevent content from disappearing */
+  .theology-card,
+  .chiasm-card {
+    position: relative;
+    z-index: 1;
+    /* Force repaint */
+    transform: translateZ(0);
+  }
+}
+
+/* Fix 5: Disable problematic animations on iOS completely */
+@media (max-width: 768px) {
+  @supports (-webkit-overflow-scrolling: touch) {
+    /* Timeline animations that cause issues */
+    .timeline-item {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    
+    /* Disable fade animations */
+    .fade-in,
+    .fade-slide-down,
+    .fade-slide-left {
+      animation: none !important;
+    }
+    
+    /* Keep content visible */
+    .animate-on-scroll {
+      visibility: visible !important;
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+  }
+}
+
+/* Fix 6: Reduce repaints on scroll */
+@media (max-width: 768px) {
+  /* Fixed elements that shouldn't repaint */
+  .reading-progress,
+  nav#main-nav {
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  
+  /* Simplify shadows on mobile */
+  .theology-card,
+  .study-card {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  }
+  
+  .theology-card:hover,
+  .study-card:hover {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    transform: none;
+  }
+}
+
+/* Fix 7: Prevent iOS bounce scroll issues */
+body {
+  /* Prevent overscroll bounce */
+  overscroll-behavior: none;
+  /* Smooth scrolling but not too aggressive */
+  scroll-behavior: auto;
+}
+
+/* Fix 8: Stabilize content during scroll */
+@media (max-width: 768px) {
+  .content-section {
+    /* Prevent layout shifts */
+    overflow-anchor: auto;
+    /* Contain layout */
+    contain: layout style;
+  }
+  
+  /* Keep images from causing reflow */
+  img, svg {
+    max-width: 100%;
+    height: auto;
+    contain: layout;
+  }
+}
+
+/* Fix 9: Alternative mobile tab implementation */
+@media (max-width: 768px) {
+  .mobile-section-tabs {
+    /* Always visible, just slide down */
+    display: block !important;
+    position: fixed;
+    transform: translateY(0);
+    transition: transform 0.15s ease-out;
+  }
+  
+  .mobile-section-tabs.hidden {
+    transform: translateY(calc(100% + 2px));
+  }
+}
