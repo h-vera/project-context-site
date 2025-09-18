@@ -8,6 +8,7 @@
 })();
 
 // character-page.js — page utilities for character profiles
+// Version: 2.0 - Now with dynamic mobile tab generation
 
 // Reading progress indicator
 window.addEventListener('scroll', () => {
@@ -65,22 +66,6 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll('.animate-on-scroll').forEach(card => {
   observer.observe(card);
 });
-
-// Timeline item animation - COMMENT THIS OUT OR REMOVE
-/*
-const timelineObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('loaded');
-      timelineObserver.unobserve(entry.target);
-    }
-  });
-}, { rootMargin: '100px' });
-
-document.querySelectorAll('.timeline-item').forEach(item => {
-  timelineObserver.observe(item);
-});
-*/
 
 // Smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -169,6 +154,14 @@ window.addEventListener('resize', () => {
       document.querySelector('.nav-links')?.classList.remove('active');
       document.querySelector('.mobile-menu-toggle')?.setAttribute('aria-expanded', 'false');
     }
+    
+    // Handle mobile tabs on resize
+    const mobileTabs = document.querySelector('.mobile-section-tabs');
+    if (window.innerWidth <= 768 && !mobileTabs) {
+      generateMobileTabs();
+    } else if (window.innerWidth > 768 && mobileTabs) {
+      mobileTabs.remove();
+    }
   }, 250);
 });
 
@@ -205,13 +198,114 @@ if (bibliographyDetails) {
 }
 
 // ============================================
-// MOBILE SECTION TABS - NEW ADDITION
-// Bottom navigation for mobile viewers
+// DYNAMIC MOBILE SECTION TABS - VERSION 2.0
+// Automatically generates tabs based on present sections
 // ============================================
 
-document.addEventListener('DOMContentLoaded', function() {
+function generateMobileTabs() {
+  // Check if mobile tabs already exist (avoid duplicates)
+  if (document.querySelector('.mobile-section-tabs')) return;
+  
+  // Define section selectors and their priority order
+  // Priority is important for selecting which tabs to show when many sections exist
+  const sectionConfig = [
+    { id: 'overview', icon: '📋', label: 'Overview', priority: 1 },
+    { id: 'narrative', icon: '📖', label: 'Journey', priority: 2 },
+    { id: 'literary-context', icon: '📚', label: 'Literary', priority: 3 },
+    { id: 'major-chiasm', icon: '🔍', label: 'Chiasm', priority: 4 },
+    { id: 'literary-artistry', icon: '🎨', label: 'Artistry', priority: 5 },
+    { id: 'themes', icon: '💡', label: 'Themes', priority: 3 },
+    { id: 'ane-context', icon: '📜', label: 'ANE', priority: 4 },
+    { id: 'eden', icon: '🌳', label: 'Eden', priority: 5 },
+    { id: 'wordplay', icon: '✍️', label: 'Words', priority: 5 },
+    { id: 'covenant', icon: '🤝', label: 'Covenant', priority: 5 },
+    { id: 'unique', icon: '⭐', label: 'Unique', priority: 5 },
+    { id: 'biblical-theology', icon: '🌍', label: 'Theology', priority: 2 },
+    { id: 'messianic', icon: '✨', label: 'Messiah', priority: 3 },
+    { id: 'second-temple', icon: '🏛️', label: '2nd Temple', priority: 5 },
+    { id: 'intertext', icon: '🔗', label: 'Intertext', priority: 4 },
+    { id: 'songs', icon: '🎵', label: 'Songs', priority: 5 },
+    { id: 'application', icon: '🎯', label: 'Apply', priority: 2 },
+    { id: 'questions', icon: '❓', label: 'Q&A', priority: 4 }
+  ];
+  
+  // Find which sections actually exist in the document
+  const existingSections = [];
+  sectionConfig.forEach(config => {
+    const element = document.getElementById(config.id);
+    if (element) {
+      existingSections.push({
+        ...config,
+        element: element
+      });
+    }
+  });
+  
+  // If no sections found, don't create tabs
+  if (existingSections.length === 0) return;
+  
+  // Determine how many tabs to show (max 5-6 for mobile usability)
+  const MAX_TABS = 5;
+  let tabsToShow = existingSections;
+  
+  if (existingSections.length > MAX_TABS) {
+    // Sort by priority and take top 5
+    tabsToShow = existingSections
+      .sort((a, b) => a.priority - b.priority)
+      .slice(0, MAX_TABS);
+    
+    // Always include Overview if it exists
+    const overviewIndex = tabsToShow.findIndex(t => t.id === 'overview');
+    if (overviewIndex === -1) {
+      const overview = existingSections.find(s => s.id === 'overview');
+      if (overview) {
+        tabsToShow[MAX_TABS - 1] = overview; // Replace last item with overview
+      }
+    }
+    
+    // Re-sort by document order
+    tabsToShow.sort((a, b) => {
+      const posA = Array.from(document.querySelectorAll('[id]')).indexOf(a.element);
+      const posB = Array.from(document.querySelectorAll('[id]')).indexOf(b.element);
+      return posA - posB;
+    });
+  }
+  
+  // Create mobile tabs container
+  const mobileNav = document.createElement('nav');
+  mobileNav.className = 'mobile-section-tabs';
+  mobileNav.setAttribute('aria-label', 'Section navigation');
+  mobileNav.setAttribute('role', 'navigation');
+  
+  const tabsContainer = document.createElement('div');
+  tabsContainer.className = 'tabs-container';
+  
+  // Create tabs
+  tabsToShow.forEach((section, index) => {
+    const button = document.createElement('button');
+    button.className = 'tab-item';
+    if (index === 0) button.classList.add('active');
+    button.setAttribute('data-target', `#${section.id}`);
+    button.setAttribute('aria-label', `${section.label} section`);
+    
+    button.innerHTML = `
+      <span class="tab-icon">${section.icon}</span>
+      <span class="tab-label">${section.label}</span>
+    `;
+    
+    tabsContainer.appendChild(button);
+  });
+  
+  mobileNav.appendChild(tabsContainer);
+  document.body.appendChild(mobileNav);
+  
+  // Initialize tab functionality
+  initializeMobileTabs();
+}
+
+function initializeMobileTabs() {
   const mobileTabsNav = document.querySelector('.mobile-section-tabs');
-  const tabItems = document.querySelectorAll('.tab-item');
+  const tabItems = document.querySelectorAll('.mobile-section-tabs .tab-item');
   
   if (!mobileTabsNav || !tabItems.length) return;
   
@@ -221,29 +315,31 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Function to update active tab based on scroll position
   function updateActiveTab() {
-    const sections = document.querySelectorAll('.theology-card[id], .chiasm-card[id], .animate-on-scroll[id]');
+    const sections = [];
+    tabItems.forEach(tab => {
+      const targetId = tab.dataset.target;
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        sections.push({ tab, element: targetElement });
+      }
+    });
+    
     const scrollPosition = window.scrollY + window.innerHeight / 3;
     
     let activeSection = null;
     
-    sections.forEach(section => {
-      const rect = section.getBoundingClientRect();
+    sections.forEach(({ tab, element }) => {
+      const rect = element.getBoundingClientRect();
       const absoluteTop = rect.top + window.scrollY;
       
       if (absoluteTop <= scrollPosition) {
-        activeSection = section;
+        activeSection = { tab, element };
       }
     });
     
     if (activeSection) {
-      const activeId = '#' + activeSection.id;
-      tabItems.forEach(tab => {
-        if (tab.dataset.target === activeId) {
-          tab.classList.add('active');
-        } else {
-          tab.classList.remove('active');
-        }
-      });
+      tabItems.forEach(t => t.classList.remove('active'));
+      activeSection.tab.classList.add('active');
     }
   }
   
@@ -273,7 +369,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // Scroll event handler for mobile tabs (separate from main scroll handler)
+  // Scroll event handler for mobile tabs
   let mobileTabScrollHandler = function() {
     // Update active tab
     if (scrollTimer) {
@@ -298,20 +394,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
   
-  // Only add scroll listener if on mobile
-  if (window.innerWidth <= 768) {
-    window.addEventListener('scroll', mobileTabScrollHandler);
-  }
-  
-  // Handle resize events to add/remove scroll listener
-  window.addEventListener('resize', () => {
-    if (window.innerWidth <= 768) {
-      window.addEventListener('scroll', mobileTabScrollHandler);
-      updateActiveTab();
-    } else {
-      window.removeEventListener('scroll', mobileTabScrollHandler);
-    }
-  });
+  // Add scroll listener
+  window.addEventListener('scroll', mobileTabScrollHandler);
   
   // Initial active tab setup
   updateActiveTab();
@@ -341,7 +425,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const diff = touchStartX - touchEndX;
     
     if (Math.abs(diff) > swipeThreshold) {
-      const activeTab = document.querySelector('.tab-item.active');
+      const activeTab = document.querySelector('.mobile-section-tabs .tab-item.active');
       const activeIndex = Array.from(tabItems).indexOf(activeTab);
       
       if (diff > 0 && activeIndex < tabItems.length - 1) {
@@ -377,11 +461,35 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }, mobileObserverOptions);
     
-    // Observe all major sections
-    document.querySelectorAll('.theology-card[id], .chiasm-card[id]').forEach(section => {
-      if (section.id) {
-        mobileSectionObserver.observe(section);
+    // Observe all sections that have tabs
+    tabItems.forEach(tab => {
+      const targetId = tab.dataset.target;
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        mobileSectionObserver.observe(targetElement);
       }
     });
   }
+}
+
+// Initialize everything on DOM ready
+document.addEventListener('DOMContentLoaded', function() {
+  // Only generate mobile tabs on mobile devices
+  if (window.innerWidth <= 768) {
+    generateMobileTabs();
+  }
+  
+  // Handle resize events to add/remove mobile tabs
+  window.addEventListener('resize', () => {
+    const mobileTabs = document.querySelector('.mobile-section-tabs');
+    if (window.innerWidth <= 768 && !mobileTabs) {
+      generateMobileTabs();
+    } else if (window.innerWidth > 768 && mobileTabs) {
+      mobileTabs.remove();
+    }
+  });
+  
+  // Log initialization for debugging
+  console.log('Character page utilities initialized');
+  console.log('Mobile tabs:', window.innerWidth <= 768 ? 'Generated' : 'Not needed (desktop)');
 });
