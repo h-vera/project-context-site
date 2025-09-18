@@ -8,10 +8,7 @@
 })();
 
 // character-page.js — page utilities for character profiles
-// Version: 2.1 - Fixed iOS blank content issue
-
-// Detect iOS early
-const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+// Version: 2.0 - Now with dynamic mobile tab generation
 
 // Reading progress indicator
 window.addEventListener('scroll', () => {
@@ -50,27 +47,25 @@ window.addEventListener('scroll', () => {
   });
 });
 
-// Intersection Observer for section animations (SKIP ON iOS)
-if (!isIOS) {
-  const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-  };
+// Intersection Observer for section animations
+const observerOptions = {
+  threshold: 0.1,
+  rootMargin: '0px 0px -50px 0px'
+};
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, observerOptions);
-
-  // Apply to all cards
-  document.querySelectorAll('.animate-on-scroll').forEach(card => {
-    observer.observe(card);
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
   });
-}
+}, observerOptions);
+
+// Apply to all cards
+document.querySelectorAll('.animate-on-scroll').forEach(card => {
+  observer.observe(card);
+});
 
 // Smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -203,8 +198,8 @@ if (bibliographyDetails) {
 }
 
 // ============================================
-// DYNAMIC MOBILE SECTION TABS - VERSION 2.1
-// Fixed for iOS blank content issue
+// DYNAMIC MOBILE SECTION TABS - VERSION 2.0
+// Automatically generates tabs based on present sections
 // ============================================
 
 function generateMobileTabs() {
@@ -212,16 +207,11 @@ function generateMobileTabs() {
   if (document.querySelector('.mobile-section-tabs')) return;
   
   // Define section selectors and their priority order
+  // Priority is important for selecting which tabs to show when many sections exist
   const sectionConfig = [
     { id: 'overview', icon: '📋', label: 'Overview', priority: 1 },
     { id: 'narrative', icon: '📖', label: 'Journey', priority: 2 },
     { id: 'literary-context', icon: '📚', label: 'Literary', priority: 3 },
-    { id: 'providence', icon: '👁️', label: 'Providence', priority: 1 },
-    { id: 'redemption', icon: '💰', label: 'Redemption', priority: 2 },
-    { id: 'inclusion', icon: '🌍', label: 'Inclusion', priority: 3 },
-    { id: 'fullness', icon: '📈', label: 'Fullness', priority: 4 },
-    { id: 'hiddenness', icon: '🔍', label: 'Hiddenness', priority: 5 },
-    { id: 'synthesis', icon: '✨', label: 'Synthesis', priority: 4 },
     { id: 'major-chiasm', icon: '🔍', label: 'Chiasm', priority: 4 },
     { id: 'literary-artistry', icon: '🎨', label: 'Artistry', priority: 5 },
     { id: 'themes', icon: '💡', label: 'Themes', priority: 3 },
@@ -236,8 +226,7 @@ function generateMobileTabs() {
     { id: 'intertext', icon: '🔗', label: 'Intertext', priority: 4 },
     { id: 'songs', icon: '🎵', label: 'Songs', priority: 5 },
     { id: 'application', icon: '🎯', label: 'Apply', priority: 2 },
-    { id: 'questions', icon: '❓', label: 'Q&A', priority: 4 },
-    { id: 'further-study', icon: '📚', label: 'More', priority: 5 }
+    { id: 'questions', icon: '❓', label: 'Q&A', priority: 4 }
   ];
   
   // Find which sections actually exist in the document
@@ -288,11 +277,6 @@ function generateMobileTabs() {
   mobileNav.setAttribute('aria-label', 'Section navigation');
   mobileNav.setAttribute('role', 'navigation');
   
-  // FOR iOS: Force tabs to always be visible
-  if (isIOS) {
-    mobileNav.style.cssText = 'display: block !important; transform: none !important; position: fixed !important; bottom: 0 !important; opacity: 1 !important; visibility: visible !important;';
-  }
-  
   const tabsContainer = document.createElement('div');
   tabsContainer.className = 'tabs-container';
   
@@ -319,12 +303,15 @@ function generateMobileTabs() {
   initializeMobileTabs();
 }
 
-// SINGLE, FIXED VERSION of initializeMobileTabs
 function initializeMobileTabs() {
   const mobileTabsNav = document.querySelector('.mobile-section-tabs');
   const tabItems = document.querySelectorAll('.mobile-section-tabs .tab-item');
   
   if (!mobileTabsNav || !tabItems.length) return;
+  
+  // Track scroll position for hide/show behavior
+  let lastScrollTop = 0;
+  let scrollTimer = null;
   
   // Function to update active tab based on scroll position
   function updateActiveTab() {
@@ -365,59 +352,50 @@ function initializeMobileTabs() {
       const targetElement = document.querySelector(targetId);
       
       if (targetElement) {
+        // Calculate offset for fixed elements
         const navHeight = document.querySelector('nav')?.offsetHeight || 65;
         const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - navHeight - 10;
         
+        // Smooth scroll to section
         window.scrollTo({
           top: targetPosition,
           behavior: 'smooth'
         });
         
+        // Update active state immediately
         tabItems.forEach(t => t.classList.remove('active'));
         this.classList.add('active');
       }
     });
   });
   
-  // CRITICAL FIX: Different behavior for iOS vs others
-  if (isIOS) {
-    console.log('iOS detected - keeping mobile tabs always visible');
+  // Scroll event handler for mobile tabs
+  let mobileTabScrollHandler = function() {
+    // Update active tab
+    if (scrollTimer) {
+      clearTimeout(scrollTimer);
+    }
     
-    // Force tabs to stay visible on iOS
-    mobileTabsNav.classList.remove('hidden');
-    mobileTabsNav.style.transform = 'none';
-    mobileTabsNav.style.display = 'block';
-    mobileTabsNav.style.opacity = '1';
-    mobileTabsNav.style.visibility = 'visible';
+    scrollTimer = setTimeout(updateActiveTab, 100);
     
-    // Simple scroll listener for iOS - ONLY update active tab
-    window.addEventListener('scroll', updateActiveTab, { passive: true });
-    
-  } else {
-    // Original hide/show behavior for non-iOS devices
-    let lastScrollTop = 0;
-    let scrollTimer = null;
-    
-    window.addEventListener('scroll', function() {
-      if (scrollTimer) {
-        clearTimeout(scrollTimer);
+    // Hide/show tabs based on scroll direction (mobile only)
+    if (window.innerWidth <= 768) {
+      const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      
+      if (currentScrollTop > lastScrollTop && currentScrollTop > 100) {
+        // Scrolling down - hide tabs
+        mobileTabsNav.classList.add('hidden');
+      } else {
+        // Scrolling up - show tabs
+        mobileTabsNav.classList.remove('hidden');
       }
       
-      scrollTimer = setTimeout(function() {
-        updateActiveTab();
-        
-        const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        
-        if (currentScrollTop > lastScrollTop && currentScrollTop > 100) {
-          mobileTabsNav.classList.add('hidden');
-        } else {
-          mobileTabsNav.classList.remove('hidden');
-        }
-        
-        lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
-      }, 100);
-    }, { passive: true });
-  }
+      lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
+    }
+  };
+  
+  // Add scroll listener
+  window.addEventListener('scroll', mobileTabScrollHandler);
   
   // Initial active tab setup
   updateActiveTab();
@@ -426,51 +404,92 @@ function initializeMobileTabs() {
   window.addEventListener('orientationchange', function() {
     setTimeout(updateActiveTab, 300);
   });
-}
-
-// SINGLE DOMContentLoaded handler
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('Character page utilities initializing...');
-  console.log('iOS detected:', isIOS);
   
-  // iOS-specific fixes FIRST
-  if (isIOS) {
-    document.body.classList.add('ios-device');
+  // Optional: Swipe gestures for tab navigation
+  let touchStartX = 0;
+  let touchEndX = 0;
+  
+  if (mobileTabsNav) {
+    mobileTabsNav.addEventListener('touchstart', function(e) {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
     
-    // Disable all scroll animations on iOS
-    const animatedElements = document.querySelectorAll('.animate-on-scroll');
-    animatedElements.forEach(el => {
-      el.classList.remove('animate-on-scroll');
-      el.classList.add('visible');
-      el.style.opacity = '1';
-      el.style.transform = 'none';
-      el.style.visibility = 'visible';
-    });
-    
-    // Force all cards to be visible
-    const cards = document.querySelectorAll('.theology-card, .study-card, .chiasm-card');
-    cards.forEach(card => {
-      card.style.opacity = '1';
-      card.style.visibility = 'visible';
-      card.style.transform = 'none';
-    });
+    mobileTabsNav.addEventListener('touchend', function(e) {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
   }
   
-  // Generate mobile tabs if on mobile
-  if (window.innerWidth <= 768) {
-    generateMobileTabs();
+  function handleSwipe() {
+    const swipeThreshold = 50;
+    const diff = touchStartX - touchEndX;
     
-    // Extra iOS fix for mobile tabs
-    if (isIOS) {
-      const mobileTabs = document.querySelector('.mobile-section-tabs');
-      if (mobileTabs) {
-        // Nuclear option - force visibility
-        mobileTabs.style.cssText = 'display: block !important; transform: none !important; position: fixed !important; bottom: 0 !important; opacity: 1 !important; visibility: visible !important; z-index: 1000 !important;';
-        mobileTabs.classList.remove('hidden');
+    if (Math.abs(diff) > swipeThreshold) {
+      const activeTab = document.querySelector('.mobile-section-tabs .tab-item.active');
+      const activeIndex = Array.from(tabItems).indexOf(activeTab);
+      
+      if (diff > 0 && activeIndex < tabItems.length - 1) {
+        // Swipe left - next section
+        tabItems[activeIndex + 1].click();
+      } else if (diff < 0 && activeIndex > 0) {
+        // Swipe right - previous section
+        tabItems[activeIndex - 1].click();
       }
     }
   }
   
+  // Enhanced Intersection Observer for mobile tabs (more precise)
+  if ('IntersectionObserver' in window && window.innerWidth <= 768) {
+    const mobileObserverOptions = {
+      root: null,
+      rootMargin: '-30% 0px -50% 0px',
+      threshold: 0
+    };
+    
+    const mobileSectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const sectionId = '#' + entry.target.id;
+          tabItems.forEach(tab => {
+            if (tab.dataset.target === sectionId) {
+              tab.classList.add('active');
+            } else {
+              tab.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, mobileObserverOptions);
+    
+    // Observe all sections that have tabs
+    tabItems.forEach(tab => {
+      const targetId = tab.dataset.target;
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        mobileSectionObserver.observe(targetElement);
+      }
+    });
+  }
+}
+
+// Initialize everything on DOM ready
+document.addEventListener('DOMContentLoaded', function() {
+  // Only generate mobile tabs on mobile devices
+  if (window.innerWidth <= 768) {
+    generateMobileTabs();
+  }
+  
+  // Handle resize events to add/remove mobile tabs
+  window.addEventListener('resize', () => {
+    const mobileTabs = document.querySelector('.mobile-section-tabs');
+    if (window.innerWidth <= 768 && !mobileTabs) {
+      generateMobileTabs();
+    } else if (window.innerWidth > 768 && mobileTabs) {
+      mobileTabs.remove();
+    }
+  });
+  
+  // Log initialization for debugging
+  console.log('Character page utilities initialized');
   console.log('Mobile tabs:', window.innerWidth <= 768 ? 'Generated' : 'Not needed (desktop)');
-  console.log('Initialization complete');
 });
