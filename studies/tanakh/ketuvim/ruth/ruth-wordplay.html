@@ -1772,40 +1772,233 @@
   <!-- Mobile Menu Overlay -->
   <div class="mobile-menu-overlay"></div>
 
-  <!-- Enhanced Mobile Navigation Implementation -->
+  <!-- Enhanced Mobile Navigation with iOS Flicker/Blank Page Fixes -->
 <script>
 (function() {
-  // Mobile Navigation Implementation
+  'use strict';
+  
+  // Debug flag - set to true to see console logs
+  const DEBUG = false;
+  
+  function log(message, data) {
+    if (DEBUG) {
+      console.log(`[MobileNav] ${message}`, data || '');
+    }
+  }
+  
+  // iOS Detection
+  const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  
+  // Apply iOS-specific fixes immediately to prevent flicker
+  if (isIOS) {
+    log('iOS device detected - applying anti-flicker fixes');
+    
+    // Create and inject critical iOS fixes before page renders
+    const criticalStyles = document.createElement('style');
+    criticalStyles.textContent = `
+      /* Critical iOS Anti-Flicker Styles */
+      body {
+        -webkit-overflow-scrolling: touch;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+      }
+      
+      /* Prevent transform-based animations on scroll */
+      * {
+        -webkit-backface-visibility: hidden !important;
+        backface-visibility: hidden !important;
+        -webkit-perspective: 1000px !important;
+        perspective: 1000px !important;
+      }
+      
+      /* Force GPU acceleration for main content */
+      .content-section,
+      main,
+      #main-content {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+        will-change: transform;
+      }
+      
+      /* Disable problematic animations on iOS */
+      @supports (-webkit-touch-callout: none) {
+        .animate-on-scroll {
+          animation: none !important;
+          transition: none !important;
+          opacity: 1 !important;
+          transform: none !important;
+          visibility: visible !important;
+        }
+        
+        .theology-card,
+        .word-pattern-card,
+        .chiasm-card,
+        .timeline-item {
+          animation: none !important;
+          transition: opacity 0.2s ease !important;
+          opacity: 1 !important;
+          transform: none !important;
+        }
+      }
+    `;
+    document.head.insertBefore(criticalStyles, document.head.firstChild);
+    
+    // Disable Intersection Observer animations on iOS
+    if (window.IntersectionObserver) {
+      const originalObserver = window.IntersectionObserver;
+      window.IntersectionObserver = function(callback, options) {
+        const wrappedCallback = function(entries, observer) {
+          entries.forEach(entry => {
+            if (entry.target.classList.contains('animate-on-scroll')) {
+              // Force immediate visibility without animation
+              entry.target.classList.add('visible');
+              entry.target.style.opacity = '1';
+              entry.target.style.transform = 'none';
+              observer.unobserve(entry.target);
+            } else {
+              callback(entries, observer);
+            }
+          });
+        };
+        return new originalObserver(wrappedCallback, options);
+      };
+      Object.setPrototypeOf(window.IntersectionObserver, originalObserver);
+      Object.setPrototypeOf(window.IntersectionObserver.prototype, originalObserver.prototype);
+    }
+  }
+  
   function initializeMobileNavigation() {
-    // Check if mobile
-    if (window.innerWidth > 768) return;
+    // Check if we're on mobile
+    if (window.innerWidth > 768) {
+      log('Desktop view - skipping mobile nav');
+      return;
+    }
     
     // Check if tabs already exist
-    if (document.querySelector('.mobile-section-tabs')) return;
+    if (document.querySelector('.mobile-section-tabs')) {
+      log('Mobile tabs already exist');
+      return;
+    }
     
-    // Get all major sections
-    const sections = document.querySelectorAll('.theology-card, .word-pattern-card, .chiasm-card, .transformation-card');
-    if (sections.length === 0) return;
+    // Fix for iOS blank page issue - ensure all content is rendered
+    if (isIOS) {
+      document.querySelectorAll('[style*="transform"]').forEach(el => {
+        if (!el.closest('nav')) {
+          el.style.transform = 'none';
+          el.style.webkitTransform = 'none';
+        }
+      });
+      
+      // Force repaint to prevent blank pages
+      document.body.style.display = 'none';
+      document.body.offsetHeight; // Force reflow
+      document.body.style.display = '';
+    }
+    
+    // COMPREHENSIVE SECTION SELECTION
+    let sections = document.querySelectorAll(
+      '.theology-card[id], ' +
+      '.chiasm-card[id], ' +
+      '.word-pattern-card[id], ' +
+      '.session-card[id], ' +
+      '.redemption-framework[id], ' +
+      '.transformation-card[id], ' +
+      '.providence-card[id], ' +
+      '.hook-section[id], ' +
+      '.name-card[id], ' +
+      '.timeline-card[id], ' +
+      '.panel-card[id], ' +
+      '.content-block[id], ' +
+      '.word-study[id], ' +
+      '.key-insight-section[id], ' +
+      'section[id], ' +
+      'div[id].animate-on-scroll'
+    );
+    
+    log(`Found ${sections.length} sections with specific selectors`);
+    
+    // Method 2: If few sections found, use intelligent detection
+    if (sections.length < 3) {
+      log('Using intelligent section detection...');
+      
+      const allElements = document.querySelectorAll('[id]');
+      const validSections = [];
+      
+      allElements.forEach(el => {
+        if (Array.from(sections).includes(el)) return;
+        if (!el.closest('main, .content-section, #main-content')) return;
+        if (el.closest('nav, header, footer, .nav-links, .mobile-menu-overlay')) return;
+        if (el.classList.contains('breadcrumbs') || 
+            el.classList.contains('meta') || 
+            el.classList.contains('tag') ||
+            el.classList.contains('badge')) return;
+        
+        const heading = el.querySelector('h3, h4, h2');
+        if (!heading) return;
+        
+        const rect = el.getBoundingClientRect();
+        const styles = window.getComputedStyle(el);
+        
+        if (styles.display === 'none' || 
+            styles.visibility === 'hidden' || 
+            styles.opacity === '0') return;
+        
+        if (el.clientHeight < 50) return;
+        
+        validSections.push(el);
+        log(`Found valid section: ${el.id}`, {
+          heading: heading.textContent.trim(),
+          height: el.clientHeight
+        });
+      });
+      
+      const combinedSections = new Set([...sections, ...validSections]);
+      sections = Array.from(combinedSections);
+      log(`Total sections after intelligent detection: ${sections.length}`);
+    }
+    
+    if (sections.length < 2) {
+      log('Not enough sections for mobile navigation');
+      return;
+    }
+    
+    // Sort sections by position
+    sections = Array.from(sections).sort((a, b) => {
+      const aTop = a.getBoundingClientRect().top + window.scrollY;
+      const bTop = b.getBoundingClientRect().top + window.scrollY;
+      return aTop - bTop;
+    });
     
     // Create mobile nav container
     const mobileNav = document.createElement('nav');
     mobileNav.className = 'mobile-section-tabs';
     mobileNav.setAttribute('aria-label', 'Section navigation');
+    mobileNav.setAttribute('role', 'navigation');
     mobileNav.innerHTML = '<div class="tabs-container"></div>';
     
     const container = mobileNav.querySelector('.tabs-container');
     
-    // Define section mappings
+    // Enhanced section mappings
     const sectionMap = {
+      'overview': { icon: '📖', label: 'Overview' },
+      'introduction': { icon: '👋', label: 'Intro' },
+      'hook': { icon: '🎯', label: 'Intro' },
+      'narrative': { icon: '📚', label: 'Journey' },
+      'journey': { icon: '🚶', label: 'Journey' },
+      'timeline': { icon: '⏱️', label: 'Timeline' },
+      'literary': { icon: '✍️', label: 'Literary' },
+      'literary-context': { icon: '📝', label: 'Context' },
+      'chiasm': { icon: '🔍', label: 'Chiasm' },
+      'structure': { icon: '🏗️', label: 'Structure' },
+      'themes': { icon: '💭', label: 'Themes' },
+      'theology': { icon: '⛪', label: 'Theology' },
+      'biblical-theology': { icon: '📖', label: 'Biblical' },
       'providence': { icon: '👁️', label: 'Providence' },
       'redemption': { icon: '💰', label: 'Redemption' },
       'inclusion': { icon: '🌍', label: 'Inclusion' },
       'fullness': { icon: '📈', label: 'Fullness' },
-      'hiddenness': { icon: '🔍', label: 'Hidden' },
-      'synthesis': { icon: '🎯', label: 'Synthesis' },
-      'application': { icon: '✋', label: 'Apply' },
-      'further-study': { icon: '📚', label: 'Study' },
-      // Wordplay page sections
+      'wordplay': { icon: '🔤', label: 'Wordplay' },
       'word-chips-quick': { icon: '🔤', label: 'Quick' },
       'abraham-parallel': { icon: '🌟', label: 'Abraham' },
       'shuv': { icon: '↩️', label: 'Return' },
@@ -1814,19 +2007,65 @@
       'wings': { icon: '🦅', label: 'Wings' },
       'goel': { icon: '💰', label: 'Redeem' },
       'names': { icon: '📛', label: 'Names' },
+      'ane-context': { icon: '🏺', label: 'ANE' },
+      'cultural': { icon: '🌐', label: 'Culture' },
+      'messianic': { icon: '👑', label: 'Messiah' },
+      'eden': { icon: '🌳', label: 'Eden' },
+      'covenant': { icon: '📜', label: 'Covenant' },
+      'unique': { icon: '⭐', label: 'Unique' },
       'irony': { icon: '🎭', label: 'Irony' },
-      'motif-map': { icon: '🗺️', label: 'Motifs' }
+      'motif-map': { icon: '🗺️', label: 'Motifs' },
+      'synthesis': { icon: '🎯', label: 'Synthesis' },
+      'application': { icon: '✋', label: 'Apply' },
+      'questions': { icon: '❓', label: 'Questions' },
+      'further-study': { icon: '📚', label: 'Study' },
+      'intertext': { icon: '🔗', label: 'Connections' }
     };
     
-    // Create tabs for each section
+    // Create tabs
+    let tabsCreated = 0;
+    const maxTabs = 8;
+    
     sections.forEach((section, index) => {
+      if (tabsCreated >= maxTabs) return;
+      
       const sectionId = section.getAttribute('id');
       if (!sectionId) return;
       
-      const config = sectionMap[sectionId] || {
-        icon: '📖',
-        label: sectionId.charAt(0).toUpperCase() + sectionId.slice(1).replace(/-/g, ' ')
-      };
+      const heading = section.querySelector('h3, h4, h2');
+      const headingText = heading ? heading.textContent.trim() : sectionId;
+      
+      const cleanHeading = headingText
+        .replace(/📖|📚|🔍|⚡|🌍|✨|📛|🎯|💭|🏺|👑|🌳|📜|⭐|✋|❓|🔗/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+      
+      let config = sectionMap[sectionId];
+      
+      if (!config) {
+        const lowerSectionId = sectionId.toLowerCase();
+        for (const key in sectionMap) {
+          if (lowerSectionId.includes(key) || key.includes(lowerSectionId)) {
+            config = sectionMap[key];
+            break;
+          }
+        }
+      }
+      
+      if (!config) {
+        let icon = '📄';
+        let label = cleanHeading.substring(0, 8);
+        
+        const headingLower = cleanHeading.toLowerCase();
+        if (headingLower.includes('question')) icon = '❓';
+        else if (headingLower.includes('theme')) icon = '💭';
+        else if (headingLower.includes('apply') || headingLower.includes('application')) icon = '✋';
+        else if (headingLower.includes('hebrew') || headingLower.includes('greek')) icon = '🔤';
+        else if (headingLower.includes('narrative') || headingLower.includes('story')) icon = '📚';
+        else if (headingLower.includes('messiah') || headingLower.includes('christ')) icon = '👑';
+        
+        config = { icon, label };
+      }
       
       const button = document.createElement('button');
       button.className = 'tab-item' + (index === 0 ? ' active' : '');
@@ -1837,64 +2076,172 @@
         <span class="tab-label">${config.label}</span>
       `;
       
-      // Add click handler
-      button.addEventListener('click', function() {
-        // Remove all active states
-        container.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-        // Add active to clicked
+      // iOS-optimized click handler
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        container.querySelectorAll('.tab-item').forEach(t => {
+          t.classList.remove('active');
+        });
+        
         this.classList.add('active');
         
-        // Scroll to section
-        const target = document.querySelector(`#${sectionId}`);
-        if (target) {
-          const offset = 80;
-          const targetPosition = target.getBoundingClientRect().top + window.scrollY - offset;
-          window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+        const targetSection = document.getElementById(sectionId);
+        if (targetSection) {
+          // Prevent flicker by disabling animations during scroll
+          if (isIOS) {
+            document.body.classList.add('ios-scrolling');
+          }
+          
+          const navHeight = document.querySelector('nav') ? 
+            document.querySelector('nav').offsetHeight : 0;
+          const offset = navHeight + 20;
+          const targetPosition = targetSection.getBoundingClientRect().top + 
+                                window.pageYOffset - offset;
+          
+          // Use requestAnimationFrame for smoother iOS scrolling
+          if (isIOS) {
+            const startPosition = window.pageYOffset;
+            const distance = targetPosition - startPosition;
+            const duration = 500;
+            let start = null;
+            
+            function step(timestamp) {
+              if (!start) start = timestamp;
+              const progress = Math.min((timestamp - start) / duration, 1);
+              const easeProgress = progress * (2 - progress); // Ease out quad
+              
+              window.scrollTo(0, startPosition + distance * easeProgress);
+              
+              if (progress < 1) {
+                requestAnimationFrame(step);
+              } else {
+                document.body.classList.remove('ios-scrolling');
+              }
+            }
+            
+            requestAnimationFrame(step);
+          } else {
+            // Non-iOS smooth scroll
+            try {
+              window.scrollTo({ 
+                top: targetPosition, 
+                behavior: 'smooth' 
+              });
+            } catch(e) {
+              window.scrollTo(0, targetPosition);
+            }
+          }
         }
+        
+        log(`Tab clicked: ${config.label} -> ${sectionId}`);
       });
       
       container.appendChild(button);
+      tabsCreated++;
     });
     
-    // Only add if we created tabs
-    if (container.children.length > 0) {
+    if (tabsCreated > 0) {
       document.body.appendChild(mobileNav);
+      log(`Created ${tabsCreated} mobile navigation tabs`);
       
-      // Update active tab on scroll
+      // iOS-optimized scroll handler
       let scrollTimer;
-      window.addEventListener('scroll', function() {
-        if (scrollTimer) clearTimeout(scrollTimer);
+      let lastScrollTop = 0;
+      let isScrolling = false;
+      
+      // Throttled scroll handler for iOS
+      function handleScroll() {
+        if (isScrolling) return;
+        isScrolling = true;
         
-        scrollTimer = setTimeout(function() {
-          const scrollPos = window.scrollY + window.innerHeight / 3;
+        requestAnimationFrame(() => {
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          const scrollDirection = scrollTop > lastScrollTop ? 'down' : 'up';
+          lastScrollTop = scrollTop;
+          
+          // Prevent flicker by not updating during rapid scrolling
+          if (Math.abs(scrollTop - lastScrollTop) > 100) {
+            isScrolling = false;
+            return;
+          }
+          
+          const viewportMiddle = scrollTop + (window.innerHeight / 3);
+          let activeSection = null;
+          let minDistance = Infinity;
           
           sections.forEach(section => {
             const rect = section.getBoundingClientRect();
-            const absoluteTop = rect.top + window.scrollY;
+            const sectionTop = rect.top + scrollTop;
+            const sectionMiddle = sectionTop + (rect.height / 2);
+            const distance = Math.abs(viewportMiddle - sectionMiddle);
             
-            if (absoluteTop <= scrollPos && (absoluteTop + rect.height) > scrollPos) {
-              const sectionId = section.getAttribute('id');
-              container.querySelectorAll('.tab-item').forEach(tab => {
-                tab.classList.remove('active');
-                if (tab.getAttribute('data-target') === `#${sectionId}`) {
-                  tab.classList.add('active');
-                }
-              });
+            if (distance < minDistance) {
+              minDistance = distance;
+              activeSection = section;
             }
           });
+          
+          if (activeSection) {
+            const activeSectionId = activeSection.getAttribute('id');
+            container.querySelectorAll('.tab-item').forEach(tab => {
+              tab.classList.remove('active');
+              if (tab.getAttribute('data-target') === `#${activeSectionId}`) {
+                tab.classList.add('active');
+              }
+            });
+          }
+          
+          isScrolling = false;
+        });
+      }
+      
+      // Use passive listener for better iOS performance
+      window.addEventListener('scroll', function() {
+        if (scrollTimer) clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(handleScroll, 100);
+      }, { passive: true });
+      
+      // Ensure content padding for iOS
+      document.body.style.paddingBottom = '80px';
+      
+      // Additional iOS fixes for content visibility
+      if (isIOS) {
+        // Prevent rubber-band scrolling from causing flicker
+        document.body.style.overscrollBehavior = 'none';
+        
+        // Force all content to be visible
+        setTimeout(() => {
+          document.querySelectorAll('.theology-card, .word-pattern-card, .chiasm-card').forEach(card => {
+            card.style.opacity = '1';
+            card.style.visibility = 'visible';
+            card.style.transform = 'none';
+            card.style.webkitTransform = 'none';
+            
+            // Remove animation classes that might cause issues
+            card.classList.remove('animate-on-scroll');
+            card.classList.add('ios-visible');
+          });
+          
+          // Force a repaint to ensure visibility
+          document.body.style.zoom = '99.99%';
+          setTimeout(() => {
+            document.body.style.zoom = '100%';
+          }, 10);
         }, 100);
-      });
+      }
     }
   }
   
-  // Initialize when DOM ready
+  // Initialize when DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeMobileNavigation);
   } else {
-    initializeMobileNavigation();
+    setTimeout(initializeMobileNavigation, 100);
   }
   
-  // Reinitialize on resize
+  // Handle resize events
   let resizeTimer;
   window.addEventListener('resize', function() {
     if (resizeTimer) clearTimeout(resizeTimer);
@@ -1904,11 +2251,148 @@
         initializeMobileNavigation();
       } else if (window.innerWidth > 768 && existingTabs) {
         existingTabs.remove();
+        document.body.style.paddingBottom = '';
       }
     }, 250);
   });
 })();
 </script>
+
+<!-- Enhanced iOS Anti-Flicker Styles -->
+<style>
+/* Critical iOS Performance Fixes */
+@supports (-webkit-touch-callout: none) {
+  /* Disable all transforms and animations on content cards */
+  .theology-card,
+  .word-pattern-card,
+  .chiasm-card,
+  .timeline-item,
+  .animate-on-scroll {
+    -webkit-transform: none !important;
+    transform: none !important;
+    -webkit-animation: none !important;
+    animation: none !important;
+    -webkit-transition: opacity 0.2s ease !important;
+    transition: opacity 0.2s ease !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  
+  /* Force GPU acceleration on containers */
+  .content-section,
+  main,
+  #main-content {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-overflow-scrolling: touch;
+    will-change: scroll-position;
+  }
+  
+  /* Prevent flicker during scroll */
+  body.ios-scrolling * {
+    -webkit-animation-play-state: paused !important;
+    animation-play-state: paused !important;
+  }
+  
+  /* Ensure cards stay visible */
+  .ios-visible {
+    opacity: 1 !important;
+    visibility: visible !important;
+    -webkit-transform: none !important;
+    transform: none !important;
+  }
+  
+  /* Fix for blank pages on scroll up */
+  body {
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+    overscroll-behavior: none;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  /* Prevent z-index issues */
+  .mobile-section-tabs {
+    position: fixed;
+    -webkit-transform: translateZ(1px);
+    transform: translateZ(1px);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  
+  /* Remove problematic shadows and filters on iOS */
+  * {
+    -webkit-filter: none !important;
+    filter: none !important;
+  }
+  
+  .theology-card,
+  .word-pattern-card {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+  }
+}
+
+/* General mobile performance */
+@media (max-width: 768px) {
+  /* Simplify animations */
+  * {
+    -webkit-animation-duration: 0.2s !important;
+    animation-duration: 0.2s !important;
+  }
+  
+  /* Ensure content visibility */
+  [id] {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  
+  /* Remove complex transforms */
+  .animate-on-scroll,
+  .timeline-item {
+    -webkit-animation: none !important;
+    animation: none !important;
+    -webkit-transform: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+  
+  /* Optimize scroll performance */
+  .content-section {
+    will-change: auto;
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+  }
+  
+  /* Ensure proper stacking */
+  .mobile-section-tabs {
+    z-index: 1000;
+  }
+  
+  nav {
+    z-index: 1001;
+  }
+  
+  .content-section {
+    position: relative;
+    z-index: 1;
+    padding-bottom: 80px !important;
+  }
+}
+
+/* iOS-specific scroll optimization */
+@media (max-width: 768px) and (-webkit-min-device-pixel-ratio: 2) {
+  html, body {
+    scroll-behavior: auto !important;
+  }
+  
+  /* Use transform3d for better performance */
+  .content-section > * {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+</style>
 
 <!-- JavaScript - Fixed Navigation with Fallback -->
 <script type="module">
