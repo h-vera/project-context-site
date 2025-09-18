@@ -458,6 +458,60 @@
     padding-bottom: 70px;
   }
 }
+/* Critical Mobile Fixes for iPhone */
+@media (max-width: 768px) {
+  /* Ensure content is visible */
+  body {
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .content-section {
+    padding: 5rem 1rem 80px;
+    width: 100%;
+    max-width: 100vw;
+  }
+  
+  /* Fix card visibility */
+  .theology-card,
+  .word-pattern-card {
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
+  }
+  
+  /* Ensure navigation is visible */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: white;
+  }
+  
+  /* Fix mobile navigation links */
+  .nav-links.active {
+    display: flex !important;
+    position: fixed;
+    right: 0;
+    top: 65px;
+    width: 80%;
+    max-width: 300px;
+    height: 100vh;
+    background: white;
+    flex-direction: column;
+    padding: 2rem;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+  }
+}
+
+/* iPhone-specific fixes */
+@supports (-webkit-touch-callout: none) {
+  .content-section {
+    -webkit-transform: translate3d(0,0,0);
+  }
+}
   </style>
 </head>
 <body class="book-overview" dir="ltr">
@@ -1086,14 +1140,249 @@
   <!-- Mobile Menu Overlay -->
   <div class="mobile-menu-overlay"></div>
 
-  <!-- JavaScript -->
-  <script type="module">
-    import NavigationComponent from '/assets/js/nav-component.js';
-    const navigation = new NavigationComponent({
-      currentPage: 'tanakh',
-      hubType: 'tanakh'
+  <!-- Enhanced Mobile Navigation Implementation -->
+<script>
+(function() {
+  // Mobile Navigation Implementation
+  function initializeMobileNavigation() {
+    // Check if mobile
+    if (window.innerWidth > 768) return;
+    
+    // Check if tabs already exist
+    if (document.querySelector('.mobile-section-tabs')) return;
+    
+    // Get all major sections
+    const sections = document.querySelectorAll('.theology-card, .word-pattern-card, .chiasm-card, .transformation-card');
+    if (sections.length === 0) return;
+    
+    // Create mobile nav container
+    const mobileNav = document.createElement('nav');
+    mobileNav.className = 'mobile-section-tabs';
+    mobileNav.setAttribute('aria-label', 'Section navigation');
+    mobileNav.innerHTML = '<div class="tabs-container"></div>';
+    
+    const container = mobileNav.querySelector('.tabs-container');
+    
+    // Define section mappings
+    const sectionMap = {
+      'providence': { icon: '👁️', label: 'Providence' },
+      'redemption': { icon: '💰', label: 'Redemption' },
+      'inclusion': { icon: '🌍', label: 'Inclusion' },
+      'fullness': { icon: '📈', label: 'Fullness' },
+      'hiddenness': { icon: '🔍', label: 'Hidden' },
+      'synthesis': { icon: '🎯', label: 'Synthesis' },
+      'application': { icon: '✋', label: 'Apply' },
+      'further-study': { icon: '📚', label: 'Study' },
+      // Wordplay page sections
+      'word-chips-quick': { icon: '🔤', label: 'Quick' },
+      'abraham-parallel': { icon: '🌟', label: 'Abraham' },
+      'shuv': { icon: '↩️', label: 'Return' },
+      'hesed': { icon: '💝', label: 'Ḥesed' },
+      'davaq-section': { icon: '🤝', label: 'Cling' },
+      'wings': { icon: '🦅', label: 'Wings' },
+      'goel': { icon: '💰', label: 'Redeem' },
+      'names': { icon: '📛', label: 'Names' },
+      'irony': { icon: '🎭', label: 'Irony' },
+      'motif-map': { icon: '🗺️', label: 'Motifs' }
+    };
+    
+    // Create tabs for each section
+    sections.forEach((section, index) => {
+      const sectionId = section.getAttribute('id');
+      if (!sectionId) return;
+      
+      const config = sectionMap[sectionId] || {
+        icon: '📖',
+        label: sectionId.charAt(0).toUpperCase() + sectionId.slice(1).replace(/-/g, ' ')
+      };
+      
+      const button = document.createElement('button');
+      button.className = 'tab-item' + (index === 0 ? ' active' : '');
+      button.setAttribute('data-target', `#${sectionId}`);
+      button.setAttribute('aria-label', config.label);
+      button.innerHTML = `
+        <span class="tab-icon">${config.icon}</span>
+        <span class="tab-label">${config.label}</span>
+      `;
+      
+      // Add click handler
+      button.addEventListener('click', function() {
+        // Remove all active states
+        container.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+        // Add active to clicked
+        this.classList.add('active');
+        
+        // Scroll to section
+        const target = document.querySelector(`#${sectionId}`);
+        if (target) {
+          const offset = 80;
+          const targetPosition = target.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+        }
+      });
+      
+      container.appendChild(button);
     });
-  </script>
+    
+    // Only add if we created tabs
+    if (container.children.length > 0) {
+      document.body.appendChild(mobileNav);
+      
+      // Update active tab on scroll
+      let scrollTimer;
+      window.addEventListener('scroll', function() {
+        if (scrollTimer) clearTimeout(scrollTimer);
+        
+        scrollTimer = setTimeout(function() {
+          const scrollPos = window.scrollY + window.innerHeight / 3;
+          
+          sections.forEach(section => {
+            const rect = section.getBoundingClientRect();
+            const absoluteTop = rect.top + window.scrollY;
+            
+            if (absoluteTop <= scrollPos && (absoluteTop + rect.height) > scrollPos) {
+              const sectionId = section.getAttribute('id');
+              container.querySelectorAll('.tab-item').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.getAttribute('data-target') === `#${sectionId}`) {
+                  tab.classList.add('active');
+                }
+              });
+            }
+          });
+        }, 100);
+      });
+    }
+  }
+  
+  // Initialize when DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeMobileNavigation);
+  } else {
+    initializeMobileNavigation();
+  }
+  
+  // Reinitialize on resize
+  let resizeTimer;
+  window.addEventListener('resize', function() {
+    if (resizeTimer) clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+      const existingTabs = document.querySelector('.mobile-section-tabs');
+      if (window.innerWidth <= 768 && !existingTabs) {
+        initializeMobileNavigation();
+      } else if (window.innerWidth > 768 && existingTabs) {
+        existingTabs.remove();
+      }
+    }, 250);
+  });
+})();
+</script>
+
+  <!-- JavaScript - Fixed Navigation with Fallback -->
+<script type="module">
+  // Initialize navigation with fallback
+  function initializeNavigation() {
+    // Check if NavigationComponent is available
+    if (window.NavigationComponent) {
+      const navigation = new window.NavigationComponent({
+        currentPage: 'studies/tanakh/ketuvim/ruth',
+        hubType: 'tanakh'
+      });
+    } else {
+      // Fallback: inject basic navigation HTML
+      const navHTML = `
+        <nav id="main-nav" role="navigation" aria-label="Main navigation">
+          <div class="nav-container">
+            <a href="/" class="logo">
+              <div class="logo-icon">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="40" height="40">
+                  <path d="M 25 15 L 10 15 L 10 85 L 25 85" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
+                  <path d="M 75 15 L 90 15 L 90 85 L 75 85" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
+                  <ellipse cx="50" cy="50" rx="25" ry="15" stroke="#0a0a0a" stroke-width="3" fill="none"/>
+                  <circle cx="50" cy="50" r="8" fill="#00b4d8"/>
+                  <circle cx="50" cy="50" r="3" fill="#0a0a0a"/>
+                </svg>
+              </div>
+              <span class="logo-text">Project Context</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+              <li><a href="/">Home</a></li>
+              <li class="dropdown">
+                <a href="/studies/" class="dropdown-toggle">Studies</a>
+                <div class="dropdown-content">
+                  <a href="/studies/characters/">Biblical Characters</a>
+                  <a href="/studies/tanakh/">Tanakh Studies</a>
+                  <a href="/studies/women/">Women in the Bible</a>
+                </div>
+              </li>
+              <li><a href="/resources/">Resources</a></li>
+              <li><a href="/about/">About</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation">
+              <span></span><span></span><span></span>
+            </button>
+          </div>
+        </nav>
+      `;
+      document.body.insertAdjacentHTML('afterbegin', navHTML);
+      
+      // Initialize mobile menu after adding HTML
+      initializeMobileMenu();
+    }
+  }
+  
+  // Basic mobile menu functionality
+  function initializeMobileMenu() {
+    const toggle = document.getElementById('mobileMenuToggle');
+    const navLinks = document.getElementById('navLinks');
+    let overlay = document.querySelector('.mobile-menu-overlay');
+    
+    if (!toggle || !navLinks) return;
+    
+    // Create overlay if it doesn't exist
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.className = 'mobile-menu-overlay';
+      document.body.appendChild(overlay);
+    }
+    
+    toggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      const isActive = toggle.classList.contains('active');
+      
+      if (isActive) {
+        toggle.classList.remove('active');
+        navLinks.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.classList.remove('menu-open');
+      } else {
+        toggle.classList.add('active');
+        navLinks.classList.add('active');
+        overlay.classList.add('active');
+        document.body.classList.add('menu-open');
+      }
+    });
+    
+    // Close on overlay click
+    overlay.addEventListener('click', function() {
+      toggle.classList.remove('active');
+      navLinks.classList.remove('active');
+      overlay.classList.remove('active');
+      document.body.classList.remove('menu-open');
+    });
+  }
+  
+  // Try module import with fallback
+  import('/assets/js/nav-component.js')
+    .then(module => {
+      window.NavigationComponent = module.default;
+      initializeNavigation();
+    })
+    .catch(err => {
+      console.warn('Navigation component not found, using fallback', err);
+      initializeNavigation();
+    });
+</script>
 
   <script src="/assets/js/character-page.js" defer></script>
 
