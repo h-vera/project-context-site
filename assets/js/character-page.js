@@ -580,3 +580,130 @@ if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
   // Keep existing Intersection Observer for non-iOS devices
   // ... existing observer code ...
 }
+// ============================================
+// FIX FOR iOS BLANK CONTENT ON SCROLL UP
+// Replace the mobile tab scroll handler in character-page.js
+// ============================================
+
+// Find this section in character-page.js and REPLACE the scroll handler:
+function initializeMobileTabs() {
+  const mobileTabsNav = document.querySelector('.mobile-section-tabs');
+  const tabItems = document.querySelectorAll('.mobile-section-tabs .tab-item');
+  
+  if (!mobileTabsNav || !tabItems.length) return;
+  
+  // SOLUTION 1: Keep mobile tabs always visible on iOS
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  
+  if (isIOS) {
+    // On iOS, never hide the tabs - just keep them fixed
+    mobileTabsNav.classList.remove('hidden');
+    
+    // Only update active state on scroll
+    window.addEventListener('scroll', function() {
+      updateActiveTab();
+    }, { passive: true });
+    
+  } else {
+    // Original hide/show behavior for Android and other devices
+    let lastScrollTop = 0;
+    let scrollTimer = null;
+    
+    window.addEventListener('scroll', function() {
+      if (scrollTimer) {
+        clearTimeout(scrollTimer);
+      }
+      
+      scrollTimer = setTimeout(function() {
+        updateActiveTab();
+        
+        const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // Only hide/show on non-iOS devices
+        if (currentScrollTop > lastScrollTop && currentScrollTop > 100) {
+          mobileTabsNav.classList.add('hidden');
+        } else {
+          mobileTabsNav.classList.remove('hidden');
+        }
+        
+        lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
+      }, 100);
+    }, { passive: true });
+  }
+  
+  // ... rest of the initializeMobileTabs function stays the same ...
+}
+
+// SOLUTION 2: Alternative - Disable hide/show entirely
+// If Solution 1 doesn't work, try this simpler approach:
+function initializeMobileTabsSimple() {
+  const mobileTabsNav = document.querySelector('.mobile-section-tabs');
+  const tabItems = document.querySelectorAll('.mobile-section-tabs .tab-item');
+  
+  if (!mobileTabsNav || !tabItems.length) return;
+  
+  // Never hide the tabs - always visible
+  mobileTabsNav.classList.remove('hidden');
+  mobileTabsNav.style.transform = 'translateY(0)';
+  mobileTabsNav.style.position = 'fixed';
+  mobileTabsNav.style.bottom = '0';
+  
+  // Only handle active state updates
+  function updateActiveTab() {
+    const sections = [];
+    tabItems.forEach(tab => {
+      const targetId = tab.dataset.target;
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        sections.push({ tab, element: targetElement });
+      }
+    });
+    
+    const scrollPosition = window.scrollY + window.innerHeight / 3;
+    
+    let activeSection = null;
+    
+    sections.forEach(({ tab, element }) => {
+      const rect = element.getBoundingClientRect();
+      const absoluteTop = rect.top + window.scrollY;
+      
+      if (absoluteTop <= scrollPosition) {
+        activeSection = { tab, element };
+      }
+    });
+    
+    if (activeSection) {
+      tabItems.forEach(t => t.classList.remove('active'));
+      activeSection.tab.classList.add('active');
+    }
+  }
+  
+  // Simple scroll listener
+  window.addEventListener('scroll', updateActiveTab, { passive: true });
+  
+  // Tab click handlers stay the same
+  tabItems.forEach(tab => {
+    tab.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      const targetId = this.dataset.target;
+      const targetElement = document.querySelector(targetId);
+      
+      if (targetElement) {
+        const navHeight = document.querySelector('nav')?.offsetHeight || 65;
+        const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - navHeight - 10;
+        
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
+        
+        tabItems.forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+      }
+    });
+  });
+  
+  // Initial setup
+  updateActiveTab();
+}

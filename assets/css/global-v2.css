@@ -2743,3 +2743,144 @@ body {
     transform: translateY(calc(100% + 2px));
   }
 }
+/* ============================================
+   CRITICAL iOS BLANK CONTENT FIX
+   Add to the END of global-v2.css
+   ============================================ */
+
+/* Fix 1: Prevent mobile tabs from causing reflow on iOS */
+@supports (-webkit-overflow-scrolling: touch) {
+  .mobile-section-tabs {
+    /* Keep tabs always visible on iOS */
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+  
+  .mobile-section-tabs.hidden {
+    /* Don't actually hide on iOS, just make subtle */
+    opacity: 0.95 !important;
+    transform: translateY(0) !important;
+  }
+}
+
+/* Fix 2: Force content to stay rendered */
+@supports (-webkit-overflow-scrolling: touch) {
+  .content-section {
+    /* Force GPU layer */
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    
+    /* Prevent content unloading */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    
+    /* Force height to be respected */
+    min-height: 100vh;
+    
+    /* Contain painting */
+    contain: layout;
+  }
+  
+  /* Each content card needs its own layer */
+  .theology-card,
+  .chiasm-card,
+  .study-card,
+  .transformation-card {
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    
+    /* Force visibility */
+    opacity: 1 !important;
+    visibility: visible !important;
+    
+    /* Prevent unloading */
+    will-change: transform;
+  }
+}
+
+/* Fix 3: Alternative approach - disable problematic features on iOS */
+@media screen and (max-width: 768px) {
+  @supports (-webkit-overflow-scrolling: touch) {
+    /* Keep mobile tabs static */
+    .mobile-section-tabs {
+      position: fixed !important;
+      bottom: 0 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+    
+    /* Remove all animations that might cause reflow */
+    * {
+      animation: none !important;
+      transition-duration: 0s !important;
+    }
+    
+    /* Ensure content stays visible */
+    .animate-on-scroll {
+      opacity: 1 !important;
+      transform: none !important;
+      visibility: visible !important;
+    }
+    
+    /* Force main content to maintain its paint */
+    main {
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+  }
+}
+
+/* Fix 4: iOS-specific body and html settings */
+@supports (-webkit-overflow-scrolling: touch) {
+  html, body {
+    /* Prevent elastic scrolling */
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    
+    /* Keep content rendered */
+    height: 100%;
+    position: relative;
+  }
+  
+  body {
+    /* Prevent blank screen issues */
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Fix 5: Nuclear option - if still having issues */
+@media screen and (max-width: 768px) {
+  /* iOS only */
+  @supports (-webkit-touch-callout: none) {
+    /* Keep everything visible all the time */
+    * {
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+    
+    /* No transforms on main content */
+    .content-section,
+    .content-section * {
+      transform: none !important;
+      -webkit-transform: none !important;
+    }
+    
+    /* Mobile tabs stay put */
+    .mobile-section-tabs {
+      display: block !important;
+      position: fixed !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+}
