@@ -493,3 +493,90 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log('Character page utilities initialized');
   console.log('Mobile tabs:', window.innerWidth <= 768 ? 'Generated' : 'Not needed (desktop)');
 });
+// ============================================
+// iOS SCROLL FIX
+// Add this section to character-page.js after DOMContentLoaded
+// ============================================
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Detect iOS
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  
+  if (isIOS) {
+    // Add iOS class to body for CSS targeting
+    document.body.classList.add('ios-device');
+    
+    // Option 1: Disable all scroll animations on iOS
+    const animatedElements = document.querySelectorAll('.animate-on-scroll');
+    animatedElements.forEach(el => {
+      el.classList.remove('animate-on-scroll');
+      el.classList.add('visible');
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+    });
+    
+    // Option 2: Simplify mobile tab behavior on iOS
+    const mobileTabs = document.querySelector('.mobile-section-tabs');
+    if (mobileTabs) {
+      let scrollTimer = null;
+      let lastScrollY = window.scrollY;
+      
+      // Debounced scroll handler for iOS
+      window.addEventListener('scroll', function() {
+        if (scrollTimer) {
+          clearTimeout(scrollTimer);
+        }
+        
+        scrollTimer = setTimeout(function() {
+          const currentScrollY = window.scrollY;
+          
+          // Only hide/show if scroll distance is significant
+          if (Math.abs(currentScrollY - lastScrollY) > 50) {
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+              mobileTabs.classList.add('hidden');
+            } else {
+              mobileTabs.classList.remove('hidden');
+            }
+            lastScrollY = currentScrollY;
+          }
+        }, 100); // Debounce delay
+      }, { passive: true });
+    }
+    
+    // Option 3: Force repaint on problematic elements
+    const fixFlickering = () => {
+      const cards = document.querySelectorAll('.theology-card, .study-card');
+      cards.forEach(card => {
+        // Force a repaint by accessing offsetHeight
+        card.style.display = 'block';
+        card.offsetHeight; // Trigger reflow
+      });
+    };
+    
+    // Run after a delay to ensure layout is complete
+    setTimeout(fixFlickering, 100);
+    
+    // Option 4: Disable Intersection Observer on iOS
+    if (window.observer) {
+      window.observer.disconnect();
+    }
+  }
+});
+
+// Alternative: Replace the existing Intersection Observer with a simpler version for iOS
+if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+  // Simple visibility check without animations
+  window.addEventListener('scroll', function() {
+    const elements = document.querySelectorAll('.theology-card, .study-card');
+    elements.forEach(element => {
+      const rect = element.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        element.style.opacity = '1';
+        element.style.visibility = 'visible';
+      }
+    });
+  }, { passive: true });
+} else {
+  // Keep existing Intersection Observer for non-iOS devices
+  // ... existing observer code ...
+}
