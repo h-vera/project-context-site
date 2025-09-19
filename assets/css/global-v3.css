@@ -897,61 +897,74 @@ p {
 }
 
 /* ============================================
-   MOBILE SECTION TABS
+   MOBILE SECTION TABS - Missing from global-v3.css
+   Add this to global-v3.css after line 759 where .mobile-section-tabs is referenced
    ============================================ */
+
+/* Mobile Section Tabs Base */
 .mobile-section-tabs {
   display: none;
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  height: var(--mobile-tabs-height);
+  height: 56px;
   background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
   border-top: 1px solid rgba(114, 9, 183, 0.1);
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
-  z-index: var(--z-sticky);
+  z-index: 200;
   transform: translateY(0);
-  transition: transform var(--duration-moderate) var(--motion-standard);
+  transition: transform 0.3s ease;
   will-change: transform;
   -webkit-transform: translateZ(0);
   overscroll-behavior: contain;
-  /* iOS Safe Area Support */
-  padding-bottom: env(safe-area-inset-bottom, 0);
-  height: calc(var(--mobile-tabs-height) + env(safe-area-inset-bottom, 0));
 }
 
-/* Show on mobile */
+/* iOS Safe Area Support */
+@supports (padding: max(0px)) {
+  .mobile-section-tabs {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    height: calc(56px + env(safe-area-inset-bottom, 0));
+  }
+}
+
+/* Show on mobile only */
 @media (max-width: 768px) {
   .mobile-section-tabs {
     display: flex;
   }
   
+  /* Adjust content padding to account for tabs */
   .content-section {
-    padding-bottom: calc(var(--mobile-tabs-height) + env(safe-area-inset-bottom, 0) + var(--space-xl));
+    padding-bottom: calc(56px + env(safe-area-inset-bottom, 0) + 2rem);
   }
 }
 
-/* Hide when scrolling down, show when scrolling up */
+/* Hide when scrolling down */
 .mobile-section-tabs.hidden {
   transform: translateY(100%);
 }
 
-.mobile-section-tabs-inner {
+/* Inner container for tabs */
+.mobile-section-tabs-inner,
+.tabs-container {
   display: flex;
   align-items: center;
   justify-content: space-around;
   width: 100%;
   height: 100%;
-  padding: 0 var(--space-xs);
+  padding: 0 8px;
   overflow-x: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
 }
 
-.mobile-section-tabs-inner::-webkit-scrollbar {
+.mobile-section-tabs-inner::-webkit-scrollbar,
+.tabs-container::-webkit-scrollbar {
   display: none;
 }
 
+/* Individual Tab Items */
 .tab-item {
   display: flex;
   flex-direction: column;
@@ -959,15 +972,19 @@ p {
   justify-content: center;
   min-width: 64px;
   height: 100%;
-  padding: var(--space-xs);
+  padding: 8px 4px;
   color: hsla(0, 0%, 20%, 0.7);
   text-decoration: none;
-  transition: all var(--duration-fast) var(--motion-standard);
+  transition: all 0.2s ease;
   position: relative;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  background: none;
+  border: none;
+  font-family: inherit;
 }
 
+/* Active indicator bar */
 .tab-item::before {
   content: '';
   position: absolute;
@@ -976,31 +993,55 @@ p {
   transform: translateX(-50%) scaleX(0);
   width: 32px;
   height: 3px;
-  background: var(--gradient-hero);
+  background: linear-gradient(135deg, var(--accent-purple, #7209b7), var(--accent-rose, #e11d48));
   border-radius: 0 0 3px 3px;
-  transition: transform var(--duration-fast) var(--motion-spring);
+  transition: transform 0.2s ease;
 }
 
+/* Active state */
 .tab-item.active {
-  color: var(--accent-purple);
+  color: var(--accent-purple, #7209b7);
 }
 
 .tab-item.active::before {
   transform: translateX(-50%) scaleX(1);
 }
 
+/* Tab Icons */
 .tab-icon {
   font-size: 20px;
   margin-bottom: 2px;
-  transition: transform var(--duration-fast) var(--motion-spring);
+  transition: transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
 }
 
+/* Icon SVG support */
+.tab-icon .icon-svg {
+  width: 20px;
+  height: 20px;
+}
+
+.tab-icon .icon-svg svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+/* Tab Labels */
 .tab-label {
-  font-size: var(--type-xxs);
-  font-weight: var(--font-medium);
+  font-size: 10px;
+  font-weight: 500;
   white-space: nowrap;
+  margin-top: 2px;
 }
 
+/* Touch feedback */
 .tab-item:active .tab-icon {
   transform: scale(0.9);
 }
@@ -1009,6 +1050,128 @@ p {
   transform: scale(1.1);
 }
 
+/* Hover effects for devices with hover capability */
+@media (hover: hover) {
+  .tab-item:hover {
+    color: var(--accent-purple, #7209b7);
+  }
+  
+  .tab-item:hover .tab-icon {
+    transform: scale(1.05);
+  }
+}
+
+/* Color adjustments for active tab */
+.tab-item.active .icon-svg svg {
+  stroke: var(--accent-purple, #7209b7);
+}
+
+/* Optional: Gradient background for active tab */
+.tab-item.active {
+  background: linear-gradient(180deg, 
+    rgba(114, 9, 183, 0.05) 0%, 
+    rgba(114, 9, 183, 0) 100%
+  );
+  border-radius: 8px 8px 0 0;
+}
+
+/* Ensure proper stacking */
+.mobile-section-tabs * {
+  z-index: 201;
+}
+
+/* Animation for showing/hiding */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.mobile-section-tabs.show {
+  animation: slideUp 0.3s ease forwards;
+}
+
+/* Dark mode support (if implementing) */
+@media (prefers-color-scheme: dark) {
+  .mobile-section-tabs {
+    background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
+    border-top-color: rgba(114, 9, 183, 0.2);
+  }
+  
+  .tab-item {
+    color: hsla(0, 0%, 80%, 0.7);
+  }
+  
+  .tab-item.active {
+    color: var(--accent-purple-light, #8b2dd1);
+    background: linear-gradient(180deg, 
+      rgba(114, 9, 183, 0.1) 0%, 
+      rgba(114, 9, 183, 0) 100%
+    );
+  }
+}
+
+/* Specific adjustments for iOS */
+.is-ios .mobile-section-tabs {
+  /* Account for iOS bottom bar */
+  padding-bottom: max(env(safe-area-inset-bottom, 0), 20px);
+  height: calc(56px + max(env(safe-area-inset-bottom, 0), 20px));
+}
+
+/* Prevent layout shift when tabs appear */
+body.has-mobile-tabs {
+  padding-bottom: calc(56px + env(safe-area-inset-bottom, 0));
+}
+
+/* Optional: Swipe indicator */
+.mobile-section-tabs::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.8) 100%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Show swipe indicator when scrollable */
+.mobile-section-tabs.scrollable::after {
+  opacity: 1;
+}
+
+/* Accessibility improvements */
+.tab-item:focus {
+  outline: 2px solid var(--accent-purple, #7209b7);
+  outline-offset: -2px;
+  border-radius: 8px;
+}
+
+.tab-item:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .mobile-section-tabs,
+  .tab-item,
+  .tab-item::before,
+  .tab-icon {
+    transition: none;
+    animation: none;
+  }
+}
 /* ============================================
    SMART PROGRESS NAVIGATOR (Desktop)
    ============================================ */
