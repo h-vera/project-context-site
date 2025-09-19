@@ -262,9 +262,9 @@
     }
   };
 
-  // Auto-initialize if not in module context
-  if (typeof module === 'undefined') {
-    window.initPremiumNav();
-  }
+  // Don't auto-initialize - let the page call it when ready
+// if (typeof module === 'undefined') {
+//   window.initPremiumNav();
+// }
 
 })();
