@@ -2,7 +2,7 @@
  * HYBRID MIGRATION SCRIPT: v5.4-5.7 to v5.8
  * Path: /migration/migrate-to-v58.js
  * Purpose: Properly migrate biblical character templates to v5.8
- * Version: 4.3.0 - COMPLETE CLEAN VERSION
+ * Version: 5.0.0 - ENHANCED HYBRID VERSION - COMPLETE
  */
 
 const fs = require('fs-extra');
@@ -11,12 +11,18 @@ const glob = require('glob');
 const chalk = require('chalk');
 const cheerio = require('cheerio');
 
-// Configuration
+// ============================================
+// CONFIGURATION
+// ============================================
 const CONFIG = {
   backupSuffix: '-backup-v57',
   logFile: './migration-log.txt',
+  reportDir: './migration-reports',
   testMode: false,
   verbose: true,
+  preserveCustom: true,
+  analyzeOnly: false,
+  createReports: true,
   templatePath: path.join(process.cwd(), 'templates/biblical-characters-template-v5.8.html'),
   
   // File patterns to find templates
@@ -29,16 +35,96 @@ const CONFIG = {
   ]
 };
 
+// ============================================
+// CONTENT CATEGORIES
+// ============================================
+const CONTENT_CATEGORIES = {
+  // Always migrate these exactly
+  mandatory: [
+    'overview',
+    'narrative',
+    'literary-context',
+    'themes',
+    'ane-context',
+    'biblical-theology',
+    'messianic',
+    'application',
+    'questions'
+  ],
+  
+  // Migrate if present
+  optional: [
+    'major-chiasm',
+    'eden',
+    'wordplay',
+    'covenant',
+    'unique',
+    'second-temple',
+    'songs',
+    'literary-artistry',
+    'gender-dynamics',
+    'intertext',
+    'tables',
+    'bibliography'
+  ],
+  
+  // Preserve but flag for review
+  custom: [
+    'textual-clarification',
+    'warning-box',
+    'related-profiles',
+    'custom-insights',
+    'special-notes'
+  ],
+  
+  // Never migrate (recreate from metadata)
+  regenerate: [
+    'character-title',
+    'breadcrumbs'
+  ]
+};
+
+// Standard classes used in templates
+const STANDARD_CLASSES = new Set([
+  'theology-card', 'animate-on-scroll', 'timeline', 'timeline-item',
+  'panel', 'grid-2', 'grid-3', 'grid-4', 'key-insight',
+  'glass-card', 'glass-premium', 'glass-textured', 'hover-lift',
+  'card-3d', 'stagger-children', 'chiasm-card', 'chiasm-structure',
+  'character-type-badge', 'complexity-indicator', 'complexity-level',
+  'complexity-dot', 'filled', 'section-title', 'section-icon',
+  'hebrew', 'greek', 'hebrew-large', 'greek-large', 'hebrew-inline',
+  'meta', 'kv', 'tag', 'primary', 'word-study', 'cross-ref',
+  'question-list', 'bibliography-section', 'enhanced',
+  'source-category', 'source-entry', 'source-citation', 'source-usage',
+  'usage-tag', 'usage-note', 'citation-note', 'breadcrumbs',
+  'content-section', 'skip-link', 'reading-progress', 'back-to-top',
+  'quick-nav-sidebar', 'quick-nav-item', 'mobile-section-tabs',
+  'tabs-container', 'tab-item', 'tab-icon', 'tab-label', 'active',
+  'bibliography-header', 'bibliography-inner', 'bibliography-icon',
+  'bibliography-text', 'bibliography-title', 'bibliography-subtitle',
+  'expand-indicator', 'bibliography-content', 'section-divider',
+  'chiasm-title', 'chiasm-line', 'chiasm-center', 'indent-1',
+  'indent-2', 'indent-3', 'significance', 'note', 'warning-box',
+  'clarification-box', 'enhancement-indicator', 'optional-indicator',
+  'profile-status-indicator', 'incomplete', 'multi-page-indicator',
+  'character-profile', 'woman-profile'
+]);
+
 // Migration statistics
 const stats = {
   total: 0,
   migrated: 0,
   skipped: 0,
   errors: 0,
-  backedUp: 0
+  backedUp: 0,
+  analyzed: 0,
+  customContent: 0,
+  warnings: []
 };
 
-// Logging utilities
+// ============================================
+// LOGGING UTILITIES
+// ============================================
 const log = {
   info: (msg) => {
     console.log(chalk.blue('ℹ'), msg);
@@ -51,6 +137,7 @@ const log = {
   warning: (msg) => {
     console.log(chalk.yellow('⚠'), msg);
     appendToLog(`WARNING: ${msg}`);
+    stats.warnings.push(msg);
   },
   error: (msg) => {
     console.log(chalk.red('✖'), msg);
@@ -61,6 +148,10 @@ const log = {
       console.log(chalk.gray('  →'), chalk.gray(msg));
     }
     appendToLog(`VERBOSE: ${msg}`);
+  },
+  custom: (msg) => {
+    console.log(chalk.magenta('⚡'), msg);
+    appendToLog(`CUSTOM: ${msg}`);
   }
 };
 
@@ -69,9 +160,45 @@ function appendToLog(msg) {
   fs.appendFileSync(CONFIG.logFile, `[${timestamp}] ${msg}\n`);
 }
 
-/**
- * Check if file is already migrated to v5.8
- */
+// ============================================
+// VERSION DETECTION
+// ============================================
+function detectTemplateVersion(html, $) {
+  // Check meta tag first
+  const metaVersion = $('meta[name="template-version"]').attr('content');
+  if (metaVersion) {
+    log.verbose(`Detected version from meta tag: ${metaVersion}`);
+    return metaVersion;
+  }
+  
+  // Fallback to CSS detection
+  if (html.includes('global-v3.css')) return '5.8';
+  if (html.includes('global-v2-enhanced.css')) return '5.7';
+  if (html.includes('global-v2.min.css')) return '5.6';
+  if (html.includes('global-v2.css')) {
+    // Check for minified version indicator
+    if (html.includes('global-v2.min.css')) return '5.6';
+    
+    // Check for extensive inline styles (v5.5 characteristic)
+    const styleElements = $('style');
+    const hasExtensiveInlineStyles = styleElements.length > 0 && 
+      styleElements.toArray().some(el => $(el).html().length > 1000);
+    
+    if (hasExtensiveInlineStyles) {
+      log.verbose('Detected v5.5 based on extensive inline styles');
+      return '5.5';
+    }
+    
+    return '5.5'; // Default for global-v2.css
+  }
+  
+  log.warning('Could not detect template version reliably');
+  return 'unknown';
+}
+
+// ============================================
+// CHECK IF ALREADY MIGRATED
+// ============================================
 function isAlreadyMigrated(html) {
   const checks = [
     html.includes('global-v3.css'),
@@ -83,9 +210,138 @@ function isAlreadyMigrated(html) {
   return checks.filter(Boolean).length >= 3;
 }
 
-/**
- * Clean section HTML to ensure no nested html/body tags
- */
+// ============================================
+// CUSTOM CONTENT DETECTION
+// ============================================
+function detectInlineCustomizations($) {
+  const customizations = {
+    inlineStyles: [],
+    inlineScripts: [],
+    customElements: [],
+    customClasses: [],
+    customDataAttributes: [],
+    customSections: []
+  };
+  
+  // Detect inline styles
+  $('style').each(function() {
+    const style = $(this).html();
+    const isCustom = style && 
+      !style.includes('/* template-default */') &&
+      !style.includes('/* auto-generated */');
+    
+    if (isCustom) {
+      customizations.inlineStyles.push({
+        content: style.substring(0, 200) + (style.length > 200 ? '...' : ''),
+        fullContent: style,
+        location: $(this).parent().prop('tagName').toLowerCase(),
+        length: style.length,
+        preserve: true
+      });
+      log.custom(`Found custom inline styles (${style.length} chars)`);
+    }
+  });
+  
+  // Detect inline scripts
+  $('script').not('[src]').each(function() {
+    const script = $(this).html();
+    const isCustom = script && script.trim() && 
+      !script.includes('// template-default') &&
+      !script.includes('NavigationComponent') && // Skip standard nav
+      !script.includes('Template Version:'); // Skip version logging
+    
+    if (isCustom) {
+      customizations.inlineScripts.push({
+        content: script.substring(0, 200) + (script.length > 200 ? '...' : ''),
+        fullContent: script,
+        location: $(this).parent().prop('tagName').toLowerCase(),
+        length: script.length,
+        preserve: true
+      });
+      log.custom(`Found custom inline script (${script.length} chars)`);
+    }
+  });
+  
+  // Detect non-standard classes
+  $('.theology-card, .panel, .timeline-item').each(function() {
+    const classAttr = $(this).attr('class');
+    if (!classAttr) return;
+    
+    const classes = classAttr.split(' ').filter(cls => cls.trim());
+    classes.forEach(cls => {
+      if (!STANDARD_CLASSES.has(cls) && cls !== '') {
+        if (!customizations.customClasses.includes(cls)) {
+          customizations.customClasses.push(cls);
+        }
+      }
+    });
+  });
+  
+  if (customizations.customClasses.length > 0) {
+    log.custom(`Found custom classes: ${customizations.customClasses.join(', ')}`);
+  }
+  
+  // Detect custom data attributes
+  $('[data-custom], [data-special], [data-note]').each(function() {
+    const $elem = $(this);
+    const data = $elem.data();
+    customizations.customDataAttributes.push({
+      element: this.tagName.toLowerCase(),
+      id: $elem.attr('id'),
+      class: $elem.attr('class'),
+      attributes: data,
+      content: $elem.html().substring(0, 100)
+    });
+  });
+  
+  // Detect custom sections (warning boxes, clarifications, etc.)
+  $('.theology-card').each(function() {
+    const $card = $(this);
+    const style = $card.attr('style');
+    const heading = $card.find('h3, h4').first().text();
+    
+    // Check for custom styled sections
+    if (style && (style.includes('background') || style.includes('border'))) {
+      const id = $card.attr('id') || 'custom-' + Date.now();
+      customizations.customSections.push({
+        id: id,
+        heading: heading,
+        style: style,
+        classes: $card.attr('class'),
+        html: $card.prop('outerHTML'),
+        type: detectCustomSectionType($card)
+      });
+      log.custom(`Found custom section: ${heading || id}`);
+    }
+  });
+  
+  return customizations;
+}
+
+function detectCustomSectionType($element) {
+  const text = $element.text().toLowerCase();
+  const heading = $element.find('h3, h4').first().text().toLowerCase();
+  const style = $element.attr('style') || '';
+  
+  if (heading.includes('warning') || heading.includes('caution') || heading.includes('⚠️')) {
+    return 'warning';
+  }
+  if (heading.includes('clarification') || heading.includes('note') || text.includes('distinguishing')) {
+    return 'clarification';
+  }
+  if (style.includes('#fffbf0') || style.includes('#f0ad4e')) {
+    return 'alert';
+  }
+  if (heading.includes('related') || heading.includes('profiles')) {
+    return 'related';
+  }
+  
+  return 'custom';
+}
+
+// ============================================
+// CLEAN SECTION HTML
+// ============================================
 function cleanSectionHtml(html) {
   if (!html) return '';
   
@@ -98,7 +354,6 @@ function cleanSectionHtml(html) {
     });
     
     // Try to find the actual content element
-    // Look for the main elements that we care about
     const mainElements = [
       '.theology-card',
       '.animate-on-scroll', 
@@ -137,13 +392,13 @@ function cleanSectionHtml(html) {
   // Remove any DOCTYPE declarations
   html = html.replace(/<!DOCTYPE[^>]*>/gi, '');
   
-  // Remove any html tags and their attributes (more aggressive)
+  // Remove any html tags and their attributes
   html = html.replace(/<html[^>]*>/gi, '');
   html = html.replace(/<\/html>/gi, '');
   
   // Remove any head sections completely
   html = html.replace(/<head[^>]*>[\s\S]*?<\/head>/gi, '');
-  html = html.replace(/<head[^>]*\/>/gi, ''); // Self-closing head
+  html = html.replace(/<head[^>]*\/>/gi, '');
   
   // Remove any body tags and their attributes
   html = html.replace(/<body[^>]*>/gi, '');
@@ -152,8 +407,10 @@ function cleanSectionHtml(html) {
   // Remove any meta tags that might have been included
   html = html.replace(/<meta[^>]*>/gi, '');
   
-  // Remove any script tags
-  html = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+  // Remove any script tags (unless preserving custom)
+  if (!CONFIG.preserveCustom) {
+    html = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+  }
   
   // Remove any link tags
   html = html.replace(/<link[^>]*>/gi, '');
@@ -167,15 +424,16 @@ function cleanSectionHtml(html) {
   return html;
 }
 
-/**
- * HYBRID EXTRACTION - Captures all content types
- */
-function extractContent($) {
+// ============================================
+// ENHANCED CONTENT EXTRACTION
+// ============================================
+function extractContent($, version) {
   const contentData = {
     // Character info from title and meta
     characterName: '',
     bookName: '',
     hebrewName: '',
+    greekName: '',
     
     // Meta tags
     description: '',
@@ -184,17 +442,28 @@ function extractContent($) {
     characterId: '',
     bookId: '',
     
-    // Body content sections - preserve everything
+    // Template version
+    sourceVersion: version,
+    
+    // Body content sections
     sections: {},
-    specialSections: {}, // For non-standard sections
+    specialSections: {},
+    customSections: {},
     
     // Original body classes
-    bodyClasses: ''
+    bodyClasses: '',
+    
+    // Custom content detected
+    hasCustomContent: false,
+    customizations: null
   };
   
-  // ========================================
-  // PHASE 1: Extract metadata
-  // ========================================
+  // Extract customizations first
+  contentData.customizations = detectInlineCustomizations($);
+  contentData.hasCustomContent = 
+    contentData.customizations.inlineStyles.length > 0 ||
+    contentData.customizations.inlineScripts.length > 0 ||
+    contentData.customizations.customSections.length > 0;
   
   // Extract from title
   const title = $('title').text();
@@ -218,332 +487,247 @@ function extractContent($) {
   // Extract body classes
   contentData.bodyClasses = $('body').attr('class') || '';
   
-  // Extract Hebrew/Greek name from the title section
+  // Extract Hebrew/Greek names
   const titleSection = $('#character-title, h1.section-title, h2.section-title').first();
   const hebrewSpan = titleSection.find('.hebrew-large, .hebrew').first();
+  const greekSpan = titleSection.find('.greek-large, .greek').first();
+  
   if (hebrewSpan.length) {
     contentData.hebrewName = hebrewSpan.text().trim();
   }
+  if (greekSpan.length) {
+    contentData.greekName = greekSpan.text().trim();
+  }
   
-  // ========================================
-  // PHASE 2: Extract sections using $.html() method
-  // ========================================
-  
-  const sectionIds = [
-    'character-title',
-    'overview',
-    'narrative', 
-    'literary-context',
-    'themes',
-    'major-chiasm',
-    'ane-context',
-    'eden',
-    'wordplay',
-    'covenant',
-    'unique',
-    'biblical-theology',
-    'messianic',
-    'second-temple',
-    'songs',
-    'intertext',
-    'application',
-    'questions'
+  // Extract sections using improved logic
+  const allSectionIds = [
+    ...CONTENT_CATEGORIES.mandatory,
+    ...CONTENT_CATEGORIES.optional
   ];
   
-  // Extract sections by ID
-  sectionIds.forEach(id => {
-    // First try to find by ID
-    let $section = $(`#${id}`);
-    
-    if ($section.length > 0) {
-      let html = '';
-      
-      // If the ID is on a parent container, use that
-      if ($section.hasClass('theology-card') || $section.hasClass('animate-on-scroll') || $section.hasClass('grid-2')) {
-        // Get just this element
-        html = $('<div>').append($section.clone()).html();
-      } else {
-        // The ID might be on an inner element, look for parent
-        const $parent = $section.closest('.theology-card, .animate-on-scroll, .grid-2');
-        if ($parent.length > 0) {
-          html = $('<div>').append($parent.clone()).html();
-        } else {
-          // Just use the element with the ID
-          html = $('<div>').append($section.clone()).html();
-        }
-      }
-      
-      contentData.sections[id] = cleanSectionHtml(html);
-      log.verbose(`Extracted section by ID: ${id}`);
+  allSectionIds.forEach(id => {
+    const $section = extractSectionById($, id);
+    if ($section) {
+      contentData.sections[id] = $section;
+      log.verbose(`Extracted section: ${id}`);
     }
   });
   
-  // Extract unlabeled theology cards
-  $('.theology-card, .animate-on-scroll').each(function() {
-    const $this = $(this);
-    const id = $this.attr('id');
-    
-    // Skip if already extracted
-    if (id && contentData.sections[id]) return;
-    
-    // Check if it's a special section by its content
-    const heading = $this.find('h3, h4').first().text();
-    
-    if (!id && heading) {
-      // Try to generate an ID from the heading
-      const generatedId = heading.toLowerCase()
-        .replace(/[^\w\s]/g, '')
-        .replace(/\s+/g, '-')
-        .substring(0, 30);
-      
-      if (!contentData.sections[generatedId]) {
-        const html = $('<div>').append($this.clone()).html();
-        contentData.sections[generatedId] = cleanSectionHtml(html);
-        log.verbose(`Extracted unlabeled section: ${generatedId}`);
-      }
-    }
-  });
-  
-  // Extract grid-2 sections with tables (for intertext)
-  $('.grid-2').each(function() {
-    const $this = $(this);
-    const id = $this.attr('id');
-    
-    // Check if it has tables inside
-    if ($this.find('table').length > 0) {
-      if (id && !contentData.sections[id]) {
-        const html = $('<div>').append($this.clone()).html();
-        contentData.sections[id] = cleanSectionHtml(html);
-        log.verbose(`Extracted grid section: ${id}`);
-      } else if (!id) {
-        // Try to identify by content
-        const firstHeading = $this.find('h3').first().text().toLowerCase();
-        if (firstHeading.includes('intertext') || firstHeading.includes('old testament') || firstHeading.includes('new testament')) {
-          const html = $('<div>').append($this.clone()).html();
-          contentData.sections['intertext'] = cleanSectionHtml(html);
-          log.verbose('Extracted intertext tables section');
-        }
-      }
-    }
-  });
-  
-  // ========================================
-  // PHASE 3: Extract special/custom sections
-  // ========================================
-  
-  // 1. Character Title Section - Skip extraction if it causes issues
-  // We'll recreate it from metadata instead
-  const characterTitle = $('h1#character-title, h2#character-title, h1.section-title, h2.section-title').first();
-  if (characterTitle.length) {
-    // Extract Hebrew name if present
-    const hebrewInTitle = characterTitle.find('.hebrew-large, .hebrew').first();
-    if (hebrewInTitle.length && !contentData.hebrewName) {
-      contentData.hebrewName = hebrewInTitle.text().trim();
-    }
-    log.verbose('Skipping character title extraction due to HTML nesting issues - will recreate from metadata');
+  // Extract custom sections
+  if (contentData.customizations.customSections.length > 0) {
+    contentData.customizations.customSections.forEach(customSection => {
+      contentData.customSections[customSection.id] = customSection.html;
+      log.verbose(`Preserved custom section: ${customSection.heading || customSection.id}`);
+    });
   }
   
-  // 2. Character Type Badge
-  const characterBadge = $('.character-type-badge').first();
-  if (characterBadge.length) {
-    // Use outerHTML directly to avoid wrapper issues
-    const badgeHtml = characterBadge.prop('outerHTML');
-    if (badgeHtml) {
-      contentData.specialSections['character-badge'] = cleanSectionHtml(badgeHtml);
-    }
-    log.verbose('Extracted character type badge');
-  }
-  
-  // 3. Complexity Indicator
-  const complexityIndicator = $('.complexity-indicator').first();
-  if (complexityIndicator.length) {
-    // Use outerHTML directly
-    const complexityHtml = complexityIndicator.prop('outerHTML');
-    if (complexityHtml) {
-      contentData.specialSections['complexity-indicator'] = cleanSectionHtml(complexityHtml);
-    }
-    log.verbose('Extracted complexity indicator');
-  }
-  
-  // 4. Warning/Clarification boxes - SKIP THIS TO AVOID ISSUES
-  // The textual clarification boxes are causing nested HTML problems
-  // We'll skip extracting them and recreate manually if needed
-  log.verbose('Skipping textual clarification extraction to avoid nested HTML issues');
-  
-  // 5. Related Profiles - SKIP THIS TOO
-  // Also causing nested HTML issues
-  log.verbose('Skipping related profiles extraction to avoid nested HTML issues');
-  
-  // 6. Tables Grid (for intertext sections)
-  const tablesGrid = $('.grid-2').filter(function() {
-    return $(this).find('table').length > 0;
-  }).first();
-  if (tablesGrid.length && !contentData.sections['tables']) {
-    const html = $('<div>').append(tablesGrid.clone()).html();
-    contentData.sections['tables'] = cleanSectionHtml(html);
-    log.verbose('Extracted tables section');
-  }
-  
-  // Also check for #intertext specifically
-  const intertextSection = $('#intertext');
-  if (intertextSection.length && !contentData.sections['intertext']) {
-    const html = $('<div>').append(intertextSection.clone()).html();
-    contentData.sections['intertext'] = cleanSectionHtml(html);
-    log.verbose('Extracted intertext section by ID');
-  }
-  
-  // 7. Bibliography
-  const bibliography = $('.bibliography-section, details').filter(function() {
-    const text = $(this).text().toLowerCase();
-    const summaryText = $(this).find('summary').text().toLowerCase();
-    return text.includes('bibliography') || summaryText.includes('bibliography');
-  }).first();
-  if (bibliography.length && !contentData.sections['bibliography']) {
-    const html = $('<div>').append(bibliography.clone()).html();
-    contentData.sections['bibliography'] = cleanSectionHtml(html);
-    log.verbose('Extracted bibliography section');
-  }
-  
-  // 8. Any remaining sections with specific headings
-  $('.theology-card').each(function() {
-    const $this = $(this);
-    const heading = $this.find('h3').first().text().toLowerCase();
-    
-    // Songs section
-    if (heading.includes('songs') && !contentData.sections['songs']) {
-      const html = $('<div>').append($this.clone()).html();
-      contentData.sections['songs'] = cleanSectionHtml(html);
-      log.verbose('Extracted songs section');
-    }
-    
-    // Second Temple section
-    if ((heading.includes('second temple') || heading.includes('jewish sources')) && !contentData.sections['second-temple']) {
-      const html = $('<div>').append($this.clone()).html();
-      contentData.sections['second-temple'] = cleanSectionHtml(html);
-      log.verbose('Extracted second temple section');
-    }
-  });
+  // Extract special components
+  extractSpecialComponents($, contentData);
   
   return contentData;
 }
 
-/**
- * Enhancement function for sections - SIMPLIFIED VERSION
- */
-function enhanceSection(sectionHtml, sectionId) {
-  if (!sectionHtml) return '';
+function extractSectionById($, id) {
+  // Try multiple selectors
+  const selectors = [
+    `#${id}`,
+    `[data-section="${id}"]`,
+    `.theology-card#${id}`,
+    `.animate-on-scroll#${id}`
+  ];
   
-  // Clean the HTML first - aggressive cleaning
-  sectionHtml = sectionHtml.replace(/<html[^>]*>/gi, '');
-  sectionHtml = sectionHtml.replace(/<\/html>/gi, '');
-  sectionHtml = sectionHtml.replace(/<head[^>]*>[\s\S]*?<\/head>/gi, '');
-  sectionHtml = sectionHtml.replace(/<head[^>]*\/>/gi, '');
-  sectionHtml = sectionHtml.replace(/<body[^>]*>/gi, '');
-  sectionHtml = sectionHtml.replace(/<\/body>/gi, '');
-  sectionHtml = sectionHtml.trim();
-  
-  // If it still has HTML/body tags after cleaning, return empty
-  if (sectionHtml.includes('<html') || sectionHtml.includes('<body')) {
-    log.warning(`Section ${sectionId} still has nested HTML after cleaning - skipping enhancement`);
-    return '';
+  for (const selector of selectors) {
+    const $element = $(selector);
+    if ($element.length > 0) {
+      return cleanSectionHtml($('<div>').append($element.clone()).html());
+    }
   }
   
-  // For now, just return the cleaned HTML without further enhancement
-  // The classes should already be in the extracted HTML
-  return sectionHtml;
+  // Fallback: try to find by heading content
+  if (id === 'intertext' || id === 'tables') {
+    const $tables = $('.grid-2').filter(function() {
+      return $(this).find('table').length > 0;
+    });
+    if ($tables.length > 0) {
+      return cleanSectionHtml($('<div>').append($tables.clone()).html());
+    }
+  }
+  
+  return null;
 }
 
-/**
- * Enhancement for special sections
- */
-function enhanceSpecialSection(sectionHtml, type) {
-  if (!sectionHtml) return '';
-  
-  // First, aggressively clean the HTML
-  sectionHtml = sectionHtml.replace(/<html[^>]*>/gi, '');
-  sectionHtml = sectionHtml.replace(/<\/html>/gi, '');
-  sectionHtml = sectionHtml.replace(/<head[^>]*>[\s\S]*?<\/head>/gi, '');
-  sectionHtml = sectionHtml.replace(/<head[^>]*\/>/gi, '');
-  sectionHtml = sectionHtml.replace(/<body[^>]*>/gi, '');
-  sectionHtml = sectionHtml.replace(/<\/body>/gi, '');
-  sectionHtml = sectionHtml.trim();
-  
-  // If still has nested tags, try to extract the actual content
-  if (sectionHtml.includes('<html') || sectionHtml.includes('<body')) {
-    const $ = cheerio.load(sectionHtml, {
-      xml: false,
-      decodeEntities: false  
-    });
-    
-    // Find the actual element we want
-    let actualElement = null;
-    if (type === 'badge') {
-      actualElement = $('.character-type-badge').first();
-    } else if (type === 'complexity') {
-      actualElement = $('.complexity-indicator').first();
-    } else if (type === 'warning') {
-      actualElement = $('.theology-card, .warning-box').first();
-    } else if (type === 'related') {
-      actualElement = $('.theology-card').first();
-    }
-    
-    if (actualElement && actualElement.length) {
-      sectionHtml = actualElement.prop('outerHTML') || '';
-    }
+function extractSpecialComponents($, contentData) {
+  // Character Type Badge
+  const $badge = $('.character-type-badge').first();
+  if ($badge.length) {
+    contentData.specialSections['character-badge'] = cleanSectionHtml($badge.prop('outerHTML'));
   }
   
-  // Now enhance based on type
-  const $ = cheerio.load(sectionHtml, {
-    xml: false,
-    decodeEntities: false
+  // Complexity Indicator
+  const $complexity = $('.complexity-indicator').first();
+  if ($complexity.length) {
+    contentData.specialSections['complexity-indicator'] = cleanSectionHtml($complexity.prop('outerHTML'));
+  }
+  
+  // Bibliography (handle both old and new formats)
+  const $bibliography = $('details.bibliography-section, .bibliography-section').first();
+  if ($bibliography.length && !contentData.sections['bibliography']) {
+    contentData.sections['bibliography'] = cleanSectionHtml($bibliography.prop('outerHTML'));
+  }
+}
+
+// ============================================
+// UPDATE SECTION CLASSES FOR v5.8
+// ============================================
+function updateSectionClasses(html) {
+  if (!html) return '';
+  
+  // Update classes to v5.8 standards
+  html = html.replace(/class="theology-card"/g, 'class="theology-card glass-premium animate-on-scroll"');
+  html = html.replace(/class="animate-on-scroll"/g, 'class="animate-on-scroll"');
+  
+  // Update panel classes
+  html = html.replace(/class="panel"/g, 'class="panel hover-lift"');
+  
+  // Add data-section-priority for proper animations
+  if (html.includes('id="overview"')) {
+    html = html.replace('id="overview"', 'id="overview" data-section-priority="1"');
+  }
+  if (html.includes('id="narrative"')) {
+    html = html.replace('id="narrative"', 'id="narrative" data-section-priority="2"');
+  }
+  if (html.includes('id="biblical-theology"')) {
+    html = html.replace('id="biblical-theology"', 'id="biblical-theology" data-section-priority="2"');
+  }
+  if (html.includes('id="messianic"')) {
+    html = html.replace('id="messianic"', 'id="messianic" data-section-priority="3"');
+  }
+  if (html.includes('id="application"')) {
+    html = html.replace('id="application"', 'id="application" data-section-priority="2"');
+  }
+  
+  // Update grid classes
+  html = html.replace(/class="grid-3"/g, 'class="grid-3 stagger-children"');
+  
+  // Ensure timeline items have proper classes
+  html = html.replace(/class="timeline-item"/g, 'class="timeline-item"');
+  
+  return html;
+}
+
+// ============================================
+// MIGRATION PLANNING
+// ============================================
+function createMigrationPlan(contentData, version) {
+  const plan = {
+    version: version,
+    actions: [],
+    warnings: [],
+    manual_review: [],
+    custom_preservations: []
+  };
+  
+  // Check mandatory sections
+  CONTENT_CATEGORIES.mandatory.forEach(id => {
+    if (contentData.sections[id]) {
+      plan.actions.push({
+        type: 'migrate',
+        section: id,
+        category: 'mandatory',
+        method: 'standard'
+      });
+    } else {
+      plan.warnings.push({
+        type: 'missing-mandatory',
+        section: id,
+        severity: 'high'
+      });
+    }
   });
   
-  const $section = $('*').first();
+  // Check optional sections
+  CONTENT_CATEGORIES.optional.forEach(id => {
+    if (contentData.sections[id]) {
+      plan.actions.push({
+        type: 'migrate',
+        section: id,
+        category: 'optional',
+        method: 'preserve-structure'
+      });
+    }
+  });
   
-  switch(type) {
-    case 'badge':
-      // Just return as-is, it's already properly formatted
-      return sectionHtml;
+  // Handle custom content
+  if (contentData.hasCustomContent) {
+    // Inline styles
+    if (contentData.customizations.inlineStyles.length > 0) {
+      plan.manual_review.push({
+        type: 'inline-styles',
+        count: contentData.customizations.inlineStyles.length,
+        totalChars: contentData.customizations.inlineStyles.reduce((sum, s) => sum + s.length, 0),
+        action: 'review-and-integrate',
+        severity: 'medium'
+      });
       
-    case 'complexity':
-      // Just return as-is
-      return sectionHtml;
+      if (CONFIG.preserveCustom) {
+        plan.custom_preservations.push({
+          type: 'styles',
+          content: contentData.customizations.inlineStyles
+        });
+      }
+    }
+    
+    // Inline scripts
+    if (contentData.customizations.inlineScripts.length > 0) {
+      plan.manual_review.push({
+        type: 'inline-scripts',
+        count: contentData.customizations.inlineScripts.length,
+        action: 'review-for-compatibility',
+        severity: 'high'
+      });
       
-    case 'warning':
-      // Ensure it has proper classes
-      if (!$section.hasClass('theology-card')) {
-        $section.addClass('theology-card');
+      if (CONFIG.preserveCustom) {
+        plan.custom_preservations.push({
+          type: 'scripts',
+          content: contentData.customizations.inlineScripts
+        });
       }
-      if (!$section.hasClass('glass-premium')) {
-        $section.addClass('glass-premium');
-      }
-      if (!$section.hasClass('animate-on-scroll')) {
-        $section.addClass('animate-on-scroll');
-      }
-      return $.html();
-      
-    case 'related':
-      // Ensure it has premium classes
-      if (!$section.hasClass('glass-premium')) {
-        $section.addClass('glass-premium');
-      }
-      if (!$section.hasClass('animate-on-scroll')) {
-        $section.addClass('animate-on-scroll');
-      }
-      return $.html();
-      
-    default:
-      return sectionHtml;
+    }
+    
+    // Custom classes
+    if (contentData.customizations.customClasses.length > 0) {
+      plan.manual_review.push({
+        type: 'custom-classes',
+        classes: contentData.customizations.customClasses,
+        action: 'add-to-custom-css',
+        severity: 'low'
+      });
+    }
+    
+    // Custom sections
+    if (contentData.customizations.customSections.length > 0) {
+      contentData.customizations.customSections.forEach(section => {
+        plan.actions.push({
+          type: 'preserve-custom',
+          section: section.id,
+          category: 'custom',
+          sectionType: section.type,
+          method: 'preserve-with-update'
+        });
+      });
+    }
   }
+  
+  return plan;
 }
 
-/**
- * Build the complete main content HTML
- */
-function buildMainContent(contentData) {
+// ============================================
+// BUILD MAIN CONTENT
+// ============================================
+function buildMainContent(contentData, plan) {
   let mainContent = '';
   
-  // Add breadcrumbs
+  // Add breadcrumbs (always regenerate)
   mainContent += `
     <!-- Breadcrumbs -->
     <nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -554,57 +738,45 @@ function buildMainContent(contentData) {
       <span aria-current="page">${contentData.characterName}</span>
     </nav>\n`;
   
-  // ALWAYS generate character title fresh - never use extracted version
+  // Always generate character title fresh
   mainContent += `
-    <h2 id="character-title" class="section-title" 
+    <h1 id="character-title" class="section-title" 
         data-character-id="${contentData.characterId}" 
         data-book="${contentData.bookId}">
-      <span class="section-icon">👤</span>
+      <span class="section-icon icon-svg" data-icon="user"></span>
       ${contentData.characterName}
       ${contentData.hebrewName ? `<span class="hebrew-large">${contentData.hebrewName}</span>` : ''}
-    </h2>\n`;
+      ${contentData.greekName ? `<span class="greek-large">${contentData.greekName}</span>` : ''}
+    </h1>\n`;
   
-  // Add special sections AFTER title but BEFORE main content
+  // Add special sections
   if (contentData.specialSections['character-badge']) {
-    let badgeHtml = contentData.specialSections['character-badge'];
-    // Clean it just in case
-    badgeHtml = badgeHtml.replace(/<html[^>]*>/gi, '').replace(/<\/html>/gi, '');
-    badgeHtml = badgeHtml.replace(/<head[^>]*>[\s\S]*?<\/head>/gi, '');
-    badgeHtml = badgeHtml.replace(/<body[^>]*>/gi, '').replace(/<\/body>/gi, '');
-    
-    if (!badgeHtml.includes('<html') && !badgeHtml.includes('<body')) {
-      mainContent += '\n    ' + enhanceSpecialSection(badgeHtml, 'badge') + '\n';
-    }
+    mainContent += '\n    ' + contentData.specialSections['character-badge'] + '\n';
   }
   
   if (contentData.specialSections['complexity-indicator']) {
-    let complexityHtml = contentData.specialSections['complexity-indicator'];
-    // Clean it just in case
-    complexityHtml = complexityHtml.replace(/<html[^>]*>/gi, '').replace(/<\/html>/gi, '');
-    complexityHtml = complexityHtml.replace(/<head[^>]*>[\s\S]*?<\/head>/gi, '');
-    complexityHtml = complexityHtml.replace(/<body[^>]*>/gi, '').replace(/<\/body>/gi, '');
-    
-    if (!complexityHtml.includes('<html') && !complexityHtml.includes('<body')) {
-      mainContent += '\n    ' + enhanceSpecialSection(complexityHtml, 'complexity') + '\n';
-    }
+    mainContent += '\n    ' + contentData.specialSections['complexity-indicator'] + '\n';
   }
   
-  // SKIP THE TEXTUAL CLARIFICATION - it's causing issues
-  // Log that we're skipping it
-  if (contentData.specialSections['textual-clarification']) {
-    log.verbose('Skipping textual clarification section due to extraction issues');
-  }
+  // Add custom sections that come before main content
+  Object.entries(contentData.customSections).forEach(([id, html]) => {
+    if (id.includes('clarification') || id.includes('warning')) {
+      mainContent += '\n    <!-- Custom Section: ' + id + ' -->\n';
+      mainContent += '    ' + updateSectionClasses(html) + '\n';
+    }
+  });
   
   // Add main sections in proper order
   const sectionOrder = [
     'overview',
     'narrative',
     'literary-context',
-    'themes',
     'major-chiasm',
+    'literary-artistry',
+    'themes',
     'ane-context',
     'eden',
-    'wordplay', 
+    'wordplay',
     'covenant',
     'unique',
     'biblical-theology',
@@ -617,52 +789,37 @@ function buildMainContent(contentData) {
     'questions'
   ];
   
-  // Add each section that exists
   sectionOrder.forEach(sectionId => {
     if (contentData.sections[sectionId]) {
-      let sectionHtml = contentData.sections[sectionId];
-      
-      // Extra safety: clean each section before adding
-      sectionHtml = sectionHtml.replace(/<html[^>]*>/gi, '').replace(/<\/html>/gi, '');
-      sectionHtml = sectionHtml.replace(/<head[^>]*>[\s\S]*?<\/head>/gi, '');
-      sectionHtml = sectionHtml.replace(/<body[^>]*>/gi, '').replace(/<\/body>/gi, '');
-      
-      if (!sectionHtml.includes('<html') && !sectionHtml.includes('<body')) {
-        const enhanced = enhanceSection(sectionHtml, sectionId);
-        if (enhanced) {
-          mainContent += '\n    ' + enhanced + '\n';
-        }
-      } else {
+      const sectionHtml = updateSectionClasses(contentData.sections[sectionId]);
+      if (sectionHtml && !sectionHtml.includes('<html') && !sectionHtml.includes('<body')) {
+        mainContent += '\n    ' + sectionHtml + '\n';
+      } else if (sectionHtml) {
         log.warning(`Skipping section ${sectionId} due to nested HTML`);
       }
     }
   });
   
-  // SKIP related profiles - causing issues
-  if (contentData.specialSections['related-profiles']) {
-    log.verbose('Skipping related profiles section due to extraction issues');
-  }
+  // Add remaining custom sections
+  Object.entries(contentData.customSections).forEach(([id, html]) => {
+    if (!id.includes('clarification') && !id.includes('warning')) {
+      mainContent += '\n    <!-- Custom Section: ' + id + ' -->\n';
+      mainContent += '    ' + updateSectionClasses(html) + '\n';
+    }
+  });
   
   // Add bibliography last
   if (contentData.sections['bibliography']) {
-    let bibHtml = contentData.sections['bibliography'];
-    // Clean it
-    bibHtml = bibHtml.replace(/<html[^>]*>/gi, '').replace(/<\/html>/gi, '');
-    bibHtml = bibHtml.replace(/<head[^>]*>[\s\S]*?<\/head>/gi, '');
-    bibHtml = bibHtml.replace(/<body[^>]*>/gi, '').replace(/<\/body>/gi, '');
-    
-    if (!bibHtml.includes('<html') && !bibHtml.includes('<body')) {
-      mainContent += '\n    ' + enhanceSection(bibHtml, 'bibliography') + '\n';
-    }
+    mainContent += '\n    ' + updateSectionClasses(contentData.sections['bibliography']) + '\n';
   }
   
   return mainContent;
 }
 
-/**
- * Build v5.8 page with preserved content
- */
-function buildV58Page(templatePath, contentData) {
+// ============================================
+// BUILD v5.8 PAGE
+// ============================================
+function buildV58Page(templatePath, contentData, plan) {
   // Load the v5.8 template
   if (!fs.existsSync(templatePath)) {
     throw new Error(`Template not found at: ${templatePath}`);
@@ -671,42 +828,23 @@ function buildV58Page(templatePath, contentData) {
   let template = fs.readFileSync(templatePath, 'utf8');
   
   // Build the complete main content
-  const mainContent = buildMainContent(contentData);
+  const mainContent = buildMainContent(contentData, plan);
   
   // Final validation - check the main content doesn't have nested HTML
   if (mainContent.includes('<html') || mainContent.includes('<body')) {
-    console.log('DEBUG: Main content still contains HTML/BODY tags');
     const htmlPos = mainContent.indexOf('<html');
     const bodyPos = mainContent.indexOf('<body');
-    console.log('First <html> occurrence:', htmlPos);
-    console.log('First <body> occurrence:', bodyPos);
-    
-    // Show what's around position 421
-    if (bodyPos > 0) {
-      console.log('Content around position:', mainContent.substring(Math.max(0, bodyPos - 50), bodyPos + 100));
-    }
-    
-    // Debug: Show which sections have the problem
-    Object.entries(contentData.sections).forEach(([id, html]) => {
-      if (html && (html.includes('<html') || html.includes('<body'))) {
-        console.log(`Section "${id}" contains HTML/BODY tags`);
-      }
-    });
-    Object.entries(contentData.specialSections).forEach(([id, html]) => {
-      if (html && (html.includes('<html') || html.includes('<body'))) {
-        console.log(`Special section "${id}" contains HTML/BODY tags`);
-      }
-    });
-    
+    log.error(`Main content still contains HTML tags at positions: html=${htmlPos}, body=${bodyPos}`);
     throw new Error('Main content contains nested HTML/BODY tags');
   }
   
-  // Prepare all replacements - using a safer approach
+  // Prepare all replacements
   const replacements = [
     { find: /\[Character Name\]/g, replace: contentData.characterName },
     { find: /\[Book\]/g, replace: contentData.bookName },
     { find: /\[Hebrew Name\]/g, replace: contentData.hebrewName || '' },
-    { find: /\[Hebrew\/Greek\]/g, replace: contentData.hebrewName || '' },
+    { find: /\[Greek Name\]/g, replace: contentData.greekName || '' },
+    { find: /\[Hebrew\/Greek\]/g, replace: contentData.hebrewName || contentData.greekName || '' },
     { find: /\[Hebrew\]/g, replace: contentData.hebrewName || '' },
     { find: /\[male\/female\]/g, replace: contentData.gender },
     { find: /\[single-page\/multi-page\]/g, replace: contentData.profileType },
@@ -722,9 +860,8 @@ function buildV58Page(templatePath, contentData) {
     template = template.replace(find, replace);
   });
   
-  // Handle description replacements separately
+  // Handle description replacements
   if (contentData.description) {
-    // Replace the meta description placeholders
     template = template.replace(
       /Seminary-level biblical character study of \[Character Name\][^"]*/g,
       contentData.description
@@ -744,12 +881,8 @@ function buildV58Page(templatePath, contentData) {
   template = template.replace(/\[major themes\][^\]]*/g, 'themes');
   template = template.replace(/\[specific theological focus\][^\]]*/g, 'theology');
   template = template.replace(/\[unique contribution\][^\]]*/g, 'significance');
-  template = template.replace(/\[Book\]'s story/g, contentData.bookName);
-  template = template.replace(/\[Character Name\] \(\[Hebrew\/Greek\]\)/g, 
-    `${contentData.characterName}${contentData.hebrewName ? ' (' + contentData.hebrewName + ')' : ''}`);
   
-  // Now replace the entire main content section
-  // Find the main content area in the template
+  // Replace the main content section
   const mainStartMatch = template.match(/<main[^>]*>/);
   const mainEndMatch = template.match(/<\/main>/);
   
@@ -757,10 +890,36 @@ function buildV58Page(templatePath, contentData) {
     const mainStart = template.indexOf(mainStartMatch[0]) + mainStartMatch[0].length;
     const mainEnd = template.lastIndexOf('</main>');
     
-    // Replace everything between <main> tags with our content
     template = template.substring(0, mainStart) + '\n' + 
                mainContent + '\n  ' +
                template.substring(mainEnd);
+  }
+  
+  // Add custom styles if preserved
+  if (CONFIG.preserveCustom && plan.custom_preservations.length > 0) {
+    const customStyles = plan.custom_preservations
+      .filter(p => p.type === 'styles')
+      .map(p => p.content.map(s => s.fullContent).join('\n'))
+      .join('\n');
+    
+    if (customStyles) {
+      // Add custom styles before closing head tag
+      template = template.replace('</head>', 
+        `\n  <!-- Custom Preserved Styles -->\n  <style>\n${customStyles}\n  </style>\n</head>`);
+      log.custom('Added preserved custom styles to output');
+    }
+    
+    const customScripts = plan.custom_preservations
+      .filter(p => p.type === 'scripts')
+      .map(p => p.content.map(s => s.fullContent).join('\n'))
+      .join('\n');
+    
+    if (customScripts) {
+      // Add custom scripts before closing body tag
+      template = template.replace('</body>',
+        `\n  <!-- Custom Preserved Scripts -->\n  <script>\n${customScripts}\n  </script>\n</body>`);
+      log.custom('Added preserved custom scripts to output');
+    }
   }
   
   // Final check - ensure no nested HTML in final output
@@ -772,142 +931,239 @@ function buildV58Page(templatePath, contentData) {
   return template;
 }
 
-/**
- * Fix already migrated files with malformed HTML
- */
-function fixMigratedFile(filePath) {
-  const fileName = path.basename(filePath);
-  log.verbose(`Fixing malformed HTML in ${fileName}`);
+// ============================================
+// GENERATE RECOMMENDATIONS
+// ============================================
+function generateRecommendations(plan, contentData) {
+  const recommendations = [];
   
-  try {
-    // Read the file
-    const html = fs.readFileSync(filePath, 'utf8');
-    
-    // Check if it has the malformed HTML issue
-    if (!html.includes('<html class=') && !html.includes('<html data-section-priority=')) {
-      log.verbose(`No malformed HTML found in ${fileName}`);
-      return { status: 'skipped', reason: 'no malformed HTML' };
-    }
-    
-    // Load with cheerio to re-extract content
-    const $ = cheerio.load(html);
-    
-    // Re-extract content
-    const contentData = extractContent($);
-    
-    // If we have a template, rebuild the page
-    if (fs.existsSync(CONFIG.templatePath)) {
-      const fixedHtml = buildV58Page(CONFIG.templatePath, contentData);
-      
-      // Save the fixed file
-      if (!CONFIG.testMode) {
-        // Create backup first
-        const backupPath = filePath.replace('.html', `-backup-fix-${Date.now()}.html`);
-        fs.copyFileSync(filePath, backupPath);
-        
-        // Save fixed version
-        fs.writeFileSync(filePath, fixedHtml);
-        log.success(`Fixed malformed HTML in: ${fileName}`);
-      } else {
-        log.info(`TEST MODE - Would fix: ${fileName}`);
-      }
-      
-      return { status: 'fixed' };
-    }
-    
-  } catch (error) {
-    log.error(`Failed to fix ${fileName}: ${error.message}`);
-    return { status: 'error', error: error.message };
+  // Missing mandatory sections
+  const missingMandatory = plan.warnings.filter(w => w.type === 'missing-mandatory');
+  if (missingMandatory.length > 0) {
+    recommendations.push({
+      priority: 'high',
+      type: 'missing-content',
+      action: `Add missing mandatory sections: ${missingMandatory.map(w => w.section).join(', ')}`,
+      sections: missingMandatory.map(w => w.section)
+    });
   }
+  
+  // Custom styles review
+  if (contentData.customizations.inlineStyles.length > 0) {
+    recommendations.push({
+      priority: 'medium',
+      type: 'custom-styles',
+      action: 'Review inline styles and migrate to custom CSS file or global-v3.css',
+      details: `${contentData.customizations.inlineStyles.length} style blocks found`
+    });
+  }
+  
+  // Custom scripts review
+  if (contentData.customizations.inlineScripts.length > 0) {
+    recommendations.push({
+      priority: 'high',
+      type: 'custom-scripts',
+      action: 'Test inline scripts with v5.8 JavaScript modules',
+      details: `${contentData.customizations.inlineScripts.length} script blocks found`
+    });
+  }
+  
+  // Custom classes
+  if (contentData.customizations.customClasses.length > 0) {
+    recommendations.push({
+      priority: 'low',
+      type: 'custom-classes',
+      action: 'Add custom classes to a supplementary CSS file',
+      classes: contentData.customizations.customClasses
+    });
+  }
+  
+  // Version-specific recommendations
+  if (contentData.sourceVersion === '5.5') {
+    recommendations.push({
+      priority: 'medium',
+      type: 'version-upgrade',
+      action: 'Test mobile responsiveness thoroughly (major changes from v5.5)',
+      details: 'v5.5 had different mobile handling'
+    });
+  }
+  
+  if (contentData.sourceVersion === '5.6' || contentData.sourceVersion === '5.7') {
+    recommendations.push({
+      priority: 'low',
+      type: 'version-upgrade',
+      action: 'Review glass morphism effects and animations',
+      details: 'v5.8 has enhanced visual effects'
+    });
+  }
+  
+  return recommendations;
 }
 
-/**
- * Main migration function
- */
+// ============================================
+// MIGRATION REPORTING
+// ============================================
+function generateMigrationReport(file, plan, contentData, result) {
+  const report = {
+    file: path.basename(file),
+    path: file,
+    timestamp: new Date().toISOString(),
+    
+    character: {
+      name: contentData.characterName,
+      id: contentData.characterId,
+      book: contentData.bookName,
+      bookId: contentData.bookId,
+      gender: contentData.gender,
+      profileType: contentData.profileType
+    },
+    
+    source: {
+      version: contentData.sourceVersion,
+      hasCustomContent: contentData.hasCustomContent,
+      bodyClasses: contentData.bodyClasses
+    },
+    
+    migration: {
+      status: result.status,
+      error: result.error,
+      
+      sections: {
+        mandatory: {
+          total: CONTENT_CATEGORIES.mandatory.length,
+          migrated: plan.actions.filter(a => 
+            a.category === 'mandatory'
+          ).length,
+          missing: plan.warnings.filter(w => 
+            w.type === 'missing-mandatory'
+          ).map(w => w.section)
+        },
+        optional: {
+          total: CONTENT_CATEGORIES.optional.length,
+          migrated: plan.actions.filter(a => 
+            a.category === 'optional'
+          ).length
+        },
+        custom: {
+          total: Object.keys(contentData.customSections).length,
+          preserved: plan.actions.filter(a => 
+            a.category === 'custom'
+          ).length
+        }
+      },
+      
+      customContent: {
+        inlineStyles: contentData.customizations.inlineStyles.length,
+        inlineScripts: contentData.customizations.inlineScripts.length,
+        customClasses: contentData.customizations.customClasses,
+        customSections: contentData.customizations.customSections.map(s => ({
+          id: s.id,
+          type: s.type,
+          heading: s.heading
+        }))
+      },
+      
+      warnings: plan.warnings,
+      manualReview: plan.manual_review,
+      preservations: plan.custom_preservations.map(p => ({
+        type: p.type,
+        count: Array.isArray(p.content) ? p.content.length : 1
+      }))
+    },
+    
+    recommendations: generateRecommendations(plan, contentData)
+  };
+  
+  // Save report
+  if (CONFIG.createReports) {
+    if (!fs.existsSync(CONFIG.reportDir)) {
+      fs.mkdirSync(CONFIG.reportDir, { recursive: true });
+    }
+    
+    const reportName = path.basename(file, '.html') + '-migration-report.json';
+    const reportPath = path.join(CONFIG.reportDir, reportName);
+    fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
+    log.verbose(`Report saved: ${reportPath}`);
+  }
+  
+  return report;
+}
+
+// ============================================
+// MAIN MIGRATION FUNCTION
+// ============================================
 function migrateTemplate(filePath, options = {}) {
   const fileName = path.basename(filePath);
   log.verbose(`Processing ${fileName}`);
+  stats.total++;
   
   try {
     // Read the original file
     const originalHtml = fs.readFileSync(filePath, 'utf8');
     
-    // CRITICAL CHECK: Count HTML and BODY tags
+    // Check for corruption
     const htmlTagCount = (originalHtml.match(/<html/gi) || []).length;
     const bodyTagCount = (originalHtml.match(/<body/gi) || []).length;
     
-    log.verbose(`Source file has ${htmlTagCount} <html> tags and ${bodyTagCount} <body> tags`);
-    
-    // If file is corrupted, we need to restore from backup
     if (htmlTagCount > 1 || bodyTagCount > 1) {
       log.error(`❌ SOURCE FILE IS CORRUPTED: Contains ${htmlTagCount} <html> and ${bodyTagCount} <body> tags!`);
-      log.error('This file has nested HTML from a failed migration.');
       
-      // Check for existing backups
+      // Check for backups
       const possibleBackups = [
         filePath.replace('.html', '-backup-v57.html'),
         filePath.replace('.html', '.backup.html'),
-        filePath.replace('.html', '-original.html'),
-        filePath.replace('.html', '-clean.html')
+        filePath.replace('.html', '-original.html')
       ];
       
-      let backupFound = false;
       for (const backupPath of possibleBackups) {
         if (fs.existsSync(backupPath)) {
           log.info(`✅ Backup found: ${path.basename(backupPath)}`);
-          log.info(`To restore, run:`);
-          log.info(`  cp "${backupPath}" "${filePath}"`);
-          backupFound = true;
+          log.info(`To restore, run: cp "${backupPath}" "${filePath}"`);
           break;
         }
       }
       
-      if (!backupFound) {
-        log.error('❌ No backup found. You may need to restore from version control.');
-      }
-      
       stats.errors++;
-      return { status: 'error', error: 'Source file corrupted - restore from backup' };
+      return { status: 'error', error: 'Source file corrupted' };
     }
     
-    // Check if already migrated
-    if (isAlreadyMigrated(originalHtml)) {
-      log.verbose(`Already migrated: ${fileName}`);
-      stats.skipped++;
-      return { status: 'skipped', reason: 'already migrated' };
-    }
-    
-    // Load with cheerio for better parsing
+    // Load with cheerio
     const $ = cheerio.load(originalHtml, {
       xml: false,
       decodeEntities: false
     });
     
-    // Extract all content using hybrid approach
-    const contentData = extractContent($);
+    // Detect version
+    const version = detectTemplateVersion(originalHtml, $);
+    log.info(`Detected version: ${version}`);
+    
+    // Check if already migrated
+    if (isAlreadyMigrated(originalHtml)) {
+      log.verbose(`Already migrated to v5.8: ${fileName}`);
+      stats.skipped++;
+      return { status: 'skipped', reason: 'already migrated to v5.8' };
+    }
+    
+    // Extract content
+    const contentData = extractContent($, version);
     log.verbose(`Extracted content for: ${contentData.characterName || 'unknown'}`);
     
-    // Log what we found
+    // Log extraction details
     const regularSections = Object.keys(contentData.sections).length;
     const specialSections = Object.keys(contentData.specialSections).length;
-    log.verbose(`Found ${regularSections} regular sections, ${specialSections} special sections`);
+    const customSections = Object.keys(contentData.customSections).length;
+    log.verbose(`Found ${regularSections} regular, ${specialSections} special, ${customSections} custom sections`);
     
-    // Debug: Check each section for nested HTML
-    if (CONFIG.verbose) {
-      Object.entries(contentData.sections).forEach(([id, html]) => {
-        if (html && (html.includes('<html') || html.includes('<body'))) {
-          log.warning(`Section ${id} contains nested HTML tags!`);
-          // Show first 200 chars of problematic section
-          log.verbose(`Preview: ${html.substring(0, 200)}...`);
-        }
-      });
-      
-      Object.entries(contentData.specialSections).forEach(([id, html]) => {
-        if (html && (html.includes('<html') || html.includes('<body'))) {
-          log.warning(`Special section ${id} contains nested HTML tags!`);
-          log.verbose(`Preview: ${html.substring(0, 200)}...`);
-        }
-      });
+    // Create migration plan
+    const plan = createMigrationPlan(contentData, version);
+    log.verbose(`Created migration plan with ${plan.actions.length} actions`);
+    
+    // If analyze only mode, generate report and stop
+    if (CONFIG.analyzeOnly) {
+      const report = generateMigrationReport(filePath, plan, contentData, { status: 'analyzed' });
+      stats.analyzed++;
+      log.success(`Analysis complete: ${fileName}`);
+      return { status: 'analyzed', report };
     }
     
     // Create backup if not in test mode
@@ -919,16 +1175,11 @@ function migrateTemplate(filePath, options = {}) {
     }
     
     // Build the new v5.8 page
-    const newHtml = buildV58Page(CONFIG.templatePath, contentData);
+    const newHtml = buildV58Page(CONFIG.templatePath, contentData, plan);
     
-    // Verify the output doesn't have malformed HTML
+    // Verify the output
     if (newHtml.includes('<html class=') || newHtml.includes('<html data-section-priority=')) {
       throw new Error('Generated HTML contains malformed nested HTML tags');
-    }
-    
-    // Additional check for any nested HTML
-    if (newHtml.match(/<html[^>]*>[\s\S]*<html/)) {
-      throw new Error('Generated HTML contains nested <html> tags');
     }
     
     // Save migrated file if not in test mode
@@ -939,8 +1190,17 @@ function migrateTemplate(filePath, options = {}) {
       log.info(`TEST MODE - Would migrate: ${fileName}`);
     }
     
+    // Generate report
+    const report = generateMigrationReport(filePath, plan, contentData, { status: 'migrated' });
+    
+    // Track custom content
+    if (contentData.hasCustomContent) {
+      stats.customContent++;
+      log.custom(`File has custom content that was preserved: ${fileName}`);
+    }
+    
     stats.migrated++;
-    return { status: 'migrated', contentData };
+    return { status: 'migrated', contentData, report };
     
   } catch (error) {
     log.error(`Failed to migrate ${fileName}: ${error.message}`);
@@ -948,16 +1208,35 @@ function migrateTemplate(filePath, options = {}) {
       console.error(error.stack);
     }
     stats.errors++;
+    
+    // Generate error report
+    if (CONFIG.createReports) {
+      const errorReport = {
+        file: fileName,
+        error: error.message,
+        stack: error.stack,
+        timestamp: new Date().toISOString()
+      };
+      
+      if (!fs.existsSync(CONFIG.reportDir)) {
+        fs.mkdirSync(CONFIG.reportDir, { recursive: true });
+      }
+      
+      const reportPath = path.join(CONFIG.reportDir, `${path.basename(fileName, '.html')}-error.json`);
+      fs.writeFileSync(reportPath, JSON.stringify(errorReport, null, 2));
+    }
+    
     return { status: 'error', error: error.message };
   }
 }
 
-/**
- * Main execution
- */
+// ============================================
+// MAIN EXECUTION
+// ============================================
 async function main() {
   console.log(chalk.cyan('\n╔════════════════════════════════════════════╗'));
-  console.log(chalk.cyan('║   Template Migration Tool v5.8 (v4.3.0)   ║'));
+  console.log(chalk.cyan('║   Template Migration Tool v5.8 (v5.0.0)   ║'));
+  console.log(chalk.cyan('║           ENHANCED HYBRID VERSION         ║'));
   console.log(chalk.cyan('╚════════════════════════════════════════════╝\n'));
   
   // Parse command line arguments
@@ -967,11 +1246,46 @@ async function main() {
     single: args.includes('--single') ? args[args.indexOf('--single') + 1] : null,
     folder: args.includes('--folder') ? args[args.indexOf('--folder') + 1] : './',
     verbose: args.includes('--verbose'),
-    fix: args.includes('--fix')  // Flag to fix malformed HTML
+    analyzeOnly: args.includes('--analyze-only') || args.includes('--analyze'),
+    preserveCustom: !args.includes('--no-preserve-custom'),
+    createReports: !args.includes('--no-reports'),
+    help: args.includes('--help') || args.includes('-h')
   };
   
+  // Show help if requested
+  if (flags.help) {
+    console.log(chalk.yellow('Usage:'));
+    console.log('  node migrate-to-v58.js [options]\n');
+    console.log(chalk.yellow('Options:'));
+    console.log('  --single <file>       Migrate a single file');
+    console.log('  --folder <path>       Folder to search for templates (default: ./)');
+    console.log('  --test               Test mode (no files modified)');
+    console.log('  --verbose            Show detailed output');
+    console.log('  --analyze-only       Analyze files without migrating');
+    console.log('  --no-preserve-custom Do not preserve custom content');
+    console.log('  --no-reports         Do not create migration reports');
+    console.log('  --help               Show this help message\n');
+    console.log(chalk.yellow('Examples:'));
+    console.log('  node migrate-to-v58.js --analyze-only --folder studies/');
+    console.log('  node migrate-to-v58.js --single studies/characters/david.html --test');
+    console.log('  node migrate-to-v58.js --folder studies/characters/ --preserve-custom');
+    process.exit(0);
+  }
+  
+  // Apply flags to config
   CONFIG.testMode = flags.test;
-  if (flags.verbose) CONFIG.verbose = true;
+  CONFIG.verbose = flags.verbose;
+  CONFIG.analyzeOnly = flags.analyzeOnly;
+  CONFIG.preserveCustom = flags.preserveCustom;
+  CONFIG.createReports = flags.createReports;
+  
+  // Display current configuration
+  console.log(chalk.blue('Configuration:'));
+  console.log(`  Mode: ${CONFIG.analyzeOnly ? 'ANALYZE ONLY' : (CONFIG.testMode ? 'TEST' : 'PRODUCTION')}`);
+  console.log(`  Preserve Custom: ${CONFIG.preserveCustom ? 'YES' : 'NO'}`);
+  console.log(`  Create Reports: ${CONFIG.createReports ? 'YES' : 'NO'}`);
+  console.log(`  Verbose: ${CONFIG.verbose ? 'YES' : 'NO'}`);
+  console.log();
   
   // Check if template exists
   if (!fs.existsSync(CONFIG.templatePath)) {
@@ -985,7 +1299,7 @@ async function main() {
     fs.writeFileSync(CONFIG.logFile, `Migration started at ${new Date().toISOString()}\n`);
   }
   
-  // Find files to migrate or fix
+  // Find files to migrate
   let files;
   if (flags.single) {
     files = [flags.single];
@@ -1004,28 +1318,42 @@ async function main() {
     return;
   }
   
-  // Run migration or fix
-  console.log('\n' + chalk.cyan(flags.fix ? 'Starting fix process...' : 'Starting migration...'));
-  stats.total = files.length;
+  // Run migration
+  console.log('\n' + chalk.cyan(CONFIG.analyzeOnly ? 'Starting analysis...' : 'Starting migration...'));
   
   for (const file of files) {
-    if (flags.fix) {
-      fixMigratedFile(file);
-    } else {
-      migrateTemplate(file, flags);
-    }
+    migrateTemplate(file, flags);
   }
   
   // Display results
   console.log('\n' + chalk.cyan('═══════════════════════════════════════════'));
-  console.log(chalk.cyan('Migration Summary:'));
+  console.log(chalk.cyan('Summary:'));
   console.log(chalk.cyan('═══════════════════════════════════════════'));
-  console.log(`Total files:    ${stats.total}`);
-  console.log(chalk.green(`✔ Migrated:     ${stats.migrated}`));
-  console.log(chalk.yellow(`⚠ Skipped:      ${stats.skipped}`));
-  console.log(chalk.red(`✖ Errors:       ${stats.errors}`));
+  console.log(`Total files:       ${stats.total}`);
+  
+  if (CONFIG.analyzeOnly) {
+    console.log(chalk.blue(`✔ Analyzed:        ${stats.analyzed}`));
+  } else {
+    console.log(chalk.green(`✔ Migrated:        ${stats.migrated}`));
+  }
+  
+  console.log(chalk.yellow(`⚠ Skipped:         ${stats.skipped}`));
+  console.log(chalk.red(`✖ Errors:          ${stats.errors}`));
+  
+  if (stats.customContent > 0) {
+    console.log(chalk.magenta(`⚡ Custom Content:  ${stats.customContent}`));
+  }
+  
   if (stats.backedUp > 0) {
-    console.log(chalk.blue(`↻ Backed up:    ${stats.backedUp}`));
+    console.log(chalk.blue(`↻ Backed up:       ${stats.backedUp}`));
+  }
+  
+  if (stats.warnings.length > 0) {
+    console.log('\n' + chalk.yellow('Warnings:'));
+    stats.warnings.slice(0, 5).forEach(w => console.log(`  • ${w}`));
+    if (stats.warnings.length > 5) {
+      console.log(`  ... and ${stats.warnings.length - 5} more (see log file)`);
+    }
   }
   
   if (CONFIG.testMode) {
@@ -1033,10 +1361,36 @@ async function main() {
     console.log(chalk.gray('Run without --test flag to perform actual migration'));
   }
   
+  if (CONFIG.analyzeOnly) {
+    console.log('\n' + chalk.blue('Analysis complete!'));
+    if (CONFIG.createReports) {
+      console.log(chalk.gray(`Reports saved in: ${CONFIG.reportDir}/`));
+    }
+    console.log(chalk.gray('Review the reports and run without --analyze-only to migrate'));
+  }
+  
   if (stats.migrated > 0 && !CONFIG.testMode) {
     console.log('\n' + chalk.green('✨ Migration successful!'));
     console.log(chalk.gray('Backup files have been created with suffix: ' + CONFIG.backupSuffix));
-    console.log(chalk.gray('To rollback: rename backup files to remove the suffix'));
+    
+    if (CONFIG.createReports) {
+      console.log(chalk.gray(`Migration reports saved in: ${CONFIG.reportDir}/`));
+    }
+    
+    if (stats.customContent > 0) {
+      console.log('\n' + chalk.magenta('⚡ Custom content was detected and preserved'));
+      console.log(chalk.gray('Review the migration reports for manual verification needed'));
+    }
+  }
+  
+  // Provide next steps
+  if (stats.migrated > 0 || stats.analyzed > 0) {
+    console.log('\n' + chalk.cyan('Next Steps:'));
+    console.log('1. Review migration reports in ' + CONFIG.reportDir);
+    console.log('2. Test migrated files in browser');
+    console.log('3. Check mobile responsiveness');
+    console.log('4. Verify custom content preservation');
+    console.log('5. Test any preserved inline scripts');
   }
 }
 
