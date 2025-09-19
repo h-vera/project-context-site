@@ -1,4 +1,214 @@
-this.activeSection = sectionId;
+/**
+ * CHARACTER PAGE ENHANCED FUNCTIONALITY v2.0
+ * Path: /assets/js/character-page-v2.js
+ * Purpose: Premium interactions for biblical character profiles
+ * Features: Mobile tabs, progress nav, animations, premium effects
+ * Version: 2.0.0
+ */
+
+// ============================================
+// BIBLICAL ICON SYSTEM
+// ============================================
+class BiblicalIconSystem {
+  constructor() {
+    this.registry = new Map();
+    this.initializeIcons();
+  }
+
+  initializeIcons() {
+    // Core navigation icons
+    this.register('overview', '📋', { category: 'section', label: 'Overview' });
+    this.register('narrative', '📖', { category: 'section', label: 'Narrative' });
+    this.register('literary', '✍️', { category: 'section', label: 'Literary' });
+    this.register('themes', '🎯', { category: 'section', label: 'Themes' });
+    this.register('theology', '⛪', { category: 'section', label: 'Theology' });
+    this.register('application', '💡', { category: 'section', label: 'Application' });
+    this.register('questions', '❓', { category: 'section', label: 'Questions' });
+    this.register('crown', '👑', { category: 'section', label: 'Messianic' });
+    this.register('scroll', '📜', { category: 'section', label: 'ANE Context' });
+    
+    // UI icons
+    this.register('collapse', '⬆️', { category: 'ui', label: 'Collapse' });
+    this.register('expand', '⬇️', { category: 'ui', label: 'Expand' });
+    this.register('menu', '☰', { category: 'ui', label: 'Menu' });
+    this.register('close', '✕', { category: 'ui', label: 'Close' });
+  }
+
+  register(name, icon, metadata = {}) {
+    this.registry.set(name, { icon, ...metadata });
+  }
+
+  get(name, options = {}) {
+    const entry = this.registry.get(name);
+    if (!entry) return '📄'; // Default icon
+    
+    if (options.size) {
+      return `<span style="font-size: ${options.size}px">${entry.icon}</span>`;
+    }
+    
+    return entry.icon;
+  }
+}
+
+// ============================================
+// MOBILE SECTION TABS
+// ============================================
+class MobileSectionTabs {
+  constructor() {
+    this.iconSystem = new BiblicalIconSystem();
+    this.sections = [];
+    this.activeSection = null;
+    this.lastScrollY = 0;
+    this.init();
+  }
+
+  init() {
+    if (window.innerWidth > 768) return; // Mobile only
+    
+    this.detectSections();
+    if (this.sections.length > 0) {
+      this.createElement();
+      this.attachEventListeners();
+      this.trackScrollPosition();
+      this.initSwipeGestures();
+    }
+  }
+
+  detectSections() {
+    const sectionElements = document.querySelectorAll('.theology-card[id], .animate-on-scroll[id]');
+    
+    const sectionMap = {
+      'overview': { icon: 'overview', label: 'Overview', order: 1 },
+      'narrative': { icon: 'narrative', label: 'Story', order: 2 },
+      'literary-context': { icon: 'literary', label: 'Literary', order: 3 },
+      'themes': { icon: 'themes', label: 'Themes', order: 4 },
+      'ane-context': { icon: 'scroll', label: 'ANE', order: 5 },
+      'biblical-theology': { icon: 'theology', label: 'Theology', order: 6 },
+      'messianic': { icon: 'crown', label: 'Messianic', order: 7 },
+      'application': { icon: 'application', label: 'Apply', order: 8 },
+      'questions': { icon: 'questions', label: 'Questions', order: 9 }
+    };
+    
+    sectionElements.forEach(element => {
+      const id = element.id;
+      const config = sectionMap[id];
+      
+      if (config) {
+        this.sections.push({
+          id,
+          element,
+          icon: config.icon,
+          label: config.label,
+          order: config.order
+        });
+      }
+    });
+    
+    // Sort by order
+    this.sections.sort((a, b) => a.order - b.order);
+  }
+
+  createElement() {
+    const container = document.createElement('div');
+    container.className = 'mobile-section-tabs';
+    container.innerHTML = `
+      <div class="mobile-section-tabs-inner">
+        ${this.sections.map(section => `
+          <button class="tab-item" 
+                  data-section="${section.id}"
+                  aria-label="${section.label}">
+            <span class="tab-icon">${this.iconSystem.get(section.icon)}</span>
+            <span class="tab-label">${section.label}</span>
+          </button>
+        `).join('')}
+      </div>
+    `;
+    
+    document.body.appendChild(container);
+    this.container = container;
+  }
+
+  attachEventListeners() {
+    // Tab clicks
+    this.container.querySelectorAll('.tab-item').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const sectionId = tab.dataset.section;
+        this.scrollToSection(sectionId);
+      });
+    });
+    
+    // Hide on scroll down, show on scroll up
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          this.handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+
+  handleScroll() {
+    const currentScrollY = window.pageYOffset;
+    const scrollDiff = currentScrollY - this.lastScrollY;
+    
+    // Hide/show based on scroll direction
+    if (scrollDiff > 10 && currentScrollY > 100) {
+      this.hideTabs();
+    } else if (scrollDiff < -5) {
+      this.showTabs();
+    }
+    
+    this.lastScrollY = currentScrollY;
+    
+    // Update active section
+    this.updateActiveSection();
+  }
+
+  hideTabs() {
+    this.container.classList.add('hidden');
+  }
+
+  showTabs() {
+    this.container.classList.remove('hidden');
+  }
+
+  trackScrollPosition() {
+    window.addEventListener('scroll', () => {
+      this.updateActiveSection();
+    }, { passive: true });
+  }
+
+  updateActiveSection() {
+    const scrollY = window.pageYOffset;
+    const windowHeight = window.innerHeight;
+    
+    for (let i = this.sections.length - 1; i >= 0; i--) {
+      const section = this.sections[i];
+      const rect = section.element.getBoundingClientRect();
+      const top = rect.top + scrollY;
+      
+      if (scrollY >= top - windowHeight / 3) {
+        this.setActiveSection(section.id);
+        break;
+      }
+    }
+  }
+
+  setActiveSection(sectionId) {
+    if (this.activeSection === sectionId) return;
+    
+    this.container.querySelectorAll('.tab-item').forEach(tab => {
+      if (tab.dataset.section === sectionId) {
+        tab.classList.add('active');
+      } else {
+        tab.classList.remove('active');
+      }
+    });
+    
+    this.activeSection = sectionId;
   }
 
   scrollToSection(sectionId) {
@@ -85,7 +295,8 @@ class SmartProgressNavigator {
         'biblical-theology': 'theology',
         'application': 'application',
         'messianic': 'crown',
-        'ane-context': 'scroll'
+        'ane-context': 'scroll',
+        'questions': 'questions'
       };
       
       this.sections.push({
@@ -193,7 +404,6 @@ class SmartProgressNavigator {
       this.sections.forEach((section, index) => {
         const sectionTop = section.top;
         const sectionBottom = sectionTop + section.height;
-        const sectionMiddle = sectionTop + (section.height / 2);
         
         // Check if section is in viewport
         if (scrollY + windowHeight > sectionTop && scrollY < sectionBottom) {
