@@ -14,6 +14,12 @@
   <meta name="book-id" content="[book-id]">
   <meta name="template-version" content="5.8-stable">
 
+  <!-- Mobile Optimizations -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="format-detection" content="telephone=no">
+
   <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="[Character Name] – Biblical Character Profile">
   <meta property="og:description" content="Comprehensive study of [Character Name]: narrative journey, theological significance, and biblical connections.">
@@ -126,7 +132,7 @@
     <h1 id="character-title" class="section-title" 
         data-character-id="[character-id]" 
         data-book="[book-id]">
-      <span class="section-icon">👤</span>
+      <span class="section-icon icon-svg" data-icon="user"></span>
       [Character Name]
       <!-- For OT: Hebrew only -->
       <span class="hebrew-large">[Hebrew Name]</span>
@@ -284,7 +290,7 @@
          id="major-chiasm"
          data-section-priority="4">
       <h3 class="chiasm-title">
-        <span class="section-icon">🔍</span>
+        <span class="section-icon icon-svg" data-icon="search"></span>
         Chiastic Structure of [Passage Reference]
       </h3>
       <div class="chiasm-structure glass-textured">
@@ -858,21 +864,30 @@
 
 <!-- Icon System Definition (before other scripts) -->
 <script>
-  // Define SVG Icon Library first
-  window.SVGIconLibrary = {
-    // Navigation icons
-    overview: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="15" x2="15" y2="15"/></svg>',
-    narrative: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
-    literary: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
-    themes: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
-    theology: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
-    application: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-    questions: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
-    crown: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6l4 6 5-4-2 10H5L3 8l5 4 4-6z"/></svg>',
-    scroll: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>'
+  // Simplified icon system - SVG icons are now embedded in CSS
+  window.getIcon = function(name, options) {
+    options = options || {};
+    var size = options.size || '';
+    var sizeClass = '';
+    
+    if (size) {
+      if (size <= 16) sizeClass = 'icon-sm';
+      else if (size <= 20) sizeClass = 'icon-md';
+      else if (size <= 24) sizeClass = 'icon-lg';
+      else sizeClass = 'icon-xl';
+    }
+    
+    // Use CSS-embedded SVG icons (defined in global-v3.css)
+    if (window.APP_CONFIG && window.APP_CONFIG.capabilities && window.APP_CONFIG.capabilities.svg !== false) {
+      return '<span class="icon-svg ' + sizeClass + '" data-icon="' + name + '"></span>';
+    }
+    
+    // Emoji fallback only if SVG is explicitly disabled or not supported
+    var emoji = window.EmojiIcons && window.EmojiIcons[name];
+    return emoji || '📄';
   };
   
-  // Emoji fallbacks
+  // Emoji fallbacks (only used when SVG is not supported)
   window.EmojiIcons = {
     overview: '📋',
     narrative: '📖',
@@ -882,15 +897,22 @@
     application: '💡',
     questions: '❓',
     crown: '👑',
-    scroll: '📜'
-  };
-  
-  // Icon getter function
-  window.getIcon = function(name, useSVG = true) {
-    if (useSVG && window.APP_CONFIG.capabilities.svg && window.SVGIconLibrary[name]) {
-      return window.SVGIconLibrary[name];
-    }
-    return window.EmojiIcons[name] || '📄';
+    scroll: '📜',
+    collapse: '⬆️',
+    expand: '⬇️',
+    user: '👤',
+    users: '👥',
+    home: '🏠',
+    search: '🔍',
+    settings: '⚙️',
+    heart: '❤️',
+    star: '⭐',
+    check: '✓',
+    alert: '⚠️',
+    info: 'ℹ️',
+    download: '⬇️',
+    calendar: '📅',
+    clock: '⏰'
   };
 </script>
 
