@@ -12,7 +12,7 @@
   <meta name="profile-type" content="[single-page/multi-page]">
   <meta name="character-id" content="[character-id]">
   <meta name="book-id" content="[book-id]">
-  <meta name="template-version" content="5.8">
+  <meta name="template-version" content="5.8-stable">
 
   <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="[Character Name] – Biblical Character Profile">
@@ -34,33 +34,84 @@
   <link rel="preload" href="/assets/css/global-v3.css" as="style">
   <link rel="preload" href="/assets/js/nav-premium.js" as="script">
   <link rel="preload" href="/assets/js/character-page-v2.js" as="script">
-  
-  <!-- Optional: Preload fonts if using them -->
-  <!-- <link rel="preload" href="https://projectcontext.org/assets/fonts/SBL_Hebrew.woff2" as="font" type="font/woff2" crossorigin> -->
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="/assets/css/global-v3.css">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://projectcontext.org/studies/characters/[book]/[character-name]/">
-  
-  <!-- Inline Critical CSS for instant render -->
-  <style>
-    /* Prevent layout shift */
-    body { opacity: 0; transition: opacity 0.3s ease; }
-    body.loaded { opacity: 1; }
-    .content-section { min-height: 100vh; }
-    .theology-card { min-height: 200px; }
-  </style>
 </head>
 <body class="character-profile [woman-profile]" dir="ltr">
   
+  <!-- Critical initialization - ADD THIS FIRST -->
+  <script>
+    // Critical initialization - runs immediately
+    (function() {
+      'use strict';
+      
+      // 1. Detect capabilities early
+      window.APP_CONFIG = {
+        version: '5.8-stable',
+        character: '[Character Name]',
+        book: '[Book]',
+        capabilities: {
+          touch: 'ontouchstart' in window,
+          ios: /iPhone|iPad|iPod/.test(navigator.userAgent),
+          android: /Android/.test(navigator.userAgent),
+          mobile: window.innerWidth <= 768,
+          svg: !!(document.createElementNS && document.createElementNS('http://www.w3.org/2000/svg','svg').createSVGRect),
+          smoothScroll: 'scrollBehavior' in document.documentElement.style,
+          intersectionObserver: 'IntersectionObserver' in window
+        }
+      };
+      
+      // 2. Set critical styles early to prevent FOUC
+      document.documentElement.className = 'js-enabled';
+      if (window.APP_CONFIG.capabilities.mobile) {
+        document.documentElement.className += ' is-mobile';
+      }
+      if (window.APP_CONFIG.capabilities.ios) {
+        document.documentElement.className += ' is-ios';
+      }
+      
+      // 3. Prevent scroll issues on iOS immediately
+      if (window.APP_CONFIG.capabilities.ios) {
+        document.addEventListener('touchmove', function(e) {
+          if (e.touches.length > 1) e.preventDefault();
+        }, { passive: false });
+      }
+      
+      // 4. Initialize smooth scroll early
+      if (window.APP_CONFIG.capabilities.smoothScroll) {
+        document.documentElement.style.scrollBehavior = 'smooth';
+      }
+      
+      // 5. Create global app namespace
+      window.BiblicalApp = {
+        initialized: false,
+        modules: {},
+        ready: []
+      };
+      
+      // 6. Ready queue system
+      window.BiblicalApp.onReady = function(fn) {
+        if (window.BiblicalApp.initialized) {
+          fn();
+        } else {
+          window.BiblicalApp.ready.push(fn);
+        }
+      };
+    })();
+  </script>
+  
   <!-- Navigation will be inserted here by nav-premium.js -->
-
+  
   <!-- Main Content -->
   <main id="main-content" class="content-section" role="main" aria-label="Biblical character profile">
     
-    <!-- Breadcrumbs -->
+    <!-- ============================================
+         MANDATORY: BREADCRUMBS
+         ============================================ -->
     <nav class="breadcrumbs" aria-label="Breadcrumb">
       <a href="/">Home</a> ›
       <a href="/studies/">Studies</a> ›
@@ -69,6 +120,9 @@
       <span aria-current="page">[Character Name]</span>
     </nav>
 
+    <!-- ============================================
+         MANDATORY: TITLE & METADATA
+         ============================================ -->
     <h1 id="character-title" class="section-title" 
         data-character-id="[character-id]" 
         data-book="[book-id]">
@@ -99,7 +153,9 @@
       <!-- <span class="multi-page-indicator">Multi-Page Study</span> -->
     </div>
 
-    <!-- SECTION 1: OVERVIEW -->
+    <!-- ============================================
+         MANDATORY SECTION 1: OVERVIEW
+         ============================================ -->
     <div class="theology-card glass-premium animate-on-scroll" 
          id="overview" 
          data-section-priority="1">
@@ -127,7 +183,9 @@
       </div>
     </div>
 
-    <!-- SECTION 2: NARRATIVE JOURNEY -->
+    <!-- ============================================
+         MANDATORY SECTION 2: NARRATIVE JOURNEY
+         ============================================ -->
     <div class="theology-card glass-premium animate-on-scroll" 
          id="narrative"
          data-section-priority="2">
@@ -155,7 +213,9 @@
       </div>
     </div>
 
-    <!-- SECTION 3: LITERARY CONTEXT & STRUCTURE -->
+    <!-- ============================================
+         MANDATORY SECTION 3: LITERARY CONTEXT
+         ============================================ -->
     <div class="theology-card glass-premium animate-on-scroll" 
          id="literary-context"
          data-section-priority="3">
@@ -180,7 +240,9 @@
       </div>
     </div>
 
-    <!-- SECTION 4: THEOLOGICAL THEMES -->
+    <!-- ============================================
+         MANDATORY SECTION 4: THEOLOGICAL THEMES
+         ============================================ -->
     <div class="theology-card glass-premium animate-on-scroll" 
          id="themes"
          data-section-priority="3">
@@ -213,7 +275,10 @@
       </div>
     </div>
 
-    <!-- OPTIONAL: MAJOR CHIASTIC STRUCTURE (Include when significant) -->
+    <!-- ============================================
+         OPTIONAL: MAJOR CHIASTIC STRUCTURE
+         Include when significant chiasm exists
+         ============================================ -->
     <!-- 
     <div class="chiasm-card glass-premium animate-on-scroll" 
          id="major-chiasm"
@@ -240,7 +305,10 @@
     </div>
     -->
 
-    <!-- OPTIONAL: LITERARY ARTISTRY & NARRATIVE TECHNIQUES (For complex literary analysis) -->
+    <!-- ============================================
+         OPTIONAL: LITERARY ARTISTRY
+         For complex literary analysis
+         ============================================ -->
     <!--
     <div class="theology-card glass-premium animate-on-scroll" 
          id="literary-artistry"
@@ -302,7 +370,10 @@
     </div>
     -->
 
-    <!-- OPTIONAL: GENDER DYNAMICS & POWER (For female characters with complex power structures) -->
+    <!-- ============================================
+         OPTIONAL: GENDER DYNAMICS & POWER
+         For female characters with complex power structures
+         ============================================ -->
     <!--
     <div class="theology-card glass-premium animate-on-scroll" 
          id="gender-dynamics"
@@ -337,7 +408,9 @@
     </div>
     -->
 
-    <!-- SECTION 5: ANE CONTEXT -->
+    <!-- ============================================
+         MANDATORY SECTION 5: ANE CONTEXT
+         ============================================ -->
     <div class="theology-card glass-premium animate-on-scroll" 
          id="ane-context"
          data-section-priority="4">
@@ -362,9 +435,10 @@
       </div>
     </div>
 
-    <!-- ENHANCEMENT SECTIONS - Add as appropriate for character complexity -->
-    
-    <!-- OPTIONAL: EDEN CONNECTIONS & NEW CREATION (For characters with clear creation parallels) -->
+    <!-- ============================================
+         OPTIONAL: EDEN CONNECTIONS & NEW CREATION
+         For characters with clear creation parallels
+         ============================================ -->
     <!--
     <div class="theology-card glass-premium animate-on-scroll" 
          id="eden"
@@ -387,7 +461,10 @@
     </div>
     -->
 
-    <!-- OPTIONAL: HEBREW/GREEK WORDPLAY (For significant linguistic patterns) -->
+    <!-- ============================================
+         OPTIONAL: HEBREW/GREEK WORDPLAY
+         For significant linguistic patterns
+         ============================================ -->
     <!--
     <div class="theology-card glass-premium animate-on-scroll" 
          id="wordplay"
@@ -412,7 +489,10 @@
     </div>
     -->
 
-    <!-- OPTIONAL: COVENANT CONTEXT (For covenant participants) -->
+    <!-- ============================================
+         OPTIONAL: COVENANT CONTEXT
+         For covenant participants
+         ============================================ -->
     <!--
     <div class="theology-card glass-premium animate-on-scroll" 
          id="covenant"
@@ -445,7 +525,10 @@
     </div>
     -->
 
-    <!-- OPTIONAL: UNIQUE ASPECTS (For distinctive features) -->
+    <!-- ============================================
+         OPTIONAL: UNIQUE ASPECTS
+         For distinctive features
+         ============================================ -->
     <!--
     <div class="theology-card glass-premium animate-on-scroll" 
          id="unique"
@@ -466,7 +549,9 @@
     </div>
     -->
 
-    <!-- SECTION 6: BIBLICAL THEOLOGY -->
+    <!-- ============================================
+         MANDATORY SECTION 6: BIBLICAL THEOLOGY
+         ============================================ -->
     <div class="theology-card glass-premium animate-on-scroll" 
          id="biblical-theology"
          data-section-priority="2">
@@ -495,7 +580,9 @@
       </div>
     </div>
 
-    <!-- SECTION 7: MESSIANIC TRAJECTORY -->
+    <!-- ============================================
+         MANDATORY SECTION 7: MESSIANIC TRAJECTORY
+         ============================================ -->
     <div class="theology-card glass-premium animate-on-scroll" 
          id="messianic"
          data-section-priority="3">
@@ -532,7 +619,9 @@
       </div>
     </div>
 
-    <!-- BIBLICAL CONNECTIONS TABLES -->
+    <!-- ============================================
+         MANDATORY: BIBLICAL CONNECTIONS TABLES
+         ============================================ -->
     <div class="grid-2" id="intertext">
       <div class="theology-card glass-premium animate-on-scroll">
         <h3>Old Testament Intertext</h3>
@@ -573,7 +662,9 @@
       </div>
     </div>
 
-    <!-- Related Profiles -->
+    <!-- ============================================
+         MANDATORY: RELATED PROFILES
+         ============================================ -->
     <div class="theology-card glass-premium animate-on-scroll">
       <h3>Related Profiles & Studies</h3>
       <p>
@@ -588,7 +679,10 @@
       </p>
     </div>
 
-    <!-- OPTIONAL: SECOND TEMPLE LITERATURE (Only when NT references use Jewish traditions) -->
+    <!-- ============================================
+         OPTIONAL: SECOND TEMPLE LITERATURE
+         Only when NT references use Jewish traditions
+         ============================================ -->
     <!--
     <div class="theology-card glass-premium animate-on-scroll" 
          id="second-temple"
@@ -628,7 +722,10 @@
     </div>
     -->
 
-    <!-- OPTIONAL: SONGS & POETRY (For biblical women with songs) -->
+    <!-- ============================================
+         OPTIONAL: SONGS & POETRY
+         For biblical women with songs
+         ============================================ -->
     <!--
     <div class="theology-card glass-premium animate-on-scroll" 
          id="songs"
@@ -646,7 +743,9 @@
     </div>
     -->
 
-    <!-- APPLICATION -->
+    <!-- ============================================
+         MANDATORY: APPLICATION
+         ============================================ -->
     <div class="theology-card glass-premium animate-on-scroll" 
          id="application"
          data-section-priority="2">
@@ -677,7 +776,9 @@
 
     <hr class="section-divider" />
 
-    <!-- STUDY QUESTIONS -->
+    <!-- ============================================
+         MANDATORY: STUDY QUESTIONS
+         ============================================ -->
     <div class="theology-card glass-premium animate-on-scroll" 
          id="questions"
          data-section-priority="3">
@@ -694,7 +795,9 @@
       </ol>
     </div>
 
-    <!-- ENHANCED BIBLIOGRAPHY -->
+    <!-- ============================================
+         MANDATORY: BIBLIOGRAPHY
+         ============================================ -->
     <details class="bibliography-section enhanced glass-premium">
       <summary>
         <div class="bibliography-header">
@@ -750,36 +853,161 @@
   <!-- Smart progress navigator will be auto-generated for desktop -->
 
   <!-- ======================================
-       JAVASCRIPT - Premium System v5.8
-       ====================================== -->
+     JAVASCRIPT - Optimized Loading Strategy v5.8
+     ====================================== -->
+
+<!-- Icon System Definition (before other scripts) -->
+<script>
+  // Define SVG Icon Library first
+  window.SVGIconLibrary = {
+    // Navigation icons
+    overview: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="15" x2="15" y2="15"/></svg>',
+    narrative: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+    literary: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+    themes: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+    theology: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+    application: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+    questions: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+    crown: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6l4 6 5-4-2 10H5L3 8l5 4 4-6z"/></svg>',
+    scroll: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>'
+  };
   
-  <!-- Premium Navigation -->
-  <script src="/assets/js/nav-premium.js"></script>
-  <script>
-    // Initialize premium navigation
-    window.initPremiumNav({
-      currentPage: 'characters',
-      hubType: 'characters',
-      enableHaptics: true,
-      enableMagnetic: true,
-      enableGestures: true
+  // Emoji fallbacks
+  window.EmojiIcons = {
+    overview: '📋',
+    narrative: '📖',
+    literary: '✍️',
+    themes: '🎯',
+    theology: '⛪',
+    application: '💡',
+    questions: '❓',
+    crown: '👑',
+    scroll: '📜'
+  };
+  
+  // Icon getter function
+  window.getIcon = function(name, useSVG = true) {
+    if (useSVG && window.APP_CONFIG.capabilities.svg && window.SVGIconLibrary[name]) {
+      return window.SVGIconLibrary[name];
+    }
+    return window.EmojiIcons[name] || '📄';
+  };
+</script>
+
+<!-- External Scripts with Proper Loading Order -->
+<script src="/assets/js/nav-premium.js" defer></script>
+<script src="/assets/js/character-page-v2.js" defer></script>
+
+<!-- Main Initialization -->
+<script>
+  // Main initialization function
+  function initializePage() {
+    'use strict';
+    
+    console.log('Initializing page with config:', window.APP_CONFIG);
+    
+    // 1. Initialize navigation
+    if (typeof window.initPremiumNav === 'function') {
+      window.initPremiumNav({
+        currentPage: 'characters',
+        hubType: 'characters',
+        enableHaptics: true,
+        enableMagnetic: true,
+        enableGestures: true,
+        iconSystem: window.getIcon
+      });
+      console.log('✓ Navigation initialized');
+    }
+    
+    // 2. Initialize timeline animations
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    timelineItems.forEach((item, index) => {
+      item.style.setProperty('--index', index);
     });
-  </script>
-
-  <!-- Character Page Premium Functionality -->
-  <script src="/assets/js/character-page-v2.js" defer></script>
-
-  <!-- Page initialization -->
-  <script>
-    // Show page when ready
-    window.addEventListener('load', () => {
-      document.body.classList.add('loaded');
+    console.log('✓ Timeline animations setup');
+    
+    // 3. Setup mobile optimizations
+    if (window.APP_CONFIG.capabilities.mobile) {
+      const checkTabs = () => {
+        const tabs = document.querySelector('.mobile-section-tabs');
+        if (tabs && window.innerWidth <= 768) {
+          tabs.style.display = 'flex';
+          tabs.style.position = 'fixed';
+          tabs.style.bottom = '0';
+          tabs.style.zIndex = '200';
+        }
+      };
       
-      // Log initialization
-      console.log('Template Version: 5.8 Premium');
-      console.log('Character: [Character Name]');
-      console.log('Book: [Book]');
-    });
-  </script>
+      checkTabs();
+      window.addEventListener('resize', checkTabs);
+      console.log('✓ Mobile optimizations active');
+      
+      if (window.APP_CONFIG.capabilities.ios) {
+        window.addEventListener('orientationchange', function() {
+          setTimeout(function() {
+            window.scrollTo(0, window.scrollY + 1);
+            window.scrollTo(0, window.scrollY - 1);
+          }, 100);
+        });
+        console.log('✓ iOS fixes applied');
+      }
+    }
+    
+    // 4. Setup scroll animations
+    if (window.APP_CONFIG.capabilities.intersectionObserver) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      });
+      
+      document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        observer.observe(el);
+      });
+      
+      console.log('✓ Scroll animations initialized');
+    } else {
+      // Fallback: show all immediately
+      document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        el.classList.add('visible');
+      });
+    }
+    
+    // 5. Mark as initialized
+    window.BiblicalApp.initialized = true;
+    window.BiblicalApp.ready.forEach(fn => fn());
+    window.BiblicalApp.ready = [];
+    
+    console.log('✅ Page initialization complete');
+  }
+  
+  // Wait for DOM ready, then initialize
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializePage);
+  } else {
+    initializePage();
+  }
+</script>
+
+<!-- Error Monitoring -->
+<script>
+  window.addEventListener('error', function(e) {
+    console.error('Page error:', e);
+  });
+  
+  window.addEventListener('load', function() {
+    if (window.performance && window.performance.timing) {
+      const perfData = window.performance.timing;
+      const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
+      console.log(`⏱️ Page load time: ${pageLoadTime}ms`);
+    }
+  });
+</script>
 </body>
 </html>
