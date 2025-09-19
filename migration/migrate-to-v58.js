@@ -1,18 +1,8 @@
 /**
- * TEMPLATE MIGRATION SCRIPT: v5.4-5.7 to v5.8
- * Path: /migration/migrate-to-v58.js
+ * TEMPLATE MIGRATION SCRIPT: v5.4-5.7 to v5.8 (IMPROVED)
+ * Path: /migration/migrate-to-v58-improved.js
  * Purpose: Safely migrate biblical character templates to premium architecture
- * 
- * USAGE:
- * 1. npm install chalk glob fs-extra
- * 2. node migrate-to-v58.js [options]
- * 
- * OPTIONS:
- * --test           Run in test mode (no changes)
- * --single [file]  Migrate single file only
- * --folder [path]  Migrate specific folder
- * --rollback       Restore from backups
- * --force          Skip confirmation prompts
+ * Version: 2.0.0 - Handles real-world HTML variations better
  */
 
 const fs = require('fs-extra');
@@ -32,7 +22,8 @@ const CONFIG = {
     '**/studies/characters/**/*.html',
     '**/studies/women/**/*.html',
     '!**/*backup*.html',
-    '!**/*test*.html'
+    '!**/*test*.html',
+    '!**/*template*.html'
   ],
   
   // Section priority mapping
@@ -135,17 +126,27 @@ function detectVersion(html) {
 function extractMetadata(html) {
   const metadata = {};
   
-  // Extract character name
+  // Extract character name from title
   const titleMatch = html.match(/<title>([^–]+).*?<\/title>/);
   if (titleMatch) metadata.characterName = titleMatch[1].trim();
+  
+  // Extract book name from title
+  const bookMatch = html.match(/<title>[^|]+\|\s*([^<]+)<\/title>/);
+  if (bookMatch) metadata.bookName = bookMatch[1].trim();
   
   // Extract character ID
   const idMatch = html.match(/data-character-id="([^"]+)"/);
   if (idMatch) metadata.characterId = idMatch[1];
+  else if (html.match(/name="character-id" content="([^"]+)"/)) {
+    metadata.characterId = html.match(/name="character-id" content="([^"]+)"/)[1];
+  }
   
-  // Extract book
-  const bookMatch = html.match(/data-book="([^"]+)"/);
-  if (bookMatch) metadata.book = bookMatch[1];
+  // Extract book ID
+  const bookIdMatch = html.match(/data-book="([^"]+)"/);
+  if (bookIdMatch) metadata.book = bookIdMatch[1];
+  else if (html.match(/name="book-id" content="([^"]+)"/)) {
+    metadata.book = html.match(/name="book-id" content="([^"]+)"/)[1];
+  }
   
   // Extract gender
   const genderMatch = html.match(/name="character-gender" content="([^"]+)"/);
@@ -155,11 +156,157 @@ function extractMetadata(html) {
   const pageMatch = html.match(/name="profile-type" content="([^"]+)"/);
   if (pageMatch) metadata.profileType = pageMatch[1];
   
+  // Extract body classes
+  const bodyMatch = html.match(/<body[^>]+class="([^"]+)"/);
+  if (bodyMatch) metadata.bodyClasses = bodyMatch[1];
+  
   return metadata;
 }
 
 /**
- * Main migration function
+ * Extract main content sections preserving structure
+ */
+function extractMainContent(html) {
+  // Find main content area
+  const mainStart = html.indexOf('<main');
+  const mainEnd = html.indexOf('</main>') + '</main>'.length;
+  
+  if (mainStart === -1 || mainEnd === -1) {
+    return null;
+  }
+  
+  let mainContent = html.substring(mainStart, mainEnd);
+  
+  // Extract just the inner content (between main tags)
+  const innerMatch = mainContent.match(/<main[^>]*>([\s\S]*)<\/main>/);
+  if (innerMatch) {
+    return innerMatch[1].trim();
+  }
+  
+  return null;
+}
+
+/**
+ * Clean and enhance content sections for v5.8
+ */
+function enhanceContent(content, metadata) {
+  let enhanced = content;
+  
+  // Remove any hardcoded navigation (old style)
+  enhanced = enhanced.replace(/<nav id="main-nav"[\s\S]*?<\/nav>/gi, '');
+  
+  // Remove quick navigation sidebar
+  enhanced = enhanced.replace(/<div class="quick-nav-sidebar"[\s\S]*?<\/div>\s*<!-- End quick nav -->/gi, '');
+  enhanced = enhanced.replace(/<div class="quick-nav-sidebar"[\s\S]*?(?=<main|<div class="content-section")/gi, '');
+  
+  // Remove old inline styles
+  enhanced = enhanced.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
+  
+  // Add glass-premium class to theology cards
+  enhanced = enhanced.replace(
+    /class="theology-card(?![^"]*glass-premium)([^"]*)"/g,
+    'class="theology-card glass-premium$1"'
+  );
+  
+  // Ensure animate-on-scroll is present
+  enhanced = enhanced.replace(
+    /class="theology-card glass-premium(?![^"]*animate-on-scroll)([^"]*)"/g,
+    'class="theology-card glass-premium animate-on-scroll$1"'
+  );
+  
+  // Add hover-lift to panels
+  enhanced = enhanced.replace(
+    /class="panel(?![^"]*hover-lift)([^"]*)"/g,
+    'class="panel hover-lift$1"'
+  );
+  
+  // Update cross-ref links to btn btn-glass
+  enhanced = enhanced.replace(
+    /class="cross-ref"/g,
+    'class="btn btn-glass"'
+  );
+  
+  // Add data-section-priority to sections
+  Object.entries(CONFIG.sectionPriorities).forEach(([id, priority]) => {
+    // Multiple patterns to catch variations
+    const patterns = [
+      new RegExp(`id="${id}"(?![^>]*data-section-priority)`, 'g'),
+      new RegExp(`id='${id}'(?![^>]*data-section-priority)`, 'g'),
+      new RegExp(`id=${id}(?![^>]*data-section-priority)`, 'g')
+    ];
+    
+    patterns.forEach(regex => {
+      enhanced = enhanced.replace(regex, (match) => {
+        return `${match} data-section-priority="${priority}"`;
+      });
+    });
+  });
+  
+  // Add stagger-children class to grids
+  enhanced = enhanced.replace(
+    /class="grid-3(?![^"]*stagger-children)([^"]*)"/g,
+    'class="grid-3 stagger-children$1"'
+  );
+  
+  // Add card-3d effect to certain panels in theme grids
+  const themeSection = enhanced.match(/<div[^>]*id="themes"[^>]*>[\s\S]*?(?=<div[^>]*id=|$)/);
+  if (themeSection) {
+    let updatedTheme = themeSection[0].replace(
+      /class="panel hover-lift(?![^"]*card-3d)([^"]*)"/g,
+      'class="panel hover-lift card-3d$1"'
+    );
+    enhanced = enhanced.replace(themeSection[0], updatedTheme);
+  }
+  
+  // Add glass-textured to certain panels
+  enhanced = enhanced.replace(
+    /class="panel(?![^"]*glass-textured)([^"]*)"[^>]*>\s*<h4>[🌍🍎]/g,
+    (match) => match.replace('class="panel', 'class="panel glass-textured')
+  );
+  
+  return enhanced;
+}
+
+/**
+ * Build v5.8 page from template
+ */
+function buildFromTemplate(templatePath, metadata, content) {
+  // Load the v5.8 template
+  let template = fs.readFileSync(templatePath || path.join(__dirname, 'template-v5.8-improved.html'), 'utf8');
+  
+  // Prepare replacements
+  const replacements = {
+    '{{CHARACTER_NAME}}': metadata.characterName || '[Character Name]',
+    '{{BOOK_NAME}}': metadata.bookName || '[Book]',
+    '{{META_DESCRIPTION}}': metadata.description || `Comprehensive profile of ${metadata.characterName}`,
+    '{{GENDER}}': metadata.gender || 'unknown',
+    '{{PROFILE_TYPE}}': metadata.profileType || 'single-page',
+    '{{CHARACTER_ID}}': metadata.characterId || 'character-id',
+    '{{BOOK_ID}}': metadata.book || 'book-id',
+    '{{OG_DESCRIPTION}}': `Comprehensive study of ${metadata.characterName}`,
+    '{{OG_URL}}': metadata.url || '#',
+    '{{OG_IMAGE}}': metadata.image || '/assets/images/og-default.jpg',
+    '{{TWITTER_DESCRIPTION}}': `Explore the narrative, theology, and significance of ${metadata.characterName}`,
+    '{{CANONICAL_URL}}': metadata.url || '#',
+    '{{BODY_CLASSES}}': metadata.bodyClasses || 'character-profile',
+    '{{NAV_CURRENT}}': metadata.characterId || 'characters',
+    '{{NAV_HUB}}': metadata.gender === 'female' ? 'women' : 'characters',
+    '{{MAIN_CONTENT}}': content,
+    '{{HEBREW_FONT_PRELOAD}}': metadata.gender === 'female' || metadata.book?.includes('samuel') ? 
+      '<link rel="preload" href="https://projectcontext.org/assets/fonts/SBL_Hebrew.woff2" as="font" type="font/woff2" crossorigin>' : 
+      '<!-- No Hebrew font needed -->'
+  };
+  
+  // Replace all placeholders
+  Object.entries(replacements).forEach(([placeholder, value]) => {
+    template = template.replace(new RegExp(placeholder, 'g'), value);
+  });
+  
+  return template;
+}
+
+/**
+ * Main migration function (IMPROVED)
  */
 function migrateTemplate(filePath, options = {}) {
   const fileName = path.basename(filePath);
@@ -190,6 +337,14 @@ function migrateTemplate(filePath, options = {}) {
     const metadata = extractMetadata(html);
     log.verbose(`Character: ${metadata.characterName || 'unknown'}`);
     
+    // Extract main content
+    const mainContent = extractMainContent(html);
+    if (!mainContent) {
+      log.error(`Could not extract main content from ${fileName}`);
+      stats.errors++;
+      return { status: 'error', reason: 'no main content found' };
+    }
+    
     // Create backup
     if (!CONFIG.testMode) {
       const backupPath = filePath.replace('.html', `${CONFIG.backupSuffix}.html`);
@@ -198,190 +353,30 @@ function migrateTemplate(filePath, options = {}) {
       log.verbose(`Backup created: ${path.basename(backupPath)}`);
     }
     
-    // ========================================
-    // MIGRATION STEPS
-    // ========================================
+    // Enhance content for v5.8
+    const enhancedContent = enhanceContent(mainContent, metadata);
     
-    // Step 1: Update CSS file reference
-    html = html.replace(
-      /<link rel="stylesheet" href="[^"]*global-v2\.css[^"]*">/g,
-      '<link rel="stylesheet" href="/assets/css/global-v3.css">'
-    );
-    log.verbose('Updated CSS reference');
-    
-    // Step 2: Update template version meta tag
-    html = html.replace(
-      /name="template-version" content="[^"]+"/g,
-      'name="template-version" content="5.8"'
-    );
-    
-    // If no template version exists, add it
-    if (!html.includes('name="template-version"')) {
-      html = html.replace(
-        '</title>',
-        '</title>\n  <meta name="template-version" content="5.8">'
-      );
-    }
-    
-    // Step 3: Add viewport and theme-color if missing
-    if (!html.includes('viewport-fit=cover')) {
-      html = html.replace(
-        'name="viewport" content="width=device-width, initial-scale=1"',
-        'name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"'
-      );
-    }
-    
-    if (!html.includes('name="theme-color"')) {
-      html = html.replace(
-        '<meta name="viewport"',
-        '<meta name="theme-color" content="#7209b7">\n  <meta name="viewport"'
-      );
-    }
-    
-    // Step 4: Remove old navigation component import
-    html = html.replace(
-      /<script type="module">[\s\S]*?import\s+NavigationComponent[\s\S]*?<\/script>/gi,
-      ''
-    );
-    
-    html = html.replace(
-      /<script type="module">[\s\S]*?import\s+.*?nav-component\.js[\s\S]*?<\/script>/gi,
-      ''
-    );
-    log.verbose('Removed old navigation imports');
-    
-    // Step 5: Remove old JavaScript files
-    const oldScripts = [
-      'character-page.js',
-      'mobile-menu.js',
-      'nav-component.js'
-    ];
-    
-    oldScripts.forEach(script => {
-      const regex = new RegExp(`<script[^>]*src="[^"]*${script}"[^>]*>\\s*</script>`, 'gi');
-      html = html.replace(regex, '');
-    });
-    log.verbose('Removed old JavaScript files');
-    
-    // Step 6: Find the right place to insert new scripts (before </body>)
-    const bodyCloseIndex = html.lastIndexOf('</body>');
-    if (bodyCloseIndex === -1) {
-      throw new Error('Could not find </body> tag');
-    }
-    
-    // Build new script section
-    const currentPage = metadata.characterId || 'characters';
-    const hubType = metadata.gender === 'female' ? 'women' : 'characters';
-    
-    const newScripts = `
-  <!-- ======================================
-       JAVASCRIPT - Premium System v5.8
-       ====================================== -->
-  
-  <!-- Premium Navigation -->
-  <script src="/assets/js/nav-premium.js"></script>
-  <script>
-    // Initialize premium navigation
-    window.initPremiumNav({
-      currentPage: '${currentPage}',
-      hubType: '${hubType}',
-      enableHaptics: true,
-      enableMagnetic: true,
-      enableGestures: true
-    });
-  </script>
-
-  <!-- Character Page Premium Functionality -->
-  <script src="/assets/js/character-page-v2.js" defer></script>
-
-  <!-- Page initialization -->
-  <script>
-    // Show page when ready
-    window.addEventListener('load', () => {
-      document.body.classList.add('loaded');
-      
-      // Log initialization
-      console.log('Template Version: 5.8 Premium');
-      console.log('Character: ${metadata.characterName || '[Character Name]'}');
-      console.log('Book: ${metadata.book || '[Book]'}');
-    });
-  </script>
-`;
-    
-    // Insert new scripts before </body>
-    html = html.substring(0, bodyCloseIndex) + newScripts + '\n' + html.substring(bodyCloseIndex);
-    
-    // Step 7: Add data-section-priority to sections
-    Object.entries(CONFIG.sectionPriorities).forEach(([id, priority]) => {
-      // Pattern 1: id="section-name"
-      const regex1 = new RegExp(`id="${id}"(?![^>]*data-section-priority)`, 'g');
-      html = html.replace(regex1, `id="${id}" data-section-priority="${priority}"`);
-      
-      // Pattern 2: id='section-name'
-      const regex2 = new RegExp(`id='${id}'(?![^>]*data-section-priority)`, 'g');
-      html = html.replace(regex2, `id='${id}' data-section-priority="${priority}"`);
-    });
-    log.verbose('Added section priorities');
-    
-    // Step 8: Add glass-premium class to theology cards
-    html = html.replace(
-      /class="theology-card(?![^"]*glass-premium)/g,
-      'class="theology-card glass-premium'
-    );
-    
-    // Also add animate-on-scroll if missing
-    html = html.replace(
-      /class="theology-card glass-premium(?![^"]*animate-on-scroll)/g,
-      'class="theology-card glass-premium animate-on-scroll'
-    );
-    log.verbose('Added premium glass classes');
-    
-    // Step 9: Update buttons to use new classes
-    html = html.replace(
-      /class="cross-ref"/g,
-      'class="btn btn-glass"'
-    );
-    
-    // Step 10: Add hover effects to panels
-    html = html.replace(
-      /class="panel(?![^"]*hover-lift)/g,
-      'class="panel hover-lift'
-    );
-    
-    // Step 11: Remove old quick navigation sidebar HTML if present
-    html = html.replace(
-      /<div class="quick-nav-sidebar"[\s\S]*?<\/div>\s*<!-- End quick nav -->/gi,
-      ''
-    );
-    
-    // Step 12: Clean up extra blank lines
-    html = html.replace(/\n\s*\n\s*\n/g, '\n\n');
-    
-    // Step 13: Update preload directives
-    const hasPreload = html.includes('rel="preload"');
-    if (!hasPreload) {
-      html = html.replace(
-        '<link rel="stylesheet" href="/assets/css/global-v3.css">',
-        `<!-- Preload Critical Resources -->
-  <link rel="preload" href="/assets/css/global-v3.css" as="style">
-  <link rel="preload" href="/assets/js/nav-premium.js" as="script">
-  <link rel="preload" href="/assets/js/character-page-v2.js" as="script">
-  
-  <!-- Stylesheets -->
-  <link rel="stylesheet" href="/assets/css/global-v3.css">`
-      );
-    }
+    // Build new page from template
+    const newHtml = buildFromTemplate(null, metadata, enhancedContent);
     
     // Save migrated file
     if (!CONFIG.testMode) {
-      fs.writeFileSync(filePath, html);
+      fs.writeFileSync(filePath, newHtml);
       log.success(`Migrated: ${fileName}`);
     } else {
       log.info(`TEST MODE - Would migrate: ${fileName}`);
+      
+      // In test mode, show what would change
+      if (CONFIG.verbose) {
+        log.verbose('Extracted metadata:');
+        Object.entries(metadata).forEach(([key, value]) => {
+          log.verbose(`  ${key}: ${value}`);
+        });
+      }
     }
     
     stats.migrated++;
-    return { status: 'migrated', changes: html !== originalHtml };
+    return { status: 'migrated', metadata };
     
   } catch (error) {
     log.error(`Failed to migrate ${fileName}: ${error.message}`);
@@ -423,43 +418,11 @@ function rollbackMigration(folderPath) {
 }
 
 /**
- * Clean up backup files
- */
-function cleanupBackups(folderPath) {
-  const backupFiles = glob.sync(`${folderPath}/**/*${CONFIG.backupSuffix}.html`);
-  
-  if (backupFiles.length === 0) {
-    log.info('No backup files to clean');
-    return;
-  }
-  
-  log.warning(`Found ${backupFiles.length} backup files`);
-  
-  const readline = require('readline').createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-  
-  readline.question('Delete all backup files? (yes/no): ', (answer) => {
-    if (answer.toLowerCase() === 'yes') {
-      backupFiles.forEach(file => {
-        fs.unlinkSync(file);
-        log.verbose(`Deleted: ${path.basename(file)}`);
-      });
-      log.success('All backup files deleted');
-    } else {
-      log.info('Backup files preserved');
-    }
-    readline.close();
-  });
-}
-
-/**
  * Main execution
  */
 async function main() {
   console.log(chalk.cyan('\n╔══════════════════════════════════════════╗'));
-  console.log(chalk.cyan('║   Template Migration Tool v5.8          ║'));
+  console.log(chalk.cyan('║   Template Migration Tool v5.8 IMPROVED ║'));
   console.log(chalk.cyan('╚══════════════════════════════════════════╝\n'));
   
   // Parse command line arguments
@@ -483,12 +446,6 @@ async function main() {
   // Handle rollback
   if (flags.rollback) {
     rollbackMigration(flags.folder);
-    return;
-  }
-  
-  // Handle cleanup
-  if (flags.cleanup) {
-    cleanupBackups(flags.folder);
     return;
   }
   
@@ -555,13 +512,13 @@ async function main() {
   
   if (CONFIG.testMode) {
     console.log('\n' + chalk.yellow('TEST MODE - No files were actually modified'));
+    console.log(chalk.gray('Run without --test flag to perform actual migration'));
   }
   
   if (stats.migrated > 0 && !CONFIG.testMode) {
     console.log('\n' + chalk.green('✨ Migration successful!'));
     console.log(chalk.gray('Backup files have been created with suffix: ' + CONFIG.backupSuffix));
     console.log(chalk.gray('Run with --rollback to restore from backups'));
-    console.log(chalk.gray('Run with --cleanup to remove backup files'));
   }
 }
 
