@@ -2,7 +2,7 @@
  * HYBRID MIGRATION SCRIPT: v5.4-5.7 to v5.8
  * Path: /migration/migrate-to-v58.js
  * Purpose: Properly migrate biblical character templates to v5.8
- * Version: 4.0.0 - HYBRID VERSION
+ * Version: 4.1.0 - HYBRID VERSION (FIXED)
  */
 
 const fs = require('fs-extra');
@@ -84,6 +84,29 @@ function isAlreadyMigrated(html) {
 }
 
 /**
+ * Clean HTML output - removes wrapper html/body tags from sections
+ */
+function cleanSectionHtml(html) {
+  if (!html) return '';
+  
+  // Load the HTML with cheerio
+  const $ = cheerio.load(html);
+  
+  // If the content is wrapped in html/body tags, extract just the inner content
+  if ($('html').length > 0 || $('body').length > 0) {
+    // Get the actual content without the wrapper
+    const actualContent = $('body').children().length > 0 
+      ? $('body').html() 
+      : $('html').children().filter((i, el) => el.name !== 'head').html() || $.html();
+    
+    return actualContent || $.html();
+  }
+  
+  // Return the HTML of the root element without wrapper
+  return $.html();
+}
+
+/**
  * HYBRID EXTRACTION - Captures all content types
  */
 function extractContent($) {
@@ -141,7 +164,7 @@ function extractContent($) {
   }
   
   // ========================================
-  // PHASE 2: Extract known sections
+  // PHASE 2: Extract known sections (FIX: properly extract outer HTML)
   // ========================================
   
   const sectionIds = [
@@ -169,7 +192,9 @@ function extractContent($) {
   $('.theology-card, .animate-on-scroll').each(function() {
     const id = $(this).attr('id');
     if (id && !contentData.sections[id]) {
-      contentData.sections[id] = $.html(this);
+      // Get the outer HTML properly
+      const element = $(this).clone();
+      contentData.sections[id] = $('<div>').append(element).html();
       log.verbose(`Extracted section: ${id}`);
     }
   });
@@ -179,14 +204,8 @@ function extractContent($) {
     if (!contentData.sections[id]) {
       const section = $(`#${id}`);
       if (section.length) {
-        if (section.hasClass('theology-card') || section.hasClass('section')) {
-          contentData.sections[id] = $.html(section);
-        } else {
-          const parent = section.closest('.theology-card, .section, div[id]');
-          if (parent.length) {
-            contentData.sections[id] = $.html(parent);
-          }
-        }
+        const element = section.clone();
+        contentData.sections[id] = $('<div>').append(element).html();
         log.verbose(`Extracted additional section: ${id}`);
       }
     }
@@ -199,21 +218,24 @@ function extractContent($) {
   // 1. Character Title Section (h2 with character name)
   const characterTitle = $('h2#character-title, .section-title').first();
   if (characterTitle.length && !contentData.sections['character-title']) {
-    contentData.sections['character-title'] = $.html(characterTitle);
+    const element = characterTitle.clone();
+    contentData.sections['character-title'] = $('<div>').append(element).html();
     log.verbose('Extracted character title');
   }
   
   // 2. Character Type Badge
-  const characterBadge = $('.character-type-badge');
+  const characterBadge = $('.character-type-badge').first();
   if (characterBadge.length) {
-    contentData.specialSections['character-badge'] = $.html(characterBadge);
+    const element = characterBadge.clone();
+    contentData.specialSections['character-badge'] = $('<div>').append(element).html();
     log.verbose('Extracted character type badge');
   }
   
   // 3. Complexity Indicator
-  const complexityIndicator = $('.complexity-indicator');
+  const complexityIndicator = $('.complexity-indicator').first();
   if (complexityIndicator.length) {
-    contentData.specialSections['complexity-indicator'] = $.html(complexityIndicator);
+    const element = complexityIndicator.clone();
+    contentData.specialSections['complexity-indicator'] = $('<div>').append(element).html();
     log.verbose('Extracted complexity indicator');
   }
   
@@ -227,7 +249,8 @@ function extractContent($) {
       // This is likely a warning/clarification box
       const heading = $this.find('h4').text();
       if (heading.includes('Textual') || heading.includes('Clarification') || heading.includes('⚠️')) {
-        contentData.specialSections['textual-clarification'] = $.html($this);
+        const element = $this.clone();
+        contentData.specialSections['textual-clarification'] = $('<div>').append(element).html();
         log.verbose('Extracted textual clarification box');
       }
     }
@@ -239,7 +262,8 @@ function extractContent($) {
     const heading = $this.find('h3').text().toLowerCase();
     if ((heading.includes('related') || heading.includes('profiles')) && 
         !contentData.specialSections['related-profiles']) {
-      contentData.specialSections['related-profiles'] = $.html($this);
+      const element = $this.clone();
+      contentData.specialSections['related-profiles'] = $('<div>').append(element).html();
       log.verbose('Extracted related profiles section');
     }
   });
@@ -247,9 +271,10 @@ function extractContent($) {
   // 6. Tables Grid
   const tablesGrid = $('.grid-2').filter(function() {
     return $(this).find('table').length > 0;
-  });
+  }).first();
   if (tablesGrid.length && !contentData.sections['tables']) {
-    contentData.sections['tables'] = $.html(tablesGrid);
+    const element = tablesGrid.clone();
+    contentData.sections['tables'] = $('<div>').append(element).html();
     log.verbose('Extracted tables section');
   }
   
@@ -258,89 +283,22 @@ function extractContent($) {
     const text = $(this).text().toLowerCase();
     const summaryText = $(this).find('summary').text().toLowerCase();
     return text.includes('bibliography') || summaryText.includes('bibliography');
-  });
+  }).first();
   if (bibliography.length && !contentData.sections['bibliography']) {
-    contentData.sections['bibliography'] = $.html(bibliography);
+    const element = bibliography.clone();
+    contentData.sections['bibliography'] = $('<div>').append(element).html();
     log.verbose('Extracted bibliography section');
   }
-  
-  // ========================================
-  // PHASE 4: Capture orphaned content (safety net)
-  // ========================================
-  
-  const capturedElements = new Set();
-  
-  // Mark all already captured elements
-  Object.values(contentData.sections).forEach(html => {
-    const $section = $(html);
-    const id = $section.attr('id');
-    if (id) capturedElements.add(id);
-  });
-  Object.values(contentData.specialSections).forEach(html => {
-    const $section = $(html);
-    const classes = $section.attr('class');
-    if (classes) capturedElements.add(classes);
-  });
-  
-  // Find any direct children of main that weren't captured
-  $('main > *').each(function() {
-    const $this = $(this);
-    const id = $this.attr('id');
-    const classes = $this.attr('class') || '';
-    const tagName = $this.prop('tagName').toLowerCase();
-    
-    // Skip if already captured
-    if (id && capturedElements.has(id)) return;
-    if (classes && capturedElements.has(classes)) return;
-    
-    // Skip navigation elements
-    if (tagName === 'nav' || classes.includes('breadcrumb')) return;
-    if (classes.includes('back-to-top') || classes.includes('skip-link')) return;
-    
-    // Skip empty elements
-    const text = $this.text().trim();
-    if (text.length === 0 && $this.find('*').length === 0) return;
-    
-    // Skip hr elements
-    if (tagName === 'hr') return;
-    
-    // Check if this is a loose paragraph with important content
-    if (tagName === 'p') {
-      const strongText = $this.find('strong').text();
-      if (strongText.includes('Tags:') || strongText.includes('Summary:')) {
-        // This is likely part of the overview section that got separated
-        if (!contentData.sections['overview-extra']) {
-          contentData.sections['overview-extra'] = '';
-        }
-        contentData.sections['overview-extra'] += $.html($this) + '\n';
-        log.verbose('Captured loose overview content');
-        return;
-      }
-    }
-    
-    // Check if this is a loose key-insight div
-    if (classes.includes('key-insight')) {
-      if (!contentData.sections['overview-extra']) {
-        contentData.sections['overview-extra'] = '';
-      }
-      contentData.sections['overview-extra'] += $.html($this) + '\n';
-      log.verbose('Captured loose key-insight');
-      return;
-    }
-    
-    // Capture any other orphaned content
-    const orphanKey = id || classes.split(' ')[0] || `orphan-${tagName}-${Math.random().toString(36).substr(2, 9)}`;
-    contentData.specialSections[orphanKey] = $.html($this);
-    log.verbose(`Captured orphaned content: ${orphanKey.substring(0, 50)}`);
-  });
   
   return contentData;
 }
 
 /**
- * Enhancement function for sections
+ * Enhancement function for sections - cleaned version
  */
 function enhanceSection(sectionHtml, sectionId) {
+  if (!sectionHtml) return '';
+  
   const $ = cheerio.load(sectionHtml);
   const section = $('*').first();
   
@@ -374,68 +332,16 @@ function enhanceSection(sectionHtml, sectionId) {
     section.attr('data-section-priority', priorities[sectionId]);
   }
   
-  // Enhance specific elements within sections
-  
-  // Upgrade panels
-  section.find('.panel').each(function() {
-    const $panel = $(this);
-    if (!$panel.hasClass('hover-lift')) {
-      $panel.addClass('hover-lift');
-    }
-    // Add glass-textured to specific panels
-    const h4Text = $panel.find('h4').text();
-    if (h4Text.includes('🌍') || h4Text.includes('🍎')) {
-      $panel.addClass('glass-textured');
-    }
-  });
-  
-  // Upgrade theme panels to 3D cards
-  if (sectionId === 'themes') {
-    section.find('.panel').each(function() {
-      const $panel = $(this);
-      if (!$panel.hasClass('card-3d')) {
-        $panel.addClass('card-3d');
-      }
-    });
-  }
-  
-  // Upgrade grids with stagger-children
-  section.find('.grid-3').each(function() {
-    const $grid = $(this);
-    if (!$grid.hasClass('stagger-children')) {
-      $grid.addClass('stagger-children');
-    }
-  });
-  
-  // Upgrade tables
-  section.find('table').each(function() {
-    const $table = $(this);
-    if (!$table.hasClass('glass-table')) {
-      $table.addClass('glass-table');
-    }
-  });
-  
-  // Upgrade buttons/links
-  section.find('.cross-ref').each(function() {
-    const $link = $(this);
-    $link.removeClass('cross-ref').addClass('btn btn-glass');
-  });
-  
-  // Add hover-lift to tags
-  section.find('.tag').each(function() {
-    const $tag = $(this);
-    if (!$tag.hasClass('hover-lift')) {
-      $tag.addClass('hover-lift');
-    }
-  });
-  
-  return $.html();
+  // Return clean HTML without wrapper tags
+  return cleanSectionHtml($.html());
 }
 
 /**
- * Enhancement for special sections
+ * Enhancement for special sections - cleaned version
  */
 function enhanceSpecialSection(sectionHtml, type) {
+  if (!sectionHtml) return '';
+  
   const $ = cheerio.load(sectionHtml);
   const section = $('*').first();
   
@@ -468,7 +374,8 @@ function enhanceSpecialSection(sectionHtml, type) {
       break;
   }
   
-  return $.html();
+  // Return clean HTML without wrapper tags
+  return cleanSectionHtml($.html());
 }
 
 /**
@@ -490,7 +397,7 @@ function buildMainContent(contentData) {
   
   // Add character title
   if (contentData.sections['character-title']) {
-    mainContent += enhanceSection(contentData.sections['character-title'], 'character-title') + '\n';
+    mainContent += '\n    ' + enhanceSection(contentData.sections['character-title'], 'character-title') + '\n';
   } else {
     mainContent += `
     <h1 id="character-title" class="section-title" 
@@ -504,21 +411,20 @@ function buildMainContent(contentData) {
   
   // Add special sections AFTER title but BEFORE main content
   if (contentData.specialSections['character-badge']) {
-    mainContent += enhanceSpecialSection(contentData.specialSections['character-badge'], 'badge') + '\n';
+    mainContent += '\n    ' + enhanceSpecialSection(contentData.specialSections['character-badge'], 'badge') + '\n';
   }
   
   if (contentData.specialSections['complexity-indicator']) {
-    mainContent += enhanceSpecialSection(contentData.specialSections['complexity-indicator'], 'complexity') + '\n';
+    mainContent += '\n    ' + enhanceSpecialSection(contentData.specialSections['complexity-indicator'], 'complexity') + '\n';
   }
   
   if (contentData.specialSections['textual-clarification']) {
-    mainContent += enhanceSpecialSection(contentData.specialSections['textual-clarification'], 'warning') + '\n';
+    mainContent += '\n    ' + enhanceSpecialSection(contentData.specialSections['textual-clarification'], 'warning') + '\n';
   }
   
   // Add main sections in proper order
   const sectionOrder = [
     'overview',
-    'overview-extra',  // Any loose overview content
     'narrative',
     'literary-context',
     'themes',
@@ -541,36 +447,22 @@ function buildMainContent(contentData) {
   // Add each section that exists
   sectionOrder.forEach(sectionId => {
     if (contentData.sections[sectionId]) {
-      // Special handling for overview-extra
-      if (sectionId === 'overview-extra') {
-        // Just add it raw, it's already loose content
-        mainContent += contentData.sections[sectionId] + '\n';
-      } else {
-        mainContent += enhanceSection(contentData.sections[sectionId], sectionId) + '\n\n';
+      const enhanced = enhanceSection(contentData.sections[sectionId], sectionId);
+      if (enhanced) {
+        mainContent += '\n    ' + enhanced + '\n';
       }
     }
   });
   
   // Add related profiles before bibliography
   if (contentData.specialSections['related-profiles']) {
-    mainContent += enhanceSpecialSection(contentData.specialSections['related-profiles'], 'related') + '\n\n';
+    mainContent += '\n    ' + enhanceSpecialSection(contentData.specialSections['related-profiles'], 'related') + '\n';
   }
   
   // Add bibliography last
   if (contentData.sections['bibliography']) {
-    mainContent += enhanceSection(contentData.sections['bibliography'], 'bibliography') + '\n\n';
+    mainContent += '\n    ' + enhanceSection(contentData.sections['bibliography'], 'bibliography') + '\n';
   }
-  
-  // Add any remaining orphaned content (but be selective)
-  Object.entries(contentData.specialSections).forEach(([key, html]) => {
-    if (!['character-badge', 'complexity-indicator', 'textual-clarification', 'related-profiles'].includes(key)) {
-      // Only add if it starts with 'orphan-' (our safety net captures)
-      if (key.startsWith('orphan-')) {
-        log.verbose(`Adding orphaned content: ${key}`);
-        mainContent += html + '\n\n';
-      }
-    }
-  });
   
   return mainContent;
 }
@@ -647,7 +539,7 @@ function buildV58Page(templatePath, contentData) {
     
     // Replace everything between <main> tags with our content
     template = template.substring(0, mainStart) + '\n' + 
-               mainContent + '\n' + 
+               mainContent + '\n  ' +  // Add proper indentation for closing main
                template.substring(mainEnd);
   }
   
@@ -655,7 +547,56 @@ function buildV58Page(templatePath, contentData) {
 }
 
 /**
- * Main migration function - HYBRID VERSION
+ * Fix already migrated files with malformed HTML
+ */
+function fixMigratedFile(filePath) {
+  const fileName = path.basename(filePath);
+  log.verbose(`Fixing malformed HTML in ${fileName}`);
+  
+  try {
+    // Read the file
+    const html = fs.readFileSync(filePath, 'utf8');
+    
+    // Check if it has the malformed HTML issue
+    if (!html.includes('<html class=') && !html.includes('<html data-section-priority=')) {
+      log.verbose(`No malformed HTML found in ${fileName}`);
+      return { status: 'skipped', reason: 'no malformed HTML' };
+    }
+    
+    // Load with cheerio to re-extract content
+    const $ = cheerio.load(html);
+    
+    // Re-extract content
+    const contentData = extractContent($);
+    
+    // If we have a template, rebuild the page
+    if (fs.existsSync(CONFIG.templatePath)) {
+      const fixedHtml = buildV58Page(CONFIG.templatePath, contentData);
+      
+      // Save the fixed file
+      if (!CONFIG.testMode) {
+        // Create backup first
+        const backupPath = filePath.replace('.html', `-backup-fix-${Date.now()}.html`);
+        fs.copyFileSync(filePath, backupPath);
+        
+        // Save fixed version
+        fs.writeFileSync(filePath, fixedHtml);
+        log.success(`Fixed malformed HTML in: ${fileName}`);
+      } else {
+        log.info(`TEST MODE - Would fix: ${fileName}`);
+      }
+      
+      return { status: 'fixed' };
+    }
+    
+  } catch (error) {
+    log.error(`Failed to fix ${fileName}: ${error.message}`);
+    return { status: 'error', error: error.message };
+  }
+}
+
+/**
+ * Main migration function - HYBRID VERSION with fix capability
  */
 function migrateTemplate(filePath, options = {}) {
   const fileName = path.basename(filePath);
@@ -665,9 +606,15 @@ function migrateTemplate(filePath, options = {}) {
     // Read the original file
     const originalHtml = fs.readFileSync(filePath, 'utf8');
     
-    // Check if already migrated
+    // Check if already migrated but has malformed HTML
     if (isAlreadyMigrated(originalHtml)) {
-      log.verbose(`Already migrated: ${fileName}`);
+      // Check for malformed HTML and fix if needed
+      if (originalHtml.includes('<html class=') || originalHtml.includes('<html data-section-priority=')) {
+        log.warning(`Already migrated but has malformed HTML: ${fileName}`);
+        return fixMigratedFile(filePath);
+      }
+      
+      log.verbose(`Already migrated and clean: ${fileName}`);
       stats.skipped++;
       return { status: 'skipped', reason: 'already migrated' };
     }
@@ -683,11 +630,6 @@ function migrateTemplate(filePath, options = {}) {
     const regularSections = Object.keys(contentData.sections).length;
     const specialSections = Object.keys(contentData.specialSections).length;
     log.verbose(`Found ${regularSections} regular sections, ${specialSections} special sections`);
-    
-    if (CONFIG.verbose) {
-      log.verbose(`Regular sections: ${Object.keys(contentData.sections).join(', ')}`);
-      log.verbose(`Special sections: ${Object.keys(contentData.specialSections).join(', ')}`);
-    }
     
     // Create backup if not in test mode
     if (!CONFIG.testMode) {
@@ -706,15 +648,6 @@ function migrateTemplate(filePath, options = {}) {
       log.success(`Migrated: ${fileName}`);
     } else {
       log.info(`TEST MODE - Would migrate: ${fileName}`);
-      
-      // In test mode, show what we found
-      if (CONFIG.verbose) {
-        log.verbose('Content summary:');
-        log.verbose(`  Character: ${contentData.characterName}`);
-        log.verbose(`  Book: ${contentData.bookName}`);
-        log.verbose(`  Gender: ${contentData.gender}`);
-        log.verbose(`  Total sections captured: ${regularSections + specialSections}`);
-      }
     }
     
     stats.migrated++;
@@ -744,7 +677,8 @@ async function main() {
     test: args.includes('--test'),
     single: args.includes('--single') ? args[args.indexOf('--single') + 1] : null,
     folder: args.includes('--folder') ? args[args.indexOf('--folder') + 1] : './',
-    verbose: args.includes('--verbose')
+    verbose: args.includes('--verbose'),
+    fix: args.includes('--fix')  // New flag to fix malformed HTML
   };
   
   CONFIG.testMode = flags.test;
@@ -757,20 +691,12 @@ async function main() {
     process.exit(1);
   }
   
-  // Check if cheerio is installed
-  try {
-    require.resolve('cheerio');
-  } catch(e) {
-    log.error('Cheerio is not installed. Please run: npm install cheerio');
-    process.exit(1);
-  }
-  
   // Initialize log file
   if (!CONFIG.testMode) {
     fs.writeFileSync(CONFIG.logFile, `Migration started at ${new Date().toISOString()}\n`);
   }
   
-  // Find files to migrate
+  // Find files to migrate or fix
   let files;
   if (flags.single) {
     files = [flags.single];
@@ -789,12 +715,16 @@ async function main() {
     return;
   }
   
-  // Run migration
-  console.log('\n' + chalk.cyan('Starting migration...'));
+  // Run migration or fix
+  console.log('\n' + chalk.cyan(flags.fix ? 'Starting fix process...' : 'Starting migration...'));
   stats.total = files.length;
   
   for (const file of files) {
-    const result = migrateTemplate(file, flags);
+    if (flags.fix) {
+      fixMigratedFile(file);
+    } else {
+      migrateTemplate(file, flags);
+    }
   }
   
   // Display results
