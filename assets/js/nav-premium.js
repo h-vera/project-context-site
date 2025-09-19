@@ -507,5 +507,3 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
-
-export default PremiumNavigation;
