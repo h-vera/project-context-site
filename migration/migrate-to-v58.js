@@ -272,7 +272,7 @@ function enhanceContent(content, metadata) {
  */
 function buildFromTemplate(templatePath, metadata, content) {
   // Load the v5.8 template
-  let template = fs.readFileSync(templatePath || path.join(__dirname, 'template-v5.8-improved.html'), 'utf8');
+  let template = fs.readFileSync(templatePath || path.join(__dirname, 'biblical-characters-template-v5.8.html'), 'utf8');
   
   // Prepare replacements
   const replacements = {
