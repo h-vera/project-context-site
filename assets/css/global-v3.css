@@ -1471,11 +1471,13 @@ body.has-mobile-tabs {
 /* Premium hover effects */
 .hover-lift {
   transition: transform var(--duration-moderate) var(--motion-spring);
-  will-change: transform;
+  will-change: auto; /* Let browser decide */
+  cursor: pointer;
 }
 
 .hover-lift:hover {
   transform: translateY(-4px) scale(1.02);
+  will-change: transform; /* Only during hover */
 }
 
 /* 3D card effect */
@@ -1487,6 +1489,215 @@ body.has-mobile-tabs {
 
 .card-3d:hover {
   transform: perspective(1000px) rotateX(-5deg) rotateY(5deg) translateZ(20px);
+}
+
+/* ============================================
+   INTERACTIVE TAG BUBBLES
+   ============================================ */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: var(--space-xs) var(--space-md);
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+  border: 1px solid rgba(114, 9, 183, 0.15);
+  border-radius: var(--button-radius);
+  font-size: var(--type-sm);
+  font-weight: var(--font-medium);
+  margin: var(--space-xs);
+  transition: all var(--duration-fast) var(--motion-standard);
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+  /* Prevent text selection on double-click */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Shimmer effect on hover */
+.tag::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: left var(--duration-moderate) var(--motion-standard);
+  pointer-events: none;
+}
+
+.tag:hover {
+  background: var(--gradient-hero);
+  color: white;
+  border-color: transparent;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 8px rgba(114, 9, 183, 0.2);
+  cursor: pointer;
+}
+
+.tag:hover::before {
+  left: 100%;
+}
+
+/* Active state for touch devices */
+.tag:active {
+  transform: translateY(-1px) scale(1.03);
+}
+
+/* Primary tags */
+.tag.primary {
+  background: var(--gradient-hero);
+  color: white;
+  border-color: transparent;
+  font-weight: var(--font-semibold);
+  box-shadow: 0 2px 4px rgba(114, 9, 183, 0.15);
+}
+
+.tag.primary:hover {
+  transform: translateY(-3px) scale(1.08);
+  box-shadow: 0 6px 12px rgba(114, 9, 183, 0.3);
+}
+
+/* Combination: tag with hover-lift */
+.tag.hover-lift {
+  transition: all var(--duration-moderate) var(--motion-spring);
+}
+
+.tag.hover-lift:hover {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 8px 16px rgba(114, 9, 183, 0.25);
+}
+
+/* ============================================
+   MAGNETIC HOVER EFFECT
+   ============================================ */
+.magnetic {
+  position: relative;
+  transition: transform var(--duration-fast) var(--motion-spring);
+}
+
+.magnetic:hover {
+  transform: translate(
+    calc(var(--mouse-x, 0) * 0.3),
+    calc(var(--mouse-y, 0) * 0.3)
+  );
+}
+
+/* ============================================
+   RIPPLE EFFECT
+   ============================================ */
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.ripple:active::after {
+  width: 300px;
+  height: 300px;
+  animation: ripple 0.6s ease-out;
+}
+
+/* ============================================
+   PULSE ANIMATION
+   ============================================ */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(114, 9, 183, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(114, 9, 183, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(114, 9, 183, 0);
+  }
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+.pulse:hover {
+  animation: none;
+}
+
+/* ============================================
+   GLOW EFFECT
+   ============================================ */
+.glow {
+  transition: all var(--duration-moderate) var(--motion-standard);
+}
+
+.glow:hover {
+  box-shadow: 
+    0 0 20px rgba(114, 9, 183, 0.3),
+    0 0 40px rgba(114, 9, 183, 0.2),
+    0 0 60px rgba(114, 9, 183, 0.1);
+}
+
+/* ============================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .tag::before {
+    display: none;
+  }
+  
+  .hover-lift:hover,
+  .tag:hover,
+  .card-3d:hover {
+    transform: none;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) {
+  .hover-lift:active {
+    transform: translateY(-2px) scale(1.01);
+  }
+  
+  .tag:active {
+    transform: translateY(-1px) scale(1.03);
+  }
+  
+  /* Disable hover effects that don't work well on touch */
+  .magnetic:hover {
+    transform: none;
+  }
 }
 
 /* ============================================
