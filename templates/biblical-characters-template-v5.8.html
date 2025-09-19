@@ -927,18 +927,52 @@
     'use strict';
     
     console.log('Initializing page with config:', window.APP_CONFIG);
+    console.log('initPremiumNav exists?', typeof window.initPremiumNav);
     
-    // 1. Initialize navigation
+    // 1. Initialize navigation with better error handling
     if (typeof window.initPremiumNav === 'function') {
-      window.initPremiumNav({
-        currentPage: 'characters',
-        hubType: 'characters',
-        enableHaptics: true,
-        enableMagnetic: true,
-        enableGestures: true,
-        iconSystem: window.getIcon
-      });
-      console.log('✓ Navigation initialized');
+      try {
+        console.log('Calling initPremiumNav...');
+        window.initPremiumNav({
+          currentPage: 'characters',
+          hubType: 'characters',
+          enableHaptics: true,
+          enableMagnetic: true,
+          enableGestures: true,
+          iconSystem: window.getIcon
+        });
+        console.log('✓ Navigation initialized');
+        
+        // Check if nav actually appeared
+        setTimeout(() => {
+          const nav = document.querySelector('nav');
+          console.log('Nav element in DOM?', nav ? 'YES' : 'NO');
+          if (!nav) {
+            console.error('Navigation was not inserted into DOM');
+          }
+        }, 100);
+        
+      } catch (error) {
+        console.error('ERROR calling initPremiumNav:', error);
+        console.error('Stack trace:', error.stack);
+      }
+    } else {
+      console.error('initPremiumNav is not a function!');
+      
+      // Check if the script loaded at all
+      console.log('Available on window:', Object.keys(window).filter(k => k.includes('nav') || k.includes('Nav')));
+      
+      // Try waiting and checking again
+      setTimeout(() => {
+        console.log('After delay - initPremiumNav exists?', typeof window.initPremiumNav);
+        if (typeof window.initPremiumNav === 'function') {
+          console.log('Nav function appeared late - trying now...');
+          window.initPremiumNav({
+            currentPage: 'characters',
+            hubType: 'characters'
+          });
+        }
+      }, 1000);
     }
     
     // 2. Initialize timeline animations
@@ -949,31 +983,63 @@
     console.log('✓ Timeline animations setup');
     
     // 3. Setup mobile optimizations
-    if (window.APP_CONFIG.capabilities.mobile) {
-      const checkTabs = () => {
-        const tabs = document.querySelector('.mobile-section-tabs');
-        if (tabs && window.innerWidth <= 768) {
-          tabs.style.display = 'flex';
-          tabs.style.position = 'fixed';
-          tabs.style.bottom = '0';
-          tabs.style.zIndex = '200';
+if (window.APP_CONFIG.capabilities.mobile) {
+  // Wait for mobile tabs to be created by character-page-v2.js
+  const setupMobileTabs = () => {
+    const tabs = document.querySelector('.mobile-section-tabs');
+    if (tabs) {
+      if (window.innerWidth <= 768) {
+        tabs.style.display = 'flex';
+        tabs.style.position = 'fixed';
+        tabs.style.bottom = '0';
+        tabs.style.zIndex = '200';
+        console.log('✓ Mobile tabs configured');
+      }
+      return true; // Found and configured
+    }
+    return false; // Not found yet
+  };
+  
+  // Try immediately
+  if (!setupMobileTabs()) {
+    // If not found, wait for them to be created
+    let attempts = 0;
+    const checkInterval = setInterval(() => {
+      attempts++;
+      if (setupMobileTabs() || attempts > 20) {
+        clearInterval(checkInterval);
+        if (attempts > 20) {
+          console.log('Mobile tabs not found after 20 attempts');
         }
-      };
-      
-      checkTabs();
-      window.addEventListener('resize', checkTabs);
-      console.log('✓ Mobile optimizations active');
-      
-      if (window.APP_CONFIG.capabilities.ios) {
-        window.addEventListener('orientationchange', function() {
-          setTimeout(function() {
-            window.scrollTo(0, window.scrollY + 1);
-            window.scrollTo(0, window.scrollY - 1);
-          }, 100);
-        });
-        console.log('✓ iOS fixes applied');
+      }
+    }, 250); // Check every 250ms for up to 5 seconds
+  }
+  
+  // Handle resize
+  window.addEventListener('resize', () => {
+    const tabs = document.querySelector('.mobile-section-tabs');
+    if (tabs) {
+      if (window.innerWidth <= 768) {
+        tabs.style.display = 'flex';
+      } else {
+        tabs.style.display = 'none';
       }
     }
+  });
+  
+  console.log('✓ Mobile optimizations active');
+  
+  // iOS specific fixes
+  if (window.APP_CONFIG.capabilities.ios) {
+    window.addEventListener('orientationchange', function() {
+      setTimeout(function() {
+        window.scrollTo(0, window.scrollY + 1);
+        window.scrollTo(0, window.scrollY - 1);
+      }, 100);
+    });
+    console.log('✓ iOS fixes applied');
+  }
+}
     
     // 4. Setup scroll animations
     if (window.APP_CONFIG.capabilities.intersectionObserver) {
@@ -1013,7 +1079,8 @@
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializePage);
   } else {
-    initializePage();
+    // Give scripts a moment to load
+    setTimeout(initializePage, 100);
   }
 </script>
 
@@ -1029,6 +1096,53 @@
       const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
       console.log(`⏱️ Page load time: ${pageLoadTime}ms`);
     }
+  });
+</script>
+<!-- Consolidated initialization after all scripts load -->
+<script>
+  window.addEventListener('load', function() {
+    console.log('=== All resources loaded, final setup ===');
+    
+    // 1. Check navigation
+    if (!document.querySelector('nav')) {
+      console.error('Navigation missing - attempting to initialize...');
+      if (typeof window.initPremiumNav === 'function') {
+        window.initPremiumNav({
+          currentPage: 'characters',
+          hubType: 'characters'
+        });
+      }
+    }
+    
+    // 2. Check mobile tabs (if mobile)
+    if (window.innerWidth <= 768) {
+      const tabs = document.querySelector('.mobile-section-tabs');
+      if (!tabs) {
+        console.log('Mobile tabs missing - CharacterPage may not have initialized');
+        // Could manually create basic tabs here if needed
+      }
+    }
+    
+    // 3. Check back to top button
+    const backToTop = document.querySelector('.back-to-top');
+    if (!backToTop) {
+      console.log('Back to top button missing');
+    } else if (!backToTop.innerHTML || backToTop.innerHTML.includes('undefined')) {
+      // Fix missing arrow
+      backToTop.innerHTML = '↑';
+    }
+    
+    // 4. Final visibility check for animated elements
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+      if (!el.classList.contains('visible')) {
+        // Force visibility if animations didn't trigger
+        setTimeout(() => {
+          el.classList.add('visible');
+        }, 100);
+      }
+    });
+    
+    console.log('=== Final setup complete ===');
   });
 </script>
 </body>

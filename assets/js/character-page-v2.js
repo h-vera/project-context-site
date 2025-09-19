@@ -874,20 +874,25 @@ class CharacterPage {
       });
       
       // Back to top button
-      const backToTop = document.createElement('button');
-      backToTop.className = 'back-to-top';
-      backToTop.innerHTML = this.iconSystem.get('collapse', { size: 24 });
-      backToTop.setAttribute('aria-label', 'Back to top');
-      
-      document.body.appendChild(backToTop);
-      
-      backToTop.addEventListener('click', () => {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
-        this.announce('Scrolling to top of page');
-      });
+const backToTop = document.createElement('button');
+backToTop.className = 'back-to-top';
+// Use SVG arrow
+backToTop.innerHTML = `
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+    <polyline points="18 15 12 9 6 15"></polyline>
+  </svg>
+`;
+backToTop.setAttribute('aria-label', 'Back to top');
+
+document.body.appendChild(backToTop);
+
+backToTop.addEventListener('click', () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+  this.announce('Scrolling to top of page');
+});
       
       // Show/hide based on scroll
       window.addEventListener('scroll', () => {
