@@ -1,13 +1,14 @@
 /**
- * CHARACTER PAGE ENHANCED FUNCTIONALITY v2.0
+ * CHARACTER PAGE ENHANCED FUNCTIONALITY v2.1
  * Path: /assets/js/character-page-v2.js
  * Purpose: Premium interactions for biblical character profiles
  * Features: Mobile tabs, progress nav, animations, premium effects
- * Version: 2.0.0
+ * Version: 2.1.0-optimized
+ * Compatibility: global-v3.css v3.1.0, nav-premium.js v1.0.0
  */
 
 // ============================================
-// BIBLICAL ICON SYSTEM
+// BIBLICAL ICON SYSTEM - ENHANCED
 // ============================================
 class BiblicalIconSystem {
   constructor() {
@@ -16,16 +17,56 @@ class BiblicalIconSystem {
   }
 
   initializeIcons() {
-    // Core navigation icons
-    this.register('overview', '📋', { category: 'section', label: 'Overview' });
-    this.register('narrative', '📖', { category: 'section', label: 'Narrative' });
-    this.register('literary', '✍️', { category: 'section', label: 'Literary' });
-    this.register('themes', '🎯', { category: 'section', label: 'Themes' });
-    this.register('theology', '⛪', { category: 'section', label: 'Theology' });
-    this.register('application', '💡', { category: 'section', label: 'Application' });
-    this.register('questions', '❓', { category: 'section', label: 'Questions' });
-    this.register('crown', '👑', { category: 'section', label: 'Messianic' });
-    this.register('scroll', '📜', { category: 'section', label: 'ANE Context' });
+    // Use global icon definitions if available
+    const icons = window.EmojiIcons || {};
+    const svgIcons = window.SVGIconLibrary || {};
+    
+    // Core navigation icons with fallbacks
+    this.register('overview', icons.overview || '📋', { 
+      category: 'section', 
+      label: 'Overview',
+      svg: svgIcons.overview 
+    });
+    this.register('narrative', icons.narrative || '📖', { 
+      category: 'section', 
+      label: 'Narrative',
+      svg: svgIcons.narrative
+    });
+    this.register('literary', icons.literary || '✍️', { 
+      category: 'section', 
+      label: 'Literary',
+      svg: svgIcons.literary
+    });
+    this.register('themes', icons.themes || '🎯', { 
+      category: 'section', 
+      label: 'Themes',
+      svg: svgIcons.themes
+    });
+    this.register('theology', icons.theology || '⛪', { 
+      category: 'section', 
+      label: 'Theology',
+      svg: svgIcons.theology
+    });
+    this.register('application', icons.application || '💡', { 
+      category: 'section', 
+      label: 'Application',
+      svg: svgIcons.application
+    });
+    this.register('questions', icons.questions || '❓', { 
+      category: 'section', 
+      label: 'Questions',
+      svg: svgIcons.questions
+    });
+    this.register('crown', icons.crown || '👑', { 
+      category: 'section', 
+      label: 'Messianic',
+      svg: svgIcons.crown
+    });
+    this.register('scroll', icons.scroll || '📜', { 
+      category: 'section', 
+      label: 'ANE Context',
+      svg: svgIcons.scroll
+    });
     
     // UI icons
     this.register('collapse', '⬆️', { category: 'ui', label: 'Collapse' });
@@ -40,18 +81,43 @@ class BiblicalIconSystem {
 
   get(name, options = {}) {
     const entry = this.registry.get(name);
-    if (!entry) return '📄'; // Default icon
     
-    if (options.size) {
-      return `<span style="font-size: ${options.size}px">${entry.icon}</span>`;
+    // Default to SVG unless explicitly disabled or not supported
+    const useSVG = options.useSVG !== false && window.APP_CONFIG?.capabilities?.svg !== false;
+    
+    // Use CSS-based SVG icons (embedded in global-v3.css)
+    if (useSVG) {
+      const sizeClass = options.size ? this.getSizeClass(options.size) : '';
+      return `<span class="icon-svg ${sizeClass}" data-icon="${name}"></span>`;
     }
     
-    return entry.icon;
+    // Fallback to emoji if SVG not available or disabled
+    if (entry) {
+      if (options.size) {
+        return `<span class="icon-emoji" style="font-size: ${options.size}px">${entry.icon}</span>`;
+      }
+      return entry.icon;
+    }
+    
+    // Final fallback
+    return window.EmojiIcons?.[name] || '📄';
+  }
+  
+  getSizeClass(size) {
+    if (size <= 16) return 'icon-sm';
+    if (size <= 20) return 'icon-md';
+    if (size <= 24) return 'icon-lg';
+    return 'icon-xl';
+  }
+
+  getLabel(name) {
+    const entry = this.registry.get(name);
+    return entry ? entry.label : name;
   }
 }
 
 // ============================================
-// MOBILE SECTION TABS
+// MOBILE SECTION TABS - ENHANCED
 // ============================================
 class MobileSectionTabs {
   constructor() {
@@ -59,18 +125,26 @@ class MobileSectionTabs {
     this.sections = [];
     this.activeSection = null;
     this.lastScrollY = 0;
+    this.scrollHandler = null;
+    this.resizeHandler = null;
+    this.touchStartHandler = null;
+    this.touchEndHandler = null;
     this.init();
   }
 
   init() {
     if (window.innerWidth > 768) return; // Mobile only
     
-    this.detectSections();
-    if (this.sections.length > 0) {
-      this.createElement();
-      this.attachEventListeners();
-      this.trackScrollPosition();
-      this.initSwipeGestures();
+    try {
+      this.detectSections();
+      if (this.sections.length > 0) {
+        this.createElement();
+        this.attachEventListeners();
+        this.trackScrollPosition();
+        this.initSwipeGestures();
+      }
+    } catch (error) {
+      console.error('Failed to initialize mobile section tabs:', error);
     }
   }
 
@@ -116,7 +190,9 @@ class MobileSectionTabs {
         ${this.sections.map(section => `
           <button class="tab-item" 
                   data-section="${section.id}"
-                  aria-label="${section.label}">
+                  aria-label="${section.label}"
+                  role="tab"
+                  aria-selected="false">
             <span class="tab-icon">${this.iconSystem.get(section.icon)}</span>
             <span class="tab-label">${section.label}</span>
           </button>
@@ -134,12 +210,13 @@ class MobileSectionTabs {
       tab.addEventListener('click', () => {
         const sectionId = tab.dataset.section;
         this.scrollToSection(sectionId);
+        this.announce(`Navigating to ${tab.getAttribute('aria-label')} section`);
       });
     });
     
     // Hide on scroll down, show on scroll up
     let ticking = false;
-    window.addEventListener('scroll', () => {
+    this.scrollHandler = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           this.handleScroll();
@@ -147,7 +224,16 @@ class MobileSectionTabs {
         });
         ticking = true;
       }
-    }, { passive: true });
+    };
+    window.addEventListener('scroll', this.scrollHandler, { passive: true });
+    
+    // Handle resize
+    this.resizeHandler = () => {
+      if (window.innerWidth > 768) {
+        this.destroy();
+      }
+    };
+    window.addEventListener('resize', this.resizeHandler);
   }
 
   handleScroll() {
@@ -203,8 +289,10 @@ class MobileSectionTabs {
     this.container.querySelectorAll('.tab-item').forEach(tab => {
       if (tab.dataset.section === sectionId) {
         tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
       } else {
         tab.classList.remove('active');
+        tab.setAttribute('aria-selected', 'false');
       }
     });
     
@@ -214,7 +302,7 @@ class MobileSectionTabs {
   scrollToSection(sectionId) {
     const section = document.getElementById(sectionId);
     if (section) {
-      const offset = 80; // Account for fixed header
+      const offset = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--js-scroll-offset')) || 80;
       const top = section.offsetTop - offset;
       window.scrollTo({
         top,
@@ -227,18 +315,21 @@ class MobileSectionTabs {
     let touchStartX = 0;
     let touchEndX = 0;
     
-    this.container.addEventListener('touchstart', (e) => {
+    this.touchStartHandler = (e) => {
       touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
+    };
     
-    this.container.addEventListener('touchend', (e) => {
+    this.touchEndHandler = (e) => {
       touchEndX = e.changedTouches[0].screenX;
       this.handleSwipe(touchStartX, touchEndX);
-    }, { passive: true });
+    };
+    
+    this.container.addEventListener('touchstart', this.touchStartHandler, { passive: true });
+    this.container.addEventListener('touchend', this.touchEndHandler, { passive: true });
   }
 
   handleSwipe(startX, endX) {
-    const swipeThreshold = 50;
+    const swipeThreshold = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--js-swipe-threshold')) || 50;
     const diff = startX - endX;
     
     if (Math.abs(diff) > swipeThreshold) {
@@ -253,10 +344,40 @@ class MobileSectionTabs {
       }
     }
   }
+
+  announce(message) {
+    // Use global announcer if available
+    if (window.BiblicalApp?.announce) {
+      window.BiblicalApp.announce(message);
+    }
+  }
+
+  destroy() {
+    // Clean up event listeners
+    if (this.scrollHandler) {
+      window.removeEventListener('scroll', this.scrollHandler);
+    }
+    if (this.resizeHandler) {
+      window.removeEventListener('resize', this.resizeHandler);
+    }
+    if (this.touchStartHandler) {
+      this.container.removeEventListener('touchstart', this.touchStartHandler);
+    }
+    if (this.touchEndHandler) {
+      this.container.removeEventListener('touchend', this.touchEndHandler);
+    }
+    
+    // Remove element
+    if (this.container) {
+      this.container.remove();
+    }
+    
+    console.log('Mobile tabs destroyed');
+  }
 }
 
 // ============================================
-// SMART PROGRESS NAVIGATOR
+// SMART PROGRESS NAVIGATOR - ENHANCED
 // ============================================
 class SmartProgressNavigator {
   constructor() {
@@ -264,17 +385,24 @@ class SmartProgressNavigator {
     this.sections = [];
     this.totalHeight = 0;
     this.currentProgress = 0;
+    this.scrollHandler = null;
+    this.resizeHandler = null;
+    this.observers = [];
     this.init();
   }
 
   init() {
     if (window.innerWidth <= 1024) return; // Desktop only
     
-    this.detectSections();
-    if (this.sections.length > 0) {
-      this.createElement();
-      this.attachEventListeners();
-      this.trackProgress();
+    try {
+      this.detectSections();
+      if (this.sections.length > 0) {
+        this.createElement();
+        this.attachEventListeners();
+        this.trackProgress();
+      }
+    } catch (error) {
+      console.error('Failed to initialize progress navigator:', error);
     }
   }
 
@@ -336,17 +464,22 @@ class SmartProgressNavigator {
   createElement() {
     const nav = document.createElement('div');
     nav.className = 'smart-progress-nav';
+    nav.setAttribute('role', 'navigation');
+    nav.setAttribute('aria-label', 'Section progress');
     nav.innerHTML = `
-      <div class="progress-track"></div>
+      <div class="progress-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
       <div class="progress-sections">
         ${this.sections.map(section => `
           <div class="progress-section" 
-               data-section="${section.id}">
+               data-section="${section.id}"
+               role="button"
+               tabindex="0"
+               aria-label="Go to ${section.label}">
             <span class="progress-section-icon">
               ${this.iconSystem.get(section.icon, { size: 16 })}
             </span>
             <span class="progress-section-label">${section.label}</span>
-            <span class="progress-section-percent">0%</span>
+            <span class="progress-section-percent" aria-live="polite">0%</span>
           </div>
         `).join('')}
       </div>
@@ -363,23 +496,36 @@ class SmartProgressNavigator {
         const sectionId = section.dataset.section;
         const target = document.getElementById(sectionId);
         if (target) {
-          const offset = 80;
+          const offset = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--js-scroll-offset')) || 80;
           window.scrollTo({
             top: target.offsetTop - offset,
             behavior: 'smooth'
           });
+          this.announce(`Navigating to ${section.getAttribute('aria-label')}`);
+        }
+      });
+      
+      // Keyboard navigation
+      section.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          section.click();
         }
       });
     });
     
     // Recalculate on resize
     let resizeTimeout;
-    window.addEventListener('resize', () => {
+    this.resizeHandler = () => {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
         this.calculatePositions();
+        if (window.innerWidth <= 1024) {
+          this.destroy();
+        }
       }, 250);
-    });
+    };
+    window.addEventListener('resize', this.resizeHandler);
   }
 
   trackProgress() {
@@ -398,6 +544,7 @@ class SmartProgressNavigator {
       const progressTrack = this.element.querySelector('.progress-track');
       if (progressTrack) {
         progressTrack.style.setProperty('--progress', this.currentProgress);
+        progressTrack.setAttribute('aria-valuenow', Math.round(this.currentProgress * 100));
       }
       
       // Section progress
@@ -433,32 +580,63 @@ class SmartProgressNavigator {
       ticking = false;
     };
     
-    window.addEventListener('scroll', () => {
+    this.scrollHandler = () => {
       if (!ticking) {
         window.requestAnimationFrame(updateProgress);
         ticking = true;
       }
-    }, { passive: true });
+    };
+    
+    window.addEventListener('scroll', this.scrollHandler, { passive: true });
     
     // Initial update
     updateProgress();
   }
+
+  announce(message) {
+    if (window.BiblicalApp?.announce) {
+      window.BiblicalApp.announce(message);
+    }
+  }
+
+  destroy() {
+    // Clean up event listeners
+    if (this.scrollHandler) {
+      window.removeEventListener('scroll', this.scrollHandler);
+    }
+    if (this.resizeHandler) {
+      window.removeEventListener('resize', this.resizeHandler);
+    }
+    
+    // Remove element
+    if (this.element) {
+      this.element.remove();
+    }
+    
+    console.log('Progress navigator destroyed');
+  }
 }
 
 // ============================================
-// PREMIUM EFFECTS CONTROLLER
+// PREMIUM EFFECTS CONTROLLER - ENHANCED
 // ============================================
 class PremiumEffects {
   constructor() {
+    this.observers = [];
+    this.eventHandlers = [];
     this.init();
   }
 
   init() {
-    this.initScrollAnimations();
-    this.initHoverEffects();
-    this.init3DCards();
-    this.initParallax();
-    this.initTextEffects();
+    try {
+      this.initScrollAnimations();
+      this.initHoverEffects();
+      this.init3DCards();
+      this.initParallax();
+      this.initTextEffects();
+    } catch (error) {
+      console.error('Failed to initialize premium effects:', error);
+    }
   }
 
   initScrollAnimations() {
@@ -485,6 +663,7 @@ class PremiumEffects {
       });
       
       animatedElements.forEach(el => observer.observe(el));
+      this.observers.push(observer);
     } else {
       // Fallback for older browsers
       animatedElements.forEach(el => el.classList.add('visible'));
@@ -495,7 +674,7 @@ class PremiumEffects {
     const cards = document.querySelectorAll('.theology-card');
     
     cards.forEach(card => {
-      card.addEventListener('mousemove', (e) => {
+      const moveHandler = (e) => {
         const rect = card.getBoundingClientRect();
         const x = ((e.clientX - rect.left) / rect.width) * 100;
         const y = ((e.clientY - rect.top) / rect.height) * 100;
@@ -509,14 +688,20 @@ class PremiumEffects {
         const shadowY = (y - 50) / 5;
         card.style.setProperty('--shadow-x', `${shadowX}px`);
         card.style.setProperty('--shadow-y', `${shadowY}px`);
-      });
+      };
       
-      card.addEventListener('mouseleave', () => {
+      const leaveHandler = () => {
         card.style.setProperty('--mouse-x', '50%');
         card.style.setProperty('--mouse-y', '50%');
         card.style.setProperty('--shadow-x', '0px');
         card.style.setProperty('--shadow-y', '10px');
-      });
+      };
+      
+      card.addEventListener('mousemove', moveHandler);
+      card.addEventListener('mouseleave', leaveHandler);
+      
+      this.eventHandlers.push({ element: card, event: 'mousemove', handler: moveHandler });
+      this.eventHandlers.push({ element: card, event: 'mouseleave', handler: leaveHandler });
     });
   }
 
@@ -524,7 +709,7 @@ class PremiumEffects {
     const cards3d = document.querySelectorAll('.card-3d');
     
     cards3d.forEach(card => {
-      card.addEventListener('mousemove', (e) => {
+      const moveHandler = (e) => {
         const rect = card.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
@@ -538,11 +723,17 @@ class PremiumEffects {
           rotateY(${angleY}deg) 
           translateZ(10px)
         `;
-      });
+      };
       
-      card.addEventListener('mouseleave', () => {
+      const leaveHandler = () => {
         card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
-      });
+      };
+      
+      card.addEventListener('mousemove', moveHandler);
+      card.addEventListener('mouseleave', leaveHandler);
+      
+      this.eventHandlers.push({ element: card, event: 'mousemove', handler: moveHandler });
+      this.eventHandlers.push({ element: card, event: 'mouseleave', handler: leaveHandler });
     });
   }
 
@@ -550,7 +741,7 @@ class PremiumEffects {
     const parallaxElements = document.querySelectorAll('[data-parallax]');
     
     if (parallaxElements.length > 0) {
-      window.addEventListener('scroll', () => {
+      const scrollHandler = () => {
         const scrolled = window.pageYOffset;
         
         parallaxElements.forEach(el => {
@@ -558,7 +749,10 @@ class PremiumEffects {
           const yPos = -(scrolled * rate);
           el.style.transform = `translateY(${yPos}px)`;
         });
-      }, { passive: true });
+      };
+      
+      window.addEventListener('scroll', scrollHandler, { passive: true });
+      this.eventHandlers.push({ element: window, event: 'scroll', handler: scrollHandler });
     }
   }
 
@@ -567,19 +761,37 @@ class PremiumEffects {
     const gradientTexts = document.querySelectorAll('.text-gradient-animated');
     
     gradientTexts.forEach(text => {
-      text.addEventListener('mouseenter', () => {
+      const enterHandler = () => {
         text.style.animationPlayState = 'running';
-      });
+      };
       
-      text.addEventListener('mouseleave', () => {
+      const leaveHandler = () => {
         text.style.animationPlayState = 'paused';
-      });
+      };
+      
+      text.addEventListener('mouseenter', enterHandler);
+      text.addEventListener('mouseleave', leaveHandler);
+      
+      this.eventHandlers.push({ element: text, event: 'mouseenter', handler: enterHandler });
+      this.eventHandlers.push({ element: text, event: 'mouseleave', handler: leaveHandler });
     });
+  }
+
+  destroy() {
+    // Clean up Intersection Observers
+    this.observers.forEach(observer => observer.disconnect());
+    
+    // Clean up event handlers
+    this.eventHandlers.forEach(({ element, event, handler }) => {
+      element.removeEventListener(event, handler);
+    });
+    
+    console.log('Premium effects destroyed');
   }
 }
 
 // ============================================
-// MAIN CHARACTER PAGE CONTROLLER
+// MAIN CHARACTER PAGE CONTROLLER - ENHANCED
 // ============================================
 class CharacterPage {
   constructor() {
@@ -587,6 +799,7 @@ class CharacterPage {
     this.mobileTabs = null;
     this.progressNav = null;
     this.effects = null;
+    this.announcer = null;
     
     this.init();
   }
@@ -601,151 +814,199 @@ class CharacterPage {
   }
 
   initialize() {
-    // Initialize components
-    this.initializeComponents();
-    this.initializeNavigation();
-    this.initializeInteractions();
-    this.initializeAccessibility();
-    
-    // Log initialization
-    console.log('Character Page v2.0.0 initialized');
-    console.log('Template version: 5.8');
-    console.log('Icon system loaded:', this.iconSystem.registry.size, 'icons');
+    try {
+      // Initialize components
+      this.initializeComponents();
+      this.initializeNavigation();
+      this.initializeInteractions();
+      this.initializeAccessibility();
+      
+      // Set up global announce function
+      if (window.BiblicalApp) {
+        window.BiblicalApp.announce = (message) => this.announce(message);
+      }
+      
+      // Log initialization
+      console.log('Character Page v2.1.0 initialized');
+      console.log('Template version: 5.8');
+      console.log('Icon system loaded:', this.iconSystem.registry.size, 'icons');
+      console.log('Capabilities:', window.APP_CONFIG?.capabilities);
+    } catch (error) {
+      console.error('Failed to initialize character page:', error);
+      // Continue with degraded functionality
+    }
   }
 
   initializeComponents() {
-    // Mobile section tabs
-    if (window.innerWidth <= 768) {
-      this.mobileTabs = new MobileSectionTabs();
+    try {
+      // Mobile section tabs
+      if (window.innerWidth <= 768) {
+        this.mobileTabs = new MobileSectionTabs();
+      }
+      
+      // Desktop progress navigator
+      if (window.innerWidth > 1024) {
+        this.progressNav = new SmartProgressNavigator();
+      }
+      
+      // Premium effects
+      this.effects = new PremiumEffects();
+    } catch (error) {
+      console.error('Failed to initialize components:', error);
     }
-    
-    // Desktop progress navigator
-    if (window.innerWidth > 1024) {
-      this.progressNav = new SmartProgressNavigator();
-    }
-    
-    // Premium effects
-    this.effects = new PremiumEffects();
   }
 
   initializeNavigation() {
-    // Smooth scrolling for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', (e) => {
-        e.preventDefault();
-        const target = document.querySelector(anchor.getAttribute('href'));
-        if (target) {
-          const offset = 80;
-          window.scrollTo({
-            top: target.offsetTop - offset,
-            behavior: 'smooth'
-          });
+    try {
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', (e) => {
+          e.preventDefault();
+          const target = document.querySelector(anchor.getAttribute('href'));
+          if (target) {
+            const offset = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--js-scroll-offset')) || 80;
+            window.scrollTo({
+              top: target.offsetTop - offset,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+      
+      // Back to top button
+      const backToTop = document.createElement('button');
+      backToTop.className = 'back-to-top';
+      backToTop.innerHTML = this.iconSystem.get('collapse', { size: 24 });
+      backToTop.setAttribute('aria-label', 'Back to top');
+      
+      document.body.appendChild(backToTop);
+      
+      backToTop.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+        this.announce('Scrolling to top of page');
+      });
+      
+      // Show/hide based on scroll
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 500) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
         }
-      });
-    });
-    
-    // Back to top button
-    const backToTop = document.createElement('button');
-    backToTop.className = 'back-to-top';
-    backToTop.innerHTML = this.iconSystem.get('collapse', { size: 24 });
-    backToTop.setAttribute('aria-label', 'Back to top');
-    
-    document.body.appendChild(backToTop);
-    
-    backToTop.addEventListener('click', () => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    });
-    
-    // Show/hide based on scroll
-    window.addEventListener('scroll', () => {
-      if (window.pageYOffset > 500) {
-        backToTop.classList.add('visible');
-      } else {
-        backToTop.classList.remove('visible');
-      }
-    }, { passive: true });
+      }, { passive: true });
+    } catch (error) {
+      console.error('Failed to initialize navigation:', error);
+    }
   }
 
   initializeInteractions() {
-    // Timeline items hover enhancement
-    const timelineItems = document.querySelectorAll('.timeline-item');
-    timelineItems.forEach((item, index) => {
-      item.style.setProperty('--index', index);
-    });
-    
-    // Bibliography toggle enhancement
-    const bibliography = document.querySelector('.bibliography-section');
-    if (bibliography) {
-      const summary = bibliography.querySelector('summary');
-      if (summary) {
-        summary.addEventListener('click', (e) => {
-          e.preventDefault();
-          bibliography.open = !bibliography.open;
-          
-          // Smooth animation
-          if (bibliography.open) {
-            bibliography.classList.add('expanding');
-            setTimeout(() => {
-              bibliography.classList.remove('expanding');
-            }, 600);
-          }
-        });
-      }
-    }
-    
-    // Tag interactions
-    const tags = document.querySelectorAll('.tag');
-    tags.forEach(tag => {
-      tag.addEventListener('click', () => {
-        // Could implement tag filtering or searching
-        console.log('Tag clicked:', tag.textContent);
+    try {
+      // Timeline items hover enhancement
+      const timelineItems = document.querySelectorAll('.timeline-item');
+      timelineItems.forEach((item, index) => {
+        item.style.setProperty('--index', index);
       });
-    });
-  }
-
-  initializeAccessibility() {
-    // Skip to main content
-    const skipLink = document.createElement('a');
-    skipLink.href = '#main-content';
-    skipLink.className = 'skip-link';
-    skipLink.textContent = 'Skip to main content';
-    document.body.insertBefore(skipLink, document.body.firstChild);
-    
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      // J/K navigation for sections
-      if (e.key === 'j' || e.key === 'k') {
-        if (document.activeElement.tagName !== 'INPUT' && 
-            document.activeElement.tagName !== 'TEXTAREA') {
-          e.preventDefault();
-          this.navigateSections(e.key === 'j' ? 'next' : 'prev');
+      
+      // Bibliography toggle enhancement
+      const bibliography = document.querySelector('.bibliography-section');
+      if (bibliography) {
+        const summary = bibliography.querySelector('summary');
+        if (summary) {
+          summary.addEventListener('click', (e) => {
+            e.preventDefault();
+            bibliography.open = !bibliography.open;
+            
+            // Smooth animation
+            if (bibliography.open) {
+              bibliography.classList.add('expanding');
+              setTimeout(() => {
+                bibliography.classList.remove('expanding');
+              }, 600);
+              this.announce('Bibliography expanded');
+            } else {
+              this.announce('Bibliography collapsed');
+            }
+          });
         }
       }
       
-      // Escape closes mobile menu
-      if (e.key === 'Escape') {
-        if (this.mobileTabs && this.mobileTabs.container) {
-          this.mobileTabs.showTabs();
-        }
-      }
-    });
-    
-    // Reduced motion support
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (prefersReducedMotion.matches) {
-      document.documentElement.classList.add('reduced-motion');
+      // Tag interactions
+      const tags = document.querySelectorAll('.tag');
+      tags.forEach(tag => {
+        tag.addEventListener('click', () => {
+          // Could implement tag filtering or searching
+          console.log('Tag clicked:', tag.textContent);
+          this.announce(`Tag selected: ${tag.textContent}`);
+        });
+      });
+    } catch (error) {
+      console.error('Failed to initialize interactions:', error);
     }
-    
-    prefersReducedMotion.addEventListener('change', (e) => {
-      if (e.matches) {
+  }
+
+  initializeAccessibility() {
+    try {
+      // Skip to main content
+      const skipLink = document.createElement('a');
+      skipLink.href = '#main-content';
+      skipLink.className = 'skip-link';
+      skipLink.textContent = 'Skip to main content';
+      document.body.insertBefore(skipLink, document.body.firstChild);
+      
+      // Create screen reader announcement region
+      this.announcer = document.createElement('div');
+      this.announcer.className = 'sr-only';
+      this.announcer.setAttribute('aria-live', 'polite');
+      this.announcer.setAttribute('aria-atomic', 'true');
+      document.body.appendChild(this.announcer);
+      
+      // Keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        // J/K navigation for sections
+        if (e.key === 'j' || e.key === 'k') {
+          if (document.activeElement.tagName !== 'INPUT' && 
+              document.activeElement.tagName !== 'TEXTAREA') {
+            e.preventDefault();
+            this.navigateSections(e.key === 'j' ? 'next' : 'prev');
+          }
+        }
+        
+        // Escape closes mobile menu
+        if (e.key === 'Escape') {
+          if (this.mobileTabs && this.mobileTabs.container) {
+            this.mobileTabs.showTabs();
+          }
+        }
+      });
+      
+      // Reduced motion support
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (prefersReducedMotion.matches) {
         document.documentElement.classList.add('reduced-motion');
-      } else {
-        document.documentElement.classList.remove('reduced-motion');
       }
-    });
+      
+      prefersReducedMotion.addEventListener('change', (e) => {
+        if (e.matches) {
+          document.documentElement.classList.add('reduced-motion');
+        } else {
+          document.documentElement.classList.remove('reduced-motion');
+        }
+      });
+    } catch (error) {
+      console.error('Failed to initialize accessibility:', error);
+    }
+  }
+
+  announce(message) {
+    if (this.announcer) {
+      this.announcer.textContent = message;
+      setTimeout(() => {
+        this.announcer.textContent = '';
+      }, 1000);
+    }
   }
 
   navigateSections(direction) {
@@ -764,11 +1025,15 @@ class CharacterPage {
       
       if (targetIndex !== currentIndex) {
         const targetSection = sections[targetIndex];
-        const offset = 80;
+        const offset = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--js-scroll-offset')) || 80;
         window.scrollTo({
           top: targetSection.offsetTop - offset,
           behavior: 'smooth'
         });
+        
+        const heading = targetSection.querySelector('h3') || targetSection.querySelector('h2');
+        const sectionName = heading ? heading.textContent.trim() : 'section';
+        this.announce(`Navigating to ${sectionName}`);
       }
     }
   }
@@ -789,77 +1054,25 @@ class CharacterPage {
     
     return sections[0];
   }
+
+  destroy() {
+    // Clean up all components
+    if (this.mobileTabs) this.mobileTabs.destroy();
+    if (this.progressNav) this.progressNav.destroy();
+    if (this.effects) this.effects.destroy();
+    
+    // Remove global elements
+    const backToTop = document.querySelector('.back-to-top');
+    if (backToTop) backToTop.remove();
+    
+    const skipLink = document.querySelector('.skip-link');
+    if (skipLink) skipLink.remove();
+    
+    if (this.announcer) this.announcer.remove();
+    
+    console.log('Character page cleaned up');
+  }
 }
-
-// ============================================
-// STYLES FOR BACK TO TOP BUTTON
-// ============================================
-const styles = `
-  .back-to-top {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    width: 48px;
-    height: 48px;
-    background: var(--gradient-hero);
-    border: none;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    cursor: pointer;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(20px);
-    transition: all var(--duration-moderate) var(--motion-spring);
-    z-index: var(--z-fixed);
-    box-shadow: 0 4px 12px rgba(114, 9, 183, 0.3);
-  }
-  
-  .back-to-top.visible {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-  
-  .back-to-top:hover {
-    transform: translateY(-4px) scale(1.1);
-    box-shadow: 0 8px 24px rgba(114, 9, 183, 0.4);
-  }
-  
-  .back-to-top:active {
-    transform: translateY(-2px) scale(1.05);
-  }
-  
-  .skip-link {
-    position: absolute;
-    top: -40px;
-    left: 0;
-    background: var(--accent-purple);
-    color: white;
-    padding: 8px 16px;
-    text-decoration: none;
-    z-index: 2000;
-    border-radius: 0 0 8px 0;
-  }
-  
-  .skip-link:focus {
-    top: 0;
-  }
-  
-  @media (max-width: 768px) {
-    .back-to-top {
-      bottom: calc(var(--mobile-tabs-height) + 1rem);
-      right: 1rem;
-    }
-  }
-`;
-
-// Add styles to document
-const styleSheet = document.createElement('style');
-styleSheet.textContent = styles;
-document.head.appendChild(styleSheet);
 
 // ============================================
 // INITIALIZE ON LOAD
@@ -870,6 +1083,387 @@ const characterPage = new CharacterPage();
 window.CharacterPage = CharacterPage;
 window.BiblicalIconSystem = BiblicalIconSystem;
 
+// Clean up on page unload
+window.addEventListener('beforeunload', () => {
+  if (characterPage) {
+    characterPage.destroy();
+  }
+});
+
 // ============================================
-// END OF CHARACTER PAGE V2
+// SMOOTH SCROLL POLYFILL
+// ============================================
+if (!('scrollBehavior' in document.documentElement.style)) {
+  // Simple smooth scroll polyfill for older browsers
+  window.smoothScrollTo = function(endY, duration = 400) {
+    const startY = window.scrollY;
+    const distance = endY - startY;
+    const startTime = performance.now();
+    
+    function scroll() {
+      const now = performance.now();
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const easing = progress * (2 - progress); // easeOutQuad
+      
+      window.scrollTo(0, startY + distance * easing);
+      
+      if (progress < 1) {
+        requestAnimationFrame(scroll);
+      }
+    }
+    
+    requestAnimationFrame(scroll);
+  };
+}
+
+// ============================================
+// INTERSECTION OBSERVER POLYFILL CHECK
+// ============================================
+if (!('IntersectionObserver' in window)) {
+  console.warn('IntersectionObserver not supported. Consider adding polyfill for better scroll animations.');
+  // Fallback: immediately show all animated elements
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+      el.classList.add('visible');
+    });
+  });
+}
+
+// ============================================
+// PERFORMANCE MONITORING
+// ============================================
+class PerformanceMonitor {
+  constructor() {
+    this.metrics = {};
+    this.init();
+  }
+  
+  init() {
+    // Track page load performance
+    if (window.performance && window.performance.timing) {
+      window.addEventListener('load', () => {
+        const perfData = window.performance.timing;
+        this.metrics.pageLoad = perfData.loadEventEnd - perfData.navigationStart;
+        this.metrics.domReady = perfData.domContentLoadedEventEnd - perfData.navigationStart;
+        this.metrics.firstPaint = perfData.responseEnd - perfData.navigationStart;
+        
+        console.log('Performance Metrics:', this.metrics);
+      });
+    }
+    
+    // Track scroll performance
+    this.trackScrollPerformance();
+  }
+  
+  trackScrollPerformance() {
+    let lastScrollTime = performance.now();
+    let frameCount = 0;
+    let fpsInterval;
+    
+    const measureFPS = () => {
+      frameCount++;
+    };
+    
+    window.addEventListener('scroll', () => {
+      if (!fpsInterval) {
+        frameCount = 0;
+        fpsInterval = setInterval(() => {
+          this.metrics.scrollFPS = frameCount;
+          frameCount = 0;
+          
+          // Warn if FPS drops below 30
+          if (this.metrics.scrollFPS < 30) {
+            console.warn('Low scroll performance detected:', this.metrics.scrollFPS, 'FPS');
+          }
+        }, 1000);
+        
+        // Stop measuring after 2 seconds of no scrolling
+        setTimeout(() => {
+          if (fpsInterval) {
+            clearInterval(fpsInterval);
+            fpsInterval = null;
+          }
+        }, 2000);
+      }
+      
+      requestAnimationFrame(measureFPS);
+    }, { passive: true });
+  }
+}
+
+// ============================================
+// LAZY LOADING MANAGER
+// ============================================
+class LazyLoadManager {
+  constructor() {
+    this.images = [];
+    this.init();
+  }
+  
+  init() {
+    // Find all images that should be lazy loaded
+    this.images = document.querySelectorAll('img[data-src]');
+    
+    if ('IntersectionObserver' in window) {
+      this.initIntersectionObserver();
+    } else {
+      // Fallback: load all images immediately
+      this.loadAllImages();
+    }
+  }
+  
+  initIntersectionObserver() {
+    const imageObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          this.loadImage(img);
+          imageObserver.unobserve(img);
+        }
+      });
+    }, {
+      rootMargin: '50px 0px',
+      threshold: 0.01
+    });
+    
+    this.images.forEach(img => imageObserver.observe(img));
+  }
+  
+  loadImage(img) {
+    const src = img.dataset.src;
+    if (!src) return;
+    
+    // Create a new image to preload
+    const newImg = new Image();
+    newImg.onload = () => {
+      img.src = src;
+      img.classList.add('loaded');
+      delete img.dataset.src;
+    };
+    newImg.onerror = () => {
+      console.error('Failed to load image:', src);
+      img.classList.add('error');
+    };
+    newImg.src = src;
+  }
+  
+  loadAllImages() {
+    this.images.forEach(img => this.loadImage(img));
+  }
+}
+
+// ============================================
+// TOUCH GESTURE HANDLER
+// ============================================
+class TouchGestureHandler {
+  constructor() {
+    this.touchStartX = 0;
+    this.touchStartY = 0;
+    this.touchEndX = 0;
+    this.touchEndY = 0;
+    this.minSwipeDistance = 50;
+    this.callbacks = {
+      swipeLeft: [],
+      swipeRight: [],
+      swipeUp: [],
+      swipeDown: []
+    };
+    
+    this.init();
+  }
+  
+  init() {
+    document.addEventListener('touchstart', (e) => {
+      this.touchStartX = e.changedTouches[0].screenX;
+      this.touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+    
+    document.addEventListener('touchend', (e) => {
+      this.touchEndX = e.changedTouches[0].screenX;
+      this.touchEndY = e.changedTouches[0].screenY;
+      this.handleSwipe();
+    }, { passive: true });
+  }
+  
+  handleSwipe() {
+    const deltaX = this.touchEndX - this.touchStartX;
+    const deltaY = this.touchEndY - this.touchStartY;
+    const absX = Math.abs(deltaX);
+    const absY = Math.abs(deltaY);
+    
+    if (Math.max(absX, absY) < this.minSwipeDistance) return;
+    
+    if (absX > absY) {
+      // Horizontal swipe
+      if (deltaX > 0) {
+        this.trigger('swipeRight', deltaX);
+      } else {
+        this.trigger('swipeLeft', Math.abs(deltaX));
+      }
+    } else {
+      // Vertical swipe
+      if (deltaY > 0) {
+        this.trigger('swipeDown', deltaY);
+      } else {
+        this.trigger('swipeUp', Math.abs(deltaY));
+      }
+    }
+  }
+  
+  on(event, callback) {
+    if (this.callbacks[event]) {
+      this.callbacks[event].push(callback);
+    }
+  }
+  
+  trigger(event, distance) {
+    if (this.callbacks[event]) {
+      this.callbacks[event].forEach(callback => callback(distance));
+    }
+  }
+}
+
+// ============================================
+// THEME MANAGER
+// ============================================
+class ThemeManager {
+  constructor() {
+    this.theme = 'auto';
+    this.init();
+  }
+  
+  init() {
+    // Check for saved theme preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      this.setTheme(savedTheme);
+    }
+    
+    // Listen for system theme changes
+    if (window.matchMedia) {
+      const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      darkModeQuery.addEventListener('change', (e) => {
+        if (this.theme === 'auto') {
+          this.applyTheme(e.matches ? 'dark' : 'light');
+        }
+      });
+    }
+  }
+  
+  setTheme(theme) {
+    this.theme = theme;
+    localStorage.setItem('theme', theme);
+    
+    if (theme === 'auto') {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      this.applyTheme(prefersDark ? 'dark' : 'light');
+    } else {
+      this.applyTheme(theme);
+    }
+  }
+  
+  applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    
+    // Update theme color meta tag
+    const themeColor = theme === 'dark' ? '#1a1a1a' : '#7209b7';
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', themeColor);
+  }
+  
+  toggle() {
+    const current = document.documentElement.getAttribute('data-theme') || 'light';
+    this.setTheme(current === 'dark' ? 'light' : 'dark');
+  }
+}
+
+// ============================================
+// ENHANCED MAIN CONTROLLER
+// ============================================
+// Update the CharacterPage class initialization
+CharacterPage.prototype.initializeEnhancements = function() {
+  // Performance monitoring
+  this.performanceMonitor = new PerformanceMonitor();
+  
+  // Lazy loading for images
+  this.lazyLoader = new LazyLoadManager();
+  
+  // Touch gestures
+  this.touchHandler = new TouchGestureHandler();
+  
+  // Theme management
+  this.themeManager = new ThemeManager();
+  
+  // Set up gesture callbacks
+  this.touchHandler.on('swipeLeft', () => {
+    if (this.mobileTabs && this.activeSection) {
+      const currentIndex = this.mobileTabs.sections.findIndex(s => s.id === this.activeSection);
+      if (currentIndex < this.mobileTabs.sections.length - 1) {
+        this.mobileTabs.scrollToSection(this.mobileTabs.sections[currentIndex + 1].id);
+      }
+    }
+  });
+  
+  this.touchHandler.on('swipeRight', () => {
+    if (this.mobileTabs && this.activeSection) {
+      const currentIndex = this.mobileTabs.sections.findIndex(s => s.id === this.activeSection);
+      if (currentIndex > 0) {
+        this.mobileTabs.scrollToSection(this.mobileTabs.sections[currentIndex - 1].id);
+      }
+    }
+  });
+  
+  console.log('✓ Enhancements initialized');
+};
+
+// Add to existing initialize method
+const originalInitialize = CharacterPage.prototype.initialize;
+CharacterPage.prototype.initialize = function() {
+  originalInitialize.call(this);
+  this.initializeEnhancements();
+};
+
+// ============================================
+// ERROR BOUNDARY
+// ============================================
+window.addEventListener('error', function(e) {
+  console.error('Global error:', e.error);
+  
+  // Send to analytics if available
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'exception', {
+      description: e.message,
+      fatal: false
+    });
+  }
+});
+
+window.addEventListener('unhandledrejection', function(e) {
+  console.error('Unhandled promise rejection:', e.reason);
+});
+
+// ============================================
+// PRINT SUPPORT
+// ============================================
+window.addEventListener('beforeprint', function() {
+  // Expand all collapsed sections
+  document.querySelectorAll('details').forEach(details => {
+    details.open = true;
+  });
+  
+  // Show all lazy-loaded images
+  if (window.characterPage?.lazyLoader) {
+    window.characterPage.lazyLoader.loadAllImages();
+  }
+  
+  // Add print class to body
+  document.body.classList.add('printing');
+});
+
+window.addEventListener('afterprint', function() {
+  document.body.classList.remove('printing');
+});
+
+// ============================================
+// END OF CHARACTER PAGE V2.1 - COMPLETE
 // ============================================
