@@ -35,23 +35,69 @@
   };
 
   // Create navigation HTML
-  function createNavHTML() {
-    // Get icon function - check multiple sources
-    const getIconHTML = function(name, options = {}) {
-      // Try different icon sources
-      if (typeof window.getIcon === 'function') {
-        return window.getIcon(name, options);
-      } else if (window.BiblicalApp && typeof window.BiblicalApp.getIcon === 'function') {
-        return window.BiblicalApp.getIcon(name, options);
-      } else {
-        // SVG fallback icons
-        const svgIcons = {
-          'home': '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
-          'menu': '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>'
-        };
-        return svgIcons[name] || '📄';
-      }
+function createNavHTML() {
+  // Get icon function - simplified since we know load order is correct
+  const getIconHTML = function(name, options = {}) {
+    // By the time this runs, consolidated-init.js has already set up window.getIcon
+    if (typeof window.getIcon === 'function') {
+      return window.getIcon(name, options);
+    }
+    
+    // Fallback if somehow getIcon isn't available
+    const fallbacks = {
+      'home': '🏠',
+      'menu': '☰'
     };
+    return fallbacks[name] || '📄';
+  };
+
+  return `
+    <nav role="navigation" aria-label="Main navigation">
+      <div class="nav-container">
+        <!-- Logo -->
+        <a href="/" class="logo" aria-label="Project Context Home">
+          <span class="logo-icon">${getIconHTML('home', { size: 24, color: 'currentColor' })}</span>
+          <span class="logo-text">Project Context</span>
+        </a>
+
+        <!-- Mobile Menu Toggle (Hamburger) -->
+        <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <!-- Navigation Links -->
+        <ul class="nav-links">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li class="dropdown">
+            <a href="#" class="nav-link dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+              Studies
+            </a>
+            <div class="dropdown-content" role="menu">
+              <a href="/studies/characters/" role="menuitem">Biblical Characters</a>
+              <a href="/studies/women/" role="menuitem">Women in the Bible</a>
+              <a href="/studies/tanakh/" role="menuitem">Tanakh Studies</a>
+              <a href="/studies/themes/" role="menuitem">Thematic Studies</a>
+            </div>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="nav-link dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+              Resources
+            </a>
+            <div class="dropdown-content" role="menu">
+              <a href="/resources/timelines/" role="menuitem">Timelines</a>
+              <a href="/resources/maps/" role="menuitem">Maps</a>
+              <a href="/resources/glossary/" role="menuitem">Glossary</a>
+              <a href="/resources/bibliography/" role="menuitem">Bibliography</a>
+            </div>
+          </li>
+          <li><a href="/about/" class="nav-link">About</a></li>
+        </ul>
+      </div>
+    </nav>
+  `;
+}
 
     return `
       <nav role="navigation" aria-label="Main navigation">
