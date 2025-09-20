@@ -865,23 +865,87 @@ p {
   font-size: var(--type-base);
 }
 
-/* Tags */
-.tag {
+/* ============================================
+   TAG SYSTEM - COMPLETE V3.2 UNIFIED
+   Single source of truth for all tag styling
+   ============================================ */
+
+/* Base tag styling - applies to all tags */
+.tag,
+.badge,
+[class*="tag-"],
+[class*="badge-"] {
+  /* Layout */
   display: inline-flex;
   align-items: center;
-  min-height: 32px;
+  justify-content: center;
+  
+  /* Sizing */
+  min-height: 36px;
   padding: var(--space-xs) var(--space-md);
+  margin: var(--space-xs);
+  
+  /* Typography */
+  font-size: var(--type-sm);
+  font-weight: var(--font-medium);
+  line-height: 1.4;
+  white-space: nowrap;
+  
+  /* Appearance */
   background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
   border: 1px solid rgba(114, 9, 183, 0.15);
   border-radius: var(--button-radius);
-  font-size: var(--type-sm);
-  font-weight: var(--font-medium);
-  margin: var(--space-xs);
+  color: hsl(0, 0%, 20%);
+  
+  /* Interaction */
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  
+  /* Animation */
   transition: all var(--duration-fast) var(--motion-standard);
-  cursor: default;
+  
+  /* Positioning for pseudo-elements */
+  position: relative;
+  overflow: hidden;
+  
+  /* Performance */
+  will-change: auto;
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
-.tag:hover {
+/* Shimmer effect pseudo-element */
+.tag::before,
+.badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: left var(--duration-moderate) var(--motion-standard);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Ensure content stays above shimmer */
+.tag > *,
+.badge > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Default hover - transforms to gradient */
+.tag:hover,
+.badge:hover {
   background: var(--gradient-hero);
   color: white;
   border-color: transparent;
@@ -889,11 +953,157 @@ p {
   box-shadow: 0 4px 8px rgba(114, 9, 183, 0.2);
 }
 
-.tag.primary {
+/* Trigger shimmer on hover */
+.tag:hover::before,
+.badge:hover::before {
+  left: 100%;
+}
+
+/* Active state (click/tap) */
+.tag:active,
+.badge:active {
+  transform: translateY(-1px) scale(1.03);
+  transition-duration: var(--duration-instant);
+}
+
+/* Primary variant - always colored */
+.tag.primary,
+.badge.primary {
   background: var(--gradient-hero);
   color: white;
   border-color: transparent;
   font-weight: var(--font-semibold);
+  box-shadow: 0 2px 4px rgba(114, 9, 183, 0.15);
+}
+
+.tag.primary:hover,
+.badge.primary:hover {
+  transform: translateY(-3px) scale(1.08);
+  box-shadow: 0 6px 12px rgba(114, 9, 183, 0.3);
+  filter: brightness(1.1);
+}
+
+/* Hover-lift variant - enhanced animation */
+.tag.hover-lift,
+.badge.hover-lift {
+  transition: all var(--duration-moderate) var(--motion-spring);
+}
+
+.tag.hover-lift:hover,
+.badge.hover-lift:hover {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 8px 16px rgba(114, 9, 183, 0.25);
+}
+
+/* Primary + hover-lift combination */
+.tag.primary.hover-lift:hover,
+.badge.primary.hover-lift:hover {
+  transform: translateY(-5px) scale(1.1);
+  box-shadow: 0 10px 20px rgba(114, 9, 183, 0.35);
+  filter: brightness(1.15);
+}
+
+/* IMPORTANT: Inline style overrides for CMS/dynamic content */
+.tag[style*="background"],
+.badge[style*="background"],
+span[class*="tag"][style*="background"] {
+  transition: all var(--duration-fast) var(--motion-standard) !important;
+  cursor: pointer !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Hover for inline-styled tags */
+.tag[style*="background"]:hover,
+.badge[style*="background"]:hover,
+span[class*="tag"][style*="background"]:hover {
+  transform: translateY(-3px) scale(1.05) !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25) !important;
+  filter: brightness(1.2) saturate(1.1) !important;
+}
+
+/* Active state for inline-styled tags */
+.tag[style*="background"]:active,
+.badge[style*="background"]:active {
+  transform: translateY(-1px) scale(1.03) !important;
+  filter: brightness(1.1) saturate(1.05) !important;
+}
+
+/* Focus states for accessibility */
+.tag:focus-visible,
+.badge:focus-visible {
+  outline: 2px solid var(--accent-purple);
+  outline-offset: 2px;
+}
+
+.tag:focus:not(:focus-visible),
+.badge:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Touch device optimization */
+@media (hover: none) and (pointer: coarse) {
+  .tag,
+  .badge {
+    min-height: 44px;
+    padding: var(--space-sm) var(--space-lg);
+  }
+  
+  .tag:active,
+  .badge:active,
+  .tag[style]:active,
+  .badge[style]:active {
+    transform: translateY(-1px) scale(1.03) !important;
+  }
+}
+
+/* Small screens */
+@media (max-width: 768px) {
+  .tag,
+  .badge {
+    font-size: var(--type-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .tag,
+  .badge,
+  .tag::before,
+  .badge::before {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .tag::before,
+  .badge::before {
+    display: none;
+  }
+  
+  .tag:hover,
+  .badge:hover,
+  .tag[style]:hover,
+  .badge[style]:hover {
+    transform: none !important;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .tag:not(.primary):not([style*="background"]),
+  .badge:not(.primary):not([style*="background"]) {
+    background: linear-gradient(135deg, #2a2a2a 0%, #252525 100%);
+    border-color: rgba(114, 9, 183, 0.25);
+    color: hsl(0, 0%, 87%);
+  }
+  
+  .tag:not(.primary):not([style*="background"]):hover,
+  .badge:not(.primary):not([style*="background"]):hover {
+    background: var(--gradient-hero);
+    color: white;
+    border-color: transparent;
+  }
 }
 
 /* ============================================
@@ -1468,16 +1678,16 @@ body.has-mobile-tabs {
 .stagger-children.visible > *:nth-child(7) { transition-delay: 300ms; }
 .stagger-children.visible > *:nth-child(8) { transition-delay: 350ms; }
 
-/* Premium hover effects */
-.hover-lift {
+/* Premium hover effects - for non-tag elements */
+.hover-lift:not(.tag):not(.badge) {
   transition: transform var(--duration-moderate) var(--motion-spring);
-  will-change: auto; /* Let browser decide */
+  will-change: auto;
   cursor: pointer;
 }
 
-.hover-lift:hover {
+.hover-lift:not(.tag):not(.badge):hover {
   transform: translateY(-4px) scale(1.02);
-  will-change: transform; /* Only during hover */
+  will-change: transform;
 }
 
 /* 3D card effect */
@@ -1489,89 +1699,6 @@ body.has-mobile-tabs {
 
 .card-3d:hover {
   transform: perspective(1000px) rotateX(-5deg) rotateY(5deg) translateZ(20px);
-}
-
-/* ============================================
-   INTERACTIVE TAG BUBBLES
-   ============================================ */
-.tag {
-  display: inline-flex;
-  align-items: center;
-  min-height: 36px;
-  padding: var(--space-xs) var(--space-md);
-  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
-  border: 1px solid rgba(114, 9, 183, 0.15);
-  border-radius: var(--button-radius);
-  font-size: var(--type-sm);
-  font-weight: var(--font-medium);
-  margin: var(--space-xs);
-  transition: all var(--duration-fast) var(--motion-standard);
-  cursor: default;
-  position: relative;
-  overflow: hidden;
-  /* Prevent text selection on double-click */
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-/* Shimmer effect on hover */
-.tag::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.4),
-    transparent
-  );
-  transition: left var(--duration-moderate) var(--motion-standard);
-  pointer-events: none;
-}
-
-.tag:hover {
-  background: var(--gradient-hero);
-  color: white;
-  border-color: transparent;
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 4px 8px rgba(114, 9, 183, 0.2);
-  cursor: pointer;
-}
-
-.tag:hover::before {
-  left: 100%;
-}
-
-/* Active state for touch devices */
-.tag:active {
-  transform: translateY(-1px) scale(1.03);
-}
-
-/* Primary tags */
-.tag.primary {
-  background: var(--gradient-hero);
-  color: white;
-  border-color: transparent;
-  font-weight: var(--font-semibold);
-  box-shadow: 0 2px 4px rgba(114, 9, 183, 0.15);
-}
-
-.tag.primary:hover {
-  transform: translateY(-3px) scale(1.08);
-  box-shadow: 0 6px 12px rgba(114, 9, 183, 0.3);
-}
-
-/* Combination: tag with hover-lift */
-.tag.hover-lift {
-  transition: all var(--duration-moderate) var(--motion-spring);
-}
-
-.tag.hover-lift:hover {
-  transform: translateY(-4px) scale(1.08);
-  box-shadow: 0 8px 16px rgba(114, 9, 183, 0.25);
 }
 
 /* ============================================
