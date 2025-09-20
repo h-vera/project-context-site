@@ -10,15 +10,6 @@
 (function() {
   'use strict';
   
-  // ============================================
-  // CHECK INITIALIZATION STATUS CORRECTLY
-  // ============================================
-  
-  // The check should be for whether features are initialized, not the module itself
-  if (window.APP_CONFIG?.initialized?.characterPageComplete) {
-    console.log('Character page features already fully initialized');
-    return;
-  }
   
   // ============================================
   // BIBLICAL ICON SYSTEM - ENHANCED
