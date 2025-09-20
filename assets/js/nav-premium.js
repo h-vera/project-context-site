@@ -1,27 +1,56 @@
 /**
- * NAV-PREMIUM.JS - WHITE NAVIGATION VERSION
+ * NAV-PREMIUM.JS - FIXED WHITE NAVIGATION VERSION
  * Path: /assets/js/nav-premium.js
  * Purpose: Premium navigation with mobile hamburger menu
- * Version: 1.2.0 - White navigation (no purple gradient)
+ * Version: 1.3.0 - Fixed navigation rendering
  * Compatible with global-v3.css and consolidated initialization
  */
 
 (function() {
   'use strict';
 
-  // Navigation HTML template with proper icon integration
-  const createNavHTML = function() {
-    // Use the global icon system if available, otherwise use fallbacks
-    const getIconHTML = function(name, options) {
-      if (window.getIcon) {
-        return window.getIcon(name, options);
+  // Initialize premium navigation
+  window.initPremiumNav = function(options = {}) {
+    console.log('Initializing Premium Navigation v1.3.0...');
+    
+    // First, inject critical styles
+    injectNavStyles();
+    
+    // Then insert navigation HTML
+    insertNavigation();
+    
+    // Setup functionality after a brief delay to ensure DOM is ready
+    requestAnimationFrame(() => {
+      setupMobileMenu();
+      setupScrollBehavior();
+      highlightCurrentPage();
+      
+      // Mark navigation as initialized
+      if (window.APP_CONFIG) {
+        window.APP_CONFIG.initialized.navigation = true;
       }
-      // Fallback icons
-      const icons = {
-        'home': '🏠',
-        'menu': '☰'
-      };
-      return icons[name] || '📄';
+      
+      console.log('✅ Premium navigation fully initialized');
+    });
+  };
+
+  // Create navigation HTML
+  function createNavHTML() {
+    // Get icon function - check multiple sources
+    const getIconHTML = function(name, options = {}) {
+      // Try different icon sources
+      if (typeof window.getIcon === 'function') {
+        return window.getIcon(name, options);
+      } else if (window.BiblicalApp && typeof window.BiblicalApp.getIcon === 'function') {
+        return window.BiblicalApp.getIcon(name, options);
+      } else {
+        // SVG fallback icons
+        const svgIcons = {
+          'home': '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+          'menu': '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>'
+        };
+        return svgIcons[name] || '📄';
+      }
     };
 
     return `
@@ -70,11 +99,14 @@
         </div>
       </nav>
     `;
-  };
+  }
 
-  // Critical navigation styles - WHITE THEME
-  const injectNavStyles = function() {
-    if (document.getElementById('nav-critical-styles')) return;
+  // Inject critical navigation styles
+  function injectNavStyles() {
+    if (document.getElementById('nav-critical-styles')) {
+      console.log('Navigation styles already injected');
+      return;
+    }
     
     const styles = `
       /* Critical Navigation Styles - White Theme */
@@ -172,7 +204,6 @@
         padding-left: 1.5rem;
       }
       
-      /* Dropdown arrow indicator */
       nav .dropdown-toggle::after {
         content: '▾';
         font-size: 0.8rem;
@@ -185,7 +216,6 @@
         transform: rotate(180deg);
       }
       
-      /* Mobile menu toggle (hamburger) */
       .mobile-menu-toggle {
         display: none;
         background: none;
@@ -221,12 +251,10 @@
         transform: rotate(-45deg) translate(7px, -6px);
       }
       
-      /* Scrolled state */
       nav.scrolled {
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
       }
       
-      /* Mobile styles */
       @media (max-width: 768px) {
         .mobile-menu-toggle {
           display: flex;
@@ -307,237 +335,243 @@
     styleEl.id = 'nav-critical-styles';
     styleEl.textContent = styles;
     document.head.appendChild(styleEl);
-  };
-
-  // Initialize premium navigation
-  window.initPremiumNav = function(options = {}) {
-    console.log('Initializing Premium Navigation (White Theme)...');
     
-    // Inject critical styles first
-    injectNavStyles();
+    console.log('✓ Navigation styles injected');
+  }
+
+  // Insert navigation HTML into the page
+  function insertNavigation() {
+    // Remove ALL existing navigation elements first
+    const existingNavs = document.querySelectorAll('nav');
+    existingNavs.forEach(nav => {
+      console.log('Removing existing nav:', nav);
+      nav.remove();
+    });
     
-    // Insert navigation HTML
-    const insertNavigation = () => {
-      // Remove any existing navigation first
-      const existingNav = document.querySelector('nav');
-      if (existingNav) {
-        console.log('Removing existing navigation');
-        existingNav.remove();
-      }
+    // Clear nav placeholder if it exists
+    const placeholder = document.getElementById('nav-placeholder');
+    if (placeholder) {
+      placeholder.innerHTML = '';
+    }
 
-      // Create nav HTML with current icon system
-      const navHTML = createNavHTML();
+    // Create nav HTML
+    const navHTML = createNavHTML();
+    
+    // Create a temporary container to parse the HTML
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = navHTML.trim();
+    
+    // Get the nav element
+    const navElement = tempDiv.querySelector('nav');
+    
+    if (!navElement) {
+      console.error('Failed to create nav element from HTML');
+      return;
+    }
+    
+    // Insert nav at the beginning of body
+    if (document.body.firstChild) {
+      document.body.insertBefore(navElement, document.body.firstChild);
+    } else {
+      document.body.appendChild(navElement);
+    }
+
+    // Create mobile menu overlay if it doesn't exist
+    if (!document.querySelector('.mobile-menu-overlay')) {
+      const overlay = document.createElement('div');
+      overlay.className = 'mobile-menu-overlay';
+      document.body.appendChild(overlay);
+    }
+
+    console.log('✓ Navigation HTML injected successfully');
+    
+    // Verify the navigation was inserted
+    const verifyNav = document.querySelector('nav');
+    if (verifyNav) {
+      console.log('Navigation verification:');
+      console.log('- Has container:', !!verifyNav.querySelector('.nav-container'));
+      console.log('- Has logo:', !!verifyNav.querySelector('.logo'));
+      console.log('- Has nav links:', !!verifyNav.querySelector('.nav-links'));
+      console.log('- Has dropdowns:', !!verifyNav.querySelector('.dropdown-content'));
+    }
+  }
+
+  // Setup mobile menu functionality
+  function setupMobileMenu() {
+    const menuToggle = document.querySelector('.mobile-menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    const menuOverlay = document.querySelector('.mobile-menu-overlay');
+    const body = document.body;
+
+    if (!menuToggle || !navLinks) {
+      console.warn('Mobile menu elements not found');
+      return;
+    }
+
+    // Toggle menu function
+    const toggleMenu = () => {
+      const isOpen = menuToggle.classList.contains('active');
       
-      // Create nav element
-      const navContainer = document.createElement('div');
-      navContainer.innerHTML = navHTML;
-      
-      // Insert at beginning of body
-      document.body.insertBefore(navContainer.firstChild, document.body.firstChild);
-
-      // Create mobile menu overlay if it doesn't exist
-      if (!document.querySelector('.mobile-menu-overlay')) {
-        const overlay = document.createElement('div');
-        overlay.className = 'mobile-menu-overlay';
-        document.body.appendChild(overlay);
+      if (isOpen) {
+        // Close menu
+        menuToggle.classList.remove('active');
+        navLinks.classList.remove('active');
+        if (menuOverlay) menuOverlay.classList.remove('active');
+        body.classList.remove('menu-open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      } else {
+        // Open menu
+        menuToggle.classList.add('active');
+        navLinks.classList.add('active');
+        if (menuOverlay) menuOverlay.classList.add('active');
+        body.classList.add('menu-open');
+        menuToggle.setAttribute('aria-expanded', 'true');
       }
-
-      console.log('✓ Navigation HTML injected');
     };
 
-    // Setup mobile menu functionality
-    const setupMobileMenu = () => {
-      const menuToggle = document.querySelector('.mobile-menu-toggle');
-      const navLinks = document.querySelector('.nav-links');
-      const menuOverlay = document.querySelector('.mobile-menu-overlay');
-      const body = document.body;
+    // Event listeners
+    menuToggle.addEventListener('click', toggleMenu);
+    
+    if (menuOverlay) {
+      menuOverlay.addEventListener('click', toggleMenu);
+    }
 
-      if (!menuToggle || !navLinks) {
-        console.warn('Mobile menu elements not found');
-        return;
-      }
-
-      // Toggle menu function
-      const toggleMenu = () => {
-        const isOpen = menuToggle.classList.contains('active');
-        
-        if (isOpen) {
-          // Close menu
-          menuToggle.classList.remove('active');
-          navLinks.classList.remove('active');
-          menuOverlay.classList.remove('active');
-          body.classList.remove('menu-open');
-          menuToggle.setAttribute('aria-expanded', 'false');
-        } else {
-          // Open menu
-          menuToggle.classList.add('active');
-          navLinks.classList.add('active');
-          menuOverlay.classList.add('active');
-          body.classList.add('menu-open');
-          menuToggle.setAttribute('aria-expanded', 'true');
+    // Handle dropdown toggles in mobile
+    const dropdownToggles = document.querySelectorAll('.dropdown .dropdown-toggle');
+    dropdownToggles.forEach(toggle => {
+      toggle.addEventListener('click', function(e) {
+        if (window.innerWidth <= 768) {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          const dropdown = this.parentElement;
+          const wasActive = dropdown.classList.contains('active');
+          
+          // Close all other dropdowns
+          document.querySelectorAll('.dropdown.active').forEach(d => {
+            if (d !== dropdown) d.classList.remove('active');
+          });
+          
+          // Toggle current dropdown
+          dropdown.classList.toggle('active', !wasActive);
+          this.setAttribute('aria-expanded', !wasActive);
         }
-      };
-
-      // Event listeners
-      menuToggle.addEventListener('click', toggleMenu);
-      
-      if (menuOverlay) {
-        menuOverlay.addEventListener('click', toggleMenu);
-      }
-
-      // Handle dropdown toggles in mobile
-      const dropdownToggles = document.querySelectorAll('.dropdown .dropdown-toggle');
-      dropdownToggles.forEach(toggle => {
-        toggle.addEventListener('click', function(e) {
-          if (window.innerWidth <= 768) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const dropdown = this.parentElement;
-            const wasActive = dropdown.classList.contains('active');
-            
-            // Close all other dropdowns
-            document.querySelectorAll('.dropdown.active').forEach(d => {
-              if (d !== dropdown) d.classList.remove('active');
-            });
-            
-            // Toggle current dropdown
-            dropdown.classList.toggle('active', !wasActive);
-            
-            // Update aria-expanded
-            this.setAttribute('aria-expanded', !wasActive);
-          }
-        });
       });
+    });
 
-      // Close menu when clicking on a link (not dropdown toggle)
-      const navLinksItems = document.querySelectorAll('.nav-links a:not(.dropdown-toggle)');
-      navLinksItems.forEach(link => {
-        link.addEventListener('click', () => {
-          if (window.innerWidth <= 768 && navLinks.classList.contains('active')) {
-            toggleMenu();
-          }
-        });
-      });
-
-      // Close menu on escape key
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+    // Close menu when clicking on a link (not dropdown toggle)
+    const navLinksItems = document.querySelectorAll('.nav-links a:not(.dropdown-toggle)');
+    navLinksItems.forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 768 && navLinks.classList.contains('active')) {
           toggleMenu();
         }
       });
+    });
 
-      // Handle window resize
-      let resizeTimer;
-      window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => {
-          if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
-            // Close mobile menu if window is resized to desktop
-            menuToggle.classList.remove('active');
-            navLinks.classList.remove('active');
-            if (menuOverlay) menuOverlay.classList.remove('active');
-            body.classList.remove('menu-open');
-            menuToggle.setAttribute('aria-expanded', 'false');
-            
-            // Reset all dropdown states
-            document.querySelectorAll('.dropdown.active').forEach(d => {
-              d.classList.remove('active');
-            });
-          }
-        }, 250);
-      });
+    // Close menu on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+        toggleMenu();
+      }
+    });
 
-      console.log('✓ Mobile menu initialized');
-    };
-
-    // Setup scroll behavior
-    const setupScrollBehavior = () => {
-      const nav = document.querySelector('nav');
-      if (!nav) return;
-
-      let lastScrollY = window.scrollY;
-      let ticking = false;
-
-      const updateNav = () => {
-        const currentScrollY = window.scrollY;
-        
-        // Add scrolled class when scrolled down
-        if (currentScrollY > 100) {
-          nav.classList.add('scrolled');
-        } else {
-          nav.classList.remove('scrolled');
-        }
-        
-        lastScrollY = currentScrollY;
-        ticking = false;
-      };
-
-      window.addEventListener('scroll', () => {
-        if (!ticking) {
-          window.requestAnimationFrame(updateNav);
-          ticking = true;
-        }
-      }, { passive: true });
-
-      console.log('✓ Scroll behavior initialized');
-    };
-
-    // Highlight current page
-    const highlightCurrentPage = () => {
-      const currentPath = window.location.pathname;
-      const navLinks = document.querySelectorAll('.nav-links a');
-      
-      navLinks.forEach(link => {
-        const href = link.getAttribute('href');
-        if (href && href !== '#') {
-          // Remove any trailing slashes for comparison
-          const cleanHref = href.replace(/\/$/, '');
-          const cleanPath = currentPath.replace(/\/$/, '');
+    // Handle window resize
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
+          // Close mobile menu if window is resized to desktop
+          menuToggle.classList.remove('active');
+          navLinks.classList.remove('active');
+          if (menuOverlay) menuOverlay.classList.remove('active');
+          body.classList.remove('menu-open');
+          menuToggle.setAttribute('aria-expanded', 'false');
           
-          // Check if current path matches or is a child of the link
-          if (cleanPath === cleanHref || 
-              (cleanHref !== '' && cleanPath.startsWith(cleanHref + '/'))) {
-            link.classList.add('active');
-            
-            // Also mark parent dropdown as active if in a submenu
-            const parentDropdown = link.closest('.dropdown');
-            if (parentDropdown) {
-              parentDropdown.querySelector('.dropdown-toggle')?.classList.add('active');
-            }
-          }
+          // Reset all dropdown states
+          document.querySelectorAll('.dropdown.active').forEach(d => {
+            d.classList.remove('active');
+          });
         }
-      });
+      }, 250);
+    });
 
-      console.log('✓ Current page highlighted');
-    };
+    console.log('✓ Mobile menu initialized');
+  }
 
-    // Initialize everything
-    insertNavigation();
-    
-    // Use requestAnimationFrame to ensure DOM is updated
-    requestAnimationFrame(() => {
-      setupMobileMenu();
-      setupScrollBehavior();
-      highlightCurrentPage();
+  // Setup scroll behavior
+  function setupScrollBehavior() {
+    const nav = document.querySelector('nav');
+    if (!nav) return;
+
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    const updateNav = () => {
+      const currentScrollY = window.scrollY;
       
-      // Mark navigation as initialized
-      if (window.APP_CONFIG) {
-        window.APP_CONFIG.initialized.navigation = true;
+      // Add scrolled class when scrolled down
+      if (currentScrollY > 100) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
       }
       
-      console.log('✅ Premium navigation fully initialized (White Theme)');
+      lastScrollY = currentScrollY;
+      ticking = false;
+    };
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateNav);
+        ticking = true;
+      }
+    }, { passive: true });
+
+    console.log('✓ Scroll behavior initialized');
+  }
+
+  // Highlight current page in navigation
+  function highlightCurrentPage() {
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('.nav-links a');
+    
+    navLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      if (href && href !== '#') {
+        // Remove any trailing slashes for comparison
+        const cleanHref = href.replace(/\/$/, '');
+        const cleanPath = currentPath.replace(/\/$/, '');
+        
+        // Check if current path matches or is a child of the link
+        if (cleanPath === cleanHref || 
+            (cleanHref !== '' && cleanPath.startsWith(cleanHref + '/'))) {
+          link.classList.add('active');
+          
+          // Also mark parent dropdown as active if in a submenu
+          const parentDropdown = link.closest('.dropdown');
+          if (parentDropdown) {
+            parentDropdown.querySelector('.dropdown-toggle')?.classList.add('active');
+          }
+        }
+      }
     });
-  };
 
-  // Make sure the function is available globally
-  if (typeof window !== 'undefined') {
-    window.initPremiumNav = window.initPremiumNav || initPremiumNav;
+    console.log('✓ Current page highlighted');
   }
 
-  // Export for module systems if needed
-  if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { initPremiumNav };
+  // Auto-initialize if DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      // Don't auto-initialize, wait for explicit call
+      console.log('nav-premium.js loaded and ready');
+    });
+  } else {
+    console.log('nav-premium.js loaded and ready');
   }
+
+  // Make function globally available
+  window.initPremiumNav = window.initPremiumNav || initPremiumNav;
 
 })();
