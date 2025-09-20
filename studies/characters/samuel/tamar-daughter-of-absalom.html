@@ -585,5 +585,108 @@
       }
     });
   </script>
+  <!-- Add this script after your other scripts to diagnose the navigation issue -->
+<script>
+  window.addEventListener('load', function() {
+    console.log('=== NAVIGATION DIAGNOSTIC ===');
+    
+    // Check if nav exists
+    const navElement = document.querySelector('nav');
+    console.log('Nav element exists:', !!navElement);
+    
+    if (navElement) {
+      console.log('Nav location:', navElement.parentElement.tagName);
+      console.log('Nav HTML:', navElement.outerHTML.substring(0, 200) + '...');
+      console.log('Nav computed styles:');
+      const styles = window.getComputedStyle(navElement);
+      console.log('  - display:', styles.display);
+      console.log('  - visibility:', styles.visibility);
+      console.log('  - position:', styles.position);
+      console.log('  - background:', styles.background);
+      console.log('  - z-index:', styles.zIndex);
+      console.log('  - height:', styles.height);
+    }
+    
+    // Check for nav styles
+    const navStyles = document.getElementById('nav-critical-styles');
+    console.log('Nav critical styles injected:', !!navStyles);
+    
+    // Check for multiple navs
+    const allNavs = document.querySelectorAll('nav');
+    console.log('Total nav elements:', allNavs.length);
+    
+    // Try to manually fix navigation if it exists but isn't visible
+    if (navElement && navElement.querySelector('.nav-container')) {
+      console.log('Attempting manual nav fix...');
+      
+      // Force nav to be visible
+      navElement.style.cssText = `
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        height: 64px !important;
+        background: white !important;
+        z-index: 1000 !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+      `;
+      
+      // Adjust main content padding
+      const main = document.querySelector('main');
+      if (main) {
+        main.style.paddingTop = '80px';
+      }
+      
+      console.log('Manual nav fix applied');
+    } else if (!navElement) {
+      console.log('No navigation found - attempting to create fallback nav');
+      
+      // Create a simple fallback navigation
+      const fallbackNav = document.createElement('nav');
+      fallbackNav.innerHTML = `
+        <div class="nav-container" style="max-width: 1400px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; height: 100%;">
+          <a href="/" style="color: #333; text-decoration: none; font-weight: bold; font-size: 1.25rem;">
+            🏠 Project Context
+          </a>
+          <div style="display: flex; gap: 2rem;">
+            <a href="/" style="color: #666; text-decoration: none;">Home</a>
+            <a href="/studies/" style="color: #666; text-decoration: none;">Studies</a>
+            <a href="/characters/" style="color: #666; text-decoration: none;">Characters</a>
+            <a href="/about/" style="color: #666; text-decoration: none;">About</a>
+          </div>
+        </div>
+      `;
+      
+      fallbackNav.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 64px;
+        background: white;
+        z-index: 1000;
+        display: block;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      `;
+      
+      document.body.insertBefore(fallbackNav, document.body.firstChild);
+      
+      // Adjust main content padding
+      const main = document.querySelector('main');
+      if (main) {
+        main.style.paddingTop = '80px';
+      }
+      
+      console.log('Fallback navigation created');
+    }
+    
+    console.log('=== END DIAGNOSTIC ===');
+  });
+</script>
 </body>
 </html>
