@@ -1,21 +1,22 @@
 /**
- * CHARACTER PAGE ENHANCED FUNCTIONALITY v2.2
+ * CHARACTER PAGE ENHANCED FUNCTIONALITY v2.3
  * Path: /assets/js/character-page-v2.js
  * Purpose: Premium interactions for biblical character profiles
  * Features: Mobile tabs, progress nav, animations, premium effects
- * Version: 2.2.0 - Defers to consolidated-init.js
- * Compatibility: global-v3.css v3.1.0, consolidated-init.js v1.1.0
+ * Version: 2.3.0 - Fixed initialization check
+ * Compatibility: global-v3.css v3.1.0, consolidated-init.js v1.1.0+
  */
 
-// ============================================
-// REGISTER WITH CONSOLIDATED INIT
-// ============================================
 (function() {
   'use strict';
   
-  // Don't initialize if already done by consolidated-init
-  if (window.BiblicalApp?.modules?.characterPage) {
-    console.log('Character page already initialized by consolidated-init');
+  // ============================================
+  // CHECK INITIALIZATION STATUS CORRECTLY
+  // ============================================
+  
+  // The check should be for whether features are initialized, not the module itself
+  if (window.APP_CONFIG?.initialized?.characterPageComplete) {
+    console.log('Character page features already fully initialized');
     return;
   }
   
@@ -29,9 +30,9 @@
     }
 
     initializeIcons() {
-      // Defer to global icon system if available
-      if (window.getIcon) {
-        console.log('Using global icon system from consolidated-init');
+      // Use global icon system if available from consolidated-init
+      if (window.BiblicalApp?.iconSystem) {
+        console.log('Using existing global icon system');
         return;
       }
       
@@ -99,7 +100,7 @@
 
     get(name, options = {}) {
       // Use global icon function if available
-      if (window.getIcon) {
+      if (window.getIcon && typeof window.getIcon === 'function') {
         return window.getIcon(name, options);
       }
       
@@ -870,13 +871,8 @@
   // ============================================
   class CharacterPage {
     constructor() {
-      // Check if already initialized
-      if (window.BiblicalApp?.modules?.characterPage) {
-        console.log('CharacterPage already exists');
-        return window.BiblicalApp.modules.characterPage;
-      }
-      
-      this.iconSystem = window.BiblicalApp?.iconSystem || new BiblicalIconSystem();
+      // Don't check if already exists - we want to create it fresh
+      this.iconSystem = null;
       this.mobileTabs = null;
       this.progressNav = null;
       this.effects = null;
@@ -884,15 +880,23 @@
       
       // Register with global app
       if (window.BiblicalApp) {
+        // Set up icon system if not already present
+        if (!window.BiblicalApp.iconSystem) {
+          window.BiblicalApp.iconSystem = new BiblicalIconSystem();
+        }
+        this.iconSystem = window.BiblicalApp.iconSystem;
+        
         window.BiblicalApp.modules = window.BiblicalApp.modules || {};
         window.BiblicalApp.modules.characterPage = this;
+      } else {
+        this.iconSystem = new BiblicalIconSystem();
       }
       
       this.init();
     }
 
     init() {
-      // Use BiblicalApp's ready system instead of our own
+      // Use BiblicalApp's ready system if available
       if (window.BiblicalApp?.onReady) {
         window.BiblicalApp.onReady(() => this.initialize());
       } else {
@@ -907,7 +911,7 @@
 
     initialize() {
       try {
-        // Initialize components only if not already done
+        // Initialize components
         this.initializeComponents();
         this.initializeNavigation();
         this.initializeInteractions();
@@ -918,8 +922,13 @@
           window.BiblicalApp.announce = (message) => this.announce(message);
         }
         
+        // Mark character page as fully initialized
+        if (window.APP_CONFIG?.initialized) {
+          window.APP_CONFIG.initialized.characterPageComplete = true;
+        }
+        
         // Log initialization
-        console.log('Character Page v2.2.0 initialized');
+        console.log('Character Page v2.3.0 initialized successfully');
         console.log('Template version:', window.APP_CONFIG?.version);
         console.log('Icon system loaded:', this.iconSystem.registry?.size || 'using global', 'icons');
         console.log('Capabilities:', window.APP_CONFIG?.capabilities);
@@ -952,8 +961,8 @@
     }
 
     initializeNavigation() {
-      // Skip main navigation initialization - let consolidated-init handle it
-      console.log('Main navigation initialization handled by consolidated-init.js');
+      // Navigation will be handled by nav-premium.js
+      console.log('Navigation initialization will be handled by nav-premium.js');
       
       try {
         // Only handle smooth scrolling for anchor links if not already done
@@ -989,8 +998,10 @@
     createBackToTopButton() {
       const backToTop = document.createElement('button');
       backToTop.className = 'back-to-top';
-      // Use global icon system if available
-      if (window.getIcon) {
+      // Use icon system
+      if (this.iconSystem) {
+        backToTop.innerHTML = this.iconSystem.get('chevron-up', { size: 24 });
+      } else if (window.getIcon) {
         backToTop.innerHTML = window.getIcon('chevron-up', { size: 24, color: 'white' });
       } else {
         backToTop.innerHTML = `
@@ -1230,17 +1241,8 @@
   window.PremiumEffects = PremiumEffects;
   window.CharacterPage = CharacterPage;
   
-  // Create instance when ready
-  if (window.BiblicalApp?.onReady) {
-    window.BiblicalApp.onReady(function() {
-      if (!window.BiblicalApp.modules?.characterPage) {
-        window.BiblicalApp.modules.characterPage = new CharacterPage();
-      }
-    });
-  } else {
-    // Fallback: create immediately
-    const characterPage = new CharacterPage();
-  }
+  // Create instance immediately - don't wait for ready callbacks
+  const characterPage = new CharacterPage();
   
   // Clean up on page unload
   window.addEventListener('beforeunload', () => {
@@ -1250,6 +1252,8 @@
   });
   
 })();
+
+// Rest of the file remains the same (polyfills, performance monitoring, etc.)
 
 // ============================================
 // SMOOTH SCROLL POLYFILL

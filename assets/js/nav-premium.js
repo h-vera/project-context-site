@@ -1,8 +1,8 @@
 /**
- * NAV-PREMIUM.JS - FIXED WHITE NAVIGATION VERSION
+ * NAV-PREMIUM.JS - FIXED ICON SYSTEM VERSION
  * Path: /assets/js/nav-premium.js
  * Purpose: Premium navigation with mobile hamburger menu
- * Version: 1.3.0 - Fixed navigation rendering
+ * Version: 1.4.0 - Fixed icon system dependencies
  * Compatible with global-v3.css and consolidated initialization
  */
 
@@ -11,7 +11,13 @@
 
   // Initialize premium navigation
   window.initPremiumNav = function(options = {}) {
-    console.log('Initializing Premium Navigation v1.3.0...');
+    console.log('Initializing Premium Navigation v1.4.0...');
+    
+    // Check if navigation already exists
+    if (document.querySelector('nav .nav-container')) {
+      console.log('Navigation already exists');
+      return;
+    }
     
     // First, inject critical styles
     injectNavStyles();
@@ -35,83 +41,55 @@
   };
 
   // Create navigation HTML
-function createNavHTML() {
-  // Get icon function - simplified since we know load order is correct
-  const getIconHTML = function(name, options = {}) {
-    // By the time this runs, consolidated-init.js has already set up window.getIcon
-    if (typeof window.getIcon === 'function') {
-      return window.getIcon(name, options);
-    }
+  function createNavHTML() {
+    // Get icon function - properly handle icon system
+    const getIconHTML = function(name, options = {}) {
+      // Try multiple sources for icons
+      
+      // 1. First try window.getIcon if it exists
+      if (typeof window.getIcon === 'function') {
+        return window.getIcon(name, options);
+      }
+      
+      // 2. Try BiblicalApp icon system
+      if (window.BiblicalApp?.iconSystem?.get) {
+        return window.BiblicalApp.iconSystem.get(name, options);
+      }
+      
+      // 3. Try using CSS-based SVG icons from global-v3.css
+      if (window.APP_CONFIG?.capabilities?.svg !== false) {
+        const sizeClass = options.size ? getSizeClass(options.size) : '';
+        return `<span class="icon-svg ${sizeClass}" data-icon="${name}"></span>`;
+      }
+      
+      // 4. Use emoji fallback
+      const emojiIcons = window.EmojiIcons || {
+        'home': '🏠',
+        'menu': '☰',
+        'close': '✕',
+        'chevron-down': '⬇️'
+      };
+      
+      const emoji = emojiIcons[name] || '📄';
+      if (options.size) {
+        return `<span class="icon-emoji" style="font-size: ${options.size}px">${emoji}</span>`;
+      }
+      return emoji;
+    };
     
-    // Create the icon system adapter that character-page-v2.js expects
-    window.BiblicalApp.iconSystem = {
-    get: (name, options) => window.getIcon(name, options)
+    const getSizeClass = function(size) {
+      if (size <= 16) return 'icon-sm';
+      if (size <= 20) return 'icon-md';
+      if (size <= 24) return 'icon-lg';
+      return 'icon-xl';
     };
-
-// Mark icon system as initialized
-window.APP_CONFIG.initialized.iconSystem = true;
-    // Fallback if somehow getIcon isn't available
-    const fallbacks = {
-      'home': '🏠',
-      'menu': '☰'
-    };
-    return fallbacks[name] || '📄';
-  };
-
-  return `
-    <nav role="navigation" aria-label="Main navigation">
-      <div class="nav-container">
-        <!-- Logo -->
-        <a href="/" class="logo" aria-label="Project Context Home">
-          <span class="logo-icon">${getIconHTML('home', { size: 24, color: 'currentColor' })}</span>
-          <span class="logo-text">Project Context</span>
-        </a>
-
-        <!-- Mobile Menu Toggle (Hamburger) -->
-        <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-
-        <!-- Navigation Links -->
-        <ul class="nav-links">
-          <li><a href="/" class="nav-link">Home</a></li>
-          <li class="dropdown">
-            <a href="#" class="nav-link dropdown-toggle" aria-haspopup="true" aria-expanded="false">
-              Studies
-            </a>
-            <div class="dropdown-content" role="menu">
-              <a href="/studies/characters/" role="menuitem">Biblical Characters</a>
-              <a href="/studies/women/" role="menuitem">Women in the Bible</a>
-              <a href="/studies/tanakh/" role="menuitem">Tanakh Studies</a>
-              <a href="/studies/themes/" role="menuitem">Thematic Studies</a>
-            </div>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="nav-link dropdown-toggle" aria-haspopup="true" aria-expanded="false">
-              Resources
-            </a>
-            <div class="dropdown-content" role="menu">
-              <a href="/resources/timelines/" role="menuitem">Timelines</a>
-              <a href="/resources/maps/" role="menuitem">Maps</a>
-              <a href="/resources/glossary/" role="menuitem">Glossary</a>
-              <a href="/resources/bibliography/" role="menuitem">Bibliography</a>
-            </div>
-          </li>
-          <li><a href="/about/" class="nav-link">About</a></li>
-        </ul>
-      </div>
-    </nav>
-  `;
-}
 
     return `
       <nav role="navigation" aria-label="Main navigation">
         <div class="nav-container">
           <!-- Logo -->
           <a href="/" class="logo" aria-label="Project Context Home">
-            <span class="logo-icon">${getIconHTML('home', { size: 24, color: 'currentColor' })}</span>
+            <span class="logo-icon">${getIconHTML('home', { size: 24 })}</span>
             <span class="logo-text">Project Context</span>
           </a>
 
@@ -198,6 +176,21 @@ window.APP_CONFIG.initialized.iconSystem = true;
       
       nav .logo:hover {
         opacity: 0.7;
+      }
+      
+      nav .logo-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+      }
+      
+      nav .logo-icon .icon-svg,
+      nav .logo-icon .icon-emoji {
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       
       nav .nav-links {
@@ -394,16 +387,10 @@ window.APP_CONFIG.initialized.iconSystem = true;
 
   // Insert navigation HTML into the page
   function insertNavigation() {
-    // Check if nav already exists and is visible
-    const existingNav = document.querySelector('nav');
-    if (existingNav && existingNav.querySelector('.nav-container')) {
-    console.log('Navigation already exists and is complete');
-    return;
-  }
-    // Remove ALL existing navigation elements first
+    // Remove any existing navigation elements first
     const existingNavs = document.querySelectorAll('nav');
     existingNavs.forEach(nav => {
-      console.log('Removing existing nav:', nav);
+      console.log('Removing existing nav');
       nav.remove();
     });
     
@@ -443,16 +430,6 @@ window.APP_CONFIG.initialized.iconSystem = true;
     }
 
     console.log('✓ Navigation HTML injected successfully');
-    
-    // Verify the navigation was inserted
-    const verifyNav = document.querySelector('nav');
-    if (verifyNav) {
-      console.log('Navigation verification:');
-      console.log('- Has container:', !!verifyNav.querySelector('.nav-container'));
-      console.log('- Has logo:', !!verifyNav.querySelector('.logo'));
-      console.log('- Has nav links:', !!verifyNav.querySelector('.nav-links'));
-      console.log('- Has dropdowns:', !!verifyNav.querySelector('.dropdown-content'));
-    }
   }
 
   // Setup mobile menu functionality
@@ -624,13 +601,13 @@ window.APP_CONFIG.initialized.iconSystem = true;
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       // Don't auto-initialize, wait for explicit call
-      console.log('nav-premium.js loaded and ready');
+      console.log('nav-premium.js v1.4.0 loaded and ready');
     });
   } else {
-    console.log('nav-premium.js loaded and ready');
+    console.log('nav-premium.js v1.4.0 loaded and ready');
   }
 
   // Make function globally available
-  window.initPremiumNav = window.initPremiumNav || initPremiumNav;
+  window.initPremiumNav = window.initPremiumNav || window.initPremiumNav;
 
 })();
