@@ -426,7 +426,7 @@
     
     // Console log in development
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      console.log('Track:', event, parameters);
+      console.log("Track:", event, parameters);
     }
   };
 
