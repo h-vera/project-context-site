@@ -1289,7 +1289,7 @@ if (!('IntersectionObserver' in window)) {
 // ============================================
 // PERFORMANCE MONITORING
 // ============================================
-class PerformanceMonitor {
+/*class PerformanceMonitor {
   constructor() {
     this.metrics = {};
     this.init();
@@ -1347,6 +1347,7 @@ class PerformanceMonitor {
     }, { passive: true });
   }
 }
+*/
 
 // ============================================
 // LAZY LOADING MANAGER
@@ -1537,7 +1538,7 @@ class TouchGestureHandler {
 // ENHANCED MAIN CONTROLLER
 // ============================================
 // Update the CharacterPage class initialization
-CharacterPage.prototype.initializeEnhancements = function() {
+/*CharacterPage.prototype.initializeEnhancements = function() {
   // Performance monitoring
   if (!window.BiblicalApp?.modules?.performanceMonitor) {
     this.performanceMonitor = new PerformanceMonitor();
@@ -1545,7 +1546,7 @@ CharacterPage.prototype.initializeEnhancements = function() {
       window.BiblicalApp.modules.performanceMonitor = this.performanceMonitor;
     }
   }
-  
+  */
   // Lazy loading for images
   if (!window.BiblicalApp?.modules?.lazyLoader) {
     this.lazyLoader = new LazyLoadManager();
