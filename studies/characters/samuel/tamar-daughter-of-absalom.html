@@ -46,68 +46,10 @@
 
   <!-- Preload Critical Resources -->
   <link rel="preload" href="/assets/css/global-v3.css?v=3.1.0" as="style">
-  <link rel="preload" href="/assets/js/consolidated-init.js?v=1.0.0" as="script">
+  <link rel="preload" href="/assets/js/consolidated-init.js?v=1.3.0" as="script">
 
-  <!-- Stylesheets - ONLY global-v3.css, NO inline styles -->
+  <!-- Stylesheets - ONLY global-v3.css -->
   <link rel="stylesheet" href="/assets/css/global-v3.css?v=3.1.0">
-  <style>
-  /* Force navigation to be visible with inline styles */
-  nav:first-of-type {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    width: 100% !important;
-    height: 64px !important;
-    background: white !important;
-    border-bottom: 1px solid #e5e7eb !important;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
-    z-index: 1000 !important;
-    display: block !important;
-  }
-  
-  nav .nav-container {
-    max-width: 1400px !important;
-    margin: 0 auto !important;
-    padding: 0 2rem !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    height: 100% !important;
-  }
-  
-  nav .logo {
-    display: flex !important;
-    align-items: center !important;
-    color: #333 !important;
-    text-decoration: none !important;
-    font-weight: bold !important;
-    font-size: 1.25rem !important;
-  }
-  
-  nav .nav-links {
-    display: flex !important;
-    gap: 2rem !important;
-    list-style: none !important;
-  }
-  
-  nav .nav-links a {
-    color: #666 !important;
-    text-decoration: none !important;
-    padding: 0.5rem 1rem !important;
-  }
-  
-  nav .nav-links a:hover {
-    color: #333 !important;
-    background: rgba(0, 0, 0, 0.05) !important;
-    border-radius: 8px !important;
-  }
-  
-  /* Ensure main content has space for fixed nav */
-  main.content-section {
-    padding-top: 80px !important;
-  }
-</style>
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://projectcontext.org/studies/characters/2samuel2chronicles/tamar-absalom-daughter/">
@@ -117,7 +59,8 @@
   <!-- Skip to main content for accessibility -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
   
-  <!-- Navigation will be inserted here by consolidated-init.js -->
+  <!-- Navigation placeholder - will be replaced by JavaScript -->
+  <div id="nav-placeholder"></div>
   
   <!-- Main Content -->
   <main id="main-content" class="content-section" role="main" aria-label="Biblical character profile">
@@ -617,275 +560,94 @@
   <!-- Screen reader announcements -->
   <div class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
-  <!-- JavaScript Loading - v6.0 COMPLETE -->
-  <script src="/assets/js/consolidated-init.js?v=1.0.0"></script>
-  <script src="/assets/js/nav-premium.js?v=1.0.0"></script>
-  <script src="/assets/js/character-page-v2.js?v=2.1.0"></script>
+  <!-- JavaScript Loading - FIXED ORDER -->
+  <!-- 1. Load consolidated init first - it sets up the global namespace -->
+  <script src="/assets/js/consolidated-init.js?v=1.3.0"></script>
+  
+  <!-- 2. Load nav-premium after consolidated-init -->
+  <script src="/assets/js/nav-premium.js?v=1.2.0"></script>
+  
+  <!-- 3. Load character page last -->
+  <script src="/assets/js/character-page-v2.js?v=2.2.0"></script>
 
-  <!-- Page-specific setup -->
+  <!-- 4. Initialize everything in the correct order -->
   <script>
-    window.BiblicalApp.onReady(function() {
-      console.log('Tamar page initialized');
+    // Ensure navigation is initialized after all scripts load
+    window.addEventListener('DOMContentLoaded', function() {
+      // Small delay to ensure all scripts are parsed
+      setTimeout(function() {
+        // Check if initPremiumNav exists and call it
+        if (typeof window.initPremiumNav === 'function') {
+          console.log('Initializing premium navigation...');
+          window.initPremiumNav();
+        } else {
+          console.error('initPremiumNav function not found!');
+          
+          // Fallback: Create basic navigation
+          const navHTML = `
+            <nav role="navigation" aria-label="Main navigation">
+              <div class="nav-container">
+                <a href="/" class="logo" aria-label="Project Context Home">
+                  <span class="logo-icon">🏠</span>
+                  <span class="logo-text">Project Context</span>
+                </a>
+                <ul class="nav-links">
+                  <li><a href="/" class="nav-link">Home</a></li>
+                  <li><a href="/studies/" class="nav-link">Studies</a></li>
+                  <li><a href="/studies/characters/" class="nav-link">Characters</a></li>
+                  <li><a href="/about/" class="nav-link">About</a></li>
+                </ul>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </button>
+              </div>
+            </nav>
+          `;
+          
+          const navPlaceholder = document.getElementById('nav-placeholder');
+          if (navPlaceholder) {
+            navPlaceholder.innerHTML = navHTML;
+          } else {
+            document.body.insertAdjacentHTML('afterbegin', navHTML);
+          }
+        }
+      }, 100);
     });
-  </script>
 
-  <!-- Performance Monitoring -->
-  <script>
+    // Additional initialization after everything loads
     window.addEventListener('load', function() {
+      // Performance monitoring
       if (window.performance && window.performance.timing) {
         const perfData = window.performance.timing;
-        const metrics = {
-          pageLoad: perfData.loadEventEnd - perfData.navigationStart,
-          domReady: perfData.domContentLoadedEventEnd - perfData.navigationStart,
-          firstPaint: perfData.responseEnd - perfData.navigationStart
-        };
-        console.log('Performance Metrics:', metrics);
+        const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
+        console.log('Page loaded in:', pageLoadTime + 'ms');
       }
+      
+      // Final check for navigation visibility
+      setTimeout(function() {
+        const nav = document.querySelector('nav');
+        if (!nav || window.getComputedStyle(nav).display === 'none') {
+          console.error('Navigation still not visible! Applying emergency fix...');
+          
+          // Force navigation to be visible
+          if (nav) {
+            nav.style.cssText = `
+              display: block !important;
+              position: fixed !important;
+              top: 0 !important;
+              left: 0 !important;
+              right: 0 !important;
+              width: 100% !important;
+              z-index: 1000 !important;
+              visibility: visible !important;
+              opacity: 1 !important;
+            `;
+          }
+        }
+      }, 500);
     });
   </script>
-  <!-- Add this script after your other scripts to diagnose the navigation issue -->
-<script>
-  window.addEventListener('load', function() {
-    console.log('=== NAVIGATION DIAGNOSTIC ===');
-    
-    // Check if nav exists
-    const navElement = document.querySelector('nav');
-    console.log('Nav element exists:', !!navElement);
-    
-    if (navElement) {
-      console.log('Nav location:', navElement.parentElement.tagName);
-      console.log('Nav HTML:', navElement.outerHTML.substring(0, 200) + '...');
-      console.log('Nav computed styles:');
-      const styles = window.getComputedStyle(navElement);
-      console.log('  - display:', styles.display);
-      console.log('  - visibility:', styles.visibility);
-      console.log('  - position:', styles.position);
-      console.log('  - background:', styles.background);
-      console.log('  - z-index:', styles.zIndex);
-      console.log('  - height:', styles.height);
-    }
-    
-    // Check for nav styles
-    const navStyles = document.getElementById('nav-critical-styles');
-    console.log('Nav critical styles injected:', !!navStyles);
-    
-    // Check for multiple navs
-    const allNavs = document.querySelectorAll('nav');
-    console.log('Total nav elements:', allNavs.length);
-    
-    // Try to manually fix navigation if it exists but isn't visible
-    if (navElement && navElement.querySelector('.nav-container')) {
-      console.log('Attempting manual nav fix...');
-      
-      // Force nav to be visible
-      navElement.style.cssText = `
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        width: 100% !important;
-        height: 64px !important;
-        background: white !important;
-        z-index: 1000 !important;
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
-      `;
-      
-      // Adjust main content padding
-      const main = document.querySelector('main');
-      if (main) {
-        main.style.paddingTop = '80px';
-      }
-      
-      console.log('Manual nav fix applied');
-    } else if (!navElement) {
-      console.log('No navigation found - attempting to create fallback nav');
-      
-      // Create a simple fallback navigation
-      const fallbackNav = document.createElement('nav');
-      fallbackNav.innerHTML = `
-        <div class="nav-container" style="max-width: 1400px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; height: 100%;">
-          <a href="/" style="color: #333; text-decoration: none; font-weight: bold; font-size: 1.25rem;">
-            🏠 Project Context
-          </a>
-          <div style="display: flex; gap: 2rem;">
-            <a href="/" style="color: #666; text-decoration: none;">Home</a>
-            <a href="/studies/" style="color: #666; text-decoration: none;">Studies</a>
-            <a href="/characters/" style="color: #666; text-decoration: none;">Characters</a>
-            <a href="/about/" style="color: #666; text-decoration: none;">About</a>
-          </div>
-        </div>
-      `;
-      
-      fallbackNav.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        height: 64px;
-        background: white;
-        z-index: 1000;
-        display: block;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      `;
-      
-      document.body.insertBefore(fallbackNav, document.body.firstChild);
-      
-      // Adjust main content padding
-      const main = document.querySelector('main');
-      if (main) {
-        main.style.paddingTop = '80px';
-      }
-      
-      console.log('Fallback navigation created');
-    }
-    
-    console.log('=== END DIAGNOSTIC ===');
-  });
-</script>
-<!-- Add this diagnostic script right before </body> in your HTML -->
-<script>
-  console.log('=== COMPREHENSIVE NAV DIAGNOSTIC STARTING ===');
-  
-  // Wait for everything to load
-  window.addEventListener('load', function() {
-    setTimeout(function() {
-      console.log('\n--- Navigation Structure Analysis ---');
-      
-      // 1. Check all nav elements
-      const allNavs = document.querySelectorAll('nav');
-      console.log('Total <nav> elements found:', allNavs.length);
-      
-      allNavs.forEach((nav, index) => {
-        console.log(`\nNav #${index + 1}:`);
-        console.log('  - Parent:', nav.parentElement ? nav.parentElement.tagName : 'none');
-        console.log('  - Classes:', nav.className || 'none');
-        console.log('  - ID:', nav.id || 'none');
-        console.log('  - Children count:', nav.children.length);
-        console.log('  - Has .nav-container?', !!nav.querySelector('.nav-container'));
-        console.log('  - Has .nav-links?', !!nav.querySelector('.nav-links'));
-        console.log('  - Has dropdown menus?', !!nav.querySelector('.dropdown-content'));
-        console.log('  - HTML preview:', nav.outerHTML.substring(0, 200) + '...');
-        
-        // Check computed styles
-        const styles = window.getComputedStyle(nav);
-        console.log('  - Computed styles:');
-        console.log('    • display:', styles.display);
-        console.log('    • visibility:', styles.visibility);
-        console.log('    • position:', styles.position);
-        console.log('    • opacity:', styles.opacity);
-        console.log('    • z-index:', styles.zIndex);
-        console.log('    • background:', styles.background.substring(0, 50));
-      });
-      
-      // 2. Check for nav-premium.js specific elements
-      console.log('\n--- Nav Premium Elements Check ---');
-      console.log('Mobile menu toggle exists?', !!document.querySelector('.mobile-menu-toggle'));
-      console.log('Mobile drawer exists?', !!document.querySelector('.mobile-drawer'));
-      console.log('Nav overlay exists?', !!document.querySelector('.nav-overlay, .mobile-menu-overlay'));
-      console.log('Dropdown toggles exist?', document.querySelectorAll('.dropdown-toggle').length);
-      console.log('Dropdown content blocks exist?', document.querySelectorAll('.dropdown-content').length);
-      
-      // 3. Check style injection
-      console.log('\n--- Style Injection Check ---');
-      const navStyles = document.getElementById('nav-critical-styles');
-      console.log('nav-critical-styles element exists?', !!navStyles);
-      if (navStyles) {
-        console.log('Style content length:', navStyles.textContent.length);
-        console.log('First 200 chars:', navStyles.textContent.substring(0, 200));
-      }
-      
-      // Check all style elements
-      const allStyles = document.querySelectorAll('style');
-      console.log('Total <style> elements:', allStyles.length);
-      allStyles.forEach((style, i) => {
-        if (style.textContent.includes('nav') || style.textContent.includes('mobile-menu')) {
-          console.log(`Style #${i} contains nav rules (${style.textContent.length} chars)`);
-        }
-      });
-      
-      // 4. Check initPremiumNav function
-      console.log('\n--- Function Availability ---');
-      console.log('window.initPremiumNav exists?', typeof window.initPremiumNav);
-      console.log('window.initPremiumNav is function?', typeof window.initPremiumNav === 'function');
-      
-      // 5. Check for conflicts
-      console.log('\n--- Potential Conflicts ---');
-      console.log('Number of elements with position:fixed:', document.querySelectorAll('[style*="position: fixed"]').length);
-      console.log('Elements with z-index > 1000:', 
-        Array.from(document.querySelectorAll('*')).filter(el => {
-          const z = window.getComputedStyle(el).zIndex;
-          return z !== 'auto' && parseInt(z) > 1000;
-        }).length
-      );
-      
-      // 6. Try to manually call initPremiumNav
-      console.log('\n--- Manual Init Attempt ---');
-      if (typeof window.initPremiumNav === 'function') {
-        console.log('Attempting to manually call initPremiumNav()...');
-        try {
-          // First, remove any existing nav to avoid duplicates
-          const existingNavs = document.querySelectorAll('nav');
-          console.log(`Removing ${existingNavs.length} existing nav(s) first...`);
-          existingNavs.forEach(nav => nav.remove());
-          
-          // Now try to initialize
-          window.initPremiumNav();
-          console.log('Manual init completed - checking results...');
-          
-          setTimeout(() => {
-            const newNav = document.querySelector('nav');
-            if (newNav) {
-              console.log('New nav created successfully!');
-              console.log('New nav has dropdowns?', !!newNav.querySelector('.dropdown-content'));
-              console.log('New nav HTML:', newNav.outerHTML.substring(0, 500));
-            } else {
-              console.log('ERROR: No nav element found after manual init!');
-            }
-          }, 100);
-        } catch (error) {
-          console.log('ERROR during manual init:', error);
-        }
-      } else {
-        console.log('Cannot attempt manual init - function not available');
-      }
-      
-      // 7. Check what's actually visible in viewport
-      console.log('\n--- Viewport Visibility ---');
-      const viewportNav = document.elementFromPoint(window.innerWidth / 2, 10);
-      console.log('Element at center-top of viewport:', viewportNav ? viewportNav.tagName + '.' + viewportNav.className : 'none');
-      
-      // 8. Check for script errors
-      console.log('\n--- Script Loading ---');
-      const scripts = document.querySelectorAll('script[src*="nav"]');
-      scripts.forEach(script => {
-        console.log('Nav script:', script.src);
-        console.log('  - async?', script.async);
-        console.log('  - defer?', script.defer);
-      });
-      
-      // 9. Create a test navigation to ensure nothing is blocking nav elements
-      console.log('\n--- Navigation Element Test ---');
-      const testNav = document.createElement('nav');
-      testNav.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; height: 60px; background: yellow; z-index: 99999;';
-      testNav.innerHTML = '<div style="padding: 20px; color: black;">TEST NAV - If you see this yellow bar, nav elements can be created</div>';
-      document.body.appendChild(testNav);
-      console.log('Test nav created - you should see a yellow bar at the top');
-      
-      setTimeout(() => {
-        testNav.remove();
-        console.log('Test nav removed');
-      }, 3000);
-      
-      console.log('\n=== DIAGNOSTIC COMPLETE ===');
-      console.log('Check the yellow test nav - if it appears, the issue is with nav-premium.js execution');
-      console.log('If no yellow bar appears, something is blocking all nav elements');
-      
-    }, 1000); // Wait 1 second after load to ensure everything has run
-  });
-</script>
 </body>
 </html>
