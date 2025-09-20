@@ -733,5 +733,27 @@
     }, 500);
   });
 </script>
+<script>
+window.addEventListener('load', function() {
+    // Force create back-to-top button
+    if (!document.querySelector('.back-to-top')) {
+        const btn = document.createElement('button');
+        btn.className = 'back-to-top';
+        btn.innerHTML = '⬆️';
+        btn.setAttribute('aria-label', 'Back to top');
+        btn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+        document.body.appendChild(btn);
+        
+        window.addEventListener('scroll', () => {
+            btn.classList.toggle('visible', window.pageYOffset > 500);
+        });
+    }
+    
+    // Force animation visibility
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        el.classList.add('visible');
+    });
+});
+</script>
 </body>
 </html>
