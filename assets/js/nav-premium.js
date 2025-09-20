@@ -43,6 +43,13 @@ function createNavHTML() {
       return window.getIcon(name, options);
     }
     
+    // Create the icon system adapter that character-page-v2.js expects
+    window.BiblicalApp.iconSystem = {
+    get: (name, options) => window.getIcon(name, options)
+    };
+
+// Mark icon system as initialized
+window.APP_CONFIG.initialized.iconSystem = true;
     // Fallback if somehow getIcon isn't available
     const fallbacks = {
       'home': '🏠',
@@ -387,6 +394,12 @@ function createNavHTML() {
 
   // Insert navigation HTML into the page
   function insertNavigation() {
+    // Check if nav already exists and is visible
+    const existingNav = document.querySelector('nav');
+    if (existingNav && existingNav.querySelector('.nav-container')) {
+    console.log('Navigation already exists and is complete');
+    return;
+  }
     // Remove ALL existing navigation elements first
     const existingNavs = document.querySelectorAll('nav');
     existingNavs.forEach(nav => {

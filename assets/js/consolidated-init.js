@@ -309,6 +309,27 @@
       'clock': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
       'edit': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`,
       'trash': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`
+    
+      // These eye icons you already added:
+    'eye': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2">
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+    <circle cx="12" cy="12" r="3"/>
+  </svg>`,
+  
+  'eye-box': `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2">
+    <rect x="3" y="3" width="18" height="18" rx="2"/>
+    <path d="M7 12s2-3 5-3 5 3 5 3-2 3-5 3-5-3-5-3z"/>
+    <circle cx="12" cy="12" r="1.5"/>
+  </svg>`,
+  
+  // ADD A COMMA after eye-box above, then ADD YOUR CUSTOM LOGO HERE:
+  'eye-logo': `<svg width="${size}" height="${size}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <path d="M 25 15 L 10 15 L 10 85 L 25 85" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M 75 15 L 90 15 L 90 85 L 75 85" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <ellipse cx="50" cy="50" rx="25" ry="15" stroke="#0a0a0a" stroke-width="3" fill="none"/>
+    <circle cx="50" cy="50" r="8" fill="#00b4d8"/>
+    <circle cx="50" cy="50" r="3" fill="#0a0a0a"/>
+  </svg>`
     };
     
     // Return SVG directly
