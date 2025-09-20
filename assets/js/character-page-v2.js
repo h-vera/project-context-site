@@ -1538,8 +1538,8 @@ class TouchGestureHandler {
 // ENHANCED MAIN CONTROLLER
 // ============================================
 // Update the CharacterPage class initialization
-/*CharacterPage.prototype.initializeEnhancements = function() {
-  // Performance monitoring
+CharacterPage.prototype.initializeEnhancements = function() {
+  /* Performance monitoring - COMMENTED OUT
   if (!window.BiblicalApp?.modules?.performanceMonitor) {
     this.performanceMonitor = new PerformanceMonitor();
     if (window.BiblicalApp?.modules) {
@@ -1547,6 +1547,7 @@ class TouchGestureHandler {
     }
   }
   */
+  
   // Lazy loading for images
   if (!window.BiblicalApp?.modules?.lazyLoader) {
     this.lazyLoader = new LazyLoadManager();
@@ -1563,33 +1564,35 @@ class TouchGestureHandler {
     }
   }
   
-  // Theme management
-  /*if (!window.BiblicalApp?.modules?.themeManager) {
+  /* Theme management - COMMENTED OUT
+  if (!window.BiblicalApp?.modules?.themeManager) {
     this.themeManager = new ThemeManager();
     if (window.BiblicalApp?.modules) {
       window.BiblicalApp.modules.themeManager = this.themeManager;
     }
   }
-    */
+  */
   
   // Set up gesture callbacks
-  this.touchHandler.on('swipeLeft', () => {
-    if (this.mobileTabs && this.mobileTabs.activeSection) {
-      const currentIndex = this.mobileTabs.sections.findIndex(s => s.id === this.mobileTabs.activeSection);
-      if (currentIndex < this.mobileTabs.sections.length - 1) {
-        this.mobileTabs.scrollToSection(this.mobileTabs.sections[currentIndex + 1].id);
+  if (this.touchHandler) {  // Add safety check
+    this.touchHandler.on('swipeLeft', () => {
+      if (this.mobileTabs && this.mobileTabs.activeSection) {
+        const currentIndex = this.mobileTabs.sections.findIndex(s => s.id === this.mobileTabs.activeSection);
+        if (currentIndex < this.mobileTabs.sections.length - 1) {
+          this.mobileTabs.scrollToSection(this.mobileTabs.sections[currentIndex + 1].id);
+        }
       }
-    }
-  });
-  
-  this.touchHandler.on('swipeRight', () => {
-    if (this.mobileTabs && this.mobileTabs.activeSection) {
-      const currentIndex = this.mobileTabs.sections.findIndex(s => s.id === this.mobileTabs.activeSection);
-      if (currentIndex > 0) {
-        this.mobileTabs.scrollToSection(this.mobileTabs.sections[currentIndex - 1].id);
+    });
+    
+    this.touchHandler.on('swipeRight', () => {
+      if (this.mobileTabs && this.mobileTabs.activeSection) {
+        const currentIndex = this.mobileTabs.sections.findIndex(s => s.id === this.mobileTabs.activeSection);
+        if (currentIndex > 0) {
+          this.mobileTabs.scrollToSection(this.mobileTabs.sections[currentIndex - 1].id);
+        }
       }
-    }
-  });
+    });
+  }
   
   console.log('✓ Enhancements initialized');
 };
