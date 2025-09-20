@@ -509,6 +509,10 @@ function updateSectionsForV60(html) {
   // Add v6.0 specific attributes
   html = addDataSectionPriorities(html);
   
+  // Add hover-lift to tags
+  html = html.replace(/class="tag primary"/g, 'class="tag primary hover-lift"');
+  html = html.replace(/class="tag"(?!.*hover-lift)/g, 'class="tag hover-lift"');
+  
   // Update grid classes
   html = html.replace(/class="grid-3"/g, 'class="grid-3 stagger-children"');
   html = html.replace(/class="grid-4"/g, 'class="grid-4"');
