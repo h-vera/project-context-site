@@ -1483,7 +1483,7 @@ class TouchGestureHandler {
 // ============================================
 // THEME MANAGER
 // ============================================
-class ThemeManager {
+/* class ThemeManager {
   constructor() {
     this.theme = 'auto';
     this.init();
@@ -1532,7 +1532,7 @@ class ThemeManager {
     this.setTheme(current === 'dark' ? 'light' : 'dark');
   }
 }
-
+*/
 // ============================================
 // ENHANCED MAIN CONTROLLER
 // ============================================
@@ -1563,12 +1563,13 @@ CharacterPage.prototype.initializeEnhancements = function() {
   }
   
   // Theme management
-  if (!window.BiblicalApp?.modules?.themeManager) {
+  /*if (!window.BiblicalApp?.modules?.themeManager) {
     this.themeManager = new ThemeManager();
     if (window.BiblicalApp?.modules) {
       window.BiblicalApp.modules.themeManager = this.themeManager;
     }
   }
+    */
   
   // Set up gesture callbacks
   this.touchHandler.on('swipeLeft', () => {
