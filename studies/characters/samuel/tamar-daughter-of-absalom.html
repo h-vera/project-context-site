@@ -746,5 +746,146 @@
     console.log('=== END DIAGNOSTIC ===');
   });
 </script>
+<!-- Add this diagnostic script right before </body> in your HTML -->
+<script>
+  console.log('=== COMPREHENSIVE NAV DIAGNOSTIC STARTING ===');
+  
+  // Wait for everything to load
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      console.log('\n--- Navigation Structure Analysis ---');
+      
+      // 1. Check all nav elements
+      const allNavs = document.querySelectorAll('nav');
+      console.log('Total <nav> elements found:', allNavs.length);
+      
+      allNavs.forEach((nav, index) => {
+        console.log(`\nNav #${index + 1}:`);
+        console.log('  - Parent:', nav.parentElement ? nav.parentElement.tagName : 'none');
+        console.log('  - Classes:', nav.className || 'none');
+        console.log('  - ID:', nav.id || 'none');
+        console.log('  - Children count:', nav.children.length);
+        console.log('  - Has .nav-container?', !!nav.querySelector('.nav-container'));
+        console.log('  - Has .nav-links?', !!nav.querySelector('.nav-links'));
+        console.log('  - Has dropdown menus?', !!nav.querySelector('.dropdown-content'));
+        console.log('  - HTML preview:', nav.outerHTML.substring(0, 200) + '...');
+        
+        // Check computed styles
+        const styles = window.getComputedStyle(nav);
+        console.log('  - Computed styles:');
+        console.log('    • display:', styles.display);
+        console.log('    • visibility:', styles.visibility);
+        console.log('    • position:', styles.position);
+        console.log('    • opacity:', styles.opacity);
+        console.log('    • z-index:', styles.zIndex);
+        console.log('    • background:', styles.background.substring(0, 50));
+      });
+      
+      // 2. Check for nav-premium.js specific elements
+      console.log('\n--- Nav Premium Elements Check ---');
+      console.log('Mobile menu toggle exists?', !!document.querySelector('.mobile-menu-toggle'));
+      console.log('Mobile drawer exists?', !!document.querySelector('.mobile-drawer'));
+      console.log('Nav overlay exists?', !!document.querySelector('.nav-overlay, .mobile-menu-overlay'));
+      console.log('Dropdown toggles exist?', document.querySelectorAll('.dropdown-toggle').length);
+      console.log('Dropdown content blocks exist?', document.querySelectorAll('.dropdown-content').length);
+      
+      // 3. Check style injection
+      console.log('\n--- Style Injection Check ---');
+      const navStyles = document.getElementById('nav-critical-styles');
+      console.log('nav-critical-styles element exists?', !!navStyles);
+      if (navStyles) {
+        console.log('Style content length:', navStyles.textContent.length);
+        console.log('First 200 chars:', navStyles.textContent.substring(0, 200));
+      }
+      
+      // Check all style elements
+      const allStyles = document.querySelectorAll('style');
+      console.log('Total <style> elements:', allStyles.length);
+      allStyles.forEach((style, i) => {
+        if (style.textContent.includes('nav') || style.textContent.includes('mobile-menu')) {
+          console.log(`Style #${i} contains nav rules (${style.textContent.length} chars)`);
+        }
+      });
+      
+      // 4. Check initPremiumNav function
+      console.log('\n--- Function Availability ---');
+      console.log('window.initPremiumNav exists?', typeof window.initPremiumNav);
+      console.log('window.initPremiumNav is function?', typeof window.initPremiumNav === 'function');
+      
+      // 5. Check for conflicts
+      console.log('\n--- Potential Conflicts ---');
+      console.log('Number of elements with position:fixed:', document.querySelectorAll('[style*="position: fixed"]').length);
+      console.log('Elements with z-index > 1000:', 
+        Array.from(document.querySelectorAll('*')).filter(el => {
+          const z = window.getComputedStyle(el).zIndex;
+          return z !== 'auto' && parseInt(z) > 1000;
+        }).length
+      );
+      
+      // 6. Try to manually call initPremiumNav
+      console.log('\n--- Manual Init Attempt ---');
+      if (typeof window.initPremiumNav === 'function') {
+        console.log('Attempting to manually call initPremiumNav()...');
+        try {
+          // First, remove any existing nav to avoid duplicates
+          const existingNavs = document.querySelectorAll('nav');
+          console.log(`Removing ${existingNavs.length} existing nav(s) first...`);
+          existingNavs.forEach(nav => nav.remove());
+          
+          // Now try to initialize
+          window.initPremiumNav();
+          console.log('Manual init completed - checking results...');
+          
+          setTimeout(() => {
+            const newNav = document.querySelector('nav');
+            if (newNav) {
+              console.log('New nav created successfully!');
+              console.log('New nav has dropdowns?', !!newNav.querySelector('.dropdown-content'));
+              console.log('New nav HTML:', newNav.outerHTML.substring(0, 500));
+            } else {
+              console.log('ERROR: No nav element found after manual init!');
+            }
+          }, 100);
+        } catch (error) {
+          console.log('ERROR during manual init:', error);
+        }
+      } else {
+        console.log('Cannot attempt manual init - function not available');
+      }
+      
+      // 7. Check what's actually visible in viewport
+      console.log('\n--- Viewport Visibility ---');
+      const viewportNav = document.elementFromPoint(window.innerWidth / 2, 10);
+      console.log('Element at center-top of viewport:', viewportNav ? viewportNav.tagName + '.' + viewportNav.className : 'none');
+      
+      // 8. Check for script errors
+      console.log('\n--- Script Loading ---');
+      const scripts = document.querySelectorAll('script[src*="nav"]');
+      scripts.forEach(script => {
+        console.log('Nav script:', script.src);
+        console.log('  - async?', script.async);
+        console.log('  - defer?', script.defer);
+      });
+      
+      // 9. Create a test navigation to ensure nothing is blocking nav elements
+      console.log('\n--- Navigation Element Test ---');
+      const testNav = document.createElement('nav');
+      testNav.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; height: 60px; background: yellow; z-index: 99999;';
+      testNav.innerHTML = '<div style="padding: 20px; color: black;">TEST NAV - If you see this yellow bar, nav elements can be created</div>';
+      document.body.appendChild(testNav);
+      console.log('Test nav created - you should see a yellow bar at the top');
+      
+      setTimeout(() => {
+        testNav.remove();
+        console.log('Test nav removed');
+      }, 3000);
+      
+      console.log('\n=== DIAGNOSTIC COMPLETE ===');
+      console.log('Check the yellow test nav - if it appears, the issue is with nav-premium.js execution');
+      console.log('If no yellow bar appears, something is blocking all nav elements');
+      
+    }, 1000); // Wait 1 second after load to ensure everything has run
+  });
+</script>
 </body>
 </html>
