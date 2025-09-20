@@ -603,5 +603,41 @@
       });
     });
   </script>
+  <script>
+  // Debug script - remove after fixing
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      console.log('=== DEBUG CHECK ===');
+      console.log('BiblicalApp exists?', !!window.BiblicalApp);
+      console.log('Modules:', window.BiblicalApp?.modules);
+      console.log('Icon system?', !!window.BiblicalApp?.iconSystem);
+      console.log('Character page?', !!window.BiblicalApp?.modules?.characterPage);
+      
+      // Check for elements
+      console.log('Theology cards found:', document.querySelectorAll('.theology-card').length);
+      console.log('Back-to-top exists?', !!document.querySelector('.back-to-top'));
+      console.log('Mobile tabs exists?', !!document.querySelector('.mobile-section-tabs'));
+      console.log('Progress nav exists?', !!document.querySelector('.smart-progress-nav'));
+      
+      // Check initialization flags
+      console.log('Init flags:', window.APP_CONFIG?.initialized);
+      
+      // Force create back-to-top if missing
+      if (!document.querySelector('.back-to-top')) {
+        console.log('Manually creating back-to-top button...');
+        const btn = document.createElement('button');
+        btn.className = 'back-to-top visible';
+        btn.innerHTML = '⬆️';
+        btn.onclick = () => window.scrollTo({top: 0, behavior: 'smooth'});
+        document.body.appendChild(btn);
+      }
+      
+      // Force add visible class to cards
+      document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        el.classList.add('visible');
+      });
+    }, 1000);
+  });
+</script>
 </body>
 </html>
