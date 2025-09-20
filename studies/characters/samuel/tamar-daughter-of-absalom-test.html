@@ -639,5 +639,19 @@
     }, 1000);
   });
 </script>
+<!-- 1) Global namespace first -->
+<script src="/assets/js/consolidated-init.js?v=1.5.0"></script>
+
+<!-- 2) Then nav, then character page, with init -->
+<script>
+  // helper to chain-load scripts
+  function loadScript(src, done){ const s=document.createElement('script'); s.src=src; s.onload=done; s.onerror=done; document.head.appendChild(s); }
+
+  // load nav, then init it, then load character-page
+  loadScript('/assets/js/nav-premium.js?v=1.4.0', function () {
+    if (typeof window.initPremiumNav === 'function') window.initPremiumNav();
+    loadScript('/assets/js/character-page-v2.js?v=2.3.0', function(){ /* page features ready */ });
+  });
+</script>
 </body>
 </html>
