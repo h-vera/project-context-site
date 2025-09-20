@@ -653,5 +653,85 @@
     loadScript('/assets/js/character-page-v2.js?v=2.3.0', function(){ /* page features ready */ });
   });
 </script>
+<script>
+  // Debug what's actually happening
+  window.addEventListener('load', function() {
+    console.log('=== INITIALIZATION DEBUG ===');
+    console.log('1. Global objects:');
+    console.log('   - window.BiblicalApp exists?', !!window.BiblicalApp);
+    console.log('   - window.APP_CONFIG exists?', !!window.APP_CONFIG);
+    console.log('   - window.CharacterPage exists?', !!window.CharacterPage);
+    console.log('   - window.MobileSectionTabs exists?', !!window.MobileSectionTabs);
+    console.log('   - window.SmartProgressNavigator exists?', !!window.SmartProgressNavigator);
+    console.log('   - window.PremiumEffects exists?', !!window.PremiumEffects);
+    
+    console.log('2. Initialization flags:', window.APP_CONFIG?.initialized);
+    
+    console.log('3. DOM elements present:');
+    console.log('   - Nav exists?', !!document.querySelector('nav'));
+    console.log('   - Theology cards?', document.querySelectorAll('.theology-card').length);
+    console.log('   - Mobile tabs?', !!document.querySelector('.mobile-section-tabs'));
+    console.log('   - Progress nav?', !!document.querySelector('.smart-progress-nav'));
+    console.log('   - Back to top?', !!document.querySelector('.back-to-top'));
+    
+    console.log('4. BiblicalApp modules:', window.BiblicalApp?.modules);
+    
+    // Try to manually initialize character page
+    console.log('5. Attempting manual initialization...');
+    
+    // Reset ALL flags
+    if (window.APP_CONFIG?.initialized) {
+      Object.keys(window.APP_CONFIG.initialized).forEach(key => {
+        if (key !== 'core' && key !== 'iconSystem') {
+          window.APP_CONFIG.initialized[key] = false;
+        }
+      });
+      console.log('   - Flags reset:', window.APP_CONFIG.initialized);
+    }
+    
+    // Try creating components manually
+    if (window.CharacterPage && !window.BiblicalApp?.modules?.characterPage) {
+      console.log('   - Creating new CharacterPage instance...');
+      const cp = new window.CharacterPage();
+      console.log('   - CharacterPage instance created:', cp);
+    }
+    
+    // Check if components exist now
+    setTimeout(() => {
+      console.log('6. After manual init:');
+      console.log('   - characterPage module?', !!window.BiblicalApp?.modules?.characterPage);
+      console.log('   - Mobile tabs in DOM?', !!document.querySelector('.mobile-section-tabs'));
+      console.log('   - Progress nav in DOM?', !!document.querySelector('.smart-progress-nav'));
+      console.log('   - Back to top in DOM?', !!document.querySelector('.back-to-top'));
+      
+      // If still nothing, try creating individual components
+      if (!document.querySelector('.back-to-top')) {
+        console.log('7. Creating back-to-top manually...');
+        const btn = document.createElement('button');
+        btn.className = 'back-to-top';
+        btn.innerHTML = '⬆️';
+        btn.setAttribute('aria-label', 'Back to top');
+        btn.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        document.body.appendChild(btn);
+        
+        // Show/hide based on scroll
+        window.addEventListener('scroll', () => {
+          if (window.pageYOffset > 500) {
+            btn.classList.add('visible');
+          } else {
+            btn.classList.remove('visible');
+          }
+        });
+      }
+      
+      // Force visibility on all cards
+      document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        el.classList.add('visible');
+      });
+    }, 500);
+  });
+</script>
 </body>
 </html>
