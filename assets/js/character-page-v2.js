@@ -985,48 +985,47 @@
     window.APP_CONFIG.initialized.backToTop = true;
   }
 }
-
     createBackToTopButton() {
-      const backToTop = document.createElement('button');
-      backToTop.className = 'back-to-top';
-      // Use icon system
-      if (this.iconSystem) {
-        backToTop.innerHTML = this.iconSystem.get('chevron-up', { size: 24 });
-      } else if (window.getIcon) {
-        backToTop.innerHTML = window.getIcon('chevron-up', { size: 24, color: 'white' });
-      } else {
-        backToTop.innerHTML = `
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-            <polyline points="18 15 12 9 6 15"></polyline>
-          </svg>
-        `;
-      }
-      backToTop.setAttribute('aria-label', 'Back to top');
+  const backToTop = document.createElement('button');
+  backToTop.className = 'back-to-top';
+  // Use icon system
+  if (this.iconSystem) {
+    backToTop.innerHTML = this.iconSystem.get('chevron-up', { size: 24 });
+  } else if (window.getIcon) {
+    backToTop.innerHTML = window.getIcon('chevron-up', { size: 24, color: 'white' });
+  } else {
+    backToTop.innerHTML = `
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+        <polyline points="18 15 12 9 6 15"></polyline>
+      </svg>
+    `;
+  }
+  backToTop.setAttribute('aria-label', 'Back to top');
 
-      document.body.appendChild(backToTop);
+  document.body.appendChild(backToTop);
 
-      backToTop.addEventListener('click', () => {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
-        this.announce('Scrolling to top of page');
-      });
-      
-      // Show/hide based on scroll
-      window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 500) {
-          backToTop.classList.add('visible');
-        } else {
-          backToTop.classList.remove('visible');
-        }
-      }, { passive: true });
-      
-      // Mark as initialized
-      if (window.APP_CONFIG?.initialized) {
-        window.APP_CONFIG.initialized.backToTop = true;
-      }
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+    this.announce('Scrolling to top of page');
+  });
+  
+  // Show/hide based on scroll
+  window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 500) {
+      backToTop.classList.add('visible');
+    } else {
+      backToTop.classList.remove('visible');
     }
+  }, { passive: true });
+  
+  // Mark as initialized
+  if (window.APP_CONFIG?.initialized) {
+    window.APP_CONFIG.initialized.backToTop = true;
+  }
+} // ← Make sure this closing brace is there!
 
     initializeInteractions() {
       try {
