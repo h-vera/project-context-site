@@ -409,8 +409,8 @@
     <div class="theology-card glass-premium animate-on-scroll">
       <h3>Related Profiles & Studies</h3>
       <p>
-        <a href="/studies/characters/2samuel/absalom.html">Absalom</a> - Father, rebel prince<br>
-        <a href="/studies/characters/2samuel/tamar-david-daughter.html">Tamar (David's daughter)</a> - Namesake aunt<br>
+        <a href="/studies/characters/samuel/absalom.html">Absalom</a> - Father, rebel prince<br>
+        <a href="/studies/characters/samuel/tamar-david-daughter.html">Tamar (David's daughter)</a> - Namesake aunt<br>
         <a href="/studies/characters/genesis/tamar-judah.html">Tamar (Judah's daughter-in-law)</a> - First biblical Tamar<br>
         <a href="/studies/themes/names-memorial.html">Memorial Names in Scripture</a><br>
         <a href="/studies/themes/women-genealogy.html">Women in Biblical Genealogies</a>
@@ -550,203 +550,22 @@
         </div>
       </div>
     </details>
-
   </main>
-
-  <!-- Footer -->
-  <footer class="site-footer" role="contentinfo">
-    <div class="footer-content">
-      <p>&copy; 2025 Project Context. Empowering faith through understanding.</p>
-    </div>
-  </footer>
 
   <!-- Screen reader announcements -->
   <div class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
-  <!-- JavaScript Loading - PROPER ORDER WITHOUT DEFER -->
-  <!-- 1) Global namespace first -->
+<!-- 1) Core must load first -->
 <script src="/assets/js/consolidated-init.js?v=1.5.0"></script>
 
-<!-- 2) Then nav, then character page -->
+<!-- 2) Premium navigation -->
+<script src="/assets/js/nav-premium.js?v=1.4.0"></script>
 <script>
-  function loadScript(src, done){
-    const s=document.createElement('script');
-    s.src=src; s.onload=done; s.onerror=done;
-    document.head.appendChild(s);
-  }
+  // initialize once the file is loaded
+  window.initPremiumNav?.();
+</script>
 
-  loadScript('/assets/js/nav-premium.js?v=1.4.0', function () {
-    if (typeof window.initPremiumNav === 'function') window.initPremiumNav();
-    loadScript('/assets/js/character-page-v2.js?v=2.3.0', function(){ /* ready */ });
-  });
-</script>
-    
-    // Load remaining scripts with proper error handling
-    function loadScript(src, callback) {
-      const script = document.createElement('script');
-      script.src = src;
-      script.onload = callback;
-      script.onerror = function() {
-        console.error('Failed to load:', src);
-        if (callback) callback();
-      };
-      document.head.appendChild(script);
-    }
-    
-    // Load nav-premium.js then character-page-v2.js
-    loadScript('/assets/js/nav-premium.js?v=1.4.0', function() {
-      console.log('nav-premium.js loaded');
-      
-      // Initialize navigation immediately
-      if (typeof window.initPremiumNav === 'function') {
-        window.initPremiumNav();
-      } else {
-        console.error('initPremiumNav not found');
-      }
-      
-      // Then load character page
-      loadScript('/assets/js/character-page-v2.js?v=2.3.0', function() {
-        console.log('character-page-v2.js loaded');
-      });
-    });
-  </script>
-  <script>
-  // Debug script - remove after fixing
-  window.addEventListener('load', function() {
-    setTimeout(function() {
-      console.log('=== DEBUG CHECK ===');
-      console.log('BiblicalApp exists?', !!window.BiblicalApp);
-      console.log('Modules:', window.BiblicalApp?.modules);
-      console.log('Icon system?', !!window.BiblicalApp?.iconSystem);
-      console.log('Character page?', !!window.BiblicalApp?.modules?.characterPage);
-      
-      // Check for elements
-      console.log('Theology cards found:', document.querySelectorAll('.theology-card').length);
-      console.log('Back-to-top exists?', !!document.querySelector('.back-to-top'));
-      console.log('Mobile tabs exists?', !!document.querySelector('.mobile-section-tabs'));
-      console.log('Progress nav exists?', !!document.querySelector('.smart-progress-nav'));
-      
-      // Check initialization flags
-      console.log('Init flags:', window.APP_CONFIG?.initialized);
-      
-      // Force create back-to-top if missing
-      if (!document.querySelector('.back-to-top')) {
-        console.log('Manually creating back-to-top button...');
-        const btn = document.createElement('button');
-        btn.className = 'back-to-top visible';
-        btn.innerHTML = '⬆️';
-        btn.onclick = () => window.scrollTo({top: 0, behavior: 'smooth'});
-        document.body.appendChild(btn);
-      }
-      
-      // Force add visible class to cards
-      document.querySelectorAll('.animate-on-scroll').forEach(el => {
-        el.classList.add('visible');
-      });
-    }, 1000);
-  });
-</script>
-<script>
-  // Debug what's actually happening
-  window.addEventListener('load', function() {
-    console.log('=== INITIALIZATION DEBUG ===');
-    console.log('1. Global objects:');
-    console.log('   - window.BiblicalApp exists?', !!window.BiblicalApp);
-    console.log('   - window.APP_CONFIG exists?', !!window.APP_CONFIG);
-    console.log('   - window.CharacterPage exists?', !!window.CharacterPage);
-    console.log('   - window.MobileSectionTabs exists?', !!window.MobileSectionTabs);
-    console.log('   - window.SmartProgressNavigator exists?', !!window.SmartProgressNavigator);
-    console.log('   - window.PremiumEffects exists?', !!window.PremiumEffects);
-    
-    console.log('2. Initialization flags:', window.APP_CONFIG?.initialized);
-    
-    console.log('3. DOM elements present:');
-    console.log('   - Nav exists?', !!document.querySelector('nav'));
-    console.log('   - Theology cards?', document.querySelectorAll('.theology-card').length);
-    console.log('   - Mobile tabs?', !!document.querySelector('.mobile-section-tabs'));
-    console.log('   - Progress nav?', !!document.querySelector('.smart-progress-nav'));
-    console.log('   - Back to top?', !!document.querySelector('.back-to-top'));
-    
-    console.log('4. BiblicalApp modules:', window.BiblicalApp?.modules);
-    
-    // Try to manually initialize character page
-    console.log('5. Attempting manual initialization...');
-    
-    // Reset ALL flags
-    if (window.APP_CONFIG?.initialized) {
-      Object.keys(window.APP_CONFIG.initialized).forEach(key => {
-        if (key !== 'core' && key !== 'iconSystem') {
-          window.APP_CONFIG.initialized[key] = false;
-        }
-      });
-      console.log('   - Flags reset:', window.APP_CONFIG.initialized);
-    }
-    
-    // Try creating components manually
-    if (window.CharacterPage && !window.BiblicalApp?.modules?.characterPage) {
-      console.log('   - Creating new CharacterPage instance...');
-      const cp = new window.CharacterPage();
-      console.log('   - CharacterPage instance created:', cp);
-    }
-    
-    // Check if components exist now
-    setTimeout(() => {
-      console.log('6. After manual init:');
-      console.log('   - characterPage module?', !!window.BiblicalApp?.modules?.characterPage);
-      console.log('   - Mobile tabs in DOM?', !!document.querySelector('.mobile-section-tabs'));
-      console.log('   - Progress nav in DOM?', !!document.querySelector('.smart-progress-nav'));
-      console.log('   - Back to top in DOM?', !!document.querySelector('.back-to-top'));
-      
-      // If still nothing, try creating individual components
-      if (!document.querySelector('.back-to-top')) {
-        console.log('7. Creating back-to-top manually...');
-        const btn = document.createElement('button');
-        btn.className = 'back-to-top';
-        btn.innerHTML = '⬆️';
-        btn.setAttribute('aria-label', 'Back to top');
-        btn.addEventListener('click', () => {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-        document.body.appendChild(btn);
-        
-        // Show/hide based on scroll
-        window.addEventListener('scroll', () => {
-          if (window.pageYOffset > 500) {
-            btn.classList.add('visible');
-          } else {
-            btn.classList.remove('visible');
-          }
-        });
-      }
-      
-      // Force visibility on all cards
-      document.querySelectorAll('.animate-on-scroll').forEach(el => {
-        el.classList.add('visible');
-      });
-    }, 500);
-  });
-</script>
-<script>
-window.addEventListener('load', function() {
-    // Force create back-to-top button
-    if (!document.querySelector('.back-to-top')) {
-        const btn = document.createElement('button');
-        btn.className = 'back-to-top';
-        btn.innerHTML = '⬆️';
-        btn.setAttribute('aria-label', 'Back to top');
-        btn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
-        document.body.appendChild(btn);
-        
-        window.addEventListener('scroll', () => {
-            btn.classList.toggle('visible', window.pageYOffset > 500);
-        });
-    }
-    
-    // Force animation visibility
-    document.querySelectorAll('.animate-on-scroll').forEach(el => {
-        el.classList.add('visible');
-    });
-});
-</script>
+<!-- 3) Character page features -->
+<script src="/assets/js/character-page-v2.js?v=2.3.0"></script>
 </body>
 </html>
