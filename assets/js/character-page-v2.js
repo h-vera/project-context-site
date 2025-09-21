@@ -154,7 +154,7 @@
     }
 
     init() {
-      if (window.innerWidth > 768) return; // Mobile only
+      // if (window.innerWidth > 768) return; // Mobile only
       
       // Check if tabs already exist in DOM
       if (document.querySelector('.mobile-section-tabs')) {
@@ -431,7 +431,7 @@
     }
 
     init() {
-      if (window.innerWidth <= 1024) return; // Desktop only
+      // if (window.innerWidth <= 1024) return; // Desktop only
       
       // Check if navigator already exists in DOM
       if (document.querySelector('.smart-progress-nav')) {
@@ -978,13 +978,13 @@
         }
         
         // Only create back-to-top button if not already present
-        if (!document.querySelector('.back-to-top') && !window.APP_CONFIG?.initialized?.backToTop) {
-          this.createBackToTopButton();
-        }
-      } catch (error) {
-        console.error('Failed to initialize navigation enhancements:', error);
-      }
-    }
+        if (!document.querySelector('.back-to-top')) {
+  this.createBackToTopButton();
+  // Mark as initialized AFTER creation, not as a condition
+  if (window.APP_CONFIG?.initialized) {
+    window.APP_CONFIG.initialized.backToTop = true;
+  }
+}
 
     createBackToTopButton() {
       const backToTop = document.createElement('button');
