@@ -567,5 +567,50 @@
 
 <!-- 3) Character page features -->
 <script src="/assets/js/character-page-v2.js?v=2.3.0"></script>
+<!-- After your other scripts -->
+<script>
+(function () {
+  const KEY = 'theme';
+  const root = document.documentElement;
+  function applyTheme(value) {
+    if (!value || value === 'auto') {
+      root.setAttribute('data-theme', 'auto');
+      const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+      document.querySelector('meta[name="theme-color"]')
+        ?.setAttribute('content', dark ? '#1a1a1a' : '#7209b7');
+    } else {
+      root.setAttribute('data-theme', value);
+      document.querySelector('meta[name="theme-color"]')
+        ?.setAttribute('content', value === 'dark' ? '#1a1a1a' : '#7209b7');
+    }
+  }
+  applyTheme(localStorage.getItem(KEY) || 'auto');
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    if ((localStorage.getItem(KEY) || 'auto') === 'auto') applyTheme('auto');
+  });
+  window.setTheme = function (value) {
+    localStorage.setItem(KEY, value);
+    applyTheme(value);
+  };
+})();
+</script>
+<script>
+// Auto-update theme-color meta tag based on system preference
+(function() {
+  const updateThemeColor = () => {
+    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (metaThemeColor) {
+      metaThemeColor.content = isDark ? '#1a1a1a' : '#7209b7';
+    }
+  };
+  
+  // Set initial theme color
+  updateThemeColor();
+  
+  // Update when system preference changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateThemeColor);
+})();
+</script>
 </body>
 </html>

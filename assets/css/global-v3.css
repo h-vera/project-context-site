@@ -2580,17 +2580,25 @@ body.menu-open {
 }
 
 /* ============================================
-   DARK MODE SUPPORT (OS-driven)
+   AUTOMATIC THEME SYSTEM - Follows OS Preference
    ============================================ */
+
+/* Light mode is default (already defined in :root earlier) */
+
+/* Dark mode - automatically applies when OS is in dark mode */
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Adjust surface colors for dark mode */
+    /* Core surfaces */
     --surface-base: #1a1a1a;
     --surface-raised: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
-    --surface-overlay: rgba(0, 0, 0, 0.95);
+    --surface-overlay: rgba(30, 30, 30, 0.95);
+    --surface-accent: linear-gradient(135deg, rgba(114, 9, 183, 0.08), rgba(225, 29, 72, 0.04));
     
-    /* Adjust shadows for dark */
+    /* Shadows */
     --shadow-color: 271 30% 10%;
+    
+    /* Tell browser we're in dark mode */
+    color-scheme: dark;
   }
   
   body {
@@ -2601,76 +2609,88 @@ body.menu-open {
   h1, h2, h3, h4, h5, h6 {
     color: hsl(0, 0%, 93%);
   }
-  
-  .theology-card {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 50%, #252525 100%);
-    border-color: rgba(255, 255, 255, 0.08);
-  }
-  
-  .panel {
-    background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
-    border-color: rgba(255, 255, 255, 0.05);
-  }
-  
-  .timeline-item {
-    background: linear-gradient(135deg, 
-      rgba(30, 30, 30, 0.9) 0%,
-      rgba(40, 30, 45, 0.85) 100%
-    );
-    border-color: rgba(114, 9, 183, 0.2);
-  }
-  
-  .tag {
+}
+
+/* ============================================
+   COMPONENT THEME BINDINGS
+   ============================================ */
+
+/* These components now use the theme variables automatically */
+.glass-card,
+.theology-card {
+  background: var(--surface-raised);
+  border-color: rgba(128, 128, 128, 0.1);
+}
+
+.glass-premium,
+.panel {
+  background: var(--surface-raised);
+}
+
+.timeline-item {
+  background: var(--surface-raised);
+  border-color: rgba(114, 9, 183, 0.15);
+}
+
+nav {
+  background: var(--surface-overlay);
+  border-bottom-color: rgba(114, 9, 183, 0.1);
+}
+
+.mobile-section-tabs {
+  background: var(--surface-raised);
+  border-top-color: rgba(114, 9, 183, 0.1);
+}
+
+.smart-progress-nav:hover {
+  background: var(--surface-raised);
+  border-color: rgba(114, 9, 183, 0.15);
+}
+
+.dropdown-menu,
+.dropdown-content {
+  background: var(--surface-raised);
+  border-color: rgba(128, 128, 128, 0.1);
+}
+
+/* Text colors that adapt to theme */
+.nav-link,
+.nav-links a {
+  color: inherit;
+  opacity: 0.8;
+}
+
+.nav-link:hover,
+.nav-links a:hover,
+.nav-link.active,
+.nav-links a.active {
+  opacity: 1;
+  color: var(--accent-purple);
+}
+
+.tab-item {
+  color: inherit;
+  opacity: 0.7;
+}
+
+.tab-item.active {
+  color: var(--accent-purple);
+  opacity: 1;
+}
+
+/* Dark mode specific adjustments for tags */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .tag:not(.primary):not([style*="background"]) {
     background: linear-gradient(135deg, #2a2a2a 0%, #252525 100%);
     border-color: rgba(114, 9, 183, 0.25);
-  }
-  
-  .progress-section-label {
     color: hsl(0, 0%, 80%);
   }
-  
-  .tab-item {
-    color: hsla(0, 0%, 80%, 0.7);
-  }
-  
-  .tab-item.active {
-    color: var(--accent-purple-light);
-  }
-  
-  nav {
-    background: linear-gradient(90deg, 
-      rgba(26, 26, 26, 0.98) 0%,
-      rgba(30, 26, 35, 0.98) 50%,
-      rgba(35, 26, 30, 0.98) 100%
-    );
-    border-bottom-color: rgba(114, 9, 183, 0.15);
-  }
-  
-  .mobile-section-tabs {
-    background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
-    border-top-color: rgba(114, 9, 183, 0.15);
-  }
-  
-  .smart-progress-nav:hover {
-    background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
-    border-color: rgba(114, 9, 183, 0.15);
-  }
-  
-  .mobile-drawer {
-    background: #1a1a1a;
-  }
-  
-  .dropdown-menu {
-    background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
-  }
-  
-  .nav-link {
-    color: hsl(0, 0%, 80%);
-  }
-  
-  .nav-link:hover {
-    color: var(--accent-purple-light);
-  }
+}
+
+:root[data-theme="dark"] .tag:not(.primary):not([style*="background"]) {
+  background: linear-gradient(135deg, #2a2a2a 0%, #252525 100%);
+  border-color: rgba(114, 9, 183, 0.25);
+  color: hsl(0, 0%, 80%);
 }
 
 /* ============================================
