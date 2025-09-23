@@ -1,17 +1,14 @@
 /**
  * Character Page Optimized JavaScript with Auto-Generating Mobile Tabs
  * Path: /assets/js/character-page-optimized.js
- * Version: 2.0.0
- * Purpose: Performant, modern JavaScript with dynamic mobile navigation
+ * Version: 2.0.1 - FIXED MOBILE FLICKERING
  * 
- * Features:
- * - AUTO-GENERATING mobile tabs based on present sections
- * - Smart prioritization when >5 sections exist
- * - Intersection Observer for animations
- * - Passive event listeners
- * - RequestAnimationFrame for smooth updates
- * - Hide on scroll down, show on scroll up
- * - No jQuery dependencies
+ * FIXES:
+ * - Debounced scroll events to prevent flickering
+ * - Added will-change CSS for smoother animations
+ * - Fixed scroll direction detection
+ * - Added threshold to prevent jitter
+ * - Removed aggressive hide/show on small scroll movements
  */
 
 (function() {
@@ -89,7 +86,10 @@
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
-            this.observer.unobserve(entry.target);
+            // Don't unobserve immediately - let animation complete
+            setTimeout(() => {
+              this.observer.unobserve(entry.target);
+            }, 600);
           }
         });
       }, this.options);
@@ -166,7 +166,7 @@
       this.sidebar = $('.quick-nav-sidebar');
       if (!this.sidebar) return;
       
-      this.sections = $$('.theology-card[id], .animate-on-scroll[id], .chiasm-card[id]');
+      this.sections = $$('.theology-card[id], .animate-on-scroll[id], .chiasm-card[id], .abrahamic-parallel[id], .characters-section[id]');
       this.items = $$('.quick-nav-item');
       
       if (this.sections.length) this.init();
@@ -207,7 +207,7 @@
   }
   
   // ===========================================
-  // AUTO-GENERATING MOBILE TABS (v2.0)
+  // AUTO-GENERATING MOBILE TABS (v2.0) - FIXED
   // Dynamic generation based on present sections
   // ===========================================
   class DynamicMobileTabs {
@@ -216,9 +216,13 @@
       this.sectionConfig = [
         // Core sections (Priority 1-2)
         { id: 'overview', icon: '📋', label: 'Overview', priority: 1 },
+        { id: 'structure', icon: '🏗️', label: 'Structure', priority: 1 },
         { id: 'narrative', icon: '📖', label: 'Journey', priority: 2 },
+        { id: 'scene-rhythm', icon: '🎭', label: 'Scenes', priority: 2 },
+        { id: 'legal', icon: '⚖️', label: 'Legal', priority: 3 },
         { id: 'literary-context', icon: '📚', label: 'Literary', priority: 3 },
         { id: 'themes', icon: '💡', label: 'Themes', priority: 3 },
+        { id: 'devices', icon: '🎨', label: 'Devices', priority: 3 },
         { id: 'ane-context', icon: '🌍', label: 'ANE', priority: 4 },
         { id: 'biblical-theology', icon: '⛪', label: 'Theology', priority: 2 },
         { id: 'messianic', icon: '✨', label: 'Messianic', priority: 3 },
@@ -227,7 +231,11 @@
         
         // Optional sections (Priority 4-5)
         { id: 'chiasm', icon: '🔄', label: 'Chiasm', priority: 4 },
-        { id: 'major-chiasm', icon: '🔍', label: 'Chiasm', priority: 4 },
+        { id: 'major-chiasm', icon: '🔍', label: 'Chiasm', priority: 2 },
+        { id: 'dialogue', icon: '💬', label: 'Dialogue', priority: 3 },
+        { id: 'chorus', icon: '👥', label: 'Chorus', priority: 4 },
+        { id: 'characters', icon: '👤', label: 'Characters', priority: 2 },
+        { id: 'abrahamic-parallel', icon: '🌟', label: 'Abraham', priority: 3 },
         { id: 'literary-artistry', icon: '🎨', label: 'Artistry', priority: 5 },
         { id: 'eden', icon: '🌳', label: 'Eden', priority: 5 },
         { id: 'wordplay', icon: '✍️', label: 'Wordplay', priority: 5 },
@@ -237,6 +245,7 @@
         { id: 'songs', icon: '🎵', label: 'Songs', priority: 4 },
         { id: 'intertext', icon: '🔗', label: 'Intertext', priority: 4 },
         { id: 'bibliography', icon: '📚', label: 'Sources', priority: 5 },
+        { id: 'further-study', icon: '📖', label: 'Study', priority: 4 },
         
         // Character-specific sections
         { id: 'prophetic-messages', icon: '📜', label: 'Prophecy', priority: 3 },
@@ -247,6 +256,9 @@
       this.maxTabs = 5; // Maximum tabs for mobile usability
       this.lastScrollY = 0;
       this.isHidden = false;
+      this.scrollDirection = null;
+      this.scrollThreshold = 5; // Minimum scroll distance to trigger hide/show
+      this.hideTimeout = null;
       
       // Only initialize on mobile
       if (window.innerWidth <= 768) {
@@ -290,7 +302,8 @@
           `[id="${config.id}"]`,
           `.theology-card#${config.id}`,
           `.chiasm-card#${config.id}`,
-          `section#${config.id}`
+          `section#${config.id}`,
+          `.${config.id}`
         ];
         
         const exists = selectors.some(selector => {
@@ -318,9 +331,9 @@
       
       // Sort by priority, then select top 5
       const sorted = sections.sort((a, b) => {
-        // Always include Overview if present
-        if (a.id === 'overview') return -1;
-        if (b.id === 'overview') return 1;
+        // Always include Overview or Structure if present
+        if (a.id === 'overview' || a.id === 'structure') return -1;
+        if (b.id === 'overview' || b.id === 'structure') return 1;
         
         // Then sort by priority
         return a.priority - b.priority;
@@ -338,6 +351,10 @@
       nav.className = 'mobile-section-tabs dynamic-tabs';
       nav.setAttribute('aria-label', 'Section navigation');
       nav.setAttribute('role', 'navigation');
+      
+      // Add will-change for smooth animations
+      nav.style.willChange = 'transform';
+      nav.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
       
       // Create tabs container
       const container = document.createElement('div');
@@ -393,9 +410,19 @@
     
     setupScrollHide() {
       let ticking = false;
+      let lastTimestamp = 0;
       
       window.addEventListener('scroll', () => {
         if (!ticking) {
+          const currentTimestamp = Date.now();
+          
+          // Debounce - only process every 100ms minimum
+          if (currentTimestamp - lastTimestamp < 100) {
+            return;
+          }
+          
+          lastTimestamp = currentTimestamp;
+          
           requestAnimationFrame(() => {
             this.handleScrollHide();
             ticking = false;
@@ -407,13 +434,38 @@
     
     handleScrollHide() {
       const currentScrollY = window.pageYOffset;
+      const scrollDiff = currentScrollY - this.lastScrollY;
       
-      if (currentScrollY > this.lastScrollY && currentScrollY > 100 && !this.isHidden) {
-        // Scrolling down - hide
-        this.container.style.transform = 'translateY(100%)';
-        this.isHidden = true;
-      } else if (currentScrollY < this.lastScrollY && this.isHidden) {
-        // Scrolling up - show
+      // Only act if scroll is more than threshold
+      if (Math.abs(scrollDiff) < this.scrollThreshold) {
+        return;
+      }
+      
+      // Clear any pending hide timeout
+      if (this.hideTimeout) {
+        clearTimeout(this.hideTimeout);
+        this.hideTimeout = null;
+      }
+      
+      // Determine scroll direction
+      if (scrollDiff > 0 && currentScrollY > 200) {
+        // Scrolling down - hide after a delay
+        if (!this.isHidden) {
+          this.hideTimeout = setTimeout(() => {
+            this.container.style.transform = 'translateY(100%)';
+            this.isHidden = true;
+          }, 150); // Small delay prevents flicker
+        }
+      } else if (scrollDiff < 0) {
+        // Scrolling up - show immediately
+        if (this.isHidden) {
+          this.container.style.transform = 'translateY(0)';
+          this.isHidden = false;
+        }
+      }
+      
+      // At the top of the page, always show
+      if (currentScrollY < 100 && this.isHidden) {
         this.container.style.transform = 'translateY(0)';
         this.isHidden = false;
       }
@@ -692,7 +744,7 @@
         new PerformanceMonitor()
       );
       
-      console.log('Character Page Optimized v2.0 initialized');
+      console.log('Character Page Optimized v2.0.1 initialized');
     }
   }
   
