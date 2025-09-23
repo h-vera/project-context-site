@@ -1025,7 +1025,7 @@
   if (window.APP_CONFIG?.initialized) {
     window.APP_CONFIG.initialized.backToTop = true;
   }
-} // ← Make sure this closing brace is there!
+} // <-- Add this closing brace to end initializeNavigation
 
     initializeInteractions() {
       try {
@@ -1407,7 +1407,8 @@ class LazyLoadManager {
   loadAllImages() {
     this.images.forEach(img => this.loadImage(img));
   }
-}
+} // <-- Add this closing brace to end the class definition
+
 
 // ============================================
 // TOUCH GESTURE HANDLER

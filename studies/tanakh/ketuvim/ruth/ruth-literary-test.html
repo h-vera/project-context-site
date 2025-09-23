@@ -29,28 +29,73 @@
     :root{--primary:#0a0a0a;--surface:#fff;--accent-purple:#7209b7;--accent-rose:#e11d48;--accent-blue:#00b4d8;--text-gray:#6b7280;--panel:#f8fafc;--border:#e5e7eb}
     *{margin:0;padding:0;box-sizing:border-box}
     html{scroll-behavior:smooth}
-    body{font:16px/1.6 system-ui,-apple-system,sans-serif;color:var(--primary);background:linear-gradient(to bottom,#fafafa,#f3f4f6);min-height:100vh}
+    body{font:16px/1.6 system-ui,-apple-system,sans-serif;color:var(--primary);background:linear-gradient(to bottom,#fafafa,#f3f4f6);min-height:100vh;overflow-x:hidden}
     .content-section{max-width:1100px;margin:0 auto;padding:6rem 1rem 2rem}
+    
+    /* Fixed navigation and progress bar */
     nav{position:fixed;top:0;left:0;right:0;background:rgba(255,255,255,.98);backdrop-filter:blur(10px);z-index:1000;padding:1rem;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-    .nav-container{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
-    .reading-progress{position:fixed;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--accent-purple),var(--accent-rose));transform:scaleX(0);transform-origin:left;z-index:1001}
+    .nav-container{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;min-height:48px}
+    .reading-progress{position:fixed;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent-purple),var(--accent-rose));transform-origin:left;transform:scaleX(0);z-index:1001;pointer-events:none}
+    
+    /* Basic card styles */
     .theology-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;margin:2rem 0;box-shadow:0 1px 3px rgba(0,0,0,.05)}
     .chiasm-card{background:linear-gradient(135deg,#1e293b 0%,#334155 100%);color:white;border:none;border-radius:16px;padding:2.5rem;margin:3rem 0;box-shadow:0 10px 30px rgba(0,0,0,.2)}
-    .animate-on-scroll{opacity:0;transform:translateY(20px)}
+    
+    /* Animations */
+    .animate-on-scroll{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease, transform 0.6s ease}
+    .animate-on-scroll.visible{opacity:1;transform:translateY(0)}
+    
+    /* Skip link */
     .skip-link{position:absolute;top:-40px;left:0;background:var(--primary);color:white;padding:8px 16px;text-decoration:none;z-index:2000;border-radius:0 0 8px 0}
     .skip-link:focus{top:0}
     
-    /* Prevent CLS for mobile */
+    /* Quick nav sidebar - right side */
+    .quick-nav-sidebar{position:fixed;right:2rem;top:50%;transform:translateY(-50%);display:none;flex-direction:column;gap:0.5rem;z-index:500}
+    .quick-nav-item{width:12px;height:12px;border-radius:50%;background:var(--border);transition:all 0.3s ease;cursor:pointer}
+    .quick-nav-item:hover,.quick-nav-item.active{background:linear-gradient(135deg,var(--accent-purple),var(--accent-rose));transform:scale(1.5)}
+    @media(min-width:1400px){.quick-nav-sidebar{display:flex}}
+    
+    /* Mobile section tabs */
+    .mobile-section-tabs{display:none;position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid var(--border);padding:10px;z-index:999;box-shadow:0 -2px 10px rgba(0,0,0,0.1);transition:transform 0.3s ease}
+    .tabs-container{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+    .tabs-container::-webkit-scrollbar{display:none}
+    .tab-item{flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 15px;background:var(--panel);border:1px solid var(--border);border-radius:20px;cursor:pointer;transition:all 0.2s;min-width:80px;text-decoration:none;color:var(--text-gray)}
+    .tab-item:active,.tab-item.active{background:linear-gradient(135deg,var(--accent-purple),var(--accent-rose));color:white;border-color:transparent;transform:scale(1.05)}
+    .tab-icon{font-size:1.25rem;margin-bottom:0.25rem}
+    .tab-label{font-size:0.75rem;font-weight:600}
+    
+    /* Mobile responsive */
     @media(max-width:768px){
       .content-section{padding-top:5rem}
-      .nav-links{display:none}
-      .mobile-menu-toggle{display:flex;width:44px;height:44px;align-items:center;justify-content:center;background:none;border:none}
+      .quick-nav-sidebar{display:none !important}
+      .mobile-section-tabs{display:block}
     }
+    
+    /* Back to top button */
+    .back-to-top{position:fixed;bottom:2rem;right:2rem;background:linear-gradient(135deg,var(--accent-purple),var(--accent-rose));color:white;width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;opacity:0;visibility:hidden;transition:all 0.3s ease;box-shadow:0 4px 15px rgba(114,9,183,0.3);z-index:999}
+    .back-to-top.visible{opacity:1;visibility:visible}
+    @media(max-width:768px){.back-to-top{bottom:4.5rem;right:1rem}}
   </style>
   
   <!-- Preload optimized CSS -->
   <link rel="preload" href="/assets/css/global-optimized.css" as="style">
   <link rel="stylesheet" href="/assets/css/global-optimized.css">
+  
+  <!-- Temporary fallback styles while waiting for global CSS -->
+  <style>
+    /* Fallback navigation styles */
+    .logo{display:inline-flex;align-items:center;gap:0.75rem;font-weight:700;font-size:1.5rem;color:var(--primary);text-decoration:none}
+    .nav-links{display:flex;gap:2rem;list-style:none;align-items:center;margin:0;padding:0}
+    .nav-links a{padding:0.5rem 1rem;color:var(--text-gray);text-decoration:none;font-weight:500;border-radius:8px;transition:all 0.2s}
+    .nav-links a:hover{color:var(--primary);background-color:rgba(0,0,0,0.05)}
+    .mobile-menu-toggle{display:none}
+    @media(max-width:768px){
+      .nav-links{position:fixed;top:65px;right:-100%;width:80%;max-width:300px;height:100vh;background:white;flex-direction:column;padding:2rem;gap:1rem;box-shadow:-5px 0 15px rgba(0,0,0,0.1);transition:right 0.3s ease}
+      .nav-links.active{right:0}
+      .mobile-menu-toggle{display:flex;flex-direction:column;gap:4px;width:44px;height:44px;padding:0.5rem;background:none;border:none;cursor:pointer;align-items:center;justify-content:center}
+      .mobile-menu-toggle span{display:block;width:25px;height:3px;background:var(--primary);border-radius:2px;transition:all 0.2s}
+    }
+  </style>
   
   <!-- Preload Hebrew font -->
   <link rel="preload" href="https://projectcontext.org/assets/fonts/SBL_Hebrew.woff2" as="font" type="font/woff2" crossorigin>
@@ -60,6 +105,337 @@
   
   <!-- Page-specific styles for enhanced visual variety -->
   <style>
+    /* Fix table visibility */
+    table{width:100%;border-collapse:collapse;background:white;margin:1.5rem 0}
+    th,td{padding:1rem;border:1px solid var(--border);text-align:left}
+    thead th{background:#f8fafc;font-weight:600}
+    tbody tr:hover{background:#fafbfc}
+    
+    /* Ensure panels and grids work */
+    .grid{display:grid;gap:1.5rem}
+    .grid-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+    .panel{background:white;border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1rem 0}
+    
+    /* Key insight styling */
+    .key-insight{background:linear-gradient(135deg,#dbeafe 0%,#bfdbfe 100%);border-left:4px solid #3b82f6;padding:1rem 1.25rem;border-radius:8px;margin:1.5rem 0}
+    .key-insight strong{color:#1e40af}
+    
+    /* Significance blocks */
+    .significance{background:var(--panel);border-radius:12px;padding:1rem 1.25rem;margin-top:1.5rem;border-left:4px solid #10b981}
+    .significance h4{margin:.2rem 0 .75rem;color:#10b981;font-size:1.1rem}
+    
+    /* Word study */
+    .word-study{background:#fffbeb;border-left:4px solid #f59e0b;padding:1.5rem;margin:1.5rem 0;border-radius:0 8px 8px 0}
+    .word-study h4{color:#d97706;margin-top:0}
+    
+    /* Hebrew text */
+    .hebrew-inline,.hebrew-large{font-family:'SBL Hebrew','Times New Roman',serif;direction:rtl;unicode-bidi:embed;color:var(--accent-purple)}
+    .hebrew-large{font-size:1.5rem;font-weight:bold}
+    .hebrew-inline{font-size:1.1em;padding:0 0.3rem}
+    
+    /* Visual variety for different card types */
+    .structure-card {
+      background: linear-gradient(135deg, #f0f9ff 0%, #f8fafc 100%);
+      border: 1px solid #bfdbfe;
+    }
+    
+    .legal-card {
+      background: linear-gradient(135deg, #fef3f2 0%, #fef9c3 100%);
+      border: 1px solid #fed7aa;
+    }
+    
+    .devices-card {
+      background: #f9fafb;
+      border: 1px solid #d1d5db;
+    }
+    
+    .chorus-card {
+      background: linear-gradient(135deg, #faf5ff 0%, #f3f4f6 100%);
+      border: 1px solid #e9d5ff;
+    }
+    
+    .chiasm-card h3 {
+      color: white;
+      border-bottom: 2px solid rgba(255,255,255,0.2);
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .chiasm-structure {
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 2rem;
+      font-family: 'Courier New', monospace;
+      margin: 1.5rem 0;
+    }
+    
+    .chiasm-line {
+      color: #e2e8f0;
+      line-height: 2;
+      transition: all 0.3s ease;
+    }
+    
+    .chiasm-line:hover {
+      color: white;
+      transform: translateX(5px);
+    }
+    
+    .chiasm-center {
+      background: linear-gradient(135deg, #7209b7 0%, #e11d48 100%);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+      text-align: center;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(114, 9, 183, 0.3);
+    }
+    
+    .indent-1{padding-left:1.5rem}
+    .indent-2{padding-left:3rem}
+    
+    /* Abrahamic parallel section */
+    .abrahamic-parallel {
+      background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
+      border: 2px solid #f59e0b;
+      border-radius: 16px;
+      padding: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .hebrew-comparison {
+      background: white;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+    
+    .hebrew-text {
+      font-family: 'SBL Hebrew', serif;
+      font-size: 1.3em;
+      color: #7209b7;
+      direction: rtl;
+      margin: 0.5rem 0;
+      line-height: 1.8;
+    }
+    
+    /* Characters section */
+    .characters-section {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: white;
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin: 3rem 0;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    
+    .characters-section h3 {
+      color: white;
+      margin-bottom: 1rem;
+    }
+    
+    .characters-section p {
+      color: #cbd5e1;
+      margin-bottom: 2rem;
+    }
+    
+    .character-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 1.5rem 0;
+    }
+    
+    .character-chips .tag {
+      display: inline-block;
+      padding: 0.6rem 1.2rem;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 24px;
+      text-decoration: none;
+      color: #e2e8f0;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    
+    .character-chips .tag.primary {
+      background: rgba(114,9,183,0.2);
+      border-color: #7209b7;
+      color: white;
+      font-weight: 600;
+    }
+    
+    .character-chips .tag:hover:not(.inactive) {
+      transform: translateY(-3px);
+      background: rgba(114,9,183,0.3);
+      border-color: #7209b7;
+      box-shadow: 0 6px 20px rgba(114,9,183,0.3);
+    }
+    
+    .character-chips .tag.inactive {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.1);
+      cursor: default;
+      opacity: 0.5;
+    }
+    
+    .character-interpretation {
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .character-interpretation strong {
+      color: #fbbf24;
+    }
+    
+    /* Panel variations */
+    .panel-accent {
+      border-left: 4px solid #7209b7;
+      background: linear-gradient(90deg, rgba(114,9,183,0.03) 0%, white 100%);
+    }
+    
+    .panel-highlight {
+      background: #fffbeb;
+      border: 1px solid #fbbf24;
+      position: relative;
+    }
+    
+    .panel-highlight::before {
+      content: '💡';
+      position: absolute;
+      top: -10px;
+      left: 20px;
+      background: white;
+      padding: 0 8px;
+      font-size: 1.2rem;
+    }
+    
+    /* Providence note */
+    .providence-note {
+      background: linear-gradient(135deg, #faf5ff 0%, #fef3f2 100%);
+      border: 2px dashed #7209b7;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    
+    .providence-note h4 {
+      color: #7209b7;
+      margin-bottom: 1rem;
+    }
+    
+    /* Study navigation */
+    .study-nav {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 2rem;
+      margin: 3rem 0;
+    }
+    
+    .study-nav h3 {
+      color: #1e293b;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+    
+    .nav-button {
+      display: block;
+      padding: 12px 16px;
+      background: linear-gradient(135deg, #7209b7, #e11d48);
+      color: white;
+      text-align: center;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+    
+    .nav-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(114, 9, 183, 0.3);
+      color: white;
+    }
+    
+    /* Key verse styling */
+    .key-verse {
+      background: linear-gradient(135deg, #faf5ff 0%, #fef3f2 100%);
+      padding: 2rem;
+      border-left: 4px solid #7209b7;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+      position: relative;
+    }
+    
+    .key-verse::before {
+      content: '📖';
+      position: absolute;
+      top: -12px;
+      left: 20px;
+      background: white;
+      padding: 0 8px;
+      font-size: 1.5rem;
+    }
+    
+    /* Section divider */
+    .section-divider{height:2px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:3rem 0;border:0}
+    
+    /* Bibliography */
+    .bibliography-section{max-width:100%;margin:3rem auto}
+    .bibliography-header{background:linear-gradient(135deg,var(--accent-purple),var(--accent-rose));color:white;padding:1.5rem;border-radius:16px;cursor:pointer;margin:0}
+    .bibliography-title{color:white;margin:0;font-size:1.4rem}
+    .bibliography-subtitle{color:rgba(255,255,255,0.95);margin:0.25rem 0 0;font-size:0.9rem}
+    .bibliography-content{padding:2rem;background:#f8fafc}
+    .source-category{margin-bottom:2.5rem}
+    .source-category h4{color:var(--accent-purple);margin-bottom:1rem;font-size:1.1rem}
+    .source-entry{margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+    .source-usage{display:flex;align-items:center;gap:1rem;margin-top:0.5rem;flex-wrap:wrap}
+    .usage-tag{display:inline-flex;align-items:center;padding:0.4rem 0.9rem;background:linear-gradient(135deg,#e11d48,#7209b7);color:white;border-radius:25px;font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em}
+    .usage-note{color:var(--text-gray);font-size:0.9rem}
+    
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+      .chiasm-card,
+      .characters-section {
+        padding: 1.5rem;
+      }
+      
+      .nav-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 8px;
+      }
+      
+      .nav-button {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+      }
+      
+      .character-chips {
+        gap: 8px;
+      }
+      
+      .character-chips .tag {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+      }
+      
+      .indent-1{padding-left:1rem}
+      .indent-2{padding-left:2rem}
+    }
+  </style>
     /* Visual variety for different card types */
     .structure-card {
       background: linear-gradient(135deg, #f0f9ff 0%, #f8fafc 100%);
@@ -338,7 +714,12 @@
   <!-- Reading Progress Bar -->
   <div class="reading-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
   
-  <!-- Navigation will be injected by JS -->
+  <!-- Navigation placeholder for JS to replace -->
+  <nav id="main-nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <!-- Navigation will be injected here by nav-component-v2.js -->
+    </div>
+  </nav>
   
   <!-- Quick Navigation Sidebar (Desktop) -->
   <nav class="quick-nav-sidebar" aria-label="Section navigation">
@@ -1113,7 +1494,7 @@
        JAVASCRIPT - Optimized Loading
        ====================================== -->
   
-  <!-- Navigation Component (ES6 Module) -->
+  <!-- Navigation Component -->
   <script type="module">
     import NavigationComponent from '/assets/js/nav-component-v2.js';
     
@@ -1125,7 +1506,7 @@
   </script>
   
   <!-- Character Page Functionality -->
-  <script src="/assets/js/character-page-optimized.js" defer></script>
+  <script src="/assets/js/character-page-optimized.js"></script>
   
   <!-- Page-specific functionality -->
   <script>
