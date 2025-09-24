@@ -45,6 +45,8 @@
     }
     
     init() {
+      // Add GPU acceleration
+      this.bar.style.willChange = 'transform';
       // Use transform for better performance than width
       this.update();
       window.addEventListener('scroll', () => this.throttledUpdate(), { passive: true });
@@ -63,6 +65,11 @@
       const height = document.documentElement.scrollHeight - window.innerHeight;
       const scrolled = Math.min(winScroll / height, 1);
       this.bar.style.transform = `scaleX(${scrolled})`;
+    }
+    
+    destroy() {
+      // Cleanup method
+      this.bar.style.willChange = 'auto';
     }
   }
   
@@ -166,8 +173,9 @@
       this.sidebar = $('.quick-nav-sidebar');
       if (!this.sidebar) return;
       
-      this.sections = $$('.theology-card[id], .animate-on-scroll[id], .chiasm-card[id], .abrahamic-parallel[id], .characters-section[id]');
-      this.items = $$('.quick-nav-item');
+      // Enhanced selector to include ALL possible section types
+      this.sections = $('.theology-card[id], .animate-on-scroll[id], .chiasm-card[id], .abrahamic-parallel[id], .characters-section[id], .structure-card[id], .legal-card[id], .devices-card[id], .chorus-card[id], .study-nav[id], section[id]');
+      this.items = $('.quick-nav-item');
       
       if (this.sections.length) this.init();
     }
@@ -204,6 +212,12 @@
         item.classList.toggle('active', isActive);
       });
     }
+    
+    destroy() {
+      // Cleanup method
+      this.items = [];
+      this.sections = [];
+    }
   }
   
   // ===========================================
@@ -212,7 +226,7 @@
   // ===========================================
   class DynamicMobileTabs {
     constructor() {
-      // Section configuration with priorities
+      // Section configuration with priorities - ENHANCED LIST
       this.sectionConfig = [
         // Core sections (Priority 1-2)
         { id: 'overview', icon: '📋', label: 'Overview', priority: 1 },
@@ -435,6 +449,11 @@
     handleScrollHide() {
       const currentScrollY = window.pageYOffset;
       const scrollDiff = currentScrollY - this.lastScrollY;
+      
+      // Check if smooth scrolling is in progress - don't hide during smooth scroll
+      if (document.documentElement.style.scrollBehavior === 'smooth') {
+        return;
+      }
       
       // Only act if scroll is more than threshold
       if (Math.abs(scrollDiff) < this.scrollThreshold) {
@@ -744,11 +763,169 @@
         new PerformanceMonitor()
       );
       
-      console.log('Character Page Optimized v2.0.1 initialized');
+      console.log('Character Page Optimized v2.0.2 initialized - Enhanced with all optimizations');
+      
+      // Additional initialization checks
+      this.verifyInitialization();
+    }
+    
+    verifyInitialization() {
+      // Verify critical elements are present
+      const criticalElements = {
+        navigation: document.querySelector('nav'),
+        progressBar: document.querySelector('.reading-progress'),
+        backToTop: document.querySelector('.back-to-top'),
+        quickNav: document.querySelector('.quick-nav-sidebar')
+      };
+      
+      // Log any missing elements in development
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        Object.entries(criticalElements).forEach(([name, element]) => {
+          if (!element) {
+            console.warn(`Critical element missing: ${name}`);
+          }
+        });
+      }
+      
+      // Set up error boundary for production
+      window.addEventListener('error', (e) => {
+        if (e.filename && e.filename.includes('character-page-optimized')) {
+          console.error('Character page script error:', e.message);
+          // Attempt graceful recovery
+          this.attemptRecovery();
+        }
+      });
+    }
+    
+    attemptRecovery() {
+      // Try to maintain basic functionality even if some modules fail
+      try {
+        // Ensure basic scroll functionality
+        const backToTop = document.querySelector('.back-to-top');
+        if (backToTop && !backToTop.hasAttribute('data-initialized')) {
+          backToTop.setAttribute('data-initialized', 'true');
+          backToTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+        }
+        
+        // Ensure basic animation visibility
+        const animatedElements = document.querySelectorAll('.animate-on-scroll');
+        if (animatedElements.length > 0) {
+          animatedElements.forEach(el => {
+            if (el.getBoundingClientRect().top < window.innerHeight) {
+              el.classList.add('visible');
+            }
+          });
+        }
+      } catch (recoveryError) {
+        console.error('Recovery attempt failed:', recoveryError);
+      }
+    }
+    
+    cleanup() {
+      // Clean up all modules to prevent memory leaks
+      console.log('Cleaning up Character Page modules...');
+      
+      this.modules.forEach(module => {
+        if (module.observer) {
+          module.observer.disconnect();
+        }
+        if (module.destroy) {
+          module.destroy();
+        }
+      });
+      
+      // Clear the cache
+      cache.clear();
+      
+      // Clear RAF if pending
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+      
+      if (scrollTimeout) {
+        cancelAnimationFrame(scrollTimeout);
+        scrollTimeout = null;
+      }
+      
+      // Clear modules array
+      this.modules = [];
     }
   }
   
-  // Start the app
-  window.CharacterPageApp = new CharacterPage();
+  // Start the app with error handling
+  try {
+    window.CharacterPageApp = new CharacterPage();
+    
+    // Add cleanup on page unload to prevent memory leaks
+    window.addEventListener('beforeunload', () => {
+      if (window.CharacterPageApp && window.CharacterPageApp.cleanup) {
+        window.CharacterPageApp.cleanup();
+      }
+    });
+    
+    // Expose utility functions for debugging
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      window.CharacterPageDebug = {
+        getModules: () => window.CharacterPageApp.modules,
+        reinitialize: () => {
+          if (window.CharacterPageApp) {
+            window.CharacterPageApp.cleanup();
+            window.CharacterPageApp = new CharacterPage();
+          }
+        },
+        clearCache: () => {
+          cache.clear();
+          console.log('DOM cache cleared');
+        },
+        testMobileHide: () => {
+          const tabs = document.querySelector('.mobile-section-tabs');
+          if (tabs) {
+            tabs.style.transform = tabs.style.transform === 'translateY(100%)' ? 'translateY(0)' : 'translateY(100%)';
+          }
+        }
+      };
+    }
+  } catch (initError) {
+    console.error('Failed to initialize Character Page:', initError);
+    
+    // Fallback: Ensure basic functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      // Basic scroll to top
+      const backToTop = document.querySelector('.back-to-top');
+      if (backToTop) {
+        backToTop.addEventListener('click', (e) => {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        window.addEventListener('scroll', () => {
+          if (window.pageYOffset > 300) {
+            backToTop.style.opacity = '1';
+            backToTop.style.visibility = 'visible';
+          } else {
+            backToTop.style.opacity = '0';
+            backToTop.style.visibility = 'hidden';
+          }
+        });
+      }
+      
+      // Basic animations
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        observer.observe(el);
+      });
+    });
+  }
   
-})();
+})(); // End of IIFE wrapper
