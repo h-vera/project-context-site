@@ -1963,243 +1963,138 @@ footer p {
   }
 }
 /* ============================================
-   SECTION 24:
- VISUAL HIERARCHY & CONTRAST FIXES
+   TARGETED FIXES - Won't break existing layout
    ============================================ */
 
-/* Fix overlapping icons - remove pseudo-element icons from panels */
+/* 1. FIX: Remove duplicate icons on panels */
 .panel-highlight::before {
   display: none !important;
 }
 
-/* Add icon inline instead */
-.panel-highlight h4::before {
-  content: '💡 ';
-  font-size: 1.2rem;
-  vertical-align: middle;
+/* 2. FIX: Better visual separation for cards without breaking layout */
+.theology-card {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06) !important;
+  transition: box-shadow 0.3s ease;
 }
 
-/* Better card distinction with shadows and borders */
-.theology-card,
-.chiasm-card,
-.abrahamic-parallel,
-.characters-section {
-  position: relative;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 2px solid;
-  transition: all 0.3s ease;
+.theology-card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
 }
 
-.theology-card:hover,
-.abrahamic-parallel:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+/* Add subtle left accent bars for card types */
+.structure-card {
+  border-left: 4px solid #3b82f6 !important;
 }
 
-/* Distinct border colors for each card type */
-.structure-card { border-color: #3b82f6; border-left-width: 6px; }
-.legal-card { border-color: #f59e0b; border-left-width: 6px; }
-.devices-card { border-color: #10b981; border-left-width: 6px; }
-.chorus-card { border-color: #7209b7; border-left-width: 6px; }
-
-/* Section headers with better visual anchoring */
-.theology-card h2,
-.abrahamic-parallel h2 {
-  background: linear-gradient(90deg, rgba(114, 9, 183, 0.05) 0%, transparent 100%);
-  margin: -2rem -2rem 1.5rem -2rem;
-  padding: 1.5rem 2rem;
-  border-bottom: 2px solid rgba(114, 9, 183, 0.15);
-  border-radius: 16px 16px 0 0;
+.legal-card {
+  border-left: 4px solid #f59e0b !important;
 }
 
-/* Better panel contrast and grouping */
-.panel,
-.panel-accent {
-  background: #ffffff;
-  border: 1.5px solid #d1d5db;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  position: relative;
-  margin: 1rem 0;
-  transition: all 0.2s ease;
+.devices-card {
+  border-left: 4px solid #10b981 !important;
 }
 
-.panel:hover,
-.panel-accent:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transform: translateY(-2px);
+.chorus-card {
+  border-left: 4px solid #7209b7 !important;
 }
 
-.panel-accent {
-  border-left: 5px solid #7209b7;
-  padding-left: 1.5rem;
+/* 3. FIX: Improve panel contrast inside dark cards */
+.chiasm-card .panel {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
 }
 
-/* Panel headers stand out more */
-.panel h4,
-.panel-accent h4 {
-  color: #1e293b !important;
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid rgba(114, 9, 183, 0.1);
-}
-
-/* Fix white text visibility in dark sections */
-.chiasm-card .panel,
-.characters-section .character-interpretation {
-  background: rgba(255, 255, 255, 0.95) !important;
-  color: #1e293b !important;
-  border: 2px solid rgba(255, 255, 255, 1);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.chiasm-card .panel h4,
-.characters-section .character-interpretation h4 {
+.chiasm-card .panel h4 {
   color: #7209b7 !important;
-  border-bottom: 2px solid rgba(114, 9, 183, 0.2);
+  font-weight: 700;
 }
 
 .chiasm-card .panel p,
-.chiasm-card .panel li,
-.characters-section .character-interpretation p,
-.characters-section .character-interpretation li {
+.chiasm-card .panel ol li,
+.chiasm-card .panel ul li {
   color: #1e293b !important;
 }
 
-/* Visual grouping indicators */
-.theology-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; border-radius: 16px 16px 0 0; }
-.structure-card::before { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
-.legal-card::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
-.devices-card::before { background: linear-gradient(90deg, #10b981, #34d399); }
-.chorus-card::before { background: linear-gradient(90deg, #7209b7, #a855f7); }
-
-/* Grid improvements */
-.grid { gap: 2rem; margin: 2rem 0; }
-.grid-2 > div { height: 100%; }
-
-/* Table improvements */
-table {
-  background: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  border: 1px solid #e5e7eb;
-  margin: 2rem 0;
+/* 4. FIX: Characters section white boxes */
+.characters-section .character-interpretation {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
 }
-thead th {
-  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
-  color: #0f172a !important;
+
+.characters-section .character-interpretation strong {
+  color: #7209b7 !important;
+}
+
+.characters-section .character-interpretation ul li {
+  color: #1e293b !important;
+}
+
+/* 5. FIX: Add subtle headers to group content */
+.theology-card h2 {
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+}
+
+/* 6. FIX: Panel improvements without breaking layout */
+.panel,
+.panel-accent {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.panel h4,
+.panel-accent h4 {
   font-weight: 700;
-  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 0.75rem;
 }
 
-/* Key insight boxes */
-.key-insight {
-  background: #ffffff;
-  border: 2px solid #3b82f6;
-  border-left-width: 6px;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
-  color: #1e293b !important;
-}
-.key-insight strong { color: #1e40af !important; font-weight: 700; }
-
-/* Significance blocks */
-.significance {
-  background: #fefef9;
-  border: 2px solid #10b981;
-  border-left-width: 6px;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.08);
-}
-.significance h4 { color: #047857 !important; font-weight: 700; }
-
-/* Word study */
-.word-study {
-  background: #fffef5;
-  border: 2px solid #f59e0b;
-  border-left-width: 6px;
-  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.08);
-}
-
-/* Providence note */
-.providence-note {
-  background: #ffffff;
-  border: 3px dashed #7209b7;
-  box-shadow: 0 4px 12px rgba(114, 9, 183, 0.08);
-}
-
-/* Mobile tabs */
+/* 7. FIX: Mobile tabs visibility */
 .mobile-section-tabs {
-  background: #ffffff;
-  border-top: 2px solid #e5e7eb;
-  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05) !important;
 }
+
 .tab-item {
-  background: #f8fafc;
-  border: 1.5px solid #d1d5db;
   font-weight: 600;
 }
+
 .tab-item.active {
-  box-shadow: 0 2px 8px rgba(114, 9, 183, 0.3);
-  transform: scale(1.08);
+  box-shadow: 0 2px 6px rgba(114, 9, 183, 0.2);
 }
 
-/* Section divider */
-.section-divider {
-  height: 3px;
-  background: linear-gradient(90deg, transparent, #7209b7 20%, #e11d48 50%, #7209b7 80%, transparent);
-  margin: 4rem 0;
-  opacity: 0.3;
+/* 8. FIX: Table readability */
+table thead th {
+  font-weight: 700;
+  background: #f8fafc !important;
 }
 
-/* Responsive tweaks */
-@media (max-width: 768px) {
-  .theology-card h2,
-  .abrahamic-parallel h2 {
-    margin: -1.5rem -1.5rem 1rem -1.5rem;
-    padding: 1rem 1.5rem;
-    font-size: 1.3rem;
-  }
-  .grid { gap: 1.5rem; }
-  .panel, .panel-accent { padding: 1rem; }
-  .mobile-section-tabs { bottom: 0; position: fixed; z-index: 999; padding: 12px 10px; }
+/* 9. FIX: Key insight and significance boxes */
+.key-insight {
+  border-left-width: 4px !important;
 }
 
-/* Print styles */
-@media print {
-  .theology-card,
-  .chiasm-card,
-  .characters-section {
-    border: 2px solid #000 !important;
-    box-shadow: none !important;
-    page-break-inside: avoid;
-  }
-  .panel {
-    border: 1px solid #000 !important;
-    box-shadow: none !important;
-  }
+.significance {
+  border-left-width: 4px !important;
 }
 
-/* High-contrast mode */
-@media (prefers-contrast: high) {
-  .theology-card,
-  .panel,
-  .key-insight,
-  .significance { border-width: 3px; }
-  .tab-item.active { outline: 3px solid #7209b7; outline-offset: 2px; }
+/* 10. Additional subtle improvements */
+.word-study {
+  border-left-width: 4px !important;
 }
 
-/* Dark mode */
-@media (prefers-color-scheme: dark) {
-  .panel,
-  .panel-accent,
-  .key-insight,
-  .significance,
-  .word-study,
-  .providence-note {
-    background: #1e293b;
-    color: #e2e8f0 !important;
-    border-color: #475569;
-  }
-  .panel h4, .significance h4 { color: #fbbf24 !important; }
-  table { background: #1e293b; color: #e2e8f0; }
-  thead th { background: #0f172a; color: #e2e8f0 !important; }
+.providence-note {
+  border-width: 2px !important;
+}
+
+/* Ensure spacing between sections */
+.theology-card + .theology-card {
+  margin-top: 2.5rem;
+}
+
+/* Fix grid spacing */
+.grid {
+  gap: 1.5rem !important;
+}
+
+.grid-2 {
+  gap: 1.5rem !important;
 }
