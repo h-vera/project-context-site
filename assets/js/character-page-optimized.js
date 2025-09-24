@@ -129,55 +129,90 @@
   }
   
   // ===========================================
-  // NAVIGATION SCROLL EFFECTS
-  // ===========================================
-  class NavScrollEffects {
-    constructor() {
-      this.nav = $('nav');
-      this.backToTop = $('.back-to-top');
-      this.lastScroll = 0;
-      
-      if (this.nav) this.init();
-    }
+// NAVIGATION SCROLL EFFECTS - FIXED
+// ===========================================
+class NavScrollEffects {
+  constructor() {
+    this.nav = $('nav');
+    this.backToTop = $('.back-to-top');
+    this.lastScroll = 0;
     
-    init() {
-      window.addEventListener('scroll', () => this.handleScroll(), { passive: true });
-      
-      if (this.backToTop) {
-        this.backToTop.addEventListener('click', (e) => {
-          e.preventDefault();
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-      }
-    }
+    if (this.nav) this.init();
+  }
+  
+  init() {
+    window.addEventListener('scroll', () => this.handleScroll(), { passive: true });
     
-    handleScroll() {
-      if (scrollTimeout) return;
-      
-      scrollTimeout = requestAnimationFrame(() => {
-        const currentScroll = window.pageYOffset;
-        
-        // Nav shadow
-        if (currentScroll > 100) {
-          this.nav.classList.add('scrolled');
-        } else {
-          this.nav.classList.remove('scrolled');
-        }
-        
-        // Back to top visibility
-        if (this.backToTop) {
-          if (currentScroll > 500) {
-            this.backToTop.classList.add('visible');
-          } else {
-            this.backToTop.classList.remove('visible');
-          }
-        }
-        
-        this.lastScroll = currentScroll;
-        scrollTimeout = null;
+    if (this.backToTop) {
+      this.backToTop.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     }
+    
+    // Initialize dropdown functionality
+    this.initDropdowns();
   }
+  
+  initDropdowns() {
+    const dropdowns = $$('.dropdown');
+    
+    dropdowns.forEach(dropdown => {
+      const toggle = dropdown.querySelector('.dropdown-toggle');
+      const content = dropdown.querySelector('.dropdown-content');
+      
+      if (toggle && content) {
+        // Desktop hover
+        dropdown.addEventListener('mouseenter', () => {
+          if (window.innerWidth > 768) {
+            dropdown.classList.add('open');
+          }
+        });
+        
+        dropdown.addEventListener('mouseleave', () => {
+          if (window.innerWidth > 768) {
+            dropdown.classList.remove('open');
+          }
+        });
+        
+        // Mobile click
+        toggle.addEventListener('click', (e) => {
+          if (window.innerWidth <= 768) {
+            e.preventDefault();
+            dropdown.classList.toggle('open');
+          }
+        });
+      }
+    });
+  }
+  
+  handleScroll() {
+    if (scrollTimeout) return;
+    
+    scrollTimeout = requestAnimationFrame(() => {
+      const currentScroll = window.pageYOffset;
+      
+      // Nav shadow
+      if (currentScroll > 100) {
+        this.nav.classList.add('scrolled');
+      } else {
+        this.nav.classList.remove('scrolled');
+      }
+      
+      // Back to top visibility
+      if (this.backToTop) {
+        if (currentScroll > 500) {
+          this.backToTop.classList.add('visible');
+        } else {
+          this.backToTop.classList.remove('visible');
+        }
+      }
+      
+      this.lastScroll = currentScroll;
+      scrollTimeout = null;
+    });
+  }
+}
   
   // ===========================================
   // QUICK NAVIGATION SIDEBAR
