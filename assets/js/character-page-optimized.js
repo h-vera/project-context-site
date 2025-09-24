@@ -1,14 +1,15 @@
 /**
- * Character Page Optimized JavaScript with Auto-Generating Mobile Tabs
+ * Character Page Optimized JavaScript - FIXED VERSION
  * Path: /assets/js/character-page-optimized.js
- * Version: 2.0.2 - FULLY FUNCTIONAL
+ * Version: 2.0.3 - CONFLICT FIXES
  * 
  * FIXES:
- * - Fixed navigation component integration
- * - Improved mobile tab generation
- * - Enhanced scroll performance
- * - Better error handling
- * - Proper cleanup and initialization
+ * - Fixed DOM ready state check conflicts
+ * - Simplified mobile tab generation logic
+ * - Removed redundant initialization calls
+ * - Fixed scroll hide/show timing
+ * - Cleaned up error handling
+ * - Removed duplicate event listeners
  */
 
 (function() {
@@ -17,6 +18,7 @@
   // Performance: Single RAF instance for all animations
   let rafId = null;
   let scrollTimeout = null;
+  let isInitialized = false;
   
   // Cache DOM queries
   const cache = new Map();
@@ -39,15 +41,14 @@
   class ProgressBar {
     constructor() {
       this.bar = $('.reading-progress');
-      if (!this.bar) return;
+      if (!this.bar || this.bar.hasAttribute('data-initialized')) return;
       
       this.init();
     }
     
     init() {
-      // Add GPU acceleration
+      this.bar.setAttribute('data-initialized', 'true');
       this.bar.style.willChange = 'transform';
-      // Use transform for better performance than width
       this.update();
       window.addEventListener('scroll', () => this.throttledUpdate(), { passive: true });
     }
@@ -65,13 +66,7 @@
       const height = document.documentElement.scrollHeight - window.innerHeight;
       const scrolled = Math.min(winScroll / height, 1);
       this.bar.style.transform = `scaleX(${scrolled})`;
-    }
-    
-    destroy() {
-      // Cleanup method
-      if (this.bar) {
-        this.bar.style.willChange = 'auto';
-      }
+      this.bar.setAttribute('aria-valuenow', Math.round(scrolled * 100));
     }
   }
   
@@ -91,7 +86,7 @@
     init() {
       if (!('IntersectionObserver' in window)) {
         // Fallback for older browsers
-        $$('.animate-on-scroll').forEach(el => {
+        $('.animate-on-scroll').forEach(el => {
           el.classList.add('visible');
         });
         return;
@@ -110,12 +105,12 @@
       }, this.options);
       
       // Observe all animated elements
-      $$('.animate-on-scroll').forEach(el => {
+      $('.animate-on-scroll').forEach(el => {
         this.observer.observe(el);
       });
       
-      // Timeline items with staggered animation
-      $$('.timeline-item').forEach((item, index) => {
+      // Timeline items
+      $('.timeline-item').forEach((item, index) => {
         item.style.setProperty('--index', index);
         this.observer.observe(item);
       });
@@ -129,102 +124,68 @@
   }
   
   // ===========================================
-// NAVIGATION SCROLL EFFECTS - FIXED
-// ===========================================
-class NavScrollEffects {
-  constructor() {
-    this.nav = $('nav');
-    this.backToTop = $('.back-to-top');
-    this.lastScroll = 0;
-    
-    if (this.nav) this.init();
-  }
-  
-  init() {
-    window.addEventListener('scroll', () => this.handleScroll(), { passive: true });
-    
-    if (this.backToTop) {
-      this.backToTop.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
+  // NAVIGATION SCROLL EFFECTS - SIMPLIFIED
+  // ===========================================
+  class NavScrollEffects {
+    constructor() {
+      this.nav = $('nav');
+      this.backToTop = $('.back-to-top');
+      this.lastScroll = 0;
+      
+      if (this.nav || this.backToTop) this.init();
     }
     
-    // Initialize dropdown functionality
-    this.initDropdowns();
-  }
-  
-  initDropdowns() {
-    const dropdowns = $$('.dropdown');
-    
-    dropdowns.forEach(dropdown => {
-      const toggle = dropdown.querySelector('.dropdown-toggle');
-      const content = dropdown.querySelector('.dropdown-content');
+    init() {
+      window.addEventListener('scroll', () => this.handleScroll(), { passive: true });
       
-      if (toggle && content) {
-        // Desktop hover
-        dropdown.addEventListener('mouseenter', () => {
-          if (window.innerWidth > 768) {
-            dropdown.classList.add('open');
-          }
-        });
-        
-        dropdown.addEventListener('mouseleave', () => {
-          if (window.innerWidth > 768) {
-            dropdown.classList.remove('open');
-          }
-        });
-        
-        // Mobile click
-        toggle.addEventListener('click', (e) => {
-          if (window.innerWidth <= 768) {
-            e.preventDefault();
-            dropdown.classList.toggle('open');
-          }
-        });
-      }
-    });
-  }
-  
-  handleScroll() {
-    if (scrollTimeout) return;
-    
-    scrollTimeout = requestAnimationFrame(() => {
-      const currentScroll = window.pageYOffset;
-      
-      // Nav shadow
-      if (currentScroll > 100) {
-        this.nav.classList.add('scrolled');
-      } else {
-        this.nav.classList.remove('scrolled');
-      }
-      
-      // Back to top visibility
       if (this.backToTop) {
-        if (currentScroll > 500) {
-          this.backToTop.classList.add('visible');
-        } else {
-          this.backToTop.classList.remove('visible');
-        }
+        this.backToTop.addEventListener('click', (e) => {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
       }
+    }
+    
+    handleScroll() {
+      if (scrollTimeout) return;
       
-      this.lastScroll = currentScroll;
-      scrollTimeout = null;
-    });
+      scrollTimeout = requestAnimationFrame(() => {
+        const currentScroll = window.pageYOffset;
+        
+        // Nav shadow
+        if (this.nav) {
+          if (currentScroll > 100) {
+            this.nav.classList.add('scrolled');
+          } else {
+            this.nav.classList.remove('scrolled');
+          }
+        }
+        
+        // Back to top visibility
+        if (this.backToTop) {
+          if (currentScroll > 500) {
+            this.backToTop.classList.add('visible');
+          } else {
+            this.backToTop.classList.remove('visible');
+          }
+        }
+        
+        this.lastScroll = currentScroll;
+        scrollTimeout = null;
+      });
+    }
   }
-}
   
   // ===========================================
-  // QUICK NAVIGATION SIDEBAR
+  // QUICK NAVIGATION SIDEBAR - SIMPLIFIED
   // ===========================================
   class QuickNav {
     constructor() {
       this.sidebar = $('.quick-nav-sidebar');
       if (!this.sidebar) return;
       
-      // Enhanced selector to include ALL possible section types
-      this.sections = $$('.theology-card[id], .animate-on-scroll[id], .chiasm-card[id], .abrahamic-parallel[id], .characters-section[id], .structure-card[id], .legal-card[id], .devices-card[id], .chorus-card[id], .study-nav[id], section[id]');
-      this.items = $$('.quick-nav-item');
+      this.sections = $('.theology-card[id], .animate-on-scroll[id], .chiasm-card[id], section[id]');
+      this.items = $('.quick-nav-item');
       
       if (this.sections.length && this.items.length) this.init();
     }
@@ -261,72 +222,36 @@ class NavScrollEffects {
         item.classList.toggle('active', isActive);
       });
     }
-    
-    destroy() {
-      // Cleanup method
-      this.items = [];
-      this.sections = [];
-    }
   }
   
   // ===========================================
-  // AUTO-GENERATING MOBILE TABS (v2.0) - FIXED
-  // Dynamic generation based on present sections
+  // MOBILE TABS - SIMPLIFIED & FIXED
   // ===========================================
   class DynamicMobileTabs {
     constructor() {
-      // Section configuration with priorities - ENHANCED LIST
+      // Only run on mobile
+      if (window.innerWidth > 768) return;
+      
+      // Section configuration - SIMPLIFIED
       this.sectionConfig = [
-        // Core sections (Priority 1-2)
-        { id: 'overview', icon: '📋', label: 'Overview', priority: 1 },
         { id: 'structure', icon: '🏗️', label: 'Structure', priority: 1 },
-        { id: 'narrative', icon: '📖', label: 'Journey', priority: 2 },
         { id: 'scene-rhythm', icon: '🎭', label: 'Scenes', priority: 2 },
-        { id: 'legal', icon: '⚖️', label: 'Legal', priority: 3 },
-        { id: 'literary-context', icon: '📚', label: 'Literary', priority: 3 },
-        { id: 'themes', icon: '💡', label: 'Themes', priority: 3 },
-        { id: 'devices', icon: '🎨', label: 'Devices', priority: 3 },
-        { id: 'ane-context', icon: '🌍', label: 'ANE', priority: 4 },
-        { id: 'biblical-theology', icon: '⛪', label: 'Theology', priority: 2 },
-        { id: 'messianic', icon: '✨', label: 'Messianic', priority: 3 },
-        { id: 'application', icon: '🎯', label: 'Apply', priority: 2 },
-        { id: 'questions', icon: '❓', label: 'Questions', priority: 4 },
-        
-        // Optional sections (Priority 4-5)
-        { id: 'chiasm', icon: '🔄', label: 'Chiasm', priority: 4 },
+        { id: 'legal', icon: '⚖️', label: 'Legal', priority: 2 },
         { id: 'major-chiasm', icon: '🔍', label: 'Chiasm', priority: 2 },
+        { id: 'devices', icon: '🎨', label: 'Devices', priority: 3 },
+        { id: 'abrahamic-parallel', icon: '🌟', label: 'Abraham', priority: 3 },
         { id: 'dialogue', icon: '💬', label: 'Dialogue', priority: 3 },
         { id: 'chorus', icon: '👥', label: 'Chorus', priority: 4 },
         { id: 'characters', icon: '👤', label: 'Characters', priority: 2 },
-        { id: 'abrahamic-parallel', icon: '🌟', label: 'Abraham', priority: 3 },
-        { id: 'literary-artistry', icon: '🎨', label: 'Artistry', priority: 5 },
-        { id: 'eden', icon: '🌳', label: 'Eden', priority: 5 },
-        { id: 'wordplay', icon: '✍️', label: 'Wordplay', priority: 5 },
-        { id: 'covenant', icon: '💍', label: 'Covenant', priority: 5 },
-        { id: 'unique', icon: '⭐', label: 'Unique', priority: 5 },
-        { id: 'second-temple', icon: '🏛️', label: '2nd Temple', priority: 5 },
-        { id: 'songs', icon: '🎵', label: 'Songs', priority: 4 },
-        { id: 'intertext', icon: '🔗', label: 'Intertext', priority: 4 },
-        { id: 'bibliography', icon: '📚', label: 'Sources', priority: 5 },
-        { id: 'further-study', icon: '📖', label: 'Study', priority: 4 },
-        
-        // Character-specific sections
-        { id: 'prophetic-messages', icon: '📜', label: 'Prophecy', priority: 3 },
-        { id: 'reign-summary', icon: '👑', label: 'Reign', priority: 3 },
-        { id: 'gender-dynamics', icon: '👩', label: 'Gender', priority: 4 }
+        { id: 'bibliography', icon: '📚', label: 'Sources', priority: 5 }
       ];
       
-      this.maxTabs = 5; // Maximum tabs for mobile usability
+      this.maxTabs = 5;
       this.lastScrollY = 0;
       this.isHidden = false;
-      this.scrollDirection = null;
-      this.scrollThreshold = 5; // Minimum scroll distance to trigger hide/show
       this.hideTimeout = null;
       
-      // Only initialize on mobile
-      if (window.innerWidth <= 768) {
-        this.init();
-      }
+      this.init();
       
       // Reinitialize on resize
       window.addEventListener('resize', () => {
@@ -339,89 +264,58 @@ class NavScrollEffects {
     }
     
     init() {
-      // Detect present sections
-      const presentSections = this.detectSections();
-      
-      if (presentSections.length === 0) {
-        console.log('Dynamic Mobile Tabs: No sections found');
-        return;
+      try {
+        const presentSections = this.detectSections();
+        if (presentSections.length === 0) return;
+        
+        const selectedTabs = this.selectTabs(presentSections);
+        this.generateNavigation(selectedTabs);
+        this.setupEventListeners();
+        this.setupScrollHide();
+      } catch (error) {
+        console.warn('Mobile tabs initialization failed:', error);
       }
-      
-      // Select tabs based on priority
-      const selectedTabs = this.selectTabs(presentSections);
-      
-      // Generate and insert navigation
-      this.generateNavigation(selectedTabs);
-      
-      // Initialize functionality
-      this.setupEventListeners();
-      this.setupScrollHide();
     }
     
     detectSections() {
       const presentSections = [];
       
       this.sectionConfig.forEach(config => {
-        // Check multiple possible selectors for each section
-        const selectors = [
-          `#${config.id}`,
-          `[id="${config.id}"]`,
-          `.theology-card#${config.id}`,
-          `.chiasm-card#${config.id}`,
-          `section#${config.id}`,
-          `.${config.id}`,
-          `[aria-labelledby*="${config.id}"]`
-        ];
+        const element = document.getElementById(config.id) || 
+                       document.querySelector(`[id="${config.id}"]`) ||
+                       document.querySelector(`.${config.id}`);
         
-        const exists = selectors.some(selector => {
-          try {
-            return document.querySelector(selector) !== null;
-          } catch (e) {
-            return false;
-          }
-        });
-        
-        if (exists) {
+        if (element) {
           presentSections.push(config);
         }
       });
       
-      console.log(`Dynamic Mobile Tabs: Found ${presentSections.length} sections:`, 
-        presentSections.map(s => s.id));
       return presentSections;
     }
     
     selectTabs(sections) {
-      // If 5 or fewer, use all
       if (sections.length <= this.maxTabs) {
         return sections;
       }
       
-      // Sort by priority, then select top 5
-      const sorted = sections.sort((a, b) => {
-        // Always include Overview or Structure if present
-        if (a.id === 'overview' || a.id === 'structure') return -1;
-        if (b.id === 'overview' || b.id === 'structure') return 1;
-        
-        // Then sort by priority
-        return a.priority - b.priority;
-      });
-      
-      const selected = sorted.slice(0, this.maxTabs);
-      console.log(`Dynamic Mobile Tabs: Selected ${selected.length} high-priority tabs:`, 
-        selected.map(s => s.id));
-      
-      return selected;
+      // Sort by priority and select top 5
+      const sorted = sections.sort((a, b) => a.priority - b.priority);
+      return sorted.slice(0, this.maxTabs);
     }
     
     generateNavigation(tabs) {
+      // Remove existing tabs first
+      const existingTabs = document.querySelector('.mobile-section-tabs');
+      if (existingTabs) {
+        existingTabs.remove();
+      }
+      
       // Create container
       const nav = document.createElement('nav');
       nav.className = 'mobile-section-tabs dynamic-tabs';
       nav.setAttribute('aria-label', 'Section navigation');
-      nav.setAttribute('role', 'navigation');
       
-      // Add will-change for smooth animations
+      // Add smooth transform
       nav.style.willChange = 'transform';
       nav.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
       
@@ -445,13 +339,6 @@ class NavScrollEffects {
       });
       
       nav.appendChild(container);
-      
-      // Remove any existing mobile tabs
-      const existingTabs = document.querySelector('.mobile-section-tabs');
-      if (existingTabs) {
-        existingTabs.remove();
-      }
-      
       document.body.appendChild(nav);
       
       this.container = nav;
@@ -479,26 +366,13 @@ class NavScrollEffects {
       
       // Update active tab on scroll
       window.addEventListener('scroll', () => this.updateActive(), { passive: true });
-      
-      // Swipe gestures for section navigation
-      this.setupSwipeGestures();
     }
     
     setupScrollHide() {
       let ticking = false;
-      let lastTimestamp = 0;
       
       window.addEventListener('scroll', () => {
         if (!ticking) {
-          const currentTimestamp = Date.now();
-          
-          // Debounce - only process every 100ms minimum
-          if (currentTimestamp - lastTimestamp < 100) {
-            return;
-          }
-          
-          lastTimestamp = currentTimestamp;
-          
           requestAnimationFrame(() => {
             this.handleScrollHide();
             ticking = false;
@@ -512,32 +386,25 @@ class NavScrollEffects {
       const currentScrollY = window.pageYOffset;
       const scrollDiff = currentScrollY - this.lastScrollY;
       
-      // Check if smooth scrolling is in progress - don't hide during smooth scroll
-      if (document.documentElement.style.scrollBehavior === 'smooth') {
-        return;
-      }
+      // Only act if scroll is significant
+      if (Math.abs(scrollDiff) < 10) return;
       
-      // Only act if scroll is more than threshold
-      if (Math.abs(scrollDiff) < this.scrollThreshold) {
-        return;
-      }
-      
-      // Clear any pending hide timeout
+      // Clear any pending timeout
       if (this.hideTimeout) {
         clearTimeout(this.hideTimeout);
         this.hideTimeout = null;
       }
       
-      // Determine scroll direction
+      // Hide on scroll down, show on scroll up
       if (scrollDiff > 0 && currentScrollY > 200) {
-        // Scrolling down - hide after a delay
+        // Scrolling down - hide with delay
         if (!this.isHidden) {
           this.hideTimeout = setTimeout(() => {
             if (this.container) {
               this.container.style.transform = 'translateY(100%)';
               this.isHidden = true;
             }
-          }, 150); // Small delay prevents flicker
+          }, 200);
         }
       } else if (scrollDiff < 0) {
         // Scrolling up - show immediately
@@ -547,46 +414,13 @@ class NavScrollEffects {
         }
       }
       
-      // At the top of the page, always show
+      // Always show at top
       if (currentScrollY < 100 && this.isHidden && this.container) {
         this.container.style.transform = 'translateY(0)';
         this.isHidden = false;
       }
       
       this.lastScrollY = currentScrollY;
-    }
-    
-    setupSwipeGestures() {
-      let touchStartX = 0;
-      let touchEndX = 0;
-      
-      document.addEventListener('touchstart', (e) => {
-        touchStartX = e.changedTouches[0].screenX;
-      }, { passive: true });
-      
-      document.addEventListener('touchend', (e) => {
-        touchEndX = e.changedTouches[0].screenX;
-        this.handleSwipe();
-      }, { passive: true });
-      
-      this.handleSwipe = () => {
-        const swipeThreshold = 50;
-        const diff = touchStartX - touchEndX;
-        
-        if (Math.abs(diff) < swipeThreshold) return;
-        
-        // Find current active tab
-        const activeTab = this.tabs.find(tab => tab.classList.contains('active'));
-        const activeIndex = this.tabs.indexOf(activeTab);
-        
-        if (diff > 0 && activeIndex < this.tabs.length - 1) {
-          // Swipe left - next section
-          this.tabs[activeIndex + 1].click();
-        } else if (diff < 0 && activeIndex > 0) {
-          // Swipe right - previous section
-          this.tabs[activeIndex - 1].click();
-        }
-      };
     }
     
     updateActive() {
@@ -607,24 +441,6 @@ class NavScrollEffects {
       if (activeTab) {
         this.tabs.forEach(tab => tab.classList.remove('active'));
         activeTab.classList.add('active');
-        
-        // Scroll tab into view
-        if (this.tabContainer) {
-          const container = this.tabContainer;
-          const tabLeft = activeTab.offsetLeft;
-          const tabWidth = activeTab.offsetWidth;
-          const containerScroll = container.scrollLeft;
-          const containerWidth = container.offsetWidth;
-          
-          if (tabLeft < containerScroll) {
-            container.scrollTo({ left: tabLeft - 20, behavior: 'smooth' });
-          } else if (tabLeft + tabWidth > containerScroll + containerWidth) {
-            container.scrollTo({ 
-              left: tabLeft + tabWidth - containerWidth + 20, 
-              behavior: 'smooth' 
-            });
-          }
-        }
       }
     }
     
@@ -652,6 +468,10 @@ class NavScrollEffects {
     }
     
     init() {
+      // Avoid duplicate listeners
+      if (document.hasAttribute('data-smooth-anchors')) return;
+      document.setAttribute('data-smooth-anchors', 'true');
+      
       document.addEventListener('click', (e) => {
         const link = e.target.closest('a[href^="#"]');
         if (!link) return;
@@ -679,7 +499,7 @@ class NavScrollEffects {
   }
   
   // ===========================================
-  // ENHANCED TABLE WRAPPER
+  // TABLE WRAPPER
   // ===========================================
   class TableWrapper {
     constructor() {
@@ -687,7 +507,7 @@ class NavScrollEffects {
     }
     
     init() {
-      $$('table').forEach(table => {
+      $('table').forEach(table => {
         if (table.parentElement.classList.contains('table-wrapper')) return;
         
         const wrapper = document.createElement('div');
@@ -707,109 +527,35 @@ class NavScrollEffects {
   class Bibliography {
     constructor() {
       this.section = $('.bibliography-section');
-      if (!this.section) return;
+      if (!this.section || this.section.hasAttribute('data-initialized')) return;
       
       this.init();
     }
     
     init() {
+      this.section.setAttribute('data-initialized', 'true');
+      
       this.section.addEventListener('toggle', () => {
         const indicator = $('.expand-indicator', this.section);
         if (indicator) {
           indicator.style.transform = this.section.open ? 'rotate(180deg)' : 'rotate(0)';
         }
-        
-        // Lazy load content
-        if (this.section.open && !this.section.dataset.loaded) {
-          this.loadContent();
-        }
-      });
-    }
-    
-    loadContent() {
-      // In production, this would fetch actual bibliography
-      // For now, mark as loaded
-      this.section.dataset.loaded = 'true';
-    }
-  }
-  
-  // ===========================================
-  // PRINT OPTIMIZATION
-  // ===========================================
-  class PrintOptimizer {
-    constructor() {
-      window.addEventListener('beforeprint', () => this.preparePrint());
-    }
-    
-    preparePrint() {
-      // Expand all collapsible content
-      $$('.animate-on-scroll').forEach(el => el.classList.add('visible'));
-      $$('.timeline-item').forEach(el => el.classList.add('visible'));
-      
-      // Open bibliography
-      const bibliography = $('.bibliography-section');
-      if (bibliography) bibliography.setAttribute('open', 'true');
-    }
-  }
-  
-  // ===========================================
-  // PERFORMANCE MONITOR (Development only)
-  // ===========================================
-  class PerformanceMonitor {
-    constructor() {
-      if (window.location.hostname === 'localhost' || 
-          window.location.hostname === '127.0.0.1') {
-        this.init();
-      }
-    }
-    
-    init() {
-      // Log performance metrics
-      if ('PerformanceObserver' in window) {
-        try {
-          // LCP
-          const lcpObserver = new PerformanceObserver((list) => {
-            const entries = list.getEntries();
-            const lastEntry = entries[entries.length - 1];
-            console.log('LCP:', lastEntry.startTime.toFixed(0) + 'ms');
-          });
-          lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
-          
-          // FID
-          const fidObserver = new PerformanceObserver((list) => {
-            for (const entry of list.getEntries()) {
-              console.log('FID:', entry.processingStart - entry.startTime);
-            }
-          });
-          fidObserver.observe({ entryTypes: ['first-input'] });
-          
-        } catch (e) {
-          // Silently fail if not supported
-        }
-      }
-      
-      // Page load time
-      window.addEventListener('load', () => {
-        const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
-        console.log('Page Load Time:', loadTime + 'ms');
-        
-        // Log dynamic tab info
-        const dynamicTabs = document.querySelector('.dynamic-tabs');
-        if (dynamicTabs) {
-          const tabCount = dynamicTabs.querySelectorAll('.tab-item').length;
-          console.log(`Dynamic Mobile Tabs: Generated ${tabCount} tabs`);
-        }
       });
     }
   }
   
   // ===========================================
-  // INITIALIZATION
+  // INITIALIZATION - SIMPLIFIED
   // ===========================================
   class CharacterPage {
     constructor() {
       this.modules = [];
-      this.initialized = false;
+      
+      // Prevent multiple initialization
+      if (isInitialized || document.hasAttribute('data-character-page-init')) {
+        return;
+      }
+      
       this.init();
     }
     
@@ -823,87 +569,38 @@ class NavScrollEffects {
     }
     
     initModules() {
-      if (this.initialized) return;
-      this.initialized = true;
+      if (isInitialized) return;
       
-      // Initialize all modules
+      // Mark as initialized
+      isInitialized = true;
+      document.setAttribute('data-character-page-init', 'true');
+      
       try {
+        // Initialize modules with error handling
         this.modules.push(
           new ProgressBar(),
           new ScrollAnimator(),
           new NavScrollEffects(),
           new QuickNav(),
-          new DynamicMobileTabs(), // Auto-generating mobile tabs
+          new DynamicMobileTabs(),
           new SmoothAnchors(),
           new TableWrapper(),
-          new Bibliography(),
-          new PrintOptimizer(),
-          new PerformanceMonitor()
+          new Bibliography()
         );
         
-        console.log('Character Page Optimized v2.0.2 initialized - Enhanced with all optimizations');
+        console.log('Character Page Optimized v2.0.3 initialized - Fixed conflicts');
         
-        // Additional initialization checks
-        this.verifyInitialization();
       } catch (error) {
         console.error('Error initializing Character Page modules:', error);
-        this.attemptRecovery();
+        this.fallbackInit();
       }
     }
     
-    verifyInitialization() {
-      // Verify critical elements are present
-      const criticalElements = {
-        navigation: document.querySelector('nav'),
-        progressBar: document.querySelector('.reading-progress'),
-        backToTop: document.querySelector('.back-to-top'),
-        quickNav: document.querySelector('.quick-nav-sidebar')
-      };
-      
-      // Log any missing elements in development
-      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        Object.entries(criticalElements).forEach(([name, element]) => {
-          if (!element) {
-            console.warn(`Critical element missing: ${name}`);
-          }
-        });
-      }
-      
-      // Set up error boundary for production
-      window.addEventListener('error', (e) => {
-        if (e.filename && e.filename.includes('character-page-optimized')) {
-          console.error('Character page script error:', e.message);
-          // Attempt graceful recovery
-          this.attemptRecovery();
-        }
-      });
-    }
-    
-    attemptRecovery() {
-      // Try to maintain basic functionality even if some modules fail
+    fallbackInit() {
+      // Basic functionality fallbacks
       try {
-        // Ensure basic scroll functionality
-        const backToTop = document.querySelector('.back-to-top');
-        if (backToTop && !backToTop.hasAttribute('data-initialized')) {
-          backToTop.setAttribute('data-initialized', 'true');
-          backToTop.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          });
-        }
-        
-        // Ensure basic animation visibility
-        const animatedElements = document.querySelectorAll('.animate-on-scroll');
-        if (animatedElements.length > 0) {
-          animatedElements.forEach(el => {
-            if (el.getBoundingClientRect().top < window.innerHeight) {
-              el.classList.add('visible');
-            }
-          });
-        }
-        
-        // Basic progress bar
-        const progressBar = document.querySelector('.reading-progress');
+        // Progress bar
+        const progressBar = $('.reading-progress');
         if (progressBar && !progressBar.hasAttribute('data-initialized')) {
           progressBar.setAttribute('data-initialized', 'true');
           const updateProgress = () => {
@@ -911,19 +608,50 @@ class NavScrollEffects {
             const height = document.documentElement.scrollHeight - window.innerHeight;
             const scrolled = Math.min(winScroll / height, 1);
             progressBar.style.transform = `scaleX(${scrolled})`;
+            progressBar.setAttribute('aria-valuenow', Math.round(scrolled * 100));
           };
           
           window.addEventListener('scroll', updateProgress, { passive: true });
           updateProgress();
         }
         
-      } catch (recoveryError) {
-        console.error('Recovery attempt failed:', recoveryError);
+        // Back to top
+        const backToTop = $('.back-to-top');
+        if (backToTop && !backToTop.hasAttribute('data-initialized')) {
+          backToTop.setAttribute('data-initialized', 'true');
+          backToTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+          
+          window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 500) {
+              backToTop.classList.add('visible');
+            } else {
+              backToTop.classList.remove('visible');
+            }
+          }, { passive: true });
+        }
+        
+        // Basic animations
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        }, { threshold: 0.1 });
+        
+        $('.animate-on-scroll').forEach(el => {
+          observer.observe(el);
+        });
+        
+      } catch (fallbackError) {
+        console.error('Fallback initialization failed:', fallbackError);
       }
     }
     
     cleanup() {
-      // Clean up all modules to prevent memory leaks
       console.log('Cleaning up Character Page modules...');
       
       this.modules.forEach(module => {
@@ -953,58 +681,45 @@ class NavScrollEffects {
         scrollTimeout = null;
       }
       
-      // Clear modules array
+      // Reset state
       this.modules = [];
-      this.initialized = false;
+      isInitialized = false;
+      document.removeAttribute('data-character-page-init');
     }
   }
   
-  // Start the app with error handling
+  // Start the app with error handling - ONLY ONCE
   try {
-    window.CharacterPageApp = new CharacterPage();
-    
-    // Add cleanup on page unload to prevent memory leaks
-    window.addEventListener('beforeunload', () => {
-      if (window.CharacterPageApp && window.CharacterPageApp.cleanup) {
-        window.CharacterPageApp.cleanup();
-      }
-    });
-    
-    // Expose utility functions for debugging
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      window.CharacterPageDebug = {
-        getModules: () => window.CharacterPageApp.modules,
-        reinitialize: () => {
-          if (window.CharacterPageApp) {
-            window.CharacterPageApp.cleanup();
-            window.CharacterPageApp = new CharacterPage();
-          }
-        },
-        clearCache: () => {
-          cache.clear();
-          console.log('DOM cache cleared');
-        },
-        testMobileHide: () => {
-          const tabs = document.querySelector('.mobile-section-tabs');
-          if (tabs) {
-            tabs.style.transform = tabs.style.transform === 'translateY(100%)' ? 'translateY(0)' : 'translateY(100%)';
-          }
-        },
-        forceMobileTabs: () => {
-          // Force mobile tabs to show for testing
-          const existingTabs = document.querySelector('.mobile-section-tabs');
-          if (!existingTabs) {
-            new DynamicMobileTabs();
-          }
+    if (!window.CharacterPageApp) {
+      window.CharacterPageApp = new CharacterPage();
+      
+      // Add cleanup on page unload
+      window.addEventListener('beforeunload', () => {
+        if (window.CharacterPageApp && window.CharacterPageApp.cleanup) {
+          window.CharacterPageApp.cleanup();
         }
-      };
+      });
     }
+    
   } catch (initError) {
     console.error('Failed to initialize Character Page:', initError);
     
-    // Fallback: Ensure basic functionality
+    // Final fallback - ensure basic functionality
     document.addEventListener('DOMContentLoaded', () => {
-      // Basic scroll to top
+      // Basic progress bar
+      const progressBar = document.querySelector('.reading-progress');
+      if (progressBar) {
+        const updateProgress = () => {
+          const winScroll = window.pageYOffset;
+          const height = document.documentElement.scrollHeight - window.innerHeight;
+          const scrolled = Math.min(winScroll / height, 1);
+          progressBar.style.transform = `scaleX(${scrolled})`;
+        };
+        window.addEventListener('scroll', updateProgress, { passive: true });
+        updateProgress();
+      }
+      
+      // Basic back to top
       const backToTop = document.querySelector('.back-to-top');
       if (backToTop) {
         backToTop.addEventListener('click', (e) => {
@@ -1020,21 +735,23 @@ class NavScrollEffects {
             backToTop.style.opacity = '0';
             backToTop.style.visibility = 'hidden';
           }
-        });
+        }, { passive: true });
       }
       
       // Basic animations
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+          observer.observe(el);
         });
-      }, { threshold: 0.1 });
-      
-      document.querySelectorAll('.animate-on-scroll').forEach(el => {
-        observer.observe(el);
-      });
+      }
     });
   }
   

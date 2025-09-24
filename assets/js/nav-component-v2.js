@@ -1,16 +1,18 @@
 /**
- * Enhanced Navigation Component v2
+ * Enhanced Navigation Component v2 - CLEANED UP
  * Path: /assets/js/nav-component-v2.js
  * Purpose: Centralized, performant navigation for all pages
- * Version: 2.0.1 - FIXED FOR COMPATIBILITY
+ * Version: 2.1.0 - MAJOR CLEANUP
  * 
- * Features:
- * - Single source of truth for navigation
- * - Mobile-optimized with touch gestures
- * - Lazy loading of dropdowns
- * - Accessibility compliant
- * - Performance optimized
- * - Better error handling
+ * FIXES:
+ * - Simplified initialization logic
+ * - Fixed duplicate event listeners
+ * - Removed redundant DOM manipulation
+ * - Fixed mobile menu scroll lock issues
+ * - Cleaned up error handling
+ * - Simplified dropdown logic
+ * - Fixed z-index conflicts
+ * - Removed unused features
  */
 
 class NavigationComponent {
@@ -24,15 +26,22 @@ class NavigationComponent {
     };
     
     this.state = {
-      isMobile: false,
+      isMobile: window.innerWidth <= this.options.mobileBreakpoint,
       isMenuOpen: false,
-      scrollPosition: 0
+      scrollPosition: 0,
+      isInitialized: false
     };
+    
+    // Prevent multiple initialization
+    if (document.hasAttribute('data-nav-initialized')) {
+      console.warn('Navigation already initialized');
+      return;
+    }
     
     this.init();
   }
   
-  // Navigation HTML template
+  // Navigation HTML template - CLEANED UP
   getNavigationHTML() {
     const { currentPage, hubType } = this.options;
     
@@ -131,35 +140,33 @@ class NavigationComponent {
     `;
   }
   
-  // Check if nav item should be active
+  // Check if nav item should be active - SIMPLIFIED
   isActive(section) {
     const { currentPage, hubType } = this.options;
-    
-    // Normalize paths for comparison
     const page = currentPage.toLowerCase();
     
     switch(section) {
       case 'home':
-        return page === 'home' || page === '' || page === '/' ? 'active' : '';
+        return (page === 'home' || page === '' || page === '/') ? 'active' : '';
         
       case 'studies':
-        return page.includes('studies') || 
-               page.includes('characters') || 
-               page.includes('women') || 
-               page.includes('tanakh') || 
-               page.includes('thematic') ? 'active' : '';
+        return (page.includes('studies') || 
+                page.includes('characters') || 
+                page.includes('women') || 
+                page.includes('tanakh') || 
+                page.includes('thematic')) ? 'active' : '';
         
       case 'characters':
-        return hubType === 'characters' || page.includes('characters') ? 'active' : '';
+        return (hubType === 'characters' || page.includes('characters')) ? 'active' : '';
         
       case 'women':
-        return hubType === 'women' || page.includes('women') ? 'active' : '';
+        return (hubType === 'women' || page.includes('women')) ? 'active' : '';
         
       case 'tanakh':
-        return hubType === 'tanakh' || page.includes('tanakh') ? 'active' : '';
+        return (hubType === 'tanakh' || page.includes('tanakh')) ? 'active' : '';
         
       case 'thematic':
-        return hubType === 'thematic' || page.includes('thematic') ? 'active' : '';
+        return (hubType === 'thematic' || page.includes('thematic')) ? 'active' : '';
         
       case 'resources':
         return page.includes('resources') ? 'active' : '';
@@ -172,8 +179,10 @@ class NavigationComponent {
     }
   }
   
-  // Initialize navigation
+  // Initialize navigation - SIMPLIFIED
   init() {
+    if (this.state.isInitialized) return;
+    
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => this.render());
     } else {
@@ -181,65 +190,79 @@ class NavigationComponent {
     }
   }
   
-  // Render navigation
+  // Render navigation - CLEANED UP
   render() {
     try {
-      // Check if nav already exists
-      const existingNav = document.getElementById('main-nav');
+      // Mark as initialized early to prevent duplicates
+      document.setAttribute('data-nav-initialized', 'true');
+      this.state.isInitialized = true;
       
-      if (existingNav) {
-        // Update existing nav content
-        existingNav.innerHTML = this.getNavigationHTML();
-      } else {
-        // Create new nav if it doesn't exist
-        const nav = document.createElement('nav');
+      // Get or create nav element
+      let nav = document.getElementById('main-nav');
+      
+      if (!nav) {
+        nav = document.createElement('nav');
         nav.id = 'main-nav';
         nav.setAttribute('role', 'navigation');
         nav.setAttribute('aria-label', 'Main navigation');
-        nav.innerHTML = this.getNavigationHTML();
         
         // Insert at the beginning of body
         document.body.insertBefore(nav, document.body.firstChild);
       }
       
-      // Initialize functionality
-      this.initializeEventListeners();
-      this.initializeScrollEffects();
-      this.checkMobileState();
+      // Set content
+      nav.innerHTML = this.getNavigationHTML();
       
-      console.log('Navigation component initialized');
+      // Initialize functionality
+      this.setupEventListeners();
+      this.setupScrollEffects();
+      this.updateMobileState();
+      
+      console.log('Navigation component v2.1.0 initialized');
+      
     } catch (error) {
       console.error('Error rendering navigation:', error);
-      this.fallbackNavigation();
+      this.renderFallback();
     }
   }
   
-  // Fallback navigation for error cases
-  fallbackNavigation() {
-    const nav = document.getElementById('main-nav') || document.querySelector('nav');
-    if (nav && !nav.querySelector('.logo')) {
-      nav.innerHTML = `
-        <div class="nav-container">
-          <a href="/" class="logo">Project Context</a>
-          <ul class="nav-links">
-            <li><a href="/">Home</a></li>
-            <li><a href="/studies/">Studies</a></li>
-            <li><a href="/resources/">Resources</a></li>
-            <li><a href="/about/">About</a></li>
-          </ul>
-        </div>
-      `;
+  // Fallback navigation for error cases - SIMPLIFIED
+  renderFallback() {
+    let nav = document.getElementById('main-nav');
+    
+    if (!nav) {
+      nav = document.createElement('nav');
+      nav.id = 'main-nav';
+      document.body.insertBefore(nav, document.body.firstChild);
     }
+    
+    nav.innerHTML = `
+      <div class="nav-container">
+        <a href="/" class="logo">Project Context</a>
+        <ul class="nav-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/studies/">Studies</a></li>
+          <li><a href="/resources/">Resources</a></li>
+          <li><a href="/about/">About</a></li>
+        </ul>
+      </div>
+    `;
   }
   
-  // Set up event listeners
-  initializeEventListeners() {
+  // Set up event listeners - FIXED DUPLICATES
+  setupEventListeners() {
+    // Prevent multiple event listener setup
+    if (document.hasAttribute('data-nav-events-setup')) {
+      return;
+    }
+    document.setAttribute('data-nav-events-setup', 'true');
+    
     const menuToggle = document.getElementById('mobileMenuToggle');
     const navLinks = document.getElementById('navLinks');
     const overlay = document.querySelector('.mobile-menu-overlay');
     
     if (!menuToggle || !navLinks) {
-      console.warn('Navigation elements not found');
+      console.warn('Navigation elements not found for event setup');
       return;
     }
     
@@ -257,47 +280,19 @@ class NavigationComponent {
       });
     }
     
-    // Close menu on nav link click (except dropdowns)
-    navLinks.querySelectorAll('a:not(.dropdown-toggle)').forEach(link => {
-      link.addEventListener('click', () => {
+    // Close menu on navigation
+    navLinks.addEventListener('click', (e) => {
+      const link = e.target.closest('a:not(.dropdown-toggle)');
+      if (link) {
         const href = link.getAttribute('href');
         if (href && href !== '#' && !href.startsWith('#')) {
           this.closeMobileMenu();
         }
-      });
-    });
-    
-    // Mobile dropdown toggles
-    navLinks.querySelectorAll('.dropdown').forEach(dropdown => {
-      const toggle = dropdown.querySelector('.dropdown-toggle');
-      
-      if (toggle) {
-        toggle.addEventListener('click', (e) => {
-          if (this.state.isMobile) {
-            e.preventDefault();
-            this.toggleDropdown(dropdown);
-          }
-        });
-        
-        // Desktop hover with delay
-        let hoverTimeout;
-        
-        dropdown.addEventListener('mouseenter', () => {
-          if (!this.state.isMobile) {
-            clearTimeout(hoverTimeout);
-            this.openDropdown(dropdown);
-          }
-        });
-        
-        dropdown.addEventListener('mouseleave', () => {
-          if (!this.state.isMobile) {
-            hoverTimeout = setTimeout(() => {
-              this.closeDropdown(dropdown);
-            }, 300);
-          }
-        });
       }
     });
+    
+    // Dropdown handling - SIMPLIFIED
+    this.setupDropdowns();
     
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
@@ -307,17 +302,68 @@ class NavigationComponent {
       }
     });
     
-    // Window resize
-    window.addEventListener('resize', this.debounce(() => {
-      this.checkMobileState();
-      if (window.innerWidth > this.options.mobileBreakpoint) {
-        this.closeMobileMenu();
-      }
-    }, 250));
+    // Window resize handling
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        this.updateMobileState();
+        if (!this.state.isMobile) {
+          this.closeMobileMenu();
+        }
+      }, 150);
+    });
   }
   
-  // Initialize scroll effects
-  initializeScrollEffects() {
+  // Setup dropdown functionality - SIMPLIFIED
+  setupDropdowns() {
+    const dropdowns = document.querySelectorAll('.dropdown');
+    
+    dropdowns.forEach(dropdown => {
+      const toggle = dropdown.querySelector('.dropdown-toggle');
+      
+      if (!toggle) return;
+      
+      // Desktop hover
+      if (window.innerWidth > this.options.mobileBreakpoint) {
+        let hoverTimeout;
+        
+        dropdown.addEventListener('mouseenter', () => {
+          clearTimeout(hoverTimeout);
+          this.openDropdown(dropdown);
+        });
+        
+        dropdown.addEventListener('mouseleave', () => {
+          hoverTimeout = setTimeout(() => {
+            this.closeDropdown(dropdown);
+          }, 200);
+        });
+      }
+      
+      // Mobile/keyboard click
+      toggle.addEventListener('click', (e) => {
+        if (this.state.isMobile) {
+          e.preventDefault();
+          this.toggleDropdown(dropdown);
+        }
+      });
+      
+      // Focus handling
+      toggle.addEventListener('focus', () => {
+        if (!this.state.isMobile) {
+          this.openDropdown(dropdown);
+        }
+      });
+    });
+  }
+  
+  // Initialize scroll effects - SIMPLIFIED
+  setupScrollEffects() {
+    if (document.hasAttribute('data-nav-scroll-setup')) {
+      return;
+    }
+    document.setAttribute('data-nav-scroll-setup', 'true');
+    
     let rafId = null;
     const nav = document.getElementById('main-nav');
     
@@ -341,13 +387,19 @@ class NavigationComponent {
     }, { passive: true });
   }
   
-  // Check if mobile
-  checkMobileState() {
+  // Update mobile state - SIMPLIFIED
+  updateMobileState() {
+    const wasMobile = this.state.isMobile;
     this.state.isMobile = window.innerWidth <= this.options.mobileBreakpoint;
     
     const navLinks = document.getElementById('navLinks');
     if (navLinks) {
       navLinks.setAttribute('aria-hidden', this.state.isMobile ? 'true' : 'false');
+    }
+    
+    // If switching from mobile to desktop, close menu
+    if (wasMobile && !this.state.isMobile && this.state.isMenuOpen) {
+      this.closeMobileMenu();
     }
   }
   
@@ -360,65 +412,83 @@ class NavigationComponent {
     }
   }
   
-  // Open mobile menu
+  // Open mobile menu - FIXED SCROLL LOCK
   openMobileMenu() {
+    if (this.state.isMenuOpen) return;
+    
     const menuToggle = document.getElementById('mobileMenuToggle');
     const navLinks = document.getElementById('navLinks');
     const overlay = document.querySelector('.mobile-menu-overlay');
     
     if (!menuToggle || !navLinks) return;
     
+    // Store current scroll position
+    this.state.scrollPosition = window.pageYOffset;
     this.state.isMenuOpen = true;
     
+    // Update UI
     menuToggle.classList.add('active');
     navLinks.classList.add('active');
     if (overlay) overlay.classList.add('active');
     document.body.classList.add('menu-open');
     
-    // Prevent background scroll
+    // Lock scroll - FIXED METHOD
+    document.body.style.overflow = 'hidden';
     document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
     document.body.style.top = `-${this.state.scrollPosition}px`;
+    document.body.style.width = '100%';
     
+    // Update ARIA attributes
     menuToggle.setAttribute('aria-expanded', 'true');
     navLinks.setAttribute('aria-hidden', 'false');
     if (overlay) overlay.setAttribute('aria-hidden', 'false');
   }
   
-  // Close mobile menu
+  // Close mobile menu - FIXED SCROLL RESTORE
   closeMobileMenu() {
+    if (!this.state.isMenuOpen) return;
+    
     const menuToggle = document.getElementById('mobileMenuToggle');
     const navLinks = document.getElementById('navLinks');
     const overlay = document.querySelector('.mobile-menu-overlay');
     
-    if (!this.state.isMenuOpen || !menuToggle || !navLinks) return;
+    if (!menuToggle || !navLinks) return;
     
     this.state.isMenuOpen = false;
     
+    // Update UI
     menuToggle.classList.remove('active');
     navLinks.classList.remove('active');
     if (overlay) overlay.classList.remove('active');
     document.body.classList.remove('menu-open');
     
-    // Restore scroll
+    // Restore scroll - FIXED METHOD
+    document.body.style.overflow = '';
     document.body.style.position = '';
-    document.body.style.width = '';
     document.body.style.top = '';
+    document.body.style.width = '';
+    
+    // Restore scroll position
     window.scrollTo(0, this.state.scrollPosition);
     
+    // Update ARIA attributes
     menuToggle.setAttribute('aria-expanded', 'false');
-    navLinks.setAttribute('aria-hidden', 'true');
+    navLinks.setAttribute('aria-hidden', this.state.isMobile ? 'true' : 'false');
     if (overlay) overlay.setAttribute('aria-hidden', 'true');
+    
+    // Close any open dropdowns
+    this.closeAllDropdowns();
   }
   
-  // Toggle dropdown
+  // Toggle dropdown - SIMPLIFIED
   toggleDropdown(dropdown) {
     const isOpen = dropdown.classList.contains('open');
     
-    if (isOpen) {
-      this.closeDropdown(dropdown);
-    } else {
-      this.closeAllDropdowns();
+    // Close all dropdowns first
+    this.closeAllDropdowns();
+    
+    // Open this one if it wasn't open
+    if (!isOpen) {
       this.openDropdown(dropdown);
     }
   }
@@ -428,7 +498,9 @@ class NavigationComponent {
     const toggle = dropdown.querySelector('.dropdown-toggle');
     
     dropdown.classList.add('open');
-    if (toggle) toggle.setAttribute('aria-expanded', 'true');
+    if (toggle) {
+      toggle.setAttribute('aria-expanded', 'true');
+    }
   }
   
   // Close dropdown
@@ -436,7 +508,9 @@ class NavigationComponent {
     const toggle = dropdown.querySelector('.dropdown-toggle');
     
     dropdown.classList.remove('open');
-    if (toggle) toggle.setAttribute('aria-expanded', 'false');
+    if (toggle) {
+      toggle.setAttribute('aria-expanded', 'false');
+    }
   }
   
   // Close all dropdowns
@@ -446,58 +520,97 @@ class NavigationComponent {
     });
   }
   
-  // Utility: Debounce function
-  debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-      const later = () => {
-        clearTimeout(timeout);
-        func(...args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
-  }
-  
   // Update navigation state
   updateState(newOptions) {
     Object.assign(this.options, newOptions);
-    this.render();
+    
+    // Re-render navigation content
+    const nav = document.getElementById('main-nav');
+    if (nav) {
+      nav.innerHTML = this.getNavigationHTML();
+      // Re-setup dropdowns for new content
+      this.setupDropdowns();
+    }
   }
   
-  // Cleanup method
+  // Cleanup method - IMPROVED
   destroy() {
-    // Remove event listeners and clean up
+    console.log('Destroying navigation component');
+    
+    // Close menu
+    this.closeMobileMenu();
+    this.closeAllDropdowns();
+    
+    // Remove navigation element
+    const nav = document.getElementById('main-nav');
+    if (nav) {
+      nav.remove();
+    }
+    
+    // Remove overlay
     const overlay = document.querySelector('.mobile-menu-overlay');
     if (overlay) {
       overlay.remove();
     }
     
-    this.closeMobileMenu();
-    this.closeAllDropdowns();
+    // Reset document attributes
+    document.removeAttribute('data-nav-initialized');
+    document.removeAttribute('data-nav-events-setup');
+    document.removeAttribute('data-nav-scroll-setup');
+    
+    // Reset body styles
+    document.body.classList.remove('menu-open');
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    
+    // Reset state
+    this.state = {
+      isMobile: false,
+      isMenuOpen: false,
+      scrollPosition: 0,
+      isInitialized: false
+    };
   }
 }
 
-// Auto-initialize helper - COMPATIBILITY VERSION
+// Auto-initialize helper - SIMPLIFIED
 window.initializeNavigation = function(options = {}) {
   try {
-    return new NavigationComponent(options);
+    // Prevent multiple instances
+    if (window.navigationInstance) {
+      console.warn('Navigation already exists, updating state instead');
+      window.navigationInstance.updateState(options);
+      return window.navigationInstance;
+    }
+    
+    window.navigationInstance = new NavigationComponent(options);
+    return window.navigationInstance;
+    
   } catch (error) {
     console.error('Navigation initialization failed:', error);
-    // Return a mock object to prevent further errors
+    
+    // Return mock object to prevent errors
     return {
       updateState: () => {},
-      destroy: () => {}
+      destroy: () => {},
+      closeMobileMenu: () => {},
+      closeAllDropdowns: () => {}
     };
   }
 };
 
-// Export for both ES6 modules and global scope
+// Export for modules and global scope
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = NavigationComponent;
 } else if (typeof window !== 'undefined') {
   window.NavigationComponent = NavigationComponent;
-  window.initializeNavigation = function(options = {}) {
-    return new NavigationComponent(options);
-  };
 }
+
+// Cleanup on page unload
+window.addEventListener('beforeunload', () => {
+  if (window.navigationInstance && window.navigationInstance.destroy) {
+    window.navigationInstance.destroy();
+  }
+});
