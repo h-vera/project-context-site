@@ -732,87 +732,86 @@
   
   <!-- JavaScript Loading - FIXED ORDER -->
   <script src="/assets/js/nav-component-v2.js"></script>
-  <script src="/assets/js/character-page-optimized.js"></script>
-  
-  <!-- Initialize Navigation -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Initialize Navigation Component
-      try {
-        if (typeof window.initializeNavigation === 'function') {
-          window.navInstance = window.initializeNavigation({
-            currentPage: 'studies/tanakh/ketuvim/ruth/ruth-literary',
-            hubType: 'tanakh'
-          });
-        } else if (typeof NavigationComponent !== 'undefined') {
-          window.navInstance = new NavigationComponent({
-            currentPage: 'studies/tanakh/ketuvim/ruth/ruth-literary',
-            hubType: 'tanakh'
-          });
-        }
-      } catch (error) {
-        console.error('Navigation initialization failed:', error);
-        // Fallback: ensure basic functionality
-        document.body.style.paddingTop = '80px';
-      }
-      
-      // Basic functionality fallbacks
-      const progressBar = document.querySelector('.reading-progress');
-      if (progressBar) {
-        function updateProgress() {
-          const winScroll = window.pageYOffset;
-          const height = document.documentElement.scrollHeight - window.innerHeight;
-          const scrolled = Math.min(winScroll / height, 1);
-          progressBar.style.transform = `scaleX(${scrolled})`;
-          progressBar.setAttribute('aria-valuenow', Math.round(scrolled * 100));
-        }
-        
-        window.addEventListener('scroll', updateProgress, { passive: true });
-        updateProgress();
-      }
-      
-      // Back to top functionality
-      const backToTop = document.querySelector('.back-to-top');
-      if (backToTop) {
-        backToTop.addEventListener('click', function(e) {
-          e.preventDefault();
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+<script src="/assets/js/character-page-optimized.js"></script>
+
+<!-- Initialize Navigation -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Navigation Component
+    try {
+      if (typeof window.initializeNavigation === 'function') {
+        window.navInstance = window.initializeNavigation({
+          currentPage: 'studies/tanakh/ketuvim/ruth/ruth-literary',
+          hubType: 'tanakh'
         });
-        
-        window.addEventListener('scroll', function() {
-          if (window.pageYOffset > 300) {
-            backToTop.classList.add('visible');
-          } else {
-            backToTop.classList.remove('visible');
-          }
-        }, { passive: true });
+      } else if (typeof NavigationComponent !== 'undefined') {
+        window.navInstance = new NavigationComponent({
+          currentPage: 'studies/tanakh/ketuvim/ruth/ruth-literary',
+          hubType: 'tanakh'
+        });
+      }
+    } catch (error) {
+      console.error('Navigation initialization failed:', error);
+      // Fallback: ensure basic functionality
+      document.body.style.paddingTop = '80px';
+    }
+    
+    // Basic functionality fallbacks
+    const progressBar = document.querySelector('.reading-progress');
+    if (progressBar) {
+      function updateProgress() {
+        const winScroll = window.pageYOffset;
+        const height = document.documentElement.scrollHeight - window.innerHeight;
+        const scrolled = Math.min(winScroll / height, 1);
+        progressBar.style.transform = `scaleX(${scrolled})`;
+        progressBar.setAttribute('aria-valuenow', Math.round(scrolled * 100));
       }
       
-      // Quick navigation
-      document.querySelectorAll('.quick-nav-item').forEach(function(item) {
-        item.addEventListener('click', function() {
-          const target = document.querySelector(item.dataset.target);
-          if (target) {
-            const offset = target.getBoundingClientRect().top + window.pageYOffset - 100;
-            window.scrollTo({ top: offset, behavior: 'smooth' });
-          }
-        });
+      window.addEventListener('scroll', updateProgress, { passive: true });
+      updateProgress();
+    }
+    
+    // Back to top functionality
+    const backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      backToTop.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
       
-      // Bibliography toggle
-      const bibliography = document.querySelector('.bibliography-section');
-      if (bibliography) {
-        bibliography.addEventListener('toggle', function() {
-          const indicator = bibliography.querySelector('.expand-indicator');
-          if (indicator) {
-            indicator.style.transform = bibliography.open ? 'rotate(180deg)' : 'rotate(0deg)';
-          }
-        });
-      }
-      
-      console.log('Ruth Literary Design & Structure loaded successfully');
+      window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      }, { passive: true });
+    }
+    
+    // Quick navigation
+    document.querySelectorAll('.quick-nav-item').forEach(function(item) {
+      item.addEventListener('click', function() {
+        const target = document.querySelector(item.dataset.target);
+        if (target) {
+          const offset = target.getBoundingClientRect().top + window.pageYOffset - 100;
+          window.scrollTo({ top: offset, behavior: 'smooth' });
+        }
+      });
     });
-  </script>
-
+    
+    // Bibliography toggle
+    const bibliography = document.querySelector('.bibliography-section');
+    if (bibliography) {
+      bibliography.addEventListener('toggle', function() {
+        const indicator = bibliography.querySelector('.expand-indicator');
+        if (indicator) {
+          indicator.style.transform = bibliography.open ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+      });
+    }
+    
+    console.log('Ruth Literary Design & Structure loaded successfully');
+  });
+</script>
 </body>
 </html>
