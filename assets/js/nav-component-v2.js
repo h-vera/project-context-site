@@ -492,9 +492,12 @@ window.initializeNavigation = function(options = {}) {
   }
 };
 
-// Export for ES6 modules
+// Export for both ES6 modules and global scope
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = NavigationComponent;
 } else if (typeof window !== 'undefined') {
   window.NavigationComponent = NavigationComponent;
+  window.initializeNavigation = function(options = {}) {
+    return new NavigationComponent(options);
+  };
 }
