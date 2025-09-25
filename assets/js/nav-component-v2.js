@@ -1,13 +1,12 @@
 /**
- * Enhanced Navigation Component v2.1.1 - COMPLETE FILE
+ * Enhanced Navigation Component v2.1.2 - MAJOR FIXES
  * Path: /assets/js/nav-component-v2.js
- * Purpose: Centralized, performant navigation for all pages
  * 
  * CRITICAL FIXES:
- * - Fixed document.hasAttribute() bug (doesn't exist on document)
- * - Use document.body.hasAttribute() or window flags instead
- * - Fixed all initialization conflicts
- * - Simplified error handling
+ * - Fixed navigation not appearing issue
+ * - Fixed DOM insertion and rendering
+ * - Simplified initialization flow
+ * - Fixed all attribute and flag conflicts
  */
 
 class NavigationComponent {
@@ -27,10 +26,10 @@ class NavigationComponent {
       isInitialized: false
     };
     
-    // FIXED: Use body attribute instead of document
-    if (document.body && document.body.hasAttribute('data-nav-initialized')) {
-      console.warn('Navigation already initialized');
-      return;
+    // Check if already initialized
+    if (window.navigationInstance) {
+      console.warn('Navigation already exists');
+      return window.navigationInstance;
     }
     
     this.init();
@@ -171,21 +170,17 @@ class NavigationComponent {
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => this.render());
     } else {
-      this.render();
+      // Small delay to ensure DOM is fully ready
+      setTimeout(() => this.render(), 10);
     }
   }
   
-  // Render navigation
+  // Render navigation - MAJOR FIX
   render() {
     try {
-      // FIXED: Use body attribute and window flag
-      if (document.body) {
-        document.body.setAttribute('data-nav-initialized', 'true');
-      }
-      window.navigationInitialized = true;
       this.state.isInitialized = true;
       
-      // Get or create nav element
+      // Create nav element FIRST
       let nav = document.getElementById('main-nav');
       
       if (!nav) {
@@ -194,19 +189,25 @@ class NavigationComponent {
         nav.setAttribute('role', 'navigation');
         nav.setAttribute('aria-label', 'Main navigation');
         
-        // Insert at the beginning of body
-        document.body.insertBefore(nav, document.body.firstChild);
+        // Insert at the very beginning of body - CRITICAL FIX
+        if (document.body.firstChild) {
+          document.body.insertBefore(nav, document.body.firstChild);
+        } else {
+          document.body.appendChild(nav);
+        }
       }
       
-      // Set content
+      // Set content AFTER element is in DOM
       nav.innerHTML = this.getNavigationHTML();
       
-      // Initialize functionality
-      this.setupEventListeners();
-      this.setupScrollEffects();
-      this.updateMobileState();
+      // CRITICAL: Wait a frame before setting up events
+      requestAnimationFrame(() => {
+        this.setupEventListeners();
+        this.setupScrollEffects();
+        this.updateMobileState();
+      });
       
-      console.log('Navigation component v2.1.1 initialized successfully');
+      console.log('Navigation component v2.1.2 initialized successfully');
       
     } catch (error) {
       console.error('Error rendering navigation:', error);
@@ -221,18 +222,19 @@ class NavigationComponent {
     if (!nav) {
       nav = document.createElement('nav');
       nav.id = 'main-nav';
+      nav.style.cssText = 'position:fixed;top:0;left:0;right:0;background:white;padding:1rem;box-shadow:0 2px 10px rgba(0,0,0,0.1);z-index:1000;';
       document.body.insertBefore(nav, document.body.firstChild);
     }
     
     nav.innerHTML = `
-      <div class="nav-container">
-        <a href="/" class="logo">Project Context</a>
-        <ul class="nav-links">
-          <li><a href="/">Home</a></li>
-          <li><a href="/studies/">Studies</a></li>
-          <li><a href="/resources/">Resources</a></li>
-          <li><a href="/about/">About</a></li>
-        </ul>
+      <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;">
+        <a href="/" style="font-size:1.5rem;font-weight:bold;text-decoration:none;color:#0a0a0a;">Project Context</a>
+        <div style="display:flex;gap:2rem;">
+          <a href="/" style="text-decoration:none;color:#666;">Home</a>
+          <a href="/studies/" style="text-decoration:none;color:#666;">Studies</a>
+          <a href="/resources/" style="text-decoration:none;color:#666;">Resources</a>
+          <a href="/about/" style="text-decoration:none;color:#666;">About</a>
+        </div>
       </div>
     `;
     
@@ -241,12 +243,6 @@ class NavigationComponent {
   
   // Set up event listeners
   setupEventListeners() {
-    // FIXED: Use window flag instead of document attribute
-    if (window.navEventsSetup) {
-      return;
-    }
-    window.navEventsSetup = true;
-    
     const menuToggle = document.getElementById('mobileMenuToggle');
     const navLinks = document.getElementById('navLinks');
     const overlay = document.querySelector('.mobile-menu-overlay');
@@ -342,12 +338,6 @@ class NavigationComponent {
   
   // Initialize scroll effects
   setupScrollEffects() {
-    // FIXED: Use window flag
-    if (window.navScrollSetup) {
-      return;
-    }
-    window.navScrollSetup = true;
-    
     let rafId = null;
     const nav = document.getElementById('main-nav');
     
@@ -522,14 +512,6 @@ class NavigationComponent {
       overlay.remove();
     }
     
-    // FIXED: Clean up flags
-    if (document.body) {
-      document.body.removeAttribute('data-nav-initialized');
-    }
-    window.navigationInitialized = false;
-    window.navEventsSetup = false;
-    window.navScrollSetup = false;
-    
     // Reset body styles
     document.body.classList.remove('menu-open');
     document.body.style.overflow = '';
@@ -543,10 +525,13 @@ class NavigationComponent {
       scrollPosition: 0,
       isInitialized: false
     };
+    
+    // Clear instance
+    window.navigationInstance = null;
   }
 }
 
-// FIXED: Auto-initialize helper with better error handling
+// FIXED: Auto-initialize helper
 window.initializeNavigation = function(options = {}) {
   try {
     // Prevent multiple instances
@@ -561,6 +546,23 @@ window.initializeNavigation = function(options = {}) {
     
   } catch (error) {
     console.error('Navigation initialization failed:', error);
+    
+    // Create emergency fallback nav
+    const nav = document.createElement('nav');
+    nav.id = 'main-nav';
+    nav.style.cssText = 'position:fixed;top:0;left:0;right:0;background:white;padding:1rem;box-shadow:0 2px 10px rgba(0,0,0,0.1);z-index:1000;';
+    nav.innerHTML = `
+      <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;">
+        <a href="/" style="font-size:1.5rem;font-weight:bold;text-decoration:none;color:#0a0a0a;">Project Context</a>
+        <div style="display:flex;gap:2rem;">
+          <a href="/" style="text-decoration:none;color:#666;">Home</a>
+          <a href="/studies/" style="text-decoration:none;color:#666;">Studies</a>
+          <a href="/resources/" style="text-decoration:none;color:#666;">Resources</a>
+          <a href="/about/" style="text-decoration:none;color:#666;">About</a>
+        </div>
+      </div>
+    `;
+    document.body.insertBefore(nav, document.body.firstChild);
     
     // Return mock object to prevent errors
     return {
