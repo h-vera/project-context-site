@@ -1,18 +1,13 @@
 /**
- * Enhanced Navigation Component v2 - CLEANED UP
+ * Enhanced Navigation Component v2.1.1 - COMPLETE FILE
  * Path: /assets/js/nav-component-v2.js
  * Purpose: Centralized, performant navigation for all pages
- * Version: 2.1.0 - MAJOR CLEANUP
  * 
- * FIXES:
- * - Simplified initialization logic
- * - Fixed duplicate event listeners
- * - Removed redundant DOM manipulation
- * - Fixed mobile menu scroll lock issues
- * - Cleaned up error handling
- * - Simplified dropdown logic
- * - Fixed z-index conflicts
- * - Removed unused features
+ * CRITICAL FIXES:
+ * - Fixed document.hasAttribute() bug (doesn't exist on document)
+ * - Use document.body.hasAttribute() or window flags instead
+ * - Fixed all initialization conflicts
+ * - Simplified error handling
  */
 
 class NavigationComponent {
@@ -32,8 +27,8 @@ class NavigationComponent {
       isInitialized: false
     };
     
-    // Prevent multiple initialization
-    if (document.hasAttribute('data-nav-initialized')) {
+    // FIXED: Use body attribute instead of document
+    if (document.body && document.body.hasAttribute('data-nav-initialized')) {
       console.warn('Navigation already initialized');
       return;
     }
@@ -41,7 +36,7 @@ class NavigationComponent {
     this.init();
   }
   
-  // Navigation HTML template - CLEANED UP
+  // Navigation HTML template
   getNavigationHTML() {
     const { currentPage, hubType } = this.options;
     
@@ -140,7 +135,7 @@ class NavigationComponent {
     `;
   }
   
-  // Check if nav item should be active - SIMPLIFIED
+  // Check if nav item should be active
   isActive(section) {
     const { currentPage, hubType } = this.options;
     const page = currentPage.toLowerCase();
@@ -148,38 +143,28 @@ class NavigationComponent {
     switch(section) {
       case 'home':
         return (page === 'home' || page === '' || page === '/') ? 'active' : '';
-        
       case 'studies':
-        return (page.includes('studies') || 
-                page.includes('characters') || 
-                page.includes('women') || 
-                page.includes('tanakh') || 
+        return (page.includes('studies') || page.includes('characters') || 
+                page.includes('women') || page.includes('tanakh') || 
                 page.includes('thematic')) ? 'active' : '';
-        
       case 'characters':
         return (hubType === 'characters' || page.includes('characters')) ? 'active' : '';
-        
       case 'women':
         return (hubType === 'women' || page.includes('women')) ? 'active' : '';
-        
       case 'tanakh':
         return (hubType === 'tanakh' || page.includes('tanakh')) ? 'active' : '';
-        
       case 'thematic':
         return (hubType === 'thematic' || page.includes('thematic')) ? 'active' : '';
-        
       case 'resources':
         return page.includes('resources') ? 'active' : '';
-        
       case 'about':
         return page.includes('about') ? 'active' : '';
-        
       default:
         return '';
     }
   }
   
-  // Initialize navigation - SIMPLIFIED
+  // Initialize navigation
   init() {
     if (this.state.isInitialized) return;
     
@@ -190,11 +175,14 @@ class NavigationComponent {
     }
   }
   
-  // Render navigation - CLEANED UP
+  // Render navigation
   render() {
     try {
-      // Mark as initialized early to prevent duplicates
-      document.setAttribute('data-nav-initialized', 'true');
+      // FIXED: Use body attribute and window flag
+      if (document.body) {
+        document.body.setAttribute('data-nav-initialized', 'true');
+      }
+      window.navigationInitialized = true;
       this.state.isInitialized = true;
       
       // Get or create nav element
@@ -218,7 +206,7 @@ class NavigationComponent {
       this.setupScrollEffects();
       this.updateMobileState();
       
-      console.log('Navigation component v2.1.0 initialized');
+      console.log('Navigation component v2.1.1 initialized successfully');
       
     } catch (error) {
       console.error('Error rendering navigation:', error);
@@ -226,7 +214,7 @@ class NavigationComponent {
     }
   }
   
-  // Fallback navigation for error cases - SIMPLIFIED
+  // Fallback navigation for error cases
   renderFallback() {
     let nav = document.getElementById('main-nav');
     
@@ -247,15 +235,17 @@ class NavigationComponent {
         </ul>
       </div>
     `;
+    
+    console.log('Navigation fallback rendered');
   }
   
-  // Set up event listeners - FIXED DUPLICATES
+  // Set up event listeners
   setupEventListeners() {
-    // Prevent multiple event listener setup
-    if (document.hasAttribute('data-nav-events-setup')) {
+    // FIXED: Use window flag instead of document attribute
+    if (window.navEventsSetup) {
       return;
     }
-    document.setAttribute('data-nav-events-setup', 'true');
+    window.navEventsSetup = true;
     
     const menuToggle = document.getElementById('mobileMenuToggle');
     const navLinks = document.getElementById('navLinks');
@@ -291,7 +281,7 @@ class NavigationComponent {
       }
     });
     
-    // Dropdown handling - SIMPLIFIED
+    // Dropdown handling
     this.setupDropdowns();
     
     // Keyboard navigation
@@ -315,7 +305,7 @@ class NavigationComponent {
     });
   }
   
-  // Setup dropdown functionality - SIMPLIFIED
+  // Setup dropdown functionality
   setupDropdowns() {
     const dropdowns = document.querySelectorAll('.dropdown');
     
@@ -347,22 +337,16 @@ class NavigationComponent {
           this.toggleDropdown(dropdown);
         }
       });
-      
-      // Focus handling
-      toggle.addEventListener('focus', () => {
-        if (!this.state.isMobile) {
-          this.openDropdown(dropdown);
-        }
-      });
     });
   }
   
-  // Initialize scroll effects - SIMPLIFIED
+  // Initialize scroll effects
   setupScrollEffects() {
-    if (document.hasAttribute('data-nav-scroll-setup')) {
+    // FIXED: Use window flag
+    if (window.navScrollSetup) {
       return;
     }
-    document.setAttribute('data-nav-scroll-setup', 'true');
+    window.navScrollSetup = true;
     
     let rafId = null;
     const nav = document.getElementById('main-nav');
@@ -387,7 +371,7 @@ class NavigationComponent {
     }, { passive: true });
   }
   
-  // Update mobile state - SIMPLIFIED
+  // Update mobile state
   updateMobileState() {
     const wasMobile = this.state.isMobile;
     this.state.isMobile = window.innerWidth <= this.options.mobileBreakpoint;
@@ -397,7 +381,6 @@ class NavigationComponent {
       navLinks.setAttribute('aria-hidden', this.state.isMobile ? 'true' : 'false');
     }
     
-    // If switching from mobile to desktop, close menu
     if (wasMobile && !this.state.isMobile && this.state.isMenuOpen) {
       this.closeMobileMenu();
     }
@@ -412,7 +395,7 @@ class NavigationComponent {
     }
   }
   
-  // Open mobile menu - FIXED SCROLL LOCK
+  // Open mobile menu
   openMobileMenu() {
     if (this.state.isMenuOpen) return;
     
@@ -422,7 +405,6 @@ class NavigationComponent {
     
     if (!menuToggle || !navLinks) return;
     
-    // Store current scroll position
     this.state.scrollPosition = window.pageYOffset;
     this.state.isMenuOpen = true;
     
@@ -432,19 +414,19 @@ class NavigationComponent {
     if (overlay) overlay.classList.add('active');
     document.body.classList.add('menu-open');
     
-    // Lock scroll - FIXED METHOD
+    // Lock scroll
     document.body.style.overflow = 'hidden';
     document.body.style.position = 'fixed';
     document.body.style.top = `-${this.state.scrollPosition}px`;
     document.body.style.width = '100%';
     
-    // Update ARIA attributes
+    // Update ARIA
     menuToggle.setAttribute('aria-expanded', 'true');
     navLinks.setAttribute('aria-hidden', 'false');
     if (overlay) overlay.setAttribute('aria-hidden', 'false');
   }
   
-  // Close mobile menu - FIXED SCROLL RESTORE
+  // Close mobile menu
   closeMobileMenu() {
     if (!this.state.isMenuOpen) return;
     
@@ -462,32 +444,26 @@ class NavigationComponent {
     if (overlay) overlay.classList.remove('active');
     document.body.classList.remove('menu-open');
     
-    // Restore scroll - FIXED METHOD
+    // Restore scroll
     document.body.style.overflow = '';
     document.body.style.position = '';
     document.body.style.top = '';
     document.body.style.width = '';
     
-    // Restore scroll position
     window.scrollTo(0, this.state.scrollPosition);
     
-    // Update ARIA attributes
+    // Update ARIA
     menuToggle.setAttribute('aria-expanded', 'false');
     navLinks.setAttribute('aria-hidden', this.state.isMobile ? 'true' : 'false');
     if (overlay) overlay.setAttribute('aria-hidden', 'true');
     
-    // Close any open dropdowns
     this.closeAllDropdowns();
   }
   
-  // Toggle dropdown - SIMPLIFIED
+  // Toggle dropdown
   toggleDropdown(dropdown) {
     const isOpen = dropdown.classList.contains('open');
-    
-    // Close all dropdowns first
     this.closeAllDropdowns();
-    
-    // Open this one if it wasn't open
     if (!isOpen) {
       this.openDropdown(dropdown);
     }
@@ -496,7 +472,6 @@ class NavigationComponent {
   // Open dropdown
   openDropdown(dropdown) {
     const toggle = dropdown.querySelector('.dropdown-toggle');
-    
     dropdown.classList.add('open');
     if (toggle) {
       toggle.setAttribute('aria-expanded', 'true');
@@ -506,7 +481,6 @@ class NavigationComponent {
   // Close dropdown
   closeDropdown(dropdown) {
     const toggle = dropdown.querySelector('.dropdown-toggle');
-    
     dropdown.classList.remove('open');
     if (toggle) {
       toggle.setAttribute('aria-expanded', 'false');
@@ -524,39 +498,37 @@ class NavigationComponent {
   updateState(newOptions) {
     Object.assign(this.options, newOptions);
     
-    // Re-render navigation content
     const nav = document.getElementById('main-nav');
     if (nav) {
       nav.innerHTML = this.getNavigationHTML();
-      // Re-setup dropdowns for new content
       this.setupDropdowns();
     }
   }
   
-  // Cleanup method - IMPROVED
+  // Cleanup method
   destroy() {
     console.log('Destroying navigation component');
     
-    // Close menu
     this.closeMobileMenu();
     this.closeAllDropdowns();
     
-    // Remove navigation element
     const nav = document.getElementById('main-nav');
     if (nav) {
       nav.remove();
     }
     
-    // Remove overlay
     const overlay = document.querySelector('.mobile-menu-overlay');
     if (overlay) {
       overlay.remove();
     }
     
-    // Reset document attributes
-    document.removeAttribute('data-nav-initialized');
-    document.removeAttribute('data-nav-events-setup');
-    document.removeAttribute('data-nav-scroll-setup');
+    // FIXED: Clean up flags
+    if (document.body) {
+      document.body.removeAttribute('data-nav-initialized');
+    }
+    window.navigationInitialized = false;
+    window.navEventsSetup = false;
+    window.navScrollSetup = false;
     
     // Reset body styles
     document.body.classList.remove('menu-open');
@@ -565,7 +537,6 @@ class NavigationComponent {
     document.body.style.top = '';
     document.body.style.width = '';
     
-    // Reset state
     this.state = {
       isMobile: false,
       isMenuOpen: false,
@@ -575,12 +546,12 @@ class NavigationComponent {
   }
 }
 
-// Auto-initialize helper - SIMPLIFIED
+// FIXED: Auto-initialize helper with better error handling
 window.initializeNavigation = function(options = {}) {
   try {
     // Prevent multiple instances
     if (window.navigationInstance) {
-      console.warn('Navigation already exists, updating state instead');
+      console.log('Navigation already exists, updating state instead');
       window.navigationInstance.updateState(options);
       return window.navigationInstance;
     }
@@ -593,10 +564,10 @@ window.initializeNavigation = function(options = {}) {
     
     // Return mock object to prevent errors
     return {
-      updateState: () => {},
-      destroy: () => {},
-      closeMobileMenu: () => {},
-      closeAllDropdowns: () => {}
+      updateState: function() { console.log('Navigation mock: updateState called'); },
+      destroy: function() { console.log('Navigation mock: destroy called'); },
+      closeMobileMenu: function() { console.log('Navigation mock: closeMobileMenu called'); },
+      closeAllDropdowns: function() { console.log('Navigation mock: closeAllDropdowns called'); }
     };
   }
 };
