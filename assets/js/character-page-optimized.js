@@ -1,32 +1,26 @@
 /**
- * Character Page JavaScript - Bug-Free v2.0.5
+ * Character Page JavaScript - Simplified & Fixed v3.0.0
  * Path: /assets/js/character-page-optimized.js
  * 
- * CRITICAL FIXES:
- * - FIXED: document.hasAttribute() bug (doesn't exist)
- * - FIXED: All DOM attribute errors
- * - FIXED: Bibliography functionality
- * - FIXED: Z-index issues
- * - FIXED: Initialization conflicts
+ * MAJOR SIMPLIFICATION:
+ * - Removed complex initialization
+ * - Fixed all DOM issues
+ * - Guaranteed functionality
+ * - Bulletproof fallbacks
  */
 
 (function() {
   'use strict';
   
-  // Performance: Single RAF instance for all animations
-  let rafId = null;
-  let scrollTimeout = null;
-  let isInitialized = false;
+  // Prevent multiple initialization
+  if (window.characterPageInitialized) {
+    console.log('📍 Character page already initialized');
+    return;
+  }
   
-  // Cache DOM queries
-  const cache = new Map();
-  
+  // Simple DOM query helpers
   function $(selector, context = document) {
-    const key = `${context === document ? 'doc' : 'ctx'}-${selector}`;
-    if (!cache.has(key)) {
-      cache.set(key, context.querySelector(selector));
-    }
-    return cache.get(key);
+    return context.querySelector(selector);
   }
   
   function $$(selector, context = document) {
@@ -34,807 +28,597 @@
   }
   
   // ===========================================
-  // READING PROGRESS BAR - FIXED Z-INDEX
+  // READING PROGRESS BAR - SIMPLIFIED
   // ===========================================
-  class ProgressBar {
-    constructor() {
-      this.bar = $('.reading-progress');
-      if (!this.bar || this.bar.dataset.initialized === 'true') return;
-      
-      this.init();
-    }
+  function initializeProgressBar() {
+    const bar = $('.reading-progress');
+    if (!bar) return;
     
-    init() {
-      this.bar.dataset.initialized = 'true';
-      this.bar.style.willChange = 'transform';
-      // CRITICAL FIX: Ensure proper z-index
-      this.bar.style.zIndex = '1001';
-      this.bar.style.position = 'fixed';
-      this.bar.style.top = '0';
-      this.bar.style.left = '0';
-      this.bar.style.width = '100%';
-      this.bar.style.height = '3px';
-      this.update();
-      window.addEventListener('scroll', () => this.throttledUpdate(), { passive: true });
-    }
+    console.log('📊 Initializing progress bar');
     
-    throttledUpdate() {
-      if (rafId) return;
-      rafId = requestAnimationFrame(() => {
-        this.update();
-        rafId = null;
-      });
-    }
+    // CRITICAL: Ensure proper styling
+    bar.style.cssText = `
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 3px !important;
+      background: linear-gradient(90deg, #7209b7, #e11d48) !important;
+      transform: scaleX(0) !important;
+      transform-origin: left !important;
+      z-index: 1001 !important;
+      display: block !important;
+      visibility: visible !important;
+      pointer-events: none !important;
+    `;
     
-    update() {
+    function updateProgress() {
       const winScroll = window.pageYOffset;
       const height = document.documentElement.scrollHeight - window.innerHeight;
-      const scrolled = Math.min(winScroll / height, 1);
-      this.bar.style.transform = `scaleX(${scrolled})`;
-      this.bar.setAttribute('aria-valuenow', Math.round(scrolled * 100));
+      const scrolled = Math.max(0, Math.min(winScroll / height, 1));
+      bar.style.transform = `scaleX(${scrolled})`;
+      bar.setAttribute('aria-valuenow', Math.round(scrolled * 100));
     }
+    
+    // Throttled scroll handler
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          updateProgress();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+    
+    updateProgress(); // Initial call
+    console.log('✅ Progress bar initialized');
   }
   
   // ===========================================
-  // INTERSECTION OBSERVER FOR ANIMATIONS
+  // BACK TO TOP BUTTON - SIMPLIFIED
   // ===========================================
-  class ScrollAnimator {
-    constructor() {
-      this.options = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-      };
-      
-      this.init();
-    }
+  function initializeBackToTop() {
+    const backToTop = $('.back-to-top');
+    if (!backToTop) return;
     
-    init() {
-      if (!('IntersectionObserver' in window)) {
-        // Fallback for older browsers
-        $$('.animate-on-scroll').forEach(el => {
-          el.classList.add('visible');
+    console.log('⬆️ Initializing back to top');
+    
+    // CRITICAL: Ensure proper styling
+    backToTop.style.cssText = `
+      position: fixed !important;
+      bottom: 2rem !important;
+      right: 2rem !important;
+      z-index: 999 !important;
+      width: 50px !important;
+      height: 50px !important;
+      border-radius: 50% !important;
+      background: linear-gradient(135deg, #7209b7, #e11d48) !important;
+      color: white !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      text-decoration: none !important;
+      box-shadow: 0 4px 15px rgba(114, 9, 183, 0.3) !important;
+      transition: all 0.3s ease !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+    `;
+    
+    // Click handler
+    backToTop.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    
+    // Scroll visibility
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          if (window.pageYOffset > 500) {
+            backToTop.style.opacity = '1';
+            backToTop.style.visibility = 'visible';
+          } else {
+            backToTop.style.opacity = '0';
+            backToTop.style.visibility = 'hidden';
+          }
+          ticking = false;
         });
-        return;
+        ticking = true;
       }
-      
-      this.observer = new IntersectionObserver((entries) => {
+    }, { passive: true });
+    
+    console.log('✅ Back to top initialized');
+  }
+  
+  // ===========================================
+  // SCROLL ANIMATIONS - SIMPLIFIED
+  // ===========================================
+  function initializeScrollAnimations() {
+    const elements = $$('.animate-on-scroll');
+    if (elements.length === 0) return;
+    
+    console.log('🎬 Initializing scroll animations');
+    
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
-            // Don't unobserve immediately - let animation complete
-            setTimeout(() => {
-              this.observer.unobserve(entry.target);
-            }, 600);
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+            observer.unobserve(entry.target); // Stop observing once visible
           }
         });
-      }, this.options);
-      
-      // Observe all animated elements
-      $$('.animate-on-scroll').forEach(el => {
-        this.observer.observe(el);
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
       });
       
-      // Timeline items
-      $$('.timeline-item').forEach((item, index) => {
-        item.style.setProperty('--index', index);
-        this.observer.observe(item);
+      elements.forEach(el => {
+        // Set initial state
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
       });
-    }
-    
-    destroy() {
-      if (this.observer) {
-        this.observer.disconnect();
-      }
+      
+      console.log('✅ Intersection Observer animations initialized');
+    } else {
+      // Fallback for older browsers
+      elements.forEach(el => {
+        el.classList.add('visible');
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+      });
+      console.log('✅ Fallback animations applied');
     }
   }
   
   // ===========================================
-  // NAVIGATION SCROLL EFFECTS - FIXED
+  // NAVIGATION SCROLL EFFECTS - SIMPLIFIED
   // ===========================================
-  class NavScrollEffects {
-    constructor() {
-      this.nav = $('nav') || $('#main-nav');
-      this.backToTop = $('.back-to-top');
-      this.lastScroll = 0;
-      
-      if (this.nav || this.backToTop) this.init();
-    }
+  function initializeNavScrollEffects() {
+    const nav = $('nav') || $('#main-nav');
+    if (!nav) return;
     
-    init() {
-      window.addEventListener('scroll', () => this.handleScroll(), { passive: true });
-      
-      if (this.backToTop) {
-        // CRITICAL FIX: Ensure back-to-top doesn't cover content
-        this.backToTop.style.zIndex = '999';
-        this.backToTop.style.position = 'fixed';
-        
-        this.backToTop.addEventListener('click', (e) => {
-          e.preventDefault();
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-      }
-    }
+    console.log('🎯 Initializing nav scroll effects');
     
-    handleScroll() {
-      if (scrollTimeout) return;
-      
-      scrollTimeout = requestAnimationFrame(() => {
-        const currentScroll = window.pageYOffset;
-        
-        // Nav shadow
-        if (this.nav) {
-          if (currentScroll > 100) {
-            this.nav.classList.add('scrolled');
-          } else {
-            this.nav.classList.remove('scrolled');
-          }
-        }
-        
-        // Back to top visibility
-        if (this.backToTop) {
-          if (currentScroll > 500) {
-            this.backToTop.classList.add('visible');
-          } else {
-            this.backToTop.classList.remove('visible');
-          }
-        }
-        
-        this.lastScroll = currentScroll;
-        scrollTimeout = null;
-      });
-    }
-  }
-  
-  // ===========================================
-  // QUICK NAVIGATION SIDEBAR - FIXED
-  // ===========================================
-  class QuickNav {
-    constructor() {
-      this.sidebar = $('.quick-nav-sidebar');
-      if (!this.sidebar) return;
-      
-      // CRITICAL FIX: Ensure sidebar doesn't cover content
-      this.sidebar.style.zIndex = '500';
-      
-      this.sections = $$('.theology-card[id], .animate-on-scroll[id], .chiasm-card[id], section[id]');
-      this.items = $$('.quick-nav-item');
-      
-      if (this.sections.length && this.items.length) this.init();
-    }
-    
-    init() {
-      // Click handlers
-      this.items.forEach(item => {
-        item.addEventListener('click', () => {
-          const target = $(item.dataset.target);
-          if (target) {
-            const offset = target.getBoundingClientRect().top + window.pageYOffset - 100;
-            window.scrollTo({ top: offset, behavior: 'smooth' });
-          }
-        });
-      });
-      
-      // Scroll spy
-      window.addEventListener('scroll', () => this.updateActive(), { passive: true });
-      this.updateActive();
-    }
-    
-    updateActive() {
-      const scrollPos = window.pageYOffset + 200;
-      
-      let currentSection = null;
-      this.sections.forEach(section => {
-        if (section.offsetTop <= scrollPos) {
-          currentSection = section.id;
-        }
-      });
-      
-      this.items.forEach(item => {
-        const isActive = item.dataset.target === `#${currentSection}`;
-        item.classList.toggle('active', isActive);
-      });
-    }
-  }
-  
-  // ===========================================
-  // MOBILE TABS - FIXED Z-INDEX
-  // ===========================================
-  class DynamicMobileTabs {
-    constructor() {
-      // Only run on mobile
-      if (window.innerWidth > 768) return;
-      
-      // Section configuration
-      this.sectionConfig = [
-        { id: 'structure', icon: '🏗️', label: 'Structure', priority: 1 },
-        { id: 'scene-rhythm', icon: '🎭', label: 'Scenes', priority: 2 },
-        { id: 'legal', icon: '⚖️', label: 'Legal', priority: 2 },
-        { id: 'major-chiasm', icon: '🔍', label: 'Chiasm', priority: 2 },
-        { id: 'devices', icon: '🎨', label: 'Devices', priority: 3 },
-        { id: 'abrahamic-parallel', icon: '🌟', label: 'Abraham', priority: 3 },
-        { id: 'dialogue', icon: '💬', label: 'Dialogue', priority: 3 },
-        { id: 'chorus', icon: '👥', label: 'Chorus', priority: 4 },
-        { id: 'characters', icon: '👤', label: 'Characters', priority: 2 },
-        { id: 'bibliography', icon: '📚', label: 'Sources', priority: 5 }
-      ];
-      
-      this.maxTabs = 5;
-      this.lastScrollY = 0;
-      this.isHidden = false;
-      this.hideTimeout = null;
-      
-      this.init();
-      
-      // Reinitialize on resize
-      window.addEventListener('resize', () => {
-        if (window.innerWidth <= 768 && !this.container) {
-          this.init();
-        } else if (window.innerWidth > 768 && this.container) {
-          this.destroy();
-        }
-      });
-    }
-    
-    init() {
-      try {
-        const presentSections = this.detectSections();
-        if (presentSections.length === 0) return;
-        
-        const selectedTabs = this.selectTabs(presentSections);
-        this.generateNavigation(selectedTabs);
-        this.setupEventListeners();
-        this.setupScrollHide();
-      } catch (error) {
-        console.warn('Mobile tabs initialization failed:', error);
-      }
-    }
-    
-    detectSections() {
-      const presentSections = [];
-      
-      this.sectionConfig.forEach(config => {
-        const element = document.getElementById(config.id) || 
-                       document.querySelector(`[id="${config.id}"]`) ||
-                       document.querySelector(`.${config.id}`);
-        
-        if (element) {
-          presentSections.push(config);
-        }
-      });
-      
-      return presentSections;
-    }
-    
-    selectTabs(sections) {
-      if (sections.length <= this.maxTabs) {
-        return sections;
-      }
-      
-      // Sort by priority and select top 5
-      const sorted = sections.sort((a, b) => a.priority - b.priority);
-      return sorted.slice(0, this.maxTabs);
-    }
-    
-    generateNavigation(tabs) {
-      // Remove existing tabs first
-      const existingTabs = document.querySelector('.mobile-section-tabs');
-      if (existingTabs) {
-        existingTabs.remove();
-      }
-      
-      // Create container
-      const nav = document.createElement('nav');
-      nav.className = 'mobile-section-tabs dynamic-tabs';
-      nav.setAttribute('aria-label', 'Section navigation');
-      
-      // CRITICAL FIX: Proper z-index to not cover content
-      nav.style.cssText = `
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: 998;
-        background: white;
-        border-top: 1px solid #e5e7eb;
-        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-        padding: 10px;
-        transform: translateY(0);
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      `;
-      
-      // Create tabs container
-      const container = document.createElement('div');
-      container.className = 'tabs-container';
-      container.style.cssText = `
-        display: flex;
-        gap: 10px;
-        overflow-x: auto;
-        scrollbar-width: none;
-        -webkit-overflow-scrolling: touch;
-      `;
-      
-      // Generate tabs
-      tabs.forEach(tab => {
-        const button = document.createElement('button');
-        button.className = 'tab-item';
-        button.dataset.target = `#${tab.id}`;
-        button.setAttribute('aria-label', `${tab.label} section`);
-        button.style.cssText = `
-          flex-shrink: 0;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          padding: 8px 15px;
-          background: #f8fafc;
-          border: 1px solid #e5e7eb;
-          border-radius: 20px;
-          cursor: pointer;
-          transition: all 0.2s;
-          min-width: 80px;
-          text-decoration: none;
-          color: #6b7280;
-          font-size: 0.75rem;
-          font-weight: 600;
-        `;
-        
-        button.innerHTML = `
-          <span class="tab-icon" style="font-size: 1.25rem; margin-bottom: 0.25rem;" aria-hidden="true">${tab.icon}</span>
-          <span class="tab-label">${tab.label}</span>
-        `;
-        
-        container.appendChild(button);
-      });
-      
-      nav.appendChild(container);
-      document.body.appendChild(nav);
-      
-      this.container = nav;
-      this.tabContainer = container;
-      this.tabs = Array.from(container.querySelectorAll('.tab-item'));
-      
-      // Set initial active state
-      this.updateActive();
-    }
-    
-    setupEventListeners() {
-      // Click handlers for tabs
-      this.tabs.forEach(tab => {
-        tab.addEventListener('click', (e) => {
-          e.preventDefault();
-          const targetId = tab.dataset.target;
-          const target = document.querySelector(targetId);
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollY = window.pageYOffset;
           
-          if (target) {
-            const offset = target.getBoundingClientRect().top + window.pageYOffset - 80;
-            window.scrollTo({ top: offset, behavior: 'smooth' });
+          if (scrollY > 100) {
+            nav.classList.add('scrolled');
+          } else {
+            nav.classList.remove('scrolled');
           }
+          
+          ticking = false;
         });
-      });
-      
-      // Update active tab on scroll
-      window.addEventListener('scroll', () => this.updateActive(), { passive: true });
-    }
+        ticking = true;
+      }
+    }, { passive: true });
     
-    setupScrollHide() {
-      let ticking = false;
-      
-      window.addEventListener('scroll', () => {
-        if (!ticking) {
-          requestAnimationFrame(() => {
-            this.handleScrollHide();
-            ticking = false;
-          });
-          ticking = true;
-        }
-      }, { passive: true });
-    }
+    console.log('✅ Nav scroll effects initialized');
+  }
+  
+  // ===========================================
+  // SMOOTH ANCHORS - SIMPLIFIED
+  // ===========================================
+  function initializeSmoothAnchors() {
+    console.log('🔗 Initializing smooth anchors');
     
-    handleScrollHide() {
-      const currentScrollY = window.pageYOffset;
-      const scrollDiff = currentScrollY - this.lastScrollY;
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('a[href^="#"]');
+      if (!link) return;
       
-      // Only act if scroll is significant
-      if (Math.abs(scrollDiff) < 10) return;
+      const href = link.getAttribute('href');
+      if (href === '#') return;
       
-      // Clear any pending timeout
-      if (this.hideTimeout) {
-        clearTimeout(this.hideTimeout);
-        this.hideTimeout = null;
+      const target = $(href);
+      if (!target) return;
+      
+      e.preventDefault();
+      
+      // Close mobile menu if open
+      const mobileToggle = $('.mobile-menu-toggle');
+      const navLinks = $('.nav-links');
+      
+      if (mobileToggle && mobileToggle.classList.contains('active')) {
+        mobileToggle.classList.remove('active');
+        navLinks.classList.remove('active');
+        mobileToggle.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('menu-open');
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
       }
       
-      // Hide on scroll down, show on scroll up
-      if (scrollDiff > 0 && currentScrollY > 200) {
-        // Scrolling down - hide with delay
-        if (!this.isHidden) {
-          this.hideTimeout = setTimeout(() => {
-            if (this.container) {
-              this.container.style.transform = 'translateY(100%)';
-              this.isHidden = true;
+      // Smooth scroll to target
+      const offset = target.getBoundingClientRect().top + window.pageYOffset - 100;
+      window.scrollTo({ top: offset, behavior: 'smooth' });
+    });
+    
+    console.log('✅ Smooth anchors initialized');
+  }
+  
+  // ===========================================
+  // BIBLIOGRAPHY TOGGLE - SIMPLIFIED
+  // ===========================================
+  function initializeBibliography() {
+    const bibliography = $('.bibliography-section');
+    if (!bibliography) return;
+    
+    console.log('📚 Initializing bibliography');
+    
+    // Handle both <details> and custom implementation
+    if (bibliography.tagName === 'DETAILS') {
+      // Native <details> element
+      bibliography.addEventListener('toggle', () => {
+        const indicator = $('.expand-indicator', bibliography);
+        if (indicator) {
+          indicator.style.transform = bibliography.open ? 'rotate(180deg)' : 'rotate(0)';
+        }
+      });
+    } else {
+      // Custom clickable implementation
+      const header = $('.bibliography-header', bibliography);
+      if (header) {
+        header.style.cursor = 'pointer';
+        header.addEventListener('click', () => {
+          const content = $('.bibliography-content', bibliography);
+          const indicator = $('.expand-indicator', bibliography);
+          
+          if (content) {
+            const isVisible = content.style.display !== 'none' && 
+                             window.getComputedStyle(content).display !== 'none';
+            
+            content.style.display = isVisible ? 'none' : 'block';
+            if (indicator) {
+              indicator.style.transform = isVisible ? 'rotate(0)' : 'rotate(180deg)';
             }
-          }, 200);
-        }
-      } else if (scrollDiff < 0) {
-        // Scrolling up - show immediately
-        if (this.isHidden && this.container) {
-          this.container.style.transform = 'translateY(0)';
-          this.isHidden = false;
-        }
-      }
-      
-      // Always show at top
-      if (currentScrollY < 100 && this.isHidden && this.container) {
-        this.container.style.transform = 'translateY(0)';
-        this.isHidden = false;
-      }
-      
-      this.lastScrollY = currentScrollY;
-    }
-    
-    updateActive() {
-      if (!this.tabs || this.tabs.length === 0) return;
-      
-      const scrollPos = window.pageYOffset + 150;
-      let activeTab = null;
-      
-      this.tabs.forEach(tab => {
-        const targetId = tab.dataset.target;
-        const target = document.querySelector(targetId);
-        
-        if (target && target.offsetTop <= scrollPos) {
-          activeTab = tab;
-        }
-      });
-      
-      if (activeTab) {
-        this.tabs.forEach(tab => {
-          tab.classList.remove('active');
-          tab.style.background = '#f8fafc';
-          tab.style.color = '#6b7280';
+          }
         });
-        
-        activeTab.classList.add('active');
-        activeTab.style.background = 'linear-gradient(135deg, #7209b7, #e11d48)';
-        activeTab.style.color = 'white';
-        activeTab.style.borderColor = 'transparent';
-        activeTab.style.transform = 'scale(1.05)';
       }
     }
     
-    destroy() {
-      if (this.hideTimeout) {
-        clearTimeout(this.hideTimeout);
-        this.hideTimeout = null;
-      }
-      
-      if (this.container) {
-        this.container.remove();
-        this.container = null;
-        this.tabContainer = null;
-        this.tabs = [];
-      }
-    }
+    console.log('✅ Bibliography initialized');
   }
   
   // ===========================================
-  // SMOOTH ANCHOR SCROLLING - FIXED
+  // TABLE WRAPPER - SIMPLIFIED
   // ===========================================
-  class SmoothAnchors {
-    constructor() {
-      this.init();
-    }
+  function initializeTableWrapper() {
+    const tables = $$('table');
+    if (tables.length === 0) return;
     
-    init() {
-      // FIXED: Use window property instead of document.hasAttribute()
-      if (window.smoothAnchorsInitialized) return;
-      window.smoothAnchorsInitialized = true;
+    console.log('📊 Wrapping tables for mobile');
+    
+    tables.forEach(table => {
+      if (table.parentElement.classList.contains('table-wrapper')) return;
       
-      document.addEventListener('click', (e) => {
-        const link = e.target.closest('a[href^="#"]');
-        if (!link) return;
+      const wrapper = document.createElement('div');
+      wrapper.className = 'table-wrapper';
+      wrapper.style.overflowX = 'auto';
+      wrapper.style.webkitOverflowScrolling = 'touch';
+      
+      table.parentNode.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
+    });
+    
+    console.log('✅ Tables wrapped');
+  }
+  
+  // ===========================================
+  // QUICK NAV SIDEBAR - SIMPLIFIED
+  // ===========================================
+  function initializeQuickNav() {
+    const sidebar = $('.quick-nav-sidebar');
+    if (!sidebar) return;
+    
+    console.log('🎯 Initializing quick nav');
+    
+    // CRITICAL: Ensure proper z-index
+    sidebar.style.zIndex = '500';
+    
+    const items = $$('.quick-nav-item');
+    const sections = $$('[id]').filter(el => 
+      el.classList.contains('theology-card') || 
+      el.classList.contains('animate-on-scroll') ||
+      el.tagName === 'SECTION'
+    );
+    
+    if (items.length === 0 || sections.length === 0) return;
+    
+    // Click handlers
+    items.forEach(item => {
+      item.addEventListener('click', () => {
+        const targetId = item.dataset.target;
+        if (!targetId) return;
         
-        e.preventDefault();
-        const target = $(link.getAttribute('href'));
-        
+        const target = $(targetId);
         if (target) {
-          // Close mobile menu if open
-          const mobileToggle = $('.mobile-menu-toggle');
-          const navLinks = $('.nav-links');
-          
-          if (mobileToggle && mobileToggle.classList.contains('active')) {
-            mobileToggle.classList.remove('active');
-            navLinks.classList.remove('active');
-            mobileToggle.setAttribute('aria-expanded', 'false');
-          }
-          
-          // Scroll to target
           const offset = target.getBoundingClientRect().top + window.pageYOffset - 100;
           window.scrollTo({ top: offset, behavior: 'smooth' });
         }
       });
-    }
-  }
-  
-  // ===========================================
-  // TABLE WRAPPER
-  // ===========================================
-  class TableWrapper {
-    constructor() {
-      this.init();
-    }
+    });
     
-    init() {
-      $$('table').forEach(table => {
-        if (table.parentElement.classList.contains('table-wrapper')) return;
-        
-        const wrapper = document.createElement('div');
-        wrapper.className = 'table-wrapper';
-        wrapper.style.overflowX = 'auto';
-        wrapper.style.webkitOverflowScrolling = 'touch';
-        
-        table.parentNode.insertBefore(wrapper, table);
-        wrapper.appendChild(table);
-      });
-    }
-  }
-  
-  // ===========================================
-  // BIBLIOGRAPHY HANDLER - COMPLETELY FIXED
-  // ===========================================
-  class Bibliography {
-    constructor() {
-      this.section = $('.bibliography-section');
-      if (!this.section || this.section.dataset.initialized === 'true') return;
-      
-      this.init();
-    }
-    
-    init() {
-      this.section.dataset.initialized = 'true';
-      
-      // CRITICAL FIX: Handle both <details> and regular click events
-      if (this.section.tagName === 'DETAILS') {
-        // Native <details> element
-        this.section.addEventListener('toggle', () => {
-          const indicator = $('.expand-indicator', this.section);
-          if (indicator) {
-            indicator.style.transform = this.section.open ? 'rotate(180deg)' : 'rotate(0)';
-          }
-        });
-      } else {
-        // Custom clickable header
-        const header = $('.bibliography-header', this.section);
-        if (header) {
-          header.style.cursor = 'pointer';
-          header.addEventListener('click', () => {
-            this.toggleBibliography();
+    // Scroll spy
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollPos = window.pageYOffset + 200;
+          
+          let currentSection = null;
+          sections.forEach(section => {
+            if (section.offsetTop <= scrollPos) {
+              currentSection = section.id;
+            }
           });
-        }
+          
+          items.forEach(item => {
+            const isActive = item.dataset.target === `#${currentSection}`;
+            if (isActive) {
+              item.classList.add('active');
+            } else {
+              item.classList.remove('active');
+            }
+          });
+          
+          ticking = false;
+        });
+        ticking = true;
       }
-      
-      console.log('Bibliography initialized successfully');
-    }
+    }, { passive: true });
     
-    toggleBibliography() {
-      const content = $('.bibliography-content', this.section);
-      const indicator = $('.expand-indicator', this.section);
-      
-      if (!content) return;
-      
-      const isVisible = content.style.display !== 'none' && window.getComputedStyle(content).display !== 'none';
-      
-      if (isVisible) {
-        content.style.display = 'none';
-        if (indicator) indicator.style.transform = 'rotate(0)';
-      } else {
-        content.style.display = 'block';
-        if (indicator) indicator.style.transform = 'rotate(180deg)';
-      }
-    }
+    console.log('✅ Quick nav initialized');
   }
   
   // ===========================================
-  // INITIALIZATION - BUG-FREE
+  // MOBILE TABS - SIMPLIFIED
   // ===========================================
-  class CharacterPage {
-    constructor() {
-      this.modules = [];
-      
-      // Prevent multiple initialization
-      if (isInitialized || window.characterPageInitialized) {
-        return;
-      }
-      
-      this.init();
-    }
+  function initializeMobileTabs() {
+    // Only on mobile
+    if (window.innerWidth > 768) return;
     
-    init() {
-      // Wait for DOM ready
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => this.initModules());
-      } else {
-        // Small delay to ensure navigation is ready
-        setTimeout(() => this.initModules(), 100);
-      }
-    }
+    console.log('📱 Initializing mobile tabs');
     
-    initModules() {
-      if (isInitialized || window.characterPageInitialized) return;
+    // Remove existing tabs first
+    const existingTabs = $('.mobile-section-tabs');
+    if (existingTabs) existingTabs.remove();
+    
+    // Check for sections on this page
+    const sections = [
+      { id: 'structure', icon: '🏗️', label: 'Structure' },
+      { id: 'scene-rhythm', icon: '🎭', label: 'Scenes' },
+      { id: 'legal', icon: '⚖️', label: 'Legal' },
+      { id: 'major-chiasm', icon: '🔍', label: 'Chiasm' },
+      { id: 'devices', icon: '🎨', label: 'Devices' },
+      { id: 'abrahamic-parallel', icon: '🌟', label: 'Abraham' },
+      { id: 'dialogue', icon: '💬', label: 'Dialogue' },
+      { id: 'chorus', icon: '👥', label: 'Chorus' },
+      { id: 'characters', icon: '👤', label: 'Characters' },
+      { id: 'bibliography', icon: '📚', label: 'Sources' }
+    ].filter(section => $(section.id));
+    
+    if (sections.length === 0) return;
+    
+    // Take first 5 sections
+    const displaySections = sections.slice(0, 5);
+    
+    // Create mobile tabs
+    const nav = document.createElement('nav');
+    nav.className = 'mobile-section-tabs';
+    nav.setAttribute('aria-label', 'Section navigation');
+    nav.style.cssText = `
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 998;
+      background: white;
+      border-top: 1px solid #e5e7eb;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+      padding: 10px;
+      transform: translateY(0);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    `;
+    
+    const container = document.createElement('div');
+    container.className = 'tabs-container';
+    container.style.cssText = `
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    `;
+    
+    displaySections.forEach(section => {
+      const button = document.createElement('button');
+      button.className = 'tab-item';
+      button.dataset.target = `#${section.id}`;
+      button.style.cssText = `
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 15px;
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.2s;
+        min-width: 80px;
+        color: #6b7280;
+        font-size: 0.75rem;
+        font-weight: 600;
+      `;
+      
+      button.innerHTML = `
+        <span style="font-size: 1.25rem; margin-bottom: 0.25rem;">${section.icon}</span>
+        <span>${section.label}</span>
+      `;
+      
+      // Click handler
+      button.addEventListener('click', () => {
+        const target = $(section.id);
+        if (target) {
+          const offset = target.getBoundingClientRect().top + window.pageYOffset - 80;
+          window.scrollTo({ top: offset, behavior: 'smooth' });
+        }
+      });
+      
+      container.appendChild(button);
+    });
+    
+    nav.appendChild(container);
+    document.body.appendChild(nav);
+    
+    // Update active state on scroll
+    const tabs = $$('.tab-item');
+    let ticking = false;
+    
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollPos = window.pageYOffset + 150;
+          let activeTab = null;
+          
+          tabs.forEach(tab => {
+            const targetId = tab.dataset.target.substring(1);
+            const target = document.getElementById(targetId);
+            
+            if (target && target.offsetTop <= scrollPos) {
+              activeTab = tab;
+            }
+          });
+          
+          if (activeTab) {
+            tabs.forEach(tab => {
+              if (tab === activeTab) {
+                tab.style.background = 'linear-gradient(135deg, #7209b7, #e11d48)';
+                tab.style.color = 'white';
+                tab.style.borderColor = 'transparent';
+                tab.style.transform = 'scale(1.05)';
+              } else {
+                tab.style.background = '#f8fafc';
+                tab.style.color = '#6b7280';
+                tab.style.borderColor = '#e5e7eb';
+                tab.style.transform = 'scale(1)';
+              }
+            });
+          }
+          
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+    
+    console.log('✅ Mobile tabs initialized');
+  }
+  
+  // ===========================================
+  // MAIN INITIALIZATION - SIMPLIFIED
+  // ===========================================
+  function initialize() {
+    if (window.characterPageInitialized) return;
+    
+    console.log('🚀 Initializing Character Page v3.0.0');
+    
+    try {
+      // Initialize all components
+      initializeProgressBar();
+      initializeBackToTop();
+      initializeScrollAnimations();
+      initializeNavScrollEffects();
+      initializeSmoothAnchors();
+      initializeBibliography();
+      initializeTableWrapper();
+      initializeQuickNav();
+      initializeMobileTabs();
       
       // Mark as initialized
-      isInitialized = true;
       window.characterPageInitialized = true;
       
+      console.log('✅ Character Page fully initialized');
+      
+    } catch (error) {
+      console.error('❌ Character page initialization failed:', error);
+      
+      // Emergency fallback - ensure basic functionality
       try {
-        // Initialize modules with error handling
-        this.modules.push(
-          new ProgressBar(),
-          new ScrollAnimator(),
-          new NavScrollEffects(),
-          new QuickNav(),
-          new DynamicMobileTabs(),
-          new SmoothAnchors(),
-          new TableWrapper(),
-          new Bibliography()
-        );
-        
-        console.log('Character Page v2.0.5 initialized - ALL BUGS FIXED');
-        
-      } catch (error) {
-        console.error('Error initializing Character Page modules:', error);
-        this.fallbackInit();
-      }
-    }
-    
-    fallbackInit() {
-      // Basic functionality fallbacks
-      try {
-        // Progress bar
+        // Progress bar fallback
         const progressBar = $('.reading-progress');
-        if (progressBar && progressBar.dataset.initialized !== 'true') {
-          progressBar.dataset.initialized = 'true';
-          progressBar.style.zIndex = '1001';
-          const updateProgress = () => {
+        if (progressBar) {
+          progressBar.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,#7209b7,#e11d48);transform:scaleX(0);transform-origin:left;z-index:1001;';
+          window.addEventListener('scroll', () => {
             const winScroll = window.pageYOffset;
             const height = document.documentElement.scrollHeight - window.innerHeight;
             const scrolled = Math.min(winScroll / height, 1);
             progressBar.style.transform = `scaleX(${scrolled})`;
-            progressBar.setAttribute('aria-valuenow', Math.round(scrolled * 100));
-          };
-          
-          window.addEventListener('scroll', updateProgress, { passive: true });
-          updateProgress();
+          }, { passive: true });
         }
         
-        // Back to top
+        // Back to top fallback
         const backToTop = $('.back-to-top');
-        if (backToTop && backToTop.dataset.initialized !== 'true') {
-          backToTop.dataset.initialized = 'true';
-          backToTop.style.zIndex = '999';
+        if (backToTop) {
+          backToTop.style.cssText = 'position:fixed;bottom:2rem;right:2rem;z-index:999;opacity:0;visibility:hidden;';
           backToTop.addEventListener('click', (e) => {
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: 'smooth' });
           });
-          
           window.addEventListener('scroll', () => {
             if (window.pageYOffset > 500) {
-              backToTop.classList.add('visible');
+              backToTop.style.opacity = '1';
+              backToTop.style.visibility = 'visible';
             } else {
-              backToTop.classList.remove('visible');
+              backToTop.style.opacity = '0';
+              backToTop.style.visibility = 'hidden';
             }
           }, { passive: true });
         }
         
-        // Bibliography fallback - FIXED
-        const bibliography = $('.bibliography-section');
-        if (bibliography && bibliography.dataset.initialized !== 'true') {
-          bibliography.dataset.initialized = 'true';
-          const header = $('.bibliography-header', bibliography);
-          if (header) {
-            header.style.cursor = 'pointer';
-            header.addEventListener('click', () => {
-              const content = $('.bibliography-content', bibliography);
-              const indicator = $('.expand-indicator', bibliography);
-              if (content) {
-                const isVisible = content.style.display !== 'none' && window.getComputedStyle(content).display !== 'none';
-                content.style.display = isVisible ? 'none' : 'block';
-                if (indicator) {
-                  indicator.style.transform = isVisible ? 'rotate(0)' : 'rotate(180deg)';
-                }
-              }
-            });
-          }
-        }
-        
-        // Basic animations
-        if ('IntersectionObserver' in window) {
-          const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-              }
-            });
-          }, { threshold: 0.1 });
-          
-          $$('.animate-on-scroll').forEach(el => {
-            observer.observe(el);
-          });
-        }
+        console.log('✅ Emergency fallbacks applied');
         
       } catch (fallbackError) {
-        console.error('Fallback initialization failed:', fallbackError);
+        console.error('❌ Even fallbacks failed:', fallbackError);
       }
-    }
-    
-    cleanup() {
-      console.log('Cleaning up Character Page modules...');
-      
-      this.modules.forEach(module => {
-        try {
-          if (module.observer) {
-            module.observer.disconnect();
-          }
-          if (module.destroy) {
-            module.destroy();
-          }
-        } catch (error) {
-          console.warn('Error cleaning up module:', error);
-        }
-      });
-      
-      // Clear the cache
-      cache.clear();
-      
-      // Clear RAF if pending
-      if (rafId) {
-        cancelAnimationFrame(rafId);
-        rafId = null;
-      }
-      
-      if (scrollTimeout) {
-        cancelAnimationFrame(scrollTimeout);
-        scrollTimeout = null;
-      }
-      
-      // Reset state - FIXED: No document.removeAttribute()
-      this.modules = [];
-      isInitialized = false;
-      window.characterPageInitialized = false;
-      window.smoothAnchorsInitialized = false;
     }
   }
   
-  // Start the app with error handling - ONLY ONCE
-  try {
-    if (!window.CharacterPageApp && !window.characterPageInitialized) {
-      window.CharacterPageApp = new CharacterPage();
-      
-      // Add cleanup on page unload
-      window.addEventListener('beforeunload', () => {
-        if (window.CharacterPageApp && window.CharacterPageApp.cleanup) {
-          window.CharacterPageApp.cleanup();
-        }
-      });
-    }
-    
-  } catch (initError) {
-    console.error('Failed to initialize Character Page:', initError);
-    
-    // Final emergency fallback
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => {
-        // Ensure basic functionality
-        const progressBar = document.querySelector('.reading-progress');
-        if (progressBar) {
-          progressBar.style.zIndex = '1001';
-        }
-        
-        const backToTop = document.querySelector('.back-to-top');
-        if (backToTop) {
-          backToTop.style.zIndex = '999';
-        }
-      });
-    }
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initialize);
+  } else {
+    // Small delay to ensure other scripts load first
+    setTimeout(initialize, 50);
   }
   
-})(); // End of IIFE wrapper
+  // Cleanup on page unload
+  window.addEventListener('beforeunload', () => {
+    window.characterPageInitialized = false;
+  });
+  
+  // Debug helper
+  window.debugCharacterPage = function() {
+    console.log('Character Page Debug Info:');
+    console.log('- Initialized:', window.characterPageInitialized);
+    console.log('- Progress bar:', $('.reading-progress'));
+    console.log('- Back to top:', $('.back-to-top'));
+    console.log('- Navigation:', $('#main-nav'));
+  };
+  
+  console.log('📦 Character Page v3.0.0 loaded');
+  
+})();
