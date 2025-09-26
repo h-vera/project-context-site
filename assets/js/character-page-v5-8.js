@@ -385,29 +385,6 @@ attachListeners() {
     }
   });
 }
-      
-      // Swipe gestures on tabs container
-      this.tabsContainer.addEventListener('touchstart', (e) => {
-        this.touchStartX = e.changedTouches[0].screenX;
-      }, { passive: true });
-      
-      this.tabsContainer.addEventListener('touchend', (e) => {
-        this.touchEndX = e.changedTouches[0].screenX;
-        this.handleSwipe();
-      }, { passive: true });
-      
-      // Update scroll indicators
-      this.tabsContainer.addEventListener('scroll', () => {
-        this.updateScrollIndicators();
-      }, { passive: true });
-      
-      // Keyboard navigation
-      this.tabsContainer.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-          this.handleKeyboardNav(e);
-        }
-      });
-    }
     
     /**
      * Handle swipe gestures for section navigation
