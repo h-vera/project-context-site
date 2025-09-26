@@ -1,0 +1,421 @@
+/* ============================================
+   MOBILE TABS v5.8 - DYNAMIC SECTION NAVIGATION
+   Path: /assets/css/mobile-tabs-v5-8.css
+   Purpose: Dynamic mobile tab navigation for biblical profiles
+   Version: 5.8.0
+   Created: 2024
+   ============================================ */
+
+/* ============================================
+   MOBILE SECTION TABS - CONTAINER
+   ============================================ */
+.mobile-section-tabs {
+  display: none; /* Hidden by default, shown via JS on mobile */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid var(--border-light, #e5e7eb);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 997; /* Below mobile menu overlay (998) but above content */
+  transform: translateY(0);
+  transition: transform 0.3s ease-in-out;
+  padding-bottom: env(safe-area-inset-bottom); /* iOS safe area */
+}
+
+/* Hide tabs when scrolling down */
+.mobile-section-tabs.hidden {
+  transform: translateY(100%);
+}
+
+/* Show only on mobile devices */
+@media (max-width: 768px) {
+  .mobile-section-tabs.active {
+    display: block;
+  }
+  
+  /* Adjust main content padding to account for tabs */
+  body.has-mobile-tabs main {
+    padding-bottom: 80px; /* Height of tab bar + buffer */
+  }
+  
+  /* ============================================
+     NON-STICKY TOP NAVIGATION ON MOBILE
+     Maximizes reading space when bottom tabs are active
+     ============================================ */
+  
+  /* Make top nav non-sticky on mobile when tabs are present */
+  body.has-mobile-tabs nav {
+    position: relative !important;
+    top: auto !important;
+  }
+  
+  /* Reduce top padding since nav isn't fixed */
+  body.has-mobile-tabs .content-section {
+    padding-top: 2rem !important; /* Reduced from 5-6rem */
+  }
+  
+  /* Optional: Smooth transition when nav becomes non-sticky */
+  body.has-mobile-tabs nav {
+    transition: position 0.3s ease, top 0.3s ease;
+  }
+  
+  /* Keep nav shadow for visual separation */
+  body.has-mobile-tabs nav.scrolled {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Ensure reading progress bar stays fixed at very top */
+  body.has-mobile-tabs .reading-progress {
+    position: fixed !important;
+    top: 0 !important;
+    z-index: 1002 !important; /* Above everything */
+  }
+}
+
+/* ============================================
+   TAB CONTAINER & SCROLLING
+   ============================================ */
+.tabs-container {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  padding: 8px 4px;
+  gap: 4px;
+  
+  /* Hide scrollbar but maintain functionality */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tabs-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Gradient fade indicators for scrollable content */
+.mobile-section-tabs::before,
+.mobile-section-tabs::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-section-tabs::before {
+  left: 0;
+  background: linear-gradient(to right, rgba(255,255,255,0.98), transparent);
+  opacity: 0;
+}
+
+.mobile-section-tabs::after {
+  right: 0;
+  background: linear-gradient(to left, rgba(255,255,255,0.98), transparent);
+}
+
+.mobile-section-tabs.scroll-start::after {
+  opacity: 1;
+}
+
+.mobile-section-tabs.scroll-end::before {
+  opacity: 1;
+}
+
+.mobile-section-tabs.scroll-middle::before,
+.mobile-section-tabs.scroll-middle::after {
+  opacity: 1;
+}
+
+/* ============================================
+   TAB ITEMS
+   ============================================ */
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  max-width: 96px;
+  flex: 0 0 auto;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  scroll-snap-align: center;
+  position: relative;
+  text-decoration: none;
+  color: var(--text-gray, #6b7280);
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* Tab hover/active states */
+.tab-item:active {
+  transform: scale(0.95);
+}
+
+.tab-item.active {
+  background: linear-gradient(135deg, var(--accent-purple, #7209b7), var(--accent-rose, #e11d48));
+  color: white;
+  box-shadow: 0 4px 12px rgba(114, 9, 183, 0.25);
+}
+
+/* Tab icon */
+.tab-icon {
+  font-size: 20px;
+  line-height: 1;
+  margin-bottom: 4px;
+  transition: transform 0.2s ease;
+}
+
+.tab-item.active .tab-icon {
+  transform: scale(1.1);
+}
+
+/* Tab label */
+.tab-label {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  letter-spacing: -0.2px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Active indicator dot */
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+}
+
+/* ============================================
+   SWIPE INDICATOR
+   ============================================ */
+.swipe-indicator {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 4px;
+  background: var(--border-light, #e5e7eb);
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-section-tabs.show-swipe-hint .swipe-indicator {
+  opacity: 1;
+  animation: swipeHint 2s ease-in-out;
+}
+
+@keyframes swipeHint {
+  0%, 100% { transform: translateX(-50%); }
+  25% { transform: translateX(-60%); }
+  75% { transform: translateX(-40%); }
+}
+
+/* ============================================
+   LOADING STATE
+   ============================================ */
+.mobile-section-tabs.loading .tabs-container {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.mobile-section-tabs.loading::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-light, #e5e7eb);
+  border-top-color: var(--accent-purple, #7209b7);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* ============================================
+   SPECIAL STATES & VARIATIONS
+   ============================================ */
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .mobile-section-tabs,
+  .tab-item,
+  .tab-icon {
+    transition: none;
+  }
+  
+  .swipe-indicator {
+    animation: none;
+  }
+}
+
+/* Dark mode support (if implemented) */
+@media (prefers-color-scheme: dark) {
+  .mobile-section-tabs {
+    background: rgba(26, 32, 44, 0.98);
+    border-top-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .tab-item {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .tab-item.active {
+    color: white;
+  }
+}
+
+/* Landscape orientation adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+  .mobile-section-tabs {
+    padding: 4px;
+  }
+  
+  .tabs-container {
+    padding: 4px 2px;
+  }
+  
+  .tab-item {
+    min-width: 64px;
+    padding: 6px 10px;
+  }
+  
+  .tab-icon {
+    font-size: 18px;
+  }
+  
+  .tab-label {
+    font-size: 10px;
+  }
+  
+  body.has-mobile-tabs main {
+    padding-bottom: 60px;
+  }
+  
+  /* Also reduce top padding in landscape */
+  body.has-mobile-tabs .content-section {
+    padding-top: 1.5rem !important;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================ */
+
+/* Focus styles for keyboard navigation */
+.tab-item:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(114, 9, 183, 0.5);
+}
+
+.tab-item:focus:not(:focus-visible) {
+  box-shadow: none;
+}
+
+.tab-item:focus-visible {
+  outline: 2px solid var(--accent-purple, #7209b7);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .tab-item.active {
+    background: var(--primary-dark, #0a0a0a);
+    outline: 2px solid white;
+  }
+}
+
+/* ============================================
+   ANIMATION CLASSES
+   ============================================ */
+
+/* Slide in animation when tabs first appear */
+.mobile-section-tabs.slide-in {
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Pulse animation for drawing attention */
+.tab-item.pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   ============================================ */
+
+/* Small phones (< 360px) */
+@media (max-width: 359px) {
+  .tab-item {
+    min-width: 60px;
+    max-width: 80px;
+    padding: 6px 8px;
+  }
+  
+  .tab-icon {
+    font-size: 18px;
+  }
+  
+  .tab-label {
+    font-size: 10px;
+  }
+  
+  /* Even less top padding on small screens */
+  body.has-mobile-tabs .content-section {
+    padding-top: 1.5rem !important;
+  }
+}
+
+/* Tablets in portrait (768px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
+  /* Optionally show tabs on tablets too */
+  .mobile-section-tabs.tablet-enabled {
+    display: block;
+  }
+}
