@@ -365,3 +365,48 @@
     top: 0 !important;
   }
 }
+/* ============================================
+   MOBILE TABS FIXES - Sticky & Scroll Issues
+   ============================================ */
+
+/* FIX 1: ENSURE TABS ARE STICKY AT BOTTOM */
+.mobile-section-tabs {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 997 !important;
+  display: none;
+}
+
+/* Show on mobile when active */
+@media (max-width: 768px) {
+  .mobile-section-tabs.active {
+    display: block !important;
+  }
+}
+
+/* FIX 2: PREVENT ACCIDENTAL TAP/CLICK DURING SCROLL */
+.tabs-container {
+  touch-action: pan-x !important;
+  -webkit-user-select: none;
+  user-select: none;
+  pointer-events: auto;
+}
+
+/* Disable pointer events while scrolling */
+.tabs-container.is-scrolling {
+  pointer-events: none !important;
+}
+
+/* Tab items - require deliberate tap/click */
+.tab-item {
+  touch-action: manipulation;
+  transition: all 0.3s ease, background 0ms;
+}
+
+/* Visual feedback for tap (not scroll) */
+.tab-item:active {
+  transform: scale(0.95);
+  transition: transform 0.1s ease;
+}

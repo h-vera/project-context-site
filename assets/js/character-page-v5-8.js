@@ -296,21 +296,95 @@
     }
     
     /**
-     * Attach event listeners
-     */
-    attachListeners() {
-      // Tab clicks
-      this.tabsContainer.addEventListener('click', (e) => {
-        const tab = e.target.closest('.tab-item');
-        if (tab) {
-          const targetId = tab.getAttribute('data-target').substring(1);
-          const section = this.sections.find(s => s.id === targetId);
-          if (section) {
-            this.scrollToSection(section);
-            this.setActiveTab(tab);
-          }
+ * Enhanced attachListeners() method for MobileSectionTabs class
+ * Replace the existing attachListeners() method with this version
+ */
+attachListeners() {
+  let isScrolling = false;
+  let scrollTimeout;
+  let touchStartTime;
+  let touchStartX;
+  let touchStartY;
+  
+  // Track scroll state
+  this.tabsContainer.addEventListener('scroll', () => {
+    this.tabsContainer.classList.add('is-scrolling');
+    isScrolling = true;
+    
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      this.tabsContainer.classList.remove('is-scrolling');
+      isScrolling = false;
+    }, 150); // Wait 150ms after scroll ends
+    
+    this.updateScrollIndicators();
+  }, { passive: true });
+  
+  // Enhanced touch handling to differentiate scroll from tap
+  this.tabsContainer.addEventListener('touchstart', (e) => {
+    touchStartTime = Date.now();
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    this.touchStartX = e.changedTouches[0].screenX; // For swipe detection
+  }, { passive: true });
+  
+  this.tabsContainer.addEventListener('touchend', (e) => {
+    const touchEndTime = Date.now();
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    this.touchEndX = e.changedTouches[0].screenX; // For swipe detection
+    
+    // Calculate touch duration and movement
+    const touchDuration = touchEndTime - touchStartTime;
+    const horizontalMove = Math.abs(touchEndX - touchStartX);
+    const verticalMove = Math.abs(touchEndY - touchStartY);
+    
+    // If it was a quick tap with minimal movement, handle as click
+    if (touchDuration < 300 && horizontalMove < 10 && verticalMove < 10) {
+      const tab = e.target.closest('.tab-item');
+      if (tab && !isScrolling) {
+        const targetId = tab.getAttribute('data-target').substring(1);
+        const section = this.sections.find(s => s.id === targetId);
+        if (section) {
+          this.scrollToSection(section);
+          this.setActiveTab(tab);
         }
-      });
+      }
+    } else if (horizontalMove > 50) {
+      // Handle horizontal swipe for section navigation
+      this.handleSwipe();
+    }
+    
+    e.preventDefault(); // Prevent click event from firing
+  }, { passive: false });
+  
+  // Prevent regular click events - only use touch events on mobile
+  this.tabsContainer.addEventListener('click', (e) => {
+    // Only handle clicks on non-touch devices
+    if (!('ontouchstart' in window)) {
+      const tab = e.target.closest('.tab-item');
+      if (tab && !isScrolling) {
+        const targetId = tab.getAttribute('data-target').substring(1);
+        const section = this.sections.find(s => s.id === targetId);
+        if (section) {
+          this.scrollToSection(section);
+          this.setActiveTab(tab);
+        }
+      }
+    } else {
+      // On touch devices, prevent click events
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  });
+  
+  // Keyboard navigation (unchanged)
+  this.tabsContainer.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      this.handleKeyboardNav(e);
+    }
+  });
+}
       
       // Swipe gestures on tabs container
       this.tabsContainer.addEventListener('touchstart', (e) => {
