@@ -1131,5 +1131,46 @@
       // Any custom initialization here if needed
     });
   </script>
+  <style>
+/* Force mobile tabs to show on actual mobile devices */
+@supports (-webkit-touch-callout: none) {
+  /* iOS only */
+  .mobile-section-tabs.active {
+    display: block !important;
+  }
+}
+
+/* Android and other touch devices */
+@media (pointer: coarse) and (hover: none) {
+  .mobile-section-tabs.active {
+    display: block !important;
+  }
+}
+
+/* Fallback for max-width detection */
+@media screen and (max-width: 768px) {
+  .mobile-section-tabs.active {
+    display: block !important;
+  }
+  
+  body.has-mobile-tabs .mobile-section-tabs {
+    display: block !important;
+  }
+}
+</style>
+
+<script>
+// Force mobile detection for real devices
+document.addEventListener('DOMContentLoaded', function() {
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (isMobile) {
+    document.body.classList.add('has-mobile-tabs');
+    const existingTabs = document.querySelector('.mobile-section-tabs');
+    if (existingTabs) {
+      existingTabs.classList.add('active');
+    }
+  }
+});
+</script>
 </body>
 </html>
