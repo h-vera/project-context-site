@@ -244,9 +244,14 @@ createTabsElement() {
   this.tabsElement.setAttribute('role', 'navigation');
   this.tabsElement.setAttribute('aria-label', 'Section navigation');
   
-  // ADD THIS LINE: Force inline styles to guarantee sticky positioning
-  // Inline styles have highest specificity and will override any CSS issues
-  this.tabsElement.style.cssText = 'position: fixed !important; top: auto !important; bottom: 0 !important; left: 0 !important; right: 0 !important; z-index: 997 !important; display: block !important;';
+  // Use individual style properties and 'unset' for top
+  this.tabsElement.style.position = 'fixed';
+  this.tabsElement.style.top = 'unset';  // This is key - clear any top value
+  this.tabsElement.style.bottom = '0px';
+  this.tabsElement.style.left = '0px';
+  this.tabsElement.style.right = '0px';
+  this.tabsElement.style.zIndex = '997';
+  this.tabsElement.style.display = 'block';
   
   this.tabsContainer = document.createElement('div');
   this.tabsContainer.className = 'tabs-container';
@@ -506,29 +511,83 @@ attachListeners() {
     }
     
     /**
-     * Observe sections for intersection
-     */
-    observeSections() {
-      const options = {
-        rootMargin: '-20% 0% -70% 0%',
-        threshold: [0, 0.25, 0.5, 0.75, 1]
-      };
+ * Observe sections for intersection
+ */
+observeSections() {
+  // More aggressive intersection detection for better scroll tracking
+  const options = {
+    root: null,
+    rootMargin: '-20% 0% -70% 0%',  // Top 20% to 30% of viewport
+    threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]  // More granular detection
+  };
+  
+  const observer = new IntersectionObserver((entries) => {
+    let mostVisibleSection = null;
+    let highestRatio = 0;
+    
+    // Find the most visible section
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.intersectionRatio > highestRatio) {
+        highestRatio = entry.intersectionRatio;
+        mostVisibleSection = entry.target;
+      }
+    });
+    
+    // Update active tab for most visible section
+    if (mostVisibleSection) {
+      const section = this.sections.find(s => s.element === mostVisibleSection);
+      if (section && section.tab) {
+        this.setActiveTab(section.tab);
+      }
+    }
+  }, options);
+  
+  // Observe all sections
+  this.sections.forEach(section => {
+    observer.observe(section.element);
+  });
+  
+  // ALSO ADD: Backup scroll listener for better detection
+  let scrollTimeout;
+  window.addEventListener('scroll', () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      const scrollPos = window.pageYOffset + (window.innerHeight * 0.3);  // Look at top 30% of viewport
       
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting && entry.intersectionRatio > 0.25) {
-            const section = this.sections.find(s => s.element === entry.target);
-            if (section && section.tab) {
-              this.setActiveTab(section.tab);
-            }
+      // Find which section we're in
+      let activeSection = null;
+      this.sections.forEach(section => {
+        const rect = section.element.getBoundingClientRect();
+        const sectionTop = rect.top + window.pageYOffset;
+        const sectionBottom = sectionTop + rect.height;
+        
+        if (scrollPos >= sectionTop && scrollPos <= sectionBottom) {
+          activeSection = section;
+        }
+      });
+      
+      // If no section contains scroll position, find the closest one
+      if (!activeSection) {
+        let closestDistance = Infinity;
+        this.sections.forEach(section => {
+          const rect = section.element.getBoundingClientRect();
+          const sectionTop = rect.top + window.pageYOffset;
+          const distance = Math.abs(scrollPos - sectionTop);
+          
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            activeSection = section;
           }
         });
-      }, options);
+      }
       
-      this.sections.forEach(section => {
-        observer.observe(section.element);
-      });
-    }
+      // Update active tab
+      if (activeSection && activeSection.tab) {
+        this.setActiveTab(activeSection.tab);
+      }
+    }, 100);  // Debounce for performance
+  });
+}
     
     /**
      * Handle scroll visibility (keep tabs always visible for better UX)
