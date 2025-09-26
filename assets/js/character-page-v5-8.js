@@ -2,7 +2,7 @@
  * Character Page v5.8 - Dynamic Mobile Tabs
  * Path: /assets/js/character-page-v5-8.js
  * Purpose: Enhanced page utilities with dynamic mobile section navigation
- * Version: 5.8.0 - FIXED
+ * Version: 5.8.0 - COMPLETE FIXED VERSION
  * Created: 2024
  */
 
@@ -16,45 +16,65 @@
   /**
    * Section configuration with metadata for dynamic tab generation
    * Priority: 1 (highest) to 5 (lowest) - used when >5 sections exist
-   * FIXED: Removed emoji icons for cleaner text-only design
    */
   const sectionConfig = [
-    // Priority 1 - Always show if present
+    // ============================================
+    // TEMPLATE SECTIONS (from v5.8 template)
+    // ============================================
+    
+    // Priority 1 - Core template sections
     { id: 'overview', icon: '', label: 'Overview', priority: 1 },
-    { id: 'opening', icon: '', label: 'Opening', priority: 1 },
+    { id: 'narrative', icon: '', label: 'Journey', priority: 1 },
     
-    // Priority 2 - Core sections
-    { id: 'narrative', icon: '', label: 'Journey', priority: 2 },
-    { id: 'journey', icon: '', label: 'Journey', priority: 2 },
-    { id: 'cast', icon: '', label: 'Cast', priority: 2 },
+    // Priority 2 - Standard character template sections
+    { id: 'literary-context', icon: '', label: 'Literary', priority: 2 },
+    { id: 'themes', icon: '', label: 'Themes', priority: 2 },
+    { id: 'ane-context', icon: '', label: 'ANE', priority: 3 },
     { id: 'biblical-theology', icon: '', label: 'Theology', priority: 2 },
-    { id: 'application', icon: '', label: 'Apply', priority: 2 },
-    
-    // Priority 3 - Important but not essential
-    { id: 'themes', icon: '', label: 'Themes', priority: 3 },
-    { id: 'structure', icon: '', label: 'Structure', priority: 3 },
-    { id: 'literary-context', icon: '', label: 'Literary', priority: 3 },
     { id: 'messianic', icon: '', label: 'Messianic', priority: 3 },
-    
-    // Priority 4 - Specialized sections
-    { id: 'chiasm', icon: '', label: 'Chiasm', priority: 4 },
-    { id: 'wordplay', icon: '', label: 'Wordplay', priority: 4 },
-    { id: 'providence', icon: '', label: 'Providence', priority: 4 },
-    { id: 'transformation', icon: '', label: 'Transform', priority: 4 },
-    { id: 'ane-context', icon: '', label: 'ANE', priority: 4 },
-    { id: 'intertext', icon: '', label: 'Intertext', priority: 4 },
+    { id: 'application', icon: '', label: 'Apply', priority: 3 },
     { id: 'questions', icon: '', label: 'Questions', priority: 4 },
-    
-    // Priority 5 - Supplementary
-    { id: 'key-verses', icon: '', label: 'Verses', priority: 5 },
-    { id: 'genealogy', icon: '', label: 'Genealogy', priority: 5 },
-    { id: 'further-study', icon: '', label: 'Resources', priority: 5 },
     { id: 'bibliography', icon: '', label: 'Sources', priority: 5 },
-    { id: 'eden', icon: '', label: 'Eden', priority: 5 },
-    { id: 'covenant', icon: '', label: 'Covenant', priority: 5 },
-    { id: 'unique', icon: '', label: 'Unique', priority: 5 },
+    
+    // ============================================
+    // BOOK STUDY SECTIONS (Ruth, etc.)
+    // ============================================
+    
+    // Common book overview sections
+    { id: 'opening', icon: '', label: 'Opening', priority: 1 },
+    { id: 'cast', icon: '', label: 'Cast', priority: 2 },
+    { id: 'journey', icon: '', label: 'Journey', priority: 2 },
+    { id: 'structure', icon: '', label: 'Structure', priority: 2 },
+    { id: 'chiasm', icon: '', label: 'Chiasm', priority: 3 },
+    { id: 'wordplay', icon: '', label: 'Wordplay', priority: 3 },
+    { id: 'providence', icon: '', label: 'Providence', priority: 3 },
+    { id: 'transformation', icon: '', label: 'Transform', priority: 3 },
+    { id: 'key-verses', icon: '', label: 'Verses', priority: 4 },
+    { id: 'genealogy', icon: '', label: 'Genealogy', priority: 4 },
+    { id: 'further-study', icon: '', label: 'Resources', priority: 5 },
+    
+    // Literary Design page specific sections
+    { id: 'scene-rhythm', icon: '', label: 'Scene Rhythm', priority: 2 },
+    { id: 'legal', icon: '', label: 'Legal', priority: 3 },
+    { id: 'devices', icon: '', label: 'Devices', priority: 3 },
+    { id: 'abrahamic', icon: '', label: 'Abrahamic', priority: 3 },
+    { id: 'dialogue', icon: '', label: 'Dialogue', priority: 3 },
+    { id: 'chorus', icon: '', label: 'Chorus', priority: 4 },
+    { id: 'characters', icon: '', label: 'Characters', priority: 3 },
+    
+    // ============================================
+    // WOMEN-SPECIFIC SECTIONS
+    // ============================================
+    { id: 'songs', icon: '', label: 'Songs', priority: 4 },
+    { id: 'unique', icon: '', label: 'Unique', priority: 4 },
+    
+    // ============================================
+    // THEMATIC SECTIONS
+    // ============================================
+    { id: 'eden', icon: '', label: 'Eden', priority: 4 },
+    { id: 'covenant', icon: '', label: 'Covenant', priority: 4 },
     { id: 'second-temple', icon: '', label: '2nd Temple', priority: 5 },
-    { id: 'songs', icon: '', label: 'Songs', priority: 5 },
+    { id: 'intertext', icon: '', label: 'Intertext', priority: 4 },
   ];
 
   // ============================================
@@ -120,19 +140,26 @@
     }
     
     /**
-     * Detect all sections with IDs on the page
+     * Detect all sections with IDs on the page - ENHANCED VERSION
      */
     detectSections() {
-      // Find all sections with IDs that match our config
       const configIds = sectionConfig.map(s => s.id);
       const foundSections = [];
       
-      // Look for common section containers
+      // Expanded selectors to catch more section types
       const sectionSelectors = [
         '.theology-card[id]',
         '.chiasm-card[id]',
         '.hook-section[id]',
         '.transformation-ribbon[id]',
+        '.characters-section[id]',
+        '.study-nav[id]',
+        '.providence-note[id]',
+        '.abrahamic-parallel[id]',
+        '.chorus-card[id]',
+        '.devices-card[id]',
+        '.legal-card[id]',
+        '.structure-card[id]',
         'section[id]',
         'div[id]'
       ];
@@ -140,6 +167,7 @@
       sectionSelectors.forEach(selector => {
         document.querySelectorAll(selector).forEach(element => {
           const id = element.id;
+          // Check if this ID is in our config and not already found
           if (configIds.includes(id) && !foundSections.find(s => s.id === id)) {
             const config = sectionConfig.find(s => s.id === id);
             foundSections.push({
@@ -168,6 +196,9 @@
       }
       
       console.log(`MobileTabs: Found ${foundSections.length} sections, using ${this.sections.length}`);
+      if (this.sections.length > 0) {
+        console.log('Active sections:', this.sections.map(s => `${s.label} (#${s.id})`).join(', '));
+      }
     }
     
     /**
@@ -222,7 +253,6 @@
     
     /**
      * Generate tab elements
-     * FIXED: Now handles text-only labels properly
      */
     generateTabs() {
       this.sections.forEach((section, index) => {
@@ -241,7 +271,7 @@
             <span class="tab-label">${section.label}</span>
           `;
         } else {
-          // Text-only version for cleaner look (matching Ruth Overview)
+          // Text-only version for cleaner look
           tab.innerHTML = `
             <span class="tab-label-only">${section.label}</span>
           `;
@@ -447,7 +477,6 @@
     
     /**
      * Handle scroll visibility (keep tabs always visible for better UX)
-     * Modified to not hide on scroll
      */
     handleScrollVisibility() {
       // Tabs stay visible always - no hiding on scroll
@@ -695,7 +724,7 @@
   // ============================================
   
   document.addEventListener('DOMContentLoaded', function() {
-    console.log('Character Page v5.8 initialized - Fixed Version');
+    console.log('Character Page v5.8 initialized - Complete Fixed Version');
     
     // Initialize mobile tabs
     window.mobileTabs = new MobileSectionTabs();
@@ -706,7 +735,9 @@
     // Log detected sections for debugging
     if (window.mobileTabs && window.mobileTabs.sections.length > 0) {
       console.log('Mobile tabs created for sections:', 
-        window.mobileTabs.sections.map(s => `${s.label} (${s.id})`).join(', '));
+        window.mobileTabs.sections.map(s => `${s.label} (#${s.id})`).join(', '));
+    } else {
+      console.log('No mobile tabs created - no matching sections found');
     }
   });
   
