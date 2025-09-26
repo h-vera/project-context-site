@@ -2,7 +2,7 @@
  * Character Page v5.8 - Dynamic Mobile Tabs
  * Path: /assets/js/character-page-v5-8.js
  * Purpose: Enhanced page utilities with dynamic mobile section navigation
- * Version: 5.8.0
+ * Version: 5.8.0 - FIXED
  * Created: 2024
  */
 
@@ -16,44 +16,45 @@
   /**
    * Section configuration with metadata for dynamic tab generation
    * Priority: 1 (highest) to 5 (lowest) - used when >5 sections exist
+   * FIXED: Removed emoji icons for cleaner text-only design
    */
   const sectionConfig = [
     // Priority 1 - Always show if present
-    { id: 'overview', icon: '📋', label: 'Overview', priority: 1 },
-    { id: 'opening', icon: '📖', label: 'Opening', priority: 1 },
+    { id: 'overview', icon: '', label: 'Overview', priority: 1 },
+    { id: 'opening', icon: '', label: 'Opening', priority: 1 },
     
     // Priority 2 - Core sections
-    { id: 'narrative', icon: '📖', label: 'Journey', priority: 2 },
-    { id: 'journey', icon: '🗺️', label: 'Journey', priority: 2 },
-    { id: 'cast', icon: '👥', label: 'Cast', priority: 2 },
-    { id: 'biblical-theology', icon: '🌍', label: 'Theology', priority: 2 },
-    { id: 'application', icon: '🎯', label: 'Apply', priority: 2 },
+    { id: 'narrative', icon: '', label: 'Journey', priority: 2 },
+    { id: 'journey', icon: '', label: 'Journey', priority: 2 },
+    { id: 'cast', icon: '', label: 'Cast', priority: 2 },
+    { id: 'biblical-theology', icon: '', label: 'Theology', priority: 2 },
+    { id: 'application', icon: '', label: 'Apply', priority: 2 },
     
     // Priority 3 - Important but not essential
-    { id: 'themes', icon: '💡', label: 'Themes', priority: 3 },
-    { id: 'structure', icon: '🏗️', label: 'Structure', priority: 3 },
-    { id: 'literary-context', icon: '📚', label: 'Literary', priority: 3 },
-    { id: 'messianic', icon: '✨', label: 'Messianic', priority: 3 },
+    { id: 'themes', icon: '', label: 'Themes', priority: 3 },
+    { id: 'structure', icon: '', label: 'Structure', priority: 3 },
+    { id: 'literary-context', icon: '', label: 'Literary', priority: 3 },
+    { id: 'messianic', icon: '', label: 'Messianic', priority: 3 },
     
     // Priority 4 - Specialized sections
-    { id: 'chiasm', icon: '🔄', label: 'Chiasm', priority: 4 },
-    { id: 'wordplay', icon: '✍️', label: 'Hebrew', priority: 4 },
-    { id: 'providence', icon: '👁️', label: 'Providence', priority: 4 },
-    { id: 'transformation', icon: '🦋', label: 'Transform', priority: 4 },
-    { id: 'ane-context', icon: '🏺', label: 'ANE', priority: 4 },
-    { id: 'intertext', icon: '🔗', label: 'Intertext', priority: 4 },
-    { id: 'questions', icon: '❓', label: 'Questions', priority: 4 },
+    { id: 'chiasm', icon: '', label: 'Chiasm', priority: 4 },
+    { id: 'wordplay', icon: '', label: 'Wordplay', priority: 4 },
+    { id: 'providence', icon: '', label: 'Providence', priority: 4 },
+    { id: 'transformation', icon: '', label: 'Transform', priority: 4 },
+    { id: 'ane-context', icon: '', label: 'ANE', priority: 4 },
+    { id: 'intertext', icon: '', label: 'Intertext', priority: 4 },
+    { id: 'questions', icon: '', label: 'Questions', priority: 4 },
     
     // Priority 5 - Supplementary
-    { id: 'key-verses', icon: '📝', label: 'Verses', priority: 5 },
-    { id: 'genealogy', icon: '👨‍👩‍👦', label: 'Lineage', priority: 5 },
-    { id: 'further-study', icon: '📚', label: 'Resources', priority: 5 },
-    { id: 'bibliography', icon: '📖', label: 'Sources', priority: 5 },
-    { id: 'eden', icon: '🌿', label: 'Eden', priority: 5 },
-    { id: 'covenant', icon: '📜', label: 'Covenant', priority: 5 },
-    { id: 'unique', icon: '⭐', label: 'Unique', priority: 5 },
-    { id: 'second-temple', icon: '🏛️', label: '2nd Temple', priority: 5 },
-    { id: 'songs', icon: '🎵', label: 'Songs', priority: 5 },
+    { id: 'key-verses', icon: '', label: 'Verses', priority: 5 },
+    { id: 'genealogy', icon: '', label: 'Genealogy', priority: 5 },
+    { id: 'further-study', icon: '', label: 'Resources', priority: 5 },
+    { id: 'bibliography', icon: '', label: 'Sources', priority: 5 },
+    { id: 'eden', icon: '', label: 'Eden', priority: 5 },
+    { id: 'covenant', icon: '', label: 'Covenant', priority: 5 },
+    { id: 'unique', icon: '', label: 'Unique', priority: 5 },
+    { id: 'second-temple', icon: '', label: '2nd Temple', priority: 5 },
+    { id: 'songs', icon: '', label: 'Songs', priority: 5 },
   ];
 
   // ============================================
@@ -221,6 +222,7 @@
     
     /**
      * Generate tab elements
+     * FIXED: Now handles text-only labels properly
      */
     generateTabs() {
       this.sections.forEach((section, index) => {
@@ -231,10 +233,19 @@
         tab.setAttribute('role', 'tab');
         tab.setAttribute('tabindex', '0');
         
-        tab.innerHTML = `
-          <span class="tab-icon" aria-hidden="true">${section.icon}</span>
-          <span class="tab-label">${section.label}</span>
-        `;
+        // Check if icon exists and is not empty
+        if (section.icon && section.icon.trim() !== '') {
+          // Version with icon
+          tab.innerHTML = `
+            <span class="tab-icon" aria-hidden="true">${section.icon}</span>
+            <span class="tab-label">${section.label}</span>
+          `;
+        } else {
+          // Text-only version for cleaner look (matching Ruth Overview)
+          tab.innerHTML = `
+            <span class="tab-label-only">${section.label}</span>
+          `;
+        }
         
         // First tab is active by default
         if (index === 0) {
@@ -435,32 +446,12 @@
     }
     
     /**
-     * Handle scroll visibility (hide on scroll down, show on scroll up)
+     * Handle scroll visibility (keep tabs always visible for better UX)
+     * Modified to not hide on scroll
      */
     handleScrollVisibility() {
-      let ticking = false;
-      
-      const handleScroll = () => {
-        const currentScrollY = window.pageYOffset;
-        
-        if (currentScrollY > this.lastScrollY && currentScrollY > 100) {
-          // Scrolling down - hide tabs
-          this.tabsElement.classList.add('hidden');
-        } else {
-          // Scrolling up - show tabs
-          this.tabsElement.classList.remove('hidden');
-        }
-        
-        this.lastScrollY = currentScrollY;
-        ticking = false;
-      };
-      
-      window.addEventListener('scroll', () => {
-        if (!ticking) {
-          window.requestAnimationFrame(handleScroll);
-          ticking = true;
-        }
-      }, { passive: true });
+      // Tabs stay visible always - no hiding on scroll
+      // This provides better navigation UX
     }
     
     /**
@@ -704,7 +695,7 @@
   // ============================================
   
   document.addEventListener('DOMContentLoaded', function() {
-    console.log('Character Page v5.8 initialized');
+    console.log('Character Page v5.8 initialized - Fixed Version');
     
     // Initialize mobile tabs
     window.mobileTabs = new MobileSectionTabs();
@@ -715,7 +706,7 @@
     // Log detected sections for debugging
     if (window.mobileTabs && window.mobileTabs.sections.length > 0) {
       console.log('Mobile tabs created for sections:', 
-        window.mobileTabs.sections.map(s => s.id).join(', '));
+        window.mobileTabs.sections.map(s => `${s.label} (${s.id})`).join(', '));
     }
   });
   
