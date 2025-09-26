@@ -235,21 +235,25 @@
       return finalSections;
     }
     
-    /**
-     * Create the tabs container element
-     */
-    createTabsElement() {
-      this.tabsElement = document.createElement('nav');
-      this.tabsElement.className = 'mobile-section-tabs active';
-      this.tabsElement.setAttribute('role', 'navigation');
-      this.tabsElement.setAttribute('aria-label', 'Section navigation');
-      
-      this.tabsContainer = document.createElement('div');
-      this.tabsContainer.className = 'tabs-container';
-      
-      this.tabsElement.appendChild(this.tabsContainer);
-      document.body.appendChild(this.tabsElement);
-    }
+/**
+ * Create the tabs container element
+ */
+createTabsElement() {
+  this.tabsElement = document.createElement('nav');
+  this.tabsElement.className = 'mobile-section-tabs active';
+  this.tabsElement.setAttribute('role', 'navigation');
+  this.tabsElement.setAttribute('aria-label', 'Section navigation');
+  
+  // ADD THIS LINE: Force inline styles to guarantee sticky positioning
+  // Inline styles have highest specificity and will override any CSS issues
+  this.tabsElement.style.cssText = 'position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important; z-index: 997 !important; display: block !important;';
+  
+  this.tabsContainer = document.createElement('div');
+  this.tabsContainer.className = 'tabs-container';
+  
+  this.tabsElement.appendChild(this.tabsContainer);
+  document.body.appendChild(this.tabsElement);
+}
     
     /**
      * Generate tab elements

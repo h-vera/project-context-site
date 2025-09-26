@@ -1,0 +1,57 @@
+<style>
+/* mobile-tabs-patch.css - Fixes for v5.8 mobile tabs */
+/* This file should be loaded AFTER mobile-tabs-v5-8.css */
+
+/* FIX 1: Force sticky positioning with maximum specificity */
+html body .mobile-section-tabs,
+html body nav.mobile-section-tabs {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 997 !important;
+}
+
+html body .mobile-section-tabs.active,
+html body nav.mobile-section-tabs.active {
+  display: block !important;
+  position: fixed !important;
+  bottom: 0 !important;
+}
+
+/* Ensure visibility on mobile devices */
+@media screen and (max-width: 768px) {
+  .mobile-section-tabs {
+    position: fixed !important;
+    bottom: 0 !important;
+    display: block !important;
+    transform: translateY(0) !important;
+  }
+  
+  body.has-mobile-tabs .mobile-section-tabs {
+    display: block !important;
+  }
+}
+
+/* FIX 2: Remove CSS-generated icons that cause overlaps */
+.panel-highlight::before {
+  display: none !important;
+}
+
+/* Additional insurance for real devices */
+@supports (-webkit-touch-callout: none) {
+  /* iOS specific */
+  .mobile-section-tabs.active {
+    position: fixed !important;
+    bottom: 0 !important;
+  }
+}
+
+@media (pointer: coarse) and (hover: none) {
+  /* Touch devices */
+  .mobile-section-tabs {
+    position: fixed !important;
+    bottom: 0 !important;
+  }
+}
+</style>
