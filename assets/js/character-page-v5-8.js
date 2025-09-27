@@ -117,17 +117,51 @@
     }
     
     /**
-     * Initialize mobile tabs
-     */
-    init() {
-      this.detectSections();
-      
-      if (this.sections.length > 0) {
-        this.createTabsElement();
-        this.generateTabs();
-        this.attachListeners();
-        this.observeSections();
-        this.handleScrollVisibility();
+ * Initialize mobile tabs
+ */
+init() {
+  this.detectSections();
+  
+  if (this.sections.length > 0) {
+    this.createTabsElement();
+    
+    // FORCE-FIX: Ensure tabs stick to bottom
+    const forceTabs = () => {
+      if (this.tabsElement) {
+        this.tabsElement.style.position = 'fixed';
+        this.tabsElement.style.top = '';  // Clear top
+        this.tabsElement.style.bottom = '0';
+        this.tabsElement.style.left = '0';
+        this.tabsElement.style.right = '0';
+        this.tabsElement.style.zIndex = '997';
+        this.tabsElement.style.transform = 'none';
+        this.tabsElement.style.webkitTransform = 'none';
+      }
+    };
+    
+    // Apply fix multiple times to ensure it sticks
+    forceTabs();
+    setTimeout(forceTabs, 0);
+    setTimeout(forceTabs, 100);
+    setTimeout(forceTabs, 500);
+    
+    this.generateTabs();
+    this.attachListeners();
+    this.observeSections();
+    this.handleScrollVisibility();
+    
+    // Add CSS override for extra insurance
+    const style = document.createElement('style');
+    style.textContent = `
+      .mobile-section-tabs {
+        position: fixed !important;
+        bottom: 0 !important;
+        top: unset !important;
+        top: initial !important;
+        transform: none !important;
+      }
+    `;
+    document.head.appendChild(style);
         
         // Add class to body for CSS adjustments
         document.body.classList.add('has-mobile-tabs');
