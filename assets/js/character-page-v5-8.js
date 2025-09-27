@@ -116,7 +116,8 @@
       return window.innerWidth <= 768 || ('ontouchstart' in window);
     }
     
-    /**
+
+/**
  * Initialize mobile tabs
  */
 init() {
@@ -124,54 +125,20 @@ init() {
   
   if (this.sections.length > 0) {
     this.createTabsElement();
-    
-    // FORCE-FIX: Ensure tabs stick to bottom
-    const forceTabs = () => {
-      if (this.tabsElement) {
-        this.tabsElement.style.position = 'fixed';
-        this.tabsElement.style.top = '';  // Clear top
-        this.tabsElement.style.bottom = '0';
-        this.tabsElement.style.left = '0';
-        this.tabsElement.style.right = '0';
-        this.tabsElement.style.zIndex = '997';
-        this.tabsElement.style.transform = 'none';
-        this.tabsElement.style.webkitTransform = 'none';
-      }
-    };
-    
-    // Apply fix multiple times to ensure it sticks
-    forceTabs();
-    setTimeout(forceTabs, 0);
-    setTimeout(forceTabs, 100);
-    setTimeout(forceTabs, 500);
-    
     this.generateTabs();
     this.attachListeners();
     this.observeSections();
     this.handleScrollVisibility();
     
-    // Add CSS override for extra insurance
-    const style = document.createElement('style');
-    style.textContent = `
-      .mobile-section-tabs {
-        position: fixed !important;
-        bottom: 0 !important;
-        top: unset !important;
-        top: initial !important;
-        transform: none !important;
-      }
-    `;
-    document.head.appendChild(style);
-        
-        // Add class to body for CSS adjustments
-        document.body.classList.add('has-mobile-tabs');
-        
-        // Show with animation
-        setTimeout(() => {
-          this.tabsElement.classList.add('slide-in');
-        }, 100);
-      }
-    }
+    // Add class to body for CSS adjustments
+    document.body.classList.add('has-mobile-tabs');
+    
+    // Show with animation
+    setTimeout(() => {
+      this.tabsElement.classList.add('slide-in');
+    }, 100);
+  }
+}
     
     /**
      * Detect all sections with IDs on the page - ENHANCED VERSION
@@ -278,14 +245,7 @@ createTabsElement() {
   this.tabsElement.setAttribute('role', 'navigation');
   this.tabsElement.setAttribute('aria-label', 'Section navigation');
   
-  // Use individual style properties and 'unset' for top
-  this.tabsElement.style.position = 'fixed';
-  this.tabsElement.style.top = 'unset';  // This is key - clear any top value
-  this.tabsElement.style.bottom = '0px';
-  this.tabsElement.style.left = '0px';
-  this.tabsElement.style.right = '0px';
-  this.tabsElement.style.zIndex = '997';
-  this.tabsElement.style.display = 'block';
+  // NO inline styles - let CSS handle everything!
   
   this.tabsContainer = document.createElement('div');
   this.tabsContainer.className = 'tabs-container';
