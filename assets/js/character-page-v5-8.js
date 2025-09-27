@@ -508,18 +508,17 @@ attachListeners() {
  * Observe sections for intersection
  */
 observeSections() {
-  // More aggressive intersection detection for better scroll tracking
+  // Balanced detection for both scroll directions
   const options = {
     root: null,
-    rootMargin: '-20% 0% -70% 0%',  // Top 20% to 30% of viewport
-    threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]  // More granular detection
+    rootMargin: '-40% 0% -40% 0%',  // Center 20% of viewport
+    threshold: [0, 0.25, 0.5, 0.75, 1.0]
   };
   
   const observer = new IntersectionObserver((entries) => {
     let mostVisibleSection = null;
     let highestRatio = 0;
     
-    // Find the most visible section
     entries.forEach(entry => {
       if (entry.isIntersecting && entry.intersectionRatio > highestRatio) {
         highestRatio = entry.intersectionRatio;
@@ -527,20 +526,54 @@ observeSections() {
       }
     });
     
-    // Update active tab for most visible section
     if (mostVisibleSection) {
       const section = this.sections.find(s => s.element === mostVisibleSection);
       if (section && section.tab) {
         this.setActiveTab(section.tab);
       }
     }
-  }, options);
+  }, options);  // <-- CLOSE THE CALLBACK HERE
   
   // Observe all sections
   this.sections.forEach(section => {
     observer.observe(section.element);
   });
   
+  // Better scroll detection for both directions
+  let scrollTimeout;
+  let lastScrollY = window.pageYOffset;
+  
+  window.addEventListener('scroll', () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      const currentScrollY = window.pageYOffset;
+      const scrollDirection = currentScrollY > lastScrollY ? 'down' : 'up';
+      lastScrollY = currentScrollY;
+      
+      // Check which section is most visible in viewport center
+      const viewportCenter = currentScrollY + (window.innerHeight / 2);
+      
+      let activeSection = null;
+      let minDistance = Infinity;
+      
+      this.sections.forEach(section => {
+        const rect = section.element.getBoundingClientRect();
+        const sectionCenter = rect.top + window.pageYOffset + (rect.height / 2);
+        const distance = Math.abs(viewportCenter - sectionCenter);
+        
+        if (distance < minDistance) {
+          minDistance = distance;
+          activeSection = section;
+        }
+      });
+      
+      if (activeSection && activeSection.tab) {
+        this.setActiveTab(activeSection.tab);
+      }
+    }, 50);  // Faster response
+  });
+}
+    
   // ALSO ADD: Backup scroll listener for better detection
   let scrollTimeout;
   window.addEventListener('scroll', () => {
