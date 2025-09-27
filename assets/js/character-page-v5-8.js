@@ -116,28 +116,29 @@
       return window.innerWidth <= 768 || ('ontouchstart' in window);
     }
     
-    /**
-     * Initialize mobile tabs
-     */
-    init() {
-      this.detectSections();
-      
-      if (this.sections.length > 0) {
-        this.createTabsElement();
-        this.generateTabs();
-        this.attachListeners();
-        this.observeSections();
-        this.handleScrollVisibility();
-        
-        // Add class to body for CSS adjustments
-        document.body.classList.add('has-mobile-tabs');
-        
-        // Show with animation
-        setTimeout(() => {
-          this.tabsElement.classList.add('slide-in');
-        }, 100);
-      }
-    }
+
+/**
+ * Initialize mobile tabs
+ */
+init() {
+  this.detectSections();
+  
+  if (this.sections.length > 0) {
+    this.createTabsElement();
+    this.generateTabs();
+    this.attachListeners();
+    this.observeSections();
+    this.handleScrollVisibility();
+    
+    // Add class to body for CSS adjustments
+    document.body.classList.add('has-mobile-tabs');
+    
+    // Show with animation
+    setTimeout(() => {
+      this.tabsElement.classList.add('slide-in');
+    }, 100);
+  }
+}
     
     /**
      * Detect all sections with IDs on the page - ENHANCED VERSION
@@ -235,23 +236,23 @@
       return finalSections;
     }
     
-    /**
-     * Create the tabs container element
-     */
-    createTabsElement() {
-      this.tabsElement = document.createElement('nav');
-      this.tabsElement.className = 'mobile-section-tabs active';
-      this.tabsElement.setAttribute('role', 'navigation');
-      this.tabsElement.setAttribute('aria-label', 'Section navigation');
-      
-      // NO inline styles - let CSS handle everything!
-      
-      this.tabsContainer = document.createElement('div');
-      this.tabsContainer.className = 'tabs-container';
-      
-      this.tabsElement.appendChild(this.tabsContainer);
-      document.body.appendChild(this.tabsElement);
-    }
+/**
+ * Create the tabs container element
+ */
+createTabsElement() {
+  this.tabsElement = document.createElement('nav');
+  this.tabsElement.className = 'mobile-section-tabs active';
+  this.tabsElement.setAttribute('role', 'navigation');
+  this.tabsElement.setAttribute('aria-label', 'Section navigation');
+  
+  // NO inline styles - let CSS handle everything!
+  
+  this.tabsContainer = document.createElement('div');
+  this.tabsContainer.className = 'tabs-container';
+  
+  this.tabsElement.appendChild(this.tabsContainer);
+  document.body.appendChild(this.tabsElement);
+}
     
     /**
      * Generate tab elements
@@ -298,94 +299,95 @@
     }
     
     /**
-     * Enhanced attachListeners() method for MobileSectionTabs class
-     */
-    attachListeners() {
-      let isScrolling = false;
-      let scrollTimeout;
-      let touchStartTime;
-      let touchStartX;
-      let touchStartY;
-      
-      // Track scroll state
-      this.tabsContainer.addEventListener('scroll', () => {
-        this.tabsContainer.classList.add('is-scrolling');
-        isScrolling = true;
-        
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(() => {
-          this.tabsContainer.classList.remove('is-scrolling');
-          isScrolling = false;
-        }, 150); // Wait 150ms after scroll ends
-        
-        this.updateScrollIndicators();
-      }, { passive: true });
-      
-      // Enhanced touch handling to differentiate scroll from tap
-      this.tabsContainer.addEventListener('touchstart', (e) => {
-        touchStartTime = Date.now();
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-        this.touchStartX = e.changedTouches[0].screenX; // For swipe detection
-      }, { passive: true });
-      
-      this.tabsContainer.addEventListener('touchend', (e) => {
-        const touchEndTime = Date.now();
-        const touchEndX = e.changedTouches[0].clientX;
-        const touchEndY = e.changedTouches[0].clientY;
-        this.touchEndX = e.changedTouches[0].screenX; // For swipe detection
-        
-        // Calculate touch duration and movement
-        const touchDuration = touchEndTime - touchStartTime;
-        const horizontalMove = Math.abs(touchEndX - touchStartX);
-        const verticalMove = Math.abs(touchEndY - touchStartY);
-        
-        // If it was a quick tap with minimal movement, handle as click
-        if (touchDuration < 300 && horizontalMove < 10 && verticalMove < 10) {
-          const tab = e.target.closest('.tab-item');
-          if (tab && !isScrolling) {
-            const targetId = tab.getAttribute('data-target').substring(1);
-            const section = this.sections.find(s => s.id === targetId);
-            if (section) {
-              this.scrollToSection(section);
-              this.setActiveTab(tab);
-            }
-          }
-        } else if (horizontalMove > 50) {
-          // Handle horizontal swipe for section navigation
-          this.handleSwipe();
+ * Enhanced attachListeners() method for MobileSectionTabs class
+ * Replace the existing attachListeners() method with this version
+ */
+attachListeners() {
+  let isScrolling = false;
+  let scrollTimeout;
+  let touchStartTime;
+  let touchStartX;
+  let touchStartY;
+  
+  // Track scroll state
+  this.tabsContainer.addEventListener('scroll', () => {
+    this.tabsContainer.classList.add('is-scrolling');
+    isScrolling = true;
+    
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      this.tabsContainer.classList.remove('is-scrolling');
+      isScrolling = false;
+    }, 150); // Wait 150ms after scroll ends
+    
+    this.updateScrollIndicators();
+  }, { passive: true });
+  
+  // Enhanced touch handling to differentiate scroll from tap
+  this.tabsContainer.addEventListener('touchstart', (e) => {
+    touchStartTime = Date.now();
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    this.touchStartX = e.changedTouches[0].screenX; // For swipe detection
+  }, { passive: true });
+  
+  this.tabsContainer.addEventListener('touchend', (e) => {
+    const touchEndTime = Date.now();
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    this.touchEndX = e.changedTouches[0].screenX; // For swipe detection
+    
+    // Calculate touch duration and movement
+    const touchDuration = touchEndTime - touchStartTime;
+    const horizontalMove = Math.abs(touchEndX - touchStartX);
+    const verticalMove = Math.abs(touchEndY - touchStartY);
+    
+    // If it was a quick tap with minimal movement, handle as click
+    if (touchDuration < 300 && horizontalMove < 10 && verticalMove < 10) {
+      const tab = e.target.closest('.tab-item');
+      if (tab && !isScrolling) {
+        const targetId = tab.getAttribute('data-target').substring(1);
+        const section = this.sections.find(s => s.id === targetId);
+        if (section) {
+          this.scrollToSection(section);
+          this.setActiveTab(tab);
         }
-        
-        e.preventDefault(); // Prevent click event from firing
-      }, { passive: false });
-      
-      // Prevent regular click events - only use touch events on mobile
-      this.tabsContainer.addEventListener('click', (e) => {
-        // Only handle clicks on non-touch devices
-        if (!('ontouchstart' in window)) {
-          const tab = e.target.closest('.tab-item');
-          if (tab && !isScrolling) {
-            const targetId = tab.getAttribute('data-target').substring(1);
-            const section = this.sections.find(s => s.id === targetId);
-            if (section) {
-              this.scrollToSection(section);
-              this.setActiveTab(tab);
-            }
-          }
-        } else {
-          // On touch devices, prevent click events
-          e.preventDefault();
-          e.stopPropagation();
-        }
-      });
-      
-      // Keyboard navigation (unchanged)
-      this.tabsContainer.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-          this.handleKeyboardNav(e);
-        }
-      });
+      }
+    } else if (horizontalMove > 50) {
+      // Handle horizontal swipe for section navigation
+      this.handleSwipe();
     }
+    
+    e.preventDefault(); // Prevent click event from firing
+  }, { passive: false });
+  
+  // Prevent regular click events - only use touch events on mobile
+  this.tabsContainer.addEventListener('click', (e) => {
+    // Only handle clicks on non-touch devices
+    if (!('ontouchstart' in window)) {
+      const tab = e.target.closest('.tab-item');
+      if (tab && !isScrolling) {
+        const targetId = tab.getAttribute('data-target').substring(1);
+        const section = this.sections.find(s => s.id === targetId);
+        if (section) {
+          this.scrollToSection(section);
+          this.setActiveTab(tab);
+        }
+      }
+    } else {
+      // On touch devices, prevent click events
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  });
+  
+  // Keyboard navigation (unchanged)
+  this.tabsContainer.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      this.handleKeyboardNav(e);
+    }
+  });
+}
     
     /**
      * Handle swipe gestures for section navigation
@@ -503,74 +505,83 @@
     }
     
     /**
-     * Observe sections for intersection
-     */
-    observeSections() {
-      // Balanced detection for both scroll directions
-      const options = {
-        root: null,
-        rootMargin: '-40% 0% -40% 0%',  // Center 20% of viewport
-        threshold: [0, 0.25, 0.5, 0.75, 1.0]
-      };
+ * Observe sections for intersection
+ */
+observeSections() {
+  // More aggressive intersection detection for better scroll tracking
+  const options = {
+    root: null,
+    rootMargin: '-20% 0% -70% 0%',  // Top 20% to 30% of viewport
+    threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]  // More granular detection
+  };
+  
+  const observer = new IntersectionObserver((entries) => {
+    let mostVisibleSection = null;
+    let highestRatio = 0;
+    
+    // Find the most visible section
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.intersectionRatio > highestRatio) {
+        highestRatio = entry.intersectionRatio;
+        mostVisibleSection = entry.target;
+      }
+    });
+    
+    // Update active tab for most visible section
+    if (mostVisibleSection) {
+      const section = this.sections.find(s => s.element === mostVisibleSection);
+      if (section && section.tab) {
+        this.setActiveTab(section.tab);
+      }
+    }
+  }, options);
+  
+  // Observe all sections
+  this.sections.forEach(section => {
+    observer.observe(section.element);
+  });
+  
+  // ALSO ADD: Backup scroll listener for better detection
+  let scrollTimeout;
+  window.addEventListener('scroll', () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      const scrollPos = window.pageYOffset + (window.innerHeight * 0.3);  // Look at top 30% of viewport
       
-      const observer = new IntersectionObserver((entries) => {
-        let mostVisibleSection = null;
-        let highestRatio = 0;
+      // Find which section we're in
+      let activeSection = null;
+      this.sections.forEach(section => {
+        const rect = section.element.getBoundingClientRect();
+        const sectionTop = rect.top + window.pageYOffset;
+        const sectionBottom = sectionTop + rect.height;
         
-        entries.forEach(entry => {
-          if (entry.isIntersecting && entry.intersectionRatio > highestRatio) {
-            highestRatio = entry.intersectionRatio;
-            mostVisibleSection = entry.target;
+        if (scrollPos >= sectionTop && scrollPos <= sectionBottom) {
+          activeSection = section;
+        }
+      });
+      
+      // If no section contains scroll position, find the closest one
+      if (!activeSection) {
+        let closestDistance = Infinity;
+        this.sections.forEach(section => {
+          const rect = section.element.getBoundingClientRect();
+          const sectionTop = rect.top + window.pageYOffset;
+          const distance = Math.abs(scrollPos - sectionTop);
+          
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            activeSection = section;
           }
         });
-        
-        if (mostVisibleSection) {
-          const section = this.sections.find(s => s.element === mostVisibleSection);
-          if (section && section.tab) {
-            this.setActiveTab(section.tab);
-          }
-        }
-      }, options);
+      }
       
-      // Observe all sections
-      this.sections.forEach(section => {
-        observer.observe(section.element);
-      });
-      
-      // Better scroll detection for both directions
-      let scrollTimeout;
-      let lastScrollY = window.pageYOffset;
-      
-      window.addEventListener('scroll', () => {
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(() => {
-          const currentScrollY = window.pageYOffset;
-          const scrollDirection = currentScrollY > lastScrollY ? 'down' : 'up';
-          lastScrollY = currentScrollY;
-          
-          // Check which section is most visible in viewport center
-          const viewportCenter = currentScrollY + (window.innerHeight / 2);
-          
-          let activeSection = null;
-          let minDistance = Infinity;
-          
-          this.sections.forEach(section => {
-            const rect = section.element.getBoundingClientRect();
-            const sectionCenter = rect.top + window.pageYOffset + (rect.height / 2);
-            const distance = Math.abs(viewportCenter - sectionCenter);
-            
-            if (distance < minDistance) {
-              minDistance = distance;
-              activeSection = section;
-            }
-          });
-          
-          if (activeSection && activeSection.tab) {
-            this.setActiveTab(activeSection.tab);
-          }
-        }, 50);  // Faster response
-      });
-    }
+      // Update active tab
+      if (activeSection && activeSection.tab) {
+        this.setActiveTab(activeSection.tab);
+      }
+    }, 100);  // Debounce for performance
+  });
+}
     
     /**
      * Handle scroll visibility (keep tabs always visible for better UX)
