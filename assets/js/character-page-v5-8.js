@@ -75,6 +75,21 @@
     { id: 'covenant', icon: '', label: 'Covenant', priority: 4 },
     { id: 'second-temple', icon: '', label: '2nd Temple', priority: 5 },
     { id: 'intertext', icon: '', label: 'Intertext', priority: 4 },
+
+    // ============================================
+// HEBREW WORDPLAY PAGE SECTIONS (Ruth, etc.)
+// ============================================
+{ id: 'quick-reference', icon: '', label: 'Quick Ref', priority: 1 },
+{ id: 'abraham-parallel', icon: '', label: 'Abraham', priority: 2 },
+{ id: 'key-words', icon: '', label: 'Keywords', priority: 2 },
+{ id: 'shuv', icon: '', label: 'Return', priority: 2 },
+{ id: 'hesed', icon: '', label: 'Hesed', priority: 1 },
+{ id: 'davaq', icon: '', label: 'Clinging', priority: 3 },
+{ id: 'wings', icon: '', label: 'Wings', priority: 3 },
+{ id: 'goel', icon: '', label: 'Redeemer', priority: 2 },
+{ id: 'names', icon: '', label: 'Names', priority: 3 },
+{ id: 'rest', icon: '', label: 'Rest', priority: 3 },
+{ id: 'artistry', icon: '', label: 'Artistry', priority: 4 },
   ];
 
   // ============================================
