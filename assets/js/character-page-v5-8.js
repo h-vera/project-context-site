@@ -90,6 +90,17 @@
 { id: 'names', icon: '', label: 'Names', priority: 3 },
 { id: 'rest', icon: '', label: 'Rest', priority: 3 },
 { id: 'artistry', icon: '', label: 'Artistry', priority: 4 },
+{ id: 'torah', icon: '', label: 'Torah Links', priority: 1 },
+{ id: 'genesis', icon: '', label: 'Genesis Echoes', priority: 2 },
+{ id: 'wisdom', icon: '', label: 'Wisdom', priority: 2 },
+{ id: 'threads', icon: '', label: 'Threads', priority: 3 },
+{ id: 'ot-intertext', icon: '', label: 'OT Intertext', priority: 3 },
+{ id: 'nt-intertext', icon: '', label: 'NT Intertext', priority: 3 },
+{ id: 'synthesis', icon: '', label: 'Synthesis', priority: 2 },
+{ id: 'redemption', icon: '', label: 'Redemption', priority: 1 },
+{ id: 'inclusion', icon: '', label: 'Inclusion', priority: 2 },
+{ id: 'fullness', icon: '', label: 'Fullness', priority: 2 },
+{ id: 'hiddenness', icon: '', label: 'Hiddenness', priority: 3 },
   ];
 
   // ============================================
