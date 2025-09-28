@@ -49,6 +49,8 @@
     { id: 'wordplay', icon: '', label: 'Wordplay', priority: 3 },
     { id: 'providence', icon: '', label: 'Providence', priority: 3 },
     { id: 'transformation', icon: '', label: 'Transform', priority: 3 },
+    { id: 'major-chiasm', icon: '', label: 'Chiasm', priority: 3 },
+    { id: 'literary-artistry', icon: '', label: 'Artistry', priority: 3 },
     { id: 'key-verses', icon: '', label: 'Verses', priority: 4 },
     { id: 'genealogy', icon: '', label: 'Genealogy', priority: 4 },
     { id: 'further-study', icon: '', label: 'Resources', priority: 5 },
@@ -103,16 +105,16 @@
 { id: 'hiddenness', icon: '', label: 'Hiddenness', priority: 3 },
 
 // Ruth Study Kit Specific Sections
-{ id: 'introduction', icon: '📖', label: 'Intro', priority: 1 },
-{ id: 'session1', icon: '1️⃣', label: 'Session 1', priority: 1 },
-{ id: 'session2', icon: '2️⃣', label: 'Session 2', priority: 1 },
-{ id: 'session3', icon: '3️⃣', label: 'Session 3', priority: 1 },
-{ id: 'session4', icon: '4️⃣', label: 'Session 4', priority: 1 },
-{ id: 'redemption', icon: '✨', label: 'Redemption', priority: 2 },
-{ id: 'assessment', icon: '✅', label: 'Assessment', priority: 2 },
-{ id: 'resources', icon: '📚', label: 'Resources', priority: 3 },
-{ id: 'further-study', icon: '📖', label: 'Study More', priority: 4 },
-{ id: 'bibliography', icon: '📚', label: 'Sources', priority: 5 }
+{ id: 'introduction', icon: '', label: 'Intro', priority: 1 },
+{ id: 'session1', icon: '', label: 'Session 1', priority: 1 },
+{ id: 'session2', icon: '', label: 'Session 2', priority: 1 },
+{ id: 'session3', icon: '', label: 'Session 3', priority: 1 },
+{ id: 'session4', icon: '', label: 'Session 4', priority: 1 },
+{ id: 'redemption', icon: '', label: 'Redemption', priority: 2 },
+{ id: 'assessment', icon: '', label: 'Assessment', priority: 2 },
+{ id: 'resources', icon: '', label: 'Resources', priority: 3 },
+{ id: 'further-study', icon: '', label: 'Study More', priority: 4 },
+{ id: 'bibliography', icon: '', label: 'Sources', priority: 5 }
   ];
 
   // ============================================
