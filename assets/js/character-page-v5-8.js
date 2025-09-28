@@ -110,11 +110,9 @@
 { id: 'session2', icon: '', label: 'Session 2', priority: 1 },
 { id: 'session3', icon: '', label: 'Session 3', priority: 1 },
 { id: 'session4', icon: '', label: 'Session 4', priority: 1 },
-{ id: 'redemption', icon: '', label: 'Redemption', priority: 2 },
 { id: 'assessment', icon: '', label: 'Assessment', priority: 2 },
 { id: 'resources', icon: '', label: 'Resources', priority: 3 },
 { id: 'further-study', icon: '', label: 'Study More', priority: 4 },
-{ id: 'bibliography', icon: '', label: 'Sources', priority: 5 }
   ];
 
   // ============================================
