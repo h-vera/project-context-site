@@ -204,11 +204,11 @@ init() {
         return posA - posB;
       });
       
-      // If more than 5 sections, prioritize
-      if (foundSections.length > 5) {
-        this.sections = this.prioritizeSections(foundSections);
+      // If more than 7 sections, prioritize
+      if (foundSections.length > 7) {
+      this.sections = this.prioritizeSections(foundSections);
       } else {
-        this.sections = foundSections;
+      this.sections = foundSections;
       }
       
       console.log(`MobileTabs: Found ${foundSections.length} sections, using ${this.sections.length}`);
@@ -236,9 +236,9 @@ init() {
       
       // Build final list
       const finalSections = [...priority1];
-      const spotsLeft = 5 - finalSections.length;
-      
-      // Add remaining sections up to 5 total
+      const spotsLeft = 7 - finalSections.length;
+
+      // Add remaining sections up to 7 total
       finalSections.push(...remaining.slice(0, spotsLeft));
       
       // Re-sort by document order for display
