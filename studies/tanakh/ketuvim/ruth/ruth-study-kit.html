@@ -7,10 +7,20 @@
   <meta name="description" content="Transform your study of Ruth with this comprehensive kit featuring self-discovery tools, progressive questions, and meaningful activities drawn from deep character insights.">
 
   <!-- Page Metadata -->
-  <meta name="profile-type" content="multi-page">
-  <meta name="template-version" content="7.0-enhanced">
+  <meta name="profile-type" content="study-kit">
+  <meta name="template-version" content="5.8">
   <meta name="book-id" content="ruth">
   <meta name="study-type" content="interactive-study-kit-enhanced">
+  <meta name="page-category" content="biblical-study">
+  
+  <!-- Navigation Context -->
+  <meta name="nav-hub" content="tanakh">
+  <meta name="nav-section" content="ketuvim">
+  
+  <!-- Content Indicators -->
+  <meta name="has-hebrew" content="true">
+  <meta name="has-mobile-tabs" content="true">
+  <meta name="session-count" content="4">
 
   <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="Ruth Study Kit – Interactive Learning Journey Enhanced">
@@ -18,14 +28,24 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://projectcontext.org/studies/tanakh/ketuvim/ruth/ruth-study-kit.html">
 
-   <!-- ADD THIS LINE - This is what's missing! -->
-  <link rel="stylesheet" href="https://projectcontext.org/assets/css/global-v2.css">
+  <!-- Preload Critical Resources -->
+  <link rel="preload" href="/assets/css/global-v2.css" as="style">
+  <link rel="preload" href="/assets/css/mobile-tabs-v5-8.css" as="style">
+  <link rel="preload" href="/assets/js/character-page-v5-8.js" as="script">
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://projectcontext.org/studies/tanakh/ketuvim/ruth/ruth-study-kit.html">
 
-  <!-- Enhanced Page-specific styles -->
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/assets/css/global-v2.css">
+  <!-- v5.8 Mobile Tabs CSS -->
+  <link rel="stylesheet" href="/assets/css/mobile-tabs-v5-8.css">
+  <link rel="stylesheet" href="/assets/css/mobile-tabs-patch.css">
+
+  <!-- Page-specific styles -->
   <style>
     /* ============================================
-       RUTH STUDY KIT - ENHANCED STYLES
-       Version 7.0 - Enhanced Edition
+       RUTH STUDY KIT - ENHANCED STYLES v5.8
        ============================================ */
 
     * {
@@ -39,33 +59,53 @@
       background: #fafafa;
       margin: 0;
       padding: 0;
+      padding-top: 70px; /* Account for fixed nav */
     }
 
     .content-section {
       max-width: 1200px;
       margin: 0 auto;
       padding: 2rem;
+      padding-top: 2rem !important;
     }
-    
 
-#main-nav {
-  top: 0 !important;
-  margin-top: 0 !important;
-}
+    /* Fix navigation positioning */
+    nav#main-nav {
+      position: fixed;
+      top: 0 !important;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 1000;
+      min-height: 70px;
+      padding: 1rem 2rem;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
 
-    /* Reading Progress Bar - Animated */
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 50px;
+    }
+
+    /* Reading Progress Bar */
     .reading-progress {
       position: fixed;
       top: 0;
       left: 0;
-      height: 4px;
+      height: 3px;
       background: linear-gradient(90deg, #7209b7 0%, #e11d48 100%);
-      z-index: 9999;
+      z-index: 1002;
       transition: width 0.3s ease;
       width: 0%;
     }
 
-    /* Quick Navigation Sidebar - Enhanced */
+    /* Quick Navigation Sidebar */
     .quick-nav-sidebar {
       position: fixed;
       right: 30px;
@@ -119,7 +159,7 @@
       opacity: 1;
     }
 
-    /* Hero Section with Animation */
+    /* Hero Section */
     .hero-section {
       background: linear-gradient(135deg, #7209b7 0%, #e11d48 100%);
       color: white;
@@ -168,7 +208,7 @@
       margin-right: 1rem;
     }
 
-    /* Journey Tracker - Visual Progress */
+    /* Journey Tracker */
     .journey-tracker {
       display: flex;
       justify-content: space-between;
@@ -197,6 +237,7 @@
       z-index: 2;
       text-align: center;
       flex: 1;
+      cursor: pointer;
     }
 
     .journey-point-circle {
@@ -211,10 +252,10 @@
       justify-content: center;
       font-size: 1.5rem;
       transition: all 0.3s ease;
-      cursor: pointer;
     }
 
-    .journey-point.active .journey-point-circle {
+    .journey-point.active .journey-point-circle,
+    .journey-point:hover .journey-point-circle {
       border-color: #7209b7;
       background: linear-gradient(135deg, #7209b7 0%, #e11d48 100%);
       color: white;
@@ -222,13 +263,7 @@
       box-shadow: 0 4px 20px rgba(114, 9, 183, 0.3);
     }
 
-    .journey-point.completed .journey-point-circle {
-      border-color: #10b981;
-      background: #10b981;
-      color: white;
-    }
-
-    /* Session Cards - Enhanced with Visual Hierarchy */
+    /* Session Cards */
     .session-card {
       background: white;
       border-radius: 20px;
@@ -280,10 +315,6 @@
       font-size: 1.2rem;
     }
 
-    .session-title {
-      flex: 1;
-    }
-
     .session-title h3 {
       margin: 0;
       font-size: 1.5rem;
@@ -296,7 +327,7 @@
       margin-top: 0.25rem;
     }
 
-    /* Discovery Journey Cards */
+    /* Discovery Journey - Enhanced */
     .discovery-journey {
       background: linear-gradient(135deg, #faf5ff 0%, #fef3f2 100%);
       border-radius: 20px;
@@ -304,6 +335,12 @@
       margin: 2rem 0;
       border: 2px solid transparent;
       border-image: linear-gradient(135deg, #7209b7, #e11d48) 1;
+    }
+
+    .discovery-journey h4 {
+      color: #7209b7;
+      margin-bottom: 1.5rem;
+      font-size: 1.3rem;
     }
 
     .discovery-stage {
@@ -348,7 +385,7 @@
       border-left: 3px solid #e5e7eb;
     }
 
-    /* Memory Verse Cards - Enhanced */
+    /* Memory Verse */
     .memory-verse {
       background: linear-gradient(135deg, #faf5ff 0%, #fef3f2 100%);
       padding: 2rem;
@@ -388,19 +425,7 @@
       font-style: normal;
     }
 
-    .memorization-tip {
-      background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
-      padding: 0.75rem;
-      border-radius: 8px;
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      color: #92400e;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    /* Character Insight Boxes - Enhanced */
+    /* Character Insight */
     .character-insight {
       background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
       border-radius: 16px;
@@ -453,7 +478,7 @@
       unicode-bidi: embed;
     }
 
-    /* Theme Thread Tracker */
+    /* Theme Thread */
     .theme-thread {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -501,75 +526,62 @@
       unicode-bidi: embed;
     }
 
-    /* Wings Motif Visual */
-    .wings-reminder {
-      text-align: center;
+    /* Harvest Timeline - Fixed */
+    .harvest-timeline {
+      background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
+      border-radius: 16px;
       padding: 2rem;
-      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-      border-radius: 20px;
       margin: 2rem 0;
-      position: relative;
-      overflow: hidden;
+      border: 2px solid #fbbf24;
     }
 
-    .wings-visual {
-      position: relative;
-      width: 150px;
-      height: 100px;
-      margin: 0 auto 1.5rem;
+    .harvest-timeline h3 {
+      color: #92400e;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+    }
+
+    .timeline-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background: white;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .timeline-item:hover {
+      transform: translateX(5px);
+      box-shadow: 0 4px 12px rgba(251, 191, 36, 0.15);
+    }
+
+    .timeline-marker {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
     }
 
-    .wing {
-      position: absolute;
-      width: 60px;
-      height: 80px;
-      background: linear-gradient(135deg, 
-        rgba(114, 9, 183, 0.2) 0%, 
-        rgba(225, 29, 72, 0.2) 50%, 
-        rgba(212, 175, 55, 0.2) 100%);
-      border: 2px solid rgba(114, 9, 183, 0.3);
-      filter: drop-shadow(0 2px 8px rgba(114, 9, 183, 0.2));
+    .timeline-item strong {
+      color: #92400e;
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
     }
 
-    .wing-left {
-      left: 15px;
-      border-radius: 50% 10% 50% 20%;
-      transform: rotate(-20deg) skewY(-10deg);
-      animation: wingFlutterLeft 4s ease-in-out infinite;
+    .timeline-item p {
+      color: #78350f;
+      margin: 0;
+      line-height: 1.5;
     }
-
-    .wing-right {
-      right: 15px;
-      border-radius: 10% 50% 20% 50%;
-      transform: rotate(20deg) skewY(10deg);
-      animation: wingFlutterRight 4s ease-in-out infinite;
-    }
-
-    @keyframes wingFlutterLeft {
-      0%, 100% { transform: rotate(-20deg) skewY(-10deg) translateY(0); }
-      50% { transform: rotate(-25deg) skewY(-15deg) translateY(-5px); }
-    }
-
-    @keyframes wingFlutterRight {
-      0%, 100% { transform: rotate(20deg) skewY(10deg) translateY(0); }
-      50% { transform: rotate(25deg) skewY(15deg) translateY(-5px); }
-    }
-
-    .wings-text {
-      position: relative;
-      z-index: 2;
-      font-family: 'Times New Roman', serif;
-      font-size: 2rem;
-      color: #3b82f6;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      direction: rtl;
-      unicode-bidi: embed;
-    }
-
-    /* Activity Cards - Meaningful Design */
     .activity-card {
       background: white;
       border: 2px solid #e5e7eb;
@@ -601,40 +613,19 @@
       margin-bottom: 1rem;
     }
 
-    .activity-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #1f2937;
-      margin-bottom: 0.75rem;
-    }
-
-    .activity-description {
-      color: #4b5563;
-      line-height: 1.6;
-      margin-bottom: 1rem;
-    }
-
-    .activity-reflection {
-      background: #f9fafb;
-      padding: 1rem;
-      border-radius: 8px;
-      border-left: 3px solid #7209b7;
-      margin-top: 1rem;
-    }
-
-    .activity-reflection strong {
-      color: #7209b7;
-      display: block;
-      margin-bottom: 0.5rem;
-    }
-
-    /* Progressive Questions */
+    /* Progressive Questions - Complete */
     .question-progression {
       background: linear-gradient(135deg, #fff 0%, #faf5ff 100%);
       border-radius: 20px;
       padding: 2rem;
       margin: 2rem 0;
       border: 2px solid #7209b7;
+    }
+
+    .question-progression h4 {
+      color: #7209b7;
+      margin-bottom: 1.5rem;
+      font-size: 1.3rem;
     }
 
     .question-level {
@@ -668,6 +659,7 @@
       font-size: 1.05rem;
       color: #1f2937;
       margin: 0.5rem 0;
+      font-weight: 500;
     }
 
     .question-guide {
@@ -677,57 +669,20 @@
       margin-top: 0.25rem;
     }
 
-    /* Enhanced Content Styles */
-    .harvest-timeline {
-      background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
-      border-radius: 16px;
-      padding: 2rem;
-      margin: 2rem 0;
-      border: 2px solid #fbbf24;
-    }
-
-    .timeline-item {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin: 1rem 0;
-    }
-
-    .timeline-marker {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      border: 2px solid #fbbf24;
-    }
-
-    .providence-pattern {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      margin: 2rem 0;
-      padding: 1.5rem;
-      background: #f9fafb;
-      border-radius: 16px;
-    }
-
-    .providence-item {
-      background: white;
-      padding: 1rem;
+    /* Memorization Tip */
+    .memorization-tip {
+      background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+      padding: 0.75rem;
       border-radius: 8px;
-      border-left: 3px solid #7209b7;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: #92400e;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
-    .providence-item strong {
-      color: #7209b7;
-      display: block;
-      margin-bottom: 0.5rem;
-    }
-
+    /* Fullness Journey */
     .fullness-journey {
       display: flex;
       align-items: center;
@@ -760,12 +715,42 @@
       display: none;
     }
 
+    .fullness-stage strong {
+      display: block;
+      font-size: 1.1rem;
+      color: #1f2937;
+      margin-bottom: 0.5rem;
+    }
+
+    .fullness-stage p {
+      font-family: 'Times New Roman', serif;
+      font-size: 1.3rem;
+      color: #7209b7;
+      margin: 0.5rem 0;
+      direction: rtl;
+      unicode-bidi: embed;
+    }
+
+    .fullness-stage small {
+      display: block;
+      color: #6b7280;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+
+    /* Generational Impact */
     .generational-impact {
       background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
       border-radius: 20px;
       padding: 2rem;
       margin: 2rem 0;
       text-align: center;
+    }
+
+    .generational-impact h4 {
+      color: #1e40af;
+      margin-bottom: 1.5rem;
+      font-size: 1.3rem;
     }
 
     .generation-row {
@@ -782,8 +767,21 @@
       border-radius: 12px;
       border: 2px solid #3b82f6;
       font-weight: 600;
+      transition: all 0.3s ease;
     }
 
+    .generation-item:hover {
+      background: #3b82f6;
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .generation-row span {
+      color: #3b82f6;
+      font-size: 1.5rem;
+    }
+
+    /* Redemption Framework */
     .redemption-framework {
       background: linear-gradient(135deg, #fef3f2 0%, #faf5ff 100%);
       border-radius: 20px;
@@ -793,6 +791,18 @@
       border-image: linear-gradient(135deg, #dc2626, #7209b7) 1;
     }
 
+    .redemption-framework h3 {
+      color: #7209b7;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .redemption-framework h4 {
+      color: #1f2937;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
     /* Assessment Card */
     .assessment-card {
       background: linear-gradient(135deg, #fff 0%, #f0f9ff 100%);
@@ -800,6 +810,12 @@
       border-radius: 20px;
       padding: 2rem;
       margin: 2rem 0;
+    }
+
+    .assessment-card h3 {
+      color: #1e40af;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
     }
 
     .assessment-item {
@@ -815,6 +831,7 @@
 
     .assessment-item:hover {
       background: #faf5ff;
+      transform: translateX(3px);
     }
 
     .rating-dots {
@@ -847,6 +864,7 @@
       color: white;
     }
 
+    /* Practicum Weeks */
     .practicum-week {
       background: white;
       border-radius: 12px;
@@ -859,6 +877,7 @@
     .practicum-week:hover {
       border-color: #7209b7;
       transform: translateX(5px);
+      box-shadow: 0 4px 12px rgba(114, 9, 183, 0.1);
     }
 
     .week-number {
@@ -872,6 +891,19 @@
       margin-bottom: 0.5rem;
     }
 
+    .practicum-week strong {
+      display: block;
+      color: #1f2937;
+      font-size: 1.1rem;
+      margin: 0.5rem 0;
+    }
+
+    .practicum-week p {
+      color: #4b5563;
+      line-height: 1.5;
+    }
+
+    /* Theological Cards */
     .theology-card {
       background: white;
       border-radius: 20px;
@@ -886,7 +918,7 @@
       margin-bottom: 1.5rem;
     }
 
-    /* Glossy Character Chips */
+    /* CTA Grid */
     .cta-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -958,10 +990,6 @@
       margin-top: 0.5rem;
       text-align: center;
       line-height: 1.3;
-    }
-
-    .cta-button:hover small {
-      opacity: 0.95;
     }
 
     /* Bibliography Section */
@@ -1042,10 +1070,6 @@
       margin-bottom: 2.5rem;
     }
 
-    .source-category:last-child {
-      margin-bottom: 0;
-    }
-
     .source-category h4 {
       color: #7209b7;
       font-size: 1.2rem;
@@ -1061,46 +1085,6 @@
       background: #fafafa;
       border-radius: 12px;
       border-left: 4px solid #7209b7;
-    }
-
-    .source-citation {
-      margin-bottom: 1rem;
-      font-size: 1rem;
-      line-height: 1.6;
-    }
-
-    .source-citation strong {
-      color: #1f2937;
-    }
-
-    .source-citation em {
-      color: #4b5563;
-    }
-
-    .source-usage {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      align-items: center;
-    }
-
-    .usage-tag {
-      display: inline-block;
-      background: linear-gradient(135deg, #7209b7 0%, #e11d48 100%);
-      color: white;
-      padding: 0.25rem 0.75rem;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .usage-note {
-      color: #6b7280;
-      font-size: 0.9rem;
-      font-style: italic;
-      margin-left: 0.5rem;
     }
 
     /* Back to Top Button */
@@ -1135,12 +1119,35 @@
       box-shadow: 0 8px 30px rgba(114, 9, 183, 0.4);
     }
 
+    /* Animations */
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
+    }
+
+    .animate-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Additional v5.8 compatibility styles */
+    .key-insight {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border-left: 4px solid #3b82f6;
+      margin-top: 1.5rem;
+    }
+
     /* Mobile Responsive */
-    @media (max-width: 768px) {
+    @media (max-width: 1400px) {
       .quick-nav-sidebar {
         display: none;
       }
+    }
 
+    @media (max-width: 768px) {
       .journey-tracker {
         flex-direction: column;
         gap: 2rem;
@@ -1154,126 +1161,42 @@
         grid-template-columns: 1fr 1fr;
       }
 
-      .fullness-journey {
-        flex-direction: column;
-        gap: 1.5rem;
-      }
-
-      .fullness-stage::after {
-        display: none;
-      }
-
-      .generation-row {
-        flex-direction: column;
-        gap: 1rem;
-      }
-
       .cta-grid {
         grid-template-columns: 1fr;
       }
+
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .hebrew-large {
+        font-size: 2.5rem;
+      }
+
+      /* Adjust padding for mobile */
+      body {
+        padding-top: 60px;
+      }
+
+      nav#main-nav {
+        min-height: 60px;
+        padding: 0.75rem 1rem;
+      }
+
+      .content-section {
+        padding: 1rem;
+      }
     }
   </style>
-  <!-- Add this CSS to your ruth-study-kit.html file, either in the <style> section or create a new one -->
-<style>
-  /* Fix navigation positioning and ensure it's fully visible */
-  nav#main-nav {
-    position: fixed;
-    top: 0 !important; /* Ensure it starts at the very top */
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 1000;
-    min-height: 70px; /* Ensure minimum height */
-    padding: 1rem 2rem; /* Add proper padding */
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-
-  /* Ensure the nav container has proper spacing */
-  .nav-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    min-height: 50px; /* Ensure minimum height */
-  }
-
-  /* Fix body padding to account for fixed navigation */
-  body {
-    margin: 0;
-    padding: 0;
-    padding-top: 70px !important; /* Push content down below fixed nav */
-  }
-
-  /* Ensure the main content doesn't overlap with navigation */
-  main.content-section,
-  .content-section {
-    padding-top: 2rem !important; /* Additional padding after the body padding */
-    margin-top: 0;
-  }
-
-  /* Fix logo alignment */
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    text-decoration: none;
-    color: #0a0a0a;
-  }
-
-  /* Ensure nav links are properly spaced */
-  .nav-links {
-    display: flex;
-    gap: 2rem;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    align-items: center;
-  }
-
-  /* Fix dropdown positioning */
-  .dropdown {
-    position: relative;
-  }
-
-  .dropdown-content {
-    position: absolute;
-    top: 100%;
-    margin-top: 0.5rem;
-    min-width: 200px;
-    background: white;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-    border-radius: 8px;
-    z-index: 1001;
-  }
-
-  /* Hero section should not be hidden under nav */
-  .hero-section {
-    margin-top: 2rem; /* Add space between nav and hero */
-  }
-
-  /* Fix reading progress bar to be at very top */
-  .reading-progress {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #7209b7, #e11d48);
-    z-index: 1002; /* Above navigation */
-    width: 0%;
-  }
-</style>
 </head>
-<body class="study-kit" dir="ltr">
-
- <!-- Accessibility Skip Link -->
+<body class="study-kit ruth-study" dir="ltr">
+  <!-- Accessibility Skip Link -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
-<nav id="main-nav" aria-label="Main navigation">
-  <!-- Navigation will be inserted here by nav-component.js -->
-</nav>
+  <!-- Navigation will be inserted here by JavaScript -->
+  <nav id="main-nav" aria-label="Main navigation">
+    <!-- Navigation will be dynamically loaded -->
+  </nav>
 
   <!-- Mobile Menu Overlay -->
   <div class="mobile-menu-overlay"></div>
@@ -1281,7 +1204,7 @@
   <!-- Reading Progress Bar -->
   <div class="reading-progress" id="reading-progress"></div>
 
-  <!-- Quick Navigation Sidebar -->
+  <!-- Quick Navigation Sidebar (Desktop only) -->
   <div class="quick-nav-sidebar" aria-label="Section navigation">
     <div class="quick-nav-item" data-label="Introduction" data-target="#introduction"></div>
     <div class="quick-nav-item" data-label="Session 1" data-target="#session1"></div>
@@ -1296,7 +1219,7 @@
   <main id="main-content" class="content-section" role="main" aria-label="Ruth Study Kit">
 
     <!-- Hero Section -->
-    <div class="hero-section" id="introduction">
+    <div class="hero-section animate-on-scroll" id="introduction">
       <h1 class="hero-title">
         <span class="hebrew-large">רוּת</span>
         Ruth: Journey of Transformation
@@ -1308,7 +1231,7 @@
     </div>
 
     <!-- Journey Tracker -->
-    <div class="journey-tracker">
+    <div class="journey-tracker animate-on-scroll">
       <div class="journey-point" data-session="1">
         <div class="journey-point-circle">🌾</div>
         <strong>Emptiness</strong>
@@ -1332,7 +1255,7 @@
     </div>
 
     <!-- Harvest Timeline Context -->
-    <div class="harvest-timeline">
+    <div class="harvest-timeline animate-on-scroll">
       <h3>📅 The Harvest Timeline: A Journey of Redemption</h3>
       <div class="timeline-item">
         <div class="timeline-marker">🌾</div>
@@ -1358,7 +1281,7 @@
     </div>
 
     <!-- Introduction Card -->
-    <div class="theology-card">
+    <div class="theology-card animate-on-scroll">
       <h3>Your Journey Through Ruth</h3>
       <p>This study kit isn't just about learning Ruth's story—it's about finding yourself in it. Each session builds on the last, weaving together personal discovery, theological insight, and practical application.</p>
 
@@ -1383,7 +1306,7 @@
     </div>
 
     <!-- Session 1 -->
-    <div class="session-card session-1" id="session1">
+    <div class="session-card session-1 animate-on-scroll" id="session1">
       <div class="session-header">
         <div class="session-number">1</div>
         <div class="session-title">
@@ -1402,7 +1325,6 @@
         </div>
       </div>
 
-      <!-- Enhanced Character Names Section -->
       <div class="character-insight">
         <div class="character-insight-header">
           <div class="character-icon">📜</div>
@@ -1412,7 +1334,7 @@
         </div>
         <p><strong>Elimelech (אֱלִימֶלֶךְ)</strong> = "My God is King" — Yet he abandons the King's land for Moab. The irony: when "My God is King" dies in exile, it pictures Israel's spiritual state.</p>
         <p><strong>Mahlon (מַחְלוֹן)</strong> = "Sick-O" (from חָלָה, to be sick) & <strong>Chilion (כִּלְיוֹן)</strong> = "Done-For" (from כָּלָה, to come to an end) — Their names prophecy their fate: they exist in the story only to die, representing the dead-end of running from God's purposes.</p>
-        <p><em>Reflection: What happens when we claim "God is King" but live in practical exile from His purposes?</em>
+        <p><em>Reflection: What happens when we claim "God is King" but live in practical exile from His purposes?</em></p>
       </div>
 
       <div class="theme-thread">
@@ -1500,7 +1422,7 @@
     </div>
 
     <!-- Session 2 -->
-    <div class="session-card session-2" id="session2">
+    <div class="session-card session-2 animate-on-scroll" id="session2">
       <div class="session-header">
         <div class="session-number">2</div>
         <div class="session-title">
@@ -1519,7 +1441,6 @@
         </div>
       </div>
 
-      <!-- Providence Pattern Tracker -->
       <div class="providence-pattern">
         <div class="providence-item">
           <strong>"It happened" (1:1)</strong>
@@ -1585,7 +1506,6 @@
         </div>
       </div>
 
-      <!-- Modern Gleaning Fields Section -->
       <div class="activity-card">
         <span class="activity-type">Community Practice</span>
         <h5 class="activity-title">Creating Modern Gleaning Fields</h5>
@@ -1654,7 +1574,7 @@
     </div>
 
     <!-- Session 3 -->
-    <div class="session-card session-3" id="session3">
+    <div class="session-card session-3 animate-on-scroll" id="session3">
       <div class="session-header">
         <div class="session-number">3</div>
         <div class="session-title">
@@ -1673,7 +1593,6 @@
         </div>
       </div>
 
-      <!-- Wings Progression -->
       <div class="wings-reminder">
         <h4>The Wings Progression: From Prayer to Participation</h4>
         <div style="margin: 1.5rem 0;">
@@ -1771,7 +1690,7 @@
     </div>
 
     <!-- Session 4 -->
-    <div class="session-card session-4" id="session4">
+    <div class="session-card session-4 animate-on-scroll" id="session4">
       <div class="session-header">
         <div class="session-number">4</div>
         <div class="session-title">
@@ -1790,7 +1709,6 @@
         </div>
       </div>
 
-      <!-- Fullness from Emptiness Journey -->
       <div class="fullness-journey">
         <div class="fullness-stage">
           <strong>Empty</strong>
@@ -1848,7 +1766,6 @@
         </div>
       </div>
 
-      <!-- Generational Impact Study -->
       <div class="generational-impact">
         <h4>Generational Impact: Seeds Planted</h4>
         <div class="generation-row">
@@ -1916,7 +1833,7 @@
     </div>
 
     <!-- The Redemption Framework Card -->
-    <div class="redemption-framework" id="redemption">
+    <div class="redemption-framework animate-on-scroll" id="redemption">
       <h3>Theological Deep Dive: The Redemption Framework</h3>
       
       <div style="margin-bottom: 2rem;">
@@ -1953,7 +1870,7 @@
     </div>
 
     <!-- Covenant Loyalty Assessment -->
-    <div class="assessment-card" id="assessment">
+    <div class="assessment-card animate-on-scroll" id="assessment">
       <h3>Your Ḥesed (Covenant Loyalty) Assessment</h3>
       <p>Rate yourself honestly (1-5) to identify growth areas:</p>
       
@@ -2043,7 +1960,7 @@
     </div>
 
     <!-- Character Deep Dives Section -->
-    <div class="theology-card" id="resources">
+    <div class="theology-card animate-on-scroll" id="resources">
       <h3>📖 Character Deep Dives</h3>
       
       <div class="cta-grid">
@@ -2067,7 +1984,7 @@
     </div>
 
     <!-- Continue Your Ruth Study Section -->
-    <div class="theology-card" id="further-study">
+    <div class="theology-card animate-on-scroll" id="further-study">
       <h3>Continue Your Ruth Study</h3>
       
       <div class="cta-grid">
@@ -2095,7 +2012,7 @@
     </div>
 
     <!-- Bibliography -->
-    <details class="bibliography-section enhanced">
+    <details class="bibliography-section enhanced animate-on-scroll" id="bibliography">
       <summary>
         <div class="bibliography-header">
           <div class="bibliography-inner">
@@ -2201,10 +2118,93 @@
     <a href="#main-content" class="back-to-top" id="back-to-top" aria-label="Back to top">↑</a>
   </main>
 
-  <!-- JavaScript -->
+  <!-- Mobile Menu Overlay (for nav component) -->
+  <div class="mobile-menu-overlay"></div>
+
+  <!-- ======================================
+       JAVASCRIPT - v5.8 Implementation
+       ====================================== -->
+  
+  <!-- Navigation Component (v5.8 Enhanced) -->
+  <script type="module">
+    // Enhanced navigation component loading
+    async function initNavigation() {
+      try {
+        const { default: NavigationComponent } = await import('/assets/js/nav-component.js');
+        
+        // Initialize navigation
+        const navigation = new NavigationComponent({
+          currentPage: 'studies',
+          hubType: 'tanakh'
+        });
+        
+        console.log('Navigation component loaded successfully');
+      } catch (error) {
+        console.error('Navigation component failed:', error);
+        
+        // Fallback: Insert static navigation if component fails
+        const navElement = document.getElementById('main-nav');
+        if (navElement && !navElement.querySelector('.nav-container')) {
+          navElement.innerHTML = `
+            <div class="nav-container">
+              <a href="/" class="logo">
+                <div class="logo-icon">
+                  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="40" height="40">
+                    <path d="M 25 15 L 10 15 L 10 85 L 25 85" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    <path d="M 75 15 L 90 15 L 90 85 L 75 85" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    <ellipse cx="50" cy="50" rx="25" ry="15" stroke="#0a0a0a" stroke-width="3" fill="none"/>
+                    <circle cx="50" cy="50" r="8" fill="#00b4d8"/>
+                    <circle cx="50" cy="50" r="3" fill="#0a0a0a"/>
+                  </svg>
+                </div>
+                <span class="logo-text">Project Context</span>
+              </a>
+              <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li class="dropdown">
+                  <a href="/studies/" class="dropdown-toggle active">Studies</a>
+                  <div class="dropdown-content">
+                    <a href="/studies/characters/characters_hub.html">Biblical Characters</a>
+                    <a href="/studies/women/women-bible-hub.html">Women in the Bible</a>
+                    <a href="/studies/tanakh/tanakh-hub.html" class="active">Tanakh Studies</a>
+                    <a href="/studies/thematic/thematic-hub.html">Thematic Studies</a>
+                  </div>
+                </li>
+                <li class="dropdown">
+                  <a href="/resources/" class="dropdown-toggle">Resources</a>
+                  <div class="dropdown-content">
+                    <a href="/resources/discussion-guides/">Discussion Guides</a>
+                    <a href="/resources/study-tools/">Study Tools</a>
+                    <a href="/resources/downloads/">Downloads</a>
+                  </div>
+                </li>
+                <li><a href="/about/">About</a></li>
+              </ul>
+              <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <span></span><span></span><span></span>
+              </button>
+            </div>
+          `;
+          console.log('Using fallback navigation');
+        }
+      }
+    }
+    
+    // Initialize when ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initNavigation);
+    } else {
+      initNavigation();
+    }
+  </script>
+
+  <!-- v5.8: Character Page with Dynamic Mobile Tabs -->
+  <script src="/assets/js/character-page-v5-8.js" defer></script>
+
+  <!-- Page-specific JavaScript -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('Ruth Study Kit Enhanced – Version 7.0-enhanced');
+      console.log('Ruth Study Kit v5.8 initialized');
       
       // Reading Progress Bar
       window.addEventListener('scroll', () => {
@@ -2227,7 +2227,7 @@
         }
         
         // Update active nav dots
-        const sections = document.querySelectorAll('.session-card, .assessment-card, .theology-card, .redemption-framework');
+        const sections = document.querySelectorAll('.session-card, .assessment-card, .theology-card, .redemption-framework, .hero-section');
         const navItems = document.querySelectorAll('.quick-nav-item');
         
         sections.forEach((section, index) => {
@@ -2246,7 +2246,11 @@
         item.addEventListener('click', (e) => {
           const target = document.querySelector(e.currentTarget.dataset.target);
           if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
+            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - 100;
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'smooth'
+            });
           }
         });
       });
@@ -2266,7 +2270,11 @@
           const sessionNum = this.dataset.session;
           const targetSession = document.getElementById('session' + sessionNum);
           if (targetSession) {
-            targetSession.scrollIntoView({ behavior: 'smooth' });
+            const targetPosition = targetSession.getBoundingClientRect().top + window.pageYOffset - 100;
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'smooth'
+            });
           }
         });
       });
@@ -2298,79 +2306,33 @@
           }, 300);
         });
       });
+
+      // Intersection Observer for animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+      
+      const animationObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            animationObserver.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+      
+      // Apply to all animated elements
+      document.querySelectorAll('.animate-on-scroll').forEach(element => {
+        animationObserver.observe(element);
+      });
+
+      // Debug: Show which sections are detected for mobile tabs
+      if (window.mobileTabs && window.mobileTabs.sections) {
+        console.log('Detected sections for mobile tabs:', 
+          window.mobileTabs.sections.map(s => `${s.label} (#${s.id})`).join(', '));
+      }
     });
   </script>
-  <!-- Navigation Component -->
-  <script type="module">
-  // Enhanced navigation component loading
-  async function initNavigation() {
-    try {
-      const { default: NavigationComponent } = await import('/assets/js/nav-component.js');
-      
-      // Initialize navigation
-      const navigation = new NavigationComponent({
-        currentPage: 'studies',
-        hubType: 'tanakh'
-      });
-      
-      console.log('Navigation component loaded successfully');
-    } catch (error) {
-      console.error('Navigation component failed:', error);
-      
-      // Fallback: Insert static navigation if component fails
-      const navElement = document.getElementById('main-nav');
-      if (navElement && !navElement.querySelector('.nav-container')) {
-        navElement.innerHTML = `
-          <div class="nav-container">
-            <a href="/" class="logo">
-              <div class="logo-icon">
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="40" height="40">
-                  <path d="M 25 15 L 10 15 L 10 85 L 25 85" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
-                  <path d="M 75 15 L 90 15 L 90 85 L 75 85" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
-                  <ellipse cx="50" cy="50" rx="25" ry="15" stroke="#0a0a0a" stroke-width="3" fill="none"/>
-                  <circle cx="50" cy="50" r="8" fill="#00b4d8"/>
-                  <circle cx="50" cy="50" r="3" fill="#0a0a0a"/>
-                </svg>
-              </div>
-              <span class="logo-text">Project Context</span>
-            </a>
-            <ul class="nav-links" id="navLinks">
-              <li><a href="/">Home</a></li>
-              <li class="dropdown">
-                <a href="/studies/" class="dropdown-toggle active">Studies</a>
-                <div class="dropdown-content">
-                  <a href="/studies/characters/characters_hub.html">Biblical Characters</a>
-                  <a href="/studies/women/women-bible-hub.html">Women in the Bible</a>
-                  <a href="/studies/tanakh/tanakh-hub.html" class="active">Tanakh Studies</a>
-                  <a href="/studies/thematic/thematic-hub.html">Thematic Studies</a>
-                </div>
-              </li>
-              <li class="dropdown">
-                <a href="/resources/" class="dropdown-toggle">Resources</a>
-                <div class="dropdown-content">
-                  <a href="/resources/discussion-guides/">Discussion Guides</a>
-                  <a href="/resources/study-tools/">Study Tools</a>
-                  <a href="/resources/downloads/">Downloads</a>
-                </div>
-              </li>
-              <li><a href="/about/">About</a></li>
-            </ul>
-            <button class="mobile-menu-toggle" id="mobileMenuToggle">
-              <span></span><span></span><span></span>
-            </button>
-          </div>
-        `;
-        console.log('Using fallback navigation');
-      }
-    }
-  }
-  
-  // Initialize when ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initNavigation);
-  } else {
-    initNavigation();
-  }
-</script>
 </body>
 </html>
