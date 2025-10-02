@@ -1,4 +1,182 @@
-<!DOCTYPE html>
+/* Responsive */
+    @media (max-width: 768px) {
+      .page-header h1 {
+        font-size: 1.8rem;
+        flex-direction: column;
+      }
+
+      .chiasm-structure {
+        font-size: 0.8rem;
+        padding: 1rem;
+      }
+      
+      .indent-1 { padding-left: 1rem; }
+      .indent-2 { padding-left: 1.5rem; }
+      .indent-3 { padding-left: 2rem; }
+      .indent-4 { padding-left: 2.5rem; }
+      .indent-5 { padding-left: 3rem; }
+      
+      .reading-wheel {
+        display: none;
+      }
+    }
+
+    /* ==========================================
+       READING WHEEL / TABLE OF CONTENTS
+       ========================================== */
+    .reading-wheel {
+      position: fixed;
+      right: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 500;
+    }
+
+    .wheel-toggle {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(114,9,183,0.3);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wheel-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(114,9,183,0.5);
+    }
+
+    .wheel-content {
+      position: absolute;
+      right: 70px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      min-width: 250px;
+      max-width: 300px;
+      max-height: 80vh;
+      overflow-y: auto;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      border: 1px solid var(--border-light);
+    }
+
+    .wheel-content.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .wheel-content h3 {
+      margin: 0 0 1rem 0;
+      font-size: 1.1rem;
+      color: var(--accent-purple);
+      font-weight: 700;
+      border-bottom: 2px solid var(--accent-purple);
+      padding-bottom: 0.5rem;
+    }
+
+    .wheel-content ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .wheel-content li {
+      margin: 0;
+    }
+
+    .wheel-content a {
+      display: block;
+      padding: 0.5rem 0.75rem;
+      color: var(--text-gray);
+      text-decoration: none;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      font-size: 0.9rem;
+    }
+
+    .wheel-content a:hover {
+      background: var(--bg-gray);
+      color: var(--accent-purple);
+      padding-left: 1rem;
+    }
+
+    .wheel-content a.active {
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+      color: white;
+      font-weight: 600;
+    }
+
+    /* Reading Wheel Fix - if global CSS doesn't position it properly */
+    .reading-wheel {
+      position: fixed;
+      right: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 500;
+    }
+
+    .wheel-toggle {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(114,9,183,0.3);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wheel-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(114,9,183,0.5);
+    }
+
+    .wheel-content {
+      position: absolute;
+      right: 70px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      min-width: 250px;
+      max-height: 80vh;
+      overflow-y: auto;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .wheel-content.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .wheel-content h3 {
+      margin: 0 0 1rem 0;
+      font-size: 1.1rem;
+      color: var(--accent-purple);
+      font-weight: 700;
+      border-bottom: 2px solid var(--accent-purple);
+      padding-bottom: 0.5rem<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -794,6 +972,41 @@
           progressBar.style.width = progress + '%';
         }
         window.addEventListener('scroll', updateProgress);
+      }
+
+      // Reading wheel toggle
+      const wheelToggle = document.querySelector('.wheel-toggle');
+      const wheelContent = document.querySelector('.wheel-content');
+      if (wheelToggle && wheelContent) {
+        wheelToggle.addEventListener('click', function() {
+          const isExpanded = wheelToggle.getAttribute('aria-expanded') === 'true';
+          wheelToggle.setAttribute('aria-expanded', !isExpanded);
+          wheelContent.classList.toggle('visible');
+        });
+
+        // Highlight active section in reading wheel
+        const sections = document.querySelectorAll('[id^="chiasm-"]');
+        const wheelLinks = document.querySelectorAll('.wheel-content a');
+        
+        function highlightActiveSection() {
+          let current = '';
+          sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (pageYOffset >= (sectionTop - 200)) {
+              current = section.getAttribute('id');
+            }
+          });
+
+          wheelLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + current) {
+              link.classList.add('active');
+            }
+          });
+        }
+
+        window.addEventListener('scroll', highlightActiveSection);
       }
 
       // Back to top
