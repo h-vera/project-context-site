@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Lord's Prayer - Communion Reflection</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 40px 60px;
+            line-height: 1.7;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding-bottom: 30px;
+            border-bottom: 3px solid;
+            border-image: linear-gradient(90deg, #ff6b6b, #ee5a6f, #feca57, #ff9ff3) 1;
+        }
+
+        .header h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ff6b6b, #feca57, #ff9ff3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            color: #feca57;
+        }
+
+        .dropdown-container {
+            margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-container:hover {
+            border-color: rgba(255, 107, 107, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .dropdown-header {
+            padding: 30px 40px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(254, 202, 87, 0.1));
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-header:hover {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(254, 202, 87, 0.2));
+        }
+
+        .dropdown-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .dropdown-icon {
+            font-size: 2rem;
+            transition: transform 0.3s ease;
+            color: #feca57;
+        }
+
+        .dropdown-container.active .dropdown-icon {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            padding: 0 40px;
+        }
+
+        .dropdown-container.active .dropdown-content {
+            max-height: 5000px;
+            padding: 40px;
+        }
+
+        .scripture-box {
+            background: linear-gradient(135deg, rgba(238, 90, 111, 0.15), rgba(254, 202, 87, 0.15));
+            padding: 35px;
+            border-radius: 12px;
+            border-left: 6px solid #ff6b6b;
+            margin: 25px 0;
+            font-size: 1.3rem;
+            line-height: 1.9;
+        }
+
+        .scripture-ref {
+            font-weight: 700;
+            color: #feca57;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .scripture-text {
+            font-style: italic;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .outline-box {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 30px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border: 2px solid rgba(255, 107, 107, 0.2);
+        }
+
+        .outline-box h3 {
+            color: #feca57;
+            margin-bottom: 20px;
+            font-size: 1.6rem;
+        }
+
+        .outline-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .outline-box li {
+            padding: 12px 0;
+            padding-left: 30px;
+            position: relative;
+            font-size: 1.2rem;
+        }
+
+        .outline-box li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .center-emphasis {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(254, 202, 87, 0.2));
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            border: 3px solid #ff6b6b;
+        }
+
+        .center-emphasis strong {
+            font-size: 1.5rem;
+            color: #feca57;
+        }
+
+        .chiasm-diagram {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 12px;
+            margin: 30px 0;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+        }
+
+        .chiasm-line {
+            padding: 12px;
+            margin: 8px 0;
+            font-size: 1.2rem;
+        }
+
+        .chiasm-center {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.3), rgba(254, 202, 87, 0.3));
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.4rem;
+            border: 3px solid #ff6b6b;
+            color: #feca57;
+        }
+
+        .parallel-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .parallel-item {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(254, 202, 87, 0.1));
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 107, 107, 0.3);
+        }
+
+        .parallel-item h4 {
+            color: #feca57;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .emphasis-text {
+            font-size: 1.4rem;
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(238, 90, 111, 0.2), rgba(255, 159, 243, 0.2));
+            border-radius: 12px;
+            margin: 30px 0;
+            line-height: 1.8;
+            border-left: 6px solid #ff9ff3;
+        }
+
+        @media (max-width: 900px) {
+            .parallel-box {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a2e;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #ee5a6f, #ff9ff3);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>The Lord's Prayer</h1>
+        <p>A Communion Reflection</p>
+    </div>
+
+    <!-- Section 1: The Prayer Text -->
+    <div class="dropdown-container" onclick="toggleDropdown(this)">
+        <div class="dropdown-header">
+            <h2>1. The Prayer Jesus Taught</h2>
+            <span class="dropdown-icon">▼</span>
+        </div>
+        <div class="dropdown-content">
+            <div class="scripture-box">
+                <div class="scripture-ref">Matthew 6:9–13</div>
+                <div class="scripture-text">
+                    "Our Father who is in the skies, may your name be recognized as holy. May your Kingdom come, and may your will be done—as it is in the skies, so also on the land. Our daily provision of bread, give to us today. And forgive us our debts, just as we also have forgiven those indebted to us. And don't lead us to be tested, but deliver us from the evil one."
+                </div>
+                <div style="text-align: right; margin-top: 15px; font-size: 0.95rem; opacity: 0.8; font-style: normal;">
+                    — BibleProject Scholar Team Translation
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 2: Jesus as New Moses -->
+    <div class="dropdown-container" onclick="toggleDropdown(this)">
+        <div class="dropdown-header">
+            <h2>2. Jesus: The New Moses</h2>
+            <span class="dropdown-icon">▼</span>
+        </div>
+        <div class="dropdown-content">
+            <p style="font-size: 1.3rem; margin-bottom: 25px;">
+                Matthew presents Jesus as the new Moses, ascending the mountain to deliver a new understanding of God's kingdom. Just as Moses gave the Torah from Mount Sinai, Jesus gives his teaching from the mount—not to replace the law, but to fulfill it and reveal its heart.
+            </p>
+            
+            <div class="outline-box">
+                <h3>The Sermon on the Mount Structure</h3>
+                <ul>
+                    <li><strong style="color: #10b981;">Kingdom Identity (5:3-16)</strong> – Who you are in God's kingdom
+                        <ul style="margin-left: 30px; margin-top: 10px;">
+                            <li>The Beatitudes – blessed are the poor, meek, merciful...</li>
+                            <li>Salt and Light – you are the light of the world</li>
+                        </ul>
+                    </li>
+                    <li><strong>A Greater Righteousness (5:17-7:12)</strong> – Three parts expressing kingdom life
+                        <ul style="margin-left: 30px; margin-top: 10px;">
+                            <li>Part 1: Torah & Prophets (5:17-48) – fulfilling the law through love</li>
+                            <li><strong style="color: #ff6b6b;">Part 2: Religious Practices (6:1-21)</strong>
+                                <ul style="margin-left: 30px; margin-top: 10px;">
+                                    <li>Giving (6:1-4)</li>
+                                    <li><strong style="color: #feca57;">Prayer (6:5-15) – THE LORD'S PRAYER AT THE CENTER</strong></li>
+                                    <li>Fasting (6:16-18)</li>
+                                </ul>
+                            </li>
+                            <li>Part 3: Right Relationships (6:19-7:12) – treasure, trust, judgment</li>
+                        </ul>
+                    </li>
+                    <li><strong style="color: #dc2626;">The Choice (7:13-27)</strong> – Will you listen and obey?
+                        <ul style="margin-left: 30px; margin-top: 10px;">
+                            <li>Two Gates – narrow way leads to life</li>
+                            <li>Two Trees – good fruit vs bad fruit</li>
+                            <li>Two Houses – build on rock or sand</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="parallel-box" style="margin-top: 30px;">
+                <div class="parallel-item">
+                    <h4 style="color: #10b981;">Opening: Kingdom Identity</h4>
+                    <p style="font-size: 1.1rem;">Who you are called to be</p>
+                </div>
+                <div class="parallel-item">
+                    <h4 style="color: #dc2626;">Closing: The Choice</h4>
+                    <p style="font-size: 1.1rem;">What will you do with Jesus' teaching?</p>
+                </div>
+            </div>
+
+            <div class="center-emphasis">
+                <p><strong>The Lord's Prayer sits at the center of the center of the center of the Sermon on the Mount.</strong></p>
+                <p style="margin-top: 15px; font-size: 1.2rem;">It is the heart of Jesus' teaching on authentic devotion, which is the heart of his teaching on righteousness, which is the heart of his entire Sermon.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 3: The Prayer's Structure -->
+    <div class="dropdown-container" onclick="toggleDropdown(this)">
+        <div class="dropdown-header">
+            <h2>3. Forgiveness at the Center</h2>
+            <span class="dropdown-icon">▼</span>
+        </div>
+        <div class="dropdown-content">
+            <p style="font-size: 1.3rem; margin-bottom: 25px;">
+                The Lord's Prayer itself has a deliberate structure—seven petitions arranged in a chiasm, a mirror pattern where the center holds the key. At the heart of this prayer is our daily dependence on God, and forgiveness is how God's will becomes reality on earth.
+            </p>
+
+            <div class="chiasm-diagram">
+                <div class="chiasm-line" style="margin-left: 0;">A. Hallowed be <em>your name</em></div>
+                <div class="chiasm-line" style="margin-left: 40px;">B. <em>Your kingdom</em> come</div>
+                <div class="chiasm-line" style="margin-left: 80px;">C. <em>Your will</em> be done (heaven → earth)</div>
+                
+                <div class="chiasm-center">
+                    D. Give <em>us</em> today our daily bread
+                </div>
+                
+                <div class="chiasm-line" style="margin-left: 80px;">C′. Forgive <em>us</em> … as we forgive</div>
+                <div class="chiasm-line" style="margin-left: 40px;">B′. Do not lead <em>us</em> into testing</div>
+                <div class="chiasm-line" style="margin-left: 0;">A′. Deliver <em>us</em> from the evil one</div>
+            </div>
+
+            <div class="outline-box">
+                <h3>The Mirror Pattern Reveals:</h3>
+                <ul>
+                    <li><strong>A ↔ A′:</strong> God's holy <em>name</em> is protected when we're delivered from the <em>evil one</em></li>
+                    <li><strong>B ↔ B′:</strong> God's <em>kingdom</em> life is lived faithfully through <em>testing</em></li>
+                    <li><strong>C ↔ C′:</strong> God's <em>will</em> on earth is embodied in our practice of <em>forgiveness</em></li>
+                    <li><strong>CENTER:</strong> Daily bread—complete dependence on God for everything</li>
+                </ul>
+            </div>
+
+            <div class="center-emphasis">
+                <p><strong>The prayer's heart: dependence and forgiveness working together.</strong></p>
+                <p style="margin-top: 15px; font-size: 1.2rem;">Forgiveness is how God's will becomes concrete in our relationships—the practice that brings heaven to earth.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 4: Gethsemane Connection -->
+    <div class="dropdown-container" onclick="toggleDropdown(this)">
+        <div class="dropdown-header">
+            <h2>4. Jesus Prays His Own Prayer</h2>
+            <span class="dropdown-icon">▼</span>
+        </div>
+        <div class="dropdown-content">
+            <p style="font-size: 1.3rem; margin-bottom: 25px;">
+                This was not merely a template for his followers—it was Jesus' own prayer. On the night before his crucifixion, in the Garden of Gethsemane, facing the ultimate test, Jesus prayed the words he had taught.
+            </p>
+
+            <div class="parallel-box">
+                <div class="parallel-item">
+                    <h4>Matthew 6:9–10</h4>
+                    <p style="font-size: 1.2rem; margin-top: 15px;">
+                        "Our Father who is in the skies... <strong style="color: #feca57;">may your will be done, as it is in the skies, so also on the land.</strong>"
+                    </p>
+                </div>
+                <div class="parallel-item">
+                    <h4>Matthew 26:39, 42</h4>
+                    <p style="font-size: 1.2rem; margin-top: 15px;">
+                        "My Father, if it is possible, let this cup pass from Me; yet <strong style="color: #feca57;">not as I will, but as You will</strong>... <strong style="color: #feca57;">Your will be done.</strong>"
+                    </p>
+                </div>
+            </div>
+
+            <div class="scripture-box">
+                <p style="font-size: 1.3rem;">
+                    Jesus prayed this prayer three times in the garden. He asked for another way. He wrestled with what was coming. But each time, he returned to the same words: <strong style="color: #feca57;">"Your will be done."</strong>
+                </p>
+                <p style="font-size: 1.3rem; margin-top: 20px;">
+                    The prayer he taught when it was easy, he prayed when it cost everything. The prayer formed him for this moment. It carried him through.
+                </p>
+            </div>
+
+            <div class="center-emphasis">
+                <p><strong>Jesus modeled the prayer's heart:</strong></p>
+                <p style="margin-top: 15px; font-size: 1.2rem;">Trust God with your life, even when you know the outcome will not be in your favor.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 5: Trust and Forgiveness -->
+    <div class="dropdown-container" onclick="toggleDropdown(this)">
+        <div class="dropdown-header">
+            <h2>5. Trust God, Forgive Others</h2>
+            <span class="dropdown-icon">▼</span>
+        </div>
+        <div class="dropdown-content">
+            <div class="emphasis-text">
+                <p style="font-size: 1.6rem; margin-bottom: 25px; color: #feca57; font-weight: 700;">
+                    The Lord's Prayer calls us to two radical acts:
+                </p>
+                <p style="font-size: 1.4rem; margin-bottom: 20px;">
+                    <strong style="color: #ff6b6b;">1. Trust God freely with our lives</strong><br>
+                    Even when we see what's coming. Even when the outcome is not what we would choose. Even when it costs us everything.
+                </p>
+                <p style="font-size: 1.4rem;">
+                    <strong style="color: #ff6b6b;">2. Practice forgiveness</strong><br>
+                    Not because it's easy. Not because people deserve it. But because this is how God's will is done on earth. This is how heaven comes to earth in our relationships.
+                </p>
+            </div>
+
+            <div class="outline-box">
+                <h3>Jesus' Example at the Cross</h3>
+                <ul>
+                    <li>He knew what was coming—betrayal, mockery, torture, death</li>
+                    <li>He could have called legions of angels to rescue him (Matt 26:53)</li>
+                    <li>Yet he prayed: "Your will be done" (Matt 26:42)</li>
+                    <li>He cried out honestly: "My God, my God, why have you forsaken me?" (Matt 27:46)</li>
+                    <li>From the cross: "Father, forgive them, for they know not what they do" (Luke 23:34)</li>
+                    <li>His final words: "Father, into your hands I commit my spirit" (Luke 23:46)</li>
+                </ul>
+                <p style="margin-top: 20px; font-size: 1.15rem; line-height: 1.7; color: #feca57;">
+                    <strong>Jesus literally prayed the Lord's Prayer from the cross.</strong> He trusted the Father's will even in death—still calling God "my God" in his darkest moment. He forgave his debtors in real-time, the ultimate embodiment of "forgive us as we forgive." He experienced the darkness so we could be delivered from the evil one. From Gethsemane to Golgotha, Jesus made this prayer his own.
+                </p>
+            </div>
+
+            <div class="center-emphasis">
+                <p style="font-size: 1.4rem; line-height: 1.8;">
+                    <strong>This is what it means to follow Jesus:</strong><br><br>
+                    To trust God as Jesus trusted God.<br>
+                    To forgive others as Jesus forgave others.<br>
+                    Even when—especially when—the outcome is certain and not in our favor.
+                </p>
+            </div>
+
+            <div class="emphasis-text" style="margin-top: 40px;">
+                <p style="font-size: 1.5rem; line-height: 1.9;">
+                    As we take communion today, we remember that Jesus embodied this prayer completely. He trusted the Father's will. He forgave those who killed him. He brought heaven to earth through radical trust and radical forgiveness.
+                </p>
+                <p style="font-size: 1.5rem; margin-top: 25px; line-height: 1.9;">
+                    And now he invites us to do the same. To make his prayer our prayer. To make his story our story. To trust and forgive, even when it costs us everything.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleDropdown(element) {
+            element.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
