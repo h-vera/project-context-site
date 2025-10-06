@@ -563,9 +563,16 @@
 
     <!-- Navigation will be injected here by JavaScript -->
 
-    <!-- Back to Hosea Button -->
-    <a href="hosea.html" class="back-button">← Back to Hosea</a>
-
+    <!-- Study Navigation Tabs -->
+<div class="study-nav-tabs">
+  <a href="hosea.html" class="tab-button">Overview</a>
+  <a href="structure.html" class="tab-button">Structure</a>
+  <a href="hebrew-words.html" class="tab-button">Hebrew Words</a>
+  <a href="literary-analysis.html" class="tab-button">Literary Analysis</a>
+  <a href="theology.html" class="tab-button">Theology</a>
+  <a href="timeline.html" class="tab-button active">Timeline</a>
+  <a href="nt-usage.html" class="tab-button">NT Usage</a>
+</div>
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
@@ -973,132 +980,16 @@
     <!-- Mobile Menu Overlay -->
     <div class="mobile-menu-overlay"></div>
 
-    <!-- Navigation Script - Direct Implementation -->
-    <script>
-        // Direct navigation implementation without ES6 modules
-        (function() {
-            // Navigation HTML
-            const navHTML = `
-                <nav id="main-nav" role="navigation" aria-label="Main navigation">
-                    <div class="nav-container">
-                        <a href="/" class="logo">
-                            <div class="logo-icon">
-                                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="40" height="40">
-                                    <path d="M 25 15 L 10 15 L 10 85 L 25 85" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
-                                    <path d="M 75 15 L 90 15 L 90 85 L 75 85" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
-                                    <ellipse cx="50" cy="50" rx="25" ry="15" stroke="#0a0a0a" stroke-width="3" fill="none"/>
-                                    <circle cx="50" cy="50" r="8" fill="#00b4d8"/>
-                                    <circle cx="50" cy="50" r="3" fill="#0a0a0a"/>
-                                </svg>
-                            </div>
-                            <span class="logo-text">Project Context</span>
-                        </a>
-                        <ul class="nav-links" id="navLinks" aria-label="Main navigation">
-                            <li><a href="/">Home</a></li>
-                            <li class="dropdown">
-                                <a href="/studies/" class="dropdown-toggle active">Studies</a>
-                                <div class="dropdown-content">
-                                    <a href="/studies/characters/characters_hub.html">Biblical Characters</a>
-                                    <a href="/studies/women/women-bible-hub.html">Women in the Bible</a>
-                                    <a href="/studies/tanakh/tanakh-hub.html" class="active">Tanakh Studies</a>
-                                    <a href="/studies/thematic/thematic-hub.html">Thematic Studies</a>
-                                </div>
-                            </li>
-                            <li class="dropdown">
-                                <a href="/resources/" class="dropdown-toggle">Resources</a>
-                                <div class="dropdown-content">
-                                    <a href="/resources/discussion-guides/">Discussion Guides</a>
-                                    <a href="/resources/study-tools/">Study Tools</a>
-                                    <a href="/resources/downloads/">Downloads</a>
-                                </div>
-                            </li>
-                            <li><a href="/about/">About</a></li>
-                        </ul>
-                        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation" aria-expanded="false">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </button>
-                    </div>
-                </nav>
-            `;
-
-            // Insert navigation at the top of body
-            document.body.insertAdjacentHTML('afterbegin', navHTML);
-
-            // Then add the progress bar
-            document.body.insertAdjacentHTML('afterbegin', '<div class="reading-progress" id="readingProgress"></div>');
-
-            // Mobile menu functionality
-            const menuToggle = document.getElementById('mobileMenuToggle');
-            const navLinks = document.getElementById('navLinks');
-            const overlay = document.querySelector('.mobile-menu-overlay');
-
-            function openMobileMenu() {
-                menuToggle.classList.add('active');
-                navLinks.classList.add('active');
-                overlay.classList.add('active');
-                document.body.classList.add('menu-open');
-                menuToggle.setAttribute('aria-expanded', 'true');
-            }
-
-            function closeMobileMenu() {
-                menuToggle.classList.remove('active');
-                navLinks.classList.remove('active');
-                overlay.classList.remove('active');
-                document.body.classList.remove('menu-open');
-                menuToggle.setAttribute('aria-expanded', 'false');
-            }
-
-            // Toggle menu
-            if (menuToggle) {
-                menuToggle.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    if (menuToggle.classList.contains('active')) {
-                        closeMobileMenu();
-                    } else {
-                        openMobileMenu();
-                    }
-                });
-            }
-
-            // Close on overlay click
-            if (overlay) {
-                overlay.addEventListener('click', closeMobileMenu);
-            }
-
-            // Handle mobile dropdowns
-            const dropdownToggles = document.querySelectorAll('.nav-links .dropdown-toggle');
-            dropdownToggles.forEach(toggle => {
-                toggle.addEventListener('click', function(e) {
-                    if (window.matchMedia('(max-width: 768px)').matches) {
-                        e.preventDefault();
-                        const dropdown = this.parentElement;
-                        dropdown.classList.toggle('active');
-                    }
-                });
-            });
-
-            // Scroll effects
-            window.addEventListener('scroll', function() {
-                const nav = document.getElementById('main-nav');
-                if (nav) {
-                    if (window.scrollY > 100) {
-                        nav.classList.add('scrolled');
-                    } else {
-                        nav.classList.remove('scrolled');
-                    }
-                }
-            });
-
-            // Close menu on escape key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && menuToggle && menuToggle.classList.contains('active')) {
-                    closeMobileMenu();
-                }
-            });
-        })();
-    </script>
+    <!-- Navigation Component -->
+<script type="module">
+  import NavigationComponent from '/assets/js/nav-component.js';
+  
+  // Initialize centralized navigation
+  const navigation = new NavigationComponent({
+    currentPage: 'hosea',
+    hubType: 'tanakh'
+  });
+</script>
 
 <!-- Add this script at the end, right before </body> -->
 <script>
