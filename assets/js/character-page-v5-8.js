@@ -113,6 +113,18 @@
 { id: 'assessment', icon: '', label: 'Assessment', priority: 2 },
 { id: 'resources', icon: '', label: 'Resources', priority: 3 },
 { id: 'further-study', icon: '', label: 'Study More', priority: 4 },
+
+// ============================================
+// HOSEA THEOLOGY PAGE SECTIONS (Covenant, Sin, etc.)
+// ============================================
+{ id: 'foundation', icon: '', label: 'Foundation', priority: 1 },
+{ id: 'knowledge', icon: '', label: 'Knowledge', priority: 1 },
+{ id: 'relationship', icon: '', label: 'Relationship', priority: 2 },
+{ id: 'dynamics', icon: '', label: 'Dynamics', priority: 2 },
+{ id: 'breakdown', icon: '', label: 'Breakdown', priority: 2 },
+{ id: 'failure', icon: '', label: 'Failure', priority: 3 },
+{ id: 'lawsuit', icon: '', label: 'Lawsuit', priority: 2 },
+{ id: 'renewal', icon: '', label: 'Renewal', priority: 1 },
   ];
 
   // ============================================
