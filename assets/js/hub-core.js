@@ -563,12 +563,12 @@ class HubCore {
                     multiPage: false
                 },
                 { 
-                    book: 'exodus', 
-                    id: 'moses', 
-                    name: 'Moses', 
-                    hebrew: 'מֹשֶׁה',
-                    desc: 'Prophet, lawgiver, and deliverer of Israel from Egypt. Central figure in the Exodus and covenant at Sinai.',
-                    meta: 'Exodus-Deuteronomy • Multi-page Study',
+                    book: 'samuel', 
+                    id: 'david', 
+                    name: 'David', 
+                    hebrew: 'דָּוִד',
+                    desc: 'Shepherd boy anointed as king, giant-killer, musician, man after God\'s own heart who fell into sin.',
+                    meta: '1-2 Samuel • Multi-page Study',
                     multiPage: true
                 },
                 { 
