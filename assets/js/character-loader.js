@@ -589,12 +589,12 @@ class CharacterLoader {
                         name: "David",
                         hebrew: "דָּוִד",
                         gender: "male",
-                        profilePath: "/studies/characters/samuel/david.html",
+                        profilePath: "/studies/characters/samuel/david/david-overview.html",
                         references: ["1 Sam 16:1-23", "1 Sam 17:1-58", "2 Sam 1:1-24:25"],
                         meaning: "Beloved",
                         summary: "Shepherd boy anointed as king, giant-killer, musician, man after God's own heart who fell into sin",
                         tags: ["King", "Shepherd", "Musician", "Giant-killer", "Anointed", "Adulterer", "Repentant"],
-                        hasProfile: false
+                        hasProfile: true
                     },
                     {
                         id: "jonathan",
