@@ -570,7 +570,6 @@ class HubCore {
                     desc: 'Shepherd boy anointed as king, giant-killer, musician, man after God\'s own heart who fell into sin.',
                     meta: '1-2 Samuel • Multi-page Study',
                     multiPage: true
-                    profilePath: '/studies/characters/samuel/david/david-overview.html'
                 },
                 { 
                     book: 'judges', 
@@ -604,12 +603,10 @@ class HubCore {
         
         // Render featured cards with correct paths
         const html = featured.map(char => {
-            // Build the correct path based on whether it has explicit profilePath or is multi-page
-            const href = char.profilePath 
-                ? char.profilePath  // Use explicit path if provided
-                : char.multiPage 
-                    ? `/studies/characters/${char.book}/${char.id}/${char.id}.html`
-                    : `/studies/characters/${char.book}/${char.id}.html`;
+            // Build the correct path based on whether it's multi-page
+            const href = char.multiPage 
+                ? `/studies/characters/${char.book}/${char.id}/${char.id}.html`
+                : `/studies/characters/${char.book}/${char.id}.html`;
             
             return `
                 <a href="${href}" class="character-card">
