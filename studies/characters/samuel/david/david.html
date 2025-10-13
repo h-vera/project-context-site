@@ -72,6 +72,369 @@
       Page 1: Overview
     </div>
 
+    <style>
+    :root {
+      --primary-dark: #0a0a0a;
+      --primary-light: #ffffff;
+      --accent-blue: #00b4d8;
+      --accent-purple: #7209b7;
+      --accent-gold: #d4af37;
+      --text-gray: #666;
+      --bg-gray: #f5f5f5;
+      --border-light: #e0e0e0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: var(--primary-dark);
+      background: var(--bg-gray);
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 50vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+      position: relative;
+      background: linear-gradient(135deg, #e11d48 0%, #7209b7 100%);
+      color: white;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 300%;
+      height: 300%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(225,29,72,0.3) 0%, transparent 40%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 40%),
+        radial-gradient(circle at 40% 40%, rgba(114,9,183,0.2) 0%, transparent 50%),
+        radial-gradient(circle at 60% 80%, rgba(225,29,72,0.15) 0%, transparent 45%);
+      animation: float 40s infinite linear;
+      opacity: 0.8;
+    }
+
+    @keyframes float {
+      0% { transform: rotate(0deg) scale(1) translate(0, 0); }
+      25% { transform: rotate(90deg) scale(1.05) translate(-20px, 20px); }
+      50% { transform: rotate(180deg) scale(1.1) translate(0, -30px); }
+      75% { transform: rotate(270deg) scale(1.05) translate(20px, 10px); }
+      100% { transform: rotate(360deg) scale(1) translate(0, 0); }
+    }
+
+    .hero-content {
+      text-align: center;
+      max-width: 900px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 8vw, 5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      animation: fadeInUp 0.8s ease-out;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-hebrew {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+      opacity: 0.95;
+      font-family: 'SBL Hebrew', serif;
+      animation: fadeInUp 0.8s ease-out 0.2s both;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      opacity: 0.95;
+      margin-bottom: 3rem;
+      font-weight: 300;
+      animation: fadeInUp 0.8s ease-out 0.4s both;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .quick-nav {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+      animation: fadeInUp 0.8s ease-out 0.6s both;
+    }
+
+    .quick-nav-item {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(15px);
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .quick-nav-item:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    /* Reference Table Section */
+    .reference-section {
+      background: white;
+      padding: 3rem;
+      margin-bottom: 2rem;
+      border-radius: 24px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .reference-section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+    }
+
+    .reference-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .reference-section:hover::before {
+      transform: scaleX(1);
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-icon {
+      font-size: 3rem;
+      opacity: 0.8;
+    }
+
+    .key-insight {
+      background: linear-gradient(135deg, rgba(114,9,183,0.1), rgba(0,180,216,0.1));
+      border-left: 4px solid var(--accent-purple);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border-radius: 8px;
+    }
+
+    /* Reference Grid - 4 Column */
+    .reference-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .reference-panel {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      padding: 2rem;
+      border-radius: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .reference-panel:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+    }
+
+    .reference-panel h4 {
+      color: var(--primary-dark);
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .reference-panel p {
+      flex: 1;
+      margin-bottom: 0.5rem;
+      line-height: 1.6;
+    }
+
+    .reference-panel strong {
+      color: var(--accent-purple);
+      font-weight: 600;
+    }
+
+    /* Study Guide Sections */
+    .study-guide-section {
+      background: white;
+      padding: 3rem;
+      margin-bottom: 2rem;
+      border-radius: 24px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    .page-nav-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .page-nav-item {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      padding: 2rem;
+      border-radius: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      min-height: 160px;
+    }
+
+    .page-nav-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+    }
+
+    .page-nav-item.current {
+      background: linear-gradient(135deg, rgba(114,9,183,0.1), rgba(0,180,216,0.1));
+      border: 2px solid var(--accent-purple);
+    }
+
+    .page-nav-item h4 {
+      color: var(--primary-dark);
+      margin-bottom: 0.5rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .nav-subtitle {
+      color: var(--text-gray);
+      font-size: 0.95rem;
+      flex: 1;
+      margin-bottom: 1rem;
+    }
+
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+      color: white;
+      border-radius: 25px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 12px rgba(114,9,183,0.25);
+      align-self: flex-start;
+    }
+
+    .nav-link:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(114,9,183,0.4);
+    }
+
+    .nav-status {
+      color: var(--accent-purple);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 2rem 1rem;
+      }
+      
+      .reference-section, .study-guide-section {
+        padding: 2rem;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .reference-grid-4, .page-nav-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">David</h1>
+      <div class="hero-hebrew">דָּוִד</div>
+      <p class="hero-subtitle">
+        From shepherd to king: God's beloved chosen to establish an eternal throne through grace, not merit
+      </p>
+      <div class="quick-nav">
+        <a href="#reference" class="quick-nav-item">Quick Reference</a>
+        <a href="#study-guide" class="quick-nav-item">Study Guide</a>
+        <a href="#etymology" class="quick-nav-item">Name Study</a>
+        <a href="#themes" class="quick-nav-item">Key Themes</a>
+      </div>
+    </div>
+  </section>
+    
     <!-- Character Title Header -->
     <h2 id="character-title" class="section-title" data-character-id="david" data-book="samuel">
       <span class="section-icon">👤</span>
@@ -136,53 +499,127 @@
       </div>
     </div>
 
-    <!-- PROMINENT NAVIGATION SECTION -->
-    <div class="page-navigation animate-on-scroll">
-      <h3>📚 Complete Profile Navigation</h3>
+    <!-- Quick Reference Section -->
+    <section class="reference-section" id="reference">
+      <h2 class="section-title">
+        <span class="section-icon">📖</span>
+        Quick Reference
+      </h2>
+
+      <div class="key-insight">
+        <p><strong>Theological Significance:</strong> David embodies the biblical reversal pattern where God exalts the humble. As the most complex character in the Old Testament (65+ chapters devoted to his story), he demonstrates that God's kingdom advances through grace, not human merit. The eternal covenant established with David's house (2 Samuel 7) anchors all subsequent messianic hope.</p>
+      </div>
+
+      <div class="reference-grid-4">
+        <div class="reference-panel">
+          <h4>📅 Time Period</h4>
+          <p><strong>ca. 11th–10th century BCE</strong><br>
+          Early monarchy, Jerusalem/Zion<br>
+          United Kingdom of Israel</p>
+        </div>
+        
+        <div class="reference-panel">
+          <h4>📜 Primary Scripture</h4>
+          <p><strong>1 Sam 16–2 Sam 24</strong><br>
+          1 Kings 1–2, 73+ Psalms<br>
+          1–2 Chronicles</p>
+        </div>
+        
+        <div class="reference-panel">
+          <h4>🗝️ Hebrew Name</h4>
+          <p><strong>דָּוִד (Dāwīd)</strong><br>
+          "beloved"<br>
+          Root: דוד (d-w-d) covenant affection</p>
+        </div>
+        
+        <div class="reference-panel">
+          <h4>👑 Primary Role</h4>
+          <p><strong>Shepherd-King</strong><br>
+          Unifier of Israel<br>
+          Covenant recipient, Royal psalmist</p>
+        </div>
+
+        <div class="reference-panel">
+          <h4>👨‍👩‍👦 Family Line</h4>
+          <p><strong>Son of Jesse (Judah)</strong><br>
+          Father of Solomon<br>
+          Messiah's ancestor (Matt 1)</p>
+        </div>
+
+        <div class="reference-panel">
+          <h4>🎯 Central Message</h4>
+          <p><strong>Grace-Based Kingship</strong><br>
+          God chooses the overlooked<br>
+          Eternal dynasty through covenant</p>
+        </div>
+
+        <div class="reference-panel">
+          <h4>🔄 Key Pattern</h4>
+          <p><strong>Divine Reversal</strong><br>
+          Youngest → Greatest<br>
+          Shepherd → King → Type of Messiah</p>
+        </div>
+
+        <div class="reference-panel">
+          <h4>✨ Messianic Type</h4>
+          <p><strong>Son of David Title</strong><br>
+          2 Sam 7 eternal covenant<br>
+          Points to Christ fulfillment</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comprehensive Study Guide -->
+    <section class="study-guide-section" id="study-guide">
+      <h2 class="section-title">
+        <span class="section-icon">📚</span>
+        Comprehensive Study Guide Sections
+      </h2>
+      
       <div class="page-nav-grid">
         <div class="page-nav-item current">
-          <h4>📖 Overview</h4>
-          <div class="nav-subtitle">Etymology & Anointing</div>
+          <h4>📖 Page 1: Overview</h4>
+          <div class="nav-subtitle">Etymology, anointing, Samuel's influence, shepherd-to-king trajectory, and divine reversal pattern</div>
           <div class="nav-status">Current Page</div>
         </div>
 
         <a class="page-nav-item" href="/studies/characters/samuel/david/david-journey.html">
-          <h4>🎭 Page 2: Narrative</h4>
-          <div class="nav-subtitle">Rise to Kingship</div>
+          <h4>🎭 Page 2: Narrative Journey</h4>
+          <div class="nav-subtitle">Rise to kingship: Goliath, Saul's court, outlaw years, and coronation</div>
           <span class="nav-link">View Page →</span>
         </a>
 
         <a class="page-nav-item" href="/studies/characters/samuel/david/david-literary.html">
-          <h4>📜 Page 3: Literary</h4>
-          <div class="nav-subtitle">Context & Structure</div>
+          <h4>📜 Page 3: Literary Analysis</h4>
+          <div class="nav-subtitle">Context, structure, narrative techniques, and character development</div>
           <span class="nav-link">View Page →</span>
         </a>
 
         <a class="page-nav-item" href="/studies/characters/samuel/david/david-reign.html">
-          <h4>👑 Page 4: Reign</h4>
-          <div class="nav-subtitle">Summary & Evaluation</div>
+          <h4>👑 Page 4: Reign Summary</h4>
+          <div class="nav-subtitle">Achievements, failures, Bathsheba crisis, and legacy evaluation</div>
           <span class="nav-link">View Page →</span>
         </a>
 
         <a class="page-nav-item" href="/studies/characters/samuel/david/david-messianic.html">
-          <h4>✨ Page 5: Messianic</h4>
-          <div class="nav-subtitle">Covenant Promise</div>
+          <h4>✨ Page 5: Messianic Promise</h4>
+          <div class="nav-subtitle">2 Samuel 7 covenant, eternal dynasty, and Christ fulfillment</div>
           <span class="nav-link">View Page →</span>
         </a>
 
         <a class="page-nav-item" href="/studies/characters/samuel/david/david-second-temple.html">
-          <h4>📚 Page 6: Second Temple</h4>
-          <div class="nav-subtitle">NT Usage</div>
+          <h4>📚 Page 6: Second Temple Period</h4>
+          <div class="nav-subtitle">NT usage, Son of David title, and theological development</div>
           <span class="nav-link">View Page →</span>
         </a>
 
         <a class="page-nav-item" href="/studies/characters/samuel/david/david-themes.html">
-          <h4>🌟 Page 7: Themes</h4>
-          <div class="nav-subtitle">Application</div>
+          <h4>🌟 Page 7: Themes & Application</h4>
+          <div class="nav-subtitle">Contemporary relevance, leadership principles, and worship theology</div>
           <span class="nav-link">View Page →</span>
         </a>
       </div>
-    </div>
+    </section>
 
     <!-- SECTION 2: NAME STUDY & KEY TERMS (CONSOLIDATED) -->
     <div class="theology-card animate-on-scroll" id="name-etymology">
