@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Wonderfully Made – Class Session (Interactive)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root{
+      --ink:#0f172a; --sub:#334155; --accent:#2563eb; --accent2:#9333ea;
+      --muted:#cbd5e1; --bg:#ffffff; --card:#f8fafc; --card-border:#cbd5e1;
+      --title:#a78bfa; --accent-purple:#a855f7; --accent-red:#ef4444;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --ink:#e5e7eb; --sub:#cbd5e1; --bg:#0b1220;
+        --card:#0f172a; --card-border:#1f2937; --muted:#334155;
+        --accent:#60a5fa; --accent2:#c084fc;
+        --title:#a78bfa;
+      }
+      body{ color:#ffffff; }
+    }
+    *{ box-sizing:border-box; }
+    body{
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial;
+      margin:0; padding:1rem; line-height:1.5; color:var(--ink); background:var(--bg);
+    }
+    .page{ max-width:980px; margin:0 auto; }
+    h1{ font-size:1.6rem; margin:.25rem 0 .5rem; color:var(--title); font-weight:700; }
+    h2{ font-size:1.15rem; margin:1rem 0 .35rem; color:var(--title); font-weight:700; }
+    h3{ font-size:1.05rem; margin:.5rem 0 .25rem; color:var(--title); font-weight:700; }
+    p,li{ font-size:1rem; }
+    .grid{ display:grid; grid-template-columns:repeat(12,1fr); gap:12px; }
+    .card{
+      background:var(--card);
+      border:1px solid var(--card-border);
+      border-radius:14px; padding:12px 14px;
+      box-shadow: 0 4px 14px rgba(2,6,23,.06);
+    }
+    .muted{ color:var(--sub); }
+    .verse{
+      border-left:4px solid var(--accent2);
+      background:linear-gradient(90deg, rgba(147,51,234,.10), transparent);
+      padding:.5rem .75rem; margin:.25rem 0 .75rem; border-radius:8px;
+    }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size:.95rem; }
+    .btnbar{
+      display:flex; gap:.5rem; flex-wrap:wrap; margin:.25rem 0 .5rem;
+    }
+    .tabbtn{
+      appearance:none; background:var(--bg); color:var(--ink); border:1px solid var(--card-border);
+      padding:.4rem .7rem; border-radius:999px; cursor:pointer;
+    }
+    .tabbtn[aria-selected="true"]{
+      background:var(--accent2); color:white; border-color:transparent;
+    }
+    .section{ display:none; }
+    .section.active{ display:block; }
+    .cols{ columns:1; column-gap:18px; }
+    @media (min-width: 820px){ .cols{ columns:2; } }
+    .stickybar{
+      position:sticky; top:0; z-index:10; background:var(--bg);
+      padding:.5rem .25rem; border-bottom:1px solid var(--card-border);
+    }
+    .small{ font-size:.92rem; }
+    
+    /* Compact Timer */
+    .timer-compact {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #fef3c7;
+      border: 1px solid #fbbf24;
+      border-radius: 20px;
+      padding: 0.25rem 0.75rem;
+      margin-left: 0.5rem;
+      font-size: 0.85rem;
+    }
+    .timer-display-compact {
+      font-weight: 600;
+      color: #92400e;
+      min-width: 3rem;
+      text-align: center;
+    }
+    .timer-btn-compact {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.15rem 0.3rem;
+      font-size: 0.75rem;
+      color: #92400e;
+    }
+    .timer-btn-compact:active {
+      transform: scale(0.9);
+    }
+    
+    /* Chip Links */
+    .chip-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+    .chip-link {
+      display: inline-block;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 999px;
+      padding: 0.5rem 1rem;
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .chip-link:hover {
+      background: var(--accent2);
+      color: white;
+      border-color: transparent;
+      transform: translateY(-1px);
+    }
+  </style>
+  <script>
+    function tabify(group){
+      const root = document.querySelector('[data-tabgroup="'+group+'"]');
+      if(!root) return;
+      const btns = root.querySelectorAll('.tabbtn');
+      const panels = root.querySelectorAll('.section');
+      btns.forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          btns.forEach(b=>b.setAttribute('aria-selected','false'));
+          panels.forEach(p=>p.classList.remove('active'));
+          btn.setAttribute('aria-selected','true');
+          const target = root.querySelector(btn.dataset.target);
+          if(target) target.classList.add('active');
+          target.scrollIntoView({behavior:'smooth', block:'start'});
+        });
+      });
+    }
+    
+    // Compact Timer Functions
+    const timers = {};
+    function startTimer(id, minutes) {
+      if (timers[id]) clearInterval(timers[id].interval);
+      const display = document.getElementById(id);
+      let totalSeconds = timers[id]?.remaining || (minutes * 60);
+      timers[id] = {
+        interval: setInterval(() => {
+          totalSeconds--;
+          timers[id].remaining = totalSeconds;
+          const mins = Math.floor(totalSeconds / 60);
+          const secs = totalSeconds % 60;
+          display.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+          if (totalSeconds <= 0) {
+            clearInterval(timers[id].interval);
+            display.textContent = "Done!";
+            if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+          }
+        }, 1000),
+        remaining: totalSeconds
+      };
+    }
+    function pauseTimer(id) {
+      if (timers[id]) clearInterval(timers[id].interval);
+    }
+    function resetTimer(id, minutes) {
+      if (timers[id]) {
+        clearInterval(timers[id].interval);
+        delete timers[id];
+      }
+      document.getElementById(id).textContent = `${minutes}:00`;
+    }
+    
+    document.addEventListener('DOMContentLoaded', ()=>{
+      tabify('aud');
+      if ('wakeLock' in navigator) {
+        navigator.wakeLock.request('screen').catch(()=>{});
+      }
+    });
+  </script>
+</head>
+<body>
+<div class="page">
+  <div class="stickybar">
+    <div class="muted small">Psalm 139:13–16 • Genesis 1:26–27</div>
+    <h1>Wonderfully Made – Class Session (Interactive)</h1>
+  </div>
+
+  <div class="verse">
+    <strong>Main Point:</strong> You are wonderfully made in God's image. Your body is valuable, not shameful. Honoring your body helps the world see who God is.
+  </div>
+
+  <div class="grid">
+    <section class="card" style="grid-column: span 6;">
+      <h2>1) Icebreaker – Mirror Mode
+        <span class="timer-compact">
+          <span class="timer-display-compact" id="timer1">5:00</span>
+          <button class="timer-btn-compact" onclick="startTimer('timer1', 5)">▶</button>
+          <button class="timer-btn-compact" onclick="pauseTimer('timer1')">⏸</button>
+          <button class="timer-btn-compact" onclick="resetTimer('timer1', 5)">↻</button>
+        </span>
+      </h2>
+      <p><span class="muted">Setup:</span> Two circles facing each other.</p>
+      <ul>
+        <li>Partner A leads slow motions; Partner B mirrors (20s), then switch.</li>
+        <li>Outer circle rotate right; new partner. Repeat 3×.</li>
+      </ul>
+      <p class="muted">Transition: "Mirroring takes focus. We're made to reflect God's image with intention."</p>
+    </section>
+
+    <section class="card" style="grid-column: span 6;">
+      <h2>2) Icebreaker – Body Part Bonanza
+        <span class="timer-compact">
+          <span class="timer-display-compact" id="timer2">5:00</span>
+          <button class="timer-btn-compact" onclick="startTimer('timer2', 5)">▶</button>
+          <button class="timer-btn-compact" onclick="pauseTimer('timer2')">⏸</button>
+          <button class="timer-btn-compact" onclick="resetTimer('timer2', 5)">↻</button>
+        </span>
+      </h2>
+      <p><span class="muted">Setup:</span> Open space + upbeat music.</p>
+      <ul>
+        <li>Call: "Elbow to elbow • Back to back • Foot to foot • High-five!"</li>
+        <li>After each: "Switch partners!" End with "Hand to heart—thank God for one thing about your body."</li>
+      </ul>
+      <p class="muted">Transition: "Every part has purpose—God made us strong, creative, unique."</p>
+    </section>
+  </div>
+
+  <section class="card">
+    <h2>3) Teaching
+      <span class="timer-compact">
+        <span class="timer-display-compact" id="timer3">3:00</span>
+        <button class="timer-btn-compact" onclick="startTimer('timer3', 3)">▶</button>
+        <button class="timer-btn-compact" onclick="pauseTimer('timer3')">⏸</button>
+        <button class="timer-btn-compact" onclick="resetTimer('timer3', 3)">↻</button>
+      </span>
+    </h2>
+    <div class="cols">
+      <div>
+        <h3>Psalm 139:13–16 (Chiastic snapshot)</h3>
+        <ul>
+          <li><strong>A</strong> You formed my inmost being; knit me in the womb.</li>
+          <li><strong>B</strong> I praise you—your works are wonderful.</li>
+          <li><strong>C</strong> My frame was not hidden; embroidered in secret.</li>
+          <li><strong>B′</strong> Your eyes saw my unformed substance; my days written.</li>
+          <li><strong>A′</strong> How precious your thoughts!</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Genesis 1:26–27 (Chiastic snapshot)</h3>
+        <ul>
+          <li><strong>A</strong> Let us make humankind… rule the earth.</li>
+          <li><strong>B</strong> God created humankind in his image.</li>
+          <li><strong>C</strong> In the image of God he created him.</li>
+          <li><strong>B′</strong> Male and female he created them.</li>
+          <li><strong>A′</strong> God blessed them: be fruitful, fill, subdue.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted mono">Hebrew: צֶלֶם (tselem, image) • קָנָה (qanah, form/acquire) • סָכַךְ (sakhakh, knit/cover) • רָקַם (raqam, embroider)</p>
+  </section>
+
+  <section class="card" data-tabgroup="aud">
+    <h2>4) Discussion
+      <span class="timer-compact">
+        <span class="timer-display-compact" id="timer4">15:00</span>
+        <button class="timer-btn-compact" onclick="startTimer('timer4', 15)">▶</button>
+        <button class="timer-btn-compact" onclick="pauseTimer('timer4')">⏸</button>
+        <button class="timer-btn-compact" onclick="resetTimer('timer4', 15)">↻</button>
+      </span>
+    </h2>
+    <div class="btnbar" role="tablist" aria-label="Audience">
+      <button class="tabbtn" role="tab" aria-selected="true" data-target="#everyone">Everyone</button>
+      <button class="tabbtn" role="tab" aria-selected="false" data-target="#preteens">Preteens 11–13</button>
+      <button class="tabbtn" role="tab" aria-selected="false" data-target="#teens">Teens 14–17</button>
+      <button class="tabbtn" role="tab" aria-selected="false" data-target="#parents">Parents</button>
+    </div>
+
+    <div id="everyone" class="section active" role="tabpanel">
+      <h3>For Everyone (start together)</h3>
+      <ol>
+        <li>What stood out in the icebreakers?</li>
+        <li>What does "image of God" mean to you?</li>
+        <li>One thing you appreciate about how God made you?</li>
+      </ol>
+    </div>
+
+    <div id="preteens" class="section" role="tabpanel">
+      <h3>Preteens 11–13</h3>
+      <ol start="4">
+        <li>When is it hard to believe you're wonderfully made?</li>
+        <li>What helps you feel grateful for your body?</li>
+        <li>How can you remind a friend they're valuable to God?</li>
+      </ol>
+    </div>
+
+    <div id="teens" class="section" role="tabpanel">
+      <h3>Teens 14–17</h3>
+      <ol start="4">
+        <li>How do social media/comparison shape self-view?</li>
+        <li>Difference between caring for looks and being defined by them?</li>
+        <li>What does honoring your body look like this week?</li>
+      </ol>
+    </div>
+
+    <div id="parents" class="section" role="tabpanel">
+      <h3>Parents</h3>
+      <ol start="4">
+        <li>How to discuss body image/modesty without shame?</li>
+        <li>What messages about the body should kids hear at home/church?</li>
+        <li>How do you model gratitude for your own body?</li>
+      </ol>
+    </div>
+
+    <div class="section" style="display:block; margin-top:.6rem;">
+      <h3>Optional Deep Question</h3>
+      <p><strong>If God calls our bodies "wonderfully made," what happens when we criticize our looks or compare ourselves to others? What does that say about how we see His creation?</strong></p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>5) Wrap-Up
+      <span class="timer-compact">
+        <span class="timer-display-compact" id="timer5">3:00</span>
+        <button class="timer-btn-compact" onclick="startTimer('timer5', 3)">▶</button>
+        <button class="timer-btn-compact" onclick="pauseTimer('timer5')">⏸</button>
+        <button class="timer-btn-compact" onclick="resetTimer('timer5', 3)">↻</button>
+      </span>
+    </h2>
+    <p><strong>Summary:</strong> God made every part of you with intention. Your body is valuable, not shameful. When we treat it with respect and gratitude, we reflect His image to the world.</p>
+    <p><strong>Action:</strong> "I thank God for my body because ____."</p>
+  </section>
+
+  <section class="card">
+    <h2>Chiastic Study Addendum</h2>
+    <h3>1) Understanding the Chiastic Pattern</h3>
+    <p>Hebrew writers often structured revelation like a mirror — the first half rises toward a center of meaning, then descends in reverse order.</p>
+    <p class="mono">A → B → C → B′ → A′</p>
+    <p>The center (C) carries the heart of the theology — the hinge where divine purpose and human identity meet.</p>
+
+    <h3>2) Genesis 1:26–27 — Humanity in God's Image</h3>
+    <pre class="mono" style="white-space:pre-wrap">
+A. "Let us make humankind in our image… rule the earth."
+
+B.  So God created humankind in his own image,
+
+C.  In the image of God he created him,
+
+B′.  Male and female he created them,
+
+A′.  God blessed them: "Be fruitful and fill the earth and subdue it."
+    </pre>
+    <p><strong>Chiastic emphasis:</strong> Humanity (A–A′) is created for vocation — to reflect God's dominion in fruitful stewardship. At the center (C) lies <em>Imago Dei</em> — our being itself mirrors God's being; the two halves (B/B′) reveal male and female together as the full expression of that image.</p>
+
+    <h3>3) Psalm 139:13–16 — God's Intimate Formation</h3>
+    <pre class="mono" style="white-space:pre-wrap">
+A.  For you formed my inmost being (קָנִיתָ כִלְיוֹתָי)
+    you knit me together in my mother's womb.
+
+B.  I praise you, for I am fearfully and wonderfully made;
+    your works are wonderful, I know that well.
+
+C.  My frame was not hidden from you when I was made in secret,
+    embroidered in the depths of the earth.
+
+B′.  Your eyes saw my unformed substance;
+    all my days were written in your book before one of them came to be.
+
+A′.  How precious to me are your thoughts, O God! How vast the sum of them!
+    </pre>
+    <p><strong>Chiastic emphasis:</strong> God's forming and knowing mirror each other (A/A′). The center (C) reveals the sacred hiddenness of creation — life as divine artistry "woven in the depths of the earth." The surrounding halves (B/B′) celebrate both the wonder and foreknowledge of that creation.</p>
+
+    <h3>4) Theological Reflection — The Mirror Between Genesis 1 and Psalm 139</h3>
+    <ul>
+      <li><strong>Cosmic creation</strong> (Gen 1) meets <strong>personal creation</strong> (Ps 139).</li>
+      <li><strong>Image & vocation</strong> ("let us make… be fruitful") meets <strong>intimate artistry</strong> ("knit… embroidered… days written").</li>
+      <li>Male and female together image God publicly; each life is privately woven by God's hand.</li>
+    </ul>
+    <p><em>Summary:</em> God's cosmic image becomes visible in the intimate artistry of every life; honoring our bodies is part of our vocation to reflect Him.</p>
+  </section>
+
+  <section class="card">
+    <h2>📚 Learn More About the Image of God</h2>
+    <div class="chip-container">
+      <a href="/studies/thematic/image-of-god/overview.html" class="chip-link">Overview</a>
+      <a href="/studies/thematic/image-of-god/genesis-1-2.html" class="chip-link">Genesis 1–2 Foundations</a>
+      <a href="/studies/thematic/image-of-god/ane-background.html" class="chip-link">ANE Background</a>
+      <a href="/studies/thematic/image-of-god/royal-priest-prophet.html" class="chip-link">Royal–Priest–Prophet</a>
+      <a href="/studies/thematic/image-of-god/male-female-one-image.html" class="chip-link">Male & Female</a>
+      <a href="/studies/thematic/image-of-god/literary-design.html" class="chip-link">Literary Design</a>
+      <a href="/studies/thematic/image-of-god/nt-trajectory.html" class="chip-link">NT Trajectory</a>
+      <a href="/studies/thematic/image-of-god/image-of-god.html" class="chip-link">Study Hub</a>
+    </div>
+  </section>
+</div>
+</body>
+</html>

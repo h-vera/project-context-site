@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Wonderfully Made – Take-Home One-Pager</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root{
+      --ink:#111827; --sub:#374151; --accent:#7c3aed; --muted:#e5e7eb; --bg:#ffffff; --card:#fafafa; --card-border:#e5e7eb;
+      --title:#a78bfa; --accent-purple:#a855f7; --accent-red:#ef4444;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{ --ink:#e5e7eb; --sub:#cbd5e1; --bg:#0b1220; --card:#0f172a; --card-border:#1f2937; --accent:#a78bfa; --title:#a78bfa; }
+      body{ color:#ffffff; }
+    }
+    *{ box-sizing:border-box; }
+    body{ font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial; margin:0; padding:1rem; line-height:1.55; color:var(--ink); background:var(--bg); }
+    .page{ max-width:880px; margin:0 auto; }
+    h1{ font-size:1.5rem; margin:.25rem 0 .25rem; color:var(--title); font-weight:700; }
+    h2{ font-size:1.05rem; margin:1rem 0 .25rem; color:var(--title); font-weight:700; }
+    h3{ font-size:1rem; margin:.75rem 0 .25rem; color:var(--title); font-weight:700; }
+    p,li{ font-size:1rem; }
+    .card{ border:1px solid var(--card-border); border-radius:12px; padding:12px 14px; background:var(--card); }
+    .verse{ border-left:4px solid var(--accent); padding:.5rem .75rem; margin:.25rem 0 .75rem; }
+    .grid{ display:grid; grid-template-columns:repeat(12,1fr); gap:12px; }
+    .muted{ color:var(--sub); }
+    .poem{ font-style:italic; }
+    .mono{ font-family: ui-monospace, Menlo, Consolas, monospace; font-size:.95rem; }
+    @media print{ body{ padding:0; } .page{ padding:16mm 14mm; } }
+    .btnbar{ display:flex; gap:.5rem; flex-wrap:wrap; margin:.25rem 0 .5rem; }
+    .tabbtn{
+      appearance:none; background:var(--bg); color:var(--ink); border:1px solid var(--card-border);
+      padding:.35rem .65rem; border-radius:999px; cursor:pointer;
+    }
+    .tabbtn[aria-selected="true"]{ background:var(--accent); color:white; border-color:transparent; }
+    .section{ display:none; }
+    .section.active{ display:block; }
+    
+    /* Practice Tracker */
+    .practice-tracker {
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      border: 2px solid #10b981;
+      border-radius: 12px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+    .practice-tracker h3 {
+      color: #065f46;
+      margin-top: 0;
+      margin-bottom: 0.75rem;
+    }
+    .practice-tracker > p {
+      color: #064e3b;
+      margin-bottom: 0.75rem;
+    }
+    .practice-days {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0.5rem;
+      margin: 0.75rem 0;
+    }
+    .practice-day {
+      background: white;
+      border: 2px solid #d1fae5;
+      border-radius: 8px;
+      padding: 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      user-select: none;
+      color: #064e3b;
+      text-align: center;
+    }
+    .practice-day:active {
+      transform: scale(0.98);
+    }
+    .practice-day.completed {
+      background: #10b981;
+      color: white;
+      border-color: #059669;
+    }
+    .practice-day-label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+    .practice-day-status {
+      font-size: 1.25rem;
+    }
+    .practice-day.completed .practice-day-status::before {
+      content: '✓ ';
+    }
+    .practice-day:not(.completed) .practice-day-status::before {
+      content: '○ ';
+    }
+    
+    /* Chip Links */
+    .chip-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 0.75rem 0;
+    }
+    .chip-link {
+      display: inline-block;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 999px;
+      padding: 0.5rem 0.9rem;
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .chip-link:hover {
+      background: var(--accent);
+      color: white;
+      border-color: transparent;
+      transform: translateY(-1px);
+    }
+    
+    @media (max-width: 768px) {
+      .practice-days {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <script>
+    function tabify(group){
+      const root = document.querySelector('[data-tabgroup="'+group+'"]');
+      if(!root) return;
+      const btns = root.querySelectorAll('.tabbtn');
+      const panels = root.querySelectorAll('.section');
+      btns.forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          btns.forEach(b=>b.setAttribute('aria-selected','false'));
+          panels.forEach(p=>p.classList.remove('active'));
+          btn.setAttribute('aria-selected','true');
+          const target = root.querySelector(btn.dataset.target);
+          if(target) target.classList.add('active');
+          target.scrollIntoView({behavior:'smooth', block:'start'});
+        });
+      });
+    }
+    
+    // Practice tracker
+    function toggleDay(dayId) {
+      const day = document.getElementById(dayId);
+      day.classList.toggle('completed');
+      localStorage.setItem('wonderfully-made-' + dayId, day.classList.contains('completed'));
+      if (day.classList.contains('completed') && navigator.vibrate) {
+        navigator.vibrate(100);
+      }
+    }
+    
+    function loadProgress() {
+      ['day1', 'day2', 'day3'].forEach(dayId => {
+        if (localStorage.getItem('wonderfully-made-' + dayId) === 'true') {
+          document.getElementById(dayId).classList.add('completed');
+        }
+      });
+    }
+    
+    document.addEventListener('DOMContentLoaded', ()=>{
+      tabify('family');
+      loadProgress();
+    });
+  </script>
+</head>
+<body>
+<div class="page">
+  <h1>Wonderfully Made – Take-Home</h1>
+  <div class="muted">Parents, Teens & Preteens • Psalm 139:13–16 • Genesis 1:26–27</div>
+
+  <div class="verse">
+    <strong>Psalm 139:13–16</strong> — "You formed my inmost being; you knit me together in my mother's womb… I praise you because I am fearfully and wonderfully made… Your eyes saw my unformed substance; all the days ordained for me were written in your book before one of them came to be."
+  </div>
+
+  <div class="card">
+    <h2>What we learned</h2>
+    <ul>
+      <li><strong>Image:</strong> God made humanity in his <em>צֶלֶם</em> (<span class="mono">tselem</span>)—male and female together reflect his character (Gen 1:26–27).</li>
+      <li><strong>Artistry:</strong> God <em>knit</em> and <em>embroidered</em> us (<span class="mono">סָכַךְ / רָקַם</span>, <em>sakhakh / raqam</em>)—we are crafted, not accidental (Ps 139:13–16).</li>
+      <li><strong>Honor:</strong> Bodies are covered not from shame but because they're <em>valuable</em>—treated with "special honor" (cf. 1 Cor 12:23).</li>
+    </ul>
+  </div>
+
+  <section class="card" data-tabgroup="family">
+    <h2>Talk & Practice (toggle by audience)</h2>
+    <div class="btnbar" role="tablist" aria-label="Family Audience">
+      <button class="tabbtn" role="tab" aria-selected="true" data-target="#everyone">Everyone</button>
+      <button class="tabbtn" role="tab" aria-selected="false" data-target="#preteens">Preteens 11–13</button>
+      <button class="tabbtn" role="tab" aria-selected="false" data-target="#teens">Teens 14–17</button>
+      <button class="tabbtn" role="tab" aria-selected="false" data-target="#parents">Parents</button>
+    </div>
+
+    <div id="everyone" class="section active" role="tabpanel">
+      <h3>Conversation Starters</h3>
+      <ol>
+        <li>What's one thing you appreciate about how God made you?</li>
+        <li>When do comparisons or criticism about looks show up most?</li>
+        <li>How can our family speak about our bodies with gratitude and respect?</li>
+      </ol>
+      <h3>Family Practices</h3>
+      <ul>
+        <li><strong>Gratitude Mirror:</strong> "God, thank you for my ____." (Track below—three different things this week.)</li>
+        <li><strong>Encourage:</strong> One-sentence note affirming a God-given strength (not just appearance).</li>
+      </ul>
+    </div>
+
+    <div id="preteens" class="section" role="tabpanel">
+      <h3>Preteens 11–13</h3>
+      <ol>
+        <li>When is it hard to believe you're wonderfully made?</li>
+        <li>What helps you feel grateful for your body?</li>
+        <li>How can you remind a friend they're valuable to God?</li>
+      </ol>
+    </div>
+
+    <div id="teens" class="section" role="tabpanel">
+      <h3>Teens 14–17</h3>
+      <ol>
+        <li>How do social media/comparison shape self-view?</li>
+        <li>Difference between caring for looks and being defined by them?</li>
+        <li>What does honoring your body look like this week?</li>
+      </ol>
+    </div>
+
+    <div id="parents" class="section" role="tabpanel">
+      <h3>Parents</h3>
+      <ol>
+        <li>How to talk about body image & modesty without shame?</li>
+        <li>What messages about the body should kids hear at home & church?</li>
+        <li>How do you model gratitude for your own body?</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Practice Tracker -->
+  <div class="practice-tracker">
+    <h3>🪞 Gratitude Mirror Challenge</h3>
+    <p>Complete this three times this week: "God, thank you for my ____." Tap each day when you do it!</p>
+    
+    <div class="practice-days">
+      <div class="practice-day" onclick="toggleDay('day1')" id="day1">
+        <div class="practice-day-label">Day 1</div>
+        <div class="practice-day-status">Tap to complete</div>
+      </div>
+      <div class="practice-day" onclick="toggleDay('day2')" id="day2">
+        <div class="practice-day-label">Day 2</div>
+        <div class="practice-day-status">Tap to complete</div>
+      </div>
+      <div class="practice-day" onclick="toggleDay('day3')" id="day3">
+        <div class="practice-day-label">Day 3</div>
+        <div class="practice-day-status">Tap to complete</div>
+      </div>
+    </div>
+    
+    <p style="font-size: 0.9rem; text-align: center; color: #065f46; margin: 0.5rem 0 0 0;">
+      <strong>💡 Idea:</strong> Share what you thanked God for at dinner or before bed!
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>Chiastic Study (for the curious)</h2>
+    
+    <h3>Understanding the Pattern</h3>
+    <p>Hebrew writers often structured revelation like a mirror — the first half rises toward a center of meaning, then descends in reverse order.</p>
+    <p class="mono">A → B → C → B′ → A′</p>
+    <p style="margin-bottom: 1rem;">The center (C) carries the heart of the theology — the hinge where divine purpose and human identity meet.</p>
+
+    <h3>Genesis 1:26–27 — Humanity in God's Image</h3>
+    <pre class="mono" style="white-space:pre-wrap; background:var(--card); padding:0.75rem; border-radius:8px; border-left:3px solid var(--accent);">
+A. "Let us make humankind in our image… rule the earth."
+
+B.  So God created humankind in his own image,
+
+C.  In the image of God he created him,
+
+B′.  Male and female he created them,
+
+A′.  God blessed them: "Be fruitful and fill the earth and subdue it."
+    </pre>
+    <p><strong>Center emphasis:</strong> Humanity (A–A′) is created for vocation — to reflect God's dominion in fruitful stewardship. At the center (C) lies <em>Imago Dei</em> — our being itself mirrors God's being; the two halves (B/B′) reveal male and female together as the full expression of that image.</p>
+
+    <h3>Psalm 139:13–16 — God's Intimate Formation</h3>
+    <pre class="mono" style="white-space:pre-wrap; background:var(--card); padding:0.75rem; border-radius:8px; border-left:3px solid var(--accent);">
+A.  You formed my inmost being; knit me in the womb.
+
+B.  I praise you—your works are wonderful.
+
+C.  My frame was not hidden; embroidered in secret.
+
+B′.  Your eyes saw my unformed substance; my days written.
+
+A′.  How precious your thoughts!
+    </pre>
+    <p><strong>Center emphasis:</strong> God's forming and knowing mirror each other (A/A′). The center (C) reveals the sacred hiddenness of creation — life as divine artistry "woven in the depths of the earth." The surrounding halves (B/B′) celebrate both the wonder and foreknowledge of that creation.</p>
+
+    <h3>The Mirror Between Genesis 1 and Psalm 139</h3>
+    <ul>
+      <li><strong>Cosmic creation</strong> (Gen 1) meets <strong>personal creation</strong> (Ps 139).</li>
+      <li><strong>Image & vocation</strong> ("let us make… be fruitful") meets <strong>intimate artistry</strong> ("knit… embroidered… days written").</li>
+      <li>Male and female together image God publicly; each life is privately woven by God's hand.</li>
+    </ul>
+    <p><em>Summary:</em> God's cosmic image becomes visible in the intimate artistry of every life; honoring our bodies is part of our vocation to reflect Him.</p>
+  </div>
+
+  <p class="poem">Two halves of glory: from one breath, two hearts; from one light, two flames—together they image the Invisible.</p>
+  <p class="muted mono">Hebrew: צֶלֶם (tselem, image) • קָנָה (qanah, form/acquire) • סָכַךְ (sakhakh, knit/cover) • רָקַם (raqam, embroider)</p>
+
+  <div class="card">
+    <h2>📚 Learn More About the Image of God</h2>
+    <div class="chip-container">
+      <a href="/studies/thematic/image-of-god/overview.html" class="chip-link">Overview</a>
+      <a href="/studies/thematic/image-of-god/genesis-1-2.html" class="chip-link">Genesis 1–2</a>
+      <a href="/studies/thematic/image-of-god/ane-background.html" class="chip-link">ANE Background</a>
+      <a href="/studies/thematic/image-of-god/royal-priest-prophet.html" class="chip-link">Royal–Priest–Prophet</a>
+      <a href="/studies/thematic/image-of-god/male-female-one-image.html" class="chip-link">Male & Female</a>
+      <a href="/studies/thematic/image-of-god/literary-design.html" class="chip-link">Literary Design</a>
+      <a href="/studies/thematic/image-of-god/nt-trajectory.html" class="chip-link">NT Trajectory</a>
+      <a href="/studies/thematic/image-of-god/image-of-god.html" class="chip-link">Study Hub</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
