@@ -26,6 +26,9 @@ class HubCommon {
         if (this.config.animateStats) this.initStatsAnimation();
         if (this.config.enableFilters) this.initFilters();
         if (this.config.enableSearch) this.initSearch();
+
+        // ADD THIS LINE:
+    this.initScrollAnimations(); // Always initialize scroll animations
         
         // Always initialize these
         this.initMobileMenu();
@@ -80,23 +83,106 @@ class HubCommon {
     }
 
     /**
-     * Initialize stats animation
-     */
-    initStatsAnimation() {
-        const observerOptions = {
-            threshold: 0.5,
-            rootMargin: '0px 0px -10% 0px'
-        };
+ * Initialize stats animation
+ */
+initStatsAnimation() {
+    const observerOptions = {
+        threshold: 0.5,
+        rootMargin: '0px 0px -10% 0px'
+    };
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const statNumbers = entry.target.querySelectorAll('[data-target]');
-                    statNumbers.forEach(stat => this.animateStat(stat));
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const statNumbers = entry.target.querySelectorAll('[data-target]');
+                statNumbers.forEach(stat => this.animateStat(stat));
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    // Observe hero sections with stats
+    const heroSections = document.querySelectorAll('.hero-stats');
+    heroSections.forEach(section => observer.observe(section));
+    
+    // Also observe progress sections
+    const progressSections = document.querySelectorAll('.progress-section');
+    progressSections.forEach(section => observer.observe(section));
+}
+
+/**
+ * Initialize scroll-triggered animations for cards
+ */
+initScrollAnimations() {
+    if (!('IntersectionObserver' in window)) {
+        // Fallback: just show everything if IntersectionObserver not supported
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            el.classList.add('visible');
+        });
+        return;
+    }
+    
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px' // Trigger slightly before fully in view
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                // Add staggered delay for multiple items
+                setTimeout(() => {
+                    entry.target.classList.add('visible');
+                }, index * 50); // 50ms stagger
+                
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    
+    // Mark cards for animation and observe them
+    const animatableSelectors = [
+        '.character-card',
+        '.woman-card', 
+        '.study-card',
+        '.featured-card',
+        '.category-card',
+        '.division-card'
+    ];
+    
+    document.querySelectorAll(animatableSelectors.join(',')).forEach((card) => {
+        card.classList.add('animate-on-scroll');
+        observer.observe(card);
+    });
+    
+    console.log(`✓ Observing ${document.querySelectorAll('.animate-on-scroll').length} elements for scroll animations`);
+}
+
+/**
+ * Animate a single stat number
+ */
+animateStat(element) {
+    const target = parseInt(element.dataset.target);
+    if (isNaN(target)) return;
+    
+    const duration = 2000; // 2 seconds
+    const steps = 60;
+    const increment = target / steps;
+    let current = 0;
+    let step = 0;
+    
+    const timer = setInterval(() => {
+        current += increment;
+        step++;
+        
+        if (step >= steps) {
+            element.textContent = target + (element.dataset.suffix || '');
+            clearInterval(timer);
+        } else {
+            element.textContent = Math.floor(current) + (element.dataset.suffix || '');
+        }
+    }, duration / steps);
+}
 
         // Observe hero sections with stats
         const heroSections = document.querySelectorAll('.hero-stats');
