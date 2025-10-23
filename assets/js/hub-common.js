@@ -184,41 +184,6 @@ animateStat(element) {
     }, duration / steps);
 }
 
-        // Observe hero sections with stats
-        const heroSections = document.querySelectorAll('.hero-stats');
-        heroSections.forEach(section => observer.observe(section));
-        
-        // Also observe progress sections
-        const progressSections = document.querySelectorAll('.progress-section');
-        progressSections.forEach(section => observer.observe(section));
-    }
-
-    /**
-     * Animate a single stat number
-     */
-    animateStat(element) {
-        const target = parseInt(element.dataset.target);
-        if (isNaN(target)) return;
-        
-        const duration = 2000; // 2 seconds
-        const steps = 60;
-        const increment = target / steps;
-        let current = 0;
-        let step = 0;
-        
-        const timer = setInterval(() => {
-            current += increment;
-            step++;
-            
-            if (step >= steps) {
-                element.textContent = target + (element.dataset.suffix || '');
-                clearInterval(timer);
-            } else {
-                element.textContent = Math.floor(current) + (element.dataset.suffix || '');
-            }
-        }, duration / steps);
-    }
-
     /**
      * Initialize filter functionality
      */
