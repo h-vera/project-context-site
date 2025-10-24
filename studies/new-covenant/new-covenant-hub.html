@@ -6,6 +6,29 @@
   <title>New Covenant Studies - Project Context</title>
   <meta name="description" content="Structured Edition hub for the New Covenant writings: Synoptic Gospels & Acts, Pauline missionary correspondence, Pastoral & Prison letters, Petrine & Jude, Johannine corpus, and General Epistles."/>
 
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="New Covenant Studies - Project Context">
+  <meta name="twitter:description" content="Explore the 27 books of the New Covenant through structured study and literary analysis.">
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="New Covenant Studies - Project Context">
+  <meta property="og:description" content="A structured, literal–literary exploration of the apostolic writings — hearing their rhetoric, triads, creeds, and doxologies as living text.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://projectcontext.org/studies/new-covenant/">
+  <meta property="og:image" content="https://projectcontext.org/assets/images/new-covenant-og.jpg">
+
+  <!-- Navigation Context -->
+  <meta name="nav-hub" content="new-testament">
+  <meta name="page-category" content="study-hub">
+  <meta name="has-greek" content="true">
+
+  <!-- Preload Critical Resources -->
+  <link rel="preload" href="/assets/css/global-v2.css" as="style">
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://projectcontext.org/studies/new-covenant/">
+
   <!-- Stylesheets -->
   <link rel="stylesheet" href="/assets/css/global-v2.css">
 
@@ -31,6 +54,35 @@
       font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;
       line-height:1.6;color:var(--primary-dark);background:var(--bg-gray);overflow-x:hidden
     }
+
+    /* Skip Link for Accessibility */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--accent-blue);
+      color: white;
+      padding: 8px 16px;
+      text-decoration: none;
+      z-index: 10000;
+      border-radius: 0 0 4px 0;
+    }
+    .skip-link:focus {
+      top: 0;
+    }
+
+    /* Reading Progress Bar */
+    .reading-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+      z-index: 9999;
+      transition: width 0.1s ease;
+    }
+
     nav{
       position:fixed;width:100%;top:0;background:rgba(255,255,255,.98);
       backdrop-filter:blur(10px);z-index:1000;padding:1rem 2rem;box-shadow:var(--shadow-md);transition:all .3s ease
@@ -47,6 +99,41 @@
     .nav-links a:hover,.nav-links a.active{color:var(--primary-dark);background-color:rgba(0,0,0,.05)}
     .mobile-menu-toggle{display:none;background:none;border:none;cursor:pointer;padding:.5rem;flex-direction:column;gap:4px}
     .mobile-menu-toggle span{display:block;width:25px;height:3px;background:var(--primary-dark);transition:all .3s ease;border-radius:2px}
+
+    /* Mobile Menu Overlay */
+    .mobile-menu-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .mobile-menu-overlay.active {
+      display: block;
+      opacity: 1;
+    }
+
+    /* Breadcrumbs */
+    .breadcrumbs {
+      font-size: 0.9rem;
+      color: var(--text-gray);
+      margin-bottom: 2rem;
+      padding: 0.75rem 0;
+    }
+    .breadcrumbs a {
+      color: var(--accent-blue);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .breadcrumbs a:hover {
+      color: var(--accent-purple);
+      text-decoration: underline;
+    }
 
     .hero{
       min-height:50vh;display:flex;align-items:center;justify-content:center;padding:2rem;margin-top:80px;position:relative;
@@ -95,6 +182,36 @@
     .book-info-item{display:flex;align-items:center;gap:.25rem}
     .book-description{color:var(--text-gray);font-size:.95rem;line-height:1.5}
 
+    /* Back to Top Button */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 50px;
+      height: 50px;
+      background: var(--accent-blue);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 1.5rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-lg);
+      z-index: 999;
+    }
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    .back-to-top:hover {
+      background: var(--accent-purple);
+      transform: translateY(-5px);
+    }
+
     footer{background:linear-gradient(135deg,var(--primary-dark) 0%, #2c2c2c 100%);color:var(--primary-light);text-align:center;padding:3rem 2rem;margin-top:6rem;position:relative;overflow:hidden}
     footer::before{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at 50% 0%, rgba(0,180,216,.12) 0%, transparent 70%)}
     footer p{position:relative;z-index:1}
@@ -106,264 +223,294 @@
       .container{padding:2rem 1rem}
       .division-header{flex-direction:column;text-align:center}
       .hero-stats{flex-direction:column;gap:1.5rem}
+      .back-to-top {
+        bottom: 1rem;
+        right: 1rem;
+        width: 45px;
+        height: 45px;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Accessibility Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress"></div>
+
   <!-- Navigation will be injected here by nav-component.js -->
 
-  <section class="hero">
-    <div class="hero-content">
-      <h1 class="hero-title">New Covenant Studies</h1>
-      <p class="hero-subtitle">A structured, literal–literary exploration of the apostolic writings — hearing their rhetoric, triads, creeds, and doxologies as living text.</p>
-      <div class="hero-stats">
-        <div class="stat-item">
-          <div class="stat-number">27</div>
-          <div class="stat-label">Books</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">6</div>
-          <div class="stat-label">Study Clusters</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">Structured</div>
-          <div class="stat-label">Edition & Commentary</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="container">
-    <div class="quick-links">
-      <a href="#synoptic-acts" class="quick-link">📖 Synoptic Gospels & Acts</a>
-      <a href="#paul-missions" class="quick-link">🧭 Missionary Correspondence</a>
-      <a href="#pastoral-prison" class="quick-link">🩸 Pastoral & Prison Letters</a>
-      <a href="#petrine-jude" class="quick-link">🗝️ Petrine & Jude</a>
-      <a href="#johannine" class="quick-link">🕊️ Johannine Corpus</a>
-      <a href="#general-epistles" class="quick-link">✉️ General Epistles & One‑offs</a>
-    </div>
-
-    <!-- Synoptic Gospels & Acts -->
-    <div class="division-card" id="synoptic-acts">
-      <div class="division-header">
-        <div class="division-icon">📖</div>
-        <div class="division-info">
-          <h2 class="division-title">Synoptic Gospels & Acts</h2>
-          <p class="division-description">Three narrative witnesses plus the Spirit's mission through the apostles.</p>
-        </div>
-      </div>
-      <div class="books-grid">
-        <a href="#" class="book-card">
-          <div class="book-card-header"><div class="book-name">Matthew</div><span class="book-status coming-soon">Hub</span></div>
-          <div class="book-greek">Κατὰ Ματθαῖον</div>
-          <div class="book-info"><span class="book-info-item">🧱 Five discourses</span><span class="book-info-item">🌿 Fulfillment motifs</span></div>
-          <p class="book-description">Jesus as Davidic/Mosaic fulfiller; Torah intensified.</p>
-        </a>
-        <a href="#" class="book-card">
-          <div class="book-card-header"><div class="book-name">Mark</div><span class="book-status coming-soon">Hub</span></div>
-          <div class="book-greek">Κατὰ Μᾶρκον</div>
-          <div class="book-info"><span class="book-info-item">⚡ Rapid narrative</span><span class="book-info-item">🗝️ Petrine source</span></div>
-          <p class="book-description">Earliest narrative tradition; often tied to Peter's testimony.</p>
-        </a>
-        <a href="#" class="book-card">
-          <div class="book-card-header"><div class="book-name">Luke–Acts (Vol. I)</div><span class="book-status coming-soon">Hub</span></div>
-          <div class="book-greek">Κατὰ Λουκᾶν</div>
-          <div class="book-info"><span class="book-info-item">🕊️ Spirit</span><span class="book-info-item">🌍 Gentile inclusion</span></div>
-          <p class="book-description">Orderly account for Theophilus; table fellowship and reversals.</p>
-        </a>
-        <a href="#" class="book-card">
-          <div class="book-card-header"><div class="book-name">Luke–Acts (Vol. II)</div><span class="book-status coming-soon">Hub</span></div>
-          <div class="book-greek">Πράξεις Ἀποστόλων</div>
-          <div class="book-info"><span class="book-info-item">🔥 Pentecost</span><span class="book-info-item">🗺️ Paul's journeys</span></div>
-          <p class="book-description">The risen Lord's work by the Spirit from Jerusalem to the ends of the earth.</p>
-        </a>
-      </div>
-      <p style="color:#666;margin-top:1rem;">📝 <em>Note:</em> The <strong>Gospel of John</strong> appears in the <a href="#johannine">Johannine Corpus</a>.</p>
-    </div>
-
-    <!-- Missionary Correspondence -->
-    <div class="division-card" id="paul-missions">
-      <div class="division-header">
-        <div class="division-icon">🧭</div>
-        <div class="division-info">
-          <h2 class="division-title">Paul — Missionary Correspondence</h2>
-          <p class="division-description">Letters tied to the recorded journeys in Acts (13–21).</p>
-        </div>
-      </div>
-      <div class="books-grid">
-        <a href="#" class="book-card">
-          <div class="book-card-header"><div class="book-name">Journey I</div><span class="book-status coming-soon">Cluster</span></div>
-          <div class="book-greek">Acts 13–14 context</div>
-          <div class="book-info"><span class="book-info-item">🌿 Galatians</span><span class="book-info-item">🏛️ Early controversy</span></div>
-          <p class="book-description">Early mission letter from the Galatian context.</p>
-        </a>
-        <a href="#" class="book-card">
-          <div class="book-card-header"><div class="book-name">Journey II</div><span class="book-status coming-soon">Cluster</span></div>
-          <div class="book-greek">Acts 15–18 context</div>
-          <div class="book-info"><span class="book-info-item">🏙️ 1–2 Thess</span><span class="book-info-item">🧵 1–2 Cor</span></div>
-          <p class="book-description">Macedonian–Achaian mission: holiness, resurrection, generosity.</p>
-        </a>
-        <a href="#" class="book-card">
-          <div class="book-card-header"><div class="book-name">Journey III</div><span class="book-status coming-soon">Cluster</span></div>
-          <div class="book-greek">Acts 18–21 context</div>
-          <div class="book-info"><span class="book-info-item">🏛️ Romans</span><span class="book-info-item">🏗️ Corinth/Ephesus</span></div>
-          <p class="book-description">Late mission letters culminating in the Rome vision.</p>
-        </a>
+  <main id="main-content" class="content-section" role="main" aria-label="New Covenant Studies Hub">
+    
+    <!-- Breadcrumbs -->
+    <div class="container">
+      <div class="breadcrumbs">
+        <a href="/">Home</a> › 
+        <a href="/studies/">Studies</a> › 
+        New Covenant
       </div>
     </div>
 
-    <!-- Pastoral & Prison Letters -->
-    <div class="division-card" id="pastoral-prison">
-      <div class="division-header">
-        <div class="division-icon">🩸</div>
-        <div class="division-info">
-          <h2 class="division-title">Pastoral & Prison Letters</h2>
-          <p class="division-description">Late Pauline phase: mentorship, maturity, unity, and suffering for the gospel.</p>
+    <section class="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">New Covenant Studies</h1>
+        <p class="hero-subtitle">A structured, literal–literary exploration of the apostolic writings — hearing their rhetoric, triads, creeds, and doxologies as living text.</p>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div class="stat-number">27</div>
+            <div class="stat-label">Books</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">6</div>
+            <div class="stat-label">Study Clusters</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">Structured</div>
+            <div class="stat-label">Edition & Commentary</div>
+          </div>
         </div>
       </div>
-      <div class="books-grid">
-        <!-- Prison Letters -->
-        <a href="#" class="book-card">
-          <div class="book-card-header"><div class="book-name">Ephesians</div><span class="book-status coming-soon">Prison</span></div>
-          <div class="book-greek">Πρὸς Ἐφεσίους</div>
-          <div class="book-info"><span class="book-info-item">🕊️ Unity</span><span class="book-info-item">🏛️ Temple imagery</span></div>
-          <p class="book-description">Circular letter from imprisonment. <em>Note:</em> Ephesus connection (corpus context).</p>
-        </a>
-        <a href="#" class="book-card">
-          <div class="book-card-header"><div class="book-name">Philippians</div><span class="book-status coming-soon">Prison</span></div>
-          <div class="book-greek">Πρὸς Φιλιππησίους</div>
-          <div class="book-info"><span class="book-info-item">🎵 Joy</span><span class="book-info-item">🤝 Partnership</span></div>
-          <p class="book-description">Joy and partnership in the gospel under chains.</p>
-        </a>
-        <a href="#" class="book-card">
-          <div class="book-card-header"><div class="book-name">Colossians</div><span class="book-status coming-soon">Prison</span></div>
-          <div class="book-greek">Πρὸς Κολοσσαεῖς</div>
-          <div class="book-info"><span class="book-info-item">👑 Cosmic Christ</span><span class="book-info-item">🧵 Shared with Eph</span></div>
-          <p class="book-description">Christ's supremacy; language overlap with Ephesians.</p>
-        </a>
-        <a href="#" class="book-card">
-          <div class="book-card-header"><div class="book-name">Philemon</div><span class="book-status coming-soon">Prison</span></div>
-          <div class="book-greek">Φιλήμων</div>
-          <div class="book-info"><span class="book-info-item">🕊️ Reconciliation</span><span class="book-info-item">👥 Onesimus</span></div>
-          <p class="book-description">Appeal for a brother — personal, pastoral, and profound.</p>
-        </a>
+    </section>
 
-        <!-- Pastoral Letters -->
-        <a href="1Tim-Structured-Ch1-literal.html" class="book-card">
-          <div class="book-card-header"><div class="book-name">1 Timothy</div><span class="book-status">Pastoral</span></div>
-          <div class="book-greek">Πρὸς Τιμόθεον Α΄</div>
-          <div class="book-info"><span class="book-info-item">📜 Structured ed.</span><span class="book-info-item">📝 Journal live</span></div>
-          <p class="book-description">Leadership, healthy doctrine, and moral triads; Ephesus setting.</p>
-        </a>
-        <a href="#" class="book-card">
-          <div class="book-card-header"><div class="book-name">2 Timothy</div><span class="book-status coming-soon">Pastoral</span></div>
-          <div class="book-greek">Πρὸς Τιμόθεον Β΄</div>
-          <div class="book-info"><span class="book-info-item">🎖️ Endurance</span><span class="book-info-item">🔥 Guard the gospel</span></div>
-          <p class="book-description">A final charge: share in suffering, fulfill your ministry.</p>
-        </a>
-        <a href="#" class="book-card">
-          <div class="book-card-header"><div class="book-name">Titus</div><span class="book-status coming-soon">Pastoral</span></div>
-          <div class="book-greek">Πρὸς Τίτον</div>
-          <div class="book-info"><span class="book-info-item">🏝️ Crete</span><span class="book-info-item">🧭 Order & elders</span></div>
-          <p class="book-description">Set in order what remains; appoint elders; adorn the doctrine.</p>
-        </a>
+    <div class="container">
+      <div class="quick-links">
+        <a href="#synoptic-acts" class="quick-link">📖 Synoptic Gospels & Acts</a>
+        <a href="#paul-missions" class="quick-link">🧭 Missionary Correspondence</a>
+        <a href="#pastoral-prison" class="quick-link">🩸 Pastoral & Prison Letters</a>
+        <a href="#petrine-jude" class="quick-link">🗝️ Petrine & Jude</a>
+        <a href="#johannine" class="quick-link">🕊️ Johannine Corpus</a>
+        <a href="#general-epistles" class="quick-link">✉️ General Epistles & One‑offs</a>
       </div>
-    </div>
 
-    <!-- Petrine & Jude -->
-    <div class="division-card" id="petrine-jude">
-      <div class="division-header">
-        <div class="division-icon">🗝️</div>
-        <div class="division-info">
-          <h2 class="division-title">Petrine & Jude (with Mark)</h2>
-          <p class="division-description">Tradition links Mark's Gospel to Peter's testimony; grouped with 1–2 Peter & Jude.</p>
+      <!-- Synoptic Gospels & Acts -->
+      <div class="division-card" id="synoptic-acts">
+        <div class="division-header">
+          <div class="division-icon">📖</div>
+          <div class="division-info">
+            <h2 class="division-title">Synoptic Gospels & Acts</h2>
+            <p class="division-description">Three narrative witnesses plus the Spirit's mission through the apostles.</p>
+          </div>
+        </div>
+        <div class="books-grid">
+          <a href="#" class="book-card">
+            <div class="book-card-header"><div class="book-name">Matthew</div><span class="book-status coming-soon">Hub</span></div>
+            <div class="book-greek">Κατὰ Ματθαῖον</div>
+            <div class="book-info"><span class="book-info-item">🧱 Five discourses</span><span class="book-info-item">🌿 Fulfillment motifs</span></div>
+            <p class="book-description">Jesus as Davidic/Mosaic fulfiller; Torah intensified.</p>
+          </a>
+          <a href="#" class="book-card">
+            <div class="book-card-header"><div class="book-name">Mark</div><span class="book-status coming-soon">Hub</span></div>
+            <div class="book-greek">Κατὰ Μᾶρκον</div>
+            <div class="book-info"><span class="book-info-item">⚡ Rapid narrative</span><span class="book-info-item">🗝️ Petrine source</span></div>
+            <p class="book-description">Earliest narrative tradition; often tied to Peter's testimony.</p>
+          </a>
+          <a href="#" class="book-card">
+            <div class="book-card-header"><div class="book-name">Luke–Acts (Vol. I)</div><span class="book-status coming-soon">Hub</span></div>
+            <div class="book-greek">Κατὰ Λουκᾶν</div>
+            <div class="book-info"><span class="book-info-item">🕊️ Spirit</span><span class="book-info-item">🌍 Gentile inclusion</span></div>
+            <p class="book-description">Orderly account for Theophilus; table fellowship and reversals.</p>
+          </a>
+          <a href="#" class="book-card">
+            <div class="book-card-header"><div class="book-name">Luke–Acts (Vol. II)</div><span class="book-status coming-soon">Hub</span></div>
+            <div class="book-greek">Πράξεις Ἀποστόλων</div>
+            <div class="book-info"><span class="book-info-item">🔥 Pentecost</span><span class="book-info-item">🗺️ Paul's journeys</span></div>
+            <p class="book-description">The risen Lord's work by the Spirit from Jerusalem to the ends of the earth.</p>
+          </a>
+        </div>
+        <p style="color:#666;margin-top:1rem;">📝 <em>Note:</em> The <strong>Gospel of John</strong> appears in the <a href="#johannine">Johannine Corpus</a>.</p>
+      </div>
+
+      <!-- Missionary Correspondence -->
+      <div class="division-card" id="paul-missions">
+        <div class="division-header">
+          <div class="division-icon">🧭</div>
+          <div class="division-info">
+            <h2 class="division-title">Paul — Missionary Correspondence</h2>
+            <p class="division-description">Letters tied to the recorded journeys in Acts (13–21).</p>
+          </div>
+        </div>
+        <div class="books-grid">
+          <a href="#" class="book-card">
+            <div class="book-card-header"><div class="book-name">Journey I</div><span class="book-status coming-soon">Cluster</span></div>
+            <div class="book-greek">Acts 13–14 context</div>
+            <div class="book-info"><span class="book-info-item">🌿 Galatians</span><span class="book-info-item">🏛️ Early controversy</span></div>
+            <p class="book-description">Early mission letter from the Galatian context.</p>
+          </a>
+          <a href="#" class="book-card">
+            <div class="book-card-header"><div class="book-name">Journey II</div><span class="book-status coming-soon">Cluster</span></div>
+            <div class="book-greek">Acts 15–18 context</div>
+            <div class="book-info"><span class="book-info-item">🏙️ 1–2 Thess</span><span class="book-info-item">🧵 1–2 Cor</span></div>
+            <p class="book-description">Macedonian–Achaian mission: holiness, resurrection, generosity.</p>
+          </a>
+          <a href="#" class="book-card">
+            <div class="book-card-header"><div class="book-name">Journey III</div><span class="book-status coming-soon">Cluster</span></div>
+            <div class="book-greek">Acts 18–21 context</div>
+            <div class="book-info"><span class="book-info-item">🏛️ Romans</span><span class="book-info-item">🏗️ Corinth/Ephesus</span></div>
+            <p class="book-description">Late mission letters culminating in the Rome vision.</p>
+          </a>
         </div>
       </div>
-      <div class="books-grid">
-        <a href="#" class="book-card">
-          <div class="book-card-header"><div class="book-name">1 Peter</div><span class="book-status coming-soon">Hub</span></div>
-          <div class="book-greek">Πέτρου Α΄</div>
-          <div class="book-info"><span class="book-info-item">🕊️ Exiles</span><span class="book-info-item">🔥 Suffering hope</span></div>
-          <p class="book-description">Holy conduct amid trials; priestly people identity.</p>
-        </a>
-        <a href="#" class="book-card">
-          <div class="book-card-header"><div class="book-name">2 Peter</div><span class="book-status coming-soon">Hub</span></div>
-          <div class="book-greek">Πέτρου Β΄</div>
-          <div class="book-info"><span class="book-info-item">⏳ Promise/Parousia</span><span class="book-info-item">🧪 False teachers</span></div>
-          <p class="book-description">Grow in grace and knowledge; patience with the Lord's timing.</p>
-        </a>
-        <a href="#" class="book-card">
-          <div class="book-card-header"><div class="book-name">Jude</div><span class="book-status coming-soon">Hub</span></div>
-          <div class="book-greek">Ἰούδας</div>
-          <div class="book-info"><span class="book-info-item">⚠️ Contend for faith</span><span class="book-info-item">💠 Doxology</span></div>
-          <p class="book-description">Keep yourselves in God's love; mercy on those who doubt.</p>
-        </a>
-      </div>
-      <p style="color:#666;margin-top:1rem;">📝 <em>Note:</em> <strong>Mark</strong> is cross-referenced here as the Petrine narrative source.</p>
-    </div>
 
-    <!-- Johannine Corpus -->
-    <div class="division-card" id="johannine">
-      <div class="division-header">
-        <div class="division-icon">🕊️</div>
-        <div class="division-info">
-          <h2 class="division-title">Johannine Corpus</h2>
-          <p class="division-description">The Word made flesh, the beloved community, and the victory of the Lamb.</p>
+      <!-- Pastoral & Prison Letters -->
+      <div class="division-card" id="pastoral-prison">
+        <div class="division-header">
+          <div class="division-icon">🩸</div>
+          <div class="division-info">
+            <h2 class="division-title">Pastoral & Prison Letters</h2>
+            <p class="division-description">Late Pauline phase: mentorship, maturity, unity, and suffering for the gospel.</p>
+          </div>
+        </div>
+        <div class="books-grid">
+          <!-- Prison Letters -->
+          <a href="#" class="book-card">
+            <div class="book-card-header"><div class="book-name">Ephesians</div><span class="book-status coming-soon">Prison</span></div>
+            <div class="book-greek">Πρὸς Ἐφεσίους</div>
+            <div class="book-info"><span class="book-info-item">🕊️ Unity</span><span class="book-info-item">🏛️ Temple imagery</span></div>
+            <p class="book-description">Circular letter from imprisonment. <em>Note:</em> Ephesus connection (corpus context).</p>
+          </a>
+          <a href="#" class="book-card">
+            <div class="book-card-header"><div class="book-name">Philippians</div><span class="book-status coming-soon">Prison</span></div>
+            <div class="book-greek">Πρὸς Φιλιππησίους</div>
+            <div class="book-info"><span class="book-info-item">🎵 Joy</span><span class="book-info-item">🤝 Partnership</span></div>
+            <p class="book-description">Joy and partnership in the gospel under chains.</p>
+          </a>
+          <a href="#" class="book-card">
+            <div class="book-card-header"><div class="book-name">Colossians</div><span class="book-status coming-soon">Prison</span></div>
+            <div class="book-greek">Πρὸς Κολοσσαεῖς</div>
+            <div class="book-info"><span class="book-info-item">👑 Cosmic Christ</span><span class="book-info-item">🧵 Shared with Eph</span></div>
+            <p class="book-description">Christ's supremacy; language overlap with Ephesians.</p>
+          </a>
+          <a href="#" class="book-card">
+            <div class="book-card-header"><div class="book-name">Philemon</div><span class="book-status coming-soon">Prison</span></div>
+            <div class="book-greek">Φιλήμων</div>
+            <div class="book-info"><span class="book-info-item">🕊️ Reconciliation</span><span class="book-info-item">👥 Onesimus</span></div>
+            <p class="book-description">Appeal for a brother — personal, pastoral, and profound.</p>
+          </a>
+
+          <!-- Pastoral Letters -->
+          <a href="1Tim-Structured-Ch1-literal.html" class="book-card">
+            <div class="book-card-header"><div class="book-name">1 Timothy</div><span class="book-status">Pastoral</span></div>
+            <div class="book-greek">Πρὸς Τιμόθεον Α΄</div>
+            <div class="book-info"><span class="book-info-item">📜 Structured ed.</span><span class="book-info-item">📝 Journal live</span></div>
+            <p class="book-description">Leadership, healthy doctrine, and moral triads; Ephesus setting.</p>
+          </a>
+          <a href="#" class="book-card">
+            <div class="book-card-header"><div class="book-name">2 Timothy</div><span class="book-status coming-soon">Pastoral</span></div>
+            <div class="book-greek">Πρὸς Τιμόθεον Β΄</div>
+            <div class="book-info"><span class="book-info-item">🎖️ Endurance</span><span class="book-info-item">🔥 Guard the gospel</span></div>
+            <p class="book-description">A final charge: share in suffering, fulfill your ministry.</p>
+          </a>
+          <a href="#" class="book-card">
+            <div class="book-card-header"><div class="book-name">Titus</div><span class="book-status coming-soon">Pastoral</span></div>
+            <div class="book-greek">Πρὸς Τίτον</div>
+            <div class="book-info"><span class="book-info-item">🏝️ Crete</span><span class="book-info-item">🧭 Order & elders</span></div>
+            <p class="book-description">Set in order what remains; appoint elders; adorn the doctrine.</p>
+          </a>
         </div>
       </div>
-      <div class="books-grid">
-        <a href="#" class="book-card">
-          <div class="book-card-header"><div class="book-name">Gospel of John</div><span class="book-status coming-soon">Hub</span></div>
-          <div class="book-greek">Κατὰ Ἰωάννην</div>
-          <div class="book-info"><span class="book-info-item">🔑 Signs</span><span class="book-info-item">🕊️ Spirit-Paraclete</span></div>
-          <p class="book-description">The Word made flesh; belief through signs; high-priestly prayer.</p>
-        </a>
-        <a href="#" class="book-card">
-          <div class="book-card-header"><div class="book-name">1 John</div><span class="book-status coming-soon">Hub</span></div>
-          <div class="book-greek">Ἰωάννου Α΄</div>
-          <div class="book-info"><span class="book-info-item">🧪 Tests of life</span><span class="book-info-item">🕯️ Light & love</span></div>
-          <p class="book-description">Fellowship, confession, love, and true knowledge of the Son.</p>
-        </a>
-        <a href="#" class="book-card">
-          <div class="book-card-header"><div class="book-name">2–3 John</div><span class="book-status coming-soon">Hub</span></div>
-          <div class="book-greek">Ἰωάννου Β΄–Γ΄</div>
-          <div class="book-info"><span class="book-info-item">🏠 House churches</span><span class="book-info-item">🚶 Truth in love</span></div>
-          <p class="book-description">Hospitality & boundaries; imitate what is good.</p>
-        </a>
-        <a href="#" class="book-card">
-          <div class="book-card-header"><div class="book-name">Revelation</div><span class="book-status coming-soon">Hub</span></div>
-          <div class="book-greek">Ἀποκάλυψις</div>
-          <div class="book-info"><span class="book-info-item">👑 Lamb's victory</span><span class="book-info-item">🏛️ Asia Minor churches</span></div>
-          <p class="book-description">The unveiling of Jesus Christ; faithful witness under empire.</p>
-        </a>
-      </div>
-    </div>
 
-    <!-- General Epistles & One-offs -->
-    <div class="division-card" id="general-epistles">
-      <div class="division-header">
-        <div class="division-icon">✉️</div>
-        <div class="division-info">
-          <h2 class="division-title">General Epistles & One‑offs</h2>
-          <p class="division-description">Non-Pauline letters and stand-alone works, including Hebrews.</p>
+      <!-- Petrine & Jude -->
+      <div class="division-card" id="petrine-jude">
+        <div class="division-header">
+          <div class="division-icon">🗝️</div>
+          <div class="division-info">
+            <h2 class="division-title">Petrine & Jude (with Mark)</h2>
+            <p class="division-description">Tradition links Mark's Gospel to Peter's testimony; grouped with 1–2 Peter & Jude.</p>
+          </div>
+        </div>
+        <div class="books-grid">
+          <a href="#" class="book-card">
+            <div class="book-card-header"><div class="book-name">1 Peter</div><span class="book-status coming-soon">Hub</span></div>
+            <div class="book-greek">Πέτρου Α΄</div>
+            <div class="book-info"><span class="book-info-item">🕊️ Exiles</span><span class="book-info-item">🔥 Suffering hope</span></div>
+            <p class="book-description">Holy conduct amid trials; priestly people identity.</p>
+          </a>
+          <a href="#" class="book-card">
+            <div class="book-card-header"><div class="book-name">2 Peter</div><span class="book-status coming-soon">Hub</span></div>
+            <div class="book-greek">Πέτρου Β΄</div>
+            <div class="book-info"><span class="book-info-item">⏳ Promise/Parousia</span><span class="book-info-item">🧪 False teachers</span></div>
+            <p class="book-description">Grow in grace and knowledge; patience with the Lord's timing.</p>
+          </a>
+          <a href="#" class="book-card">
+            <div class="book-card-header"><div class="book-name">Jude</div><span class="book-status coming-soon">Hub</span></div>
+            <div class="book-greek">Ἰούδας</div>
+            <div class="book-info"><span class="book-info-item">⚠️ Contend for faith</span><span class="book-info-item">💠 Doxology</span></div>
+            <p class="book-description">Keep yourselves in God's love; mercy on those who doubt.</p>
+          </a>
+        </div>
+        <p style="color:#666;margin-top:1rem;">📝 <em>Note:</em> <strong>Mark</strong> is cross-referenced here as the Petrine narrative source.</p>
+      </div>
+
+      <!-- Johannine Corpus -->
+      <div class="division-card" id="johannine">
+        <div class="division-header">
+          <div class="division-icon">🕊️</div>
+          <div class="division-info">
+            <h2 class="division-title">Johannine Corpus</h2>
+            <p class="division-description">The Word made flesh, the beloved community, and the victory of the Lamb.</p>
+          </div>
+        </div>
+        <div class="books-grid">
+          <a href="#" class="book-card">
+            <div class="book-card-header"><div class="book-name">Gospel of John</div><span class="book-status coming-soon">Hub</span></div>
+            <div class="book-greek">Κατὰ Ἰωάννην</div>
+            <div class="book-info"><span class="book-info-item">🔑 Signs</span><span class="book-info-item">🕊️ Spirit-Paraclete</span></div>
+            <p class="book-description">The Word made flesh; belief through signs; high-priestly prayer.</p>
+          </a>
+          <a href="#" class="book-card">
+            <div class="book-card-header"><div class="book-name">1 John</div><span class="book-status coming-soon">Hub</span></div>
+            <div class="book-greek">Ἰωάννου Α΄</div>
+            <div class="book-info"><span class="book-info-item">🧪 Tests of life</span><span class="book-info-item">🕯️ Light & love</span></div>
+            <p class="book-description">Fellowship, confession, love, and true knowledge of the Son.</p>
+          </a>
+          <a href="#" class="book-card">
+            <div class="book-card-header"><div class="book-name">2–3 John</div><span class="book-status coming-soon">Hub</span></div>
+            <div class="book-greek">Ἰωάννου Β΄–Γ΄</div>
+            <div class="book-info"><span class="book-info-item">🏠 House churches</span><span class="book-info-item">🚶 Truth in love</span></div>
+            <p class="book-description">Hospitality & boundaries; imitate what is good.</p>
+          </a>
+          <a href="#" class="book-card">
+            <div class="book-card-header"><div class="book-name">Revelation</div><span class="book-status coming-soon">Hub</span></div>
+            <div class="book-greek">Ἀποκάλυψις</div>
+            <div class="book-info"><span class="book-info-item">👑 Lamb's victory</span><span class="book-info-item">🏛️ Asia Minor churches</span></div>
+            <p class="book-description">The unveiling of Jesus Christ; faithful witness under empire.</p>
+          </a>
         </div>
       </div>
-      <div class="books-grid">
-        <a href="#" class="book-card">
-          <div class="book-card-header"><div class="book-name">James</div><span class="book-status coming-soon">Hub</span></div>
-          <div class="book-greek">Ἰάκωβος</div>
-          <div class="book-info"><span class="book-info-item">🛠️ Wisdom-in-action</span><span class="book-info-item">🗣️ Speech ethics</span></div>
-          <p class="book-description">Be doers of the word; rich/poor reversal; taming the tongue.</p>
-        </a>
-        <a href="#" class="book-card">
-          <div class="book-card-header"><div class="book-name">Hebrews</div><span class="book-status coming-soon">Hub</span></div>
-          <div class="book-greek">Πρὸς Ἑβραίους</div>
-          <div class="book-info"><span class="book-info-item">⛪ Better covenant</span><span class="book-info-item">🩸 Once-for-all</span></div>
-          <p class="book-description">Jesus the greater priest, sacrifice, and mediator of the new covenant.</p>
-        </a>
+
+      <!-- General Epistles & One-offs -->
+      <div class="division-card" id="general-epistles">
+        <div class="division-header">
+          <div class="division-icon">✉️</div>
+          <div class="division-info">
+            <h2 class="division-title">General Epistles & One‑offs</h2>
+            <p class="division-description">Non-Pauline letters and stand-alone works, including Hebrews.</p>
+          </div>
+        </div>
+        <div class="books-grid">
+          <a href="#" class="book-card">
+            <div class="book-card-header"><div class="book-name">James</div><span class="book-status coming-soon">Hub</span></div>
+            <div class="book-greek">Ἰάκωβος</div>
+            <div class="book-info"><span class="book-info-item">🛠️ Wisdom-in-action</span><span class="book-info-item">🗣️ Speech ethics</span></div>
+            <p class="book-description">Be doers of the word; rich/poor reversal; taming the tongue.</p>
+          </a>
+          <a href="#" class="book-card">
+            <div class="book-card-header"><div class="book-name">Hebrews</div><span class="book-status coming-soon">Hub</span></div>
+            <div class="book-greek">Πρὸς Ἑβραίους</div>
+            <div class="book-info"><span class="book-info-item">⛪ Better covenant</span><span class="book-info-item">🩸 Once-for-all</span></div>
+            <p class="book-description">Jesus the greater priest, sacrifice, and mediator of the new covenant.</p>
+          </a>
+        </div>
       </div>
     </div>
-  </div>
+  </main>
+
+  <!-- Back to Top Button -->
+  <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay"></div>
 
   <footer>
     <p>&copy; 2025 Project Context — New Covenant Hub</p>
@@ -381,6 +528,24 @@
       });
     });
 
+    // Reading Progress Bar
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      document.querySelector('.reading-progress').style.width = scrolled + '%';
+    });
+
+    // Back to Top Button
+    const backToTop = document.querySelector('.back-to-top');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+
     // Add scroll effect to nav
     window.addEventListener('scroll', () => {
       const nav = document.getElementById('main-nav');
@@ -390,6 +555,23 @@
         nav.classList.remove('scrolled');
       }
     });
+
+    // Mobile Menu Overlay & Toggle
+    const mobileToggle = document.querySelector('.mobile-menu-toggle');
+    const mobileOverlay = document.querySelector('.mobile-menu-overlay');
+    const navLinks = document.querySelector('.nav-links');
+    
+    if (mobileToggle) {
+      mobileToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        mobileOverlay.classList.toggle('active');
+      });
+      
+      mobileOverlay.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        mobileOverlay.classList.remove('active');
+      });
+    }
   </script>
 
   <!-- Navigation Component Integration -->
