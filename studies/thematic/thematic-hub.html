@@ -6,6 +6,30 @@
     <title>Thematic Studies - Project Context</title>
     <meta name="description" content="Cross-biblical explorations of major themes, theological concepts, and spiritual developments throughout Scripture from Genesis to Revelation.">
     
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Thematic Studies - Project Context">
+    <meta name="twitter:description" content="Cross-biblical explorations of major themes, theological concepts, and spiritual developments throughout Scripture.">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Thematic Studies - Project Context">
+    <meta property="og:description" content="Cross-biblical explorations of major themes, theological concepts, and spiritual developments throughout Scripture from Genesis to Revelation.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://projectcontext.org/studies/thematic/">
+
+    <!-- Navigation Context -->
+    <meta name="nav-hub" content="thematic-studies">
+    <meta name="page-category" content="study-hub">
+
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="/assets/css/global-v2.css" as="style">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://projectcontext.org/studies/thematic/">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/assets/css/global-v2.css">
+    
     <style>
         /* Reset and Variables */
         :root {
@@ -20,6 +44,10 @@
             --bg-gray: #f5f5f5;
             --border: #e5e7eb;
             --shadow: rgba(0,0,0,.08);
+            --shadow-sm:0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md:0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg:0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --shadow-xl:0 20px 25px -5px rgb(0 0 0 / 0.1);
             
             /* Dynamic Gradient Schemes */
             --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
@@ -40,13 +68,51 @@
             line-height: 1.6;
             color: var(--primary-dark);
             background: var(--bg-gray);
+            overflow-x: hidden;
         }
 
-        /* Top Navigation - Simple, not fixed */
-        .top-nav {
+        /* Skip Link for Accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--accent-blue);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            z-index: 10000;
+            border-radius: 0 0 4px 0;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Reading Progress Bar */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            z-index: 9999;
+            transition: width 0.1s ease;
+        }
+
+        /* Main Navigation - Fixed */
+        nav {
+            position: fixed;
+            width: 100%;
+            top: 0;
             background: rgba(255,255,255,.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
             padding: 1rem 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,.06);
+            box-shadow: var(--shadow-md);
+            transition: all .3s ease;
+        }
+        nav.scrolled {
+            box-shadow: 0 4px 30px rgba(0,0,0,.1);
         }
 
         .nav-container {
@@ -60,22 +126,36 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 1rem;
             text-decoration: none;
             color: var(--primary-dark);
-            font-weight: 800;
-            font-size: 1.1rem;
+            transition: transform .3s ease;
+        }
+        .logo:hover {
+            transform: scale(1.05);
         }
 
-        .logo svg {
+        .logo-icon {
             width: 40px;
             height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -.5px;
         }
 
         .nav-links {
             display: flex;
             gap: 2rem;
-            align-items: center;
             list-style: none;
         }
 
@@ -83,16 +163,51 @@
             text-decoration: none;
             color: var(--text-gray);
             font-weight: 500;
-            transition: color 0.3s;
-            padding: 0.5rem;
+            transition: all .3s ease;
+            padding: .5rem 1rem;
+            border-radius: 8px;
         }
 
         .nav-links a:hover,
         .nav-links a.active {
-            background: var(--gradient-accent);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--primary-dark);
+            background-color: rgba(0,0,0,.05);
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: .5rem;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .mobile-menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: var(--primary-dark);
+            transition: all .3s ease;
+            border-radius: 2px;
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .mobile-menu-overlay.active {
+            display: block;
+            opacity: 1;
         }
 
         /* Hero Section with Dynamic Gradients */
@@ -102,6 +217,7 @@
             align-items: center;
             justify-content: center;
             padding: 6rem 2rem 3rem;
+            margin-top: 80px;
             background: var(--gradient-hero);
             background-size: 400% 400%;
             animation: gradientShift 15s ease infinite;
@@ -151,6 +267,7 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             text-shadow: 0 0 30px rgba(255,255,255,0.3);
+            animation: fadeInUp .8s ease-out;
         }
 
         .hero-subtitle {
@@ -162,6 +279,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            animation: fadeInUp .8s ease-out .1s both;
         }
 
         .hero-stats {
@@ -170,6 +288,7 @@
             justify-content: center;
             flex-wrap: wrap;
             margin-top: 2rem;
+            animation: fadeInUp .8s ease-out .3s both;
         }
 
         .stat-item {
@@ -203,10 +322,31 @@
             letter-spacing: 1px;
         }
 
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+            padding: 0.75rem 0;
+        }
+        .breadcrumbs a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .breadcrumbs a:hover {
+            color: var(--accent-purple);
+            text-decoration: underline;
+        }
+
         /* Fixed Navigation underneath hero */
         .fixed-nav {
-            position: sticky;
-            top: 0;
+            position: relative;
             background: rgba(255,255,255,0.95);
             backdrop-filter: blur(15px);
             z-index: 100;
@@ -625,18 +765,81 @@
             transform: translateX(5px);
         }
 
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--accent-blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-lg);
+            z-index: 999;
+        }
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .back-to-top:hover {
+            background: var(--accent-purple);
+            transform: translateY(-5px);
+        }
+
         /* Footer */
         footer {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #2c2c2c 100%);
+            color: var(--primary-light);
             text-align: center;
             padding: 3rem 2rem;
-            background: var(--primary-dark);
-            color: white;
+            margin-top: 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 0%, rgba(0,180,216,.12) 0%, transparent 70%);
+        }
+        footer p {
+            position: relative;
+            z-index: 1;
         }
 
         /* Mobile Responsive */
         @media (max-width: 768px) {
             .nav-links {
-                display: none;
+                position: fixed;
+                top: 65px;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background: white;
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1rem;
+                box-shadow: -5px 0 15px rgba(0,0,0,.1);
+                transition: right .3s ease;
+            }
+            .nav-links.active {
+                right: 0;
+            }
+            .mobile-menu-toggle {
+                display: flex;
             }
             
             .study-card.featured {
@@ -658,6 +861,17 @@
             .fixed-nav a {
                 padding: 0.5rem 1rem;
                 font-size: 0.85rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .back-to-top {
+                bottom: 1rem;
+                right: 1rem;
+                width: 45px;
+                height: 45px;
             }
         }
 
@@ -696,463 +910,519 @@
     </style>
 </head>
 <body>
-    <!-- Top Navigation -->
-    <nav class="top-nav">
-        <div class="nav-container">
-            <a href="/" class="logo">
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M 25 15 L 10 15 L 10 85 L 25 85" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
-                    <path d="M 75 15 L 90 15 L 90 85 L 75 85" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
-                    <ellipse cx="50" cy="50" rx="25" ry="15" stroke="#0a0a0a" stroke-width="3" fill="none"/>
-                    <circle cx="50" cy="50" r="8" fill="#00b4d8"/>
-                    <circle cx="50" cy="50" r="3" fill="#0a0a0a"/>
-                </svg>
-                <span>Project Context</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/studies" class="active">Studies</a></li>
-                <li><a href="/resources">Resources</a></li>
-                <li><a href="/about">About</a></li>
-            </ul>
-        </div>
-    </nav>
+    <!-- Accessibility Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- Hero Section with Dynamic Gradients -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">Thematic Studies</h1>
-            <p class="hero-subtitle">Cross-biblical explorations of major themes, theological concepts, and spiritual developments throughout Scripture</p>
-            <div class="hero-stats">
-                <div class="stat-item">
-                    <div class="stat-number" data-target="50">50</div>
-                    <div class="stat-label">Major Themes</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">Genesis to Revelation</div>
-                    <div class="stat-label">Full Coverage</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">Deep Dives</div>
-                    <div class="stat-label">Comprehensive Studies</div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- Reading Progress Bar -->
+    <div class="reading-progress"></div>
 
-    <!-- Fixed Navigation underneath hero -->
-    <nav class="fixed-nav">
-        <div class="fixed-nav-container">
-            <a href="#theological">⚡ Theological Concepts</a>
-            <a href="#spiritual-disciplines">🙏 Spiritual Disciplines</a>
-            <a href="#spiritual-beings">🔥 Spiritual Beings</a>
-            <a href="#covenant">📜 Covenant & Law</a>
-            <a href="#prophetic">👁️ Prophetic Themes</a>
-            <a href="#wisdom">💎 Wisdom & Poetry</a>
-            <a href="#creation">🌍 Creation & Cosmology</a>
-            <a href="#intertestamental">🏛️ Intertestamental</a>
-        </div>
-    </nav>
+    <!-- Navigation will be injected here by nav-component.js -->
 
-    <!-- Main Content -->
-    <main class="container">
-        <!-- Theme Categories -->
-        <section>
-            <div class="section-header">
-                <h2 class="section-title">Study Categories</h2>
-                <p class="section-subtitle">Explore biblical themes organized by major categories</p>
-            </div>
-
-            <div class="theme-categories">
-                <div class="category-card" data-category="theological" id="theological">
-                    <div class="category-icon">⚡</div>
-                    <h3 class="category-title">Theological Concepts</h3>
-                    <p class="category-count">15 Studies Available</p>
-                    <p class="category-description">Core theological ideas that shape our understanding of God, humanity, and salvation throughout Scripture.</p>
-                    <div class="category-topics">
-                        <span class="topic-tag">Grace</span>
-                        <span class="topic-tag">Redemption</span>
-                        <span class="topic-tag">Holiness</span>
-                        <span class="topic-tag">Justice</span>
+    <main id="main-content" role="main" aria-label="Thematic Studies Hub">
+        <!-- Hero Section with Dynamic Gradients -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">Thematic Studies</h1>
+                <p class="hero-subtitle">Cross-biblical explorations of major themes, theological concepts, and spiritual developments throughout Scripture</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="50">50</div>
+                        <div class="stat-label">Major Themes</div>
                     </div>
-                </div>
-
-                <div class="category-card" data-category="spiritual-disciplines" id="spiritual-disciplines">
-                    <div class="category-icon">🙏</div>
-                    <h3 class="category-title">Spiritual Disciplines</h3>
-                    <p class="category-count">8 Studies Available</p>
-                    <p class="category-description">Biblical practices for spiritual growth including prayer, fasting, meditation, and worship throughout Scripture.</p>
-                    <div class="category-topics">
-                        <span class="topic-tag">Prayer</span>
-                        <span class="topic-tag">Fasting</span>
-                        <span class="topic-tag">Meditation</span>
-                        <span class="topic-tag">Worship</span>
-                        <span class="topic-tag">Sabbath</span>
+                    <div class="stat-item">
+                        <div class="stat-number">Genesis to Revelation</div>
+                        <div class="stat-label">Full Coverage</div>
                     </div>
-                </div>
-
-                <div class="category-card" data-category="spiritual-beings" id="spiritual-beings">
-                    <div class="category-icon">🔥</div>
-                    <h3 class="category-title">Spiritual Beings</h3>
-                    <p class="category-count">12 Studies Available</p>
-                    <p class="category-description">Angels, demons, the divine council, and the spiritual realm as revealed in biblical texts.</p>
-                    <div class="category-topics">
-                        <span class="topic-tag">Angels</span>
-                        <span class="topic-tag">Satan</span>
-                        <span class="topic-tag">Divine Council</span>
-                        <span class="topic-tag">Cherubim</span>
-                    </div>
-                </div>
-
-                <div class="category-card" data-category="covenant" id="covenant">
-                    <div class="category-icon">📜</div>
-                    <h3 class="category-title">Covenant & Law</h3>
-                    <p class="category-count">10 Studies Available</p>
-                    <p class="category-description">God's covenants with humanity and the development of divine law throughout redemptive history.</p>
-                    <div class="category-topics">
-                        <span class="topic-tag">Abrahamic</span>
-                        <span class="topic-tag">Mosaic</span>
-                        <span class="topic-tag">Davidic</span>
-                        <span class="topic-tag">New Covenant</span>
-                    </div>
-                </div>
-
-                <div class="category-card" data-category="prophetic" id="prophetic">
-                    <div class="category-icon">👁️</div>
-                    <h3 class="category-title">Prophetic Themes</h3>
-                    <p class="category-count">8 Studies Available</p>
-                    <p class="category-description">Recurring prophetic patterns, messianic prophecies, and eschatological themes across Scripture.</p>
-                    <div class="category-topics">
-                        <span class="topic-tag">Messiah</span>
-                        <span class="topic-tag">Day of the Lord</span>
-                        <span class="topic-tag">Restoration</span>
-                        <span class="topic-tag">Kingdom</span>
-                    </div>
-                </div>
-
-                <div class="category-card" data-category="wisdom" id="wisdom">
-                    <div class="category-icon">💎</div>
-                    <h3 class="category-title">Wisdom & Poetry</h3>
-                    <p class="category-count">6 Studies Available</p>
-                    <p class="category-description">Wisdom literature themes, poetic imagery, and their theological significance.</p>
-                    <div class="category-topics">
-                        <span class="topic-tag">Fear of the Lord</span>
-                        <span class="topic-tag">Suffering</span>
-                        <span class="topic-tag">Creation</span>
-                    </div>
-                </div>
-
-                <div class="category-card" data-category="creation" id="creation">
-                    <div class="category-icon">🌍</div>
-                    <h3 class="category-title">Creation & Cosmology</h3>
-                    <p class="category-count">7 Studies Available</p>
-                    <p class="category-description">Biblical understanding of creation, the cosmos, and humanity's place within it.</p>
-                    <div class="category-topics">
-                        <span class="topic-tag">Image of God</span>
-                        <span class="topic-tag">Temple</span>
-                        <span class="topic-tag">New Creation</span>
-                    </div>
-                </div>
-
-                <div class="category-card" data-category="intertestamental" id="intertestamental">
-                    <div class="category-icon">🏛️</div>
-                    <h3 class="category-title">Intertestamental Studies</h3>
-                    <p class="category-count">4 Studies Available</p>
-                    <p class="category-description">Second Temple literature and its influence on New Testament interpretation and theology.</p>
-                    <div class="category-topics">
-                        <span class="topic-tag">1 Enoch</span>
-                        <span class="topic-tag">Jubilees</span>
-                        <span class="topic-tag">Dead Sea Scrolls</span>
-                        <span class="topic-tag">Apocalyptic</span>
+                    <div class="stat-item">
+                        <div class="stat-number">Deep Dives</div>
+                        <div class="stat-label">Comprehensive Studies</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Featured Studies Section -->
-        <section>
-            <div class="section-header">
-                <h2 class="section-title">Featured Studies</h2>
-                <p class="section-subtitle">Popular and recently updated thematic explorations</p>
+        <!-- Fixed Navigation underneath hero -->
+        <nav class="fixed-nav">
+            <div class="fixed-nav-container">
+                <a href="#theological">⚡ Theological Concepts</a>
+                <a href="#spiritual-disciplines">🙏 Spiritual Disciplines</a>
+                <a href="#spiritual-beings">🔥 Spiritual Beings</a>
+                <a href="#covenant">📜 Covenant & Law</a>
+                <a href="#prophetic">👁️ Prophetic Themes</a>
+                <a href="#wisdom">💎 Wisdom & Poetry</a>
+                <a href="#creation">🌍 Creation & Cosmology</a>
+                <a href="#intertestamental">🏛️ Intertestamental</a>
+            </div>
+        </nav>
+
+        <div class="container">
+            <!-- Breadcrumbs -->
+            <div class="breadcrumbs">
+                <a href="/">Home</a> › 
+                <a href="/studies/">Studies</a> › 
+                Thematic Studies
             </div>
 
-            <div class="featured-grid">
-                <!-- Featured Lord's Prayer Study -->
-                <a href="/studies/thematic/lords-prayer/lords-prayer.html" class="study-card featured">
-                    <div class="study-card-header">
-                        <div class="study-card-icon">🙏</div>
-                        <div>
-                            <div class="study-card-category">Spiritual Disciplines</div>
-                            <h3 class="study-card-title">The Lord's Prayer: Jesus' Model for Prayer</h3>
+            <!-- Theme Categories -->
+            <section>
+                <div class="section-header">
+                    <h2 class="section-title">Study Categories</h2>
+                    <p class="section-subtitle">Explore biblical themes organized by major categories</p>
+                </div>
+
+                <div class="theme-categories">
+                    <div class="category-card" data-category="theological" id="theological">
+                        <div class="category-icon">⚡</div>
+                        <h3 class="category-title">Theological Concepts</h3>
+                        <p class="category-count">15 Studies Available</p>
+                        <p class="category-description">Core theological ideas that shape our understanding of God, humanity, and salvation throughout Scripture.</p>
+                        <div class="category-topics">
+                            <span class="topic-tag">Grace</span>
+                            <span class="topic-tag">Redemption</span>
+                            <span class="topic-tag">Holiness</span>
+                            <span class="topic-tag">Justice</span>
                         </div>
                     </div>
-                    <div class="study-card-body">
-                        <p class="study-card-desc">A comprehensive study of Jesus' model prayer (Matthew 6:9–13): translation, structure at the heart of the Sermon on the Mount, theological themes, Old Testament echoes, and formative practice for Christian life. Explore how this prayer shapes disciples into kingdom people.</p>
-                        <div class="study-card-meta">★ New Study • Comprehensive Analysis • Interactive Design</div>
-                    </div>
-                </a>
 
-                <a href="/studies/thematic/second-temple/mechanics-of-transformation.html" class="study-card">
-                    <div class="study-card-header">
-                        <div class="study-card-icon">🏛️</div>
-                        <div>
-                            <div class="study-card-category">Intertestamental Studies</div>
-                            <h3 class="study-card-title">Second Temple Literature & NT</h3>
+                    <div class="category-card" data-category="spiritual-disciplines" id="spiritual-disciplines">
+                        <div class="category-icon">🙏</div>
+                        <h3 class="category-title">Spiritual Disciplines</h3>
+                        <p class="category-count">8 Studies Available</p>
+                        <p class="category-description">Biblical practices for spiritual growth including prayer, fasting, meditation, and worship throughout Scripture.</p>
+                        <div class="category-topics">
+                            <span class="topic-tag">Prayer</span>
+                            <span class="topic-tag">Fasting</span>
+                            <span class="topic-tag">Meditation</span>
+                            <span class="topic-tag">Worship</span>
+                            <span class="topic-tag">Sabbath</span>
                         </div>
                     </div>
-                    <div class="study-card-body">
-                        <p class="study-card-desc">Explore how New Testament authors transform Second Temple Jewish traditions through specific textual and rhetorical techniques.</p>
-                        <div class="study-card-meta">Comprehensive Study • 4-Page Analysis</div>
-                    </div>
-                </a>
 
-                <a href="/studies/thematic/evolution-of-satan/satan-evolution.html" class="study-card">
-                    <div class="study-card-header">
-                        <div class="study-card-icon">😈</div>
-                        <div>
-                            <div class="study-card-category">Spiritual Beings</div>
-                            <h3 class="study-card-title">The Evolution of Satan</h3>
+                    <div class="category-card" data-category="spiritual-beings" id="spiritual-beings">
+                        <div class="category-icon">🔥</div>
+                        <h3 class="category-title">Spiritual Beings</h3>
+                        <p class="category-count">12 Studies Available</p>
+                        <p class="category-description">Angels, demons, the divine council, and the spiritual realm as revealed in biblical texts.</p>
+                        <div class="category-topics">
+                            <span class="topic-tag">Angels</span>
+                            <span class="topic-tag">Satan</span>
+                            <span class="topic-tag">Divine Council</span>
+                            <span class="topic-tag">Cherubim</span>
                         </div>
                     </div>
-                    <div class="study-card-body">
-                        <p class="study-card-desc">Trace the development of the concept of Satan from Hebrew Bible through New Testament.</p>
-                        <div class="study-card-meta">Comprehensive Study • Multi-page</div>
-                    </div>
-                </a>
 
-                <a href="/studies/thematic/image-of-god/image-of-god.html" class="study-card">
-                    <div class="study-card-header">
-                        <div class="study-card-icon">👤</div>
-                        <div>
-                            <div class="study-card-category">Creation & Cosmology</div>
-                            <h3 class="study-card-title">Image of God</h3>
+                    <div class="category-card" data-category="covenant" id="covenant">
+                        <div class="category-icon">📜</div>
+                        <h3 class="category-title">Covenant & Law</h3>
+                        <p class="category-count">10 Studies Available</p>
+                        <p class="category-description">God's covenants with humanity and the development of divine law throughout redemptive history.</p>
+                        <div class="category-topics">
+                            <span class="topic-tag">Abrahamic</span>
+                            <span class="topic-tag">Mosaic</span>
+                            <span class="topic-tag">Davidic</span>
+                            <span class="topic-tag">New Covenant</span>
                         </div>
                     </div>
-                    <div class="study-card-body">
-                        <p class="study-card-desc">What it means to be created in God's image, from Genesis through Christ as the perfect image.</p>
-                        <div class="study-card-meta">In-depth Analysis</div>
-                    </div>
-                </a>
 
-                <a href="/studies/thematic/temple-theology/" class="study-card">
-                    <div class="study-card-header">
-                        <div class="study-card-icon">⛩️</div>
-                        <div>
-                            <div class="study-card-category">Creation & Cosmology</div>
-                            <h3 class="study-card-title">Temple Theology</h3>
+                    <div class="category-card" data-category="prophetic" id="prophetic">
+                        <div class="category-icon">👁️</div>
+                        <h3 class="category-title">Prophetic Themes</h3>
+                        <p class="category-count">8 Studies Available</p>
+                        <p class="category-description">Recurring prophetic patterns, messianic prophecies, and eschatological themes across Scripture.</p>
+                        <div class="category-topics">
+                            <span class="topic-tag">Messiah</span>
+                            <span class="topic-tag">Day of the Lord</span>
+                            <span class="topic-tag">Restoration</span>
+                            <span class="topic-tag">Kingdom</span>
                         </div>
                     </div>
-                    <div class="study-card-body">
-                        <p class="study-card-desc">The temple as cosmic mountain, meeting place between heaven and earth.</p>
-                        <div class="study-card-meta">Theological Deep Dive</div>
-                    </div>
-                </a>
 
-                <a href="/studies/thematic/kingdom-of-god/" class="study-card">
-                    <div class="study-card-header">
-                        <div class="study-card-icon">👑</div>
-                        <div>
-                            <div class="study-card-category">Prophetic Themes</div>
-                            <h3 class="study-card-title">Kingdom of God</h3>
+                    <div class="category-card" data-category="wisdom" id="wisdom">
+                        <div class="category-icon">💎</div>
+                        <h3 class="category-title">Wisdom & Poetry</h3>
+                        <p class="category-count">6 Studies Available</p>
+                        <p class="category-description">Wisdom literature themes, poetic imagery, and their theological significance.</p>
+                        <div class="category-topics">
+                            <span class="topic-tag">Fear of the Lord</span>
+                            <span class="topic-tag">Suffering</span>
+                            <span class="topic-tag">Creation</span>
                         </div>
                     </div>
-                    <div class="study-card-body">
-                        <p class="study-card-desc">The central theme of Jesus' teaching - the already/not yet nature of God's kingdom.</p>
-                        <div class="study-card-meta">NT Focus Study</div>
+
+                    <div class="category-card" data-category="creation" id="creation">
+                        <div class="category-icon">🌍</div>
+                        <h3 class="category-title">Creation & Cosmology</h3>
+                        <p class="category-count">7 Studies Available</p>
+                        <p class="category-description">Biblical understanding of creation, the cosmos, and humanity's place within it.</p>
+                        <div class="category-topics">
+                            <span class="topic-tag">Image of God</span>
+                            <span class="topic-tag">Temple</span>
+                            <span class="topic-tag">New Creation</span>
+                        </div>
                     </div>
-                </a>
-            </div>
-        </section>
 
-        <!-- All Studies Section -->
-        <section class="all-studies">
-            <div class="section-header">
-                <h2 class="section-title">All Thematic Studies</h2>
-                <p class="section-subtitle">Browse our complete collection of thematic biblical studies</p>
-            </div>
-
-            <div class="studies-filter">
-                <button class="filter-button active" data-filter="all">All Themes</button>
-                <button class="filter-button" data-filter="theological">Theological</button>
-                <button class="filter-button" data-filter="spiritual-disciplines">Spiritual Disciplines</button>
-                <button class="filter-button" data-filter="spiritual-beings">Spiritual Beings</button>
-                <button class="filter-button" data-filter="covenant">Covenant</button>
-                <button class="filter-button" data-filter="prophetic">Prophetic</button>
-                <button class="filter-button" data-filter="wisdom">Wisdom</button>
-                <button class="filter-button" data-filter="creation">Creation</button>
-                <button class="filter-button" data-filter="intertestamental">Intertestamental</button>
-            </div>
-
-            <div class="studies-list" id="studiesList">
-                <!-- Spiritual Disciplines Studies -->
-                <a href="/studies/thematic/lords-prayer/lords-prayer.html" class="study-item" data-category="spiritual-disciplines">
-                    <div class="study-item-icon">🙏</div>
-                    <div class="study-item-content">
-                        <h4 class="study-item-title">The Lord's Prayer</h4>
-                        <p class="study-item-desc">Jesus' model prayer - structure, theology, and practice for spiritual formation.</p>
+                    <div class="category-card" data-category="intertestamental" id="intertestamental">
+                        <div class="category-icon">🏛️</div>
+                        <h3 class="category-title">Intertestamental Studies</h3>
+                        <p class="category-count">4 Studies Available</p>
+                        <p class="category-description">Second Temple literature and its influence on New Testament interpretation and theology.</p>
+                        <div class="category-topics">
+                            <span class="topic-tag">1 Enoch</span>
+                            <span class="topic-tag">Jubilees</span>
+                            <span class="topic-tag">Dead Sea Scrolls</span>
+                            <span class="topic-tag">Apocalyptic</span>
+                        </div>
                     </div>
-                    <div class="study-item-arrow">→</div>
-                </a>
+                </div>
+            </section>
 
-                <a href="/studies/thematic/biblical-meditation/" class="study-item" data-category="spiritual-disciplines">
-                    <div class="study-item-icon">🧘</div>
-                    <div class="study-item-content">
-                        <h4 class="study-item-title">Biblical Meditation</h4>
-                        <p class="study-item-desc">The practice of meditating on God's Word day and night as taught in Psalms.</p>
-                    </div>
-                    <div class="study-item-arrow">→</div>
-                </a>
+            <!-- Featured Studies Section -->
+            <section>
+                <div class="section-header">
+                    <h2 class="section-title">Featured Studies</h2>
+                    <p class="section-subtitle">Popular and recently updated thematic explorations</p>
+                </div>
 
-                <a href="/studies/thematic/fasting-scripture/" class="study-item" data-category="spiritual-disciplines">
-                    <div class="study-item-icon">🍃</div>
-                    <div class="study-item-content">
-                        <h4 class="study-item-title">Fasting in Scripture</h4>
-                        <p class="study-item-desc">Biblical teaching on fasting as spiritual discipline from Moses to Jesus.</p>
-                    </div>
-                    <div class="study-item-arrow">→</div>
-                </a>
+                <div class="featured-grid">
+                    <!-- Featured Lord's Prayer Study -->
+                    <a href="/studies/thematic/lords-prayer/lords-prayer.html" class="study-card featured">
+                        <div class="study-card-header">
+                            <div class="study-card-icon">🙏</div>
+                            <div>
+                                <div class="study-card-category">Spiritual Disciplines</div>
+                                <h3 class="study-card-title">The Lord's Prayer: Jesus' Model for Prayer</h3>
+                            </div>
+                        </div>
+                        <div class="study-card-body">
+                            <p class="study-card-desc">A comprehensive study of Jesus' model prayer (Matthew 6:9–13): translation, structure at the heart of the Sermon on the Mount, theological themes, Old Testament echoes, and formative practice for Christian life. Explore how this prayer shapes disciples into kingdom people.</p>
+                            <div class="study-card-meta">★ New Study • Comprehensive Analysis • Interactive Design</div>
+                        </div>
+                    </a>
 
-                <a href="/studies/thematic/sabbath-rest/" class="study-item" data-category="spiritual-disciplines theological">
-                    <div class="study-item-icon">🕊️</div>
-                    <div class="study-item-content">
-                        <h4 class="study-item-title">Sabbath and Rest</h4>
-                        <p class="study-item-desc">From creation's seventh day to the eternal rest promised in Hebrews.</p>
-                    </div>
-                    <div class="study-item-arrow">→</div>
-                </a>
+                    <a href="/studies/thematic/second-temple/mechanics-of-transformation.html" class="study-card">
+                        <div class="study-card-header">
+                            <div class="study-card-icon">🏛️</div>
+                            <div>
+                                <div class="study-card-category">Intertestamental Studies</div>
+                                <h3 class="study-card-title">Second Temple Literature & NT</h3>
+                            </div>
+                        </div>
+                        <div class="study-card-body">
+                            <p class="study-card-desc">Explore how New Testament authors transform Second Temple Jewish traditions through specific textual and rhetorical techniques.</p>
+                            <div class="study-card-meta">Comprehensive Study • 4-Page Analysis</div>
+                        </div>
+                    </a>
 
-                <!-- Intertestamental Studies -->
-                <a href="/studies/thematic/second-temple/mechanics-of-transformation.html" class="study-item" data-category="intertestamental">
-                    <div class="study-item-icon">🏛️</div>
-                    <div class="study-item-content">
-                        <h4 class="study-item-title">Second Temple Literature & the New Testament</h4>
-                        <p class="study-item-desc">How NT authors transform Jewish apocalyptic traditions: 1 Enoch, Jubilees, and Dead Sea Scrolls influence.</p>
-                    </div>
-                    <div class="study-item-arrow">→</div>
-                </a>
+                    <a href="/studies/thematic/evolution-of-satan/satan-evolution.html" class="study-card">
+                        <div class="study-card-header">
+                            <div class="study-card-icon">😈</div>
+                            <div>
+                                <div class="study-card-category">Spiritual Beings</div>
+                                <h3 class="study-card-title">The Evolution of Satan</h3>
+                            </div>
+                        </div>
+                        <div class="study-card-body">
+                            <p class="study-card-desc">Trace the development of the concept of Satan from Hebrew Bible through New Testament.</p>
+                            <div class="study-card-meta">Comprehensive Study • Multi-page</div>
+                        </div>
+                    </a>
 
-                <!-- Spiritual Beings -->
-                <a href="/studies/thematic/evolution-of-satan/satan-evolution.html" class="study-item" data-category="spiritual-beings">
-                    <div class="study-item-icon">😈</div>
-                    <div class="study-item-content">
-                        <h4 class="study-item-title">The Evolution of Satan</h4>
-                        <p class="study-item-desc">Development of Satan concept from Hebrew Bible through New Testament.</p>
-                    </div>
-                    <div class="study-item-arrow">→</div>
-                </a>
+                    <a href="/studies/thematic/image-of-god/image-of-god.html" class="study-card">
+                        <div class="study-card-header">
+                            <div class="study-card-icon">👤</div>
+                            <div>
+                                <div class="study-card-category">Creation & Cosmology</div>
+                                <h3 class="study-card-title">Image of God</h3>
+                            </div>
+                        </div>
+                        <div class="study-card-body">
+                            <p class="study-card-desc">What it means to be created in God's image, from Genesis through Christ as the perfect image.</p>
+                            <div class="study-card-meta">In-depth Analysis</div>
+                        </div>
+                    </a>
 
-                <a href="/studies/thematic/divine-council/" class="study-item" data-category="spiritual-beings">
-                    <div class="study-item-icon">⚡</div>
-                    <div class="study-item-content">
-                        <h4 class="study-item-title">The Divine Council</h4>
-                        <p class="study-item-desc">God's heavenly assembly and the "sons of God" in divine governance.</p>
-                    </div>
-                    <div class="study-item-arrow">→</div>
-                </a>
+                    <a href="/studies/thematic/temple-theology/" class="study-card">
+                        <div class="study-card-header">
+                            <div class="study-card-icon">⛩️</div>
+                            <div>
+                                <div class="study-card-category">Creation & Cosmology</div>
+                                <h3 class="study-card-title">Temple Theology</h3>
+                            </div>
+                        </div>
+                        <div class="study-card-body">
+                            <p class="study-card-desc">The temple as cosmic mountain, meeting place between heaven and earth.</p>
+                            <div class="study-card-meta">Theological Deep Dive</div>
+                        </div>
+                    </a>
 
-                <!-- Theological Studies -->
-                <a href="/studies/thematic/holy-spirit/" class="study-item" data-category="theological spiritual-beings">
-                    <div class="study-item-icon">🔥</div>
-                    <div class="study-item-content">
-                        <h4 class="study-item-title">The Holy Spirit</h4>
-                        <p class="study-item-desc">God's Spirit from Genesis hovering over waters to Pentecost and beyond.</p>
-                    </div>
-                    <div class="study-item-arrow">→</div>
-                </a>
+                    <a href="/studies/thematic/kingdom-of-god/" class="study-card">
+                        <div class="study-card-header">
+                            <div class="study-card-icon">👑</div>
+                            <div>
+                                <div class="study-card-category">Prophetic Themes</div>
+                                <h3 class="study-card-title">Kingdom of God</h3>
+                            </div>
+                        </div>
+                        <div class="study-card-body">
+                            <p class="study-card-desc">The central theme of Jesus' teaching - the already/not yet nature of God's kingdom.</p>
+                            <div class="study-card-meta">NT Focus Study</div>
+                        </div>
+                    </a>
+                </div>
+            </section>
 
-                <!-- Wisdom Studies -->
-                <a href="/studies/thematic/suffering-theodicy/" class="study-item" data-category="wisdom">
-                    <div class="study-item-icon">💔</div>
-                    <div class="study-item-content">
-                        <h4 class="study-item-title">Suffering and Theodicy</h4>
-                        <p class="study-item-desc">Why do the righteous suffer? Biblical responses from Job through Revelation.</p>
-                    </div>
-                    <div class="study-item-arrow">→</div>
-                </a>
+            <!-- All Studies Section -->
+            <section class="all-studies">
+                <div class="section-header">
+                    <h2 class="section-title">All Thematic Studies</h2>
+                    <p class="section-subtitle">Browse our complete collection of thematic biblical studies</p>
+                </div>
 
-                <a href="/studies/thematic/wisdom-christology/" class="study-item" data-category="wisdom theological">
-                    <div class="study-item-icon">✨</div>
-                    <div class="study-item-content">
-                        <h4 class="study-item-title">Wisdom Christology</h4>
-                        <p class="study-item-desc">How personified Wisdom in Proverbs shapes NT understanding of Christ.</p>
-                    </div>
-                    <div class="study-item-arrow">→</div>
-                </a>
+                <div class="studies-filter">
+                    <button class="filter-button active" data-filter="all">All Themes</button>
+                    <button class="filter-button" data-filter="theological">Theological</button>
+                    <button class="filter-button" data-filter="spiritual-disciplines">Spiritual Disciplines</button>
+                    <button class="filter-button" data-filter="spiritual-beings">Spiritual Beings</button>
+                    <button class="filter-button" data-filter="covenant">Covenant</button>
+                    <button class="filter-button" data-filter="prophetic">Prophetic</button>
+                    <button class="filter-button" data-filter="wisdom">Wisdom</button>
+                    <button class="filter-button" data-filter="creation">Creation</button>
+                    <button class="filter-button" data-filter="intertestamental">Intertestamental</button>
+                </div>
 
-                <!-- Creation & Cosmology -->
-                <a href="/studies/thematic/image-of-god/image-of-god.html" class="study-item" data-category="creation">
-                    <div class="study-item-icon">👤</div>
-                    <div class="study-item-content">
-                        <h4 class="study-item-title">Image of God</h4>
-                        <p class="study-item-desc">Created in God's image - from Genesis through Christ as the perfect image.</p>
-                    </div>
-                    <div class="study-item-arrow">→</div>
-                </a>
+                <div class="studies-list" id="studiesList">
+                    <!-- Spiritual Disciplines Studies -->
+                    <a href="/studies/thematic/lords-prayer/lords-prayer.html" class="study-item" data-category="spiritual-disciplines">
+                        <div class="study-item-icon">🙏</div>
+                        <div class="study-item-content">
+                            <h4 class="study-item-title">The Lord's Prayer</h4>
+                            <p class="study-item-desc">Jesus' model prayer - structure, theology, and practice for spiritual formation.</p>
+                        </div>
+                        <div class="study-item-arrow">→</div>
+                    </a>
 
-                <a href="/studies/thematic/temple-theology/" class="study-item" data-category="creation">
-                    <div class="study-item-icon">⛩️</div>
-                    <div class="study-item-content">
-                        <h4 class="study-item-title">Temple Theology</h4>
-                        <p class="study-item-desc">Temple as cosmic mountain and meeting place between heaven and earth.</p>
-                    </div>
-                    <div class="study-item-arrow">→</div>
-                </a>
+                    <a href="/studies/thematic/biblical-meditation/" class="study-item" data-category="spiritual-disciplines">
+                        <div class="study-item-icon">🧘</div>
+                        <div class="study-item-content">
+                            <h4 class="study-item-title">Biblical Meditation</h4>
+                            <p class="study-item-desc">The practice of meditating on God's Word day and night as taught in Psalms.</p>
+                        </div>
+                        <div class="study-item-arrow">→</div>
+                    </a>
 
-                <a href="/studies/thematic/water-symbolism/" class="study-item" data-category="creation theological">
-                    <div class="study-item-icon">💧</div>
-                    <div class="study-item-content">
-                        <h4 class="study-item-title">Water Symbolism</h4>
-                        <p class="study-item-desc">From chaos waters to living water - theological significance of water.</p>
-                    </div>
-                    <div class="study-item-arrow">→</div>
-                </a>
+                    <a href="/studies/thematic/fasting-scripture/" class="study-item" data-category="spiritual-disciplines">
+                        <div class="study-item-icon">🍃</div>
+                        <div class="study-item-content">
+                            <h4 class="study-item-title">Fasting in Scripture</h4>
+                            <p class="study-item-desc">Biblical teaching on fasting as spiritual discipline from Moses to Jesus.</p>
+                        </div>
+                        <div class="study-item-arrow">→</div>
+                    </a>
 
-                <!-- Prophetic Themes -->
-                <a href="/studies/thematic/kingdom-of-god/" class="study-item" data-category="prophetic">
-                    <div class="study-item-icon">👑</div>
-                    <div class="study-item-content">
-                        <h4 class="study-item-title">Kingdom of God</h4>
-                        <p class="study-item-desc">Jesus' central teaching - the already/not yet nature of God's kingdom.</p>
-                    </div>
-                    <div class="study-item-arrow">→</div>
-                </a>
+                    <a href="/studies/thematic/sabbath-rest/" class="study-item" data-category="spiritual-disciplines theological">
+                        <div class="study-item-icon">🕊️</div>
+                        <div class="study-item-content">
+                            <h4 class="study-item-title">Sabbath and Rest</h4>
+                            <p class="study-item-desc">From creation's seventh day to the eternal rest promised in Hebrews.</p>
+                        </div>
+                        <div class="study-item-arrow">→</div>
+                    </a>
 
-                <a href="/studies/thematic/exile-return/" class="study-item" data-category="prophetic">
-                    <div class="study-item-icon">🏃</div>
-                    <div class="study-item-content">
-                        <h4 class="study-item-title">Exile and Return</h4>
-                        <p class="study-item-desc">The pattern of exile and restoration as theological motif.</p>
-                    </div>
-                    <div class="study-item-arrow">→</div>
-                </a>
+                    <!-- Intertestamental Studies -->
+                    <a href="/studies/thematic/second-temple/mechanics-of-transformation.html" class="study-item" data-category="intertestamental">
+                        <div class="study-item-icon">🏛️</div>
+                        <div class="study-item-content">
+                            <h4 class="study-item-title">Second Temple Literature & the New Testament</h4>
+                            <p class="study-item-desc">How NT authors transform Jewish apocalyptic traditions: 1 Enoch, Jubilees, and Dead Sea Scrolls influence.</p>
+                        </div>
+                        <div class="study-item-arrow">→</div>
+                    </a>
 
-                <!-- Covenant Studies -->
-                <a href="/studies/thematic/covenant-progression/" class="study-item" data-category="covenant">
-                    <div class="study-item-icon">📜</div>
-                    <div class="study-item-content">
-                        <h4 class="study-item-title">Covenant Progression</h4>
-                        <p class="study-item-desc">Development of God's covenants from Noah through the New Covenant.</p>
-                    </div>
-                    <div class="study-item-arrow">→</div>
-                </a>
+                    <!-- Spiritual Beings -->
+                    <a href="/studies/thematic/evolution-of-satan/satan-evolution.html" class="study-item" data-category="spiritual-beings">
+                        <div class="study-item-icon">😈</div>
+                        <div class="study-item-content">
+                            <h4 class="study-item-title">The Evolution of Satan</h4>
+                            <p class="study-item-desc">Development of Satan concept from Hebrew Bible through New Testament.</p>
+                        </div>
+                        <div class="study-item-arrow">→</div>
+                    </a>
 
-                <a href="/studies/thematic/apocalyptic-literature/" class="study-item" data-category="intertestamental prophetic">
-                    <div class="study-item-icon">📖</div>
-                    <div class="study-item-content">
-                        <h4 class="study-item-title">Apocalyptic Literature</h4>
-                        <p class="study-item-desc">Biblical apocalyptic from Daniel through Revelation, including Second Temple influences.</p>
-                    </div>
-                    <div class="study-item-arrow">→</div>
-                </a>
-            </div>
-        </section>
+                    <a href="/studies/thematic/divine-council/" class="study-item" data-category="spiritual-beings">
+                        <div class="study-item-icon">⚡</div>
+                        <div class="study-item-content">
+                            <h4 class="study-item-title">The Divine Council</h4>
+                            <p class="study-item-desc">God's heavenly assembly and the "sons of God" in divine governance.</p>
+                        </div>
+                        <div class="study-item-arrow">→</div>
+                    </a>
+
+                    <!-- Theological Studies -->
+                    <a href="/studies/thematic/holy-spirit/" class="study-item" data-category="theological spiritual-beings">
+                        <div class="study-item-icon">🔥</div>
+                        <div class="study-item-content">
+                            <h4 class="study-item-title">The Holy Spirit</h4>
+                            <p class="study-item-desc">God's Spirit from Genesis hovering over waters to Pentecost and beyond.</p>
+                        </div>
+                        <div class="study-item-arrow">→</div>
+                    </a>
+
+                    <!-- Wisdom Studies -->
+                    <a href="/studies/thematic/suffering-theodicy/" class="study-item" data-category="wisdom">
+                        <div class="study-item-icon">💔</div>
+                        <div class="study-item-content">
+                            <h4 class="study-item-title">Suffering and Theodicy</h4>
+                            <p class="study-item-desc">Why do the righteous suffer? Biblical responses from Job through Revelation.</p>
+                        </div>
+                        <div class="study-item-arrow">→</div>
+                    </a>
+
+                    <a href="/studies/thematic/wisdom-christology/" class="study-item" data-category="wisdom theological">
+                        <div class="study-item-icon">✨</div>
+                        <div class="study-item-content">
+                            <h4 class="study-item-title">Wisdom Christology</h4>
+                            <p class="study-item-desc">How personified Wisdom in Proverbs shapes NT understanding of Christ.</p>
+                        </div>
+                        <div class="study-item-arrow">→</div>
+                    </a>
+
+                    <!-- Creation & Cosmology -->
+                    <a href="/studies/thematic/image-of-god/image-of-god.html" class="study-item" data-category="creation">
+                        <div class="study-item-icon">👤</div>
+                        <div class="study-item-content">
+                            <h4 class="study-item-title">Image of God</h4>
+                            <p class="study-item-desc">Created in God's image - from Genesis through Christ as the perfect image.</p>
+                        </div>
+                        <div class="study-item-arrow">→</div>
+                    </a>
+
+                    <a href="/studies/thematic/temple-theology/" class="study-item" data-category="creation">
+                        <div class="study-item-icon">⛩️</div>
+                        <div class="study-item-content">
+                            <h4 class="study-item-title">Temple Theology</h4>
+                            <p class="study-item-desc">Temple as cosmic mountain and meeting place between heaven and earth.</p>
+                        </div>
+                        <div class="study-item-arrow">→</div>
+                    </a>
+
+                    <a href="/studies/thematic/water-symbolism/" class="study-item" data-category="creation theological">
+                        <div class="study-item-icon">💧</div>
+                        <div class="study-item-content">
+                            <h4 class="study-item-title">Water Symbolism</h4>
+                            <p class="study-item-desc">From chaos waters to living water - theological significance of water.</p>
+                        </div>
+                        <div class="study-item-arrow">→</div>
+                    </a>
+
+                    <!-- Prophetic Themes -->
+                    <a href="/studies/thematic/kingdom-of-god/" class="study-item" data-category="prophetic">
+                        <div class="study-item-icon">👑</div>
+                        <div class="study-item-content">
+                            <h4 class="study-item-title">Kingdom of God</h4>
+                            <p class="study-item-desc">Jesus' central teaching - the already/not yet nature of God's kingdom.</p>
+                        </div>
+                        <div class="study-item-arrow">→</div>
+                    </a>
+
+                    <a href="/studies/thematic/exile-return/" class="study-item" data-category="prophetic">
+                        <div class="study-item-icon">🏃</div>
+                        <div class="study-item-content">
+                            <h4 class="study-item-title">Exile and Return</h4>
+                            <p class="study-item-desc">The pattern of exile and restoration as theological motif.</p>
+                        </div>
+                        <div class="study-item-arrow">→</div>
+                    </a>
+
+                    <!-- Covenant Studies -->
+                    <a href="/studies/thematic/covenant-progression/" class="study-item" data-category="covenant">
+                        <div class="study-item-icon">📜</div>
+                        <div class="study-item-content">
+                            <h4 class="study-item-title">Covenant Progression</h4>
+                            <p class="study-item-desc">Development of God's covenants from Noah through the New Covenant.</p>
+                        </div>
+                        <div class="study-item-arrow">→</div>
+                    </a>
+
+                    <a href="/studies/thematic/apocalyptic-literature/" class="study-item" data-category="intertestamental prophetic">
+                        <div class="study-item-icon">📖</div>
+                        <div class="study-item-content">
+                            <h4 class="study-item-title">Apocalyptic Literature</h4>
+                            <p class="study-item-desc">Biblical apocalyptic from Daniel through Revelation, including Second Temple influences.</p>
+                        </div>
+                        <div class="study-item-arrow">→</div>
+                    </a>
+                </div>
+            </section>
+        </div>
     </main>
 
+    <!-- Back to Top Button -->
+    <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay"></div>
+
     <footer>
-        <p>&copy; 2025 Project Context. Empowering faith through understanding.</p>
+        <p>&copy; 2025 Project Context — Thematic Studies Hub</p>
     </footer>
 
+    <!-- Smooth scrolling for anchor links -->
     <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Reading Progress Bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.reading-progress').style.width = scrolled + '%';
+        });
+
+        // Back to Top Button
+        const backToTop = document.querySelector('.back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        // Add scroll effect to nav
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (nav && window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else if (nav) {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu Overlay & Toggle
+        const mobileToggle = document.querySelector('.mobile-menu-toggle');
+        const mobileOverlay = document.querySelector('.mobile-menu-overlay');
+        const navLinks = document.querySelector('.nav-links');
+        
+        if (mobileToggle) {
+            mobileToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                mobileOverlay.classList.toggle('active');
+            });
+            
+            mobileOverlay.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+            });
+        }
+
         // Stats animation
         function animateStats() {
             const stats = document.querySelectorAll('[data-target]');
@@ -1327,6 +1597,15 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Animate stats when page loads
             setTimeout(animateStats, 500);
+        });
+    </script>
+
+    <!-- Navigation Component Integration -->
+    <script type="module">
+        import NavigationComponent from '/assets/js/nav-component.js';
+        const navigation = new NavigationComponent({
+            currentPage: 'studies/thematic',
+            hubType: 'thematic'
         });
     </script>
 </body>
