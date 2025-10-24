@@ -6,6 +6,30 @@
     <title>Tanakh Studies - Project Context</title>
     <meta name="description" content="Comprehensive book studies of the Hebrew Bible exploring Torah, Prophets, and Writings with historical context, literary analysis, and theological insights.">
     
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Tanakh Studies - Project Context">
+    <meta name="twitter:description" content="Comprehensive book studies of the Hebrew Bible exploring Torah, Prophets, and Writings.">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Tanakh Studies - Project Context">
+    <meta property="og:description" content="Comprehensive book studies of the Hebrew Bible exploring Torah, Prophets, and Writings with historical context, literary analysis, and theological insights.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://projectcontext.org/studies/tanakh/">
+
+    <!-- Navigation Context -->
+    <meta name="nav-hub" content="tanakh-studies">
+    <meta name="page-category" content="study-hub">
+
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="/assets/css/global-v2.css" as="style">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://projectcontext.org/studies/tanakh/">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/assets/css/global-v2.css">
+    
     <style>
         * {
             margin: 0;
@@ -38,6 +62,34 @@
             color: var(--primary-dark);
             background: var(--bg-gray);
             overflow-x: hidden;
+        }
+
+        /* Skip Link for Accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--accent-blue);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            z-index: 10000;
+            border-radius: 0 0 4px 0;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Reading Progress Bar */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-bronze));
+            z-index: 9999;
+            transition: width 0.1s ease;
         }
 
         /* Hebrew Text Styling */
@@ -133,71 +185,6 @@
             background-color: rgba(0, 0, 0, 0.05);
         }
 
-        /* Dropdown Menu */
-        .dropdown {
-            position: relative;
-        }
-
-        .dropdown-toggle::after {
-            content: '▾';
-            font-size: 0.8rem;
-            margin-left: 0.25rem;
-            display: inline-block;
-            transition: transform 0.3s ease;
-        }
-
-        .dropdown:hover .dropdown-toggle::after {
-            transform: rotate(180deg);
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: var(--primary-light);
-            min-width: 200px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            z-index: 1;
-            top: 100%;
-            margin-top: 0.5rem;
-            padding: 0.5rem 0;
-            border: 1px solid var(--border-light);
-        }
-
-        .dropdown-content::before {
-            content: '';
-            position: absolute;
-            top: -0.5rem;
-            left: 0;
-            right: 0;
-            height: 0.5rem;
-        }
-
-        .dropdown-content a {
-            color: var(--text-gray);
-            padding: 0.75rem 1rem;
-            text-decoration: none;
-            display: block;
-            transition: all 0.3s ease;
-        }
-
-        .dropdown-content a:hover {
-            background-color: var(--bg-gray);
-            color: var(--primary-dark);
-            padding-left: 1.5rem;
-        }
-
-        .dropdown-content a.active {
-            color: var(--accent-gold);
-            font-weight: 600;
-            border-left: 3px solid var(--accent-gold);
-        }
-
-        .dropdown:hover .dropdown-content,
-        .dropdown-content:hover {
-            display: block;
-        }
-
         /* Mobile Menu Toggle */
         .mobile-menu-toggle {
             display: none;
@@ -216,6 +203,24 @@
             background: var(--primary-dark);
             transition: all 0.3s ease;
             border-radius: 2px;
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .mobile-menu-overlay.active {
+            display: block;
+            opacity: 1;
         }
 
         /* Hero Section - Tanakh specific gradient */
@@ -324,6 +329,23 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             opacity: 0.8;
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+            padding: 0.75rem 0;
+        }
+        .breadcrumbs a {
+            color: var(--accent-gold);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .breadcrumbs a:hover {
+            color: var(--accent-bronze);
+            text-decoration: underline;
         }
 
         /* Main Container */
@@ -600,6 +622,36 @@
             font-weight: 600;
         }
 
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--accent-gold);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-lg);
+            z-index: 999;
+        }
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .back-to-top:hover {
+            background: var(--accent-bronze);
+            transform: translateY(-5px);
+        }
+
         /* Footer */
         footer {
             background: linear-gradient(135deg, var(--primary-dark) 0%, #2c2c2c 100%);
@@ -651,18 +703,6 @@
                 display: flex;
             }
 
-            .dropdown-content {
-                position: static;
-                display: block;
-                box-shadow: none;
-                background: var(--bg-gray);
-                margin-left: 1rem;
-                margin-top: 0.5rem;
-                border-radius: 0;
-                border: none;
-                border-left: 2px solid var(--border-light);
-            }
-
             .hero-title {
                 font-size: 2rem;
             }
@@ -692,504 +732,444 @@
             .container {
                 padding: 2rem 1rem;
             }
+
+            .back-to-top {
+                bottom: 1rem;
+                right: 1rem;
+                width: 45px;
+                height: 45px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav id="main-nav">
-        <div class="nav-container">
-            <a href="/" class="logo">
-                <div class="logo-icon">
-                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Left bracket -->
-                        <path d="M 25 15 L 10 15 L 10 85 L 25 85" 
-                              stroke="#0a0a0a" 
-                              stroke-width="4" 
-                              fill="none" 
-                              stroke-linecap="round"/>
-                        
-                        <!-- Right bracket -->
-                        <path d="M 75 15 L 90 15 L 90 85 L 75 85" 
-                              stroke="#0a0a0a" 
-                              stroke-width="4" 
-                              fill="none" 
-                              stroke-linecap="round"/>
-                        
-                        <!-- Eye outline -->
-                        <ellipse cx="50" cy="50" rx="25" ry="15" 
-                                 stroke="#0a0a0a" 
-                                 stroke-width="3" 
-                                 fill="none"/>
-                        
-                        <!-- Iris -->
-                        <circle cx="50" cy="50" r="8" 
-                                fill="#00b4d8"/>
-                        
-                        <!-- Pupil -->
-                        <circle cx="50" cy="50" r="3" 
-                                fill="#0a0a0a"/>
-                    </svg>
-                </div>
-                <span class="logo-text">Project Context</span>
-            </a>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="/">Home</a></li>
-                <li class="dropdown">
-                    <a href="/studies/" class="dropdown-toggle active">Studies</a>
-                    <div class="dropdown-content">
-                        <a href="/studies/characters/characters_hub.html">Biblical Characters</a>
-                        <a href="/studies/women/women-bible-hub.html">Women in the Bible</a>
-                        <a href="/studies/tanakh/tanakh-hub.html" class="active">Tanakh Studies</a>
-                        <a href="/studies/thematic/thematic-hub.html">Thematic Studies</a>
-                    </div>
-                </li>
-                <li><a href="/resources/">Resources</a></li>
-                <li><a href="/about.html">About</a></li>
-            </ul>
-            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </nav>
+    <!-- Accessibility Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">Tanakh Studies</h1>
-            <div class="hero-hebrew">תנ״ך</div>
-            <p class="hero-subtitle">Comprehensive book studies of the Hebrew Bible exploring Torah, Prophets, and Writings with historical context, literary analysis, and theological insights</p>
-            <div class="hero-stats">
-                <div class="stat-item">
-                    <div class="stat-number">39</div>
-                    <div class="stat-label">Books</div>
+    <!-- Reading Progress Bar -->
+    <div class="reading-progress"></div>
+
+    <!-- Navigation will be injected here by nav-component.js -->
+
+    <main id="main-content" role="main" aria-label="Tanakh Studies Hub">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">Tanakh Studies</h1>
+                <div class="hero-hebrew">תנ״ך</div>
+                <p class="hero-subtitle">Comprehensive book studies of the Hebrew Bible exploring Torah, Prophets, and Writings with historical context, literary analysis, and theological insights</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">39</div>
+                        <div class="stat-label">Books</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Major Divisions</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">Deep Analysis</div>
+                        <div class="stat-label">Literary & Theological</div>
+                    </div>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-number">3</div>
-                    <div class="stat-label">Major Divisions</div>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <div class="container">
+            <!-- Breadcrumbs -->
+            <div class="breadcrumbs">
+                <a href="/">Home</a> › 
+                <a href="/studies/">Studies</a> › 
+                Tanakh Studies
+            </div>
+
+            <!-- Quick Links -->
+            <div class="quick-links">
+                <a href="#torah" class="quick-link">
+                    📜 Torah
+                </a>
+                <a href="#neviim" class="quick-link">
+                    👁️ Nevi'im (Prophets)
+                </a>
+                <a href="#ketuvim" class="quick-link">
+                    ✍️ Ketuvim (Writings)
+                </a>
+                <a href="#featured" class="quick-link">
+                    ⭐ Featured Studies
+                </a>
+            </div>
+
+            <!-- Featured Studies Section -->
+            <div class="section-header" id="featured">
+                <h2 class="section-title">Featured Book Studies</h2>
+                <p class="section-subtitle">Complete multi-page studies with in-depth analysis</p>
+            </div>
+
+            <div class="featured-grid">
+                <a href="/studies/tanakh/ketuvim/ruth/ruth-overview.html" class="featured-card">
+                    <div class="featured-card-image">💝</div>
+                    <div class="featured-card-content">
+                        <div class="featured-card-category">Ketuvim - Five Megillot</div>
+                        <h3 class="featured-card-title">Ruth <span class="hebrew">רוּת</span></h3>
+                        <p class="featured-card-desc">From emptiness to fullness - a story of covenant loyalty (ḥesed), redemption, and divine providence. Explore how a Moabite widow becomes the great-grandmother of King David through extraordinary faithfulness.</p>
+                        <div class="featured-card-meta">✨ Complete Multi-page Study Available</div>
+                    </div>
+                </a>
+
+                <a href="/studies/tanakh/neviim/minor-prophets/hosea/hosea.html" class="featured-card">
+                    <div class="featured-card-image">💔</div>
+                    <div class="featured-card-content">
+                        <div class="featured-card-category">Minor Prophets</div>
+                        <h3 class="featured-card-title">Hosea <span class="hebrew">הוֹשֵׁעַ</span></h3>
+                        <p class="featured-card-desc">A comprehensive study exploring the prophet Hosea's message of God's unwavering love through historical context, Hebrew word studies, literary analysis, and theological insights.</p>
+                        <div class="featured-card-meta">Complete Multi-page Study</div>
+                    </div>
+                </a>
+
+                <a href="/studies/tanakh/ketuvim/psalms/psalms.html" class="featured-card">
+                    <div class="featured-card-image">🎵</div>
+                    <div class="featured-card-content">
+                        <div class="featured-card-category">Writings</div>
+                        <h3 class="featured-card-title">Psalms <span class="hebrew">תְּהִלִּים</span></h3>
+                        <p class="featured-card-desc">The prayer book of Israel - 150 songs of praise, lament, thanksgiving, and wisdom that express the full range of human emotion before God.</p>
+                        <div class="featured-card-meta">In Development</div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Torah Section -->
+            <div class="division-card" id="torah">
+                <div class="division-header">
+                    <div class="division-icon">📜</div>
+                    <div class="division-info">
+                        <h2 class="division-title">
+                            Torah 
+                            <span class="hebrew hebrew-large">תּוֹרָה</span>
+                        </h2>
+                        <p class="division-description">The Five Books of Moses - Foundation of Israel's covenant relationship with God</p>
+                    </div>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-number">Deep Analysis</div>
-                    <div class="stat-label">Literary & Theological</div>
+                
+                <div class="books-grid">
+                    <a href="/studies/tanakh/torah/genesis/genesis.html" class="book-card">
+                        <div class="book-card-header">
+                            <div class="book-name">Genesis</div>
+                            <span class="book-status coming-soon">Coming</span>
+                        </div>
+                        <div class="book-hebrew">בְּרֵאשִׁית</div>
+                        <div class="book-info">
+                            <span class="book-info-item">📖 50 chapters</span>
+                            <span class="book-info-item">👥 200+ characters</span>
+                        </div>
+                        <p class="book-description">Creation, fall, flood, and the patriarchal narratives establishing God's covenant promises.</p>
+                    </a>
+
+                    <a href="/studies/tanakh/torah/exodus/exodus.html" class="book-card">
+                        <div class="book-card-header">
+                            <div class="book-name">Exodus</div>
+                            <span class="book-status coming-soon">Coming</span>
+                        </div>
+                        <div class="book-hebrew">שְׁמוֹת</div>
+                        <div class="book-info">
+                            <span class="book-info-item">📖 40 chapters</span>
+                            <span class="book-info-item">🏔️ Sinai covenant</span>
+                        </div>
+                        <p class="book-description">Liberation from Egypt, covenant at Sinai, and instructions for the tabernacle.</p>
+                    </a>
+
+                    <a href="/studies/tanakh/torah/leviticus/leviticus.html" class="book-card">
+                        <div class="book-card-header">
+                            <div class="book-name">Leviticus</div>
+                            <span class="book-status coming-soon">Coming</span>
+                        </div>
+                        <div class="book-hebrew">וַיִּקְרָא</div>
+                        <div class="book-info">
+                            <span class="book-info-item">📖 27 chapters</span>
+                            <span class="book-info-item">🕊️ Holiness code</span>
+                        </div>
+                        <p class="book-description">Laws of holiness, sacrifice, and priesthood - how to live in God's presence.</p>
+                    </a>
+
+                    <a href="/studies/tanakh/torah/numbers/numbers.html" class="book-card">
+                        <div class="book-card-header">
+                            <div class="book-name">Numbers</div>
+                            <span class="book-status coming-soon">Coming</span>
+                        </div>
+                        <div class="book-hebrew">בְּמִדְבַּר</div>
+                        <div class="book-info">
+                            <span class="book-info-item">📖 36 chapters</span>
+                            <span class="book-info-item">🏜️ Wilderness</span>
+                        </div>
+                        <p class="book-description">Israel's wilderness wanderings, rebellions, and preparations to enter the promised land.</p>
+                    </a>
+
+                    <a href="/studies/tanakh/torah/deuteronomy/deuteronomy.html" class="book-card">
+                        <div class="book-card-header">
+                            <div class="book-name">Deuteronomy</div>
+                            <span class="book-status coming-soon">Coming</span>
+                        </div>
+                        <div class="book-hebrew">דְּבָרִים</div>
+                        <div class="book-info">
+                            <span class="book-info-item">📖 34 chapters</span>
+                            <span class="book-info-item">📜 Covenant renewal</span>
+                        </div>
+                        <p class="book-description">Moses' farewell speeches - covenant renewal before entering the promised land.</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Nevi'im Section -->
+            <div class="division-card" id="neviim">
+                <div class="division-header">
+                    <div class="division-icon">👁️</div>
+                    <div class="division-info">
+                        <h2 class="division-title">
+                            Nevi'im 
+                            <span class="hebrew hebrew-large">נְבִיאִים</span>
+                        </h2>
+                        <p class="division-description">The Prophets - God's messengers calling Israel to covenant faithfulness</p>
+                    </div>
+                </div>
+
+                <h3 style="margin: 2rem 0 1rem; color: var(--primary-dark);">Former Prophets</h3>
+                <div class="books-grid">
+                    <a href="/studies/tanakh/neviim/joshua/joshua.html" class="book-card">
+                        <div class="book-card-header">
+                            <div class="book-name">Joshua</div>
+                            <span class="book-status coming-soon">Coming</span>
+                        </div>
+                        <div class="book-hebrew">יְהוֹשֻׁעַ</div>
+                        <div class="book-info">
+                            <span class="book-info-item">📖 24 chapters</span>
+                            <span class="book-info-item">⚔️ Conquest</span>
+                        </div>
+                        <p class="book-description">Conquest and settlement of the promised land under Joshua's leadership.</p>
+                    </a>
+
+                    <a href="/studies/tanakh/neviim/judges/judges.html" class="book-card">
+                        <div class="book-card-header">
+                            <div class="book-name">Judges</div>
+                            <span class="book-status coming-soon">Coming</span>
+                        </div>
+                        <div class="book-hebrew">שֹׁפְטִים</div>
+                        <div class="book-info">
+                            <span class="book-info-item">📖 21 chapters</span>
+                            <span class="book-info-item">🔄 Cycles</span>
+                        </div>
+                        <p class="book-description">Cycles of rebellion, oppression, and deliverance in pre-monarchic Israel.</p>
+                    </a>
+
+                    <a href="/studies/tanakh/neviim/samuel/samuel.html" class="book-card">
+                        <div class="book-card-header">
+                            <div class="book-name">1-2 Samuel</div>
+                            <span class="book-status coming-soon">Coming</span>
+                        </div>
+                        <div class="book-hebrew">שְׁמוּאֵל</div>
+                        <div class="book-info">
+                            <span class="book-info-item">📖 55 chapters</span>
+                            <span class="book-info-item">👑 Kingdom rise</span>
+                        </div>
+                        <p class="book-description">Transition to monarchy - Samuel, Saul, and David's rise to kingship.</p>
+                    </a>
+
+                    <a href="/studies/tanakh/neviim/kings/kings.html" class="book-card">
+                        <div class="book-card-header">
+                            <div class="book-name">1-2 Kings</div>
+                            <span class="book-status coming-soon">Coming</span>
+                        </div>
+                        <div class="book-hebrew">מְלָכִים</div>
+                        <div class="book-info">
+                            <span class="book-info-item">📖 47 chapters</span>
+                            <span class="book-info-item">🏛️ Temple & exile</span>
+                        </div>
+                        <p class="book-description">Solomon's temple, divided kingdom, and exile - covenant faithfulness evaluated.</p>
+                    </a>
+                </div>
+
+                <h3 style="margin: 2rem 0 1rem; color: var(--primary-dark);">Major Prophets</h3>
+                <div class="books-grid">
+                    <a href="/studies/tanakh/neviim/isaiah/isaiah.html" class="book-card">
+                        <div class="book-card-header">
+                            <div class="book-name">Isaiah</div>
+                            <span class="book-status coming-soon">Coming</span>
+                        </div>
+                        <div class="book-hebrew">יְשַׁעְיָהוּ</div>
+                        <div class="book-info">
+                            <span class="book-info-item">📖 66 chapters</span>
+                            <span class="book-info-item">🕊️ Messianic</span>
+                        </div>
+                        <p class="book-description">Judgment and salvation - the Holy One of Israel and the coming servant.</p>
+                    </a>
+
+                    <a href="/studies/tanakh/neviim/jeremiah/jeremiah.html" class="book-card">
+                        <div class="book-card-header">
+                            <div class="book-name">Jeremiah</div>
+                            <span class="book-status coming-soon">Coming</span>
+                        </div>
+                        <div class="book-hebrew">יִרְמְיָהוּ</div>
+                        <div class="book-info">
+                            <span class="book-info-item">📖 52 chapters</span>
+                            <span class="book-info-item">💔 Weeping prophet</span>
+                        </div>
+                        <p class="book-description">Warning of judgment, promise of new covenant, prophet's personal struggles.</p>
+                    </a>
+
+                    <a href="/studies/tanakh/neviim/ezekiel/ezekiel.html" class="book-card">
+                        <div class="book-card-header">
+                            <div class="book-name">Ezekiel</div>
+                            <span class="book-status coming-soon">Coming</span>
+                        </div>
+                        <div class="book-hebrew">יְחֶזְקֵאל</div>
+                        <div class="book-info">
+                            <span class="book-info-item">📖 48 chapters</span>
+                            <span class="book-info-item">🔥 Visions</span>
+                        </div>
+                        <p class="book-description">Priestly prophet in exile - God's glory departs and returns, new temple vision.</p>
+                    </a>
+                </div>
+
+                <h3 style="margin: 2rem 0 1rem; color: var(--primary-dark);">Minor Prophets (The Twelve)</h3>
+                <div class="books-grid">
+                    <a href="/studies/tanakh/neviim/minor-prophets/hosea/hosea.html" class="book-card">
+                        <div class="book-card-header">
+                            <div class="book-name">Hosea</div>
+                            <span class="book-status">Complete</span>
+                        </div>
+                        <div class="book-hebrew">הוֹשֵׁעַ</div>
+                        <div class="book-info">
+                            <span class="book-info-item">📖 14 chapters</span>
+                            <span class="book-info-item">💔 Divine love</span>
+                        </div>
+                        <p class="book-description">God's unfailing love illustrated through prophetic marriage to unfaithful Gomer.</p>
+                    </a>
+
+                    <a href="/studies/tanakh/neviim/minor-prophets/joel/joel.html" class="book-card">
+                        <div class="book-card-header">
+                            <div class="book-name">Joel</div>
+                            <span class="book-status coming-soon">Coming</span>
+                        </div>
+                        <div class="book-hebrew">יוֹאֵל</div>
+                        <div class="book-info">
+                            <span class="book-info-item">📖 3 chapters</span>
+                            <span class="book-info-item">🦗 Day of the Lord</span>
+                        </div>
+                        <p class="book-description">Locust plague, call to repentance, and promise of Spirit outpouring.</p>
+                    </a>
+
+                    <a href="/studies/tanakh/neviim/minor-prophets/amos/amos.html" class="book-card">
+                        <div class="book-card-header">
+                            <div class="book-name">Amos</div>
+                            <span class="book-status coming-soon">Coming</span>
+                        </div>
+                        <div class="book-hebrew">עָמוֹס</div>
+                        <div class="book-info">
+                            <span class="book-info-item">📖 9 chapters</span>
+                            <span class="book-info-item">⚖️ Justice</span>
+                        </div>
+                        <p class="book-description">Social justice and true worship - let justice roll down like waters.</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Ketuvim Section -->
+            <div class="division-card" id="ketuvim">
+                <div class="division-header">
+                    <div class="division-icon">✍️</div>
+                    <div class="division-info">
+                        <h2 class="division-title">
+                            Ketuvim 
+                            <span class="hebrew hebrew-large">כְּתוּבִים</span>
+                        </h2>
+                        <p class="division-description">The Writings - Wisdom, poetry, and Israel's lived experience of faith</p>
+                    </div>
+                </div>
+
+                <h3 style="margin: 2rem 0 1rem; color: var(--primary-dark);">Wisdom Literature</h3>
+                <div class="books-grid">
+                    <a href="/studies/tanakh/ketuvim/psalms/psalms.html" class="book-card">
+                        <div class="book-card-header">
+                            <div class="book-name">Psalms</div>
+                            <span class="book-status coming-soon">Coming</span>
+                        </div>
+                        <div class="book-hebrew">תְּהִלִּים</div>
+                        <div class="book-info">
+                            <span class="book-info-item">📖 150 psalms</span>
+                            <span class="book-info-item">🎵 Songs & prayers</span>
+                        </div>
+                        <p class="book-description">Israel's hymnbook - praise, lament, thanksgiving, and wisdom in poetic form.</p>
+                    </a>
+
+                    <a href="/studies/tanakh/ketuvim/proverbs/proverbs.html" class="book-card">
+                        <div class="book-card-header">
+                            <div class="book-name">Proverbs</div>
+                            <span class="book-status coming-soon">Coming</span>
+                        </div>
+                        <div class="book-hebrew">מִשְׁלֵי</div>
+                        <div class="book-info">
+                            <span class="book-info-item">📖 31 chapters</span>
+                            <span class="book-info-item">💎 Wisdom sayings</span>
+                        </div>
+                        <p class="book-description">Practical wisdom for living - the fear of the Lord is the beginning of knowledge.</p>
+                    </a>
+
+                    <a href="/studies/tanakh/ketuvim/job/job.html" class="book-card">
+                        <div class="book-card-header">
+                            <div class="book-name">Job</div>
+                            <span class="book-status coming-soon">Coming</span>
+                        </div>
+                        <div class="book-hebrew">אִיּוֹב</div>
+                        <div class="book-info">
+                            <span class="book-info-item">📖 42 chapters</span>
+                            <span class="book-info-item">🔥 Suffering</span>
+                        </div>
+                        <p class="book-description">Righteous suffering and divine sovereignty - wrestling with theodicy.</p>
+                    </a>
+                </div>
+
+                <h3 style="margin: 2rem 0 1rem; color: var(--primary-dark);">Five Megillot (Scrolls)</h3>
+                <div class="books-grid">
+                    <a href="/studies/tanakh/ketuvim/ruth/ruth-overview.html" class="book-card">
+                        <div class="book-card-header">
+                            <div class="book-name">Ruth</div>
+                            <span class="book-status">Complete</span>
+                        </div>
+                        <div class="book-hebrew">רוּת</div>
+                        <div class="book-info">
+                            <span class="book-info-item">📖 4 chapters</span>
+                            <span class="book-info-item">💝 Covenant loyalty</span>
+                        </div>
+                        <p class="book-description">Loyalty and redemption - a Moabite woman enters the messianic line through extraordinary faithfulness.</p>
+                    </a>
+
+                    <a href="/studies/tanakh/ketuvim/esther/esther.html" class="book-card">
+                        <div class="book-card-header">
+                            <div class="book-name">Esther</div>
+                            <span class="book-status coming-soon">Coming</span>
+                        </div>
+                        <div class="book-hebrew">אֶסְתֵּר</div>
+                        <div class="book-info">
+                            <span class="book-info-item">📖 10 chapters</span>
+                            <span class="book-info-item">👑 Providence</span>
+                        </div>
+                        <p class="book-description">God's hidden providence - deliverance of Jews in Persian exile.</p>
+                    </a>
                 </div>
             </div>
         </div>
-    </section>
+    </main>
 
-    <!-- Main Content -->
-    <div class="container">
-        <!-- Quick Links -->
-        <div class="quick-links">
-            <a href="#torah" class="quick-link">
-                📜 Torah
-            </a>
-            <a href="#neviim" class="quick-link">
-                👁️ Nevi'im (Prophets)
-            </a>
-            <a href="#ketuvim" class="quick-link">
-                ✍️ Ketuvim (Writings)
-            </a>
-            <a href="#featured" class="quick-link">
-                ⭐ Featured Studies
-            </a>
-        </div>
+    <!-- Back to Top Button -->
+    <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
 
-        <!-- Featured Studies Section -->
-        <div class="section-header" id="featured">
-            <h2 class="section-title">Featured Book Studies</h2>
-            <p class="section-subtitle">Complete multi-page studies with in-depth analysis</p>
-        </div>
-
-        <div class="featured-grid">
-            <a href="/studies/tanakh/ketuvim/ruth/ruth-overview.html" class="featured-card">
-                <div class="featured-card-image">💝</div>
-                <div class="featured-card-content">
-                    <div class="featured-card-category">Ketuvim - Five Megillot</div>
-                    <h3 class="featured-card-title">Ruth <span class="hebrew">רוּת</span></h3>
-                    <p class="featured-card-desc">From emptiness to fullness - a story of covenant loyalty (ḥesed), redemption, and divine providence. Explore how a Moabite widow becomes the great-grandmother of King David through extraordinary faithfulness.</p>
-                    <div class="featured-card-meta">✨ Complete Multi-page Study Available</div>
-                </div>
-            </a>
-
-            <a href="/studies/tanakh/neviim/minor-prophets/hosea/hosea.html" class="featured-card">
-                <div class="featured-card-image">💔</div>
-                <div class="featured-card-content">
-                    <div class="featured-card-category">Minor Prophets</div>
-                    <h3 class="featured-card-title">Hosea <span class="hebrew">הוֹשֵׁעַ</span></h3>
-                    <p class="featured-card-desc">A comprehensive study exploring the prophet Hosea's message of God's unwavering love through historical context, Hebrew word studies, literary analysis, and theological insights.</p>
-                    <div class="featured-card-meta">Complete Multi-page Study</div>
-                </div>
-            </a>
-
-            <a href="/studies/tanakh/ketuvim/psalms/psalms.html" class="featured-card">
-                <div class="featured-card-image">🎵</div>
-                <div class="featured-card-content">
-                    <div class="featured-card-category">Writings</div>
-                    <h3 class="featured-card-title">Psalms <span class="hebrew">תְּהִלִּים</span></h3>
-                    <p class="featured-card-desc">The prayer book of Israel - 150 songs of praise, lament, thanksgiving, and wisdom that express the full range of human emotion before God.</p>
-                    <div class="featured-card-meta">In Development</div>
-                </div>
-            </a>
-        </div>
-
-        <!-- Torah Section -->
-        <div class="division-card" id="torah">
-            <div class="division-header">
-                <div class="division-icon">📜</div>
-                <div class="division-info">
-                    <h2 class="division-title">
-                        Torah 
-                        <span class="hebrew hebrew-large">תּוֹרָה</span>
-                    </h2>
-                    <p class="division-description">The Five Books of Moses - Foundation of Israel's covenant relationship with God</p>
-                </div>
-            </div>
-            
-            <div class="books-grid">
-                <a href="/studies/tanakh/torah/genesis/genesis.html" class="book-card">
-                    <div class="book-card-header">
-                        <div class="book-name">Genesis</div>
-                        <span class="book-status coming-soon">Coming</span>
-                    </div>
-                    <div class="book-hebrew">בְּרֵאשִׁית</div>
-                    <div class="book-info">
-                        <span class="book-info-item">📖 50 chapters</span>
-                        <span class="book-info-item">👥 200+ characters</span>
-                    </div>
-                    <p class="book-description">Creation, fall, flood, and the patriarchal narratives establishing God's covenant promises.</p>
-                </a>
-
-                <a href="/studies/tanakh/torah/exodus/exodus.html" class="book-card">
-                    <div class="book-card-header">
-                        <div class="book-name">Exodus</div>
-                        <span class="book-status coming-soon">Coming</span>
-                    </div>
-                    <div class="book-hebrew">שְׁמוֹת</div>
-                    <div class="book-info">
-                        <span class="book-info-item">📖 40 chapters</span>
-                        <span class="book-info-item">🏔️ Sinai covenant</span>
-                    </div>
-                    <p class="book-description">Liberation from Egypt, covenant at Sinai, and instructions for the tabernacle.</p>
-                </a>
-
-                <a href="/studies/tanakh/torah/leviticus/leviticus.html" class="book-card">
-                    <div class="book-card-header">
-                        <div class="book-name">Leviticus</div>
-                        <span class="book-status coming-soon">Coming</span>
-                    </div>
-                    <div class="book-hebrew">וַיִּקְרָא</div>
-                    <div class="book-info">
-                        <span class="book-info-item">📖 27 chapters</span>
-                        <span class="book-info-item">🕊️ Holiness code</span>
-                    </div>
-                    <p class="book-description">Laws of holiness, sacrifice, and priesthood - how to live in God's presence.</p>
-                </a>
-
-                <a href="/studies/tanakh/torah/numbers/numbers.html" class="book-card">
-                    <div class="book-card-header">
-                        <div class="book-name">Numbers</div>
-                        <span class="book-status coming-soon">Coming</span>
-                    </div>
-                    <div class="book-hebrew">בְּמִדְבַּר</div>
-                    <div class="book-info">
-                        <span class="book-info-item">📖 36 chapters</span>
-                        <span class="book-info-item">🏜️ Wilderness</span>
-                    </div>
-                    <p class="book-description">Israel's wilderness wanderings, rebellions, and preparations to enter the promised land.</p>
-                </a>
-
-                <a href="/studies/tanakh/torah/deuteronomy/deuteronomy.html" class="book-card">
-                    <div class="book-card-header">
-                        <div class="book-name">Deuteronomy</div>
-                        <span class="book-status coming-soon">Coming</span>
-                    </div>
-                    <div class="book-hebrew">דְּבָרִים</div>
-                    <div class="book-info">
-                        <span class="book-info-item">📖 34 chapters</span>
-                        <span class="book-info-item">📜 Covenant renewal</span>
-                    </div>
-                    <p class="book-description">Moses' farewell speeches - covenant renewal before entering the promised land.</p>
-                </a>
-            </div>
-        </div>
-
-        <!-- Nevi'im Section -->
-        <div class="division-card" id="neviim">
-            <div class="division-header">
-                <div class="division-icon">👁️</div>
-                <div class="division-info">
-                    <h2 class="division-title">
-                        Nevi'im 
-                        <span class="hebrew hebrew-large">נְבִיאִים</span>
-                    </h2>
-                    <p class="division-description">The Prophets - God's messengers calling Israel to covenant faithfulness</p>
-                </div>
-            </div>
-
-            <h3 style="margin: 2rem 0 1rem; color: var(--primary-dark);">Former Prophets</h3>
-            <div class="books-grid">
-                <a href="/studies/tanakh/neviim/joshua/joshua.html" class="book-card">
-                    <div class="book-card-header">
-                        <div class="book-name">Joshua</div>
-                        <span class="book-status coming-soon">Coming</span>
-                    </div>
-                    <div class="book-hebrew">יְהוֹשֻׁעַ</div>
-                    <div class="book-info">
-                        <span class="book-info-item">📖 24 chapters</span>
-                        <span class="book-info-item">⚔️ Conquest</span>
-                    </div>
-                    <p class="book-description">Conquest and settlement of the promised land under Joshua's leadership.</p>
-                </a>
-
-                <a href="/studies/tanakh/neviim/judges/judges.html" class="book-card">
-                    <div class="book-card-header">
-                        <div class="book-name">Judges</div>
-                        <span class="book-status coming-soon">Coming</span>
-                    </div>
-                    <div class="book-hebrew">שֹׁפְטִים</div>
-                    <div class="book-info">
-                        <span class="book-info-item">📖 21 chapters</span>
-                        <span class="book-info-item">🔄 Cycles</span>
-                    </div>
-                    <p class="book-description">Cycles of rebellion, oppression, and deliverance in pre-monarchic Israel.</p>
-                </a>
-
-                <a href="/studies/tanakh/neviim/samuel/samuel.html" class="book-card">
-                    <div class="book-card-header">
-                        <div class="book-name">1-2 Samuel</div>
-                        <span class="book-status coming-soon">Coming</span>
-                    </div>
-                    <div class="book-hebrew">שְׁמוּאֵל</div>
-                    <div class="book-info">
-                        <span class="book-info-item">📖 55 chapters</span>
-                        <span class="book-info-item">👑 Kingdom rise</span>
-                    </div>
-                    <p class="book-description">Transition to monarchy - Samuel, Saul, and David's rise to kingship.</p>
-                </a>
-
-                <a href="/studies/tanakh/neviim/kings/kings.html" class="book-card">
-                    <div class="book-card-header">
-                        <div class="book-name">1-2 Kings</div>
-                        <span class="book-status coming-soon">Coming</span>
-                    </div>
-                    <div class="book-hebrew">מְלָכִים</div>
-                    <div class="book-info">
-                        <span class="book-info-item">📖 47 chapters</span>
-                        <span class="book-info-item">🏛️ Temple & exile</span>
-                    </div>
-                    <p class="book-description">Solomon's temple, divided kingdom, and exile - covenant faithfulness evaluated.</p>
-                </a>
-            </div>
-
-            <h3 style="margin: 2rem 0 1rem; color: var(--primary-dark);">Major Prophets</h3>
-            <div class="books-grid">
-                <a href="/studies/tanakh/neviim/isaiah/isaiah.html" class="book-card">
-                    <div class="book-card-header">
-                        <div class="book-name">Isaiah</div>
-                        <span class="book-status coming-soon">Coming</span>
-                    </div>
-                    <div class="book-hebrew">יְשַׁעְיָהוּ</div>
-                    <div class="book-info">
-                        <span class="book-info-item">📖 66 chapters</span>
-                        <span class="book-info-item">🕊️ Messianic</span>
-                    </div>
-                    <p class="book-description">Judgment and salvation - the Holy One of Israel and the coming servant.</p>
-                </a>
-
-                <a href="/studies/tanakh/neviim/jeremiah/jeremiah.html" class="book-card">
-                    <div class="book-card-header">
-                        <div class="book-name">Jeremiah</div>
-                        <span class="book-status coming-soon">Coming</span>
-                    </div>
-                    <div class="book-hebrew">יִרְמְיָהוּ</div>
-                    <div class="book-info">
-                        <span class="book-info-item">📖 52 chapters</span>
-                        <span class="book-info-item">💔 Weeping prophet</span>
-                    </div>
-                    <p class="book-description">Warning of judgment, promise of new covenant, prophet's personal struggles.</p>
-                </a>
-
-                <a href="/studies/tanakh/neviim/ezekiel/ezekiel.html" class="book-card">
-                    <div class="book-card-header">
-                        <div class="book-name">Ezekiel</div>
-                        <span class="book-status coming-soon">Coming</span>
-                    </div>
-                    <div class="book-hebrew">יְחֶזְקֵאל</div>
-                    <div class="book-info">
-                        <span class="book-info-item">📖 48 chapters</span>
-                        <span class="book-info-item">🔥 Visions</span>
-                    </div>
-                    <p class="book-description">Priestly prophet in exile - God's glory departs and returns, new temple vision.</p>
-                </a>
-            </div>
-
-            <h3 style="margin: 2rem 0 1rem; color: var(--primary-dark);">Minor Prophets (The Twelve)</h3>
-            <div class="books-grid">
-                <a href="/studies/tanakh/neviim/minor-prophets/hosea/hosea.html" class="book-card">
-                    <div class="book-card-header">
-                        <div class="book-name">Hosea</div>
-                        <span class="book-status">Complete</span>
-                    </div>
-                    <div class="book-hebrew">הוֹשֵׁעַ</div>
-                    <div class="book-info">
-                        <span class="book-info-item">📖 14 chapters</span>
-                        <span class="book-info-item">💔 Divine love</span>
-                    </div>
-                    <p class="book-description">God's unfailing love illustrated through prophetic marriage to unfaithful Gomer.</p>
-                </a>
-
-                <a href="/studies/tanakh/neviim/minor-prophets/joel/joel.html" class="book-card">
-                    <div class="book-card-header">
-                        <div class="book-name">Joel</div>
-                        <span class="book-status coming-soon">Coming</span>
-                    </div>
-                    <div class="book-hebrew">יוֹאֵל</div>
-                    <div class="book-info">
-                        <span class="book-info-item">📖 3 chapters</span>
-                        <span class="book-info-item">🦗 Day of the Lord</span>
-                    </div>
-                    <p class="book-description">Locust plague, call to repentance, and promise of Spirit outpouring.</p>
-                </a>
-
-                <a href="/studies/tanakh/neviim/minor-prophets/amos/amos.html" class="book-card">
-                    <div class="book-card-header">
-                        <div class="book-name">Amos</div>
-                        <span class="book-status coming-soon">Coming</span>
-                    </div>
-                    <div class="book-hebrew">עָמוֹס</div>
-                    <div class="book-info">
-                        <span class="book-info-item">📖 9 chapters</span>
-                        <span class="book-info-item">⚖️ Justice</span>
-                    </div>
-                    <p class="book-description">Social justice and true worship - let justice roll down like waters.</p>
-                </a>
-
-                <!-- Continue with remaining minor prophets... -->
-            </div>
-        </div>
-
-        <!-- Ketuvim Section -->
-        <div class="division-card" id="ketuvim">
-            <div class="division-header">
-                <div class="division-icon">✍️</div>
-                <div class="division-info">
-                    <h2 class="division-title">
-                        Ketuvim 
-                        <span class="hebrew hebrew-large">כְּתוּבִים</span>
-                    </h2>
-                    <p class="division-description">The Writings - Wisdom, poetry, and Israel's lived experience of faith</p>
-                </div>
-            </div>
-
-            <h3 style="margin: 2rem 0 1rem; color: var(--primary-dark);">Wisdom Literature</h3>
-            <div class="books-grid">
-                <a href="/studies/tanakh/ketuvim/psalms/psalms.html" class="book-card">
-                    <div class="book-card-header">
-                        <div class="book-name">Psalms</div>
-                        <span class="book-status coming-soon">Coming</span>
-                    </div>
-                    <div class="book-hebrew">תְּהִלִּים</div>
-                    <div class="book-info">
-                        <span class="book-info-item">📖 150 psalms</span>
-                        <span class="book-info-item">🎵 Songs & prayers</span>
-                    </div>
-                    <p class="book-description">Israel's hymnbook - praise, lament, thanksgiving, and wisdom in poetic form.</p>
-                </a>
-
-                <a href="/studies/tanakh/ketuvim/proverbs/proverbs.html" class="book-card">
-                    <div class="book-card-header">
-                        <div class="book-name">Proverbs</div>
-                        <span class="book-status coming-soon">Coming</span>
-                    </div>
-                    <div class="book-hebrew">מִשְׁלֵי</div>
-                    <div class="book-info">
-                        <span class="book-info-item">📖 31 chapters</span>
-                        <span class="book-info-item">💎 Wisdom sayings</span>
-                    </div>
-                    <p class="book-description">Practical wisdom for living - the fear of the Lord is the beginning of knowledge.</p>
-                </a>
-
-                <a href="/studies/tanakh/ketuvim/job/job.html" class="book-card">
-                    <div class="book-card-header">
-                        <div class="book-name">Job</div>
-                        <span class="book-status coming-soon">Coming</span>
-                    </div>
-                    <div class="book-hebrew">אִיּוֹב</div>
-                    <div class="book-info">
-                        <span class="book-info-item">📖 42 chapters</span>
-                        <span class="book-info-item">🔥 Suffering</span>
-                    </div>
-                    <p class="book-description">Righteous suffering and divine sovereignty - wrestling with theodicy.</p>
-                </a>
-            </div>
-
-            <h3 style="margin: 2rem 0 1rem; color: var(--primary-dark);">Five Megillot (Scrolls)</h3>
-            <div class="books-grid">
-                <a href="/studies/tanakh/ketuvim/ruth/ruth-overview.html" class="book-card">
-                    <div class="book-card-header">
-                        <div class="book-name">Ruth</div>
-                        <span class="book-status">Complete</span>
-                    </div>
-                    <div class="book-hebrew">רוּת</div>
-                    <div class="book-info">
-                        <span class="book-info-item">📖 4 chapters</span>
-                        <span class="book-info-item">💝 Covenant loyalty</span>
-                    </div>
-                    <p class="book-description">Loyalty and redemption - a Moabite woman enters the messianic line through extraordinary faithfulness.</p>
-                </a>
-
-                <a href="/studies/tanakh/ketuvim/esther/esther.html" class="book-card">
-                    <div class="book-card-header">
-                        <div class="book-name">Esther</div>
-                        <span class="book-status coming-soon">Coming</span>
-                    </div>
-                    <div class="book-hebrew">אֶסְתֵּר</div>
-                    <div class="book-info">
-                        <span class="book-info-item">📖 10 chapters</span>
-                        <span class="book-info-item">👑 Providence</span>
-                    </div>
-                    <p class="book-description">God's hidden providence - deliverance of Jews in Persian exile.</p>
-                </a>
-
-                <!-- Continue with remaining scrolls... -->
-            </div>
-        </div>
-    </div>
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay"></div>
 
     <footer>
-        <p>&copy; 2025 Project Context. Empowering faith through understanding.</p>
+        <p>&copy; 2025 Project Context — Tanakh Studies Hub</p>
     </footer>
 
     <script>
-        // Mobile menu toggle
-        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-        const navLinks = document.getElementById('navLinks');
-
-        mobileMenuToggle?.addEventListener('click', () => {
-            mobileMenuToggle.classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
-
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('#main-nav')) {
-                mobileMenuToggle?.classList.remove('active');
-                navLinks?.classList.remove('active');
-            }
-        });
-
-        // Add scroll effect to nav
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('main-nav');
-            if (window.scrollY > 100) {
-                nav?.classList.add('scrolled');
-            } else {
-                nav?.classList.remove('scrolled');
-            }
-        });
-
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -1202,6 +1182,60 @@
                     });
                 }
             });
+        });
+
+        // Reading Progress Bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.reading-progress').style.width = scrolled + '%';
+        });
+
+        // Back to Top Button
+        const backToTop = document.querySelector('.back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        // Add scroll effect to nav
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (nav && window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else if (nav) {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu Overlay & Toggle
+        const mobileToggle = document.querySelector('.mobile-menu-toggle');
+        const mobileOverlay = document.querySelector('.mobile-menu-overlay');
+        const navLinks = document.querySelector('.nav-links');
+        
+        if (mobileToggle) {
+            mobileToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                mobileOverlay.classList.toggle('active');
+            });
+            
+            mobileOverlay.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+            });
+        }
+    </script>
+
+    <!-- Navigation Component Integration -->
+    <script type="module">
+        import NavigationComponent from '/assets/js/nav-component.js';
+        const navigation = new NavigationComponent({
+            currentPage: 'studies/tanakh',
+            hubType: 'tanakh'
         });
     </script>
 </body>
