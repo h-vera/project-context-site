@@ -18,18 +18,68 @@
   <!-- central nav web component (if your site uses it) -->
   <script src="/assets/js/nav-component.js" defer></script>
   <script src="/assets/js/quick-nav.js" defer></script>
+  <style>
+    /* --- Fallback styles if /assets/css/global-v2.css isn't loaded --- */
+    :root{--bg:#ffffff;--fg:#111827;--muted:#6b7280;--border:#e5e7eb;--card:#fafafa;--accent:#0b6cff;--shade:#f3f4f6}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--fg)}
+    body{font:17px/1.6 "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif}
+    .wrap{max-width:1100px;margin:0 auto;padding:2rem 1rem}
+    h1{font-size:2rem;margin:.2rem 0 1rem}
+    h2{font-size:1.35rem;margin:0 0 .6rem}
+    h3{font-size:1.05rem;margin:.2rem 0 .35rem}
+    .breadcrumbs{max-width:1100px;margin:0 auto;padding:.5rem 1rem;color:var(--muted);font-size:.9rem}
+    .reading-progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--accent),#a855f7);z-index:1000}
+    .hero{background:linear-gradient(135deg,#0a0a0a 0%, #00b4d8 33%, #7209b7 66%, #0a0a0a 100%);color:#fff;border-radius:16px;padding:1.5rem 1.25rem;margin:1rem 0 1.5rem}
+    .pillbar{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
+    .pill{display:inline-block;padding:.2rem .6rem;border:1px solid rgba(255,255,255,.5);border-radius:999px;font-size:.8rem}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1rem 1.1rem;margin:1rem 0}
+    .muted{color:var(--muted)}
+    .grid{display:grid;gap:1rem}
+    .grid.cols-2{grid-template-columns:1fr}
+    @media(min-width:900px){.grid.cols-2{grid-template-columns:1.15fr .85fr}}
+    .demo{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#fff}
+    .demo header{display:flex;justify-content:space-between;align-items:center;padding:.5rem .75rem;background:var(--shade);border-bottom:1px solid var(--border)}
+    .pane{padding:1rem}
+    .structured .l{display:block}
+    .structured .i1{padding-left:1.1rem}
+    .structured .i2{padding-left:2.2rem}
+    .toggle{display:flex;gap:.35rem;align-items:center}
+    /* Ruth components */
+    .map-container{margin: .5rem 0 1rem}
+    .map-visual{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+    .map-visual .location{background:#fff;border:1px solid var(--border);border-radius:10px;padding:.4rem .6rem;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+    .map-visual .arrow{opacity:.7}
+    .cast-grid{display:grid;grid-template-columns:1fr;gap:.8rem}
+    @media(min-width:900px){.cast-grid{grid-template-columns:repeat(4,1fr)}}
+    .cast-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:.75rem}
+    /* Hebrew/Greek font fallbacks */
+    [lang="he"],[dir="rtl"]{font-family:"SBL Hebrew","Times New Roman",serif}
+    [lang="el"]{font-family:"Palatino Linotype",Palatino,Georgia,serif}
+  </style>
 </head>
-<body class="pc-body v5-8-1">
+<body>
+  <!-- Accessibility Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress"></div>
+
+  <!-- Navigation will be injected here by nav-component.js -->
   <!-- Central Navigation (populated by nav-premium.js) -->
-  <header id="pc-nav" class="pc-nav central" data-theme="auto" aria-label="Primary Navigation"></header>
+  
   <!-- Reading progress bar (fallback script at end) -->
   <div id="pc-progress" class="reading-progress" aria-hidden="true"></div>
   <!-- Breadcrumbs -->
-  <div class="pc-breadcrumbs"><a href="/">Home</a> › <a href="/studies/">Studies</a> › <a href="/studies/new-covenant/">New Covenant Hub</a> › LLTSE Orientation</div>
+  <div class="breadcrumbs">
+    <a href="/">Home</a> › 
+    <a href="/studies/">Studies</a> › 
+    LLTSE Orientation
+  </div>
 
-  <main class="wrap">
+  <main id="main-content" class="content-section" role="main" aria-label="LLTSE Orientation & Methodology">
+    <div class="container">
     <!-- Here's the Why (Author's Preface) -->
-    <section class="card" id="heres-the-why" data-quick-nav="Here’s the Why">
+    <section class="theology-card" id="heres-the-why" data-quick-nav="Here’s the Why">
       <h2>Here’s the Why</h2>
       <p>I created the Literal–Literary Translation Structure Edition (LLTSE) because paragraph Bibles often muffle what Scripture is trying to <em>make you hear</em>. Hebrew breathes in parallel lines and mirrored thought; Greek picks up that rhythm in creeds, triads, and nested clauses. When those patterns are pressed into uniform paragraphs with bold headings and devotional sub‑titles, much of the logic and cadence disappears. I wanted a page where the structure <em>teaches</em> before any commentary does.</p>
       <p>So this edition keeps translation <strong>literal where possible</strong> and <strong>literary where necessary</strong>, then lets the layout carry meaning: indentation for subordination, stacked lines for lists and triads, spacing for chiasm and inclusio. It removes overlays (titles, sub‑titles, intrusive verse numbers) from the reading flow and brings forward what the original audiences would have recognized immediately—audible balance and rhetorical design.</p>
@@ -39,12 +89,14 @@
 
     <!-- Hero -->
     <section class="hero">
-      <h1>Literal–Literary Translation Structure Edition (LLTSE)</h1>
-      <p>The LLTSE brings the rhythm and rhetoric of Scripture back into view by aligning <strong>literal translation</strong> with <strong>literary structure</strong>—so modern readers can hear what the original audiences heard in Hebrew, Aramaic, and Greek.</p>
-      <div class="pillbar">
-        <span class="pill">Literal where possible</span>
-        <span class="pill">Literary where necessary</span>
-        <span class="pill">Visual hierarchy of thought</span>
+      <div class="hero-content">
+        <h1 class="hero-title">Literal–Literary Translation Structure Edition (LLTSE)</h1>
+        <p class="hero-subtitle">The LLTSE brings the rhythm and rhetoric of Scripture back into view by aligning <strong>literal translation</strong> with <strong>literary structure</strong>—so modern readers can hear what the original audiences heard in Hebrew, Aramaic, and Greek.</p>
+        <div class="hero-stats">
+          <div class="stat-item"><div class="stat-number">Hebrew</div><div class="stat-label">Parallelism & Chiasm</div></div>
+          <div class="stat-item"><div class="stat-number">Greek</div><div class="stat-label">Triads & Creeds</div></div>
+          <div class="stat-item"><div class="stat-number">English</div><div class="stat-label">Structured Edition</div></div>
+        </div>
       </div>
     </section>
 
@@ -89,10 +141,10 @@
     </section>
 
     <!-- Methodology with Hebrew & Greek Examples -->
-    <section class="card" id="methodology" data-quick-nav="Methodology">
+    <section class="theology-card" id="methodology" data-quick-nav="Methodology">
       <h2>Methodology: Hebrew and Greek in Dialogue</h2>
       <p>In Scripture, language evolution is itself a theology of communication. Hebrew writers conveyed ideas through rhythm and repetition; Greek writers inherited those forms to express revelation across cultures. The LLTSE shows this continuity: how Hebrew poetry shaped Greek argumentation, and how both converge in English through structural translation.</p>
-      <div class="grid cols-2">
+      <div class="grid-2">
         <article>
           <h3>Hebrew (Tanakh)</h3>
           <div class="demo" lang="he" dir="rtl">
@@ -123,7 +175,7 @@
     </section>
 
     <!-- Before & After Comparison Block -->
-    <section class="card" id="before-after" data-quick-nav="Before & After">
+    <section class="theology-card" id="before-after" data-quick-nav="Before & After">
       <h2>Before &amp; After: Paragraph vs. Structured Edition</h2>
       <p class="muted">Flip each toggle to compare a standard paragraph with LLTSE lineation. No external loading—these are embedded samples.</p>
 
@@ -189,7 +241,7 @@
     </section>
 
     <!-- Why Indentation Works -->
-    <section class="card" id="why-indentation" data-quick-nav="Why Indentation Works">
+    <section class="theology-card" id="why-indentation" data-quick-nav="Why Indentation Works">
       <h2>Why Indentation Works</h2>
       <ul>
         <li><strong>Visual hierarchy:</strong> reveals clauses and sub‑clauses at a glance.</li>
@@ -201,7 +253,7 @@
     </section>
 
     <!-- Evolution & Rationale (scholarly lineage summary) -->
-    <section class="card" id="evolution-rationale" data-quick-nav="Evolution & Rationale">
+    <section class="theology-card" id="evolution-rationale" data-quick-nav="Evolution & Rationale">
       <h2>Evolution &amp; Rationale</h2>
       <p>LLTSE builds on centuries of observation about biblical structure:</p>
       <ul>
@@ -213,9 +265,9 @@
     </section>
 
     <!-- Principles of Translation & Design -->
-    <section class="card" id="principles" data-quick-nav="Principles">
+    <section class="theology-card" id="principles" data-quick-nav="Principles">
       <h2>Principles of Translation &amp; Design</h2>
-      <div class="grid cols-2">
+      <div class="grid-2">
         <article>
           <h3>Translation</h3>
           <ul>
@@ -240,7 +292,7 @@
     </section>
 
     <!-- From Scroll to Screen: The Evolution of Format (publishing history) -->
-    <section class="card" id="evolution-format" data-quick-nav="From Scroll to Screen">
+    <section class="theology-card" id="evolution-format" data-quick-nav="From Scroll to Screen">
       <h2>From Scroll to Screen: The Evolution of Format</h2>
       <p>Across transmission history, formatting choices have progressively flattened the audible structure of Scripture. LLTSE reverses that trend by restoring the visible logic that ancient audiences heard.</p>
       <div class="map-container" aria-label="Format Evolution">
@@ -268,7 +320,7 @@
     <section class="references-block" id="bibliography" data-quick-nav="Sources & Bibliography">
       <h2>Sources &amp; Bibliography</h2>
       <p class="muted">Key works informing the LLTSE methodology. To keep the reading flow clear, sources are listed here rather than embedded as inline notes.</p>
-      <div class="grid cols-2 ref-group">
+      <div class="grid-2 ref-group">
         <ol class="bibliography">
           <li class="ref-item">Lowth, Robert. <em>Lectures on the Sacred Poetry of the Hebrews</em> (1753).</li>
           <li class="ref-item">Alter, Robert. <em>The Art of Biblical Poetry</em> (1985); <em>The Art of Biblical Narrative</em> (2011).</li>
@@ -287,7 +339,7 @@
     </section>
 
     <!-- What LLTSE Is Not -->
-    <section class="card" id="what-not" data-quick-nav="What LLTSE Is Not">
+    <section class="theology-card" id="what-not" data-quick-nav="What LLTSE Is Not">
       <h2>What LLTSE Is Not</h2>
       <ul>
         <li><strong>Not a paraphrase:</strong> wording remains anchored to the source language; layout reveals structure without rewording sense units.</li>
@@ -297,14 +349,14 @@
     </section>
 
     <!-- Hub Tiles -->
-    <section class="card" id="explore-hubs" data-quick-nav="Explore the Hubs">
+    <section class="theology-card" id="explore-hubs" data-quick-nav="Explore the Hubs">
       <h2>Explore the Hubs</h2>
-      <div class="grid cols-2">
-        <a href="/studies/tanakh/" class="card" style="text-decoration:none">
+      <div class="grid-2">
+        <a href="/studies/tanakh/" class="theology-card" style="text-decoration:none">
           <h3>Tanakh Hub</h3>
           <p class="muted">Hebrew parallelism, poetry, prophecy, and narrative rhythm.</p>
         </a>
-        <a href="/studies/new-covenant/" class="card" style="text-decoration:none">
+        <a href="/studies/new-covenant/" class="theology-card" style="text-decoration:none">
           <h3>New Covenant Hub</h3>
           <p class="muted">Greek triads, chiastic argumentation, and creedal symmetry.</p>
         </a>
@@ -313,7 +365,23 @@
 
     <!-- Footer -->
     <footer>© 2025 Project Context · LLTSE Orientation and Methodology · Template v5.8.1</footer>
+      </div><!-- /.container -->
   </main>
+
+  <!-- Back to Top Button -->
+  <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay"></div>
+
+  <!-- Navigation Component Integration -->
+  <script type="module">
+    import NavigationComponent from '/assets/js/nav-component.js';
+    const navigation = new NavigationComponent({
+      currentPage: 'studies/lltse-orientation-methodology',
+      hubType: 'new-testament'
+    });
+  </script>
 
   <!-- Fallback progress script (if global not present) -->
   <script>
