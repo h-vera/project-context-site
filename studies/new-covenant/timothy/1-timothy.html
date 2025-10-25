@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1 Timothy – Structured Edition (Complete)</title>
+<style>
+  :root{
+    --bg: #ffffff;
+    --fg: #1f2328;
+    --muted: #6b7280;
+    --accent: #0b6cff;
+    --triad1: #2f7f5f;
+    --triad2: #8a5bbc;
+    --triad3: #c45500;
+    --creed: #0b6cff;
+    --doxo: #9a3412;
+    --lawlist: #7a7a7a;
+    --prayer: #2f7f5f;
+    --men: #1a7f8e;
+    --women: #8a5bbc;
+    --rationale: #c45500;
+    --promise: #0b6cff;
+    --indent-step: 1.25rem;
+    --line-height: 1.45;
+    --maxw: 900px;
+    --border: #e5e7eb;
+    --card: #fafafa;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg: #0b0f14;
+      --fg: #e5e7eb;
+      --muted: #9aa1aa;
+      --accent: #7aa2ff;
+      --triad1: #58bfa1;
+      --triad2: #b999ff;
+      --triad3: #ff9a66;
+      --creed: #7aa2ff;
+      --doxo: #efb366;
+      --lawlist: #a0a0a0;
+      --prayer: #58bfa1;
+      --men: #3db8cc;
+      --women: #b999ff;
+      --rationale: #ff9a66;
+      --promise: #7aa2ff;
+      --border: #1f2937;
+      --card: #0f141b;
+    }
+  }
+  body.hc{
+    --triad1: #005c3b;
+    --triad2: #4b0082;
+    --triad3: #8b2c00;
+    --creed:  #0031a8;
+    --doxo:   #5a2a00;
+    --lawlist:#2b2b2b;
+    --prayer: #00c26e;
+    --men: #008b9e;
+    --women: #4b0082;
+    --rationale: #8b2c00;
+    --promise: #0031a8;
+  }
+  @media (prefers-color-scheme: dark) {
+    body.hc{
+      --prayer: #00c26e;
+      --creed:  #66a3ff;
+      --men: #00d4e6;
+      --women: #b999ff;
+      --rationale: #ff9a66;
+      --promise: #66a3ff;
+    }
+  }
+  
+  body{
+    margin:0; padding:2rem 1rem 4rem;
+    background:var(--bg); color:var(--fg);
+    font: 17px/var(--line-height) "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  }
+  .wrap{ max-width: var(--maxw); margin: 0 auto; }
+  
+  /* Header */
+  header{
+    display:flex; align-items:center; justify-content:space-between; gap:1rem;
+    margin-bottom:1.5rem; flex-wrap:wrap;
+  }
+  .main-title{
+    font-weight:600; letter-spacing:.3px; font-size:1.3rem; color:var(--fg);
+  }
+  .controls{ display:flex; gap:.5rem; flex-wrap:wrap; }
+  button, .chip{
+    cursor:pointer; border:1px solid var(--muted); background:transparent; color:var(--fg);
+    border-radius:999px; padding:.4rem .75rem; font-size:.85rem; transition: all 0.2s;
+  }
+  button:hover{ background: color-mix(in oklab, var(--fg) 5%, transparent); }
+  button:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .chip[aria-pressed="true"], .chip.active{
+    border-color: var(--accent); color: var(--accent);
+    background: color-mix(in oklab, var(--accent) 15%, transparent);
+  }
+  
+  /* Tabs */
+  .tabs{
+    display:flex; gap:.25rem; border-bottom:2px solid var(--border);
+    margin-bottom:1.5rem; overflow-x:auto; flex-wrap:wrap;
+  }
+  .tab-btn{
+    border:none; border-radius:8px 8px 0 0; padding:.6rem 1.2rem; 
+    font-size:.95rem; cursor:pointer; background:transparent; color:var(--muted);
+    transition: all 0.2s; white-space:nowrap; border-bottom:3px solid transparent;
+  }
+  .tab-btn:hover{ background: color-mix(in oklab, var(--accent) 10%, transparent); color:var(--fg); }
+  .tab-btn.active{ 
+    color:var(--accent); font-weight:600; 
+    border-bottom-color:var(--accent);
+  }
+  .tab-content{ display:none; }
+  .tab-content.active{ display:block; animation: fadeIn 0.3s; }
+  @keyframes fadeIn{ from{ opacity:0; } to{ opacity:1; } }
+  
+  /* Orientation styles */
+  .card{
+    background:var(--card); border:1px solid var(--border); 
+    border-radius:12px; padding:1.25rem 1.5rem; margin:.75rem 0;
+  }
+  .card h2{ 
+    font-size:1.15rem; margin:.2rem 0 .6rem; color:var(--fg); font-weight:600;
+  }
+  .card h3{
+    font-size:1rem; margin:1rem 0 .4rem; color:var(--fg); font-weight:600;
+  }
+  .card p, .card li{ margin:.4rem 0; line-height:1.55; }
+  .card ul{ margin:.3rem 0 .5rem 1.2rem; padding:0; }
+  .card li{ margin:.25rem 0; }
+  
+  /* Legend */
+  .legend{
+    display:flex; gap: .75rem; flex-wrap:wrap; margin:.5rem 0 1.25rem;
+  }
+  .swatch{
+    display:inline-flex; align-items:center; gap:.4rem; font-size:.82rem; color:var(--muted);
+  }
+  .swatch::before{
+    content:""; width:.9rem; height:.9rem; border-radius:3px; 
+    display:inline-block; background: currentColor;
+    outline: 1px solid color-mix(in oklab, #000 15%, currentColor);
+  }
+  
+  /* Text structure */
+  .block{ margin:.75rem 0; }
+  .l{ margin:.25rem 0; }
+  .i1{ margin-left: calc(var(--indent-step) * 1); }
+  .i2{ margin-left: calc(var(--indent-step) * 2); }
+  .i3{ margin-left: calc(var(--indent-step) * 3); }
+  .i4{ margin-left: calc(var(--indent-step) * 4); }
+  .muted{ color: var(--muted); }
+  
+  /* Color accents */
+  .triad .i1{ color: var(--triad1); }
+  .triad .i2{ color: var(--triad2); }
+  .triad .i3{ color: var(--triad3); }
+  .creed .l{ color: var(--creed); }
+  .doxo .l{ color: var(--doxo); }
+  .law .l{ color: var(--lawlist); }
+  .prayer .l{ color: var(--prayer); }
+  .men .l{ color: var(--men); }
+  .women .l{ color: var(--women); }
+  .rationale .l{ color: var(--rationale); }
+  .promise .l{ color: var(--promise); }
+  .virtues .l{ color: var(--triad1); }
+  .negatives .l{ color: var(--triad2); }
+  
+  /* Structural anchor styling for doxologies and hymns */
+  section.doxo[aria-label*="Anchor"],
+  section.creed[aria-label*="Anchor"] {
+    border-left: 4px solid var(--accent);
+    padding-left: 1rem;
+    margin: 1.25rem 0;
+    background: color-mix(in oklab, var(--accent) 5%, transparent);
+    border-radius: 0 8px 8px 0;
+  }
+  
+  body.colorless .triad .l,
+  body.colorless .creed .l,
+  body.colorless .doxo .l,
+  body.colorless .law .l,
+  body.colorless .prayer .l,
+  body.colorless .men .l,
+  body.colorless .women .l,
+  body.colorless .virtues .l,
+  body.colorless .negatives .l,
+  body.colorless .rationale .l,
+  body.colorless .promise .l{ color: inherit; }
+  
+  .sc{ font-variant-caps: all-small-caps; letter-spacing:.04em; }
+  .smallcaps{ font-variant-caps: all-small-caps; letter-spacing:.04em; }
+  
+  /* Section labels */
+  .section-label{
+    display:none;
+    margin:.6rem 0 .3rem;
+    color: var(--muted);
+    font-size:.8rem;
+    text-transform: uppercase;
+    letter-spacing:.07em;
+    font-weight:600;
+  }
+  body.show-labels .section-label{ display:block; }
+  
+  /* Print styles */
+  @media print{
+    header .controls, .legend, .tabs{ display:none; }
+    body{ padding: 0.5in; }
+    .wrap{ max-width: none; }
+    .tab-content{ display:block !important; }
+    .tab-content:not(:first-of-type){ page-break-before: always; }
+  }
+  
+  /* Responsive */
+  @media (max-width: 600px){
+    body{ padding:1.5rem .75rem 3rem; }
+    .main-title{ font-size:1.1rem; }
+    .tab-btn{ padding:.5rem .9rem; font-size:.88rem; }
+    .card{ padding:1rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="main-title">1 Timothy – Structured Edition</div>
+    <div class="controls" role="group" aria-label="Display controls">
+      <button class="chip" id="toggle-colors" aria-pressed="false" title="Toggle color accents">Color accents</button>
+      <button class="chip" id="toggle-contrast" aria-pressed="false" title="Toggle high-contrast">High contrast</button>
+      <button class="chip" id="toggle-labels" aria-pressed="false" title="Toggle section labels">Section labels</button>
+    </div>
+  </header>
+
+  <!-- Tabs Navigation -->
+  <nav class="tabs" role="tablist">
+    <button class="tab-btn active" data-tab="orientation" role="tab" aria-selected="true">About</button>
+    <button class="tab-btn" data-tab="ch1" role="tab" aria-selected="false">Chapter 1</button>
+    <button class="tab-btn" data-tab="ch2" role="tab" aria-selected="false">Chapter 2</button>
+    <button class="tab-btn" data-tab="ch3" role="tab" aria-selected="false">Chapter 3</button>
+  </nav>
+
+  <!-- ORIENTATION TAB -->
+  <div id="orientation" class="tab-content active" role="tabpanel">
+    <div class="card">
+      <h2>About the Structured Edition</h2>
+      <p>The purpose of this project is to produce a <strong>literal–literary edition</strong> of each biblical text that remains faithful to the original Greek or Hebrew wording while revealing the author's <strong>literary structure</strong> and <strong>rhetorical movement</strong>. This is not a paraphrase or commentary; it reconstructs how the text would have been <em>heard</em> by its earliest audience, especially where Greek carries <strong>Hebraic thought patterns</strong> (parallelism, triads, creeds, doxologies).</p>
+    </div>
+
+    <div class="card">
+      <h2>Core Objectives</h2>
+      <ul>
+        <li><strong>Faithfulness to source:</strong> Preserve the sense of each Greek word and grammatical relationship (NA28/UBS5 as base).</li>
+        <li><strong>Structural visibility:</strong> Make rhetorical/poetic patterns visible (indents, triads, cadence, doxologies, creeds).</li>
+        <li><strong>Hebraic echoes in Greek:</strong> Highlight covenantal and liturgical resonances where Paul leans Hebrew.</li>
+        <li><strong>Oral readability:</strong> Retain rhythm and cadence so it reads smoothly aloud while remaining literal.</li>
+        <li><strong>Transparency:</strong> Log lexical and structural decisions in translation notes.</li>
+        <li><strong>Non-dogmatic presentation:</strong> Let form and flow speak before interpretation; avoid importing systems.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Philosophy</h2>
+      <ul>
+        <li><strong>Literal where possible, literary where necessary.</strong></li>
+        <li><strong>Formatting as pedagogy:</strong> structure replaces many footnotes—the layout itself teaches.</li>
+        <li><strong>Primed for hearing:</strong> the edition is designed to be read aloud, not only analyzed.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>How to Use This Edition</h2>
+      <h3>Interactive Features</h3>
+      <ul>
+        <li><strong>Color accents:</strong> Toggle colors to highlight different structural elements (triads, creeds, doxologies, etc.)</li>
+        <li><strong>High contrast:</strong> Increase color intensity for better visibility</li>
+        <li><strong>Section labels:</strong> Show/hide descriptive labels for each section</li>
+        <li><strong>Tabs:</strong> Navigate between chapters and the orientation guide</li>
+      </ul>
+      
+      <h3>Visual Conventions</h3>
+      <ul>
+        <li><strong>Indentation:</strong> Shows logical relationships and subordinate clauses</li>
+        <li><strong>Colors:</strong> Different hues mark distinct rhetorical units (triads, creeds, lists)</li>
+        <li><strong>Small caps:</strong> Highlights formal sayings and credal statements</li>
+        <li><strong>Spacing:</strong> Blocks separate distinct thought units</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Intended Use</h2>
+      <ul>
+        <li>For study, teaching, and literary appreciation of the biblical text's design.</li>
+        <li>A companion to interlinear and critical editions—never a replacement.</li>
+        <li>A base layer for commentary written <em>after</em> translation and structure are set.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CHAPTER 1 TAB -->
+  <div id="ch1" class="tab-content" role="tabpanel">
+    <div class="legend" aria-hidden="true">
+      <div class="swatch" style="color:var(--triad1)">Triad A</div>
+      <div class="swatch" style="color:var(--triad2)">Triad B</div>
+      <div class="swatch" style="color:var(--triad3)">Triad C</div>
+      <div class="swatch" style="color:var(--creed)">Credal line</div>
+      <div class="swatch" style="color:var(--doxo)">Doxology</div>
+    </div>
+
+    <div class="section-label">Opening greeting & commission (1–2)</div>
+    <section class="block">
+      <div class="l">Paul, an apostle of Christ Jesus</div>
+      <div class="l i1">by the command of God our Savior</div>
+      <div class="l i1">and Christ Jesus our hope,</div>
+    </section>
+
+    <section class="block">
+      <div class="l">to Timothy, my genuine child in faith—</div>
+      <div class="l i1">grace, mercy, and peace</div>
+      <div class="l i1">from God the Father</div>
+      <div class="l i1">and Christ Jesus our Lord.</div>
+    </section>
+
+    <div class="section-label">Charge against other-teaching (3–7)</div>
+    <section class="block">
+      <div class="l">Just as I urged you to remain in Ephesus when I went to Macedonia,</div>
+      <div class="l">that you might charge certain persons not to teach different doctrine,</div>
+      <div class="l i1">nor to devote themselves to myths and endless genealogies</div>
+      <div class="l i1">which give rise to controversies</div>
+      <div class="l i1">rather than God's stewardship that is by faith.</div>
+    </section>
+
+    <div class="section-label">Goal of the charge: moral triad (1:5)</div>
+    <section class="block triad" aria-label="Moral triad">
+      <div class="l"><span class="sc">The goal of the charge is love—</span></div>
+      <div class="l i1">from a pure heart,</div>
+      <div class="l i2">and a good conscience,</div>
+      <div class="l i3">and a sincere faith.</div>
+    </section>
+
+    <section class="block">
+      <div class="l">Some have missed this mark</div>
+      <div class="l i1">and have turned aside to empty talk,</div>
+      <div class="l">desiring to be teachers of the Law</div>
+      <div class="l i1">though they understand neither what they are saying</div>
+      <div class="l i1">nor the things about which they make confident claims.</div>
+    </section>
+
+    <div class="section-label">Law used lawfully; vice list (8–11)</div>
+    <section class="block law" aria-label="Law list">
+      <div class="l">Now we know that the Law is good,</div>
+      <div class="l i1">if one uses it lawfully,</div>
+      <div class="l">understanding that the Law is not laid down for the righteous,</div>
+      <div class="l i1">but for the lawless and rebellious,</div>
+      <div class="l i1">for the ungodly and sinners,</div>
+      <div class="l i1">for the unholy and the profane,</div>
+      <div class="l i1">for father-killers and mother-killers,</div>
+      <div class="l i1">for murderers,</div>
+      <div class="l i1">for the sexually immoral,</div>
+      <div class="l i1">for men who lie with men,</div>
+      <div class="l i1">for enslavers,</div>
+      <div class="l i1">for liars,</div>
+      <div class="l i1">and for perjurers,</div>
+      <div class="l">and for whatever else stands opposed to healthy doctrine,</div>
+      <div class="l i1">in accordance with the gospel of the glory of the blessed God,</div>
+      <div class="l i1">with which I was entrusted.</div>
+    </section>
+
+    <div class="section-label">Thanksgiving & testimony (12–14)</div>
+    <section class="block">
+      <div class="l">I thank Christ Jesus our Lord,</div>
+      <div class="l i1">who strengthened me,</div>
+      <div class="l i1">because he judged me faithful,</div>
+      <div class="l i1">setting me into service,</div>
+      <div class="l">even though I was formerly a blasphemer,</div>
+      <div class="l i1">a persecutor,</div>
+      <div class="l i1">and a violent man.</div>
+      <div class="l">Yet I was shown mercy,</div>
+      <div class="l i1">because I acted ignorantly in unbelief,</div>
+      <div class="l">and the grace of our Lord overflowed abundantly</div>
+      <div class="l i1">with faith and love that are in Christ Jesus.</div>
+    </section>
+
+    <div class="section-label">Credal saying (1:15)</div>
+    <section class="block creed" aria-label="Credal saying">
+      <div class="l"><span class="sc">Faithful is the saying,</span></div>
+      <div class="l i1"><span class="sc">and worthy of full acceptance:</span></div>
+      <div class="l i2">Christ Jesus came into the world</div>
+      <div class="l i2">to rescue and restore sinners—</div>
+      <div class="l i2">of whom I am the foremost.</div>
+    </section>
+
+    <div class="section-label">Mercy as exemplar (1:16)</div>
+    <section class="block">
+      <div class="l">But for this reason I received mercy,</div>
+      <div class="l i1">that in me, the foremost,</div>
+      <div class="l i1">Christ Jesus might display all his patience,</div>
+      <div class="l i1">as an example for those who would believe in him</div>
+      <div class="l i2">for eternal life.</div>
+    </section>
+
+    <div class="section-label">Doxology (1:17)</div>
+    <section class="block doxo" aria-label="Doxology - Structural Anchor">
+      <div class="l">Now to the King of the ages,</div>
+      <div class="l i1">immortal, invisible,</div>
+      <div class="l i1">the only God—</div>
+      <div class="l">be honor and glory</div>
+      <div class="l i1">forever and ever. Amen.</div>
+    </section>
+
+    <div class="section-label">Entrustment & warfare (18–19)</div>
+    <section class="block">
+      <div class="l">This charge I entrust to you, my child Timothy,</div>
+      <div class="l i1">in keeping with the prophecies once spoken about you,</div>
+      <div class="l i1">that by them you may wage the good warfare,</div>
+      <div class="l">holding faith and a good conscience,</div>
+      <div class="l i1">which some, having thrust away,</div>
+      <div class="l i1">have suffered shipwreck regarding the faith.</div>
+    </section>
+
+    <div class="section-label">Corrective discipline (1:20)</div>
+    <section class="block">
+      <div class="l">Among them are Hymenaeus and Alexander,</div>
+      <div class="l i1">whom I have handed over to Satan,</div>
+      <div class="l i2">to let the consequences teach them</div>
+      <div class="l i3">not to blaspheme.</div>
+    </section>
+  </div>
+
+  <!-- CHAPTER 2 TAB -->
+  <div id="ch2" class="tab-content" role="tabpanel">
+    <div class="legend" aria-hidden="true">
+      <div class="swatch" style="color:var(--prayer)">Prayer exhortation (2:1-2)</div>
+      <div class="swatch" style="color:var(--creed)">One God / One Mediator (2:5-6)</div>
+      <div class="swatch" style="color:var(--men)">Men in prayer (2:8)</div>
+      <div class="swatch" style="color:var(--women)">Women: adornment & learning (2:9-12)</div>
+      <div class="swatch" style="color:var(--rationale)">Creation rationale (2:13-14)</div>
+      <div class="swatch" style="color:var(--promise)">Saved through childbearing (2:15)</div>
+    </div>
+
+    <div class="section-label">Exhortation to prayer (2:1–2)</div>
+    <section class="block prayer" aria-label="Exhortation to prayer">
+      <div class="l">I urge, therefore, first of all,</div>
+      <div class="l i1">that entreaties,</div>
+      <div class="l i1">prayers,</div>
+      <div class="l i1">petitions,</div>
+      <div class="l i1">and thanksgivings</div>
+      <div class="l">be made on behalf of all people—</div>
+      <div class="l i1">for kings and all who are in positions of eminence—</div>
+      <div class="l">in order that we might lead a tranquil and quiet life,</div>
+      <div class="l i1">in all godliness and dignity.</div>
+    </section>
+
+    <div class="section-label">God's will to rescue & reveal (2:3–4)</div>
+    <section class="block">
+      <div class="l">This is good</div>
+      <div class="l i1">and acceptable before God our Savior,</div>
+      <div class="l i1">who wills all people to be rescued</div>
+      <div class="l i2">and brought into recognition of the truth.</div>
+    </section>
+
+    <div class="section-label">One God / One Mediator, Ransom for all (2:5–6)</div>
+    <section class="block creed" aria-label="Creedal core">
+      <div class="l">For one is God,</div>
+      <div class="l i1">and one also mediator between God and humankind—</div>
+      <div class="l i2">a human, Christ Jesus—</div>
+      <div class="l i2">who gave himself a ransom on behalf of all,</div>
+      <div class="l i3">the testimony in its own times.</div>
+    </section>
+
+    <div class="section-label">Apostolic commission (2:7)</div>
+    <section class="block">
+      <div class="l">For this I was set as herald and apostle—</div>
+      <div class="l i1">I speak truth, I do not lie—</div>
+      <div class="l i1">teacher of the nations,</div>
+      <div class="l i2">in faith and truth.</div>
+    </section>
+
+    <div class="section-label">Men in prayer (2:8)</div>
+    <section class="block men">
+      <div class="l">Therefore I intend the men to pray in every place,</div>
+      <div class="l i1">lifting holy hands</div>
+      <div class="l i1">without anger or dispute.</div>
+    </section>
+
+    <div class="section-label">Women: adornment and learning (2:9–12)</div>
+    <section class="block women">
+      <div class="l">Likewise, women should adorn themselves in respectable attire,</div>
+      <div class="l i1">with reverent restraint and sound judgment—</div>
+      <div class="l i1">not with braided hair and gold or pearls or costly garments,</div>
+      <div class="l i1">but with what is fitting for women who profess reverence for God—</div>
+      <div class="l i2">through good works.</div>
+    </section>
+
+    <section class="block women">
+      <div class="l">Let a woman learn in quietness,</div>
+      <div class="l i1">in all submission.</div>
+      <div class="l">But I do not permit a woman to teach</div>
+      <div class="l i1">or to exercise authority over a man;</div>
+      <div class="l">rather, she is to remain in quietness.</div>
+    </section>
+
+    <div class="section-label">Creation rationale (2:13–14)</div>
+    <section class="block rationale">
+      <div class="l">For Adam was formed first,</div>
+      <div class="l i1">then Eve.</div>
+      <div class="l">And Adam was not deceived,</div>
+      <div class="l i1">but the woman, having been deceived,</div>
+      <div class="l i2">has come to be in transgression.</div>
+    </section>
+
+    <div class="section-label">Saved through the childbearing (2:15)</div>
+    <section class="block promise">
+      <div class="l">Yet she will be saved through <i>the</i> childbearing—</div>
+      <div class="l i1">if they remain in faith and love and holiness,</div>
+      <div class="l i2">with sound judgment.</div>
+    </section>
+  </div>
+
+  <!-- CHAPTER 3 TAB -->
+  <div id="ch3" class="tab-content" role="tabpanel">
+    <div class="legend" aria-hidden="true">
+      <div class="swatch" style="color:var(--triad1)">Virtues & positive qualities</div>
+      <div class="swatch" style="color:var(--triad2)">Negatives to avoid</div>
+      <div class="swatch" style="color:var(--rationale)">Household & testing rationale</div>
+      <div class="swatch" style="color:var(--promise)">Witness, standing & confidence</div>
+    </div>
+
+    <div class="section-label">The One Who Watches Over (3:1–7)</div>
+    <section class="block overseer" aria-label="Qualifications for the one who watches over">
+      <div class="l"><span class="smallcaps">Trustworthy is the saying:</span></div>
+      <div class="l i1">If anyone aspires to oversight, he desires a noble work.</div>
+
+      <div class="virtues">
+        <div class="l">Therefore, it is necessary for the one who watches over to be blameless—</div>
+        <div class="l i1">a man of one woman, well-disciplined, sound in mind, friend to strangers,</div>
+        <div class="l i1">able to teach;</div>
+      </div>
+      
+      <div class="negatives">
+        <div class="l i1">not beside wine, not violent but gentle, peaceable,</div>
+        <div class="l i1">not a lover of money.</div>
+      </div>
+
+      <div class="rationale">
+        <div class="l">The one standing before his own household well,</div>
+        <div class="l i1">having children in submission with all dignity.</div>
+        <div class="l">But if anyone does not know how to stand before his own household,</div>
+        <div class="l i1">how will he care for God's assembly?</div>
+      </div>
+
+      <div class="l">Not newly planted, in order that having been filled with smoke,</div>
+      <div class="l i1">he might not fall into the judgment of the accuser.</div>
+
+      <div class="promise">
+        <div class="l">But it is also necessary to have a good testimony from those outside,</div>
+        <div class="l i1">in order that he might not fall into reproach and a snare of the accuser.</div>
+      </div>
+    </section>
+
+    <div class="section-label">Those Who Serve (3:8–13)</div>
+    
+    <section class="block" aria-label="Qualifications for those who serve">
+      <div class="virtues">
+        <div class="l">Those who serve likewise must be dignified,</div>
+        <div class="l i1">not double-tongued, not given to much wine,</div>
+        <div class="l i1">not greedy for dishonest gain,</div>
+        <div class="l">holding the mystery of the faith</div>
+        <div class="l i1">with a clear conscience.</div>
+      </div>
+
+      <div class="rationale">
+        <div class="l">And let these also be tested first;</div>
+        <div class="l i1">then let them serve, being unaccused.</div>
+      </div>
+
+      <div class="virtues">
+        <div class="l">Women likewise, dignified,</div>
+        <div class="l i1">not slanderers,</div>
+        <div class="l i1">temperate,</div>
+        <div class="l i1">faithful in all things.</div>
+      </div>
+
+      <div class="rationale">
+        <div class="l">Those who serve must be men of one woman,</div>
+        <div class="l i1">standing well before their children</div>
+        <div class="l i1">and their own households.</div>
+      </div>
+
+      <div class="promise">
+        <div class="l">For those who have served well</div>
+        <div class="l i1">acquire for themselves a good standing</div>
+        <div class="l i1">and great confidence in the faith</div>
+        <div class="l i2">that is in Christ Jesus.</div>
+      </div>
+    </section>
+
+    <div class="section-label">Paul's purpose and the church's foundation (3:14–15)</div>
+    <section class="block">
+      <div class="l">These things I write to you,</div>
+      <div class="l i1">while hoping to come to you in speed.</div>
+      <div class="l">But if I delay,</div>
+      <div class="l i1">in order that you may know how one must conduct oneself</div>
+      <div class="l i2">in the household of God,</div>
+      <div class="l i2">which as such is the assembly of the living God,</div>
+      <div class="l i3">the pillar and base of the truth.</div>
+    </section>
+
+    <div class="section-label">The mystery of godliness (3:16) — Structural Anchor</div>
+    <section class="block creed" aria-label="Hymnic confession - Structural Anchor">
+      <div class="l"><span class="sc">And, in a manner confessed by all,</span></div>
+      <div class="l"><span class="sc">great is the mystery of godliness:</span></div>
+      <div class="l i1">Who was revealed in flesh,</div>
+      <div class="l i1">was vindicated in spirit,</div>
+      <div class="l i1">was seen by angels,</div>
+      <div class="l i1">was proclaimed in the nations,</div>
+      <div class="l i1">was believed on in the world,</div>
+      <div class="l i1">was taken up in glory.</div>
+    </section>
+  </div>
+
+</div>
+
+<script>
+  // Tab switching
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+  
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetTab = btn.dataset.tab;
+      
+      // Update buttons
+      tabBtns.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      
+      // Update content
+      tabContents.forEach(content => {
+        content.classList.remove('active');
+      });
+      document.getElementById(targetTab).classList.add('active');
+    });
+  });
+  
+  // Control buttons
+  const btnColors = document.getElementById('toggle-colors');
+  const btnContrast = document.getElementById('toggle-contrast');
+  const btnLabels = document.getElementById('toggle-labels');
+  
+  btnColors?.addEventListener('click', () => {
+    document.body.classList.toggle('colorless');
+    const on = !document.body.classList.contains('colorless');
+    btnColors.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btnColors.classList.toggle('active', on);
+  });
+  
+  btnContrast?.addEventListener('click', () => {
+    document.body.classList.toggle('hc');
+    const on = document.body.classList.contains('hc');
+    btnContrast.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btnContrast.classList.toggle('active', on);
+  });
+  
+  btnLabels?.addEventListener('click', () => {
+    document.body.classList.toggle('show-labels');
+    const on = document.body.classList.contains('show-labels');
+    btnLabels.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btnLabels.classList.toggle('active', on);
+  });
+  
+  // Start with color accents ON by default
+  btnColors?.click();
+</script>
+</body>
+</html>
