@@ -135,6 +135,41 @@
   max-width: 100vw;
 }
 
+/* Translation Flow with Arrows */
+.translation-flow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 20px 0;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.flow-arrow {
+  font-size: 2rem;
+  color: var(--accent-purple);
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.translation-flow .cast-card {
+  flex: 1;
+  min-width: 200px;
+  max-width: 250px;
+}
+
+/* Mobile: Stack vertically with down arrows */
+@media (max-width: 768px) {
+  .translation-flow {
+    flex-direction: column;
+  }
+  
+  .flow-arrow {
+    transform: rotate(90deg);
+    margin: 0.5rem 0;
+  }
+}
+
 /* Books Grid - matching New Covenant Hub */
 .books-grid {
   display: grid;
@@ -258,6 +293,30 @@
   gap: 8px;
   margin-bottom: 8px;
   color: var(--accent-purple);
+}
+
+/* Hide quick nav at the top, show after scrolling past hero */
+.quick-nav-sidebar {
+  position: fixed;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: none;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 500;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.quick-nav-sidebar.visible {
+  opacity: 1;
+}
+
+@media (min-width: 1400px) {
+  .quick-nav-sidebar {
+    display: flex;
+  }
 }
 
 /* Mobile responsive */
@@ -585,40 +644,46 @@
       <p class="section-subtitle">Revealing how Hebrew thought flows through Aramaic and Greek expression into English—LLTSE makes the structure visible so form carries meaning.</p>
 
       <!-- Destination of Translation - Ruth-style Cast/Settings Format -->
-      <div class="map-container">
-        <h3>Destination of Translation</h3>
-        <p style="color: var(--muted); margin-bottom: 1rem;">
-          <strong>Translation Chain:</strong> Hebrew → Aramaic → Greek → English<br>
-          <strong>Goal:</strong> Preserve thought-rhythm and literary structure across languages
-        </p>
-        
-        <h4 style="margin-top: 1.5rem; margin-bottom: 1rem;">The Translation Journey</h4>
-        <div class="cast-grid">
-          <div class="cast-card">
-            <h4>🕊️ Hebrew <span lang="he">עִבְרִית</span></h4>
-            <p><strong>"Thought-rhythm"</strong></p>
-            <p>Concrete imagery, parallelism, chiastic structures. The foundation of biblical rhetoric where meaning flows through balanced lines and mirrored thoughts.</p>
-          </div>
+<div class="map-container">
+  <h3>Destination of Translation</h3>
+  <p style="color: var(--muted); margin-bottom: 1rem;">
+    <strong>Translation Chain:</strong> Hebrew → Aramaic → Greek → English<br>
+    <strong>Goal:</strong> Preserve thought-rhythm and literary structure across languages
+  </p>
+  
+  <h4 style="margin-top: 1.5rem; margin-bottom: 1rem;">The Translation Journey</h4>
+  <div class="translation-flow">
+    <div class="cast-card">
+      <h4>🕊️ Hebrew <span lang="he">עִבְרִית</span></h4>
+      <p><strong>"Thought-rhythm"</strong></p>
+      <p>Concrete imagery, parallelism, chiastic structures. The foundation of biblical rhetoric where meaning flows through balanced lines and mirrored thoughts.</p>
+    </div>
 
-          <div class="cast-card">
-            <h4>📜 Aramaic <span lang="he">אֲרָמִית</span></h4>
-            <p><strong>"Common dialect"</strong></p>
-            <p>Lingua franca of the ancient Near East. Bridge language carrying Hebrew patterns into wider cultural context with everyday idioms.</p>
-          </div>
+    <div class="flow-arrow">→</div>
 
-          <div class="cast-card">
-            <h4>🏛️ Greek <span lang="el">Ἑλληνική</span></h4>
-            <p><strong>"Analytical rhetoric"</strong></p>
-            <p>Precise philosophical language that absorbs Hebrew thought-forms. Triadic patterns, creedal formulations, and nested subordination express revelation across cultures.</p>
-          </div>
+    <div class="cast-card">
+      <h4>📜 Aramaic <span lang="he">אֲרָמִית</span></h4>
+      <p><strong>"Common dialect"</strong></p>
+      <p>Lingua franca of the ancient Near East. Bridge language carrying Hebrew patterns into wider cultural context with everyday idioms.</p>
+    </div>
 
-          <div class="cast-card">
-            <h4>📖 English</h4>
-            <p><strong>"Modern rendering"</strong></p>
-            <p>Contemporary target language. LLTSE preserves source structure through indentation, lineation, and spacing—making ancient rhetoric visible to modern readers.</p>
-          </div>
-        </div>
-      </div>
+    <div class="flow-arrow">→</div>
+
+    <div class="cast-card">
+      <h4>🏛️ Greek <span lang="el">Ἑλληνική</span></h4>
+      <p><strong>"Analytical rhetoric"</strong></p>
+      <p>Precise philosophical language that absorbs Hebrew thought-forms. Triadic patterns, creedal formulations, and nested subordination express revelation across cultures.</p>
+    </div>
+
+    <div class="flow-arrow">→</div>
+
+    <div class="cast-card">
+      <h4>📖 English</h4>
+      <p><strong>"Modern rendering"</strong></p>
+      <p>Contemporary target language. LLTSE preserves source structure through indentation, lineation, and spacing—making ancient rhetoric visible to modern readers.</p>
+    </div>
+  </div>
+</div>
 
       <!-- Structural Devices Grid -->
       <h4 style="margin-top: 2rem; margin-bottom: 1rem;">Core Structural Devices</h4>
@@ -1267,6 +1332,22 @@
         });
       });
 
+      // Show/hide quick nav based on scroll position
+const quickNav = document.querySelector('.quick-nav-sidebar');
+const hero = document.querySelector('.hero');
+
+if (quickNav && hero) {
+  window.addEventListener('scroll', () => {
+    const heroBottom = hero.offsetTop + hero.offsetHeight;
+    const scrollPosition = window.scrollY;
+    
+    if (scrollPosition > heroBottom) {
+      quickNav.classList.add('visible');
+    } else {
+      quickNav.classList.remove('visible');
+    }
+  });
+}
       // Update active nav dots
       const sections = document.querySelectorAll('.theology-card, .hero, .references-block');
       const navItems = document.querySelectorAll('.quick-nav-item');
