@@ -2892,13 +2892,15 @@
       </div> <!-- End section-content -->
     </div> <!-- End collapsible-section Part 1 -->
 
-<!-- Start Part 2 wrapper -->
+    <!-- Start Part 2 wrapper -->
 <div class="collapsible-section" data-section="chapter2-part2">
-  <div class="section-header">
-    <h2>Chapter 2: Prayer and Public Witness (Part 2)</h2>
-    <button class="section-toggle">▼</button>
-  </div>
-  
+  <button class="section-toggle">
+    <span>
+      <span class="section-number">Part 2</span>
+      Chapter 2: Prayer and Public Witness (Part 2)
+    </span>
+    <span class="section-meta">2 sections</span>
+  </button>
   <div class="section-content">
     <section id="chapter2-part2">
       
@@ -4836,111 +4838,140 @@
     <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); text-align: center; color: var(--muted); font-size: 0.9rem;">
       <p><strong>1 Timothy Commentary: Historical and Cultural Context</strong></p>
       <p>A 20-page deep dive into Paul's letter to Timothy in first-century Ephesus</p>
-      <p style="margin-top: 1rem;">© 2024 • For personal study and teaching use</p>
+      <p style="margin-top: 1rem;">© 2025 • For personal study and teaching use</p>
     </footer>
 
   </div>
 
   <script>
-    // Collapsible Section Functionality
-    document.addEventListener('DOMContentLoaded', function() {
-      const toggleButtons = document.querySelectorAll('.section-toggle');
-      const expandAllBtn = document.getElementById('expandAll');
-      const collapseAllBtn = document.getElementById('collapseAll');
-      const printModeBtn = document.getElementById('printMode');
-      const progressBar = document.getElementById('progressBar');
-      
-      // Toggle individual sections
-      toggleButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          button.classList.toggle('active');
-          const content = button.nextElementSibling;
-          content.classList.toggle('active');
-          
-          // Update URL hash for deep linking
-          const sectionId = content.querySelector('section')?.id;
-          if (sectionId && content.classList.contains('active')) {
-            history.replaceState(null, null, '#' + sectionId);
-          }
-        });
-      });
-      
-      // Expand all sections
-      expandAllBtn.addEventListener('click', () => {
-        toggleButtons.forEach(button => {
-          button.classList.add('active');
-          button.nextElementSibling.classList.add('active');
-        });
-      });
-      
-      // Collapse all sections
-      collapseAllBtn.addEventListener('click', () => {
-        toggleButtons.forEach(button => {
-          button.classList.remove('active');
-          button.nextElementSibling.classList.remove('active');
-        });
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-      
-      // Print mode - expand all and trigger print
-      printModeBtn.addEventListener('click', () => {
-        toggleButtons.forEach(button => {
-          button.classList.add('active');
-          button.nextElementSibling.classList.add('active');
-        });
+  // Collapsible Section Functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const toggleButtons = document.querySelectorAll('.section-toggle');
+    const expandAllBtn = document.getElementById('expandAll');
+    const collapseAllBtn = document.getElementById('collapseAll');
+    const printModeBtn = document.getElementById('printMode');
+    const progressBar = document.getElementById('progressBar');
+    const backToTop = document.querySelector('.back-to-top');
+    
+    // Toggle individual sections
+    toggleButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        button.classList.toggle('active');
+        const content = button.nextElementSibling;
+        content.classList.toggle('active');
         
-        setTimeout(() => {
-          window.print();
-        }, 500);
+        // Update URL hash for deep linking
+        const sectionId = content.querySelector('section')?.id;
+        if (sectionId && content.classList.contains('active')) {
+          history.replaceState(null, null, '#' + sectionId);
+        }
+      });
+    });
+    
+    // Expand all sections
+    expandAllBtn.addEventListener('click', () => {
+      toggleButtons.forEach(button => {
+        button.classList.add('active');
+        button.nextElementSibling.classList.add('active');
+      });
+    });
+    
+    // Collapse all sections
+    collapseAllBtn.addEventListener('click', () => {
+      toggleButtons.forEach(button => {
+        button.classList.remove('active');
+        button.nextElementSibling.classList.remove('active');
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    
+    // Print mode - expand all and trigger print
+    printModeBtn.addEventListener('click', () => {
+      toggleButtons.forEach(button => {
+        button.classList.add('active');
+        button.nextElementSibling.classList.add('active');
       });
       
-      // Deep linking - open section if URL has hash
-      if (window.location.hash) {
-        const targetId = window.location.hash.substring(1);
-        const targetSection = document.getElementById(targetId);
-        if (targetSection) {
-          const parentContent = targetSection.closest('.section-content');
-          const parentToggle = parentContent?.previousElementSibling;
+      setTimeout(() => {
+        window.print();
+      }, 500);
+    });
+    
+    // Deep linking - open section if URL has hash
+    if (window.location.hash) {
+      const targetId = window.location.hash.substring(1);
+      const targetSection = document.getElementById(targetId);
+      if (targetSection) {
+        const parentContent = targetSection.closest('.section-content');
+        const parentToggle = parentContent?.previousElementSibling;
+        
+        if (parentToggle && parentContent) {
+          parentToggle.classList.add('active');
+          parentContent.classList.add('active');
           
-          if (parentToggle && parentContent) {
-            parentToggle.classList.add('active');
-            parentContent.classList.add('active');
-            
-            setTimeout(() => {
-              targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 450);
-          }
+          setTimeout(() => {
+            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 450);
         }
       }
+    }
+    
+    // Progress bar and back to top button on scroll
+    window.addEventListener('scroll', () => {
+      // Progress bar
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight - windowHeight;
+      const scrolled = window.scrollY;
+      const progress = (scrolled / documentHeight) * 100;
+      progressBar.style.width = progress + '%';
       
-      // Progress bar on scroll
-      window.addEventListener('scroll', () => {
-        const windowHeight = window.innerHeight;
-        const documentHeight = document.documentElement.scrollHeight - windowHeight;
-        const scrolled = window.scrollY;
-        const progress = (scrolled / documentHeight) * 100;
-        progressBar.style.width = progress + '%';
-      });
-
       // Back to top button visibility
-        if (scrolled > 300) {
-          backToTop.classList.add('visible');
-        } else {
-          backToTop.classList.remove('visible');
-        }
+      if (scrolled > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+
+    // Add scroll effect to nav
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('main-nav');
+      if (nav && window.scrollY > 100) {
+        nav.classList.add('scrolled');
+      } else if (nav) {
+        nav.classList.remove('scrolled');
+      }
+    });
+
+    // Mobile Menu Overlay & Toggle
+    const mobileToggle = document.querySelector('.mobile-menu-toggle');
+    const mobileOverlay = document.querySelector('.mobile-menu-overlay');
+    const navLinks = document.querySelector('.nav-links');
+    
+    if (mobileToggle) {
+      mobileToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        mobileOverlay.classList.toggle('active');
       });
       
-      // Keyboard shortcuts
-      document.addEventListener('keydown', (e) => {
-        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'O') {
-          e.preventDefault();
-          expandAllBtn.click();
-        }
-        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'C') {
-          e.preventDefault();
-          collapseAllBtn.click();
-        }
+      mobileOverlay.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        mobileOverlay.classList.remove('active');
       });
-    </script>
-  </body>
+    }
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'O') {
+        e.preventDefault();
+        expandAllBtn.click();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'C') {
+        e.preventDefault();
+        collapseAllBtn.click();
+      }
+    });
+  });
+</script>
+</body>
 </html>
