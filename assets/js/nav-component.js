@@ -2,14 +2,14 @@
  * Centralized Navigation Component
  * Path: /assets/js/nav-component.js
  * Purpose: Single source of truth for navigation across all pages
- * Version: 1.0.1 - Fixed class attribute handling
+ * Version: 1.1.0 - Added New Covenant Studies and Methodology
  */
 
 class NavigationComponent {
     constructor(options = {}) {
         this.options = {
             currentPage: options.currentPage || '',
-            hubType: options.hubType || '', // 'characters', 'women', 'tanakh', 'thematic'
+            hubType: options.hubType || '', // 'characters', 'women', 'tanakh', 'new-covenant', 'thematic', 'methodology'
             ...options
         };
         
@@ -44,12 +44,14 @@ class NavigationComponent {
                                 <a href="/studies/characters/characters_hub.html" class="${this.getActiveClass('characters')}">Biblical Characters</a>
                                 <a href="/studies/women/women-bible-hub.html" class="${this.getActiveClass('women')}">Women in the Bible</a>
                                 <a href="/studies/tanakh/tanakh-hub.html" class="${this.getActiveClass('tanakh')}">Tanakh Studies</a>
+                                <a href="/studies/new-covenant/new-covenant-hub.html" class="${this.getActiveClass('new-covenant')}">New Covenant Studies</a>
                                 <a href="/studies/thematic/thematic-hub.html" class="${this.getActiveClass('thematic')}">Thematic Studies</a>
                             </div>
                         </li>
                         <li class="dropdown">
                             <a href="/resources/" class="dropdown-toggle ${this.getActiveClass('resources')}">Resources</a>
                             <div class="dropdown-content">
+                                <a href="/studies/methodology/lltse-orientation-methodology.html" class="${this.getActiveClass('methodology')}">Methodology</a>
                                 <a href="/resources/discussion-guides/">Discussion Guides</a>
                                 <a href="/resources/study-tools/">Study Tools</a>
                                 <a href="/resources/downloads/">Downloads</a>
@@ -86,7 +88,9 @@ class NavigationComponent {
             currentPage.includes('characters') || 
             currentPage.includes('women') || 
             currentPage.includes('tanakh') || 
-            currentPage.includes('thematic')
+            currentPage.includes('new-covenant') ||
+            currentPage.includes('thematic') ||
+            currentPage.includes('methodology')
         )) {
             return 'active';
         }
@@ -101,7 +105,13 @@ class NavigationComponent {
         if (section === 'tanakh' && (hubType === 'tanakh' || currentPage.includes('tanakh'))) {
             return 'active';
         }
+        if (section === 'new-covenant' && (hubType === 'new-covenant' || currentPage.includes('new-covenant'))) {
+            return 'active';
+        }
         if (section === 'thematic' && (hubType === 'thematic' || currentPage.includes('thematic'))) {
+            return 'active';
+        }
+        if (section === 'methodology' && (hubType === 'methodology' || currentPage.includes('methodology'))) {
             return 'active';
         }
         
