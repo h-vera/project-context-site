@@ -332,7 +332,7 @@ class NavigationComponent {
             dropdown.addEventListener('mouseleave', function() {
                 timeout = setTimeout(() => {
                     this.classList.remove('active');
-                }, 500); // Small delay before closing
+                }, 700); // Small delay before closing
             });
         });
     }
