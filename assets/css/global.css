@@ -435,27 +435,35 @@ nav.scrolled {
     margin-bottom: 3rem;
 }
 
+/* Make the grid flex so items share the tallest height */
 .features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;    /* stretch all cards to same row height */
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+/* Let each card grow evenly and push the pill to the bottom */
+.features-grid > .feature-card {
+  flex: 1 1 300px;         /* matches your old min 300px behavior */
 }
 
 .feature-card {
-    background: var(--bg-gray);
-    padding: 2rem;
-    border-radius: 20px;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    display: flex;             
-    flex-direction: column;
+  background: var(--bg-gray);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;  /* space between content and pill */
+  padding: 2rem 2rem 3rem;         /* extra bottom room for pill */
 }
 
 .feature-card .primary-button {
-    margin-top: 1.5rem; /* adds space between text and button */
-    align-self: center; /* keeps it aligned nicely in the flex column */
+  margin-top: auto;         /* send pill to the bottom consistently */
+  align-self: center;       /* center horizontally */
 }
 
 .feature-card::before {
