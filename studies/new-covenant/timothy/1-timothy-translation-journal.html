@@ -1,0 +1,2107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1 Timothy — Complete Translator's Journal</title>
+<style>
+  :root{
+    --bg: #ffffff;
+    --fg: #1f2328;
+    --muted: #6b7280;
+    --accent: #0b6cff;
+    --border: #e5e7eb;
+    --card: #fafafa;
+    --code: #0b1020;
+    --highlight: #fff3cd;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg: #0b0f14;
+      --fg: #e5e7eb;
+      --muted: #9aa1aa;
+      --accent: #7aa2ff;
+      --border: #1f2937;
+      --card: #0f141b;
+      --code: #e5e7eb;
+      --highlight: #3a2f0f;
+    }
+  }
+  body{
+    margin:0; padding:2.2rem 1rem 3rem;
+    background:var(--bg); color:var(--fg);
+    font:17px/1.55 "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  }
+  .wrap{ max-width: 1000px; margin: 0 auto; }
+  
+  /* Header & Navigation */
+  header{ 
+    display:flex; justify-content:space-between; align-items:center; 
+    gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap;
+  }
+  h1{ font-size:1.65rem; margin:0; font-weight:600; }
+  .muted{ color:var(--muted); }
+  a{ color:var(--accent); text-decoration:none; }
+  a:hover{ text-decoration:underline; }
+  
+  /* Pills & Tags */
+  .pill{
+    display:inline-block; padding:.3rem .65rem; border-radius:999px; 
+    border:1px solid var(--border); font-size:.82rem; color:var(--muted); 
+    margin-right:.4rem; white-space:nowrap;
+  }
+  .pill:hover{ background: color-mix(in oklab, var(--accent) 10%, transparent); }
+  
+  .tag{
+    display:inline-block; padding:.2rem .5rem; border-radius:6px;
+    background: color-mix(in oklab, var(--accent) 15%, transparent);
+    border:1px solid color-mix(in oklab, var(--accent) 30%, transparent);
+    font-size:.75rem; color:var(--accent); margin-right:.3rem; margin-bottom:.3rem;
+    font-family: ui-monospace, monospace;
+  }
+  
+  /* Cards & Layout */
+  .cards{ display:grid; gap:1.25rem; margin-top:1rem; }
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:1.25rem 1.5rem;
+  }
+  .card h2{
+    font-size:1.3rem; margin:.2rem 0 .8rem; font-weight:600;
+  }
+  .card h3{
+    font-size:1.1rem; margin:.8rem 0 .5rem; font-weight:600; color:var(--fg);
+  }
+  .card h4{
+    font-size:1rem; margin:.6rem 0 .4rem; font-weight:600; color:var(--muted);
+  }
+  
+  /* Details/Summary */
+  details{ 
+    border:1px solid var(--border); border-radius:12px; 
+    padding:.85rem 1.1rem; background:transparent; margin-top:.75rem;
+  }
+  details+details{ margin-top:.75rem; }
+  summary{ 
+    cursor:pointer; font-weight:600; font-size:1.05rem;
+    color:var(--fg); list-style:none; user-select:none;
+  }
+  summary::before{ 
+    content:"▸ "; color:var(--accent); margin-right:.3rem; 
+    font-size:.9em; display:inline-block; transition: transform 0.2s;
+  }
+  details[open] summary::before{ 
+    content:"▾ "; transform: none;
+  }
+  details .content{ padding-top:.6rem; }
+  
+  /* Grid for decision cards */
+  .grid{ 
+    display:grid; grid-template-columns: 1fr 1fr; 
+    gap:.75rem 1rem; margin-top:.6rem; 
+  }
+  .grid.single{ grid-template-columns: 1fr; }
+  .grid label{ 
+    font-size:.82rem; color:var(--muted); font-weight:600; 
+    display:block; margin-bottom:.3rem;
+  }
+  .grid .box{ 
+    background:var(--card); border:1px dashed var(--border); 
+    padding:.65rem .75rem; border-radius:10px; min-height:2.2rem; 
+    line-height:1.6;
+  }
+  
+  /* Typography */
+  .mono{ 
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; 
+    font-size:.92rem; color:var(--code); 
+  }
+  .greek{
+    font-family: "Palatino Linotype", Palatino, Georgia, serif;
+    font-size:1.05rem; color:var(--accent); font-style:italic;
+  }
+  .note{ font-size:.92rem; color:var(--muted); line-height:1.6; }
+  .lead{ font-size:1.05rem; color:var(--muted); margin-bottom:1rem; }
+  
+  /* Lists */
+  ul.note{ margin:.5rem 0 .5rem 1.3rem; padding:0; }
+  ul.note li{ margin:.35rem 0; }
+  .compact-list{ margin:.3rem 0 .3rem 1.2rem; padding:0; }
+  .compact-list li{ margin:.2rem 0; font-size:.95rem; }
+  
+  /* Special blocks */
+  .doxology{
+    border-left:4px solid var(--accent); 
+    background: color-mix(in oklab, var(--accent) 8%, transparent);
+    font-style:italic; padding:.75rem 1rem; border-radius:0 10px 10px 0;
+    margin:.5rem 0;
+  }
+  .highlight-box{
+    background: var(--highlight);
+    border-left: 3px solid var(--accent);
+    padding: .75rem 1rem;
+    border-radius: 0 8px 8px 0;
+    margin: .75rem 0;
+  }
+  
+  /* Status indicators */
+  .status-complete{ color: #10b981; font-weight:600; }
+  .status-pending{ color: #f59e0b; font-weight:600; }
+  .status-draft{ color: #8b5cf6; font-weight:600; }
+  
+  /* Horizontal rule */
+  .hr{ height:1px; background:var(--border); margin:1.5rem 0; }
+  
+  /* Footer */
+  footer{ 
+    margin-top:3rem; padding-top:1.5rem; border-top:1px solid var(--border); 
+    text-align:center; color:var(--muted); font-size:.88rem; 
+  }
+  
+  /* FAB button */
+  .fab{
+    position: fixed; right: 20px; bottom: 20px;
+    background: var(--accent); color: white; border: none;
+    border-radius: 999px; padding: .85rem 1.1rem; font-weight: 600;
+    box-shadow: 0 8px 24px rgba(0,0,0,.18); cursor:pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .fab:hover{ 
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(0,0,0,.22);
+  }
+  .fab:focus-visible{ 
+    outline: 3px solid color-mix(in oklab, white 60%, var(--accent)); 
+    outline-offset: 3px; 
+  }
+  
+  /* Tabs for chapter navigation */
+  .tabs{
+    display:flex; gap:.25rem; border-bottom:2px solid var(--border);
+    margin: 1.5rem 0 1rem; overflow-x:auto; flex-wrap:wrap;
+  }
+  .tab-btn{
+    border:none; border-radius:8px 8px 0 0; padding:.6rem 1rem; 
+    font-size:.9rem; cursor:pointer; background:transparent; color:var(--muted);
+    transition: all 0.2s; white-space:nowrap; border-bottom:3px solid transparent;
+    font-family: inherit;
+  }
+  .tab-btn:hover{ 
+    background: color-mix(in oklab, var(--accent) 10%, transparent); 
+    color:var(--fg); 
+  }
+  .tab-btn.active{ 
+    color:var(--accent); font-weight:600; 
+    border-bottom-color:var(--accent);
+  }
+  .tab-content{ display:none; }
+  .tab-content.active{ display:block; animation: fadeIn 0.3s; }
+  @keyframes fadeIn{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:translateY(0); } }
+  
+  /* Responsive */
+  @media (max-width: 768px){
+    .grid{ grid-template-columns: 1fr; }
+    body{ padding:1.5rem .75rem 3rem; }
+    h1{ font-size:1.35rem; }
+    .fab{ right: 15px; bottom: 15px; padding: .7rem .9rem; }
+  }
+  
+  /* Print styles */
+  @media print{
+    header .pill, .fab, .tabs{ display:none; }
+    body{ padding: 0.5in; }
+    .wrap{ max-width: none; }
+    .tab-content{ display:block !important; }
+    details{ border:none; }
+    details summary{ font-weight:700; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>1 Timothy — Translator's Journal</h1>
+      <p class="muted" style="margin:.3rem 0 0 0; font-size:.95rem;">Complete "Sausage Making" Documentation</p>
+    </div>
+    <div>
+      <a href="1-timothy-hub.html" class="pill">← Hub</a>
+      <a href="1-timothy-structured-edition.html" class="pill">Structured Edition</a>
+    </div>
+  </header>
+
+  <p class="lead">This journal documents <em>every</em> translation and structural decision made in creating the Literal–Literary Structured Edition of 1 Timothy. It records Greek text, alternative renderings, lexical analysis, structural rationale, and theological coherence considerations.</p>
+
+  <!-- TABS NAVIGATION -->
+  <nav class="tabs" role="tablist">
+    <button class="tab-btn active" data-tab="overview" role="tab">Overview</button>
+    <button class="tab-btn" data-tab="ch1" role="tab">Chapter 1</button>
+    <button class="tab-btn" data-tab="ch2" role="tab">Chapter 2</button>
+    <button class="tab-btn" data-tab="ch3" role="tab">Chapter 3</button>
+    <button class="tab-btn" data-tab="ch4" role="tab">Chapter 4</button>
+    <button class="tab-btn" data-tab="ch5" role="tab">Chapter 5</button>
+    <button class="tab-btn" data-tab="ch6" role="tab">Chapter 6</button>
+  </nav>
+
+  <!-- ========== OVERVIEW TAB ========== -->
+  <div id="overview" class="tab-content active" role="tabpanel">
+    <section class="cards">
+      
+      <div class="card">
+        <h2>Translation Philosophy</h2>
+        <p><span class="tag">Base Text</span> NA28/UBS5 Greek (critical text). Punctuation and paragraphing are editorial and not original.</p>
+        <p>We render English in a <strong>literal–literary</strong> style: close to Greek wording while surfacing Hebraic cadence (triads, parallelism, creed/doxology). This is not a paraphrase or commentary but a reconstruction of how the text would have been <em>heard</em> by its earliest audience.</p>
+        
+        <div class="grid">
+          <div>
+            <label>Primary Goal</label>
+            <div class="box">Preserve literal sense and rhetorical movement; readable aloud; minimal doctrinal intrusion.</div>
+          </div>
+          <div>
+            <label>Priority Hierarchy</label>
+            <div class="box">Discourse function → Lexical core → Hebraic echoes → Rhythm & register → Consistency → Clarity</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Decision-Making Framework</h2>
+        <details open>
+          <summary>How we choose between valid options</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label>Lexical Analysis</label>
+                <div class="box">Most central Koine sense in this context (BDAG/LSJ + usage in Paul). Semantic domain checks (Louw–Nida) for disambiguation.</div>
+              </div>
+              <div>
+                <label>Structural Role</label>
+                <div class="box">Clause function: contrast, reason, purpose, example. Preserve connectives and discourse markers faithfully.</div>
+              </div>
+              <div>
+                <label>Intertextual Echoes</label>
+                <div class="box">LXX/Hebrew resonances? Maintain covenantal and liturgical overtones when Paul leans Hebraic.</div>
+              </div>
+              <div>
+                <label>Reader Experience</label>
+                <div class="box">Oral flow, cadence, and literary feel in English. Designed for reading aloud, not just analysis.</div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>Visual & Structural Conventions</h2>
+        <h4>How Structure Teaches</h4>
+        <ul class="compact-list">
+          <li><strong>Indentation:</strong> Shows logical relationships and subordinate clauses</li>
+          <li><strong>Colors:</strong> Mark distinct rhetorical units (triads, creeds, doxologies, vice lists)</li>
+          <li><strong>Small caps:</strong> Highlight formal sayings and credal statements</li>
+          <li><strong>Spacing:</strong> Block breaks separate distinct thought units</li>
+          <li><strong>Borders:</strong> Structural anchors (doxologies, hymns) receive special visual treatment</li>
+        </ul>
+        
+        <h4>Formatting as Pedagogy</h4>
+        <p class="note">The layout itself teaches. Structure replaces many footnotes—readers see discourse relationships visually before reading commentary.</p>
+      </div>
+
+      <div class="card">
+        <h2>Sources & Reference Tools</h2>
+        <ul class="note">
+          <li><strong>Greek Text:</strong> NA28 / UBS5 (critical text base)</li>
+          <li><strong>Septuagint:</strong> LXX where Hebraic echoes and covenantal language matter</li>
+          <li><strong>Lexica:</strong> BDAG (primary), LSJ (classical background); Louw–Nida (semantic domains)</li>
+          <li><strong>Discourse Analysis:</strong> Runge & Westbury (discourse grammar), Porter (verbal aspect)</li>
+          <li><strong>Genre Studies:</strong> Greco-Roman epistolary conventions, Pauline rhetoric</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Key Tradeoffs & Tensions</h2>
+        <ul class="note">
+          <li><strong>"Rescue/restore" over "save":</strong> Gains covenant/restorative nuance; risks unfamiliarity — mitigated by consistency and commentary context.</li>
+          <li><strong>No verse numbers in reading text:</strong> Gains literary immersion and flow; loses quick citation — compensated by labeled study editions.</li>
+          <li><strong>Literal phrasing:</strong> Occasional syntactic stiffness offset by poetic layout and oral cadence.</li>
+          <li><strong>Hebraic cadence in Greek text:</strong> Some choices (parallelism, triadic structures) may feel unfamiliar to readers expecting smooth English prose.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Chapter Completion Status</h2>
+        <div class="grid">
+          <div>
+            <label>Chapter 1</label>
+            <div class="box"><span class="status-complete">✓ Complete</span> — All decisions documented</div>
+          </div>
+          <div>
+            <label>Chapter 2</label>
+            <div class="box"><span class="status-complete">✓ Complete</span> — All decisions documented</div>
+          </div>
+          <div>
+            <label>Chapter 3</label>
+            <div class="box"><span class="status-complete">✓ Complete</span> — All decisions documented</div>
+          </div>
+          <div>
+            <label>Chapter 4</label>
+            <div class="box"><span class="status-pending">○ Pending</span> — Template ready for completion</div>
+          </div>
+          <div>
+            <label>Chapter 5</label>
+            <div class="box"><span class="status-pending">○ Pending</span> — Template ready for completion</div>
+          </div>
+          <div>
+            <label>Chapter 6</label>
+            <div class="box"><span class="status-pending">○ Pending</span> — Template ready for completion</div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+
+  <!-- ========== CHAPTER 1 TAB ========== -->
+  <div id="ch1" class="tab-content" role="tabpanel">
+    <section class="cards">
+      
+      <div class="card">
+        <h2>Chapter 1 Overview</h2>
+        <p><strong>Theme:</strong> Mercy and Restoration through Christ</p>
+        <p><strong>Key Structures:</strong> Opening greeting (1-2), charge against false teaching (3-7), moral triad (5), law usage (8-11), Paul's testimony (12-14), credal saying (15), doxology anchor (17), entrustment (18-20)</p>
+        <p><strong>Status:</strong> <span class="status-complete">✓ Complete</span></p>
+      </div>
+
+      <div class="card">
+        <h2>1:1-2 — Opening Greeting & Authority</h2>
+        
+        <details open>
+          <summary>Apostolic Commission Formula</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">Παῦλος ἀπόστολος Χριστοῦ Ἰησοῦ</span></label>
+                <div class="box mono">
+                  Options: "apostle of Christ Jesus" / "Christ Jesus's apostle" / "sent one"<br>
+                  <strong>Chosen:</strong> "Paul, an apostle of Christ Jesus"<br>
+                  Reason: Standard Pauline opening formula; "apostle" preserves commissioned authority without requiring explanation; maintains formal register appropriate to official letter.
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">κατ' ἐπιταγήν</span></label>
+                <div class="box mono">
+                  Options: "by command" / "according to the commandment" / "by commission"<br>
+                  <strong>Chosen:</strong> "by the command"<br>
+                  Reason: Terse, authoritative. <span class="greek">ἐπιταγή</span> = authoritative order/command; divine passive nuance—God as the one commanding. Stronger than mere "will" or "appointment."
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">θεοῦ σωτῆρος ἡμῶν</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "God our Savior"<br>
+                  Note: Applies "Savior" title to God the Father (not just Christ); OT echo (Isa 43:3, 11; 45:15, 21); emphasizes God as source of salvation throughout the letter.
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">Χριστοῦ Ἰησοῦ τῆς ἐλπίδος ἡμῶν</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "Christ Jesus our hope"<br>
+                  Genitive of apposition: Christ = our hope (not merely gives us hope); eschatological overtone carried throughout letter.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>Greeting to Timothy (1:2)</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">Τιμοθέῳ γνησίῳ τέκνῳ ἐν πίστει</span></label>
+                <div class="box mono">
+                  Options: "true child" / "legitimate child" / "genuine child"<br>
+                  <strong>Chosen:</strong> "Timothy, my genuine child in faith"<br>
+                  Reason: <span class="greek">γνήσιος</span> = authentic, genuine, true-born (not illegitimate or adopted); emphasizes spiritual authenticity and legitimate succession; "in faith" = sphere of the relationship (spiritual, not biological).
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">χάρις, ἔλεος, εἰρήνη</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "grace, mercy, and peace"<br>
+                  Standard expanded Pauline greeting (adds "mercy" to typical "grace and peace"); triad structure; note: "mercy" (ἔλεος) especially appropriate for pastoral epistles' emphasis on God's compassion.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>1:3-7 — Charge Against False Teaching</h2>
+        
+        <details open>
+          <summary>The Commission in Ephesus (1:3-4)</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">παρεκάλεσά σε προσμεῖναι ἐν Ἐφέσῳ</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "I urged you to remain in Ephesus"<br>
+                  <span class="greek">παρακαλέω</span> = urge, exhort, encourage (not merely "ask"); <span class="greek">προσμένω</span> = remain, stay on; context: Paul went to Macedonia, left Timothy behind with a mission.
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">ἵνα παραγγείλῃς τισὶν μὴ ἑτεροδιδασκαλεῖν</span></label>
+                <div class="box mono">
+                  Options: "teach different doctrine" / "teach other things" / "teach differently"<br>
+                  <strong>Chosen:</strong> "charge certain persons not to teach different doctrine"<br>
+                  Reason: <span class="greek">ἑτεροδιδασκαλέω</span> (compound verb, only here and 6:3 in NT) = to teach doctrine of a different kind (hetero- = different in kind/quality); <span class="greek">παραγγέλλω</span> = command, charge (formal instruction).
+                </div>
+              </div>
+            </div>
+            <div class="grid single">
+              <div>
+                <label><span class="greek">μηδὲ προσέχειν μύθοις καὶ γενεαλογίαις ἀπεράντοις</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "nor to devote themselves to myths and endless genealogies"<br>
+                  <span class="greek">προσέχω</span> = pay attention to, occupy oneself with, devote oneself to (stronger than merely "give heed")<br>
+                  <span class="greek">μῦθοι</span> = myths, fables, fictitious stories (not historical truth)<br>
+                  <span class="greek">γενεαλογίαι ἀπέραντοι</span> = genealogies without end/limit; likely refers to speculative elaborations on OT genealogies or Gnostic emanation chains<br>
+                  <strong>Effect:</strong> These produce "controversies" (ἐκζητήσεις = speculative disputes) rather than God's stewardship.
+                </div>
+              </div>
+            </div>
+            <div class="grid single">
+              <div>
+                <label><span class="greek">οἰκονομίαν θεοῦ τὴν ἐν πίστει</span></label>
+                <div class="box mono">
+                  Options: "God's stewardship" / "God's plan" / "God's administration" / "dispensation of God"<br>
+                  <strong>Chosen:</strong> "God's stewardship that is by faith"<br>
+                  Reason: <span class="greek">οἰκονομία</span> = management of a household, stewardship, administration, plan; "that is by faith" = the sphere/means by which God's plan operates (not through speculative myths but through faith); maintains literal sense while being clear.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>Missing the Mark (1:6-7)</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">ὧν τινες ἀστοχήσαντες</span></label>
+                <div class="box mono">
+                  Options: "have wandered away" / "have deviated" / "have missed the mark"<br>
+                  <strong>Chosen:</strong> "Some have missed this mark"<br>
+                  Reason: <span class="greek">ἀστοχέω</span> = miss the mark, deviate from (from archery); refers back to the goal of love (v.5); maintains metaphor.
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">ἐξετράπησαν εἰς ματαιολογίαν</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "have turned aside to empty talk"<br>
+                  <span class="greek">ἐκτρέπω</span> = turn aside, turn away from (medical term: dislocate)<br>
+                  <span class="greek">ματαιολογία</span> = empty/vain talk, fruitless discussion; compound: mataios (empty, futile) + logos (word, speech).
+                </div>
+              </div>
+            </div>
+            <div class="grid single">
+              <div>
+                <label><span class="greek">θέλοντες εἶναι νομοδιδάσκαλοι</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "desiring to be teachers of the Law"<br>
+                  <span class="greek">νομοδιδάσκαλος</span> = law-teacher (compound: nomos + didaskalos); used of Jewish scribes/rabbis; ironic: they want to teach Law but don't understand it.
+                </div>
+              </div>
+            </div>
+            <div class="grid single">
+              <div>
+                <label><span class="greek">μὴ νοοῦντες μήτε ἃ λέγουσιν μήτε περὶ τίνων διαβεβαιοῦνται</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "though they understand neither what they are saying nor the things about which they make confident claims"<br>
+                  <span class="greek">νοέω</span> = understand, perceive, grasp<br>
+                  <span class="greek">διαβεβαιόομαι</span> = insist confidently, assert emphatically (dia- prefix intensifies); ironic contrast: great confidence, zero understanding.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>1:5 — The Moral Triad (Goal of the Charge)</h2>
+
+        
+        <details open>
+          <summary>The Goal: Love from a Triadic Source (Structural Anchor)</summary>
+          <div class="content">
+            <div class="highlight-box">
+              <p class="mono"><span class="greek">τὸ δὲ τέλος τῆς παραγγελίας ἐστὶν ἀγάπη</span></p>
+              <p><span style="font-variant-caps:all-small-caps;">The goal of the charge is love—</span><br>
+              <span style="margin-left:1.25rem;">from a pure heart,</span><br>
+              <span style="margin-left:2.5rem;">and a good conscience,</span><br>
+              <span style="margin-left:3.75rem;">and a sincere faith.</span></p>
+            </div>
+            <div class="grid">
+              <div>
+                <label><span class="greek">τὸ τέλος τῆς παραγγελίας</span></label>
+                <div class="box mono">
+                  Options: "aim" / "goal" / "end" / "purpose"<br>
+                  <strong>Chosen:</strong> "The goal of the charge"<br>
+                  Reason: <span class="greek">τέλος</span> = end, goal, purpose (not merely "aim" which is weaker); <span class="greek">παραγγελία</span> = charge, command, instruction (refers back to v.3); this is the telos—what the instruction is designed to produce.
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">ἐξ</span> — Threefold Source</label>
+                <div class="box mono">
+                  <strong>Pattern:</strong> ἐκ (from/out of) + genitive in three parallel phrases<br>
+                  1. <span class="greek">ἐκ καθαρᾶς καρδίας</span> = from a pure heart<br>
+                  2. <span class="greek">καὶ συνειδήσεως ἀγαθῆς</span> = and a good conscience<br>
+                  3. <span class="greek">καὶ πίστεως ἀνυποκρίτου</span> = and a sincere faith
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">καθαρᾶς καρδίας</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "pure heart"<br>
+                  <span class="greek">καθαρός</span> = clean, pure, unmixed; biblical "heart" = center of will, emotion, thought; source of moral action (cf. Matt 5:8).
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">συνειδήσεως ἀγαθῆς</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "good conscience"<br>
+                  <span class="greek">συνείδησις</span> = conscience, moral awareness; <span class="greek">ἀγαθός</span> = good, beneficial, sound; functions properly without accusation.
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">πίστεως ἀνυποκρίτου</span></label>
+                <div class="box mono">
+                  Options: "unhypocritical faith" / "genuine faith" / "sincere faith"<br>
+                  <strong>Chosen:</strong> "sincere faith"<br>
+                  Reason: <span class="greek">ἀνυπόκριτος</span> = without hypocrisy, genuine, sincere (α-privative + ὑπόκρισις "play-acting"); "sincere" captures it naturally in English.
+                </div>
+              </div>
+            </div>
+            <div class="grid single">
+              <div>
+                <label>Structural Decision</label>
+                <div class="box">
+                  <strong>Type:</strong> Triadic structure with increasing indentation<br>
+                  <strong>Evidence:</strong> Three parallel prepositional phrases (ἐκ + genitive); cascading moral foundation<br>
+                  <strong>Effect:</strong> Visual hierarchy shows love's threefold source; memorable cadence for oral delivery<br>
+                  <strong>Small caps:</strong> Used to mark this as a principle statement<br>
+                  <strong>Theological note:</strong> Love is the goal; the triad shows its necessary preconditions—internal purity (heart), moral integrity (conscience), authentic trust (faith).
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>1:8-11 — Law Used Lawfully & Vice List</h2>
+        
+        <details open>
+          <summary>Proper Use of the Law (1:8-9a)</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">Οἴδαμεν δὲ ὅτι καλὸς ὁ νόμος</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "Now we know that the Law is good"<br>
+                  <span class="greek">οἶδα</span> = know (perfect of εἴδω: know by perception); <span class="greek">καλός</span> = good, noble, excellent; Paul affirms Law's goodness (cf. Rom 7:12).
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">ἐάν τις αὐτῷ νομίμως χρῆται</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "if one uses it lawfully"<br>
+                  <span class="greek">νομίμως</span> = lawfully, properly (adverb from νόμος); wordplay: use the Law lawfully; <span class="greek">χράομαι</span> = use, make use of; point: Law is good when used for its proper purpose.
+                </div>
+              </div>
+            </div>
+            <div class="grid single">
+              <div>
+                <label><span class="greek">εἰδὼς τοῦτο, ὅτι δικαίῳ νόμος οὐ κεῖται</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "understanding that the Law is not laid down for the righteous"<br>
+                  <span class="greek">εἰδώς</span> = knowing, understanding (participle of οἶδα)<br>
+                  <span class="greek">κεῖμαι</span> = lie, be laid down, be established; Law's target is not the righteous but the lawless (vice list follows).
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>Vice List: Law's True Target (1:9b-10)</summary>
+          <div class="content">
+            <p class="note"><strong>Structure:</strong> Set as cadenced list with consistent indentation. Each vice receives one line for oral clarity and memorability. List moves from general rebelliousness to specific violations.</p>
+            
+            <div class="grid">
+              <div>
+                <label><span class="greek">ἀνόμοις καὶ ἀνυποτάκτοις</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "the lawless and rebellious"<br>
+                  <span class="greek">ἄνομος</span> = lawless (without law, opposed to law)<br>
+                  <span class="greek">ἀνυπότακτος</span> = not subject, rebellious, insubordinate
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">ἀσεβέσι καὶ ἁμαρτωλοῖς</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "the ungodly and sinners"<br>
+                  <span class="greek">ἀσεβής</span> = ungodly, impious (toward God)<br>
+                  <span class="greek">ἁμαρτωλός</span> = sinful, sinner (moral failure)
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">ἀνοσίοις καὶ βεβήλοις</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "the unholy and the profane"<br>
+                  <span class="greek">ἀνόσιος</span> = unholy (violations against sacred things)<br>
+                  <span class="greek">βέβηλος</span> = profane, godless (desecrating what's holy)
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">πατρολῴαις καὶ μητρολῴαις</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "father-killers and mother-killers"<br>
+                  Rare compound words: πατήρ (father) + ἀλοιάω (strike, kill); extreme violations of 5th commandment.
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">ἀνδροφόνοις</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "murderers"<br>
+                  <span class="greek">ἀνδροφόνος</span> = man-slayer, murderer; 6th commandment violation.
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">πόρνοις</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "the sexually immoral"<br>
+                  <span class="greek">πόρνος</span> = sexually immoral person, fornicator; 7th commandment violation (broad category).
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">ἀρσενοκοίταις</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "men who lie with men"<br>
+                  <span class="greek">ἀρσενοκοίτης</span> = male who lies with males (compound: ἄρσην "male" + κοίτη "bed"); likely coined from LXX Lev 18:22, 20:13; refers to male same-sex activity.
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">ἀνδραποδισταῖς</span></label>
+                <div class="box mono">
+                  Options: "slave traders" / "kidnappers" / "enslavers" / "man-stealers"<br>
+                  <strong>Chosen:</strong> "enslavers"<br>
+                  Reason: <span class="greek">ἀνδραποδιστής</span> = one who enslaves (kidnaps people to sell as slaves); captures both kidnapping and slave-dealing aspects; "enslavers" is most comprehensive modern equivalent; 8th commandment (stealing persons).
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">ψεύσταις</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "liars"<br>
+                  <span class="greek">ψεύστης</span> = liar, deceiver; 9th commandment violation.
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">ἐπιόρκοις</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "perjurers"<br>
+                  <span class="greek">ἐπίορκος</span> = one who swears falsely, perjurer; specific form of lying under oath.
+                </div>
+              </div>
+            </div>
+            
+            <div class="grid single">
+              <div>
+                <label>Summary & Gospel Context (1:10b-11)</label>
+                <div class="box mono">
+                  <span class="greek">καὶ εἴ τι ἕτερον τῇ ὑγιαινούσῃ διδασκαλίᾳ ἀντίκειται</span><br>
+                  <strong>Chosen:</strong> "and for whatever else stands opposed to healthy doctrine"<br>
+                  <span class="greek">ὑγιαίνω</span> = be healthy, sound (medical metaphor); <span class="greek">ἀντίκειμαι</span> = oppose, be contrary to; catch-all category.<br><br>
+                  
+                  <span class="greek">κατὰ τὸ εὐαγγέλιον τῆς δόξης τοῦ μακαρίου θεοῦ</span><br>
+                  <strong>Chosen:</strong> "in accordance with the gospel of the glory of the blessed God"<br>
+                  Critical phrase: "healthy doctrine" is measured by the gospel; <span class="greek">δόξα</span> = glory (objective genitive: gospel about God's glory); <span class="greek">μακάριος</span> = blessed, happy; concludes with personal note: "with which I was entrusted."
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>1:12-14 — Thanksgiving & Personal Testimony</h2>
+        
+        <details open>
+          <summary>Thanksgiving for Christ's Strengthening (1:12)</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">Χάριν ἔχω τῷ ἐνδυναμώσαντί με</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "I thank Christ Jesus our Lord, who strengthened me"<br>
+                  <span class="greek">χάριν ἔχω</span> = I have gratitude, I give thanks (lit: "I have grace toward")<br>
+                  <span class="greek">ἐνδυναμόω</span> = strengthen, empower (aorist participle: one-time decisive action); Christ as source of Paul's ministry power.
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">ὅτι πιστόν με ἡγήσατο</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "because he judged me faithful"<br>
+                  <span class="greek">ἡγέομαι</span> = consider, judge, regard; <span class="greek">πιστός</span> = faithful, trustworthy; Christ's evaluation precedes Paul's appointment.
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">θέμενος εἰς διακονίαν</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "setting me into service"<br>
+                  <span class="greek">τίθημι</span> = place, appoint, set (aorist participle); <span class="greek">διακονία</span> = service, ministry; εἰς = into (directional: placed into the sphere of ministry).
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>Paul's Former Life (1:13)</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">τὸ πρότερον ὄντα βλάσφημον</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "even though I was formerly a blasphemer"<br>
+                  <span class="greek">βλάσφημος</span> = blasphemous, slanderous (against God); Paul's persecution of church was blasphemy against Christ.
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">καὶ διώκτην καὶ ὑβριστήν</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "a persecutor, and a violent man"<br>
+                  <span class="greek">διώκτης</span> = persecutor (one who pursues to harm)<br>
+                  <span class="greek">ὑβριστής</span> = violent, insolent person; one who treats others with hubris/contempt; triadic structure of Paul's former identity.
+                </div>
+              </div>
+            </div>
+            <div class="grid single">
+              <div>
+                <label><span class="greek">ἀλλὰ ἠλεήθην, ὅτι ἀγνοῶν ἐποίησα ἐν ἀπιστίᾳ</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "Yet I was shown mercy, because I acted ignorantly in unbelief"<br>
+                  <span class="greek">ἐλεέω</span> = show mercy (aorist passive: divine action)<br>
+                  <span class="greek">ἀγνοέω</span> = be ignorant, not know (cf. Acts 3:17; Jesus' prayer in Luke 23:34); Paul's ignorance doesn't excuse but explains why mercy was extended<br>
+                  <span class="greek">ἐν ἀπιστίᾳ</span> = in unbelief (sphere/state of his actions).
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>Grace Overflowing (1:14)</summary>
+          <div class="content">
+            <div class="grid single">
+              <div>
+                <label><span class="greek">ὑπερεπλεόνασεν δὲ ἡ χάρις τοῦ κυρίου ἡμῶν</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "and the grace of our Lord overflowed abundantly"<br>
+                  <span class="greek">ὑπερπλεονάζω</span> = overflow exceedingly, superabound (ὑπέρ- prefix intensifies); grace didn't just cover Paul's sin—it superabounded; vivid metaphor of overflowing vessel.
+                </div>
+              </div>
+            </div>
+            <div class="grid">
+              <div>
+                <label><span class="greek">μετὰ πίστεως καὶ ἀγάπης</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "with faith and love"<br>
+                  <span class="greek">μετά</span> + genitive = with, accompanied by; grace came accompanied by (or bringing) faith and love.
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">τῆς ἐν Χριστῷ Ἰησοῦ</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "that are in Christ Jesus"<br>
+                  Locative: faith and love located/grounded in Christ; recalls the goal from v.5 (love from sincere faith).
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+          <div class="content">
+            <div class="highlight-box">
+              <p class="mono" style="font-variant-caps:all-small-caps;">
+                Faithful is the saying,<br>
+                and worthy of full acceptance:
+              </p>
+              <p class="mono" style="margin-left:1.25rem;">
+                Christ Jesus came into the world<br>
+                to rescue and restore sinners—<br>
+                of whom I am the foremost.
+              </p>
+            </div>
+            <div class="grid">
+              <div>
+                <label><span class="greek">σῶσαι ἁμαρτωλούς</span></label>
+                <div class="box mono">
+                  Greek: sōsai hamartōlous<br>
+                  Options: "save sinners" / "deliver sinners" / "rescue sinners"<br>
+                  <strong>Chosen:</strong> "rescue and restore sinners"<br>
+                  Reason: Expands σῴζω's semantic range (rescue + heal/restore); maintains covenant deliverance overtones; continuity with 2:4 usage; avoids theological reduction to "save."
+                </div>
+              </div>
+              <div>
+                <label>Structural Treatment</label>
+                <div class="box">
+                  <strong>Small caps for formula:</strong> "Faithful is the saying…" marks it as pre-Pauline credal material<br>
+                  <strong>Indented content:</strong> Shows the substance of the "faithful saying"<br>
+                  <strong>Purpose clause:</strong> "to rescue and restore" clarifies Christ's mission
+                </div>
+              </div>
+            </div>
+            <p class="note"><strong>Intertextual note:</strong> Echoes Luke 19:10 ("seek and save the lost"). Paul personalizes with "of whom I am foremost."</p>
+          </div>
+        </details>
+
+        <details open>
+          <summary>Mercy as Pattern for Believers (1:16)</summary>
+          <div class="content">
+            <div class="grid single">
+              <div>
+                <label><span class="greek">ἀλλὰ διὰ τοῦτο ἠλεήθην</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "But for this reason I received mercy"<br>
+                  Transitions from personal testimony to paradigmatic purpose; Paul's experience serves a larger design.
+                </div>
+              </div>
+            </div>
+            <div class="grid">
+              <div>
+                <label><span class="greek">ἵνα ἐν ἐμοὶ πρώτῳ ἐνδείξηται</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "that in me, the foremost [sinner]"<br>
+                  <span class="greek">πρῶτος</span> = first, foremost (recalls v.15); <span class="greek">ἐνδείκνυμι</span> = display, demonstrate, show forth; purpose clause: Christ's intent in showing Paul mercy.
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">Χριστὸς Ἰησοῦς τὴν ἅπασαν μακροθυμίαν</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "Christ Jesus might display all his patience"<br>
+                  <span class="greek">ἅπας</span> = all, entire, complete; <span class="greek">μακροθυμία</span> = patience, forbearance, longsuffering (compound: μακρός "long" + θυμός "anger"); Christ's full/complete patience exhibited in Paul's case.
+                </div>
+              </div>
+            </div>
+            <div class="grid single">
+              <div>
+                <label><span class="greek">πρὸς ὑποτύπωσιν τῶν μελλόντων πιστεύειν</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "as an example for those who would believe in him for eternal life"<br>
+                  <span class="greek">ὑποτύπωσις</span> = pattern, example, model (architectural/artistic term: prototype/sketch)<br>
+                  <span class="greek">μέλλω</span> = be about to, would (future believers)<br>
+                  <span class="greek">εἰς ζωὴν αἰώνιον</span> = unto eternal life (purpose/result); Paul's conversion = paradigm for all future conversions; if Christ saved him, he can save anyone.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>1:17 — Doxology (Structural Anchor)</h2>
+        
+        <details open>
+          <summary>Ascription to the Eternal King</summary>
+          <div class="content">
+            <div class="doxology" style="font-size:.95rem;">
+              Now to the King of the ages,<br>
+              <span style="margin-left:1.25rem;">immortal, invisible,</span><br>
+              <span style="margin-left:1.25rem;">the only God—</span><br>
+              be honor and glory<br>
+              <span style="margin-left:1.25rem;">forever and ever. Amen.</span>
+            </div>
+            <div class="grid">
+              <div>
+                <label><span class="greek">τῷ δὲ βασιλεῖ τῶν αἰώνων</span></label>
+                <div class="box mono">
+                  Options: "King of the ages" / "King eternal" / "King of eternity"<br>
+                  <strong>Chosen:</strong> "King of the ages"<br>
+                  Reason: <span class="greek">αἰών</span> = age, eon; "King of the ages" preserves temporal/epochal sense—ruler over all time periods; echoes OT "God of the ages" (Tobit 13:6, 10).
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">ἀφθάρτῳ ἀοράτῳ</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "immortal, invisible"<br>
+                  <span class="greek">ἄφθαρτος</span> = incorruptible, imperishable, immortal (α-privative + φθείρω "destroy")<br>
+                  <span class="greek">ἀόρατος</span> = invisible, unseen (α-privative + ὁράω "see"); paired attributes emphasize God's transcendence.
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">μόνῳ θεῷ</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "the only God"<br>
+                  Monotheistic confession; <span class="greek">μόνος</span> = only, alone; cf. Deut 6:4.
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">τιμὴ καὶ δόξα εἰς τοὺς αἰῶνας τῶν αἰώνων</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "be honor and glory forever and ever"<br>
+                  <span class="greek">τιμή</span> = honor, reverence; <span class="greek">δόξα</span> = glory, splendor<br>
+                  <span class="greek">εἰς τοὺς αἰῶνας τῶν αἰώνων</span> = lit. "unto the ages of the ages" (Hebrew idiom for eternal duration); "forever and ever" = standard liturgical English.
+                </div>
+              </div>
+            </div>
+            <div class="grid single">
+              <div>
+                <label>Structural & Theological Significance</label>
+                <div class="box">
+                  <strong>Function:</strong> Concludes testimony section (vv.12-16); provides liturgical anchor point for Chapter 1<br>
+                  <strong>Form:</strong> Classic Jewish berakah pattern: dative recipient + attributes + ascription + duration formula<br>
+                  <strong>Trigger:</strong> Overwhelmed by grace (vv.14-16), Paul breaks into spontaneous praise<br>
+                  <strong>Treatment:</strong> Set as poetry with visual border accent to mark structural importance; "Amen" signals congregational response (designed for liturgical use).
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>1:18-20 — Entrustment & Discipline</h2>
+        
+        <details open>
+          <summary>The Charge Entrusted (1:18)</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">Ταύτην τὴν παραγγελίαν παρατίθεμαί σοι</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "This charge I entrust to you"<br>
+                  <span class="greek">παραγγελία</span> = charge, command, instruction (recalls v.5)<br>
+                  <span class="greek">παρατίθημι</span> = entrust, commit to one's care (deposit metaphor: place something with someone for safekeeping).
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">τέκνον Τιμόθεε</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "my child Timothy"<br>
+                  Affectionate address; echoes v.2 "genuine child in faith"; reinforces spiritual father-son relationship.
+                </div>
+              </div>
+            </div>
+            <div class="grid single">
+              <div>
+                <label><span class="greek">κατὰ τὰς προαγούσας ἐπὶ σὲ προφητείας</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "in keeping with the prophecies once spoken about you"<br>
+                  <span class="greek">προάγω</span> = go before, precede (participle: "preceding")<br>
+                  <span class="greek">προφητεία</span> = prophecy; refers to prophetic words spoken at Timothy's commissioning (cf. 4:14); these prophecies guide/validate the charge Paul now gives.
+                </div>
+              </div>
+            </div>
+            <div class="grid single">
+              <div>
+                <label><span class="greek">ἵνα στρατεύῃ ἐν αὐταῖς τὴν καλὴν στρατείαν</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "that by them you may wage the good warfare"<br>
+                  <span class="greek">στρατεύομαι</span> = serve as soldier, wage war (metaphorical: spiritual warfare)<br>
+                  <span class="greek">στρατεία</span> = military campaign, warfare<br>
+                  <span class="greek">καλός</span> = good, noble; "by them" (ἐν αὐταῖς) = empowered/guided by the prophecies; ministry as warfare metaphor continues Pauline usage (2 Cor 10:3-4; Eph 6:10-17).
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>Faith and Conscience: Necessary Weapons (1:19)</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">ἔχων πίστιν καὶ ἀγαθὴν συνείδησιν</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "holding faith and a good conscience"<br>
+                  <span class="greek">ἔχω</span> = have, hold, possess (present participle: continuous action)<br>
+                  Echoes the triad in v.5 (pure heart, good conscience, sincere faith); these are the "weapons" for spiritual warfare.
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">ἥν τινες ἀπωσάμενοι</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "which some, having thrust away"<br>
+                  <span class="greek">ἀπωθέομαι</span> = push away, reject, thrust aside (violent rejection; not passive drift but active repudiation); "which" = the good conscience.
+                </div>
+              </div>
+            </div>
+            <div class="grid single">
+              <div>
+                <label><span class="greek">περὶ τὴν πίστιν ἐναυάγησαν</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "have suffered shipwreck regarding the faith"<br>
+                  <span class="greek">ναυαγέω</span> = suffer shipwreck (nautical metaphor: total disaster)<br>
+                  <span class="greek">περί</span> + acc. = concerning, with regard to; the faith = their trust/belief system has been destroyed; vivid image: rejecting conscience leads to faith-disaster; cause → effect relationship.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>Corrective Discipline Examples (1:20)</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">ὧν ἐστιν Ὑμέναιος καὶ Ἀλέξανδρος</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "Among them are Hymenaeus and Alexander"<br>
+                  <span class="greek">ὧν</span> = "among whom" (refers to those who shipwrecked); specific names: Hymenaeus (mentioned again in 2 Tim 2:17); Alexander (possibly same as in 2 Tim 4:14); real people, real consequences.
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">οὓς παρέδωκα τῷ Σατανᾷ</span></label>
+                <div class="box mono">
+                  Options: "handed over to Satan" / "delivered to Satan" / "given over to the Adversary"<br>
+                  <strong>Chosen:</strong> "whom I have handed over to Satan"<br>
+                  Reason: <span class="greek">παραδίδωμι</span> = hand over, deliver up (legal/judicial term); formal exclusion from community (excommunication); cf. 1 Cor 5:5; purpose: corrective, not punitive.
+                </div>
+              </div>
+            </div>
+            <div class="grid single">
+              <div>
+                <label><span class="greek">ἵνα παιδευθῶσιν μὴ βλασφημεῖν</span></label>
+                <div class="box mono">
+                  Options: "that they may be taught" / "that they may be disciplined" / "that they may learn"<br>
+                  <strong>Chosen:</strong> "to let the consequences teach them not to blaspheme"<br>
+                  Reason: <span class="greek">παιδεύω</span> = train, discipline, instruct (often through correction/consequences); purpose clause with negative infinitive: "not to blaspheme"<br>
+                  <strong>Translation note:</strong> Expanded slightly ("let the consequences teach them") to clarify that exclusion itself serves pedagogical function; being "handed to Satan" = removed from community's protection, experiencing consequences, leading to repentance<br>
+                  <strong>Theological note:</strong> Discipline aims at restoration, not destruction; severity serves mercy.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+    </section>
+  </div>
+
+  <!-- ========== CHAPTER 2 TAB ========== -->
+  <div id="ch2" class="tab-content" role="tabpanel">
+    <section class="cards">
+      
+      <div class="card">
+        <h2>Chapter 2 Overview</h2>
+        <p><strong>Theme:</strong> Prayer for All, One Mediator, Conduct in Worship</p>
+        <p><strong>Key Structures:</strong> Prayer exhortation (1-2), God's saving will (3-4), credal core (5-6), apostolic commission (7), men in prayer (8), women's adornment & learning (9-12), creation rationale (13-14), salvation promise (15)</p>
+        <p><strong>Status:</strong> <span class="status-complete">✓ Complete</span></p>
+      </div>
+
+      <div class="card">
+        <h2>2:1-2 — Exhortation to Prayer</h2>
+        
+        <details open>
+          <summary>Instruction Context & Four Prayer Terms</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">Παρακαλῶ οὖν πρῶτον πάντων</span></label>
+                <div class="box mono">
+                  <strong>Key insight:</strong> This is exhortation to the practice of prayer, NOT a prayer text itself<br>
+                  <strong>Chosen:</strong> "I urge, therefore, first of all"<br>
+                  Reason: <span class="greek">παρακαλῶ</span> marks exhortation/instruction; "first of all" emphasizes priority
+                </div>
+              </div>
+              <div>
+                <label>Four Prayer Categories</label>
+                <div class="box mono">
+                  <span class="greek">δεήσεις</span> → entreaties (specific needs)<br>
+                  <span class="greek">προσευχάς</span> → prayers (general devotion)<br>
+                  <span class="greek">ἐντεύξεις</span> → petitions (intercessions)<br>
+                  <span class="greek">εὐχαριστίας</span> → thanksgivings (gratitude)<br>
+                  <strong>Note:</strong> These are categories of prayer types, not a fixed liturgical formula
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details>
+          <summary>Purpose of Civic Intercession</summary>
+          <div class="content">
+            <div class="grid single">
+              <div>
+                <label><span class="greek">ὑπὲρ βασιλέων καὶ πάντων τῶν ἐν ὑπεροχῇ ὄντων</span></label>
+                <div class="box">
+                  <strong>Chosen:</strong> "for kings and all who are in positions of eminence"<br>
+                  <strong>Purpose clause:</strong> "in order that we might lead a tranquil and quiet life, in all godliness and dignity"<br>
+                  <strong>Rationale:</strong> Prayer for authorities serves the community's peaceful existence and proper worship; this is missional, not merely personal comfort
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>2:3-4 — God's Universal Saving Will</h2>
+        
+        <details open>
+          <summary>Key Rendering: "Recognition of the Truth"</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">πάντας ἀνθρώπους σωθῆναι</span></label>
+                <div class="box mono">
+                  "all people to be rescued"<br>
+                  <strong>Verb:</strong> σῴζω (rescue, deliver, restore, save)<br>
+                  Maintains continuity with 1:15 rendering
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">εἰς ἐπίγνωσιν ἀληθείας ἐλθεῖν</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "brought into recognition of the truth"<br>
+                  Options: "come to knowledge" / "reach full knowledge"<br>
+                  Reason: Directional <span class="greek">εἰς</span> + intensive <span class="greek">ἐπίγνωσις</span> + passive "brought" implies divine initiative; "recognition" better than mere "knowledge"
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>2:5-6 — Credal Core: One God, One Mediator</h2>
+        
+        <details open>
+          <summary>Structural & Theological Decisions</summary>
+          <div class="content">
+            <div class="highlight-box">
+              <p class="mono">
+                For one is God,<br>
+                <span style="margin-left:1.25rem;">and one also mediator between God and humankind—</span><br>
+                <span style="margin-left:2.5rem;">a human, Christ Jesus—</span><br>
+                <span style="margin-left:2.5rem;">who gave himself a ransom on behalf of all,</span><br>
+                <span style="margin-left:3.75rem;">the testimony in its own times.</span>
+              </p>
+            </div>
+            <div class="grid">
+              <div>
+                <label><span class="greek">εἷς γὰρ θεός, εἷς καὶ μεσίτης</span></label>
+                <div class="box mono">
+                  <strong>Structure:</strong> Set as credal block with indentation showing logical development<br>
+                  "One is God, and one also mediator…"<br>
+                  Reason: Shema echo + Christian expansion; parallelism demands visibility
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">ἄνθρωπος Χριστὸς Ἰησοῦς</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "a human, Christ Jesus"<br>
+                  Options: "the man" / "a man" / "the human"<br>
+                  Reason: <span class="greek">ἄνθρωπος</span> (anarthrous) emphasizes humanity itself, not maleness; "human" clearer in modern English
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">ἀντίλυτρον ὑπὲρ πάντων</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "ransom on behalf of all"<br>
+                  <span class="greek">ἀντίλυτρον</span> = ransom payment, substitute price<br>
+                  <span class="greek">ὑπὲρ πάντων</span> = on behalf of all (scope: universal intent)
+                </div>
+              </div>
+              <div>
+                <label>Why Credal Format?</label>
+                <div class="box">
+                  Oral cadence; memorability; likely pre-Pauline confession that Paul incorporates; structural prominence befits theological weight
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>2:7 — Apostolic Commission</h2>
+        
+        <details>
+          <summary>Formal Register & Divine Passive</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">εἰς ὃ ἐτέθην ἐγὼ κῆρυξ καὶ ἀπόστολος</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "For this I was set as herald and apostle"<br>
+                  Options: "I was appointed" / "I was made" / "I was placed"<br>
+                  Reason: "was set" preserves divine passive (God as agent); terse, formal register matches commissioning context
+                </div>
+              </div>
+              <div>
+                <label>Parenthetical Emphasis</label>
+                <div class="box mono">
+                  "I speak truth, I do not lie"<br>
+                  Paul's oath-like reinforcement of his apostolic legitimacy; kept terse to match Greek rhythm
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>2:8 — Men in Prayer</h2>
+        
+        <details open>
+          <summary>Volition & Posture</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">Βούλομαι οὖν</span></label>
+                <div class="box mono">
+                  Options: "I desire" / "I intend" / "I will (resolve)"<br>
+                  <strong>Chosen:</strong> "Therefore I intend"<br>
+                  Reason: <span class="greek">βούλομαι</span> = deliberate volition/intention, stronger than mere desire; "intend" captures pastoral directive without being tyrannical
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">ἐπαίροντας ὁσίους χεῖρας</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "lifting holy hands"<br>
+                  Ancient prayer posture; <span class="greek">ὅσιος</span> = holy/devout (inward purity visible in outward gesture)
+                </div>
+              </div>
+            </div>
+            <div class="grid single">
+              <div>
+                <label><span class="greek">χωρὶς ὀργῆς καὶ διαλογισμοῦ</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "without anger or dispute"<br>
+                  <span class="greek">διαλογισμός</span> = inner reasoning/disputation that leads to conflict; paired with anger, it emphasizes relational peace as prerequisite for prayer
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>2:9-10 — Women's Adornment</h2>
+        
+        <details open>
+          <summary>Virtue Terms & Inner Character</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">μετὰ αἰδοῦς καὶ σωφροσύνης</span></label>
+                <div class="box mono">
+                  Options: "with modesty and self-control" / "with propriety and sobriety"<br>
+                  <strong>Chosen:</strong> "with reverent restraint and sound judgment"<br>
+                  Reason: <span class="greek">αἰδώς</span> = moral sensitivity/reverent shame (not mere shyness); <span class="greek">σωφροσύνη</span> = soundness of mind, self-mastery, balanced judgment (not just control of appetites)
+                </div>
+              </div>
+              <div>
+                <label>Contrast Structure</label>
+                <div class="box">
+                  NOT: braided hair, gold, pearls, costly garments<br>
+                  BUT: good works befitting women who profess godliness<br>
+                  <strong>Point:</strong> Inner character > external display
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>2:11-12 — Women's Learning & Teaching</h2>
+        
+        <details open>
+          <summary>Quietness, Authority, and Submission</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">ἐν ἡσυχίᾳ</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "in quietness"<br>
+                  NOT "in silence" (absolute) — <span class="greek">ἡσυχία</span> = peaceable stillness, orderly posture, not total muteness; used twice (vv.11,12) to frame the instruction
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">ἐν πάσῃ ὑποταγῇ</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "in all submission"<br>
+                  Context: learning posture (v.11), not marital submission; <span class="greek">ὑποταγή</span> = receptive, ordered stance appropriate to disciple
+                </div>
+              </div>
+            </div>
+            <div class="grid single">
+              <div>
+                <label><span class="greek">διδάσκειν δὲ γυναικὶ οὐκ ἐπιτρέπω οὐδὲ αὐθεντεῖν ἀνδρός</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "But I do not permit a woman to teach or to exercise authority over a man"<br>
+                  <strong>Critical term:</strong> <span class="greek">αὐθεντεῖν</span> (authentein)<br>
+                  <strong>Semantic range:</strong> "to exercise authority over," "to act on one's own authority," or "to domineer"<br>
+                  <strong>Decision rationale:</strong> Only NT occurrence; by first century, primarily means legitimate exercise of authority (neutral, not hostile like "dominate"). "Exercise authority" is most literal and balanced.<br>
+                  <strong>Alternatives considered:</strong><br>
+                  • "assume authority" — suggests taking authority without having it (inceptive nuance not in Greek)<br>
+                  • "domineer" — too pejorative; imports hostility not present in the verb<br>
+                  • "have authority" — too static; Greek emphasizes active exercise<br>
+                  <strong>Status:</strong> Final rendering in reading text
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>2:13-14 — Creation Rationale</h2>
+        
+        <details>
+          <summary>Sequential Formation & Deception</summary>
+          <div class="content">
+            <div class="grid single">
+              <div>
+                <label><span class="greek">Ἀδὰμ γὰρ πρῶτος ἐπλάσθη, εἶτα Εὕα</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "For Adam was formed first, then Eve"<br>
+                  <strong>Verb:</strong> <span class="greek">πλάσσω</span> = formed/molded (echoes Gen 2:7,22 LXX)<br>
+                  Terse, sequential. <span class="greek">γάρ</span> introduces rationale for vv.11-12.
+                </div>
+              </div>
+            </div>
+            <div class="grid single">
+              <div>
+                <label><span class="greek">Ἀδὰμ οὐκ ἠπατήθη, ἡ δὲ γυνὴ ἐξαπατηθεῖσα ἐν παραβάσει γέγονεν</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "And Adam was not deceived, but the woman, having been deceived, has come to be in transgression"<br>
+                  <strong>Verbs:</strong> <span class="greek">ἀπατάω</span> (deceived) vs <span class="greek">ἐξαπατάω</span> (thoroughly/completely deceived — intensive prefix)<br>
+                  <strong>Perfect tense:</strong> <span class="greek">γέγονεν</span> = "has come to be" (completed action with ongoing state)<br>
+                  <strong>Interpretive note:</strong> Paul not assigning greater guilt but explaining the sequence in Gen 3; rationale for authority structure, not moral judgment
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>2:15 — Salvation Through the Childbearing</h2>
+        
+        <details open>
+          <summary>The Article & Messianic Reading</summary>
+          <div class="content">
+            <div class="grid single">
+              <div>
+                <label><span class="greek">σωθήσεται δὲ διὰ τῆς τεκνογονίας</span></label>
+                <div class="box mono">
+                  Options:<br>
+                  • "saved through childbearing" (generic, articular function ignored)<br>
+                  • "saved through <em>the</em> childbearing" (Messianic reference)<br>
+                  <strong>Chosen:</strong> "Yet she will be saved through <em>the</em> childbearing"<br>
+                  <strong>Reason:</strong> Retains the article <span class="greek">τῆς</span>, allowing Messianic nuance ("the Childbearing" = birth of Christ, Gen 3:15 seed promise) while preserving literal phrasing. Does not foreclose generic reading but opens interpretive space.<br>
+                  <strong>Verb:</strong> <span class="greek">σωθήσεται</span> (future passive of <span class="greek">σῴζω</span>) — to save, deliver, make whole<br>
+                  <strong>Semantic range:</strong> rescue (physical), heal/restore, redeem (spiritual). Context implies redemptive salvation, not merely physical safety in childbirth.
+                </div>
+              </div>
+            </div>
+            <div class="grid single">
+              <div>
+                <label>Conditional Clause</label>
+                <div class="box mono">
+                  <span class="greek">ἐὰν μείνωσιν ἐν πίστει καὶ ἀγάπῃ καὶ ἁγιασμῷ μετὰ σωφροσύνης</span><br>
+                  <strong>Chosen:</strong> "if they remain in faith and love and holiness, with sound judgment"<br>
+                  <strong>Shift to plural:</strong> "they" (not "she") — application moves from individual woman to Christian women corporately<br>
+                  <strong>Virtues:</strong> Faith, love, holiness (triad) + sound judgment (<span class="greek">σωφροσύνη</span> recalls v.9)
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+    </section>
+  </div>
+
+  <!-- ========== CHAPTER 3 TAB ========== -->
+  <div id="ch3" class="tab-content" role="tabpanel">
+    <section class="cards">
+      
+      <div class="card">
+        <h2>Chapter 3 Overview</h2>
+        <p><strong>Theme:</strong> Qualifications for Leadership & Church as Pillar of Truth</p>
+        <p><strong>Key Structures:</strong> Overseer qualifications (1-7), servant qualifications (8-13), Paul's purpose (14-15), mystery hymn anchor (16)</p>
+        <p><strong>Status:</strong> <span class="status-complete">✓ Complete</span></p>
+      </div>
+
+      <div class="card">
+        <h2>3:1-7 — The One Who Watches Over</h2>
+        
+        <details open>
+          <summary>Opening Formula & Office Term</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">Πιστὸς ὁ λόγος</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "Trustworthy is the saying"<br>
+                  Same formula as 1:15; marks what follows as reliable principle/tradition
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">ἐπισκοπῆς</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "oversight" (function, not title)<br>
+                  Options: "office of overseer" / "position of bishop"<br>
+                  Reason: Paul uses it functionally ("work of oversight"), not as formal ecclesiastical title; "aspires to oversight, desires noble work"
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>Qualifications: Virtues & Household Leadership</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">ἀνεπίλημπτον</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "blameless"<br>
+                  = above reproach, nothing to seize upon for accusation; summary virtue heading the list
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">μιᾶς γυναικὸς ἄνδρα</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "a man of one woman"<br>
+                  Preserves Greek word order; implies exclusive marital fidelity (not merely "married only once" but faithful devotion to one wife)
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">κόσμιον</span></label>
+                <div class="box mono">
+                  Options: "orderly" / "well-behaved" / "respectable"<br>
+                  <strong>Chosen:</strong> "well-disciplined"<br>
+                  Reason: Captures inner order and self-governance better than external "well-behaved"; from <span class="greek">κόσμος</span> (ordered world)
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">φιλόξενον</span></label>
+                <div class="box mono">
+                  Options: "hospitable" / "lover of strangers"<br>
+                  <strong>Chosen:</strong> "friend to strangers"<br>
+                  Reason: Literal rendering; <span class="greek">φίλος</span> (friend) + <span class="greek">ξένος</span> (stranger/foreigner); moral virtue + social openness
+                </div>
+              </div>
+            </div>
+            
+            <h4 style="margin-top:1rem;">Household Leadership Test</h4>
+            <div class="grid single">
+              <div>
+                <label><span class="greek">τοῦ ἰδίου οἴκου καλῶς προϊστάμενον</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "The one standing before his own household well"<br>
+                  <span class="greek">προΐστημι</span> = stand before, preside over, lead/manage<br>
+                  <strong>Rationale question (3:5):</strong> "if anyone does not know how to stand before his own household, how will he care for God's assembly?"<br>
+                  Household management = proving ground for ecclesial care
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details>
+          <summary>Maturity & External Witness</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">μὴ νεόφυτον</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "Not newly planted"<br>
+                  Literal: "newly sprouted"; metaphor for new convert; immature leadership risks pride
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">τυφωθείς</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "having been filled with smoke"<br>
+                  Literal rendering of <span class="greek">τυφόω</span> (to make smoke, puff up with pride); preserves the metaphor rather than smoothing to "become conceited"
+                </div>
+              </div>
+            </div>
+            <div class="grid single">
+              <div>
+                <label><span class="greek">μαρτυρίαν καλὴν ἔχειν ἀπὸ τῶν ἔξωθεν</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "to have a good testimony from those outside"<br>
+                  Reputation among non-Christians matters; protects against "reproach and a snare of the accuser"
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>3:8-13 — Those Who Serve (Deacons)</h2>
+        
+        <details open>
+          <summary>Title Decision & Character Qualifications</summary>
+          <div class="content">
+            <div class="grid single">
+              <div>
+                <label><span class="greek">διακόνους</span></label>
+                <div class="box mono">
+                  Options: "deacons" / "servants" / "ministers"<br>
+                  <strong>Chosen:</strong> "Those who serve" (descriptive, function-focused)<br>
+                  Reason: Avoids importing later ecclesiastical office structure; keeps focus on servant function; <span class="greek">διακονέω</span> = to serve, minister to
+                </div>
+              </div>
+            </div>
+            <div class="grid">
+              <div>
+                <label><span class="greek">σεμνούς</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "dignified"<br>
+                  Worthy of respect, honorable bearing
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">μὴ δίλογους</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "not double-tongued"<br>
+                  = not saying different things to different people; integrity in speech
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">τὸ μυστήριον τῆς πίστεως</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "the mystery of the faith"<br>
+                  = revealed gospel truth, once hidden now disclosed
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">ἐν καθαρᾷ συνειδήσει</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "with a clear conscience"<br>
+                  Moral integrity; no hidden guilt
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details>
+          <summary>Women in 3:11 — Wives or Female Servants?</summary>
+          <div class="content">
+            <div class="grid single">
+              <div>
+                <label><span class="greek">γυναῖκας ὡσαύτως</span></label>
+                <div class="box mono">
+                  <strong>Translation ambiguity:</strong> <span class="greek">γυνή</span> = woman or wife (context determines)<br>
+                  Options:<br>
+                  • "Wives [of deacons] likewise…"<br>
+                  • "Women [serving in similar capacity] likewise…"<br>
+                  <strong>Chosen:</strong> "Women likewise, dignified…"<br>
+                  Reason: Parallel structure with v.8 ("Those who serve likewise") suggests a class of female servants, not merely spouses. Qualifications (dignified, not slanderers, temperate, faithful) mirror male servant qualifications. Leaves interpretive question open while maintaining literal clarity.
+                </div>
+              </div>
+            </div>
+            <p class="note"><strong>Further consideration:</strong> Phoebe in Rom 16:1 is called <span class="greek">διάκονον</span>; female service roles attested in early church. This reading preserves that possibility without forcing it.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Reward for Faithful Service (3:13)</summary>
+          <div class="content">
+            <div class="grid single">
+              <div>
+                <label><span class="greek">βαθμὸν ἑαυτοῖς καλὸν περιποιοῦνται</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "acquire for themselves a good standing"<br>
+                  <span class="greek">βαθμός</span> = step, standing, position of respect<br>
+                  NOT ecclesiastical "rank" or "degree" but honor/respect in the community
+                </div>
+              </div>
+            </div>
+            <div class="grid single">
+              <div>
+                <label><span class="greek">πολλὴν παρρησίαν ἐν πίστει</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "great confidence in the faith"<br>
+                  <span class="greek">παρρησία</span> = boldness, confidence, freedom of speech<br>
+                  Faithful service brings assurance and boldness before God and in witness
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>3:14-15 — Purpose & Ecclesiology</h2>
+        
+        <details open>
+          <summary>Speed vs. Delay, Conduct in God's Household</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">Ταῦτά σοι γράφω … ἐλπίζων ἐλθεῖν πρὸς σὲ ἐν τάχει</span></label>
+                <div class="box mono">
+                  Options: "soon" / "quickly" / "in haste"<br>
+                  <strong>Chosen:</strong> "while hoping to come to you in speed"<br>
+                  Reason: Preserves participle ("while hoping") and keeps <span class="greek">ἐν τάχει</span> hyper-literally as "in speed," anticipating contrast with "if I delay"<br>
+                  <strong>Effect:</strong> Letter functions as Paul's present proxy; urgency conveyed by speed/delay tension
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">πῶς δεῖ ἐν οἴκῳ θεοῦ ἀναστρέφεσθαι</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "how one must conduct oneself in the household of God"<br>
+                  <span class="greek">ἀναστρέφω</span> = to conduct oneself, behave, live<br>
+                  Instructions (chs. 2-3) provide pattern for ordered community life
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>Church as Pillar and Base of Truth</summary>
+          <div class="content">
+            <div class="highlight-box">
+              <p class="mono">
+                …in the household of God,<br>
+                which as such is the assembly of the living God,<br>
+                <span style="margin-left:1.25rem;">the pillar and base of the truth.</span>
+              </p>
+            </div>
+            <div class="grid">
+              <div>
+                <label><span class="greek">οἶκος θεοῦ</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "household of God"<br>
+                  Options: "house" vs "household"<br>
+                  Reason: "Household" keeps relational ethos (family); "house" too static/architectural
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">ἥτις ἐστὶν ἐκκλησία θεοῦ ζῶντος</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "which as such is the assembly of the living God"<br>
+                  <span class="greek">ἥτις</span> = qualitative relative ("which as such," "which indeed is")<br>
+                  "assembly" over "church" — centers gathered people, not institution
+                </div>
+              </div>
+              <div>
+                <label><span class="greek">στῦλος καὶ ἑδραίωμα τῆς ἀληθείας</span></label>
+                <div class="box mono">
+                  Options: "pillar and foundation" / "pillar and bulwark"<br>
+                  <strong>Chosen:</strong> "pillar and base of the truth"<br>
+                  Reason: "Base" most literal for <span class="greek">ἑδραίωμα</span> (architectural support/foundation); paired with pillar = vertical support + horizontal stability<br>
+                  <strong>Function:</strong> Church both <em>displays</em> (pillar—visibility) and <em>steadies</em> (base—stability) the truth
+                </div>
+              </div>
+            </div>
+            <p class="note"><strong>Theological bridge:</strong> This sentence connects ordered community (3:1-13) with confessed Christ (3:16). Identity → function: God's household <em>is</em> God's assembly; therefore it upholds truth.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>3:16 — The Mystery of Godliness (Hymnic Anchor)</h2>
+        
+        <details open>
+          <summary>Confessional Introduction</summary>
+          <div class="content">
+            <div class="grid single">
+              <div>
+                <label><span class="greek">ὁμολογουμένως μέγα ἐστὶν τὸ τῆς εὐσεβείας μυστήριον</span></label>
+                <div class="box mono">
+                  Options for <span class="greek">ὁμολογουμένως</span>:<br>
+                  • "confessedly" (archaic)<br>
+                  • "by shared/united confession" (literary, communal)<br>
+                  • "as all confess" (smooth adverbial)<br>
+                  <strong>Chosen:</strong> "And, in a manner confessed by all, great is the mystery of godliness"<br>
+                  Reason: Keeps adverbial force with explicit universality ("by all"); introduces pre-Pauline hymn Paul shares with broader church
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>Six-Line Christological Hymn</summary>
+          <div class="content">
+            <div class="doxology" style="font-size:.95rem;">
+              Who was revealed in flesh,<br>
+              was vindicated in spirit,<br>
+              was seen by angels,<br>
+              was proclaimed in the nations,<br>
+              was believed on in the world,<br>
+              was taken up in glory.
+            </div>
+            
+            <h4>Line-by-Line Decisions</h4>
+            <div class="grid">
+              <div>
+                <label>Line 1: <span class="greek">ἐφανερώθη ἐν σαρκί</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "was revealed in flesh"<br>
+                  <span class="greek">φανερόω</span> = make visible/manifest (revelatory nuance, not mere "appeared")<br>
+                  Incarnation focus
+                </div>
+              </div>
+              <div>
+                <label>Line 2: <span class="greek">ἐδικαιώθη ἐν πνεύματι</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "was vindicated in spirit"<br>
+                  <span class="greek">δικαιόω</span> here = divine attestation/vindication (resurrection), not moral justification<br>
+                  Spirit-realm validation of Christ's identity
+                </div>
+              </div>
+              <div>
+                <label>Line 3: <span class="greek">ὤφθη ἀγγέλοις</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "was seen by angels"<br>
+                  Passive witness (not "shown to"); heavenly realm acknowledges Christ
+                </div>
+              </div>
+              <div>
+                <label>Line 4: <span class="greek">ἐκηρύχθη ἐν ἔθνεσιν</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "was proclaimed in the nations"<br>
+                  Literal <span class="greek">ἐν</span> + dative; gospel spreads to Gentiles
+                </div>
+              </div>
+              <div>
+                <label>Line 5: <span class="greek">ἐπιστεύθη ἐν κόσμῳ</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "was believed on in the world"<br>
+                  "Believed on" = object-of-faith idiom; faith's response to proclamation
+                </div>
+              </div>
+              <div>
+                <label>Line 6: <span class="greek">ἀνελήμφθη ἐν δόξῃ</span></label>
+                <div class="box mono">
+                  <strong>Chosen:</strong> "was taken up in glory"<br>
+                  Ascension/exaltation with <span class="greek">δόξα</span> (glory) resonance; climax of the arc
+                </div>
+              </div>
+            </div>
+            
+            <h4 style="margin-top:1rem;">Structural Analysis</h4>
+            <div class="grid single">
+              <div>
+                <label>Theological Arc</label>
+                <div class="box">
+                  Earth (flesh) → Heaven (spirit/angels) → Earth (nations/world) → Heaven (glory)<br>
+                  <strong>Pattern:</strong> Incarnation → Vindication → Witness → Proclamation → Faith → Exaltation<br>
+                  <strong>Function:</strong> Supplies content of "the truth" that the assembly (v.15) upholds<br>
+                  <strong>Why vv.14-16 cohere:</strong> Ordered conduct matters because a community indwelt by the living God must embody and exhibit the truth it confesses
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+    </section>
+  </div>
+
+  <!-- ========== CHAPTER 4 TAB ========== -->
+  <div id="ch4" class="tab-content" role="tabpanel">
+    <section class="cards">
+      
+      <div class="card">
+        <h2>Chapter 4 Overview</h2>
+        <p><strong>Theme:</strong> [To be completed]</p>
+        <p><strong>Key Structures:</strong> [To be identified]</p>
+        <p><strong>Status:</strong> <span class="status-pending">○ Pending Completion</span></p>
+      </div>
+
+      <div class="card">
+        <h2>Translation Decision Template</h2>
+        <p class="note">Use this template for each significant decision. Copy and customize as you work through the Greek text.</p>
+        
+        <details open>
+          <summary>Verse/Passage: [Reference]</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">[Greek text]</span></label>
+                <div class="box mono">
+                  Greek: [word/phrase] (transliteration)<br>
+                  Context: 1 Tim 4:__<br>
+                  Options: ______ / ______ / ______<br>
+                  <strong>Chosen:</strong> ______<br>
+                  Reason: ______<br>
+                  Intertexts/Echoes: ______
+                </div>
+              </div>
+              <div>
+                <label>Structural Decision (if applicable)</label>
+                <div class="box">
+                  Location: 1 Tim 4:__<br>
+                  Type: [triad / purpose / creed / doxology / list]<br>
+                  Evidence: [connective, parallelism, repetition]<br>
+                  Effect on reading: ______
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>Expected Key Issues for Chapter 4</h2>
+        <ul class="note">
+          <li>4:1 — Spirit's explicit prophecy about latter times; apostasy language</li>
+          <li>4:3 — False prohibitions; creation theology</li>
+          <li>4:6 — "Good servant of Christ Jesus"; training metaphor begins</li>
+          <li>4:7-8 — Godliness vs. bodily training; profit comparison</li>
+          <li>4:10 — "For this we toil and strive" — purpose statement</li>
+          <li>4:12 — "Let no one despise your youth" — Timothy's age/authority</li>
+          <li>4:13 — Public reading, exhortation, teaching — ministry priorities</li>
+          <li>4:14 — Gift given through prophecy with laying on of hands</li>
+          <li>4:16 — "Pay close attention to yourself and to your teaching" — climactic exhortation</li>
+        </ul>
+      </div>
+
+    </section>
+  </div>
+
+  <!-- ========== CHAPTER 5 TAB ========== -->
+  <div id="ch5" class="tab-content" role="tabpanel">
+    <section class="cards">
+      
+      <div class="card">
+        <h2>Chapter 5 Overview</h2>
+        <p><strong>Theme:</strong> [To be completed]</p>
+        <p><strong>Key Structures:</strong> [To be identified]</p>
+        <p><strong>Status:</strong> <span class="status-pending">○ Pending Completion</span></p>
+      </div>
+
+      <div class="card">
+        <h2>Translation Decision Template</h2>
+        <p class="note">Use this template for each significant decision. Copy and customize as you work through the Greek text.</p>
+        
+        <details open>
+          <summary>Verse/Passage: [Reference]</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">[Greek text]</span></label>
+                <div class="box mono">
+                  Greek: [word/phrase] (transliteration)<br>
+                  Context: 1 Tim 5:__<br>
+                  Options: ______ / ______ / ______<br>
+                  <strong>Chosen:</strong> ______<br>
+                  Reason: ______<br>
+                  Intertexts/Echoes: ______
+                </div>
+              </div>
+              <div>
+                <label>Structural Decision (if applicable)</label>
+                <div class="box">
+                  Location: 1 Tim 5:__<br>
+                  Type: [triad / purpose / creed / doxology / list]<br>
+                  Evidence: [connective, parallelism, repetition]<br>
+                  Effect on reading: ______
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>Expected Key Issues for Chapter 5</h2>
+        <ul class="note">
+          <li>5:1-2 — Treatment of different age groups; family metaphor</li>
+          <li>5:3 — "Honor widows who are truly widows" — widow category begins</li>
+          <li>5:4-8 — Widow qualifications and family responsibility</li>
+          <li>5:9-10 — Enrollment criteria; aged 60+; one-husband woman; good works list</li>
+          <li>5:11-15 — Younger widows; remarriage counsel; idleness warnings</li>
+          <li>5:17 — "Elders who rule well" — double honor; leadership recognition</li>
+          <li>5:18 — Scripture citations (Deut 25:4 + Jesus saying); worker's wage principle</li>
+          <li>5:19 — Accusation protocol; two or three witnesses requirement</li>
+          <li>5:20 — Public rebuke of persistent sin</li>
+          <li>5:21 — Solemn charge before God, Christ, elect angels</li>
+          <li>5:22 — "Lay hands on no one hastily" — ordination caution</li>
+          <li>5:23 — "No longer drink only water" — medicinal wine counsel</li>
+        </ul>
+      </div>
+
+    </section>
+  </div>
+
+  <!-- ========== CHAPTER 6 TAB ========== -->
+  <div id="ch6" class="tab-content" role="tabpanel">
+    <section class="cards">
+      
+      <div class="card">
+        <h2>Chapter 6 Overview</h2>
+        <p><strong>Theme:</strong> [To be completed]</p>
+        <p><strong>Key Structures:</strong> [To be identified]</p>
+        <p><strong>Status:</strong> <span class="status-pending">○ Pending Completion</span></p>
+      </div>
+
+      <div class="card">
+        <h2>Translation Decision Template</h2>
+        <p class="note">Use this template for each significant decision. Copy and customize as you work through the Greek text.</p>
+        
+        <details open>
+          <summary>Verse/Passage: [Reference]</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label><span class="greek">[Greek text]</span></label>
+                <div class="box mono">
+                  Greek: [word/phrase] (transliteration)<br>
+                  Context: 1 Tim 6:__<br>
+                  Options: ______ / ______ / ______<br>
+                  <strong>Chosen:</strong> ______<br>
+                  Reason: ______<br>
+                  Intertexts/Echoes: ______
+                </div>
+              </div>
+              <div>
+                <label>Structural Decision (if applicable)</label>
+                <div class="box">
+                  Location: 1 Tim 6:__<br>
+                  Type: [triad / purpose / creed / doxology / list]<br>
+                  Evidence: [connective, parallelism, repetition]<br>
+                  Effect on reading: ______
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>Expected Key Issues for Chapter 6</h2>
+        <ul class="note">
+          <li>6:1-2 — Slaves under unbelieving vs. believing masters</li>
+          <li>6:3-5 — False teachers; love of controversy; vice list</li>
+          <li>6:6 — "Godliness with contentment is great gain" — key principle</li>
+          <li>6:7-8 — "We brought nothing… we shall take nothing" — life's brevity</li>
+          <li>6:9-10 — Love of money as root of evils; desire for wealth</li>
+          <li>6:11 — "But you, O man of God, flee these things"</li>
+          <li>6:12 — "Fight the good fight of faith" — athletic/warfare metaphor</li>
+          <li>6:13-14 — Solemn charge; Christ's testimony before Pilate; appearing of Christ</li>
+          <li>6:15-16 — MAJOR DOXOLOGY (structural anchor); King of kings, Lord of lords; immortality</li>
+          <li>6:17-19 — Charge to the rich; generosity; storing up treasure</li>
+          <li>6:20-21 — Final exhortation; guard the deposit; avoid false knowledge</li>
+        </ul>
+      </div>
+
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Structured Scripture Project · Translator's Journal for 1 Timothy</p>
+    <p style="margin-top:.5rem;">
+      <a href="1-timothy-hub.html">← Back to 1 Timothy Hub</a>
+      <span style="margin:0 0.5rem;">|</span>
+      <a href="1-timothy-structured-edition.html">Structured Edition</a>
+    </p>
+  </footer>
+</div>
+
+<!-- Floating Action Button -->
+<button class="fab" id="add-entry">+ Add Decision</button>
+
+<script>
+  // ========== TAB SWITCHING ==========
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+  
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetTab = btn.dataset.tab;
+      
+      // Update buttons
+      tabBtns.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      
+      // Update content
+      tabContents.forEach(content => {
+        content.classList.remove('active');
+      });
+      document.getElementById(targetTab).classList.add('active');
+      
+      // Scroll to top
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+  
+  // ========== ADD ENTRY BUTTON ==========
+  const addBtn = document.getElementById('add-entry');
+  addBtn?.addEventListener('click', () => {
+    // Find active tab content
+    const activeTab = document.querySelector('.tab-content.active');
+    const container = activeTab?.querySelector('.cards');
+    if(!container) return;
+    
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.background = 'color-mix(in oklab, var(--accent) 10%, var(--card))';
+    card.style.border = '2px solid var(--accent)';
+    card.innerHTML = `
+      <h3>New Decision Entry</h3>
+      <details open>
+        <summary>Verse/Passage: [Add Reference]</summary>
+        <div class="content">
+          <div class="grid">
+            <div>
+              <label><span class="greek">[Greek text here]</span></label>
+              <div class="box mono">
+                Greek: ______ (transliteration)<br>
+                Context: 1 Tim __:__<br>
+                Options: ______ / ______ / ______<br>
+                <strong>Chosen:</strong> ______<br>
+                Reason (1–2 lines): ______<br>
+                Intertexts/Echoes: ______<br>
+                Status: New / Revised
+              </div>
+            </div>
+            <div>
+              <label>Structural Decision (if applicable)</label>
+              <div class="box">
+                Location: 1 Tim __:__<br>
+                Type: [triad / purpose / creed / doxology / list]<br>
+                Evidence: [connective, parallelism, repetition]<br>
+                Effect on reading: ______
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>`;
+    container.insertBefore(card, container.firstChild);
+    window.scrollTo({top: 0, behavior: 'smooth'});
+    
+    // Auto-remove highlight after 3 seconds
+    setTimeout(() => {
+      card.style.background = '';
+      card.style.border = '';
+    }, 3000);
+  });
+</script>
+
+</body>
+</html>
