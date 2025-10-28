@@ -51,7 +51,7 @@ class NavigationComponent {
                         <li class="dropdown">
                             <a href="/resources/" class="dropdown-toggle ${this.getActiveClass('resources')}">Resources</a>
                             <div class="dropdown-content">
-                                <a href="/studies/methodology/lltse-orientation-methodology.html" class="${this.getActiveClass('methodology')}">Methodology</a>
+                                <a href="/studies/methodology/lltse-orientation-methodology.html" class="${this.getActiveClass('methodology')}">Methodology (LLTSE)</a>
                                 <a href="/resources/discussion-guides/">Discussion Guides</a>
                                 <a href="/resources/study-tools/">Study Tools</a>
                                 <a href="/resources/downloads/">Downloads</a>
@@ -332,7 +332,7 @@ class NavigationComponent {
             dropdown.addEventListener('mouseleave', function() {
                 timeout = setTimeout(() => {
                     this.classList.remove('active');
-                }, 300); // Small delay before closing
+                }, 500); // Small delay before closing
             });
         });
     }
