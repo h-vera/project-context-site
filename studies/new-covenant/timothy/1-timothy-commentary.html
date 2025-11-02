@@ -6980,6 +6980,39 @@
       }
     }
     
+    // Smooth navigation with auto-expand for quick-nav links
+document.querySelectorAll('.quick-nav a[href^="#"]').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    const targetId = this.getAttribute('href').substring(1);
+    const targetSection = document.getElementById(targetId);
+    
+    if (targetSection) {
+      const parentContent = targetSection.closest('.section-content');
+      const parentToggle = parentContent?.previousElementSibling;
+      
+      if (parentToggle && parentContent) {
+        // Expand the parent section if it's not already active
+        if (!parentToggle.classList.contains('active')) {
+          parentToggle.classList.add('active');
+          parentContent.classList.add('active');
+        }
+        
+        // Update URL hash
+        history.replaceState(null, null, '#' + targetId);
+        
+        // Scroll to section after expansion animation
+        setTimeout(() => {
+          targetSection.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+          });
+        }, 450); // Matches your existing delay
+      }
+    }
+  });
+});
     // Progress bar and back to top button on scroll
     window.addEventListener('scroll', () => {
       // Progress bar
