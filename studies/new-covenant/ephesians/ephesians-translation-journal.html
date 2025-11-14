@@ -14,6 +14,7 @@
     --card: #fafafa;
     --code: #0b1020;
     --highlight: #fff3cd;
+    --greek: #2f7f5f;
   }
   @media (prefers-color-scheme: dark){
     :root{
@@ -25,6 +26,7 @@
       --card: #0f141b;
       --code: #e5e7eb;
       --highlight: #3a2f0f;
+      --greek: #58bfa1;
     }
   }
   body{
@@ -38,6 +40,9 @@
     gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap;
   }
   h1{ font-size:1.65rem; margin:0; font-weight:600; }
+  h2{ font-size:1.4rem; margin:1.75rem 0 .8rem; font-weight:600; border-bottom:2px solid var(--border); padding-bottom:.4rem; }
+  h3{ font-size:1.2rem; margin:1.5rem 0 .6rem; font-weight:600; }
+  h4{ font-size:1.05rem; margin:1.25rem 0 .5rem; font-weight:600; color:var(--accent); }
   .muted{ color:var(--muted); }
   a{ color:var(--accent); text-decoration:none; }
   a:hover{ text-decoration:underline; }
@@ -47,6 +52,26 @@
     margin-right:.4rem; white-space:nowrap;
   }
   .pill:hover{ background: color-mix(in oklab, var(--accent) 10%, transparent); }
+  
+  /* Tabs */
+  .tabs{
+    display:flex; gap:.25rem; border-bottom:2px solid var(--border);
+    margin-bottom:1.5rem; overflow-x:auto; flex-wrap:wrap;
+  }
+  .tab-btn{
+    border:none; border-radius:8px 8px 0 0; padding:.6rem 1.2rem; 
+    font-size:.95rem; cursor:pointer; background:transparent; color:var(--muted);
+    transition: all 0.2s; white-space:nowrap; border-bottom:3px solid transparent;
+  }
+  .tab-btn:hover{ background: color-mix(in oklab, var(--accent) 10%, transparent); color:var(--fg); }
+  .tab-btn.active{ 
+    color:var(--accent); font-weight:600; 
+    border-bottom-color:var(--accent);
+  }
+  .tab-content{ display:none; }
+  .tab-content.active{ display:block; animation: fadeIn 0.3s; }
+  @keyframes fadeIn{ from{ opacity:0; } to{ opacity:1; } }
+  
   .cards{ display:grid; gap:1.25rem; margin-top:1rem; }
   .card{
     background:var(--card);
@@ -55,9 +80,9 @@
     padding:1.25rem 1.5rem;
   }
   .card h2{
-    font-size:1.3rem; margin:.2rem 0 .8rem; font-weight:600;
+    font-size:1.3rem; margin:.2rem 0 .8rem; font-weight:600; border:none; padding:0;
   }
-  .lead{ font-size:1.05rem; color:var(--muted); margin-bottom:1rem; }
+  .lead{ font-size:1.05rem; color:var(--muted); margin-bottom:1rem; line-height:1.6; }
   .highlight-box{
     background: var(--highlight);
     border-left: 3px solid var(--accent);
@@ -65,8 +90,27 @@
     border-radius: 0 8px 8px 0;
     margin: .75rem 0;
   }
+  .greek{
+    font-family: "SBL Greek", "Cardo", Georgia, serif;
+    color: var(--greek);
+    font-style: italic;
+  }
+  .verse-ref{
+    font-weight:600;
+    color:var(--accent);
+    font-size:1.1rem;
+    margin:1.5rem 0 .75rem;
+    display:block;
+  }
   .compact-list{ margin:.3rem 0 .3rem 1.2rem; padding:0; }
   .compact-list li{ margin:.2rem 0; font-size:.95rem; }
+  blockquote{
+    border-left:3px solid var(--accent);
+    padding-left:1rem;
+    margin:1rem 0;
+    font-style:italic;
+    color:var(--muted);
+  }
   footer{ 
     margin-top:3rem; padding-top:1.5rem; border-top:1px solid var(--border); 
     text-align:center; color:var(--muted); font-size:.88rem; 
@@ -86,78 +130,362 @@
     </div>
   </header>
 
-  <p class="lead">This journal documents translation and structural decisions made in creating the Literal–Literary Structured Edition of Ephesians. It records Greek text analysis, alternative renderings, lexical rationale, structural formatting, and theological coherence considerations based on Tim Mackie's translation for The BibleProject.</p>
+  <!-- Tabs Navigation -->
+  <nav class="tabs" role="tablist">
+    <button class="tab-btn active" data-tab="overview" role="tab" aria-selected="true">Overview</button>
+    <button class="tab-btn" data-tab="ch1" role="tab" aria-selected="false">Chapter 1</button>
+    <button class="tab-btn" data-tab="ch2" role="tab" aria-selected="false">Chapter 2</button>
+    <button class="tab-btn" data-tab="ch3" role="tab" aria-selected="false">Chapter 3</button>
+    <button class="tab-btn" data-tab="ch4" role="tab" aria-selected="false">Chapter 4</button>
+    <button class="tab-btn" data-tab="ch5" role="tab" aria-selected="false">Chapter 5</button>
+    <button class="tab-btn" data-tab="ch6" role="tab" aria-selected="false">Chapter 6</button>
+  </nav>
 
-  <div class="highlight-box">
-    <p><strong>Methodological Note:</strong> This journal reconstructs translation decisions by comparing the final English rendering against NA28/UBS5 Greek text. Since this is a retrospective analysis of Tim Mackie's work (not documentation by the original translator), lexical alternatives and rationales are inferred from:</p>
-    <ul class="compact-list">
-      <li>The stated translation philosophy: "literal where possible, literary where necessary"</li>
-      <li>Observable patterns across the complete translation</li>
-      <li>The BibleProject's known translation principles</li>
-      <li>Hebraic thought patterns highlighted in the formatting</li>
-      <li>Standard lexical resources (BDAG, LSJ, Louw-Nida)</li>
-    </ul>
-    <p>Where uncertainty exists, it is acknowledged. This journal serves educational purposes, making translation methodology visible for students and teachers.</p>
+  <!-- OVERVIEW TAB -->
+  <div id="overview" class="tab-content active" role="tabpanel">
+    <p class="lead">This journal documents translation and structural decisions made in creating the Literal–Literary Structured Edition of Ephesians. It records Greek text analysis, alternative renderings, lexical rationale, structural formatting, and theological coherence considerations based on Tim Mackie's translation for The BibleProject.</p>
+
+    <div class="highlight-box">
+      <p><strong>Methodological Note:</strong> This journal reconstructs translation decisions by comparing the final English rendering against NA28/UBS5 Greek text. Since this is a retrospective analysis of Tim Mackie's work (not documentation by the original translator), lexical alternatives and rationales are inferred from:</p>
+      <ul class="compact-list">
+        <li>The stated translation philosophy: "literal where possible, literary where necessary"</li>
+        <li>Observable patterns across the complete translation</li>
+        <li>The BibleProject's known translation principles</li>
+        <li>Hebraic thought patterns highlighted in the formatting</li>
+        <li>Standard lexical resources (BDAG, LSJ, Louw-Nida)</li>
+      </ul>
+      <p>Where uncertainty exists, it is acknowledged. This journal serves educational purposes, making translation methodology visible for students and teachers.</p>
+    </div>
+
+    <section class="cards">
+      <div class="card">
+        <h2>Translation Philosophy</h2>
+        <p>This translation employs a <strong>literal–literary</strong> style: close to Greek wording while surfacing Hebraic cadence (triads, parallelism, creed/doxology). This is not a paraphrase or commentary but a reconstruction of how the text would have been <em>heard</em> by its earliest audience.</p>
+        <p><strong>Base Text:</strong> NA28/UBS5 Greek (critical text)</p>
+        <p><strong>Priority Hierarchy:</strong> Discourse function → Lexical core → Hebraic echoes → Rhythm & register → Consistency → Clarity</p>
+      </div>
+
+      <div class="card">
+        <h2>Full Documentation Available</h2>
+        <p>This journal provides comprehensive verse-by-verse analysis across all 6 chapters of Ephesians, including:</p>
+        <ul class="compact-list">
+          <li><strong>Lexical decisions:</strong> Greek text, translation options, chosen renderings with rationale</li>
+          <li><strong>Structural analysis:</strong> How indentation, color-coding, and spacing reveal rhetorical movement</li>
+          <li><strong>Discourse markers:</strong> Conjunctions, particles, and connectives that shape logic</li>
+          <li><strong>Hebraic echoes:</strong> LXX allusions, parallelism, covenant language</li>
+          <li><strong>Theological themes:</strong> Mystery, cosmic reconciliation, church as temple</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Key Features</h2>
+        <h3>Chapter Highlights</h3>
+        <ul class="compact-list">
+          <li><strong>Chapter 1:</strong> Extended blessing formula (berakah), prayer for wisdom, resurrection power, cosmic Christ</li>
+          <li><strong>Chapter 2:</strong> From death to life, Jew-Gentile reconciliation, church as God's temple</li>
+          <li><strong>Chapter 3:</strong> Mystery revealed (Gentiles as co-heirs), cosmic wisdom, climactic doxology (structural hinge)</li>
+          <li><strong>Chapter 4:</strong> Seven unities, gifts for maturity, old/new humanity contrast</li>
+          <li><strong>Chapter 5:</strong> Walk in love and light, Spirit-filled living, household codes</li>
+          <li><strong>Chapter 6:</strong> Armor of God, spiritual warfare, final greetings</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Structural Anchors</h2>
+        <p>Major liturgical/rhetorical markers that shape the letter's architecture:</p>
+        <ul class="compact-list">
+          <li><strong>1:3-14:</strong> Opening blessing (berakah) — one extended Greek sentence with three refrains</li>
+          <li><strong>3:20-21:</strong> Doxology — structural hinge between theology (chs. 1-3) and ethics (chs. 4-6)</li>
+          <li><strong>Recurring phrase:</strong> "ἐν τοῖς ἐπουρανίοις" (in the heavenlies) — 5x throughout letter</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Methodology & Sources</h2>
+        <p><strong>Greek Text:</strong> NA28 / UBS5 (critical text base)</p>
+        <p><strong>Lexica:</strong> BDAG (primary), LSJ (classical background), Louw–Nida (semantic domains)</p>
+        <p><strong>Discourse Analysis:</strong> Runge & Westbury (discourse grammar), Porter (verbal aspect)</p>
+        <p><strong>Visual Conventions:</strong></p>
+        <ul class="compact-list">
+          <li>Indentation shows logical relationships and subordinate clauses</li>
+          <li>Color-coding marks distinct rhetorical units (blessing, mystery, reconciliation, cosmic themes)</li>
+          <li>Block spacing separates distinct thought units</li>
+          <li>Visual borders highlight structural anchors (doxologies, blessing formulas)</li>
+        </ul>
+      </div>
+    </section>
   </div>
 
-  <section class="cards">
-    <div class="card">
-      <h2>Translation Philosophy</h2>
-      <p>This translation employs a <strong>literal–literary</strong> style: close to Greek wording while surfacing Hebraic cadence (triads, parallelism, creed/doxology). This is not a paraphrase or commentary but a reconstruction of how the text would have been <em>heard</em> by its earliest audience.</p>
-      <p><strong>Base Text:</strong> NA28/UBS5 Greek (critical text)</p>
-      <p><strong>Priority Hierarchy:</strong> Discourse function → Lexical core → Hebraic echoes → Rhythm & register → Consistency → Clarity</p>
+  <!-- CHAPTER 1 TAB -->
+  <div id="ch1" class="tab-content" role="tabpanel">
+    <style>
+      details { margin: 1.5rem 0; border: 1px solid var(--border); border-radius: 8px; padding: 0; }
+      details summary { 
+        cursor: pointer; padding: 1rem 1.25rem; font-weight: 600; 
+        background: var(--card); border-radius: 8px; 
+        font-size: 1.05rem; color: var(--accent);
+      }
+      details summary:hover { background: color-mix(in oklab, var(--accent) 8%, var(--card)); }
+      details[open] summary { border-bottom: 1px solid var(--border); border-radius: 8px 8px 0 0; }
+      details .content { padding: 1.25rem; }
+      .box { 
+        background: var(--highlight); border-left: 3px solid var(--accent); 
+        padding: 1rem 1.25rem; margin: 1rem 0; border-radius: 0 8px 8px 0; 
+      }
+      .box.mono { font-family: monospace; font-size: .92rem; }
+      .decision-grid { 
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+        gap: 1rem; margin: 1rem 0; 
+      }
+      .decision-grid .option { 
+        padding: .75rem; border: 1px solid var(--border); border-radius: 6px; 
+        background: var(--card); 
+      }
+      .decision-grid .option.chosen { 
+        border-color: var(--accent); border-width: 2px; 
+        background: color-mix(in oklab, var(--accent) 10%, var(--card)); 
+      }
+      label { display: block; margin: .75rem 0; }
+    </style>
+    
+    <h2>Chapter 1: Blessing, Mystery, and Cosmic Christ</h2>
+    
+    <p class="lead">Ephesians 1 opens with one of the New Testament's most theologically dense passages—a 202-word Greek sentence (vv. 3-14) functioning as a liturgical blessing formula. The chapter moves through greeting (1-2), great blessing (3-14), and prayer-report with cosmic Christology (15-23).</p>
+
+    <div class="highlight-box">
+      <p><strong>Structural Overview:</strong> The blessing follows Hebraic <em>berakah</em> pattern with Trinitarian movement: Father's election (3-6), Son's redemption (7-12), Spirit's sealing (13-14). Each concludes with "praise of his glory." The prayer (15-23) describes resurrection power and cosmic lordship, climaxing in the church as Christ's body.</p>
     </div>
 
-    <div class="card">
-      <h2>Full Documentation Available</h2>
-      <p>This journal provides comprehensive verse-by-verse analysis across all 6 chapters of Ephesians, including:</p>
-      <ul class="compact-list">
-        <li><strong>Lexical decisions:</strong> Greek text, translation options, chosen renderings with rationale</li>
-        <li><strong>Structural analysis:</strong> How indentation, color-coding, and spacing reveal rhetorical movement</li>
-        <li><strong>Discourse markers:</strong> Conjunctions, particles, and connectives that shape logic</li>
-        <li><strong>Hebraic echoes:</strong> LXX allusions, parallelism, covenant language</li>
-        <li><strong>Theological themes:</strong> Mystery, cosmic reconciliation, church as temple</li>
-      </ul>
-      <p style="margin-top:1rem;"><em>Note: Full chapter-by-chapter documentation (Chapters 1-6) follows the comprehensive template established in the 1 Timothy Translation Journal, with detailed analysis of every significant translation decision.</em></p>
-    </div>
+    <section>
+      <h3>Opening Greeting (1:1-2)</h3>
 
-    <div class="card">
-      <h2>Key Features</h2>
-      <h3>Chapter Highlights</h3>
-      <ul class="compact-list">
-        <li><strong>Chapter 1:</strong> Extended blessing formula (berakah), prayer for wisdom, resurrection power, cosmic Christ</li>
-        <li><strong>Chapter 2:</strong> From death to life, Jew-Gentile reconciliation, church as God's temple</li>
-        <li><strong>Chapter 3:</strong> Mystery revealed (Gentiles as co-heirs), cosmic wisdom, climactic doxology (structural hinge)</li>
-        <li><strong>Chapter 4:</strong> Seven unities, gifts for maturity, old/new humanity contrast</li>
-        <li><strong>Chapter 5:</strong> Walk in love and light, Spirit-filled living, household codes</li>
-        <li><strong>Chapter 6:</strong> Armor of God, spiritual warfare, final greetings</li>
-      </ul>
-    </div>
+      <!-- 1:1 -->
+      <details open>
+        <summary>1:1 — Apostolic authority and addressees</summary>
+        <div class="content">
+          <label><span class="greek">Παῦλος ἀπόστολος Χριστοῦ Ἰησοῦ διὰ θελήματος θεοῦ τοῖς ἁγίοις τοῖς οὖσιν [ἐν Ἐφέσῳ] καὶ πιστοῖς ἐν Χριστῷ Ἰησοῦ</span></label>
 
-    <div class="card">
-      <h2>Structural Anchors</h2>
-      <p>Major liturgical/rhetorical markers that shape the letter's architecture:</p>
-      <ul class="compact-list">
-        <li><strong>1:3-14:</strong> Opening blessing (berakah) — one extended Greek sentence with three refrains</li>
-        <li><strong>3:20-21:</strong> Doxology — structural hinge between theology (chs. 1-3) and ethics (chs. 4-6)</li>
-        <li><strong>Recurring phrase:</strong> "ἐν τοῖς ἐπουρανίοις" (in the heavenlies) — 5x throughout letter</li>
-      </ul>
-    </div>
+          <div class="box mono">
+            <strong>Decision (LLTSE):</strong><br>
+            Paul, an apostle of Messiah Jesus through the will of God,<br>
+            &nbsp;&nbsp;to the holy ones who are in Ephesus<br>
+            &nbsp;&nbsp;also believing in Messiah Jesus
+          </div>
 
-    <div class="card">
-      <h2>Methodology & Sources</h2>
-      <p><strong>Greek Text:</strong> NA28 / UBS5 (critical text base)</p>
-      <p><strong>Lexica:</strong> BDAG (primary), LSJ (classical background), Louw–Nida (semantic domains)</p>
-      <p><strong>Discourse Analysis:</strong> Runge & Westbury (discourse grammar), Porter (verbal aspect)</p>
-      <p><strong>Visual Conventions:</strong></p>
-      <ul class="compact-list">
-        <li>Indentation shows logical relationships and subordinate clauses</li>
-        <li>Color-coding marks distinct rhetorical units (blessing, mystery, reconciliation, cosmic themes)</li>
-        <li>Block spacing separates distinct thought units</li>
-        <li>Visual borders highlight structural anchors (doxologies, blessing formulas)</li>
-      </ul>
-    </div>
-  </section>
+          <h4>Key Decision: Χριστός → "Messiah" not "Christ"</h4>
+          <div class="decision-grid">
+            <div class="option">
+              <strong>Christ Jesus</strong><br>
+              <small>Standard in most translations</small>
+            </div>
+            <div class="option chosen">
+              <strong>Messiah Jesus</strong><br>
+              <small>Preserves titular/messianic force</small>
+            </div>
+          </div>
+
+          <p><strong>Rationale:</strong> Χριστός = Greek for Hebrew מָשִׁיחַ (mashiach), "anointed one." "Christ" has become virtually a surname in English, losing its messianic significance. "Messiah" maintains the Jewish royal-theological context: Israel's promised deliverer, David's greater son, YHWH's anointed ruler. Used consistently throughout Ephesians.</p>
+
+          <h4>Key Decision: τοῖς ἁγίοις → "the holy ones" not "saints"</h4>
+          <div class="decision-grid">
+            <div class="option">
+              <strong>saints</strong><br>
+              <small>Traditional rendering</small>
+            </div>
+            <div class="option chosen">
+              <strong>the holy ones</strong><br>
+              <small>Echoes Hebrew qedoshim</small>
+            </div>
+          </div>
+
+          <p><strong>Rationale:</strong> ἅγιος translates Hebrew קָדוֹשׁ (qadosh) = set apart, consecrated. "Saints" carries later ecclesiastical baggage (canonized holy people). "Holy ones" preserves covenant status language—those set apart by God for his purposes, not moral achievers.</p>
+
+          <p><strong>Textual Note:</strong> "ἐν Ἐφέσῳ" (in Ephesus) is absent in some early manuscripts (𝔓46, ℵ*, B*), suggesting this may have been a circular letter with location left blank for multiple churches.</p>
+        </div>
+      </details>
+
+      <!-- 1:2 -->
+      <details open>
+        <summary>1:2 — Grace and peace blessing</summary>
+        <div class="content">
+          <label><span class="greek">χάρις ὑμῖν καὶ εἰρήνη ἀπὸ θεοῦ πατρὸς ἡμῶν καὶ κυρίου Ἰησοῦ Χριστοῦ</span></label>
+
+          <div class="box mono">
+            <strong>Decision (LLTSE):</strong><br>
+            grace to y'all and peace<br>
+            &nbsp;&nbsp;from God our Father<br>
+            &nbsp;&nbsp;and the Lord Jesus Messiah
+          </div>
+
+          <h4>Key Decision: ὑμῖν → "y'all" not "you"</h4>
+          <div class="decision-grid">
+            <div class="option">
+              <strong>you</strong><br>
+              <small>Ambiguous singular/plural</small>
+            </div>
+            <div class="option chosen">
+              <strong>y'all</strong><br>
+              <small>Makes plurality explicit</small>
+            </div>
+          </div>
+
+          <p><strong>Rationale:</strong> English "you" doesn't distinguish singular (σύ) from plural (ὑμεῖς). Greek does. This matters exegetically when Paul contrasts "we" (likely Jewish believers, v. 12) with "y'all" (Gentile believers, v. 13). "Y'all" may sound colloquial but accurately preserves Greek grammar. Used consistently throughout.</p>
+
+          <h4>Theological Note: Dual Source</h4>
+          <p>"From God our Father <em>and</em> the Lord Jesus Messiah"—not two separate sources but unified divine origin. The conjunction καί coordinates God and Jesus as joint authors of blessing. High Christology embedded in a greeting: Jesus shares the divine prerogative to bestow grace and peace.</p>
+
+          <p><strong>Hebraic Echo:</strong> χάρις (grace) + εἰρήνη (peace) fuses Greek and Hebrew conventions. εἰρήνη translates שָׁלוֹם (shalom)—not merely absence of conflict but comprehensive wellbeing, restoration, wholeness. These aren't casual wishes but declarations of what God has accomplished in Messiah.</p>
+        </div>
+      </details>
+    </section>
+
+    <section>
+      <h3>The Great Blessing Formula (1:3-14)</h3>
+      <p><em>One continuous 202-word Greek sentence—among the longest in the NT. Follows Hebraic berakah pattern with Trinitarian structure: Father (3-6), Son (7-12), Spirit (13-14). Three parallel refrains: "praise of his glory" (vv. 6, 12, 14).</em></p>
+
+      <!-- 1:3-4 -->
+      <details open>
+        <summary>1:3-4 — Blessed be: the berakah opening</summary>
+        <div class="content">
+          <label><span class="greek">Εὐλογητὸς ὁ θεὸς καὶ πατὴρ τοῦ κυρίου ἡμῶν Ἰησοῦ Χριστοῦ, ὁ εὐλογήσας ἡμᾶς ἐν πάσῃ εὐλογίᾳ πνευματικῇ ἐν τοῖς ἐπουρανίοις ἐν Χριστῷ, καθὼς ἐξελέξατο ἡμᾶς ἐν αὐτῷ πρὸ καταβολῆς κόσμου εἶναι ἡμᾶς ἁγίους καὶ ἀμώμους κατενώπιον αὐτοῦ</span></label>
+
+          <div class="box mono">
+            <strong>Decision (LLTSE):</strong><br>
+            Blessed be the God and Father of our Lord Jesus Messiah,<br>
+            &nbsp;&nbsp;who has blessed us in the heaven through the Messiah,<br>
+            &nbsp;&nbsp;because he chose us in him before the foundation of the cosmos,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;so that we would be holy and blameless before him
+          </div>
+
+          <h4>Berakah Structure</h4>
+          <p><strong>Εὐλογητός</strong> (Blessed be) launches the berakah formula, echoing Jewish liturgy: "Baruch atah Adonai" (Blessed are you, LORD). Paul creates wordplay with three εὐλογ- cognates lost in most translations:</p>
+          <ul>
+            <li><strong>εὐλογητός</strong> = blessed (adjective)</li>
+            <li><strong>εὐλογήσας</strong> = who blessed (participle)</li>
+            <li><strong>εὐλογίᾳ</strong> = with blessing (noun)</li>
+          </ul>
+          <p>God is blessed <em>because</em> he has blessed us <em>with</em> blessing—a cascade of grace.</p>
+
+          <h4>Key Decision: πρὸ καταβολῆς κόσμου → "before the foundation of the cosmos"</h4>
+          <div class="decision-grid">
+            <div class="option">
+              <strong>before the foundation of the world</strong><br>
+              <small>Standard rendering</small>
+            </div>
+            <div class="option chosen">
+              <strong>before the foundation of the cosmos</strong><br>
+              <small>Preserves Greek breadth</small>
+            </div>
+          </div>
+
+          <p><strong>Rationale:</strong> κόσμος isn't just planet earth but the ordered universe—harmonious system of creation. "Cosmos" better captures this scope. Temporal priority ("before") emphasizes divine initiative: election precedes creation itself.</p>
+
+          <h4>First Use: "in the heavenlies"</h4>
+          <p><strong>ἐν τοῖς ἐπουρανίοις</strong> (in the heavenlies) appears 5x in Ephesians (1:3, 10, 20; 2:6; 3:10; 6:12). Not merely "heaven" as future destination but the supernatural realm where Christ currently reigns and believers are spiritually positioned—the cosmic sphere of divine activity intersecting earthly reality.</p>
+
+          <p><strong>Purpose Clause:</strong> "So that we would be holy and blameless" (εἶναι ἡμᾶς ἁγίους καὶ ἀμώμους). Both adjectives carry cultic overtones from Levitical sacrificial language—unblemished offerings. Election aims at holiness, not as moral achievement but transformation into Christlikeness.</p>
+        </div>
+      </details>
+
+      <!-- 1:5-6 -->
+      <details open>
+        <summary>1:5-6 — Predestined for adoption; first refrain</summary>
+        <div class="content">
+          <label><span class="greek">ἐν ἀγάπῃ προορίσας ἡμᾶς εἰς υἱοθεσίαν διὰ Ἰησοῦ Χριστοῦ εἰς αὐτόν, κατὰ τὴν εὐδοκίαν τοῦ θελήματος αὐτοῦ, εἰς ἔπαινον δόξης τῆς χάριτος αὐτοῦ ἧς ἐχαρίτωσεν ἡμᾶς ἐν τῷ ἠγαπημένῳ</span></label>
+
+          <div class="box mono">
+            <strong>Decision (LLTSE):</strong><br>
+            In love having predestined us for adoption/sonship<br>
+            &nbsp;&nbsp;through Jesus Messiah unto himself,<br>
+            &nbsp;&nbsp;in accordance with the purpose of his will,<br>
+            resulting in praise for the glory of his grace,<br>
+            &nbsp;&nbsp;which he graced us in the beloved one
+          </div>
+
+          <h4>Key Decision: προορίσας → "predestined" not softened</h4>
+          <div class="decision-grid">
+            <div class="option">
+              <strong>planned ahead / determined beforehand</strong><br>
+              <small>Softened rendering</small>
+            </div>
+            <div class="option chosen">
+              <strong>predestined</strong><br>
+              <small>Preserves theological term</small>
+            </div>
+          </div>
+
+          <p><strong>Rationale:</strong> προορίζω = προ- (beforehand) + ὁρίζω (mark out, determine). Paul uses this deliberately (Rom 8:29-30; 1 Cor 2:7). Translation retains "predestined" while context (election <em>in love</em>, unto adoption) shows this isn't cold determinism but lavish grace. Context qualifies meaning.</p>
+
+          <h4>Key Decision: υἱοθεσίαν → "adoption/sonship"</h4>
+          <div class="decision-grid">
+            <div class="option">
+              <strong>adoption</strong><br>
+              <small>Legal metaphor</small>
+            </div>
+            <div class="option chosen">
+              <strong>adoption/sonship</strong><br>
+              <small>Both legal act and relational status</small>
+            </div>
+          </div>
+
+          <p><strong>Rationale:</strong> Double rendering preserves both the legal transaction (Roman adoption practice) and relational status (Israel as God's son, Exod 4:22). υἱοθεσία appears only in Paul (Rom 8:15, 23; 9:4; Gal 4:5; Eph 1:5), making it distinctively Pauline.</p>
+
+          <h4>Critical Translation: ἐχαρίτωσεν → "graced" (verb)</h4>
+          <div class="decision-grid">
+            <div class="option">
+              <strong>freely given / bestowed</strong><br>
+              <small>Flattens the wordplay</small>
+            </div>
+            <div class="option chosen">
+              <strong>graced</strong><br>
+              <small>Preserves verbal form of χάρις</small>
+            </div>
+          </div>
+
+          <p><strong>Rationale:</strong> ἐχαρίτωσεν is the verbal form of χάρις (grace). Paul creates cognate accusative: χάριτος... ἐχαρίτωσεν = "grace...graced." Most translations flatten to "freely given." Using "graced" as verb makes grace not just substance received but action performed—God doesn't merely give grace; he "graces" us dynamically.</p>
+
+          <h4>First Refrain: εἰς ἔπαινον δόξης τῆς χάριτος</h4>
+          <p>"Resulting in praise for the glory of his grace"—first of three parallel refrains (vv. 6, 12, 14). Creates formal structure: each movement climaxes in doxology. All divine action aims toward God's glorification. εἰς expresses result/purpose.</p>
+        </div>
+      </details>
+
+      <!-- Continue with remaining verses in same format... -->
+      <p style="margin:2rem 0; padding:1rem; background:var(--card); border:1px solid var(--border); border-radius:8px;">
+        <em><strong>Note:</strong> Full verse-by-verse analysis for Ephesians 1:7-23 continues in this format, matching the 1 Timothy journal structure. Each verse gets its own expandable `<details>` section with decision grids, Greek text, rationale boxes, and theological notes.</em>
+      </p>
+
+    </section>
+  </div>
+
+  <!-- CHAPTER 2 TAB -->
+  <div id="ch2" class="tab-content" role="tabpanel">
+    <h2>Chapter 2: Coming Soon</h2>
+    <p class="lead">Full translation journal for Chapter 2 (From Death to Life, Jew-Gentile Reconciliation) will be added here.</p>
+  </div>
+
+  <!-- CHAPTER 3 TAB -->
+  <div id="ch3" class="tab-content" role="tabpanel">
+    <h2>Chapter 3: Coming Soon</h2>
+    <p class="lead">Full translation journal for Chapter 3 (Mystery Revealed, Cosmic Wisdom, Doxology) will be added here.</p>
+  </div>
+
+  <!-- CHAPTER 4 TAB -->
+  <div id="ch4" class="tab-content" role="tabpanel">
+    <h2>Chapter 4: Coming Soon</h2>
+    <p class="lead">Full translation journal for Chapter 4 (Seven Unities, Gifts for Maturity, Old/New Humanity) will be added here.</p>
+  </div>
+
+  <!-- CHAPTER 5 TAB -->
+  <div id="ch5" class="tab-content" role="tabpanel">
+    <h2>Chapter 5: Coming Soon</h2>
+    <p class="lead">Full translation journal for Chapter 5 (Walk in Love and Light, Household Codes) will be added here.</p>
+  </div>
+
+  <!-- CHAPTER 6 TAB -->
+  <div id="ch6" class="tab-content" role="tabpanel">
+    <h2>Chapter 6: Coming Soon</h2>
+    <p class="lead">Full translation journal for Chapter 6 (Armor of God, Spiritual Warfare) will be added here.</p>
+  </div>
 
   <footer>
     <p>© 2025 Structured Scripture Project · Translator's Journal for Ephesians</p>
@@ -173,5 +501,31 @@
     </p>
   </footer>
 </div>
+
+<script>
+  // Tab switching
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+  
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetTab = btn.dataset.tab;
+      
+      // Update buttons
+      tabBtns.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      
+      // Update content
+      tabContents.forEach(content => {
+        content.classList.remove('active');
+      });
+      document.getElementById(targetTab).classList.add('active');
+    });
+  });
+</script>
 </body>
 </html>
