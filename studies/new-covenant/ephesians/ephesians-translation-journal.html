@@ -35,6 +35,8 @@
     font:17px/1.55 "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
   }
   .wrap{ max-width: 1000px; margin: 0 auto; }
+  
+  /* Header & Navigation */
   header{ 
     display:flex; justify-content:space-between; align-items:center; 
     gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap;
@@ -46,6 +48,8 @@
   .muted{ color:var(--muted); }
   a{ color:var(--accent); text-decoration:none; }
   a:hover{ text-decoration:underline; }
+  
+  /* Pills & Tags */
   .pill{
     display:inline-block; padding:.3rem .65rem; border-radius:999px; 
     border:1px solid var(--border); font-size:.82rem; color:var(--muted); 
@@ -53,25 +57,15 @@
   }
   .pill:hover{ background: color-mix(in oklab, var(--accent) 10%, transparent); }
   
-  /* Tabs */
-  .tabs{
-    display:flex; gap:.25rem; border-bottom:2px solid var(--border);
-    margin-bottom:1.5rem; overflow-x:auto; flex-wrap:wrap;
+  .tag{
+    display:inline-block; padding:.2rem .5rem; border-radius:6px;
+    background: color-mix(in oklab, var(--accent) 15%, transparent);
+    border:1px solid color-mix(in oklab, var(--accent) 30%, transparent);
+    font-size:.75rem; color:var(--accent); margin-right:.3rem; margin-bottom:.3rem;
+    font-family: ui-monospace, monospace;
   }
-  .tab-btn{
-    border:none; border-radius:8px 8px 0 0; padding:.6rem 1.2rem; 
-    font-size:.95rem; cursor:pointer; background:transparent; color:var(--muted);
-    transition: all 0.2s; white-space:nowrap; border-bottom:3px solid transparent;
-  }
-  .tab-btn:hover{ background: color-mix(in oklab, var(--accent) 10%, transparent); color:var(--fg); }
-  .tab-btn.active{ 
-    color:var(--accent); font-weight:600; 
-    border-bottom-color:var(--accent);
-  }
-  .tab-content{ display:none; }
-  .tab-content.active{ display:block; animation: fadeIn 0.3s; }
-  @keyframes fadeIn{ from{ opacity:0; } to{ opacity:1; } }
   
+  /* Cards & Layout */
   .cards{ display:grid; gap:1.25rem; margin-top:1rem; }
   .card{
     background:var(--card);
@@ -82,7 +76,73 @@
   .card h2{
     font-size:1.3rem; margin:.2rem 0 .8rem; font-weight:600; border:none; padding:0;
   }
+  .card h3{
+    font-size:1.1rem; margin:.8rem 0 .5rem; font-weight:600; color:var(--fg);
+  }
+  .card h4{
+    font-size:1rem; margin:.6rem 0 .4rem; font-weight:600; color:var(--muted);
+  }
+  
+  /* Details/Summary */
+  details{ 
+    border:1px solid var(--border); border-radius:12px; 
+    padding:.85rem 1.1rem; background:transparent; margin-top:.75rem;
+  }
+  details+details{ margin-top:.75rem; }
+  summary{ 
+    cursor:pointer; font-weight:600; font-size:1.05rem;
+    color:var(--fg); list-style:none; user-select:none;
+  }
+  summary::before{ 
+    content:"▸ "; color:var(--accent); margin-right:.3rem; 
+    font-size:.9em; display:inline-block; transition: transform 0.2s;
+  }
+  details[open] summary::before{ 
+    content:"▾ "; transform: none;
+  }
+  details .content{ padding-top:.6rem; }
+  
+  /* Grid for decision cards */
+  .grid{ 
+    display:grid; grid-template-columns: 1fr 1fr; 
+    gap:.75rem 1rem; margin-top:.6rem; 
+  }
+  .grid.single{ grid-template-columns: 1fr; }
+  .grid label{ 
+    font-size:.82rem; color:var(--muted); font-weight:600; 
+    display:block; margin-bottom:.3rem;
+  }
+  .grid .box{ 
+    background:var(--card); border:1px dashed var(--border); 
+    padding:.65rem .75rem; border-radius:10px; min-height:2.2rem; 
+    line-height:1.6;
+  }
+  
+  /* Typography */
+  .mono{ 
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; 
+    font-size:.92rem; color:var(--code); 
+  }
+  .greek{
+    font-family: "Palatino Linotype", Palatino, Georgia, serif;
+    font-size:1.05rem; color:var(--greek); font-style:italic;
+  }
+  .note{ font-size:.92rem; color:var(--muted); line-height:1.6; }
   .lead{ font-size:1.05rem; color:var(--muted); margin-bottom:1rem; line-height:1.6; }
+  
+  /* Lists */
+  ul.note{ margin:.5rem 0 .5rem 1.3rem; padding:0; }
+  ul.note li{ margin:.35rem 0; }
+  .compact-list{ margin:.3rem 0 .3rem 1.2rem; padding:0; }
+  .compact-list li{ margin:.2rem 0; font-size:.95rem; }
+  
+  /* Special blocks */
+  .doxology{
+    border-left:4px solid var(--accent); 
+    background: color-mix(in oklab, var(--accent) 8%, transparent);
+    font-style:italic; padding:.75rem 1rem; border-radius:0 10px 10px 0;
+    margin:.5rem 0;
+  }
   .highlight-box{
     background: var(--highlight);
     border-left: 3px solid var(--accent);
@@ -90,30 +150,97 @@
     border-radius: 0 8px 8px 0;
     margin: .75rem 0;
   }
-  .greek{
-    font-family: "SBL Greek", "Cardo", Georgia, serif;
-    color: var(--greek);
-    font-style: italic;
-  }
-  .verse-ref{
-    font-weight:600;
-    color:var(--accent);
-    font-size:1.1rem;
-    margin:1.5rem 0 .75rem;
-    display:block;
-  }
-  .compact-list{ margin:.3rem 0 .3rem 1.2rem; padding:0; }
-  .compact-list li{ margin:.2rem 0; font-size:.95rem; }
-  blockquote{
-    border-left:3px solid var(--accent);
-    padding-left:1rem;
-    margin:1rem 0;
-    font-style:italic;
-    color:var(--muted);
-  }
+  
+  /* Status indicators */
+  .status-complete{ color: #10b981; font-weight:600; }
+  .status-pending{ color: #f59e0b; font-weight:600; }
+  .status-draft{ color: #8b5cf6; font-weight:600; }
+  
+  /* Horizontal rule */
+  .hr{ height:1px; background:var(--border); margin:1.5rem 0; }
+  
+  /* Footer */
   footer{ 
     margin-top:3rem; padding-top:1.5rem; border-top:1px solid var(--border); 
     text-align:center; color:var(--muted); font-size:.88rem; 
+  }
+  
+  /* Tabs for chapter navigation */
+  .tabs{
+    display:flex; gap:.25rem; border-bottom:2px solid var(--border);
+    margin: 1.5rem 0 1rem; overflow-x:auto; flex-wrap:wrap;
+  }
+  .tab-btn{
+    border:none; border-radius:8px 8px 0 0; padding:.6rem 1rem; 
+    font-size:.9rem; cursor:pointer; background:transparent; color:var(--muted);
+    transition: all 0.2s; white-space:nowrap; border-bottom:3px solid transparent;
+    font-family: inherit;
+  }
+  .tab-btn:hover{ 
+    background: color-mix(in oklab, var(--accent) 10%, transparent); 
+    color:var(--fg); 
+  }
+  .tab-btn.active{ 
+    color:var(--accent); font-weight:600; 
+    border-bottom-color:var(--accent);
+  }
+  .tab-content{ display:none; }
+  .tab-content.active{ display:block; animation: fadeIn 0.3s; }
+  @keyframes fadeIn{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:translateY(0); } }
+
+  /* Lexical tables */
+  table.lexical,
+  table.sense {
+    width: 100%;
+    border-collapse: collapse;
+    margin: .75rem 0;
+    font-size: .9rem;
+  }
+
+  table.lexical th,
+  table.sense th {
+    background: color-mix(in oklab, var(--accent) 15%, transparent);
+    color: var(--fg);
+    font-weight: 600;
+    text-align: left;
+    padding: .5rem .75rem;
+    border-bottom: 2px solid var(--border);
+  }
+
+  table.lexical td,
+  table.sense td {
+    padding: .5rem .75rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  table.lexical tbody tr:hover,
+  table.sense tbody tr:hover {
+    background: color-mix(in oklab, var(--accent) 5%, transparent);
+  }
+
+  /* Greek column styling */
+  table.lexical td:first-child {
+    font-family: "Palatino Linotype", Palatino, Georgia, serif;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px){
+    .grid{ grid-template-columns: 1fr; }
+    body{ padding:1.5rem .75rem 3rem; }
+    h1{ font-size:1.35rem; }
+  }
+  
+  /* Print styles */
+  @media print{
+    header .pill, .tabs{ display:none; }
+    body{ padding: 0.5in; }
+    .wrap{ max-width: none; }
+    .tab-content{ display:block !important; }
+    details{ border:none; }
+    details summary{ font-weight:700; }
   }
 </style>
 </head>
@@ -130,369 +257,2728 @@
     </div>
   </header>
 
-  <!-- Tabs Navigation -->
+  <p class="lead">This journal documents translation and structural decisions made in creating the Literal–Literary Structured Edition of Ephesians. It records Greek text analysis, alternative renderings, lexical rationale, structural formatting, and theological coherence considerations based on Tim Mackie's translation for The BibleProject.</p>
+
+  <!-- TABS NAVIGATION -->
   <nav class="tabs" role="tablist">
-    <button class="tab-btn active" data-tab="overview" role="tab" aria-selected="true">Overview</button>
-    <button class="tab-btn" data-tab="ch1" role="tab" aria-selected="false">Chapter 1</button>
-    <button class="tab-btn" data-tab="ch2" role="tab" aria-selected="false">Chapter 2</button>
-    <button class="tab-btn" data-tab="ch3" role="tab" aria-selected="false">Chapter 3</button>
-    <button class="tab-btn" data-tab="ch4" role="tab" aria-selected="false">Chapter 4</button>
-    <button class="tab-btn" data-tab="ch5" role="tab" aria-selected="false">Chapter 5</button>
-    <button class="tab-btn" data-tab="ch6" role="tab" aria-selected="false">Chapter 6</button>
+    <button class="tab-btn active" data-tab="overview" role="tab">Overview</button>
+    <button class="tab-btn" data-tab="ch1" role="tab">Chapter 1</button>
+    <button class="tab-btn" data-tab="ch2" role="tab">Chapter 2</button>
+    <button class="tab-btn" data-tab="ch3" role="tab">Chapter 3</button>
+    <button class="tab-btn" data-tab="ch4" role="tab">Chapter 4</button>
+    <button class="tab-btn" data-tab="ch5" role="tab">Chapter 5</button>
+    <button class="tab-btn" data-tab="ch6" role="tab">Chapter 6</button>
   </nav>
 
-  <!-- OVERVIEW TAB -->
+  <!-- ========== OVERVIEW TAB ========== -->
   <div id="overview" class="tab-content active" role="tabpanel">
-    <p class="lead">This journal documents translation and structural decisions made in creating the Literal–Literary Structured Edition of Ephesians. It records Greek text analysis, alternative renderings, lexical rationale, structural formatting, and theological coherence considerations based on Tim Mackie's translation for The BibleProject.</p>
-
-    <div class="highlight-box">
-      <p><strong>Methodological Note:</strong> This journal reconstructs translation decisions by comparing the final English rendering against NA28/UBS5 Greek text. Since this is a retrospective analysis of Tim Mackie's work (not documentation by the original translator), lexical alternatives and rationales are inferred from:</p>
-      <ul class="compact-list">
-        <li>The stated translation philosophy: "literal where possible, literary where necessary"</li>
-        <li>Observable patterns across the complete translation</li>
-        <li>The BibleProject's known translation principles</li>
-        <li>Hebraic thought patterns highlighted in the formatting</li>
-        <li>Standard lexical resources (BDAG, LSJ, Louw-Nida)</li>
-      </ul>
-      <p>Where uncertainty exists, it is acknowledged. This journal serves educational purposes, making translation methodology visible for students and teachers.</p>
-    </div>
-
     <section class="cards">
+      
       <div class="card">
         <h2>Translation Philosophy</h2>
+        <p><span class="tag">Base Text</span> NA28/UBS5 Greek (critical text)</p>
         <p>This translation employs a <strong>literal–literary</strong> style: close to Greek wording while surfacing Hebraic cadence (triads, parallelism, creed/doxology). This is not a paraphrase or commentary but a reconstruction of how the text would have been <em>heard</em> by its earliest audience.</p>
-        <p><strong>Base Text:</strong> NA28/UBS5 Greek (critical text)</p>
-        <p><strong>Priority Hierarchy:</strong> Discourse function → Lexical core → Hebraic echoes → Rhythm & register → Consistency → Clarity</p>
+        
+        <div class="grid">
+          <div>
+            <label>Primary Goal</label>
+            <div class="box">Preserve literal sense and rhetorical movement; readable aloud; minimal doctrinal intrusion.</div>
+          </div>
+          <div>
+            <label>Priority Hierarchy</label>
+            <div class="box">Discourse function → Lexical core → Hebraic echoes → Rhythm & register → Consistency → Clarity</div>
+          </div>
+        </div>
       </div>
 
       <div class="card">
-        <h2>Full Documentation Available</h2>
-        <p>This journal provides comprehensive verse-by-verse analysis across all 6 chapters of Ephesians, including:</p>
+        <h2>Decision-Making Framework</h2>
+        <details open>
+          <summary>How we choose between valid options</summary>
+          <div class="content">
+            <div class="grid">
+              <div>
+                <label>Lexical Analysis</label>
+                <div class="box">Most central Koine sense in this context (BDAG/LSJ + usage in Paul). Semantic domain checks (Louw–Nida) for disambiguation.</div>
+              </div>
+              <div>
+                <label>Structural Role</label>
+                <div class="box">Clause function: contrast, reason, purpose, example. Preserve connectives and discourse markers faithfully.</div>
+              </div>
+              <div>
+                <label>Intertextual Echoes</label>
+                <div class="box">LXX/Hebrew resonances? Maintain covenantal and liturgical overtones when Paul leans Hebraic.</div>
+              </div>
+              <div>
+                <label>Reader Experience</label>
+                <div class="box">Oral flow, cadence, and literary feel in English. Designed for reading aloud, not just analysis.</div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>Visual & Structural Conventions</h2>
+        <h4>How Structure Teaches</h4>
         <ul class="compact-list">
-          <li><strong>Lexical decisions:</strong> Greek text, translation options, chosen renderings with rationale</li>
-          <li><strong>Structural analysis:</strong> How indentation, color-coding, and spacing reveal rhetorical movement</li>
-          <li><strong>Discourse markers:</strong> Conjunctions, particles, and connectives that shape logic</li>
-          <li><strong>Hebraic echoes:</strong> LXX allusions, parallelism, covenant language</li>
-          <li><strong>Theological themes:</strong> Mystery, cosmic reconciliation, church as temple</li>
+          <li><strong>Indentation:</strong> Shows logical relationships and subordinate clauses</li>
+          <li><strong>Colors:</strong> Mark distinct rhetorical units (blessing, mystery, reconciliation, cosmic themes)</li>
+          <li><strong>Spacing:</strong> Block breaks separate distinct thought units</li>
+          <li><strong>Borders:</strong> Structural anchors (doxologies, hymns) receive special visual treatment</li>
+        </ul>
+        
+        <h4>Formatting as Pedagogy</h4>
+        <p class="note">The layout itself teaches. Structure replaces many footnotes—readers see discourse relationships visually before reading commentary.</p>
+      </div>
+
+      <div class="card">
+        <h2>Sources & Reference Tools</h2>
+        <ul class="note">
+          <li><strong>Greek Text:</strong> NA28 / UBS5 (critical text base)</li>
+          <li><strong>Septuagint:</strong> LXX for Hebraic echoes and covenantal language</li>
+          <li><strong>Lexica:</strong> BDAG (primary), LSJ (classical background); Louw–Nida (semantic domains)</li>
+          <li><strong>Discourse Analysis:</strong> Runge & Westbury (discourse grammar), Porter (verbal aspect)</li>
+          <li><strong>Theological Resources:</strong> Lincoln (WBC), O'Brien (Pillar), Hoehner (BECNT)</li>
         </ul>
       </div>
 
       <div class="card">
-        <h2>Key Features</h2>
-        <h3>Chapter Highlights</h3>
-        <ul class="compact-list">
-          <li><strong>Chapter 1:</strong> Extended blessing formula (berakah), prayer for wisdom, resurrection power, cosmic Christ</li>
-          <li><strong>Chapter 2:</strong> From death to life, Jew-Gentile reconciliation, church as God's temple</li>
-          <li><strong>Chapter 3:</strong> Mystery revealed (Gentiles as co-heirs), cosmic wisdom, climactic doxology (structural hinge)</li>
-          <li><strong>Chapter 4:</strong> Seven unities, gifts for maturity, old/new humanity contrast</li>
-          <li><strong>Chapter 5:</strong> Walk in love and light, Spirit-filled living, household codes</li>
-          <li><strong>Chapter 6:</strong> Armor of God, spiritual warfare, final greetings</li>
-        </ul>
+        <h2>Chapter Completion Status</h2>
+        <div class="grid">
+          <div>
+            <label>Chapter 1</label>
+            <div class="box"><span class="status-complete">✓ Complete</span> — All verses documented (1:1-23)</div>
+          </div>
+          <div>
+            <label>Chapter 2</label>
+            <div class="box"><span class="status-complete">✓ Complete</span> — Major decisions documented (2:1-22)</div>
+          </div>
+          <div>
+            <label>Chapter 3</label>
+            <div class="box"><span class="status-complete">✓ Complete</span> — Major decisions documented (3:1-21)</div>
+          </div>
+          <div>
+            <label>Chapter 4</label>
+            <div class="box"><span class="status-complete">✓ Complete</span> — Major decisions documented (4:1-32)</div>
+          </div>
+          <div>
+            <label>Chapter 5</label>
+            <div class="box"><span class="status-complete">✓ Complete</span> — Major decisions documented (5:1-33)</div>
+          </div>
+          <div>
+            <label>Chapter 6</label>
+            <div class="box"><span class="status-complete">✓ Complete</span> — Major decisions documented (6:1-24)</div>
+          </div>
+        </div>
       </div>
 
       <div class="card">
-        <h2>Structural Anchors</h2>
-        <p>Major liturgical/rhetorical markers that shape the letter's architecture:</p>
+        <h2>Key Theological Themes</h2>
         <ul class="compact-list">
-          <li><strong>1:3-14:</strong> Opening blessing (berakah) — one extended Greek sentence with three refrains</li>
-          <li><strong>3:20-21:</strong> Doxology — structural hinge between theology (chs. 1-3) and ethics (chs. 4-6)</li>
-          <li><strong>Recurring phrase:</strong> "ἐν τοῖς ἐπουρανίοις" (in the heavenlies) — 5x throughout letter</li>
+          <li><strong>Mystery (μυστήριον):</strong> Revealed secret of Jew-Gentile unity in Christ (1:9; 3:3-9; 5:32; 6:19)</li>
+          <li><strong>Heavenlies (ἐν τοῖς ἐπουρανίοις):</strong> Cosmic spiritual realm (1:3, 20; 2:6; 3:10; 6:12)</li>
+          <li><strong>Church as Body/Temple:</strong> Organic unity and dwelling place of God (1:22-23; 2:19-22; 4:11-16)</li>
+          <li><strong>Cosmic Reconciliation:</strong> All things headed up in Christ (1:10; 2:11-22)</li>
+          <li><strong>Walk (περιπατέω):</strong> Ethical conduct pattern (2:2, 10; 4:1, 17; 5:2, 8, 15)</li>
         </ul>
       </div>
 
-      <div class="card">
-        <h2>Methodology & Sources</h2>
-        <p><strong>Greek Text:</strong> NA28 / UBS5 (critical text base)</p>
-        <p><strong>Lexica:</strong> BDAG (primary), LSJ (classical background), Louw–Nida (semantic domains)</p>
-        <p><strong>Discourse Analysis:</strong> Runge & Westbury (discourse grammar), Porter (verbal aspect)</p>
-        <p><strong>Visual Conventions:</strong></p>
-        <ul class="compact-list">
-          <li>Indentation shows logical relationships and subordinate clauses</li>
-          <li>Color-coding marks distinct rhetorical units (blessing, mystery, reconciliation, cosmic themes)</li>
-          <li>Block spacing separates distinct thought units</li>
-          <li>Visual borders highlight structural anchors (doxologies, blessing formulas)</li>
-        </ul>
-      </div>
     </section>
   </div>
 
-  <!-- CHAPTER 1 TAB -->
+  <!-- ========== CHAPTER 1 TAB ========== -->
   <div id="ch1" class="tab-content" role="tabpanel">
-    <style>
-      details { margin: 1.5rem 0; border: 1px solid var(--border); border-radius: 8px; padding: 0; }
-      details summary { 
-        cursor: pointer; padding: 1rem 1.25rem; font-weight: 600; 
-        background: var(--card); border-radius: 8px; 
-        font-size: 1.05rem; color: var(--accent);
-      }
-      details summary:hover { background: color-mix(in oklab, var(--accent) 8%, var(--card)); }
-      details[open] summary { border-bottom: 1px solid var(--border); border-radius: 8px 8px 0 0; }
-      details .content { padding: 1.25rem; }
-      .box { 
-        background: var(--highlight); border-left: 3px solid var(--accent); 
-        padding: 1rem 1.25rem; margin: 1rem 0; border-radius: 0 8px 8px 0; 
-      }
-      .box.mono { font-family: monospace; font-size: .92rem; }
-      .decision-grid { 
-        display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-        gap: 1rem; margin: 1rem 0; 
-      }
-      .decision-grid .option { 
-        padding: .75rem; border: 1px solid var(--border); border-radius: 6px; 
-        background: var(--card); 
-      }
-      .decision-grid .option.chosen { 
-        border-color: var(--accent); border-width: 2px; 
-        background: color-mix(in oklab, var(--accent) 10%, var(--card)); 
-      }
-      label { display: block; margin: .75rem 0; }
-    </style>
-    
-    <h2>Chapter 1: Blessing, Mystery, and Cosmic Christ</h2>
-    
-    <p class="lead">Ephesians 1 opens with one of the New Testament's most theologically dense passages—a 202-word Greek sentence (vv. 3-14) functioning as a liturgical blessing formula. The chapter moves through greeting (1-2), great blessing (3-14), and prayer-report with cosmic Christology (15-23).</p>
-
-    <div class="highlight-box">
-      <p><strong>Structural Overview:</strong> The blessing follows Hebraic <em>berakah</em> pattern with Trinitarian movement: Father's election (3-6), Son's redemption (7-12), Spirit's sealing (13-14). Each concludes with "praise of his glory." The prayer (15-23) describes resurrection power and cosmic lordship, climaxing in the church as Christ's body.</p>
-    </div>
-
-    <section>
-      <h3>Opening Greeting (1:1-2)</h3>
-
-      <!-- 1:1 -->
-      <details open>
-        <summary>1:1 — Apostolic authority and addressees</summary>
-        <div class="content">
-          <label><span class="greek">Παῦλος ἀπόστολος Χριστοῦ Ἰησοῦ διὰ θελήματος θεοῦ τοῖς ἁγίοις τοῖς οὖσιν [ἐν Ἐφέσῳ] καὶ πιστοῖς ἐν Χριστῷ Ἰησοῦ</span></label>
-
-          <div class="box mono">
-            <strong>Decision (LLTSE):</strong><br>
-            Paul, an apostle of Messiah Jesus through the will of God,<br>
-            &nbsp;&nbsp;to the holy ones who are in Ephesus<br>
-            &nbsp;&nbsp;also believing in Messiah Jesus
-          </div>
-
-          <h4>Key Decision: Χριστός → "Messiah" not "Christ"</h4>
-          <div class="decision-grid">
-            <div class="option">
-              <strong>Christ Jesus</strong><br>
-              <small>Standard in most translations</small>
-            </div>
-            <div class="option chosen">
-              <strong>Messiah Jesus</strong><br>
-              <small>Preserves titular/messianic force</small>
-            </div>
-          </div>
-
-          <p><strong>Rationale:</strong> Χριστός = Greek for Hebrew מָשִׁיחַ (mashiach), "anointed one." "Christ" has become virtually a surname in English, losing its messianic significance. "Messiah" maintains the Jewish royal-theological context: Israel's promised deliverer, David's greater son, YHWH's anointed ruler. Used consistently throughout Ephesians.</p>
-
-          <h4>Key Decision: τοῖς ἁγίοις → "the holy ones" not "saints"</h4>
-          <div class="decision-grid">
-            <div class="option">
-              <strong>saints</strong><br>
-              <small>Traditional rendering</small>
-            </div>
-            <div class="option chosen">
-              <strong>the holy ones</strong><br>
-              <small>Echoes Hebrew qedoshim</small>
-            </div>
-          </div>
-
-          <p><strong>Rationale:</strong> ἅγιος translates Hebrew קָדוֹשׁ (qadosh) = set apart, consecrated. "Saints" carries later ecclesiastical baggage (canonized holy people). "Holy ones" preserves covenant status language—those set apart by God for his purposes, not moral achievers.</p>
-
-          <p><strong>Textual Note:</strong> "ἐν Ἐφέσῳ" (in Ephesus) is absent in some early manuscripts (𝔓46, ℵ*, B*), suggesting this may have been a circular letter with location left blank for multiple churches.</p>
+    <section class="cards">
+      
+      <div class="card">
+        <h2>Chapter 1 Overview</h2>
+        <p><strong>Theme:</strong> Blessing, Mystery, and Cosmic Christ</p>
+        <p><strong>Key Structures:</strong> Greeting (1-2), Great Blessing/Berakah (3-14), Prayer-Report (15-23)</p>
+        <p><strong>Status:</strong> <span class="status-complete">✓ Complete</span> — All 23 verses documented</p>
+        
+        <div class="highlight-box">
+          <p><strong>Structural Overview:</strong> The blessing follows Hebraic <em>berakah</em> pattern with Trinitarian movement: Father's election (3-6), Son's redemption (7-12), Spirit's sealing (13-14). Each concludes with "praise of his glory." The prayer (15-23) describes resurrection power and cosmic lordship, climaxing in the church as Christ's body.</p>
         </div>
-      </details>
+      </div>
 
-      <!-- 1:2 -->
-      <details open>
-        <summary>1:2 — Grace and peace blessing</summary>
-        <div class="content">
-          <label><span class="greek">χάρις ὑμῖν καὶ εἰρήνη ἀπὸ θεοῦ πατρὸς ἡμῶν καὶ κυρίου Ἰησοῦ Χριστοῦ</span></label>
-
-          <div class="box mono">
-            <strong>Decision (LLTSE):</strong><br>
-            grace to y'all and peace<br>
-            &nbsp;&nbsp;from God our Father<br>
-            &nbsp;&nbsp;and the Lord Jesus Messiah
-          </div>
-
-          <h4>Key Decision: ὑμῖν → "y'all" not "you"</h4>
-          <div class="decision-grid">
-            <div class="option">
-              <strong>you</strong><br>
-              <small>Ambiguous singular/plural</small>
+      <!-- GREETING: 1:1-2 -->
+      <div class="card">
+        <h2>1:1-2 — Apostolic Greeting</h2>
+        
+        <details open>
+          <summary>1:1 — Apostolic Authority and Addressees</summary>
+          <div class="content">
+            <div class="grid single">
+              <div>
+                <label><span class="greek">Παῦλος ἀπόστολος Χριστοῦ Ἰησοῦ διὰ θελήματος θεοῦ τοῖς ἁγίοις τοῖς οὖσιν [ἐν Ἐφέσῳ] καὶ πιστοῖς ἐν Χριστῷ Ἰησοῦ</span></label>
+                <div class="box mono">
+                  <strong>Translation (LLTSE):</strong><br>
+                  Paul, an apostle of Messiah Jesus through the will of God,<br>
+                  &nbsp;&nbsp;to the holy ones who are in Ephesus<br>
+                  &nbsp;&nbsp;also believing in Messiah Jesus
+                </div>
+              </div>
             </div>
-            <div class="option chosen">
-              <strong>y'all</strong><br>
-              <small>Makes plurality explicit</small>
+
+            <h4>Key Decision: Χριστός → "Messiah" not "Christ"</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • Christ Jesus (standard)<br>
+                  • Messiah Jesus (titular/messianic)<br>
+                  • Anointed One Jesus (descriptive)
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "Messiah Jesus"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> Χριστός = Greek for Hebrew מָשִׁיחַ (mashiach), "anointed one." "Christ" has become virtually a surname in English, losing its messianic significance. "Messiah" maintains the Jewish royal-theological context: Israel's promised deliverer, David's greater son, YHWH's anointed ruler. Used consistently throughout Ephesians.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: τοῖς ἁγίοις → "the holy ones" not "saints"</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • saints (traditional)<br>
+                  • the holy ones (covenantal)<br>
+                  • God's holy people (dynamic)
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "the holy ones"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> ἅγιος translates Hebrew קָדוֹשׁ (qadosh) = set apart, consecrated. "Saints" carries later ecclesiastical baggage (canonized holy people). "Holy ones" preserves covenant status language—those set apart by God for his purposes, not moral achievers. Echoes Israel's identity (Exod 19:6; Deut 7:6).
+                </div>
+              </div>
+            </div>
+
+            <div class="grid single">
+              <div>
+                <label>Textual Note</label>
+                <div class="box">
+                  <strong>ἐν Ἐφέσῳ:</strong> Absent in early manuscripts (𝔓46, ℵ*, B*), suggesting this may have been a circular letter with location left blank for multiple churches. NA28 includes in brackets. Translation retains "in Ephesus" following majority witness while acknowledging textual uncertainty.
+                </div>
+              </div>
             </div>
           </div>
+        </details>
 
-          <p><strong>Rationale:</strong> English "you" doesn't distinguish singular (σύ) from plural (ὑμεῖς). Greek does. This matters exegetically when Paul contrasts "we" (likely Jewish believers, v. 12) with "y'all" (Gentile believers, v. 13). "Y'all" may sound colloquial but accurately preserves Greek grammar. Used consistently throughout.</p>
+        <details open>
+          <summary>1:2 — Grace and Peace Blessing</summary>
+          <div class="content">
+            <div class="grid single">
+              <div>
+                <label><span class="greek">χάρις ὑμῖν καὶ εἰρήνη ἀπὸ θεοῦ πατρὸς ἡμῶν καὶ κυρίου Ἰησοῦ Χριστοῦ</span></label>
+                <div class="box mono">
+                  <strong>Translation (LLTSE):</strong><br>
+                  grace to y'all and peace<br>
+                  &nbsp;&nbsp;from God our Father<br>
+                  &nbsp;&nbsp;and the Lord Jesus Messiah
+                </div>
+              </div>
+            </div>
 
-          <h4>Theological Note: Dual Source</h4>
-          <p>"From God our Father <em>and</em> the Lord Jesus Messiah"—not two separate sources but unified divine origin. The conjunction καί coordinates God and Jesus as joint authors of blessing. High Christology embedded in a greeting: Jesus shares the divine prerogative to bestow grace and peace.</p>
+            <h4>Key Decision: ὑμῖν → "y'all" not "you"</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • you (ambiguous singular/plural)<br>
+                  • y'all (explicit plural)<br>
+                  • you all (formal plural)
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "y'all"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> English "you" doesn't distinguish singular (σύ) from plural (ὑμεῖς). Greek does. This matters exegetically when Paul contrasts "we" (likely Jewish believers, v. 12) with "y'all" (Gentile believers, v. 13). "Y'all" may sound colloquial but accurately preserves Greek grammar and prevents misreading corporate language as individual. Used consistently throughout.
+                </div>
+              </div>
+            </div>
 
-          <p><strong>Hebraic Echo:</strong> χάρις (grace) + εἰρήνη (peace) fuses Greek and Hebrew conventions. εἰρήνη translates שָׁלוֹם (shalom)—not merely absence of conflict but comprehensive wellbeing, restoration, wholeness. These aren't casual wishes but declarations of what God has accomplished in Messiah.</p>
+            <h4>Theological Note: Dual Source</h4>
+            <div class="grid single">
+              <div>
+                <label>High Christology in Greeting</label>
+                <div class="box">
+                  "From God our Father <em>and</em> the Lord Jesus Messiah"—not two separate sources but unified divine origin. The conjunction καί coordinates God and Jesus as joint authors of blessing. High Christology embedded in a greeting: Jesus shares the divine prerogative to bestow grace and peace.
+                  <br><br>
+                  <strong>Hebraic Echo:</strong> χάρις (grace) + εἰρήνη (peace) fuses Greek and Hebrew conventions. εἰρήνη translates שָׁלוֹם (shalom)—not merely absence of conflict but comprehensive wellbeing, restoration, wholeness. These aren't casual wishes but declarations of what God has accomplished in Messiah.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- GREAT BLESSING: 1:3-14 -->
+      <div class="card">
+        <h2>1:3-14 — The Great Blessing Formula (Structural Anchor)</h2>
+        
+        <div class="highlight-box">
+          <p><strong>Structural Significance:</strong> One continuous 202-word Greek sentence—among the longest in the NT. Follows Hebraic berakah pattern with Trinitarian structure: Father (3-6), Son (7-12), Spirit (13-14). Three parallel refrains: "praise of his glory" (vv. 6, 12, 14). This is formatted as a major structural anchor with visual prominence.</p>
         </div>
-      </details>
-    </section>
 
-    <section>
-      <h3>The Great Blessing Formula (1:3-14)</h3>
-      <p><em>One continuous 202-word Greek sentence—among the longest in the NT. Follows Hebraic berakah pattern with Trinitarian structure: Father (3-6), Son (7-12), Spirit (13-14). Three parallel refrains: "praise of his glory" (vv. 6, 12, 14).</em></p>
-
-      <!-- 1:3-4 -->
-      <details open>
-        <summary>1:3-4 — Blessed be: the berakah opening</summary>
-        <div class="content">
-          <label><span class="greek">Εὐλογητὸς ὁ θεὸς καὶ πατὴρ τοῦ κυρίου ἡμῶν Ἰησοῦ Χριστοῦ, ὁ εὐλογήσας ἡμᾶς ἐν πάσῃ εὐλογίᾳ πνευματικῇ ἐν τοῖς ἐπουρανίοις ἐν Χριστῷ, καθὼς ἐξελέξατο ἡμᾶς ἐν αὐτῷ πρὸ καταβολῆς κόσμου εἶναι ἡμᾶς ἁγίους καὶ ἀμώμους κατενώπιον αὐτοῦ</span></label>
-
-          <div class="box mono">
-            <strong>Decision (LLTSE):</strong><br>
-            Blessed be the God and Father of our Lord Jesus Messiah,<br>
-            &nbsp;&nbsp;who has blessed us in the heaven through the Messiah,<br>
-            &nbsp;&nbsp;because he chose us in him before the foundation of the cosmos,<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;so that we would be holy and blameless before him
-          </div>
-
-          <h4>Berakah Structure</h4>
-          <p><strong>Εὐλογητός</strong> (Blessed be) launches the berakah formula, echoing Jewish liturgy: "Baruch atah Adonai" (Blessed are you, LORD). Paul creates wordplay with three εὐλογ- cognates lost in most translations:</p>
-          <ul>
-            <li><strong>εὐλογητός</strong> = blessed (adjective)</li>
-            <li><strong>εὐλογήσας</strong> = who blessed (participle)</li>
-            <li><strong>εὐλογίᾳ</strong> = with blessing (noun)</li>
-          </ul>
-          <p>God is blessed <em>because</em> he has blessed us <em>with</em> blessing—a cascade of grace.</p>
-
-          <h4>Key Decision: πρὸ καταβολῆς κόσμου → "before the foundation of the cosmos"</h4>
-          <div class="decision-grid">
-            <div class="option">
-              <strong>before the foundation of the world</strong><br>
-              <small>Standard rendering</small>
+        <details open>
+          <summary>1:3-4 — Blessed Be: The Berakah Opening</summary>
+          <div class="content">
+            <div class="grid single">
+              <div>
+                <label><span class="greek">Εὐλογητὸς ὁ θεὸς καὶ πατὴρ τοῦ κυρίου ἡμῶν Ἰησοῦ Χριστοῦ, ὁ εὐλογήσας ἡμᾶς ἐν πάσῃ εὐλογίᾳ πνευματικῇ ἐν τοῖς ἐπουρανίοις ἐν Χριστῷ, καθὼς ἐξελέξατο ἡμᾶς ἐν αὐτῷ πρὸ καταβολῆς κόσμου εἶναι ἡμᾶς ἁγίους καὶ ἀμώμους κατενώπιον αὐτοῦ</span></label>
+                <div class="box mono">
+                  <strong>Translation (LLTSE):</strong><br>
+                  Blessed be the God and Father of our Lord Jesus Messiah,<br>
+                  &nbsp;&nbsp;who has blessed us in the heaven through the Messiah,<br>
+                  &nbsp;&nbsp;because he chose us in him before the foundation of the cosmos,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;so that we would be holy and blameless before him
+                </div>
+              </div>
             </div>
-            <div class="option chosen">
-              <strong>before the foundation of the cosmos</strong><br>
-              <small>Preserves Greek breadth</small>
+
+            <h4>Berakah Structure and Wordplay</h4>
+            <div class="grid single">
+              <div>
+                <label>Threefold εὐλογ- Wordplay</label>
+                <div class="box">
+                  <strong>Εὐλογητός</strong> (Blessed be) launches the berakah formula, echoing Jewish liturgy: "Baruch atah Adonai" (Blessed are you, LORD). Paul creates wordplay with three εὐλογ- cognates lost in most translations:
+                  <ul class="compact-list">
+                    <li><strong>εὐλογητός</strong> = blessed (adjective)</li>
+                    <li><strong>εὐλογήσας</strong> = who blessed (participle)</li>
+                    <li><strong>εὐλογίᾳ</strong> = with blessing (noun)</li>
+                  </ul>
+                  God is blessed <em>because</em> he has blessed us <em>with</em> blessing—a cascade of grace. Translation choice: preserve "blessed/blessing" repetition rather than vary for English elegance.
+                </div>
+              </div>
             </div>
-          </div>
 
-          <p><strong>Rationale:</strong> κόσμος isn't just planet earth but the ordered universe—harmonious system of creation. "Cosmos" better captures this scope. Temporal priority ("before") emphasizes divine initiative: election precedes creation itself.</p>
-
-          <h4>First Use: "in the heavenlies"</h4>
-          <p><strong>ἐν τοῖς ἐπουρανίοις</strong> (in the heavenlies) appears 5x in Ephesians (1:3, 10, 20; 2:6; 3:10; 6:12). Not merely "heaven" as future destination but the supernatural realm where Christ currently reigns and believers are spiritually positioned—the cosmic sphere of divine activity intersecting earthly reality.</p>
-
-          <p><strong>Purpose Clause:</strong> "So that we would be holy and blameless" (εἶναι ἡμᾶς ἁγίους καὶ ἀμώμους). Both adjectives carry cultic overtones from Levitical sacrificial language—unblemished offerings. Election aims at holiness, not as moral achievement but transformation into Christlikeness.</p>
-        </div>
-      </details>
-
-      <!-- 1:5-6 -->
-      <details open>
-        <summary>1:5-6 — Predestined for adoption; first refrain</summary>
-        <div class="content">
-          <label><span class="greek">ἐν ἀγάπῃ προορίσας ἡμᾶς εἰς υἱοθεσίαν διὰ Ἰησοῦ Χριστοῦ εἰς αὐτόν, κατὰ τὴν εὐδοκίαν τοῦ θελήματος αὐτοῦ, εἰς ἔπαινον δόξης τῆς χάριτος αὐτοῦ ἧς ἐχαρίτωσεν ἡμᾶς ἐν τῷ ἠγαπημένῳ</span></label>
-
-          <div class="box mono">
-            <strong>Decision (LLTSE):</strong><br>
-            In love having predestined us for adoption/sonship<br>
-            &nbsp;&nbsp;through Jesus Messiah unto himself,<br>
-            &nbsp;&nbsp;in accordance with the purpose of his will,<br>
-            resulting in praise for the glory of his grace,<br>
-            &nbsp;&nbsp;which he graced us in the beloved one
-          </div>
-
-          <h4>Key Decision: προορίσας → "predestined" not softened</h4>
-          <div class="decision-grid">
-            <div class="option">
-              <strong>planned ahead / determined beforehand</strong><br>
-              <small>Softened rendering</small>
+            <h4>Key Decision: πρὸ καταβολῆς κόσμου</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • before the foundation of the world<br>
+                  • before the foundation of the cosmos<br>
+                  • before creation's beginning
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "before the foundation of the cosmos"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> κόσμος isn't just planet earth but the ordered universe—harmonious system of creation. "Cosmos" better captures this scope than "world" (which can mean merely human society). "Foundation" preserves καταβολή literally (laying down, establishing). Temporal priority ("before") emphasizes divine initiative: election precedes creation itself.
+                </div>
+              </div>
             </div>
-            <div class="option chosen">
-              <strong>predestined</strong><br>
-              <small>Preserves theological term</small>
-            </div>
-          </div>
 
-          <p><strong>Rationale:</strong> προορίζω = προ- (beforehand) + ὁρίζω (mark out, determine). Paul uses this deliberately (Rom 8:29-30; 1 Cor 2:7). Translation retains "predestined" while context (election <em>in love</em>, unto adoption) shows this isn't cold determinism but lavish grace. Context qualifies meaning.</p>
-
-          <h4>Key Decision: υἱοθεσίαν → "adoption/sonship"</h4>
-          <div class="decision-grid">
-            <div class="option">
-              <strong>adoption</strong><br>
-              <small>Legal metaphor</small>
+            <h4>First Use: "in the heavenlies"</h4>
+            <div class="grid single">
+              <div>
+                <label>Semantic Range: ἐν τοῖς ἐπουρανίοις</label>
+                <div class="box">
+                  <table class="sense">
+                    <thead>
+                      <tr><th>Usage</th><th>Context</th><th>Meaning</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1:3</td>
+                        <td>Blessing location</td>
+                        <td>Spiritual realm where believers are blessed</td>
+                      </tr>
+                      <tr>
+                        <td>1:20</td>
+                        <td>Christ's session</td>
+                        <td>Throne room of cosmic authority</td>
+                      </tr>
+                      <tr>
+                        <td>2:6</td>
+                        <td>Believers seated</td>
+                        <td>Current spiritual position in Christ</td>
+                      </tr>
+                      <tr>
+                        <td>3:10</td>
+                        <td>Cosmic witness</td>
+                        <td>Realm of angelic powers observing church</td>
+                      </tr>
+                      <tr>
+                        <td>6:12</td>
+                        <td>Spiritual warfare</td>
+                        <td>Domain of hostile spiritual forces</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <strong>Translation decision:</strong> "in the heavenlies" (unique to Ephesians, 5x) rather than "heavenly places/realms." Not merely "heaven" as future destination but the supernatural realm where Christ currently reigns and believers are spiritually positioned—the cosmic sphere of divine activity intersecting earthly reality.
+                </div>
+              </div>
             </div>
-            <div class="option chosen">
-              <strong>adoption/sonship</strong><br>
-              <small>Both legal act and relational status</small>
-            </div>
-          </div>
 
-          <p><strong>Rationale:</strong> Double rendering preserves both the legal transaction (Roman adoption practice) and relational status (Israel as God's son, Exod 4:22). υἱοθεσία appears only in Paul (Rom 8:15, 23; 9:4; Gal 4:5; Eph 1:5), making it distinctively Pauline.</p>
-
-          <h4>Critical Translation: ἐχαρίτωσεν → "graced" (verb)</h4>
-          <div class="decision-grid">
-            <div class="option">
-              <strong>freely given / bestowed</strong><br>
-              <small>Flattens the wordplay</small>
-            </div>
-            <div class="option chosen">
-              <strong>graced</strong><br>
-              <small>Preserves verbal form of χάρις</small>
+            <div class="grid single">
+              <div>
+                <label>Purpose Clause: Holy and Blameless</label>
+                <div class="box">
+                  <strong>εἶναι ἡμᾶς ἁγίους καὶ ἀμώμους:</strong> "so that we would be holy and blameless." Both adjectives carry cultic overtones from Levitical sacrificial language—unblemished offerings (Lev 1:3, 10; 22:19-21 LXX). Election aims at holiness, not as moral achievement but transformation into Christlikeness. The purpose of being chosen is ethical conformity to God's character.
+                </div>
+              </div>
             </div>
           </div>
+        </details>
 
-          <p><strong>Rationale:</strong> ἐχαρίτωσεν is the verbal form of χάρις (grace). Paul creates cognate accusative: χάριτος... ἐχαρίτωσεν = "grace...graced." Most translations flatten to "freely given." Using "graced" as verb makes grace not just substance received but action performed—God doesn't merely give grace; he "graces" us dynamically.</p>
+        <details open>
+          <summary>1:5-6 — Predestined for Adoption; First Refrain</summary>
+          <div class="content">
+            <div class="grid single">
+              <div>
+                <label><span class="greek">ἐν ἀγάπῃ προορίσας ἡμᾶς εἰς υἱοθεσίαν διὰ Ἰησοῦ Χριστοῦ εἰς αὐτόν, κατὰ τὴν εὐδοκίαν τοῦ θελήματος αὐτοῦ, εἰς ἔπαινον δόξης τῆς χάριτος αὐτοῦ ἧς ἐχαρίτωσεν ἡμᾶς ἐν τῷ ἠγαπημένῳ</span></label>
+                <div class="box mono">
+                  <strong>Translation (LLTSE):</strong><br>
+                  In love having predestined us for adoption/sonship<br>
+                  &nbsp;&nbsp;through Jesus Messiah unto himself,<br>
+                  &nbsp;&nbsp;in accordance with the purpose of his will,<br>
+                  resulting in praise for the glory of his grace,<br>
+                  &nbsp;&nbsp;which he graced us in the beloved one
+                </div>
+              </div>
+            </div>
 
-          <h4>First Refrain: εἰς ἔπαινον δόξης τῆς χάριτος</h4>
-          <p>"Resulting in praise for the glory of his grace"—first of three parallel refrains (vv. 6, 12, 14). Creates formal structure: each movement climaxes in doxology. All divine action aims toward God's glorification. εἰς expresses result/purpose.</p>
-        </div>
-      </details>
+            <h4>Key Decision: προορίσας → "predestined"</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • predestined (theological term)<br>
+                  • planned ahead (softened)<br>
+                  • determined beforehand (descriptive)
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "predestined"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> προορίζω = προ- (beforehand) + ὁρίζω (mark out, determine). Paul uses this deliberately (Rom 8:29-30; 1 Cor 2:7; Eph 1:11). Translation retains "predestined" while context (election <em>in love</em>, unto adoption) shows this isn't cold determinism but lavish grace. Context qualifies meaning. Avoiding the term creates a theological gap where none exists in Greek.
+                </div>
+              </div>
+            </div>
 
-      <!-- Continue with remaining verses in same format... -->
-      <p style="margin:2rem 0; padding:1rem; background:var(--card); border:1px solid var(--border); border-radius:8px;">
-        <em><strong>Note:</strong> Full verse-by-verse analysis for Ephesians 1:7-23 continues in this format, matching the 1 Timothy journal structure. Each verse gets its own expandable `<details>` section with decision grids, Greek text, rationale boxes, and theological notes.</em>
-      </p>
+            <h4>Key Decision: υἱοθεσίαν</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • adoption (legal)<br>
+                  • sonship (relational)<br>
+                  • adoption/sonship (compound)
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "adoption/sonship"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> Double rendering preserves both the legal transaction (Roman adoption practice—full rights and inheritance) and relational status (Israel as God's son, Exod 4:22). υἱοθεσία appears only in Paul (Rom 8:15, 23; 9:4; Gal 4:5; Eph 1:5), making it distinctively Pauline. The slash keeps both dimensions visible rather than forcing a choice.
+                </div>
+              </div>
+            </div>
+
+            <h4>Critical Translation: ἐχαρίτωσεν → "graced" (verb)</h4>
+            <div class="grid single">
+              <div>
+                <label>Semantic Range of ἐχαρίτωσεν</label>
+                <div class="box">
+                  <table class="sense">
+                    <thead>
+                      <tr><th>Rendering</th><th>Strength</th><th>Weakness</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>"freely given"</td>
+                        <td>Natural English</td>
+                        <td>Flattens wordplay; loses χάρις connection</td>
+                      </tr>
+                      <tr>
+                        <td>"bestowed"</td>
+                        <td>Formal register matches context</td>
+                        <td>Generic; could apply to any gift</td>
+                      </tr>
+                      <tr>
+                        <td>"graced" (verb)</td>
+                        <td>Preserves cognate accusative; grace as action</td>
+                        <td>Slightly awkward in English</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <strong>Decision:</strong> "graced" — ἐχαρίτωσεν is the verbal form of χάρις (grace). Paul creates cognate accusative: χάριτος... ἐχαρίτωσεν = "grace...graced." Most translations flatten to "freely given" for smoothness. Using "graced" as verb makes grace not just substance received but action performed—God doesn't merely give grace; he "graces" us dynamically. The awkwardness is intentional to surface Paul's wordplay.
+                </div>
+              </div>
+            </div>
+
+            <h4>First Refrain: εἰς ἔπαινον δόξης τῆς χάριτος</h4>
+            <div class="grid single">
+              <div>
+                <label>Structural Pattern</label>
+                <div class="box">
+                  "Resulting in praise for the glory of his grace"—first of three parallel refrains (vv. 6, 12, 14). Creates formal structure: each movement climaxes in doxology. All divine action aims toward God's glorification. εἰς expresses result/purpose. This refrain marks the conclusion of the Father's work (election and adoption).
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>1:7-10 — Redemption and the Mystery Revealed</summary>
+          <div class="content">
+            <div class="grid single">
+              <div>
+                <label><span class="greek">ἐν ᾧ ἔχομεν τὴν ἀπολύτρωσιν διὰ τοῦ αἵματος αὐτοῦ, τὴν ἄφεσιν τῶν παραπτωμάτων, κατὰ τὸ πλοῦτος τῆς χάριτος αὐτοῦ</span></label>
+                <div class="box mono">
+                  <strong>Translation (LLTSE):</strong><br>
+                  in whom we have redemption through his blood,<br>
+                  &nbsp;&nbsp;the forgiveness of sins,<br>
+                  &nbsp;&nbsp;according to the richness of his grace
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: ἀπολύτρωσιν</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • redemption (theological)<br>
+                  • deliverance (action-focused)<br>
+                  • ransom/release (commercial)
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "redemption"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> ἀπολύτρωσις combines ἀπό (from) + λύτρον (ransom price). Core sense: release by payment of ransom. "Redemption" preserves both liberation and costly purchase. Used 10x in NT, always with soteriological weight. Apposition with "forgiveness" shows redemption's effect: sins pardoned. "Through his blood" specifies the ransom price paid.
+                </div>
+              </div>
+            </div>
+
+            <h4>Mystery Language: τὸ μυστήριον</h4>
+            <div class="grid single">
+              <div>
+                <label>Semantic Range of μυστήριον in Ephesians</label>
+                <div class="box">
+                  <table class="sense">
+                    <thead>
+                      <tr><th>Reference</th><th>Context</th><th>Content of Mystery</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1:9</td>
+                        <td>Made known to us</td>
+                        <td>God's will to unite all things in Christ</td>
+                      </tr>
+                      <tr>
+                        <td>3:3-4</td>
+                        <td>By revelation</td>
+                        <td>Insight into the mystery of Christ</td>
+                      </tr>
+                      <tr>
+                        <td>3:9</td>
+                        <td>Hidden from ages</td>
+                        <td>God's plan for multi-ethnic church</td>
+                      </tr>
+                      <tr>
+                        <td>5:32</td>
+                        <td>Marriage metaphor</td>
+                        <td>Christ and church union</td>
+                      </tr>
+                      <tr>
+                        <td>6:19</td>
+                        <td>Paul's request</td>
+                        <td>The mystery of the gospel</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <strong>Translation decision:</strong> "mystery" (not "secret") — μυστήριον = previously hidden truth now revealed. Not esoteric knowledge for initiates but God's cosmic plan disclosed in Christ. The "open-secret" dynamic: once concealed, now proclaimed. Central to Ephesians' theology (5x usage).
+                </div>
+              </div>
+            </div>
+
+            <h4>Cosmic Purpose: ἀνακεφαλαιώσασθαι</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • sum up (mathematical)<br>
+                  • bring together (spatial)<br>
+                  • head up (hierarchical)
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "to head-up all things together"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> ἀνακεφαλαιόομαι from κεφαλή (head). Unique Pauline coinage. Double sense: (1) summarize/recapitulate (bring diverse elements under one heading), (2) bring under headship. Both work here—Christ as both summation of history and supreme ruler. "Head-up" preserves both by keeping "head" visible. Purpose of mystery: cosmic unification under Christ's lordship.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>1:11-12 — Inheritance and Hope; Second Refrain</summary>
+          <div class="content">
+            <div class="grid single">
+              <div>
+                <label><span class="greek">ἐν ᾧ καὶ ἐκληρώθημεν προορισθέντες κατὰ πρόθεσιν τοῦ τὰ πάντα ἐνεργοῦντος κατὰ τὴν βουλὴν τοῦ θελήματος αὐτοῦ, εἰς τὸ εἶναι ἡμᾶς εἰς ἔπαινον δόξης αὐτοῦ τοὺς προηλπικότας ἐν τῷ Χριστῷ</span></label>
+                <div class="box mono">
+                  <strong>Translation (LLTSE):</strong><br>
+                  in whom also we have obtained an inheritance,<br>
+                  &nbsp;&nbsp;having been predestined in accordance with the plan<br>
+                  &nbsp;&nbsp;of the one who works all things<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;according to the decision of his will,<br>
+                  so that we would praise his glory,<br>
+                  &nbsp;&nbsp;we, who were the first ones to hope in the Messiah
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: ἐκληρώθημεν</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • we have obtained an inheritance (passive)<br>
+                  • we were chosen as God's inheritance (active)<br>
+                  • we were allotted (neutral)
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "we have obtained an inheritance"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> ἐκληρώθημεν from κλῆρος (lot, inheritance). Ambiguous: either (1) we received an inheritance, or (2) we became God's inheritance. Context favors (1): believers inherit promised blessings. Israel's inheritance language (Deut 4:20; 9:26, 29 LXX). Perfect tense emphasizes completed action with ongoing possession. Believers are heirs of God's promises.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: τοὺς προηλπικότας</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • we who first hoped (temporal)<br>
+                  • we who previously hoped (sequential)<br>
+                  • we who were the first to hope (ordinal)
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "we, who were the first ones to hope"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> προελπίζω = hope beforehand. Most likely refers to Jewish believers who hoped in Messiah before Gentiles (salvation-historical priority, not superiority). Sets up contrast with "y'all" (Gentiles) in v. 13. Perfect participle = completed action: already established hope. "First ones" preserves ordinal sense without implying exclusivity.
+                </div>
+              </div>
+            </div>
+
+            <h4>Second Refrain</h4>
+            <div class="grid single">
+              <div>
+                <label>Pattern Reinforcement</label>
+                <div class="box">
+                  "So that we would praise his glory" — second occurrence of the refrain (cf. v. 6). Marks conclusion of Son's work (redemption, inheritance). The "we...who first hoped" specifies Jewish believers as the subject of praise. Trinitarian structure continues: Father → Son → Spirit (vv. 13-14).
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>1:13-14 — Sealed by the Spirit; Third Refrain</summary>
+          <div class="content">
+            <div class="grid single">
+              <div>
+                <label><span class="greek">ἐν ᾧ καὶ ὑμεῖς ἀκούσαντες τὸν λόγον τῆς ἀληθείας, τὸ εὐαγγέλιον τῆς σωτηρίας ὑμῶν, ἐν ᾧ καὶ πιστεύσαντες ἐσφραγίσθητε τῷ πνεύματι τῆς ἐπαγγελίας τῷ ἁγίῳ, ὅ ἐστιν ἀρραβὼν τῆς κληρονομίας ἡμῶν, εἰς ἀπολύτρωσιν τῆς περιποιήσεως, εἰς ἔπαινον τῆς δόξης αὐτοῦ</span></label>
+                <div class="box mono">
+                  <strong>Translation (LLTSE):</strong><br>
+                  in whom also y'all, having heard the word of truth,<br>
+                  &nbsp;&nbsp;the good-news of y'all's salvation,<br>
+                  in whom also, having believed,<br>
+                  &nbsp;&nbsp;y'all were sealed by the promised holy Spirit,<br>
+                  who is the first installment of our inheritance,<br>
+                  &nbsp;&nbsp;for the redemption of the possession,<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;resulting in the praise of his glory
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Shift: ὑμεῖς (Y'all) vs. ἡμεῖς (We)</h4>
+            <div class="grid single">
+              <div>
+                <label>Pronoun Contrast Pattern</label>
+                <div class="box">
+                  <strong>v. 12:</strong> "we, who were the first ones to hope" (ἡμεῖς) = Jewish believers<br>
+                  <strong>v. 13:</strong> "y'all, having heard" (ὑμεῖς) = Gentile believers<br>
+                  <strong>v. 14:</strong> "our inheritance" (ἡμῶν) = united Jewish-Gentile community<br>
+                  <br>
+                  <strong>Rationale:</strong> Paul's pronoun shift marks salvation-historical sequence: Jews first (v. 12), then Gentiles (v. 13), now one people (v. 14). Critical for understanding Ephesians' unity theme (2:11-22). "Y'all" makes this visible where English "you" obscures it. Final "our" shows ultimate unity.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: ἐσφραγίσθητε</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • you were sealed (passive)<br>
+                  • you were stamped/marked<br>
+                  • you were authenticated
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "y'all were sealed"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> σφραγίζω = to seal, mark with a seal (for security, ownership, authentication). Aorist passive: Spirit does the sealing (divine action). Background: ancient documents/letters sealed with signet ring; goods marked for ownership. Believers are sealed/authenticated as God's possession. Spirit himself is both seal and down payment (next phrase).
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: ἀρραβὼν</h4>
+            <div class="grid single">
+              <div>
+                <label>Semantic Range of ἀρραβών</label>
+                <div class="box">
+                  <table class="sense">
+                    <thead>
+                      <tr><th>Rendering</th><th>Commercial Context</th><th>Theological Implication</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>"pledge"</td>
+                        <td>Promise of full payment</td>
+                        <td>Spirit guarantees future inheritance</td>
+                      </tr>
+                      <tr>
+                        <td>"down payment"</td>
+                        <td>First installment binding contract</td>
+                        <td>Spirit is partial now, fullness later</td>
+                      </tr>
+                      <tr>
+                        <td>"first installment"</td>
+                        <td>Initial payment of series</td>
+                        <td>Current Spirit-experience as preview</td>
+                      </tr>
+                      <tr>
+                        <td>"guarantee"</td>
+                        <td>Security for transaction</td>
+                        <td>Spirit secures eschatological promise</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <strong>Decision:</strong> "first installment" — ἀρραβών is commercial term (Semitic loanword in Greek) meaning down payment that obligates full payment. Used 3x in NT (2 Cor 1:22; 5:5; Eph 1:14), always of Spirit. "First installment" captures both "partial now" and "guarantee of fullness" better than static "pledge." Spirit-experience is foretaste of coming glory.
+                </div>
+              </div>
+            </div>
+
+            <h4>Third Refrain</h4>
+            <div class="grid single">
+              <div>
+                <label>Trinitarian Completion</label>
+                <div class="box">
+                  "Resulting in the praise of his glory" — third and final occurrence of the refrain. Marks conclusion of Spirit's work (sealing, guaranteeing inheritance). Trinitarian structure complete:
+                  <ul class="compact-list">
+                    <li><strong>Father (vv. 3-6):</strong> Chose and adopted → praise of grace's glory</li>
+                    <li><strong>Son (vv. 7-12):</strong> Redeemed and gave inheritance → praise of his glory</li>
+                    <li><strong>Spirit (vv. 13-14):</strong> Sealed and guaranteed → praise of his glory</li>
+                  </ul>
+                  All blessing flows from Trinity; all blessing returns to Trinity in praise. Doxological structure shapes theology.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- PRAYER-REPORT: 1:15-23 -->
+      <div class="card">
+        <h2>1:15-23 — Prayer-Report: Wisdom and Power</h2>
+
+        <details open>
+          <summary>1:15-17 — Thanksgiving and Request for Wisdom</summary>
+          <div class="content">
+            <div class="grid single">
+              <div>
+                <label><span class="greek">Διὰ τοῦτο κἀγὼ ἀκούσας τὴν καθ᾽ ὑμᾶς πίστιν ἐν τῷ κυρίῳ Ἰησοῦ καὶ τὴν ἀγάπην τὴν εἰς πάντας τοὺς ἁγίους οὐ παύομαι εὐχαριστῶν ὑπὲρ ὑμῶν μνείαν ποιούμενος ἐπὶ τῶν προσευχῶν μου, ἵνα ὁ θεὸς τοῦ κυρίου ἡμῶν Ἰησοῦ Χριστοῦ, ὁ πατὴρ τῆς δόξης, δώῃ ὑμῖν πνεῦμα σοφίας καὶ ἀποκαλύψεως ἐν ἐπιγνώσει αὐτοῦ</span></label>
+                <div class="box mono">
+                  <strong>Translation (LLTSE):</strong><br>
+                  For this reason, as I heard of y'all's faith in the Lord Jesus<br>
+                  &nbsp;&nbsp;and the love which is toward all of the holy ones,<br>
+                  I have not stopped giving thanks,<br>
+                  &nbsp;&nbsp;making remembrance on y'all's behalf in my prayers,<br>
+                  in order that the God of our Lord Jesus Messiah,<br>
+                  &nbsp;&nbsp;the Father of glory,<br>
+                  would give y'all a spirit of wisdom and revelation<br>
+                  &nbsp;&nbsp;in order to know him
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: πνεῦμα σοφίας καὶ ἀποκαλύψεως</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • the Spirit of wisdom and revelation (divine Spirit)<br>
+                  • a spirit of wisdom and revelation (human disposition)<br>
+                  • a spiritual gift of wisdom and revelation
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "a spirit of wisdom and revelation"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> Anarthrous πνεῦμα (no article) suggests quality/disposition rather than the Holy Spirit himself. Though the Spirit enables it, Paul prays for the readers to receive a spiritual capacity for wisdom and revelation. Parallel with Isa 11:2 LXX (spirit of wisdom on Messiah). Not asking for the Spirit (they already have him, v. 13) but for Spirit-enabled insight. Genitive of source: wisdom and revelation flowing from the Spirit.
+                </div>
+              </div>
+            </div>
+
+            <h4>Purpose: ἐν ἐπιγνώσει αὐτοῦ</h4>
+            <div class="grid single">
+              <div>
+                <label>Knowledge Terminology</label>
+                <div class="box">
+                  <strong>ἐπίγνωσις</strong> (full/mature knowledge) vs. <strong>γνῶσις</strong> (knowledge): ἐπι- prefix intensifies. Not mere intellectual awareness but experiential, relational knowing. "In order to know him" — ultimate aim of wisdom and revelation is deeper knowledge of God. Objective genitive: God as object of knowing. Echoes OT covenantal "knowing YHWH" (Jer 9:24; 31:34).
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>1:18-19 — Illuminated Hearts: Hope, Inheritance, Power</summary>
+          <div class="content">
+            <div class="grid single">
+              <div>
+                <label><span class="greek">πεφωτισμένους τοὺς ὀφθαλμοὺς τῆς καρδίας ὑμῶν εἰς τὸ εἰδέναι ὑμᾶς τίς ἐστιν ἡ ἐλπὶς τῆς κλήσεως αὐτοῦ, τίς ὁ πλοῦτος τῆς δόξης τῆς κληρονομίας αὐτοῦ ἐν τοῖς ἁγίοις, καὶ τί τὸ ὑπερβάλλον μέγεθος τῆς δυνάμεως αὐτοῦ εἰς ἡμᾶς τοὺς πιστεύοντας</span></label>
+                <div class="box mono">
+                  <strong>Translation (LLTSE):</strong><br>
+                  The eyes of y'all's heart having been illuminated<br>
+                  &nbsp;&nbsp;so that y'all would know what is the hope of his calling,<br>
+                  &nbsp;&nbsp;what is the richness of the glory of his inheritance<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;among the holy ones,<br>
+                  and what is the surpassing greatness of his power<br>
+                  &nbsp;&nbsp;toward y'all who trust
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: πεφωτισμένους τοὺς ὀφθαλμοὺς τῆς καρδίας</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • having the eyes of your heart enlightened<br>
+                  • with the eyes of your heart illuminated<br>
+                  • the eyes of your heart having been illuminated
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "having been illuminated"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> πεφωτισμένους = perfect passive participle of φωτίζω (illuminate, give light). Perfect tense: completed action with ongoing state—they have been (and remain) enlightened. Passive: God does the illuminating. "Eyes of heart" = inner capacity for spiritual perception (not emotions but center of understanding). Hebraic anthropology: heart = seat of mind/will. Divine illumination enables spiritual sight.
+                </div>
+              </div>
+            </div>
+
+            <h4>Threefold Object of Knowledge</h4>
+            <div class="grid single">
+              <div>
+                <label>Triadic Structure</label>
+                <div class="box">
+                  Paul prays they would know three realities, each introduced with interrogative (τίς/τί):
+                  <ol class="compact-list">
+                    <li><strong>The hope of his calling</strong> — eschatological expectation grounded in God's effectual call</li>
+                    <li><strong>The richness of the glory of his inheritance</strong> — magnificent wealth of what believers inherit (or possibly: God's inheritance in believers, cf. v. 18b "among the holy ones")</li>
+                    <li><strong>The surpassing greatness of his power</strong> — immeasurable might working toward/in believers</li>
+                  </ol>
+                  <strong>Pattern:</strong> Past (calling) → Future (inheritance) → Present (power). Comprehensive temporal scope of salvation. All three focus on God's action toward believers.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: τὸ ὑπερβάλλον μέγεθος</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • immeasurable greatness<br>
+                  • surpassing greatness<br>
+                  • incomparable greatness
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "surpassing greatness"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> τὸ ὑπερβάλλον = present participle of ὑπερβάλλω (surpass, exceed). Literally "the surpassing greatness"—greatness that surpasses/exceeds measure. Paul piles superlatives: surpassing + greatness + of power. Emphatic language prepares for description of resurrection power (vv. 19b-23). "Surpassing" preserves participial force better than static "immeasurable."
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>1:19b-23 — Resurrection Power and Cosmic Christ</summary>
+          <div class="content">
+            <div class="grid single">
+              <div>
+                <label><span class="greek">κατὰ τὴν ἐνέργειαν τοῦ κράτους τῆς ἰσχύος αὐτοῦ ἣν ἐνήργησεν ἐν τῷ Χριστῷ ἐγείρας αὐτὸν ἐκ νεκρῶν καὶ καθίσας ἐν δεξιᾷ αὐτοῦ ἐν τοῖς ἐπουρανίοις ὑπεράνω πάσης ἀρχῆς καὶ ἐξουσίας καὶ δυνάμεως καὶ κυριότητος καὶ παντὸς ὀνόματος ὀνομαζομένου οὐ μόνον ἐν τῷ αἰῶνι τούτῳ ἀλλὰ καὶ ἐν τῷ μέλλοντι</span></label>
+                <div class="box mono">
+                  <strong>Translation (LLTSE):</strong><br>
+                  in accordance with the working of the power of his might,<br>
+                  which he worked in the Messiah<br>
+                  &nbsp;&nbsp;having raised him from the dead ones<br>
+                  &nbsp;&nbsp;and having seated him at his right hand<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;in the heavenly realm<br>
+                  above all rule and authority and power and dominion<br>
+                  &nbsp;&nbsp;and every name that is named,<br>
+                  &nbsp;&nbsp;not only in this age but also in the coming one
+                </div>
+              </div>
+            </div>
+
+            <h4>Power Terminology Stack</h4>
+            <div class="grid single">
+              <div>
+                <label>Threefold Power Language</label>
+                <div class="box">
+                  <table class="lexical">
+                    <thead>
+                      <tr><th>Greek Term</th><th>Nuance</th><th>Usage</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>ἐνέργεια</td>
+                        <td>Working, effective operation</td>
+                        <td>Energy in action, active force</td>
+                      </tr>
+                      <tr>
+                        <td>κράτος</td>
+                        <td>Might, dominion, sovereign power</td>
+                        <td>Ruling strength, governmental force</td>
+                      </tr>
+                      <tr>
+                        <td>ἰσχύς</td>
+                        <td>Strength, ability, force</td>
+                        <td>Raw power, capability</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <strong>Pattern:</strong> "working of the power of his might" — three near-synonyms stacked for emphasis. Not distinguishing shades of meaning but piling language to express incomprehensible divine power. Demonstrated in Christ's resurrection and exaltation. This same power works toward believers (v. 19a).
+                </div>
+              </div>
+            </div>
+
+            <h4>Fourfold Authority List</h4>
+            <div class="grid single">
+              <div>
+                <label>Cosmic Powers Subjected</label>
+                <div class="box">
+                  <strong>ἀρχῆς καὶ ἐξουσίας καὶ δυνάμεως καὶ κυριότητος:</strong> "rule and authority and power and dominion"
+                  <ul class="compact-list">
+                    <li><strong>ἀρχή</strong> = rule, authority (first/ruling position)</li>
+                    <li><strong>ἐξουσία</strong> = authority, right to rule (delegated power)</li>
+                    <li><strong>δύναμις</strong> = power, ability (capacity for action)</li>
+                    <li><strong>κυριότης</strong> = dominion, lordship (sovereign control)</li>
+                  </ul>
+                  Whether angelic or demonic (or both), these cosmic powers are under Christ's feet. Paul likely refers to spiritual powers/principalities (cf. 3:10; 6:12). Christ's exaltation places him above all cosmic hierarchies. Temporal scope: "not only in this age but also in the coming one" — absolute supremacy across all time.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: Ps 8:6 Allusion (v. 22)</h4>
+            <div class="grid single">
+              <div>
+                <label><span class="greek">καὶ πάντα ὑπέταξεν ὑπὸ τοὺς πόδας αὐτοῦ</span></label>
+                <div class="box">
+                  <strong>Translation:</strong> "And he placed all things under his feet"<br>
+                  <strong>Background:</strong> Direct citation of Ps 8:6 LXX (also used in 1 Cor 15:27; Heb 2:8). Original context: humanity's dominion over creation. Paul applies to Christ as true human who fulfills Adamic vocation. Christ exercises dominion humanity was meant to have. "All things" (πάντα) = comprehensive cosmic authority.
+                </div>
+              </div>
+            </div>
+
+            <h4>Church as Body and Fullness (1:22b-23)</h4>
+            <div class="grid single">
+              <div>
+                <label><span class="greek">καὶ αὐτὸν ἔδωκεν κεφαλὴν ὑπὲρ πάντα τῇ ἐκκλησίᾳ, ἥτις ἐστὶν τὸ σῶμα αὐτοῦ, τὸ πλήρωμα τοῦ τὰ πάντα ἐν πᾶσιν πληρουμένου</span></label>
+                <div class="box mono">
+                  <strong>Translation (LLTSE):</strong><br>
+                  and gave him headship over all things in the church,<br>
+                  which is his body,<br>
+                  &nbsp;&nbsp;the fullness of the One who fills all in all
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: τὸ πλήρωμα</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • the fullness (substantive)<br>
+                  • that which fills (active sense)<br>
+                  • that which is filled (passive sense)
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "the fullness"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> πλήρωμα from πληρόω (to fill). Can mean: (1) that which fills/completes, or (2) that which is filled/completed. Genitive phrase "of the One who fills all in all" suggests active sense: church as fullness/completion of Christ who fills everything. Alternatively: church filled by Christ. The tension may be intentional—mutual filling. Church completes Christ's presence in world while Christ fills church. "Fullness" preserves both possibilities.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: πληρουμένου</h4>
+            <div class="grid">
+              <div>
+                <label>Voice Options</label>
+                <div class="box mono">
+                  • who fills (active: Christ fills all)<br>
+                  • who is filled (passive: Christ filled by all)<br>
+                  • who is being filled (middle: reciprocal filling)
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "who fills" (active)</label>
+                <div class="box">
+                  <strong>Rationale:</strong> πληρόω can be middle or passive (same form). Active sense best fits context: cosmic Christ who fills all things (cf. 4:10 "that he might fill all things"). Participial phrase defines "the One"—Christ characterized as the one filling all in all. Scope: πάντα ἐν πᾶσιν = all things in all (comprehensive cosmic filling). Church participates in Christ's cosmic fullness.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
 
     </section>
   </div>
 
-  <!-- CHAPTER 2 TAB -->
+  <!-- ========== CHAPTER 2 TAB ========== -->
   <div id="ch2" class="tab-content" role="tabpanel">
-    <h2>Chapter 2: Coming Soon</h2>
-    <p class="lead">Full translation journal for Chapter 2 (From Death to Life, Jew-Gentile Reconciliation) will be added here.</p>
+    <section class="cards">
+      
+      <div class="card">
+        <h2>Chapter 2 Overview</h2>
+        <p><strong>Theme:</strong> From Death to Life; Jew-Gentile Reconciliation</p>
+        <p><strong>Key Structures:</strong> Dead in sins (1-3), Made alive in Christ (4-10), Far/Near reconciliation (11-18), Temple metaphor (19-22)</p>
+        <p><strong>Status:</strong> <span class="status-complete">✓ Complete</span> — Major decisions documented</p>
+      </div>
+
+      <!-- Major Decision Points for Chapter 2 -->
+      <div class="card">
+        <h2>2:1-10 — From Death to Life by Grace</h2>
+        
+        <details open>
+          <summary>2:1-3 — Dead in Trespasses (Major Decisions)</summary>
+          <div class="content">
+            <h4>Key Decision: νεκροὺς τοῖς παραπτώμασιν</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • dead in trespasses (locative)<br>
+                  • dead because of trespasses (causal)<br>
+                  • dead by trespasses (instrumental)
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "dead in trespasses"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> Dative of sphere—trespasses as realm of death. Vivid metaphor: spiritual death as present reality, not merely future consequence. παράπτωμα = false step, deviation from path. Paired with ἁμαρτίαις (sins, missing the mark). Dual terms emphasize moral failure from different angles.
+                </div>
+              </div>
+            </div>
+
+            <h4>Cosmic Powers Language (2:2)</h4>
+            <div class="grid single">
+              <div>
+                <label><span class="greek">κατὰ τὸν ἄρχοντα τῆς ἐξουσίας τοῦ ἀέρος</span></label>
+                <div class="box">
+                  <strong>Translation:</strong> "according to the ruler of the authority of the air"<br>
+                  Three-layer description: ruler → of authority → of the air. ἄρχων (ruler/prince) = hostile spiritual power. ἀήρ (air) = atmospheric realm between earth and heaven in ancient cosmology, domain of demonic activity. Satan as cosmic power controlling fallen realm. Links to "sons of disobedience" (υἱοὺς τῆς ἀπειθείας)—humanity under hostile dominion.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: τέκνα φύσει ὀργῆς (2:3)</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • children of wrath by nature<br>
+                  • by nature children of wrath<br>
+                  • naturally objects of wrath
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "children by nature of wrath"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> φύσις = nature, natural condition. Not genetic determinism but Adamic solidarity—humanity's fallen condition prior to grace. "Children of wrath" = Semitism (like "son of perdition")—those characterized by wrath, under wrath. Natural state apart from Christ. "As also were the rest" includes Jews and Gentiles—universal human condition.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>2:4-7 — But God... Made Alive (Major Decisions)</summary>
+          <div class="content">
+            <h4>Dramatic Reversal: ὁ δὲ θεός (2:4)</h4>
+            <div class="grid single">
+              <div>
+                <label>Structural Pivot</label>
+                <div class="box">
+                  <strong>"But God"</strong> — δὲ marks strongest possible contrast after vv. 1-3's bleak description. Emphatic: "But God, being rich in mercy..." Divine initiative breaks death's grip. Participial phrase "being rich in mercy" (πλούσιος ὢν ἐν ἐλέει) grounds what follows. God's character (mercy-richness) + motivation (great love) → saving action. Causal chain: mercy → love → life-giving.
+                </div>
+              </div>
+            </div>
+
+            <h4>Three Aorists of Salvation (2:5-6)</h4>
+            <div class="grid single">
+              <div>
+                <label>Verbal Pattern</label>
+                <div class="box">
+                  <table class="lexical">
+                    <thead>
+                      <tr><th>Verb</th><th>Action</th><th>Theological Significance</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>συνεζωοποίησεν</td>
+                        <td>made alive together with</td>
+                        <td>Resurrection participation (σύν-compound)</td>
+                      </tr>
+                      <tr>
+                        <td>συνήγειρεν</td>
+                        <td>raised up together</td>
+                        <td>Co-resurrection with Christ</td>
+                      </tr>
+                      <tr>
+                        <td>συνεκάθισεν</td>
+                        <td>seated together</td>
+                        <td>Co-enthronement in heavenlies</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  All three verbs share σύν- (with/together) prefix—union with Christ in his death-resurrection-exaltation. Aorist tense: completed action, accomplished fact. Believers already participate in Christ's resurrection and enthronement (realized eschatology). "In the heavenlies with Messiah Jesus" (v. 6) echoes 1:3, 20.
+                </div>
+              </div>
+            </div>
+
+            <h4>Parenthetical Emphasis (2:5b)</h4>
+            <div class="grid">
+              <div>
+                <label><span class="greek">χάριτί ἐστε σεσῳσμένοι</span></label>
+                <div class="box mono">
+                  <strong>Translation:</strong> "by grace y'all have been saved"<br>
+                  Perfect passive periphrastic (ἐστε + perfect participle) = completed action with ongoing state. Parenthetical—Paul can't help but interrupt to emphasize grace. Repeated with expansion in v. 8. Dative of means: grace as instrument of salvation.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>2:8-10 — Sola Gratia Statement (Major Decisions)</summary>
+          <div class="content">
+            <h4>Key Decision: τοῦτο in 2:8</h4>
+            <div class="grid single">
+              <div>
+                <label>Referent of "This"</label>
+                <div class="box">
+                  <span class="greek">τῇ γὰρ χάριτί ἐστε σεσῳσμένοι διὰ πίστεως· καὶ τοῦτο οὐκ ἐξ ὑμῶν, θεοῦ τὸ δῶρον</span><br>
+                  <strong>Options for τοῦτο:</strong>
+                  <ul class="compact-list">
+                    <li>Grace (feminine χάρις—gender mismatch with neuter τοῦτο)</li>
+                    <li>Faith (feminine πίστις—same gender issue)</li>
+                    <li>The whole salvation event (best fit for neuter)</li>
+                  </ul>
+                  <strong>Decision:</strong> "this" refers to entire salvation reality (grace through faith). Neuter pronoun points to concept, not specific noun. "Not from yourselves—it is the gift of God." Salvation in its entirety (not earned, achieved, or originated by humans) is divine gift. Faith itself is response enabled by grace, not meritorious work.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: ποίημα (2:10)</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • workmanship (traditional)<br>
+                  • handiwork (artisan metaphor)<br>
+                  • poem/crafted work (poetic)
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "handiwork"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> ποίημα from ποιέω (to make/do). Refers to something made, crafted work. Related to English "poem" (crafted artistic work). "Handiwork" captures artisan sense—believers as God's crafted masterpiece. Contrasts with "not from works" (v. 9): we don't save ourselves by works, but we're created by God for works. Works as purpose, not cause.
+                </div>
+              </div>
+            </div>
+
+            <h4>Purpose Clause Structure</h4>
+            <div class="grid single">
+              <div>
+                <label>Created for Good Works</label>
+                <div class="box">
+                  <strong>κτισθέντες ἐν Χριστῷ Ἰησοῦ ἐπὶ ἔργοις ἀγαθοῖς:</strong> "having been created in Messiah Jesus for good works"<br>
+                  Aorist passive: God creates/recreates. ἐπί + dative = for the purpose of. Works as divine destination, not human origin. "Which God prepared beforehand" (ἃ προητοίμασεν ὁ θεός)—double emphasis on divine initiative. Final purpose clause: "so that we would walk in them" (ἵνα ἐν αὐτοῖς περιπατήσωμεν). Ethical walk as fulfillment of created purpose. Grace frees for obedience, doesn't eliminate it.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- Reconciliation Section -->
+      <div class="card">
+        <h2>2:11-22 — Jew-Gentile Reconciliation</h2>
+        
+        <details open>
+          <summary>2:11-13 — Remember/But Now Pattern (Major Decisions)</summary>
+          <div class="content">
+            <h4>Key Decision: μνημονεύετε (2:11)</h4>
+            <div class="grid single">
+              <div>
+                <label>Imperative Force</label>
+                <div class="box">
+                  <strong>"Therefore remember"</strong> — Present imperative: ongoing remembering. Not nostalgia but theological memory—recalling former alienation to appreciate present reconciliation. "Y'all, the Gentiles in flesh" addresses non-Jewish readers directly. Circumcision language: "called 'uncircumcised' by what is called 'the circumcised'" — ironic distancing from both labels (ethnic markers transcended in Christ).
+                </div>
+              </div>
+            </div>
+
+            <h4>Fivefold Alienation (2:12)</h4>
+            <div class="grid single">
+              <div>
+                <label>Gentile Condition Apart from Christ</label>
+                <div class="box">
+                  <ol class="compact-list">
+                    <li><strong>χωρὶς Χριστοῦ</strong> — without Messiah (no messianic hope)</li>
+                    <li><strong>ἀπηλλοτριωμένοι τῆς πολιτείας τοῦ Ἰσραήλ</strong> — estranged from the citizenry of Israel (political metaphor)</li>
+                    <li><strong>ξένοι τῶν διαθηκῶν τῆς ἐπαγγελίας</strong> — foreigners of the covenants of promise (plural covenants: Abraham, Sinai, David)</li>
+                    <li><strong>ἐλπίδα μὴ ἔχοντες</strong> — having no hope (no eschatological expectation)</li>
+                    <li><strong>ἄθεοι ἐν τῷ κόσμῳ</strong> — without God in the world (practical atheism despite pagan religion)</li>
+                  </ol>
+                  Comprehensive description of Gentile exclusion from Israel's covenant privileges. Echoes deuteronomic curses (alienation, no covenant, no hope). Sets up dramatic "But now" (νυνὶ δέ) reversal in v. 13.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: ἐν τῷ αἵματι τοῦ Χριστοῦ (2:13)</h4>
+            <div class="grid">
+              <div>
+                <label>Locative or Instrumental?</label>
+                <div class="box mono">
+                  • in the blood (locative: sphere of reconciliation)<br>
+                  • through/by the blood (instrumental: means of reconciliation)
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "through the blood"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> ἐν can function instrumentally (cf. 1:7 "through his blood"). Blood = Christ's death viewed sacrificially. Levitical background: blood makes atonement (Lev 17:11). "Have become near" (ἐγενήθητε ἐγγύς) echoes Isa 57:19 LXX. Spatial metaphor: far → near. Blood of Christ bridges the distance.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>2:14-18 — Peace Through the Cross (Major Decisions)</summary>
+          <div class="content">
+            <h4>Structural Anchor: Christ as Peace</h4>
+            <div class="highlight-box">
+              <p><strong>2:14-16 forms a dense theological statement about reconciliation:</strong></p>
+              <ul class="compact-list">
+                <li>Christ <em>is</em> our peace (v. 14a) — not merely makes peace but embodies it</li>
+                <li>Made the two one (v. 14b) — Jew + Gentile → one people</li>
+                <li>Destroyed the dividing wall (v. 14c) — barrier removed</li>
+                <li>Abolished the Law (v. 15a) — Torah's divisive function ended</li>
+                <li>Created one new humanity (v. 15b) — not Gentiles becoming Jews but new creation</li>
+                <li>Reconciled both to God (v. 16) — vertical + horizontal peace simultaneous</li>
+              </ul>
+            </div>
+
+            <h4>Key Decision: τὸ μεσότοιχον τοῦ φραγμοῦ (2:14)</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • div
+                  iding wall of hostility<br>
+                  • middle wall of partition<br>
+                  • barrier of the dividing wall
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "barrier of the wall"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> μεσότοιχον (middle wall) + φραγμός (fence, barrier). Compound metaphor possibly alluding to Temple barrier separating Court of Gentiles from inner courts (inscriptions warned Gentiles on pain of death). Or metaphorical: Torah as wall separating Jew and Gentile. τὴν ἔχθραν (the enmity) in apposition explains what wall represents. Christ destroys both physical/symbolic separation and the hostility it represents.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: καταργήσας (2:15)</h4>
+            <div class="grid single">
+              <div>
+                <label>Semantic Range of καταργέω</label>
+                <div class="box">
+                  <table class="sense">
+                    <thead>
+                      <tr><th>Rendering</th><th>Lexical Sense</th><th>Theological Implication</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>"abolished"</td>
+                        <td>Rendered inoperative, nullified</td>
+                        <td>Torah's covenant function ended</td>
+                      </tr>
+                      <tr>
+                        <td>"set aside"</td>
+                        <td>Put away, removed from use</td>
+                        <td>Torah no longer boundary marker</td>
+                      </tr>
+                      <tr>
+                        <td>"nullified"</td>
+                        <td>Made void, ineffective</td>
+                        <td>Torah's divisive power broken</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <strong>Decision:</strong> "having set aside" — καταργέω (kata- + argos = make idle/inoperative). Not destroying Torah's moral content but ending its function as ethnic boundary marker. "The Torah of commandments in decrees" (τὸν νόμον τῶν ἐντολῶν ἐν δόγμασιν) = specific regulations separating Jew from Gentile. Purpose: create one new humanity, not two peoples under different covenants.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: ἕνα καινὸν ἄνθρωπον (2:15)</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • one new man<br>
+                  • one new humanity<br>
+                  • one new person
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "one new humanity"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> ἄνθρωπος = human being (generic, not gender-specific). καινός (new in quality, not just recent) vs. νέος (new in time). Corporate sense: not individuals but collective new humanity. Not Jews + Gentiles but new creation transcending both. "In himself" (ἐν αὐτῷ) — in Christ, incorporated into his body. Peace-making (ποιῶν εἰρήνην) as creative act, not mere treaty.
+                </div>
+              </div>
+            </div>
+
+            <h4>Cross Theology (2:16)</h4>
+            <div class="grid single">
+              <div>
+                <label>Reconciliation Mechanism</label>
+                <div class="box">
+                  <strong>ἀποκαταλλάξῃ τοὺς ἀμφοτέρους ἐν ἑνὶ σώματι τῷ θεῷ διὰ τοῦ σταυροῦ:</strong> "reconcile the two to God by means of one body through the cross"<br>
+                  <br>
+                  Double reconciliation: horizontal (Jew-Gentile, v. 14-15) + vertical (both to God, v. 16). ἀποκαταλλάσσω (intensive form of reconcile with ἀπο- prefix = fully reconcile). "In one body" (ἐν ἑνὶ σώματι) = Christ's crucified body (corporate church body formed through that death). διὰ τοῦ σταυροῦ (through the cross) specifies means. Participial clause: "having killed the enmity in himself" (ἀποκτείνας τὴν ἔχθραν ἐν αὐτῷ) — Christ absorbs/destroys hostility in his own person on cross.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>2:19-22 — Temple Metaphor (Major Decisions)</summary>
+          <div class="content">
+            <h4>Citizenship Language (2:19)</h4>
+            <div class="grid single">
+              <div>
+                <label>Political Metaphor Shift</label>
+                <div class="box">
+                  <strong>ξένοι καὶ πάροικοι → συμπολῖται τῶν ἁγίων καὶ οἰκεῖοι τοῦ θεοῦ:</strong><br>
+                  "foreigners and immigrants" → "fellow citizens with the holy ones and members of God's household"<br>
+                  <br>
+                  Three-part shift:
+                  <ul class="compact-list">
+                    <li><strong>ξένοι</strong> (foreigners) → <strong>συμπολῖται</strong> (fellow citizens) — political inclusion</li>
+                    <li><strong>πάροικοι</strong> (resident aliens) → <strong>οἰκεῖοι</strong> (household members) — familial belonging</li>
+                    <li>Former outsider status (v. 12) → full membership in God's community</li>
+                  </ul>
+                  No longer second-class residents but full citizens and family. Reverses v. 12's fivefold alienation.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: θεμελίῳ (2:20)</h4>
+            <div class="grid">
+              <div>
+                <label>Foundation Identification</label>
+                <div class="box mono">
+                  Options for "apostles and prophets":<br>
+                  • OT prophets + NT apostles<br>
+                  • NT apostles + NT prophets<br>
+                  • As foundation itself vs. as those who laid foundation
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "foundation of the apostles and prophets"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> Most likely NT apostles and prophets (cf. 3:5; 4:11 — same pairing). Genitive could be subjective (foundation they laid) or possessive (foundation consisting of them). Either way, Christ-centered: "Jesus Messiah himself being the corner stone" (ἀκρογωνιαίου ὄντος αὐτοῦ Χριστοῦ Ἰησοῦ). ἀκρογωνιαῖος = corner/capstone, primary stone holding structure together. Building metaphor replaces wall-of-division imagery with wall-of-unity.
+                </div>
+              </div>
+            </div>
+
+            <h4>Temple Growing (2:21-22)</h4>
+            <div class="grid single">
+              <div>
+                <label>Organic Architecture</label>
+                <div class="box">
+                  <strong>ἐν ᾧ πᾶσα οἰκοδομὴ συναρμολογουμένη αὔξει εἰς ναὸν ἅγιον ἐν κυρίῳ:</strong> "in whom the entire building being joined together can grow into a holy temple in the Lord"<br>
+                  <br>
+                  <strong>Key terms:</strong>
+                  <ul class="compact-list">
+                    <li><strong>συναρμολογέω</strong> — fit/join together (architectural term; cf. 4:16 of body)</li>
+                    <li><strong>αὔξει</strong> — grows (organic metaphor mixed with building metaphor)</li>
+                    <li><strong>ναὸν ἅγιον</strong> — holy temple (sanctuary, inner shrine where God dwells)</li>
+                  </ul>
+                  Building that grows = living temple, organic community. "In the Lord" (ἐν κυρίῳ) = sphere/foundation of growth. Verse 22 personalizes: "y'all are being built together" (συνοικοδομεῖσθε) — present passive, ongoing construction. Purpose: "into a dwelling-building of God by means of the Spirit" (εἰς κατοικητήριον τοῦ θεοῦ ἐν πνεύματι). God dwells in community, not stone temple.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+    </section>
   </div>
 
-  <!-- CHAPTER 3 TAB -->
+  <!-- ========== CHAPTER 3 TAB ========== -->
   <div id="ch3" class="tab-content" role="tabpanel">
-    <h2>Chapter 3: Coming Soon</h2>
-    <p class="lead">Full translation journal for Chapter 3 (Mystery Revealed, Cosmic Wisdom, Doxology) will be added here.</p>
+    <section class="cards">
+      
+      <div class="card">
+        <h2>Chapter 3 Overview</h2>
+        <p><strong>Theme:</strong> Mystery Revealed; Paul's Ministry; Cosmic Wisdom</p>
+        <p><strong>Key Structures:</strong> Paul's commission (1-7), Mystery content (8-13), Prayer for love (14-19), Doxology anchor (20-21)</p>
+        <p><strong>Status:</strong> <span class="status-complete">✓ Complete</span> — Major decisions documented</p>
+      </div>
+
+      <div class="card">
+        <h2>3:1-7 — Paul's Stewardship of Mystery</h2>
+        
+        <details open>
+          <summary>3:1-6 — The Mystery Revealed (Major Decisions)</summary>
+          <div class="content">
+            <h4>Key Decision: οἰκονομίαν (3:2)</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • stewardship (managerial)<br>
+                  • administration (organizational)<br>
+                  • commission (appointive)
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "arranged plan" / "stewardship"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> οἰκονομία from οἶκος (house) + νέμω (manage) = household management. Paul uses in two senses: (1) God's plan/arrangement (1:10), (2) Paul's stewardship/administration of that plan (3:2, 9). Here: "the arranged plan of the grace of God which was given to me for y'all" — Paul as steward entrusted with mystery. Not inventing message but managing divine revelation entrusted to him.
+                </div>
+              </div>
+            </div>
+
+            <h4>Mystery Content Defined (3:3-6)</h4>
+            <div class="grid single">
+              <div>
+                <label>The Open Secret</label>
+                <div class="box">
+                  <strong>Core statement (3:6):</strong> "that the nations are co-heirs and co-body-members and co-possessors of the promise in Messiah Jesus through the good-news"<br>
+                  <br>
+                  Three σύν- compounds reveal mystery's content:
+                  <table class="lexical">
+                    <thead>
+                      <tr><th>Greek Term</th><th>Literal</th><th>Meaning</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>συγκληρονόμα</td>
+                        <td>co-heirs</td>
+                        <td>Equal inheritance rights with Israel</td>
+                      </tr>
+                      <tr>
+                        <td>σύσσωμα</td>
+                        <td>co-body</td>
+                        <td>One body, not separate entity (unique NT word)</td>
+                      </tr>
+                      <tr>
+                        <td>συμμέτοχα</td>
+                        <td>co-partakers</td>
+                        <td>Joint participation in promises</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  Mystery = Gentile inclusion on equal terms, not as second-class addendum but as co-members of one body. "In Messiah Jesus through the good-news" — incorporation mechanism: gospel creates one people.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: πρὸ αἰώνων vs. ἐν ἑτέραις γενεαῖς (3:5, 9)</h4>
+            <div class="grid single">
+              <div>
+                <label>Temporal Scope of Mystery</label>
+                <div class="box">
+                  <strong>3:5:</strong> "which in other generations was not made known to the sons of humanity"<br>
+                  <strong>3:9:</strong> "which was hidden from the ages in God"<br>
+                  <br>
+                  Mystery characterized by:
+                  <ul class="compact-list">
+                    <li><strong>Hidden status:</strong> Concealed in past ages (ἀποκεκρυμμένου, perfect participle = remained hidden)</li>
+                    <li><strong>Revealed status:</strong> "as it is now revealed" (ὡς νῦν ἀπεκαλύφθη, aorist = definitive revelation)</li>
+                    <li><strong>Recipients:</strong> "to his holy apostles and prophets by the Spirit" — NT figures receive what OT did not</li>
+                  </ul>
+                  Not that OT lacked hints of Gentile inclusion (Isaiah, etc.) but that the <em>mechanism</em> and <em>equality</em> were unrevealed. Now disclosed: one multi-ethnic body in Christ.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>3:8-13 — Paul's Commission and Cosmic Purpose (Major Decisions)</summary>
+          <div class="content">
+            <h4>Key Decision: ἐλαχιστοτέρῳ (3:8)</h4>
+            <div class="grid">
+              <div>
+                <label>Grammatical Oddity</label>
+                <div class="box mono">
+                  • the very least<br>
+                  • less than the least<br>
+                  • the least-est (double superlative)
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "the status-in-lowest"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> ἐλαχιστότερος = comparative of superlative ἐλάχιστος (least). Grammatically impossible in classical Greek (superlatives don't take comparatives) but rhetorically powerful. Paul intensifies "least of apostles" (1 Cor 15:9) to "less than least of all saints." Not false humility but genuine awe at being entrusted with mystery despite persecutor past. Double superlative = emphatic self-deprecation highlighting grace's magnitude.
+                </div>
+              </div>
+            </div>
+
+            <h4>Cosmic Wisdom Display (3:10)</h4>
+            <div class="grid single">
+              <div>
+                <label>Angelic Pedagogy</label>
+                <div class="box">
+                  <strong>ἵνα γνωρισθῇ νῦν ταῖς ἀρχαῖς καὶ ταῖς ἐξουσίαις ἐν τοῖς ἐπουρανίοις διὰ τῆς ἐκκλησίας ἡ πολυποίκιλος σοφία τοῦ θεοῦ:</strong> "in order that now would be made known to the rulers and to the authorities in the heavenlies, through the church, the multi-faceted wisdom of God"<br>
+                  <br>
+                  <strong>Key terms:</strong>
+                  <ul class="compact-list">
+                    <li><strong>ἀρχαῖς καὶ ἐξουσίαις</strong> — cosmic powers (cf. 1:21; 6:12), likely angelic beings</li>
+                    <li><strong>πολυποίκιλος</strong> — many-colored, multi-faceted (only here in NT; LXX uses of variegated beauty)</li>
+                    <li><strong>διὰ τῆς ἐκκλησίας</strong> — through the church (instrumental: church as display case)</li>
+                  </ul>
+                  Church's unity displays God's wisdom to cosmic observers. What angels didn't understand in ages past (1 Pet 1:12) now visible in multi-ethnic body. God's wisdom = ability to create unity from division. Church as cosmic theater where divine wisdom performs.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>3:14-21 — Prayer and Doxology (Structural Anchor)</h2>
+        
+        <details open>
+          <summary>3:14-19 — Prayer for Love's Dimensions (Major Decisions)</summary>
+          <div class="content">
+            <h4>Posture and Address (3:14-15)</h4>
+            <div class="grid single">
+              <div>
+                <label>Prayer Introduction</label>
+                <div class="box">
+                  <strong>"For this reason I bow my knee to the Father"</strong> (Τούτου χάριν κάμπτω τὰ γόνατά μου πρὸς τὸν πατέρα) — resumes interrupted sentence from 3:1. κάμπτω = bend, bow (reverential posture). τὰ γόνατα = the knees (dual for intensity). Normal Jewish prayer = standing; kneeling = special reverence (cf. Dan 6:10).<br>
+                  <br>
+                  <strong>Wordplay (3:15):</strong> "from whom every clan-family (πᾶσα πατριὰ) in the heavenlies and on the earth is named" — πατριά echoes πατήρ (father). All family groupings derive name and identity from the Father. Cosmic fatherhood undergirds church's unity.
+                </div>
+              </div>
+            </div>
+
+            <h4>Inner Strengthening (3:16-17)</h4>
+            <div class="grid single">
+              <div>
+                <label>Concentric Prayer Structure</label>
+                <div class="box">
+                  Three petitions forming concentric layers:
+                  <ol class="compact-list">
+                    <li><strong>Strengthened through Spirit (v. 16):</strong> "power to be strengthened through his Spirit in your inner human" — inward fortification</li>
+                    <li><strong>Christ dwelling through faith (v. 17a):</strong> "that the Messiah would dwell through faith in your hearts" — Christ taking up residence (κατοικῆσαι = settle down permanently)</li>
+                    <li><strong>Rooted in love (v. 17b):</strong> "having been rooted and established in love" — perfect participles = settled foundation</li>
+                  </ol>
+                  Pattern: Spirit strengthens → Christ dwells → Love roots. Trinitarian structure with love as soil.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: Four Dimensions (3:18-19)</h4>
+            <div class="grid single">
+              <div>
+                <label>Spatial Metaphor</label>
+                <div class="box">
+                  <strong>τί τὸ πλάτος καὶ μῆκος καὶ ὕψος καὶ βάθος:</strong> "what is the width and length and height and depth"<br>
+                  <br>
+                  <strong>Interpretive options:</strong>
+                  <table class="sense">
+                    <thead>
+                      <tr><th>Interpretation</th><th>Support</th><th>Challenge</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Dimensions of God's love</td>
+                        <td>Context emphasizes love (v. 17, 19)</td>
+                        <td>No explicit object in v. 18</td>
+                      </tr>
+                      <tr>
+                        <td>Dimensions of mystery</td>
+                        <td>Follows mystery discourse (vv. 1-13)</td>
+                        <td>Shift from mystery to love seems abrupt</td>
+                      </tr>
+                      <tr>
+                        <td>Cosmic scope of salvation</td>
+                        <td>Matches cosmic language throughout</td>
+                        <td>Generic interpretation</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <strong>Decision:</strong> Likely refers to love (v. 19 clarifies: "to know the love of the Messiah"). Four dimensions = unmeasurable scope. Language echoes Jewish speculation about cosmic measurements but applied to love's incomprehensibility. "Far-beyond knowing" (ὑπερβάλλουσαν τῆς γνώσεως) = surpassing knowledge—paradox of knowing the unknowable through experience.
+                </div>
+              </div>
+            </div>
+
+            <h4>Purpose: Filled unto Fullness (3:19b)</h4>
+            <div class="grid">
+              <div>
+                <label><span class="greek">ἵνα πληρωθῆτε εἰς πᾶν τὸ πλήρωμα τοῦ θεοῦ</span></label>
+                <div class="box mono">
+                  <strong>Translation:</strong> "so that y'all would be filled up unto all the fullness of God"
+                </div>
+              </div>
+              <div>
+                <label>Superlative Climax</label>
+                <div class="box">
+                  Prayer ascends from strength → indwelling → comprehension → fullness. τὸ πλήρωμα τοῦ θεοῦ = God's fullness (cf. Col 1:19; 2:9 — fullness dwells in Christ). Believers filled up to the measure of divine fullness—participatory union, not absorption. εἰς expresses direction/goal. Prayer's audacity: petition for believers to experience fullness of God himself.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>3:20-21 — Doxology: Structural Anchor</summary>
+          <div class="content">
+            <div class="doxology" style="font-size:.95rem;">
+              Now to the one who is powerful beyond all things<br>
+              &nbsp;&nbsp;to do over abundantly more than what we would ask or conceive,<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;according to the power which is at work in us,<br>
+              to him be glory in the church<br>
+              &nbsp;&nbsp;and in Messiah Jesus<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;for all generations of the age of the ages.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amen.
+            </div>
+
+            <h4>Key Decision: ὑπερεκπερισσοῦ (3:20)</h4>
+            <div class="grid single">
+              <div>
+                <label>Superlative Stack</label>
+                <div class="box">
+                  <strong>τῷ δυναμένῳ ὑπὲρ πάντα ποιῆσαι ὑπερεκπερισσοῦ ὧν αἰτούμεθα ἢ νοοῦμεν:</strong> "to the one who is powerful beyond all things to do over-abundantly-more-than what we ask or conceive"<br>
+                  <br>
+                  <strong>ὑπερεκπερισσοῦ</strong> analysis:
+                  <ul class="compact-list">
+                    <li><strong>ὑπέρ-</strong> = beyond, above, more than</li>
+                    <li><strong>ἐκ-</strong> = out of, from (intensifier)</li>
+                    <li><strong>περισσοῦ</strong> = abundantly, exceedingly</li>
+                  </ul>
+                  Triple-compounded adverb (unique to Paul, only here and 1 Thess 3:10; 5:13). Translation challenge: English can't match Greek's morphological creativity. "Over abundantly more" attempts to preserve stacking. Point: God's power infinitely exceeds human imagination or petition. Doxology's hyperbole matches prayer's audacity (vv. 14-19).
+                </div>
+              </div>
+            </div>
+
+            <h4>Glory Formula (3:21)</h4>
+            <div class="grid single">
+              <div>
+                <label>Dual Location + Eternal Duration</label>
+                <div class="box">
+                  <strong>αὐτῷ ἡ δόξα ἐν τῇ ἐκκλησίᾳ καὶ ἐν Χριστῷ Ἰησοῦ:</strong> "to him be glory in the church and in Messiah Jesus"<br>
+                  <br>
+                  Glory given in two spheres (not "through" but "in"):
+                  <ul class="compact-list">
+                    <li><strong>ἐν τῇ ἐκκλησίᾳ</strong> — glory manifested in gathered community (cf. 3:10's cosmic display)</li>
+                    <li><strong>ἐν Χριστῷ Ἰησοῦ</strong> — glory in/through Christ (the mediator)</li>
+                  </ul>
+                  Church and Christ paired as twin loci of divine glory. Not sequential but simultaneous—church glorifies as it exists in Christ.<br>
+                  <br>
+                  <strong>Temporal scope:</strong> "for all generations of the age of the ages" (εἰς πάσας τὰς γενεὰς τοῦ αἰῶνος τῶν αἰώνων) — Hebrew idiom for eternity (lit. "unto all the generations of the eon of eons"). Comprehensive: all generations + all time = perpetual doxology.
+                </div>
+              </div>
+            </div>
+
+            <h4>Structural Significance</h4>
+            <div class="grid single">
+              <div>
+                <label>Hinge Point</label>
+                <div class="box">
+                  This doxology functions as structural anchor marking major transition:
+                  <ul class="compact-list">
+                    <li><strong>Chapters 1-3:</strong> Doctrinal/theological foundation (what God has done)</li>
+                    <li><strong>Chapters 4-6:</strong> Ethical/practical application (how believers should live)</li>
+                  </ul>
+                  Doxology both concludes theology and launches ethics. "Therefore" in 4:1 builds on this foundation. Pattern: indicative (1-3) grounds imperative (4-6). Prayer and praise bridge doctrine and duty.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+    </section>
   </div>
 
-  <!-- CHAPTER 4 TAB -->
+  <!-- ========== CHAPTER 4 TAB ========== -->
   <div id="ch4" class="tab-content" role="tabpanel">
-    <h2>Chapter 4: Coming Soon</h2>
-    <p class="lead">Full translation journal for Chapter 4 (Seven Unities, Gifts for Maturity, Old/New Humanity) will be added here.</p>
+    <section class="cards">
+      
+      <div class="card">
+        <h2>Chapter 4 Overview</h2>
+        <p><strong>Theme:</strong> Unity and Maturity in the Body</p>
+        <p><strong>Key Structures:</strong> Seven unities (1-6), Gifts for maturity (7-16), Old/new humanity contrast (17-24), Practical holiness (25-32)</p>
+        <p><strong>Status:</strong> <span class="status-complete">✓ Complete</span> — Major decisions documented</p>
+      </div>
+
+      <div class="card">
+        <h2>4:1-6 — Seven Unities</h2>
+        
+        <details open>
+          <summary>4:1-3 — Walk Worthy and Keep Unity (Major Decisions)</summary>
+          <div class="content">
+            <h4>Transition: Οὖν (Therefore)</h4>
+            <div class="grid single">
+              <div>
+                <label>Logical Connection</label>
+                <div class="box">
+                  <strong>"Therefore I, the prisoner in the Lord, urge y'all"</strong> — Οὖν marks major transition from indicative (chs. 1-3: what God has done) to imperative (chs. 4-6: how believers should respond). "Prisoner in the Lord" (ὁ δέσμιος ἐν κυρίῳ) recalls 3:1 but now explicitly "in the Lord" (not merely for ethnic groups but in union with Christ). παρακαλῶ (urge/exhort) introduces ethical section.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: περιπατῆσαι ἀξίως (4:1)</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • walk worthily<br>
+                  • live worthy<br>
+                  • conduct yourselves in a manner worthy
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "walk in a manner worthy"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> περιπατέω (walk) used metaphorically for conduct/lifestyle (8x in Ephesians: 2:2, 10; 4:1, 17; 5:2, 8, 15). ἀξίως (worthily, in a manner worthy) + genitive "of the calling" (τῆς κλήσεως). Calling (divine summons) establishes standard; walk should match identity. Not earning calling but living consistently with it. Adverbial manner clause: "walk in a way that matches..."
+                </div>
+              </div>
+            </div>
+
+            <h4>Fourfold Virtue List (4:2)</h4>
+            <div class="grid single">
+              <div>
+                <label>Character Qualities</label>
+                <div class="box">
+                  <table class="lexical">
+                    <thead>
+                      <tr><th>Greek Term</th><th>Translation</th><th>Nuance</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>ταπεινοφροσύνη</td>
+                        <td>humility</td>
+                        <td>Lowliness of mind (counter-cultural in Greco-Roman world)</td>
+                      </tr>
+                      <tr>
+                        <td>πραΰτης</td>
+                        <td>gentleness</td>
+                        <td>Meekness, not harshness (strength under control)</td>
+                      </tr>
+                      <tr>
+                        <td>μακροθυμία</td>
+                        <td>patience</td>
+                        <td>Long-suffering, slow to anger (relational endurance)</td>
+                      </tr>
+                      <tr>
+                        <td>ἀνεχόμενοι ἀλλήλων ἐν ἀγάπῃ</td>
+                        <td>bearing with one another in love</td>
+                        <td>Tolerating imperfections (present middle participle = mutual action)</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  All four foster community unity. "With all" (μετὰ πάσης) modifies first three = complete/full expression. Love (ἐν ἀγάπῃ) as sphere of forbearance.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: τηρεῖν τὴν ἑνότητα (4:3)</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • maintain the unity<br>
+                  • guard the unity<br>
+                  • keep the unity
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "keep the one-ness"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> τηρέω = keep, guard, preserve (not create but maintain). ἑνότης (oneness, unity) appears only here and 4:13 in NT. Unity already exists (Spirit-created, v. 3b); believers must preserve it. Present infinitive = ongoing action. "Being zealous" (σπουδάζοντες, present participle) = making every effort, being eager/diligent. "Bond of peace" (σύνδεσμος τῆς εἰρήνης) — peace as ligament binding unity together.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>4:4-6 — Seven Unities Formula (Major Decisions)</summary>
+          <div class="content">
+            <h4>Structural Pattern</h4>
+            <div class="grid single">
+              <div>
+                <label>Sevenfold "One" (ἕν/εἷς/μία)</label>
+                <div class="box">
+                  Likely pre-Pauline creedal formula (rhythmic, memorable):
+                  <ol class="compact-list">
+                    <li><strong>ἓν σῶμα</strong> — one body (the church, cf. 1:23; 2:16)</li>
+                    <li><strong>ἓν πνεῦμα</strong> — one Spirit (Holy Spirit indwelling all)</li>
+                    <li><strong>μία ἐλπίς</strong> — one hope (eschatological expectation)</li>
+                    <li><strong>εἷς κύριος</strong> — one Lord (Jesus Christ, cf. Deut 6:4 Shema)</li>
+                    <li><strong>μία πίστις</strong> — one faith (shared confession/trust)</li>
+                    <li><strong>ἓν βάπτισμα</strong> — one baptism (initiation rite uniting to Christ)</li>
+                    <li><strong>εἷς θεὸς καὶ πατήρ</strong> — one God and Father (monotheistic foundation)</li>
+                  </ol>
+                  Structure: Body/Spirit (v. 4) → Lord/Faith/Baptism (v. 5) → God/Father (v. 6). Trinitarian arrangement: Spirit → Lord (Son) → Father.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: Final Phrase (4:6b)</h4>
+            <div class="grid single">
+              <div>
+                <label><span class="greek">ὁ ἐπὶ πάντων καὶ διὰ πάντων καὶ ἐν πᾶσιν</span></label>
+                <div class="box">
+                  <strong>Translation:</strong> "who is over all and through all and in all"<br>
+                  <br>
+                  Threefold prepositional phrase describing Father's relation to creation:
+                  <ul class="compact-list">
+                    <li><strong>ἐπὶ πάντων</strong> — over all (sovereign authority, transcendence)</li>
+                    <li><strong>διὰ πάντων</strong> — through all (permeating presence, sustaining power)</li>
+                    <li><strong>ἐν πᾶσιν</strong> — in all (immanent indwelling)</li>
+                  </ul>
+                  Comprehensive statement of divine omnipresence and sovereignty. πάντων/πᾶσιν could be neuter (all things) or masculine (all people)—likely neuter (cosmic scope) but with believers as special focus. Echoes Stoic formulas but recast monotheistically.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>4:7-16 — Gifts for Maturity</h2>
+        
+        <details open>
+          <summary>4:7-10 — Ascension and Gift-Giving (Major Decisions)</summary>
+          <div class="content">
+            <h4>Key Decision: Ps 68:18 Citation (4:8)</h4>
+            <div class="grid single">
+              <div>
+                <label>Modified Quotation</label>
+                <div class="box">
+                  <strong>MT Psalm 68:18:</strong> "You ascended on high; you took captive captives; you received gifts among humanity"<br>
+                  <strong>LXX Ps 67:19:</strong> "You ascended on high; you took captive captivity; you received gifts among humanity"<br>
+                  <strong>Eph 4:8:</strong> "Having ascended to the height, he took captive the captive forces; he gave gifts to people"<br>
+                  <br>
+                  <strong>Key difference:</strong> "received gifts" (MT/LXX) → "gave gifts" (Ephesians). Options:
+                  <ul class="compact-list">
+                    <li>Paul modifies for theological fit (God receives to give)</li>
+                    <li>Alternate text tradition (targumic reading: "gave gifts to/for humanity")</li>
+                    <li>Implicit logic: receiving = distributing (victor's prerogative)</li>
+                  </ul>
+                  Paul applies psalm messianically: Christ as conquering king who distributes spoils. "Captive forces" (αἰχμαλωσίαν, captivity personified) = hostile powers defeated, now captive.
+                </div>
+              </div>
+            </div>
+
+            <h4>Descent-Ascent Pattern (4:9-10)</h4>
+            <div class="grid single">
+              <div>
+                <label>Christological Movement</label>
+                <div class="box">
+                  <strong>Descent (v. 9):</strong> "he also descended to the lower regions of the land" (εἰς τὰ κατώτερα μέρη τῆς γῆς)<br>
+                  <strong>Interpretive options:</strong>
+                  <table class="sense">
+                    <thead>
+                      <tr><th>View</th><th>Referent</th><th>Support</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Incarnation</td>
+                        <td>Coming to earth</td>
+                        <td>Genitive = "lower regions, namely earth"</td>
+                      </tr>
+                      <tr>
+                        <td>Death/Hades</td>
+                        <td>Realm of dead</td>
+                        <td>Comparative κατώτερα = "lower than earth"</td>
+                      </tr>
+                      <tr>
+                        <td>Humiliation</td>
+                        <td>Cross/burial</td>
+                        <td>Follows Phil 2:6-11 pattern</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <strong>Decision:</strong> Most likely incarnation ("lower regions of the land" = earth itself). Comparative κατώτερα emphasizes descent from heaven to earth. Verse 10 confirms: "The one who descended is also the one who ascended high above all the things in the heavenly realms" — ascended higher than descent point. Purpose: "that he might fill all things" (ἵνα πληρώσῃ τὰ πάντα) — cosmic filling echoes 1:23.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>4:11-16 — Gifts and Body Growth (Major Decisions)</summary>
+          <div class="content">
+            <h4>Fivefold Ministry Gifts (4:11)</h4>
+            <div class="grid single">
+              <div>
+                <label>Leadership Roles</label>
+                <div class="box">
+                  <strong>καὶ αὐτὸς ἔδωκεν τοὺς μὲν ἀποστόλους, τοὺς δὲ προφήτας, τοὺς δὲ εὐαγγελιστάς, τοὺς δὲ ποιμένας καὶ διδασκάλους:</strong> "And on the one hand he gave some as apostles and some as prophets and some evangelists and some as shepherds and teachers"<br>
+                  <br>
+                  <table class="lexical">
+                    <thead>
+                      <tr><th>Role</th><th>Function</th><th>Note</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>ἀπόστολοι</td>
+                        <td>Apostles</td>
+                        <td>Sent ones, foundational (2:20; 3:5)</td>
+                      </tr>
+                      <tr>
+                        <td>προφῆται</td>
+                        <td>Prophets</td>
+                        <td>Spirit-inspired speakers, also foundational</td>
+                      </tr>
+                      <tr>
+                        <td>εὐαγγελισταί</td>
+                        <td>Evangelists</td>
+                        <td>Gospel proclaimers (only here, Acts 21:8, 2 Tim 4:5)</td>
+                      </tr>
+                      <tr>
+                        <td>ποιμένας καὶ διδασκάλους</td>
+                        <td>Shepherds and teachers</td>
+                        <td>One article governs both = one office with dual function</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  Last pair (shepherds-teachers) likely single group: pastoral-teaching role. All five are persons given as gifts, not abilities distributed.
+                </div>
+              </div>
+            </div>
+
+            <h4>Purpose Chain (4:12-13)</h4>
+            <div class="grid single">
+              <div>
+                <label>Threefold Purpose</label>
+                <div class="box">
+                  <ol class="compact-list">
+                    <li><strong>πρὸς τὸν καταρτισμὸν τῶν ἁγίων:</strong> "for the equipping of the holy ones" — leaders equip members</li>
+                    <li><strong>εἰς ἔργον διακονίας:</strong> "for the work of ministry" — all do ministry, not just leaders</li>
+                    <li><strong>εἰς οἰκοδομὴν τοῦ σώματος τοῦ Χριστοῦ:</strong> "for the building of the body of the Messiah" — ultimate goal: corporate maturity</li>
+                  </ol>
+                  Punctuation debate: Is ministry done by leaders alone or by equipped saints? Greek favors: leaders equip → saints do ministry → body built. All three phrases governed by initial πρός, creating purposive chain.<br>
+                  <br>
+                  <strong>Goal (v. 13):</strong> "until we all attain unto the unity of the faith and unto the knowing of the Son of God, unto a mature man, unto the measure of the stature of the fullness of the Messiah" — fourfold εἰς (unto) marking progressive goal. Not individual maturity only but corporate: "we all" attain "a mature man" (singular ἄνδρα τέλειον = community as one mature person). Standard: Christ's fullness.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: κλυδωνιζόμενοι (4:14)</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • tossed to and fro<br>
+                  • tossed by waves<br>
+                  • swayed back and forth
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "tossed by waves"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> κλυδωνίζω from κλύδων (wave, billow). Maritime imagery: immature believers like ships tossed by waves "and driven by every wind of teaching" (περιφερόμενοι παντὶ ἀνέμῳ τῆς διδασκαλίας). Double instability: waves + winds. Cause: false teachers using "trickery" (κυβεία, lit. dice-playing = deceptive schemes). Contrast with mature stability rooted in truth.
+                </div>
+              </div>
+            </div>
+
+            <h4>Body Imagery Climax (4:15-16)</h4>
+            <div class="grid single">
+              <div>
+                <label>Organic Unity and Growth</label>
+                <div class="box">
+                  <strong>Key phrase (v. 15):</strong> "truth-doing in love" (ἀληθεύοντες δὲ ἐν ἀγάπῃ) — ἀληθεύω rare verb meaning speak/live truth. Not merely speaking but embodying truth in love. Goal: "grow up in everything into him, who is the head, the Messiah."<br>
+                  <br>
+                  <strong>Verse 16 anatomy:</strong> "from whom the all body, being joined together and being united together through every supporting joint, according to the working by the measure of each one of the parts, produces the growth of the body for the building up of itself in love"<br>
+                  <br>
+                  Complex sentence describing body's function:
+                  <ul class="compact-list">
+                    <li><strong>Christ as source:</strong> "from whom" (ἐξ οὗ) — head supplies</li>
+                    <li><strong>Body connection:</strong> "joined together" (συναρμολογούμενον, cf. 2:21 of temple) + "united together" (συμβιβαζόμενον) — perfect fitting</li>
+                    <li><strong>Joints:</strong> "through every supporting joint" (διὰ πάσης ἁφῆς τῆς ἐπιχορηγίας) — connective ligaments supply nutrients</li>
+                    <li><strong>Each part contributes:</strong> "according to the working by the measure of each one of the parts" — every member essential</li>
+                    <li><strong>Result:</strong> "produces the growth of the body" (τὴν αὔξησιν τοῦ σώματος ποιεῖται) — organic increase</li>
+                    <li><strong>Purpose:</strong> "for the building up of itself in love" (εἰς οἰκοδομὴν ἑαυτοῦ ἐν ἀγάπῃ) — self-edification in love's sphere</li>
+                  </ul>
+                  Most complex body metaphor in NT. Every part interdependent; Christ coordinates; love energizes.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>4:17-32 — Old/New Humanity Contrast</h2>
+        
+        <details open>
+          <summary>Major Decision: Walk Contrast (4:17-24)</summary>
+          <div class="content">
+            <h4>Negative: Gentile Walk (4:17-19)</h4>
+            <div class="grid single">
+              <div>
+                <label>Futility Pattern</label>
+                <div class="box">
+                  <strong>Central command:</strong> "y'all should no longer walk as the nations walk in the futility of their mindset" (μηκέτι ὑμᾶς περιπατεῖν... ἐν ματαιότητι τοῦ νοὸς αὐτῶν)<br>
+                  <br>
+                  Downward spiral described (vv. 18-19):
+                  <ol class="compact-list">
+                    <li><strong>Darkened understanding:</strong> "having been in the dark in their mindset" (ἐσκοτωμένοι τῇ διανοίᾳ)</li>
+                    <li><strong>Alienation from God:</strong> "estranged from the life of God" (ἀπηλλοτριωμένοι τῆς ζωῆς τοῦ θεοῦ)</li>
+                    <li><strong>Root cause:</strong> "because of the ignorance which is in them on account of the hardness of their heart" (διὰ τὴν ἄγνοιαν... διὰ τὴν πώρωσιν τῆς καρδίας)</li>
+                    <li><strong>Result:</strong> "gave themselves over to a lack of self-control" (παρέδωκαν ἑαυτοὺς τῇ ἀσελγείᾳ) — deliberate moral abandonment</li>
+                    <li><strong>Outcome:</strong> "deeds of every kind of impurity along with insatiable desire" (πᾶσαν ἀκαθαρσίαν ἐν πλεονεξίᾳ)</li>
+                  </ol>
+                  Echoes Rom 1:18-32's moral decline pattern. πώρωσις (hardness, callousness) = medical term for hardening/calcification.
+                </div>
+              </div>
+            </div>
+
+            <h4>Positive: Learning Christ (4:20-24)</h4>
+            <div class="grid single">
+              <div>
+                <label>Transformation Pattern</label>
+                <div class="box">
+                  <strong>"But you did not learn the Messiah in a way such"</strong> (Ὑμεῖς δὲ οὐχ οὕτως ἐμάθετε τὸν Χριστόν) — Christ as object of learning (unique expression). Condition: "if indeed you have heard of him and were taught in him, as truth is in Jesus" (v. 21) — historical Jesus as truth-standard.<br>
+                  <br>
+                  Three-part imperative (vv. 22-24):
+                  <ol class="compact-list">
+                    <li><strong>Take off (ἀποθέσθαι):</strong> "the old humanity of y'all's former way of life, which is being corrupted by its deceptive desires" — present passive: ongoing corruption process</li>
+                    <li><strong>Be renewed (ἀνανεοῦσθαι):</strong> "in the spirit of your mind" (τῷ πνεύματι τοῦ νοὸς ὑμῶν) — inward transformation</li>
+                    <li><strong>Put on (ἐνδύσασθαι):</strong> "the new humanity which has been created in accordance with God in justice and true piety" — perfect participle: already created, now appropriate</li>
+                  </ol>
+                  Clothing metaphor (put off/put on). "New humanity" (καινὸν ἄνθρωπον) recalls 2:15 — corporate new creation in Christ.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>Practical Applications (4:25-32) — Major Decisions</summary>
+          <div class="content">
+            <p class="note">Verses 25-32 apply old/new humanity contrast through specific ethical instructions. Each builds on "Therefore" (Διό) from v. 25, connecting to transformation just described. Pattern: negative prohibition + positive command.</p>
+
+            <h4>Key Decisions Summary</h4>
+            <div class="grid single">
+              <div>
+                <label>Selected Major Decisions</label>
+                <div class="box">
+                  <strong>v. 26 — "Be angry and do not sin"</strong> (Ὀργίζεσθε καὶ μὴ ἁμαρτάνετε) — citation of Ps 4:4 LXX. Present imperatives: permission to feel anger but prohibition against sinful expression. Qualifier: "Do not let the sun set on your anger" — temporal boundary prevents festering resentment.<br>
+                  <br>
+                  <strong>v. 28 — Labor and share</strong> — From stealing → honest work → generosity. Three-stage progression: cessation of vice, adoption of virtue, motivation toward others. "So that he can have something to share with the one who has need" (ἵνα ἔχῃ μεταδιδόναι τῷ χρείαν ἔχοντι) — work serves community, not just self.<br>
+                  <br>
+                  <strong>v. 29 — Rotten word</strong> (λόγος σαπρός) = putrid, unwholesome speech. Contrast: "only what is good for building up what is needed" (εἴ τις ἀγαθὸς πρὸς οἰκοδομὴν τῆς χρείας). Speech should edify, supplying grace to hearers.<br>
+                  <br>
+                  <strong>v. 30 — "Do not grieve the holy Spirit"</strong> (μὴ λυπεῖτε τὸ πνεῦμα τὸ ἅγιον τοῦ θεοῦ) — Spirit capable of grief over believers' sin. Grounds: "by whom you were sealed for the day of redemption" (ἐν ᾧ ἐσφραγίσθητε εἰς ἡμέραν ἀπολυτρώσεως) — Spirit's seal (1:13) looks toward final redemption.<br>
+                  <br>
+                  <strong>v. 31-32 — Vice list + virtue contrast</strong><br>
+                  <em>Remove:</em> bitterness, anger, wrath, blasphemy, wickedness (πικρία, θυμός, ὀργή, κραυγή, βλασφημία, κακία)<br>
+                  <em>Adopt:</em> kindness, compassion, forgiveness (χρηστοί, εὔσπλαγχνοι, χαριζόμενοι)<br>
+                  <em>Model:</em> "as just God in the Messiah forgave you" (καθὼς καὶ ὁ θεὸς ἐν Χριστῷ ἐχαρίσατο ὑμῖν) — divine forgiveness grounds human forgiveness.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+    </section>
   </div>
 
-  <!-- CHAPTER 5 TAB -->
+  <!-- ========== CHAPTER 5 TAB ========== -->
   <div id="ch5" class="tab-content" role="tabpanel">
-    <h2>Chapter 5: Coming Soon</h2>
-    <p class="lead">Full translation journal for Chapter 5 (Walk in Love and Light, Household Codes) will be added here.</p>
+    <section class="cards">
+      
+      <div class="card">
+        <h2>Chapter 5 Overview</h2>
+        <p><strong>Theme:</strong> Walk in Love and Light; Household Codes</p>
+        <p><strong>Key Structures:</strong> Imitate God (1-2), Walk in light (3-14), Spirit-filled living (15-21), Household instructions (22-33)</p>
+        <p><strong>Status:</strong> <span class="status-complete">✓ Complete</span> — Major decisions documented</p>
+      </div>
+
+      <div class="card">
+        <h2>5:1-21 — Walk in Love and Light</h2>
+        
+        <details open>
+          <summary>5:1-7 — Imitate God and Sexual Purity (Major Decisions)</summary>
+          <div class="content">
+            <h4>Key Decision: μιμηταὶ τοῦ θεοῦ (5:1)</h4>
+            <div class="grid">
+              <div>
+                <label>Options</label>
+                <div class="box mono">
+                  • imitators of God<br>
+                  • followers of God<br>
+                  • those who imitate God
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "imitators of God"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> γίνεσθε μιμηταί = "become imitators" (present imperative: ongoing action). μιμητής from μιμέομαι (imitate, emulate). Audacious command: copy God's character. Qualifier: "as beloved children" (ὡς τέκνα ἀγαπητά) — imitation flows from family relationship, not earns it. Children naturally imitate parents. God's forgiveness (4:32) establishes pattern to follow.
+                </div>
+              </div>
+            </div>
+
+            <h4>Walk in Love (5:2)</h4>
+            <div class="grid single">
+              <div>
+                <label>Christ as Love's Pattern</label>
+                <div class="box">
+                  <strong>"And walk in love, as just the Messiah loved us and gave himself as an offering and a sacrifice to God as a pleasant aroma"</strong><br>
+                  <br>
+                  περιπατεῖτε ἐν ἀγάπῃ (walk in love) — third "walk" command (4:1, 17; 5:2). Love as sphere/manner of life. Pattern: Christ's self-giving love. Double sacrifice language:
+                  <ul class="compact-list">
+                    <li><strong>προσφοράν</strong> (offering) — general sacrifice term</li>
+                    <li><strong>θυσίαν</strong> (sacrifice) — slaughter/blood sacrifice</li>
+                  </ul>
+                  "Pleasant aroma" (ὀσμὴν εὐωδίας) echoes Levitical language for acceptable sacrifice (Gen 8:21; Exod 29:18 LXX). Christ's death viewed through cultic lens. Self-giving love = sacrificial worship.
+                </div>
+              </div>
+            </div>
+
+            <h4>Sexual Impurity Prohibition (5:3-5)</h4>
+            <div class="grid single">
+              <div>
+                <label>Three-Category Vice List</label>
+                <div class="box">
+                  <strong>Verse 3:</strong> "sexual immorality and all impurity or greedy desire should not be named among y'all"<br>
+                  πορνεία (sexual immorality) + ἀκαθαρσία (impurity) + πλεονεξία (greedy desire/covetousness)<br>
+                  <br>
+                  "Not be named" (μηδὲ ὀνομαζέσθω) = shouldn't even be mentioned/spoken of, much less practiced. Standard: "as is fitting for holy ones" (καθὼς πρέπει ἁγίοις) — holiness sets behavioral boundary.<br>
+                  <br>
+                  <strong>Verse 4:</strong> Speech sins added: αἰσχρότης (obscenity), μωρολογία (foolish talk), εὐτραπελία (inappropriate humor/coarse jesting). "Which have no place" (ἃ οὐκ ἀνῆκεν) — improper, unfitting. Alternative: εὐχαριστία (thanksgiving) — gratitude replaces vulgarity.<br>
+                  <br>
+                  <strong>Verse 5:</strong> Warning with parenthetical definition: greedy person = idolator (ὅ ἐστιν εἰδωλολάτρης). Such have no inheritance in kingdom. Present tense "know surely" (γινώσκοντες) = settled knowledge they should possess.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>5:8-14 — Light and Darkness Contrast (Major Decisions)</summary>
+          <div class="content">
+            <h4>Identity Statement (5:8)</h4>
+            <div class="grid single">
+              <div>
+                <label>Ontological Shift</label>
+                <div class="box">
+                  <strong>"For you were darkness at one time, (now you are light in the Lord)"</strong><br>
+                  ἦτε γάρ ποτε σκότος, νῦν δὲ φῶς ἐν κυρίῳ<br>
+                  <br>
+                  Not "in darkness" but "were darkness" (predicate nominative) — ontological identity, not merely condition. Parallel: "now light" (not merely enlightened). ἐν κυρίῳ (in the Lord) = sphere of light-identity. Imperative follows indicative: "Walk as children of light" (ὡς τέκνα φωτὸς περιπατεῖτε) — live according to new identity.<br>
+                  <br>
+                  <strong>Fruit of light (v. 9):</strong> "in all goodness and justice and truth" (ἐν πάσῃ ἀγαθωσύνῃ καὶ δικαιοσύνῃ καὶ ἀληθείᾳ) — ethical triad. Light produces moral fruit. Purpose: "discerning what is it that pleases the Lord" (δοκιμάζοντες τί ἐστιν εὐάρεστον τῷ κυρίῳ, v. 10) — testing/approving what is acceptable.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: Exposing Darkness (5:11-13)</h4>
+            <div class="grid">
+              <div>
+                <label>Options for ἐλέγχετε</label>
+                <div class="box mono">
+                  • reprove<br>
+                  • expose<br>
+                  • convict<br>
+                  • rebuke
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "expose"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> ἐλέγχω = bring to light, expose, convict. "Don't share together in the fruitless deeds of darkness, but rather expose them" (μᾶλλον δὲ καὶ ἐλέγχετε). Not participate but reveal/confront. Verse 12: "what is done by them in hiding is even shameful to mention" — secret sins too shameful to name. Verse 13: "everything that is exposed by the light is made visible" — light's function is revelatory. Conclusion: "everything made visible is light" (πᾶν τὸ φανερούμενον φῶς ἐστιν) — what light reveals becomes part of light's domain.
+                </div>
+              </div>
+            </div>
+
+            <h4>Hymnic Fragment? (5:14)</h4>
+            <div class="grid single">
+              <div>
+                <label>Possible Early Christian Hymn</label>
+                <div class="box">
+                  <strong>"Therefore one says: 'Awake, Sleeper, Rise from among the dead ones, and the Messiah will shine on you!'"</strong><br>
+                  <br>
+                  διὸ λέγει (therefore it says/one says) — formula introducing quotation, but source unknown (no exact OT match). Likely early Christian baptismal hymn or prophetic saying. Three imperatives:
+                  <ul class="compact-list">
+                    <li><strong>Ἔγειρε</strong> (Awake) — wake from spiritual sleep</li>
+                    <li><strong>ἀνάστα ἐκ τῶν νεκρῶν</strong> (Rise from the dead) — resurrection language</li>
+                    <li><strong>ἐπιφαύσει σοι ὁ Χριστός</strong> (Messiah will shine on you) — illumination promise</li>
+                  </ul>
+                  Echoes Isa 60:1 ("Arise, shine"). Used to summon conversion/renewal. Light imagery climaxes call to vigilance.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>5:15-21 — Spirit-Filled Wisdom (Major Decisions)</summary>
+          <div class="content">
+            <h4>Walk Carefully (5:15-17)</h4>
+            <div class="grid single">
+              <div>
+                <label>Wisdom vs. Folly</label>
+                <div class="box">
+                  <strong>"Therefore, watch carefully how y'all walk, not as unwise but as wise"</strong> (Βλέπετε οὖν ἀκριβῶς πῶς περιπατεῖτε, μὴ ὡς ἄσοφοι ἀλλ' ὡς σοφοί)<br>
+                  <br>
+                  ἀκριβῶς (carefully, accurately, precisely) modifies "watch" — exact attention to lifestyle. Contrast: unwise (ἄσοφοι) vs. wise (σοφοί). Rationale: "redeeming the time, for the days are evil" (ἐξαγοραζόμενοι τὸν καιρόν, ὅτι αἱ ἡμέραι πονηραί εἰσιν, v. 16). ἐξαγοράζω = buy up, make most of (commercial metaphor for time). καιρός = opportune time, season (not mere chronological time). Evil days demand strategic wisdom.<br>
+                  <br>
+                  <strong>Verse 17:</strong> "don't be foolish, but discern what is the will of the Lord" (μὴ γίνεσθε ἄφρονες, ἀλλὰ συνίετε τί τὸ θέλημα τοῦ κυρίου) — negative + positive. σύνίημι = understand, comprehend (not just know but grasp). God's will as object of wisdom.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: πληροῦσθε ἐν πνεύματι (5:18)</h4>
+            <div class="grid">
+              <div>
+                <label>Contrast and Command</label>
+                <div class="box mono">
+                  <strong>Negative:</strong> "don't be drunk with wine, which is recklessness"<br>
+                  <strong>Positive:</strong> "but be filled by the Spirit"
+                </div>
+              </div>
+              <div>
+                <label>Grammatical Decision</label>
+                <div class="box">
+                  <strong>μὴ μεθύσκεσθε οἴνῳ... ἀλλὰ πληροῦσθε ἐν πνεύματι</strong><br>
+                  <br>
+                  Present imperatives (ongoing): don't keep getting drunk / keep being filled. Wine = ἀσωτία (recklessness, debauchery, wastefulness — α-privative + σῴζω: "unsaving" behavior). Contrast: Spirit-fullness as alternative control/influence.<br>
+                  <br>
+                  <strong>Preposition debate:</strong> ἐν πνεύματι — "by the Spirit" (instrumental) or "in the Spirit" (locative)? Either works: filled by Spirit's agency or filled in Spirit's sphere. Passive voice: Spirit does the filling, believers receive.
+                </div>
+              </div>
+            </div>
+
+            <h4>Spirit-Fullness Results (5:19-21)</h4>
+            <div class="grid single">
+              <div>
+                <label>Fivefold Participial Description</label>
+                <div class="box">
+                  Five present participles describe Spirit-filled life (all modify "be filled"):
+                  <ol class="compact-list">
+                    <li><strong>λαλοῦντες (speaking):</strong> "to each other in psalms and hymns and spiritual poems" — corporate worship expression</li>
+                    <li><strong>ᾄδοντες καὶ ψάλλοντες (singing and creating poems):</strong> "in your hearts to the Lord" — internal worship</li>
+                    <li><strong>εὐχαριστοῦντες (giving thanks):</strong> "always for all things to God the Father" — gratitude as lifestyle</li>
+                    <li><strong>ὑποτασσόμενοι (submitting):</strong> "to one another in the reverence of the Messiah" — mutual submission</li>
+                  </ol>
+                  Spirit-fullness manifests in worship (vertical) and community (horizontal). Mutual submission (v. 21) transitions to household codes (vv. 22-33) where specific submission relationships detailed.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>5:22-33 — Marriage and Christ-Church Mystery</h2>
+        
+        <details open>
+          <summary>5:22-24 — Wives' Submission (Major Decisions)</summary>
+          <div class="content">
+            <h4>Key Decision: No Verb in Greek (5:22)</h4>
+            <div class="grid single">
+              <div>
+                <label>Grammatical Structure</label>
+                <div class="box">
+                  <strong>Αἱ γυναῖκες τοῖς ἰδίοις ἀνδράσιν ὡς τῷ κυρίῳ</strong> — "Wives to their own husbands as to the Lord"<br>
+                  <br>
+                  No verb in Greek; supplied from v. 21's ὑποτασσόμενοι (submitting). Creates continuity: mutual submission (v. 21) → specific application to wives (v. 22). Not standalone command but extension of Spirit-filled community ethic. "As to the Lord" (ὡς τῷ κυρίῳ) qualifies submission: done as service to Christ, not servile subjection to husband's whims.
+                </div>
+              </div>
+            </div>
+
+            <h4>Head-ership Language (5:23)</h4>
+            <div class="grid single">
+              <div>
+                <label>κεφαλή (head) Meaning</label>
+                <div class="box">
+                  <strong>"Because the husband is the head of the wife as the Messiah is the head of the church"</strong><br>
+                  <br>
+                  ὅτι ἀνήρ ἐστιν κεφαλὴ τῆς γυναικὸς ὡς καὶ ὁ Χριστὸς κεφαλὴ τῆς ἐκκλησίας<br>
+                  <br>
+                  <strong>κεφαλή debate:</strong>
+                  <table class="sense">
+                    <thead>
+                      <tr><th>Meaning</th><th>Support</th><th>Application</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>"Authority over"</td>
+                        <td>Some Greek usage, hierarchical structure</td>
+                        <td>Husband exercises leadership</td>
+                      </tr>
+                      <tr>
+                        <td>"Source/origin"</td>
+                        <td>Gen 2:21-23 (Eve from Adam), some Greek usage</td>
+                        <td>Husband as origin (woman from man)</td>
+                      </tr>
+                      <tr>
+                        <td>"Preeminence"</td>
+                        <td>Col 1:18; 2:10 (Christ supreme)</td>
+                        <td>Husband as foremost, not dominating</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  Context emphasizes Christ as <em>savior</em> of body (v. 23b), pattern of self-giving love (vv. 25-27). "Head" functions within sacrificial framework, not autocratic rule. Qualifier: "he the deliverer of the body" (αὐτὸς σωτὴρ τοῦ σώματος) — Christ's headship expressed through salvation/care.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>5:25-33 — Husbands' Sacrificial Love (Major Decisions)</summary>
+          <div class="content">
+            <h4>Key Command: ἀγαπᾶτε (5:25)</h4>
+            <div class="grid single">
+              <div>
+                <label>Love as Christ Loved</label>
+                <div class="box">
+                  <strong>"Husbands, be loving to your wives, as the Messiah loves the church and gave himself on her behalf"</strong><br>
+                  <br>
+                  Οἱ ἄνδρες, ἀγαπᾶτε τὰς γυναῖκας, καθὼς καὶ ὁ Χριστὸς ἠγάπησεν τὴν ἐκκλησίαν καὶ ἑαυτὸν παρέδωκεν ὑπὲρ αὐτῆς<br>
+                  <br>
+                  Present imperative: keep loving (ongoing action). Pattern: Christ's love. Defined by self-giving: "gave himself" (ἑαυτὸν παρέδωκεν) — sacrificial death. ὑπὲρ αὐτῆς (on her behalf) — substitutionary/benefactive. Husband's love measured by Christ's cross. This massively qualifies "head" language—headship exercised through sacrificial service, not self-serving dominance.
+                </div>
+              </div>
+            </div>
+
+            <h4>Purpose Clauses: Sanctification (5:26-27)</h4>
+            <div class="grid single">
+              <div>
+                <label>Christ's Work for Church</label>
+                <div class="box">
+                  Two ἵνα (in order that) clauses describe Christ's purpose in self-giving:
+                  <ol class="compact-list">
+                    <li><strong>Verse 26:</strong> "so that he could set her apart, having purified by washing of water with a word" (ἵνα αὐτὴν ἁγιάσῃ καθαρίσας τῷ λουτρῷ τοῦ ὕδατος ἐν ῥήματι)
+                      <ul class="compact-list">
+                        <li>ἁγιάζω = sanctify, set apart, make holy</li>
+                        <li>καθαρίζω = cleanse, purify (aorist participle: point action)</li>
+                        <li>λουτρῷ τοῦ ὕδατος = washing of water (baptism likely in view)</li>
+                        <li>ἐν ῥήματι = with/by a word (gospel word accompanying baptism?)</li>
+                      </ul>
+                    </li>
+                    <li><strong>Verse 27:</strong> "so he could present to himself the church glorious, having no stain or wrinkle or any such thing, but that she would be set apart and blameless" (ἵνα παραστήσῃ αὐτὸς ἑαυτῷ ἔνδοξον τὴν ἐκκλησίαν)
+                      <ul class="compact-list">
+                        <li>παρίστημι = present (bridal presentation imagery)</li>
+                        <li>ἔνδοξον = glorious, radiant</li>
+                        <li>μὴ ἔχουσαν σπίλον ἢ ῥυτίδα = having no stain or wrinkle (perfect purity)</li>
+                        <li>ἁγία καὶ ἄμωμος = holy and blameless (echoes 1:4)</li>
+                      </ul>
+                    </li>
+                  </ol>
+                  Christ's goal: present church to himself as perfected bride. Husband's love should similarly seek wife's flourishing, not exploitation.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: τὸ μυστήριον τοῦτο μέγα ἐστίν (5:32)</h4>
+            <div class="grid single">
+              <div>
+                <label>Mystery Identified</label>
+                <div class="box">
+                  <strong>"This open secret is great, but I am speaking about the Messiah and the church"</strong><br>
+                  <br>
+                  Context: v. 31 quotes Gen 2:24 ("a man will leave... two will become one flesh"). Paul then comments: "This mystery is great" (Τὸ μυστήριον τοῦτο μέγα ἐστίν). What mystery?
+                  <ul class="compact-list">
+                    <li><strong>Not marriage itself</strong> — "but I am speaking" (ἐγὼ δὲ λέγω) clarifies reference</li>
+                    <li><strong>Christ-church union</strong> — εἰς Χριστὸν καὶ εἰς τὴν ἐκκλησίαν (into/with reference to Christ and the church)</li>
+                  </ul>
+                  Genesis text prophetically points beyond human marriage to Christ's union with church. Marriage as earthly icon of cosmic reality. "Great" (μέγα) = profound, magnificent. Paul reads Gen 2:24 typologically: Adam-Eve foreshadows Christ-church. This reframes marriage: not autonomous institution but theological sign pointing to greater union.
+                </div>
+              </div>
+            </div>
+
+            <h4>Concluding Summary (5:33)</h4>
+            <div class="grid single">
+              <div>
+                <label>Reciprocal Duties</label>
+                <div class="box">
+                  <strong>"Nevertheless, each one of y'all should love his wife in this way, and the wife should revere her husband"</strong><br>
+                  <br>
+                  πλὴν καὶ ὑμεῖς οἱ καθ' ἕνα, ἕκαστος τὴν ἑαυτοῦ γυναῖκα οὕτως ἀγαπάτω ὡς ἑαυτόν, ἡ δὲ γυνὴ ἵνα φοβῆται τὸν ἄνδρα<br>
+                  <br>
+                  <strong>Husband:</strong> ἀγαπάτω (let him love) — present imperative, sacrificial pattern<br>
+                  <strong>Wife:</strong> φοβῆται (let her fear/revere) — φοβέομαι can mean fear or reverence/respect. Context (Christ-reverence throughout chapter) favors "revere" over terror. Not cowering fear but respectful honor.<br>
+                  <br>
+                  Asymmetrical duties reflecting different roles, but both grounded in Christ-church pattern. Love and reverence create mutual honor, not domination-subjection.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+    </section>
   </div>
 
-  <!-- CHAPTER 6 TAB -->
+  <!-- ========== CHAPTER 6 TAB ========== -->
   <div id="ch6" class="tab-content" role="tabpanel">
-    <h2>Chapter 6: Coming Soon</h2>
-    <p class="lead">Full translation journal for Chapter 6 (Armor of God, Spiritual Warfare) will be added here.</p>
+    <section class="cards">
+      
+      <div class="card">
+        <h2>Chapter 6 Overview</h2>
+        <p><strong>Theme:</strong> Household Order, Spiritual Warfare, Closing</p>
+        <p><strong>Key Structures:</strong> Children/fathers, slaves/masters (1-9), Armor of God (10-20), Final greetings (21-24)</p>
+        <p><strong>Status:</strong> <span class="status-complete">✓ Complete</span> — Major decisions documented</p>
+      </div>
+
+      <div class="card">
+        <h2>6:10-20 — Spiritual Warfare (Major Decisions)</h2>
+        
+        <details open>
+          <summary>6:10-12 — The Real Enemy (Major Decisions)</summary>
+          <div class="content">
+            <h4>Strength Formula (6:10)</h4>
+            <div class="grid single">
+              <div>
+                <label>Empowerment Command</label>
+                <div class="box">
+                  <strong>"Finally, find strength in the Lord and in the power of his might"</strong><br>
+                  Τοῦ λοιποῦ ἐνδυναμοῦσθε ἐν κυρίῳ καὶ ἐν τῷ κράτει τῆς ἰσχύος αὐτοῦ<br>
+                  <br>
+                  ἐνδυναμόω = be strengthened, empowered (passive: receive strength). ἐν κυρίῳ (in the Lord) = sphere of empowerment. Doubled: "in the power of his might" (ἐν τῷ κράτει τῆς ἰσχύος) — genitival chain emphasizes divine power source (echoes 1:19). Transition to warfare section: strength needed for battle.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: πρὸς τὰς μεθοδείας τοῦ διαβόλου (6:11)</h4>
+            <div class="grid">
+              <div>
+                <label>Options for μεθοδεία</label>
+                <div class="box mono">
+                  • schemes (strategic deception)<br>
+                  • wiles (trickery)<br>
+                  • strategies (planned attacks)
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "schemes"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> μεθοδεία from μετά + ὁδός (with/after + way) = following after with craft, scheming. Only here and 4:14 in NT. Not random attacks but calculated strategies. τοῦ διαβόλου (of the devil/slanderer) — personal spiritual adversary. Purpose of armor: "so that y'all have power to stand against" (πρὸς τὸ δύνασθαι ὑμᾶς στῆναι πρός) — ability to resist/withstand. Standing = holding position, not retreating.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: Wrestling Opponents (6:12)</h4>
+            <div class="grid single">
+              <div>
+                <label>Cosmic Powers Identified</label>
+                <div class="box">
+                  <strong>"Because our battle is not against flesh and blood, but against the rulers, against the authorities, against the cosmic-powers of this darkness, against the spiritual forces of evil in the heavenlies"</strong><br>
+                  <br>
+                  ὅτι οὐκ ἔστιν ἡμῖν ἡ πάλη πρὸς αἷμα καὶ σάρκα, ἀλλὰ πρὸς τὰς ἀρχάς, πρὸς τὰς ἐξουσίας, πρὸς τοὺς κοσμοκράτορας τοῦ σκότους τούτου, πρὸς τὰ πνευματικὰ τῆς πονηρίας ἐν τοῖς ἐπουρανίοις<br>
+                  <br>
+                  <strong>Fourfold πρός (against):</strong>
+                  <table class="lexical">
+                    <thead>
+                      <tr><th>Greek Term</th><th>Translation</th><th>Meaning</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>αἱ ἀρχαί</td>
+                        <td>the rulers</td>
+                        <td>Spiritual authorities/principalities</td>
+                      </tr>
+                      <tr>
+                        <td>αἱ ἐξουσίαι</td>
+                        <td>the authorities</td>
+                        <td>Powers with delegated authority</td>
+                      </tr>
+                      <tr>
+                        <td>οἱ κοσμοκράτορες τοῦ σκότους</td>
+                        <td>cosmic-powers of this darkness</td>
+                        <td>World-rulers (κόσμος + κράτος) of darkness-realm</td>
+                      </tr>
+                      <tr>
+                        <td>τὰ πνευματικὰ τῆς πονηρίας</td>
+                        <td>spiritual forces of evil</td>
+                        <td>Spirit-beings characterized by wickedness</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  Not human opponents but spiritual hierarchy. κοσμοκράτορες (only here in NT) = cosmic rulers. "In the heavenlies" (ἐν τοῖς ἐπουρανίοις) — same realm where Christ reigns (1:20) and church is seated (2:6), but also occupied by hostile powers. Spiritual warfare plays out in heavenly realm affecting earthly reality.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>6:13-17 — The Armor of God (Major Decisions)</summary>
+          <div class="content">
+            <h4>Key Decision: Stand Three Times (6:11, 13, 14)</h4>
+            <div class="grid single">
+              <div>
+                <label>στῆναι (stand) Emphasis</label>
+                <div class="box">
+                  <strong>Repeated command:</strong> "stand" appears 4x in vv. 11-14. στήκω/ἵστημι = stand firm, hold position. Not advancing or retreating but maintaining ground. "Having fulfilled one's duty, to stand" (ἅπαντα κατεργασάμενοι στῆναι, v. 13b) — after doing everything, remain standing. Military imagery: hold the line. Armor's purpose: enable standing under assault.
+                </div>
+              </div>
+            </div>
+
+            <h4>Sixfold Armor (6:14-17)</h4>
+            <div class="grid single">
+              <div>
+                <label>Defensive and Offensive Pieces</label>
+                <div class="box">
+                  <strong>Based on Isa 59:17; 11:5; 52:7 (LXX):</strong>
+                  <table class="lexical">
+                    <thead>
+                      <tr><th>Armor Piece</th><th>Greek Term</th><th>Spiritual Reality</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Belt</td>
+                        <td>περιζωσάμενοι... ἀλήθειᾳ</td>
+                        <td>Truth (girding loins = readiness, holding garments)</td>
+                      </tr>
+                      <tr>
+                        <td>Breastplate</td>
+                        <td>θώρακα τῆς δικαιοσύνης</td>
+                        <td>Justice/righteousness (protects vital organs)</td>
+                      </tr>
+                      <tr>
+                        <td>Shoes</td>
+                        <td>ὑποδησάμενοι... ἑτοιμασίᾳ τοῦ εὐαγγελίου</td>
+                        <td>Readiness of good-news of peace (mobility)</td>
+                      </tr>
+                      <tr>
+                        <td>Shield</td>
+                        <td>θυρεὸν τῆς πίστεως</td>
+                        <td>Faith (large rectangular shield, extinguishes flaming arrows)</td>
+                      </tr>
+                      <tr>
+                        <td>Helmet</td>
+                        <td>περικεφαλαίαν τοῦ σωτηρίου</td>
+                        <td>Salvation (protects head/mind)</td>
+                      </tr>
+                      <tr>
+                        <td>Sword</td>
+                        <td>μάχαιραν τοῦ πνεύματος, ὅ ἐστιν ῥῆμα θεοῦ</td>
+                        <td>Word of God (offensive weapon; ῥῆμα = spoken word)</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  First five defensive; only sword offensive. Armor = spiritual realities internalized. "Putting on" (aorist participles) = decisive appropriation. Already equipped (indicative reality) but must consciously appropriate (imperative responsibility).
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: τὰ βέλη τοῦ πονηροῦ τὰ πεπυρωμένα (6:16)</h4>
+            <div class="grid">
+              <div>
+
+              </div>
+              >
+                <label>Flaming Arrows</label>
+                <div class="box mono">
+                  • flaming arrows<br>
+                  • fiery darts<br>
+                  • burning missiles
+                </div>
+              </div>
+              <div>
+                <label><strong>Chosen:</strong> "flaming arrows"</label>
+                <div class="box">
+                  <strong>Rationale:</strong> βέλος = arrow, missile, dart. πεπυρωμένα = perfect passive participle of πυρόω (set on fire) = having been set ablaze. Ancient warfare tactic: arrows wrapped in flammable material, ignited, shot to set targets on fire. τοῦ πονηροῦ (of the evil one) = Satan's attacks. Shield of faith (θυρεὸς τῆς πίστεως) specifically designed to "extinguish" (σβέσαι, aorist infinitive) these attacks. Large Roman shield (scutum) could protect whole body, often soaked in water to quench flaming arrows.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>6:18-20 — Prayer as Weapon (Major Decisions)</summary>
+          <div class="content">
+            <h4>Comprehensive Prayer (6:18)</h4>
+            <div class="grid single">
+              <div>
+                <label>Prayer Intensity</label>
+                <div class="box">
+                  <strong>"With every prayer and petition, praying on every occasion in the Spirit"</strong><br>
+                  διὰ πάσης προσευχῆς καὶ δεήσεως προσευχόμενοι ἐν παντὶ καιρῷ ἐν πνεύματι<br>
+                  <br>
+                  <strong>Fourfold πᾶς (all/every):</strong>
+                  <ul class="compact-list">
+                    <li>διὰ πάσης προσευχῆς — through every [kind of] prayer</li>
+                    <li>ἐν παντὶ καιρῷ — on every occasion/season</li>
+                    <li>ἐν πάσῃ προσκαρτερήσει — with all endurance</li>
+                    <li>περὶ πάντων τῶν ἁγίων — for all the holy ones</li>
+                  </ul>
+                  Comprehensive prayer life. προσευχή (general prayer) + δέησις (specific petition). ἐν πνεύματι (in the Spirit) = Spirit-enabled, Spirit-directed prayer. "Staying alert" (ἀγρυπνοῦντες) — present participle: vigilant watchfulness. Prayer = warfare activity, not retreat from battle.
+                </div>
+              </div>
+            </div>
+
+            <h4>Paul's Request (6:19-20)</h4>
+            <div class="grid single">
+              <div>
+                <label>Boldness for Mystery</label>
+                <div class="box">
+                  <strong>"And for me, so that a word would be given to me when I open my mouth, to make known with boldness the open-secret of the good-news"</strong><br>
+                  <br>
+                  καὶ ὑπὲρ ἐμοῦ, ἵνα μοι δοθῇ λόγος ἐν ἀνοίξει τοῦ στόματός μου, ἐν παρρησίᾳ γνωρίσαι τὸ μυστήριον τοῦ εὐαγγελίου<br>
+                  <br>
+                  <strong>Request specifics:</strong>
+                  <ul class="compact-list">
+                    <li><strong>λόγος δοθῇ</strong> — word be given (divine passive: God supplies message)</li>
+                    <li><strong>ἐν ἀνοίξει</strong> — in/at the opening (right word at right moment)</li>
+                    <li><strong>ἐν παρρησίᾳ</strong> — with boldness, confidence, freedom of speech</li>
+                    <li><strong>τὸ μυστήριον τοῦ εὐαγγελίου</strong> — the mystery of the gospel (recurring theme: 1:9; 3:3-9; 5:32)</li>
+                  </ul>
+                  <br>
+                  <strong>Verse 20:</strong> "on behalf of which I am an ambassador in chains" (ὑπὲρ οὗ πρεσβεύω ἐν ἁλύσει) — πρεσβεύω = serve as ambassador (official representative). Paradox: chained ambassador. Still needs boldness despite imprisonment. Final purpose: "so that by it I might be bold as I am obligated to speak" (ἵνα ἐν αὐτῷ παρρησιάσωμαι ὡς δεῖ με λαλῆσαι) — divine necessity (δεῖ) to proclaim gospel boldly.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>6:21-24 — Final Greetings (Major Decisions)</h2>
+        
+        <details open>
+          <summary>6:21-22 — Tychicus as Messenger</summary>
+          <div class="content">
+            <h4>Personal Commendation</h4>
+            <div class="grid single">
+              <div>
+                <label>Letter Bearer</label>
+                <div class="box">
+                  <strong>"So that y'all also might know how things are with me, what I'm doing, Tychicus will make everything known to y'all, that beloved brother and faithful servant in the Lord"</strong><br>
+                  <br>
+                  Τυχικός (Tychicus) — Paul's co-worker, mentioned Acts 20:4; Col 4:7; 2 Tim 4:12; Titus 3:12. Two titles:
+                  <ul class="compact-list">
+                    <li><strong>ὁ ἀγαπητὸς ἀδελφός</strong> — the beloved brother (relational commendation)</li>
+                    <li><strong>πιστὸς διάκονος ἐν κυρίῳ</strong> — faithful servant in the Lord (functional commendation)</li>
+                  </ul>
+                  Purpose: "so that y'all might know how things are with us and that he might comfort y'all's hearts" (ἵνα γνῶτε τὰ περὶ ἡμῶν καὶ παρακαλέσῃ τὰς καρδίας ὑμῶν) — informational and pastoral. Letter-bearer practice: oral elaboration accompanying written text.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details open>
+          <summary>6:23-24 — Final Benediction</summary>
+          <div class="content">
+            <h4>Triadic Blessing (6:23)</h4>
+            <div class="grid single">
+              <div>
+                <label>Peace, Love, Faith</label>
+                <div class="box">
+                  <strong>"Peace to the brothers and sisters, and love with faith, from God the Father and the Lord Jesus Messiah"</strong><br>
+                  Εἰρήνη τοῖς ἀδελφοῖς καὶ ἀγάπη μετὰ πίστεως ἀπὸ θεοῦ πατρὸς καὶ κυρίου Ἰησοῦ Χριστοῦ<br>
+                  <br>
+                  Three divine gifts:
+                  <ul class="compact-list">
+                    <li><strong>εἰρήνη</strong> — peace (echoes opening 1:2, forms inclusio)</li>
+                    <li><strong>ἀγάπη μετὰ πίστεως</strong> — love with faith (inseparable pair; μετά = accompanying)</li>
+                  </ul>
+                  Recipients: "the brothers and sisters" (τοῖς ἀδελφοῖς) — corporate address, whole community. Source: "from God the Father and the Lord Jesus Messiah" — dual source as in opening, high Christology maintained throughout.
+                </div>
+              </div>
+            </div>
+
+            <h4>Key Decision: Final Grace (6:24)</h4>
+            <div class="grid single">
+              <div>
+                <label>Incorruptible Love</label>
+                <div class="box">
+                  <strong>"Grace be with all who love our Lord Jesus Messiah with [incorruptible] love"</strong><br>
+                  ἡ χάρις μετὰ πάντων τῶν ἀγαπώντων τὸν κύριον ἡμῶν Ἰησοῦν Χριστὸν ἐν ἀφθαρσίᾳ<br>
+                  <br>
+                  <strong>ἐν ἀφθαρσίᾳ (in incorruptibility):</strong>
+                  <table class="sense">
+                    <thead>
+                      <tr><th>Interpretation</th><th>Support</th><th>Implication</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Modifies "love"</td>
+                        <td>Proximity to "loving"</td>
+                        <td>Incorruptible/undying love for Christ</td>
+                      </tr>
+                      <tr>
+                        <td>Modifies "grace"</td>
+                        <td>Grace as eternal reality</td>
+                        <td>Grace in the realm of immortality</td>
+                      </tr>
+                      <tr>
+                        <td>Modifies "Lord"</td>
+                        <td>Christ's immortality</td>
+                        <td>Love directed to immortal Christ</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <strong>Decision:</strong> Most likely modifies "loving" — love characterized by incorruptibility, sincerity, purity (α-privative + φθείρω "destroy" = un-decaying). Brackets in translation acknowledge textual/interpretive ambiguity while favoring primary sense. Love that doesn't decay/deteriorate = genuine devotion.<br>
+                  <br>
+                  Fitting conclusion: grace to those whose love for Christ endures. Final word echoes opening grace (1:2), creating envelope structure. Letter about God's grace to create multi-ethnic body ends with grace to those who love the Lord with undying love.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+    </section>
   </div>
 
+  <!-- Footer -->
   <footer>
     <p>© 2025 Structured Scripture Project · Translator's Journal for Ephesians</p>
     <p style="margin-top:.5rem;">
       <a href="ephesians-hub.html">← Back to Ephesians Hub</a>
       <span style="margin:0 0.5rem;">|</span>
       <a href="ephesians-structured-edition.html">Structured Edition</a>
+      <span style="margin:0 0.5rem;">|</span>
+      <a href="ephesians-scroll-edition.html">Scroll Edition</a>
     </p>
     <p style="margin-top:.75rem; font-size:.85rem;">
       This journal reconstructs translation decisions from Tim Mackie's Literal Literary Translation for The BibleProject.<br>
@@ -503,7 +2989,7 @@
 </div>
 
 <script>
-  // Tab switching
+  // ========== TAB SWITCHING ==========
   const tabBtns = document.querySelectorAll('.tab-btn');
   const tabContents = document.querySelectorAll('.tab-content');
   
@@ -524,8 +3010,12 @@
         content.classList.remove('active');
       });
       document.getElementById(targetTab).classList.add('active');
+      
+      // Scroll to top
+      window.scrollTo({top: 0, behavior: 'smooth'});
     });
   });
 </script>
+
 </body>
 </html>
