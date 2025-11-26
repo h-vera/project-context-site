@@ -6330,26 +6330,26 @@ armor-piece {
   });
 
   // Deep linking - open ALL parent sections if URL has hash
-  if (window.location.hash) {
-    const targetId = window.location.hash.substring(1);
-    const targetSection = document.getElementById(targetId);
-    
-    if (targetSection) {
-      let parent = targetSection.closest('.section-content');
-      while (parent) {
-        const toggle = parent.previousElementSibling;
-        if (toggle && toggle.classList.contains('section-toggle')) {
-          toggle.classList.add('active');
-          parent.classList.add('active');
-        }
-        parent = parent.parentElement.closest('.section-content');
+if (window.location.hash) {
+  const targetId = window.location.hash.substring(1);
+  const targetSection = document.getElementById(targetId);
+  
+  if (targetSection) {
+    let parent = targetSection.closest('.section-content');
+    while (parent) {
+      const toggle = parent.previousElementSibling;
+      if (toggle && toggle.classList.contains('section-toggle')) {
+        toggle.classList.add('active');
+        parent.classList.add('active');
       }
-      
-      setTimeout(() => {
-        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 450);
+      parent = parent.parentElement?.closest('.section-content');
     }
+    
+    setTimeout(() => {
+      targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 450);
   }
+}
 
   // Progress bar
 const progressBar = document.getElementById('progressBar');
@@ -6376,35 +6376,33 @@ if (progressBar) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  // Smooth navigation with auto-expand
-  document.querySelectorAll('.quick-nav a[href^="#"], .source-pill[href^="#"]').forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      const targetId = this.getAttribute('href').substring(1);
-      const targetSection = document.getElementById(targetId);
-      
-      if (targetSection) {
-        let parent = targetSection.closest('.section-content');
-        while (parent) {
-          const toggle = parent.previousElementSibling;
-          if (toggle && toggle.classList.contains('section-toggle')) {
-            if (!toggle.classList.contains('active')) {
-              toggle.classList.add('active');
-              parent.classList.add('active');
-            }
-          }
-          parent = parent.parentElement.closest('.section-content');
+  // Smooth navigation with auto-expand for quick-nav links
+document.querySelectorAll('.quick-nav a[href^="#"], .source-pill[href^="#"]').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    const targetId = this.getAttribute('href').substring(1);
+    const targetSection = document.getElementById(targetId);
+    
+    if (targetSection) {
+      let parent = targetSection.closest('.section-content');
+      while (parent) {
+        const toggle = parent.previousElementSibling;
+        if (toggle && toggle.classList.contains('section-toggle')) {
+          toggle.classList.add('active');
+          parent.classList.add('active');
         }
-        
-        history.replaceState(null, null, '#' + targetId);
-        
-        setTimeout(() => {
-          targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 400);
+        parent = parent.parentElement?.closest('.section-content');
       }
-    });
+      
+      history.replaceState(null, null, '#' + targetId);
+      
+      setTimeout(() => {
+        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 450);
+    }
   });
+});
 </script>
 </body>
 </html>

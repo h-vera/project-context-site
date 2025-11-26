@@ -199,8 +199,11 @@
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- Reading Progress Bar -->
   <div class="reading-progress"></div>
 
+  <!-- Navigation will be injected here by nav-component.js -->
   <main id="main-content" role="main" aria-label="Ephesians Study Hub">
     
     <section class="hero">
@@ -427,24 +430,31 @@
   </footer>
 
   <script>
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
+  // Smooth scroll for in-page anchors
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     });
+  });
 
-    window.addEventListener('scroll', () => {
-      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      document.querySelector('.reading-progress').style.width = scrolled + '%';
-    });
+  // Reading progress bar
+  window.addEventListener('scroll', () => {
+    const progressBar = document.querySelector('.reading-progress');
+    if (!progressBar) return;
 
-    const backToTop = document.querySelector('.back-to-top');
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    progressBar.style.width = scrolled + '%';
+  });
+
+  // Back to top button
+  const backToTop = document.querySelector('.back-to-top');
+  if (backToTop) {
     window.addEventListener('scroll', () => {
       if (window.scrollY > 300) {
         backToTop.classList.add('visible');
@@ -452,6 +462,17 @@
         backToTop.classList.remove('visible');
       }
     });
-  </script>
+  }
+</script>
+
+<script type="module">
+  // Navigation Component Integration
+  import NavigationComponent from '/assets/js/nav-component.js';
+
+  const navigation = new NavigationComponent({
+    currentPage: 'studies/new-covenant/ephesians/ephesians-hub.html',
+    hubType: 'book-study'
+  });
+</script>
 </body>
 </html>
