@@ -6305,157 +6305,102 @@ armor-piece {
   </div>
 
   <script>
-    // Collapsible sections - works for both main and nested
-    document.querySelectorAll('.section-toggle').forEach(button => {
-      button.addEventListener('click', () => {
-        const content = button.nextElementSibling;
-        const isActive = button.classList.contains('active');
-        
-        button.classList.toggle('active');
-        content.classList.toggle('active');
-      });
+  // Collapsible sections - works for both main and nested
+  document.querySelectorAll('.section-toggle').forEach(button => {
+    button.addEventListener('click', () => {
+      button.classList.toggle('active');
+      button.nextElementSibling.classList.toggle('active');
     });
+  });
 
-    // Expand/Collapse all - including nested
-    document.getElementById('expandAll').addEventListener('click', () => {
-      document.querySelectorAll('.section-toggle').forEach(btn => {
-        btn.classList.add('active');
-        btn.nextElementSibling.classList.add('active');
-      });
+  // Expand/Collapse all - including nested
+  document.getElementById('expandAll').addEventListener('click', () => {
+    document.querySelectorAll('.section-toggle').forEach(btn => {
+      btn.classList.add('active');
+      btn.nextElementSibling.classList.add('active');
     });
+  });
 
-    document.getElementById('collapseAll').addEventListener('click', () => {
-      document.querySelectorAll('.section-toggle').forEach(btn => {
-        btn.classList.remove('active');
-        btn.nextElementSibling.classList.remove('active');
-      });
+  document.getElementById('collapseAll').addEventListener('click', () => {
+    document.querySelectorAll('.section-toggle').forEach(btn => {
+      btn.classList.remove('active');
+      btn.nextElementSibling.classList.remove('active');
     });
+  });
 
-    // Deep linking - open section if URL has hash
-    if (window.location.hash) {
-      const targetId = window.location.hash.substring(1);
-      const targetSection = document.getElementById(targetId);
-      if (targetSection) {
-        const parentContent = targetSection.closest('.section-content');
-        const parentToggle = parentContent?.previousElementSibling;
-        
-        if (parentToggle && parentContent) {
-          parentToggle.classList.add('active');
-          parentContent.classList.add('active');
-          
-          setTimeout(() => {
-            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }, 450);
-        }
-      }
-    }
-    
-    // Smooth navigation with auto-expand for quick-nav links
-document.querySelectorAll('.quick-nav a[href^="#"]').forEach(link => {
-  link.addEventListener('click', function(e) {
-    e.preventDefault();
-    
-    const targetId = this.getAttribute('href').substring(1);
+  // Deep linking - open ALL parent sections if URL has hash
+  if (window.location.hash) {
+    const targetId = window.location.hash.substring(1);
     const targetSection = document.getElementById(targetId);
     
     if (targetSection) {
-      const parentContent = targetSection.closest('.section-content');
-      const parentToggle = parentContent?.previousElementSibling;
-      
-      if (parentToggle && parentContent) {
-        // Expand the parent section if it's not already active
-        if (!parentToggle.classList.contains('active')) {
-          parentToggle.classList.add('active');
-          parentContent.classList.add('active');
+      let parent = targetSection.closest('.section-content');
+      while (parent) {
+        const toggle = parent.previousElementSibling;
+        if (toggle && toggle.classList.contains('section-toggle')) {
+          toggle.classList.add('active');
+          parent.classList.add('active');
         }
-        
-        // Update URL hash
-        history.replaceState(null, null, '#' + targetId);
-        
-        // Scroll to section after expansion animation
-        setTimeout(() => {
-          targetSection.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start' 
-          });
-        }, 450); // Matches your existing delay
+        parent = parent.parentElement.closest('.section-content');
       }
+      
+      setTimeout(() => {
+        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 450);
+    }
+  }
+
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const windowHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (window.scrollY / windowHeight) * 100;
+    document.getElementById('progressBar').style.width = progress + '%';
+  });
+
+  // Back to top button
+  const backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+      backToTop.classList.add('visible');
+    } else {
+      backToTop.classList.remove('visible');
     }
   });
-});
 
-    // Progress bar
-    window.addEventListener('scroll', () => {
-      const windowHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = (window.scrollY / windowHeight) * 100;
-      document.getElementById('progressBar').style.width = progress + '%';
-    });
+  backToTop.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 
-    // Back to top button
-    const backToTop = document.getElementById('backToTop');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 300) {
-        backToTop.classList.add('visible');
-      } else {
-        backToTop.classList.remove('visible');
-      }
-    });
-
-    backToTop.addEventListener('click', (e) => {
+  // Smooth navigation with auto-expand
+  document.querySelectorAll('.quick-nav a[href^="#"], .source-pill[href^="#"]').forEach(link => {
+    link.addEventListener('click', function(e) {
       e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    // Deep linking - open section if URL has hash
-    if (window.location.hash) {
-      const targetId = window.location.hash.substring(1);
+      
+      const targetId = this.getAttribute('href').substring(1);
       const targetSection = document.getElementById(targetId);
+      
       if (targetSection) {
-        // Open all parent sections
         let parent = targetSection.closest('.section-content');
         while (parent) {
           const toggle = parent.previousElementSibling;
           if (toggle && toggle.classList.contains('section-toggle')) {
-            toggle.classList.add('active');
-            parent.classList.add('active');
+            if (!toggle.classList.contains('active')) {
+              toggle.classList.add('active');
+              parent.classList.add('active');
+            }
           }
           parent = parent.parentElement.closest('.section-content');
         }
         
+        history.replaceState(null, null, '#' + targetId);
+        
         setTimeout(() => {
           targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 450);
+        }, 400);
       }
-    }
-    
-    // Smooth navigation with auto-expand
-    document.querySelectorAll('.quick-nav a[href^="#"], .source-pill[href^="#"]').forEach(link => {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        const targetId = this.getAttribute('href').substring(1);
-        const targetSection = document.getElementById(targetId);
-        
-        if (targetSection) {
-          // Open all parent sections
-          let parent = targetSection.closest('.section-content');
-          while (parent) {
-            const toggle = parent.previousElementSibling;
-            if (toggle && toggle.classList.contains('section-toggle')) {
-              if (!toggle.classList.contains('active')) {
-                toggle.classList.add('active');
-                parent.classList.add('active');
-              }
-            }
-            parent = parent.parentElement.closest('.section-content');
-          }
-          
-          setTimeout(() => {
-            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }, 400);
-        }
-      });
     });
-  </script>
+  });
+</script>
 </body>
 </html>
