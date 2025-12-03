@@ -52,7 +52,7 @@
            NAV LOGO STYLES
            ============================================= */
         .nav-logo-img {
-            height: 80px;
+            height: 84px;
             width: auto;
             object-fit: contain;
             filter: drop-shadow(0 0 8px rgba(0, 180, 216, 0.3));
@@ -119,21 +119,23 @@
             /* Feathered edge mask to blend into background */
             mask-image: radial-gradient(ellipse 85% 85% at center, black 60%, transparent 100%);
             -webkit-mask-image: radial-gradient(ellipse 85% 85% at center, black 60%, transparent 100%);
-            /* Subtle glow */
-            filter: drop-shadow(0 0 40px rgba(0, 180, 216, 0.3))
-                    drop-shadow(0 0 80px rgba(157, 78, 221, 0.15));
-            animation: logoGlow 5s ease-in-out infinite;
+            /* Enhanced glow */
+            filter: drop-shadow(0 0 30px rgba(0, 180, 216, 0.5))
+                    drop-shadow(0 0 60px rgba(157, 78, 221, 0.3));
+            animation: logoGlow 4s ease-in-out infinite;
         }
 
         @keyframes logoGlow {
             0%, 100% {
-                filter: drop-shadow(0 0 40px rgba(0, 180, 216, 0.3))
-                        drop-shadow(0 0 80px rgba(157, 78, 221, 0.15));
+                filter: drop-shadow(0 0 30px rgba(0, 180, 216, 0.5))
+                        drop-shadow(0 0 60px rgba(157, 78, 221, 0.3));
+                transform: scale(1);
             }
             50% {
-                filter: drop-shadow(0 0 60px rgba(0, 180, 216, 0.4))
-                        drop-shadow(0 0 100px rgba(157, 78, 221, 0.25))
-                        drop-shadow(0 0 120px rgba(244, 162, 97, 0.1));
+                filter: drop-shadow(0 0 50px rgba(0, 180, 216, 0.7))
+                        drop-shadow(0 0 90px rgba(157, 78, 221, 0.4))
+                        drop-shadow(0 0 120px rgba(244, 162, 97, 0.25));
+                transform: scale(1.02);
             }
         }
 
@@ -172,6 +174,11 @@
             animation: twinkle 3s ease-in-out infinite;
         }
 
+        /* Drifting stars */
+        .star.drifting {
+            animation: twinkle 3s ease-in-out infinite, drift 20s linear infinite;
+        }
+
         .star::after {
             content: '';
             position: absolute;
@@ -185,8 +192,33 @@
         }
 
         @keyframes twinkle {
-            0%, 100% { opacity: 0.15; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.2); }
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.9; transform: scale(1.3); }
+        }
+
+        @keyframes drift {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(15px, -10px); }
+            50% { transform: translate(5px, 15px); }
+            75% { transform: translate(-10px, 5px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        /* Shooting stars */
+        .shooting-star {
+            position: absolute;
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.8), transparent);
+            animation: shoot 4s linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes shoot {
+            0% { transform: translateX(0) translateY(0); opacity: 0; }
+            5% { opacity: 1; }
+            20% { transform: translateX(150px) translateY(80px); opacity: 0; }
+            100% { opacity: 0; }
         }
 
         /* =============================================
@@ -504,7 +536,8 @@
             
             for (let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
-                star.className = 'star';
+                // 30% of stars will drift
+                star.className = Math.random() < 0.3 ? 'star drifting' : 'star';
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * 100 + '%';
                 star.style.animationDelay = Math.random() * 3 + 's';
@@ -516,6 +549,17 @@
                 star.style.height = size + 'px';
                 
                 starsContainer.appendChild(star);
+            }
+            
+            // Add a few shooting stars
+            for (let i = 0; i < 3; i++) {
+                const shootingStar = document.createElement('div');
+                shootingStar.className = 'shooting-star';
+                shootingStar.style.left = (10 + Math.random() * 60) + '%';
+                shootingStar.style.top = (5 + Math.random() * 30) + '%';
+                shootingStar.style.animationDelay = (i * 3 + Math.random() * 2) + 's';
+                shootingStar.style.animationDuration = (3 + Math.random() * 2) + 's';
+                starsContainer.appendChild(shootingStar);
             }
         }
         
