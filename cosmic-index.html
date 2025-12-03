@@ -65,7 +65,7 @@
         }
 
         /* =============================================
-           HERO SECTION - COSMIC GRADIENT
+           HERO SECTION - MATCHED TO LOGO BACKGROUND
            ============================================= */
         .hero {
             position: relative;
@@ -74,18 +74,11 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            /* Deep cosmic gradient matching the logo aesthetic */
-            background: linear-gradient(
-                135deg,
-                #030810 0%,
-                #0a1628 25%,
-                #0d1f3c 50%,
-                #0a1628 75%,
-                #030810 100%
-            );
+            /* Match the logo's dark background exactly */
+            background: #050a12;
         }
 
-        /* Subtle animated gradient overlay */
+        /* Radial gradient emanating from center (where logo sits) */
         .hero::before {
             content: '';
             position: absolute;
@@ -94,35 +87,13 @@
             right: 0;
             bottom: 0;
             background: 
-                radial-gradient(ellipse at 30% 20%, rgba(0, 180, 216, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 80%, rgba(157, 78, 221, 0.06) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(244, 162, 97, 0.04) 0%, transparent 40%);
+                /* Central glow behind logo */
+                radial-gradient(ellipse 600px 400px at 50% 35%, rgba(10, 22, 40, 0.8) 0%, transparent 70%),
+                /* Subtle colored accents */
+                radial-gradient(ellipse at 20% 30%, rgba(0, 180, 216, 0.05) 0%, transparent 40%),
+                radial-gradient(ellipse at 80% 70%, rgba(157, 78, 221, 0.04) 0%, transparent 40%),
+                radial-gradient(ellipse at 50% 80%, rgba(244, 162, 97, 0.03) 0%, transparent 30%);
             z-index: 0;
-            animation: gradientShift 15s ease-in-out infinite alternate;
-        }
-
-        @keyframes gradientShift {
-            0% {
-                opacity: 0.6;
-                transform: scale(1);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1.1);
-            }
-        }
-
-        /* Noise texture for depth */
-        .hero::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-            z-index: 0;
-            pointer-events: none;
         }
 
         .hero-content {
@@ -133,41 +104,49 @@
         }
 
         /* =============================================
-           HERO LOGO IMAGE
+           HERO LOGO - SEAMLESS BLEND
            ============================================= */
+        .hero-logo-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+
         .hero-logo-img {
-            width: 280px;
+            width: 320px;
             height: auto;
-            margin-bottom: 1.5rem;
-            border-radius: 12px;
-            /* Glow effect that pulses */
-            filter: drop-shadow(0 0 30px rgba(0, 180, 216, 0.4))
-                    drop-shadow(0 0 60px rgba(157, 78, 221, 0.2));
-            animation: logoGlow 4s ease-in-out infinite;
+            display: block;
+            /* Feathered edge mask to blend into background */
+            mask-image: radial-gradient(ellipse 85% 85% at center, black 60%, transparent 100%);
+            -webkit-mask-image: radial-gradient(ellipse 85% 85% at center, black 60%, transparent 100%);
+            /* Subtle glow */
+            filter: drop-shadow(0 0 40px rgba(0, 180, 216, 0.3))
+                    drop-shadow(0 0 80px rgba(157, 78, 221, 0.15));
+            animation: logoGlow 5s ease-in-out infinite;
         }
 
         @keyframes logoGlow {
             0%, 100% {
-                filter: drop-shadow(0 0 30px rgba(0, 180, 216, 0.4))
-                        drop-shadow(0 0 60px rgba(157, 78, 221, 0.2));
+                filter: drop-shadow(0 0 40px rgba(0, 180, 216, 0.3))
+                        drop-shadow(0 0 80px rgba(157, 78, 221, 0.15));
             }
             50% {
-                filter: drop-shadow(0 0 50px rgba(0, 180, 216, 0.6))
-                        drop-shadow(0 0 80px rgba(157, 78, 221, 0.3))
-                        drop-shadow(0 0 100px rgba(244, 162, 97, 0.15));
+                filter: drop-shadow(0 0 60px rgba(0, 180, 216, 0.4))
+                        drop-shadow(0 0 100px rgba(157, 78, 221, 0.25))
+                        drop-shadow(0 0 120px rgba(244, 162, 97, 0.1));
             }
         }
 
         /* Responsive sizing */
         @media (max-width: 768px) {
             .hero-logo-img {
-                width: 220px;
+                width: 260px;
             }
         }
 
         @media (max-width: 480px) {
             .hero-logo-img {
-                width: 180px;
+                width: 220px;
             }
         }
 
@@ -201,13 +180,27 @@
             transform: translate(-50%, -50%);
             width: 6px;
             height: 6px;
-            background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255,255,255,0.5) 0%, transparent 70%);
             border-radius: 50%;
         }
 
         @keyframes twinkle {
-            0%, 100% { opacity: 0.2; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.3); }
+            0%, 100% { opacity: 0.15; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
+        }
+
+        /* =============================================
+           HERO TEXT STYLING
+           ============================================= */
+        .hero-title {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto 2rem;
         }
 
         /* =============================================
@@ -234,7 +227,7 @@
            SCROLLED NAV - COSMIC THEME
            ============================================= */
         #main-nav.scrolled {
-            background: rgba(10, 22, 40, 0.95);
+            background: rgba(5, 10, 18, 0.95);
             backdrop-filter: blur(10px);
             box-shadow: 0 2px 20px rgba(0, 180, 216, 0.1);
         }
@@ -257,7 +250,8 @@
     <nav id="main-nav">
         <div class="nav-container">
             <a href="/" class="logo">
-                <img src="/assets/images/cosmic-eye-logo.png" alt="Project Context" class="nav-logo-img">
+                <!-- USE: /assets/images/cosmic-eye-nav.png (the eye-only logo without text) -->
+                <img src="/assets/images/cosmic-eye-nav.png" alt="Project Context" class="nav-logo-img">
                 <span class="logo-text">Project Context</span>
             </a>
             <ul class="nav-links" id="navLinks">
@@ -300,12 +294,15 @@
         <div class="hero-stars" id="heroStars"></div>
         
         <div class="hero-content">
-            <!-- JPG Logo Image -->
-            <img src="/assets/images/cosmic-eye-hero.jpg" 
-                 alt="Project Context - Cosmic Eye Logo" 
-                 class="hero-logo-img">
+            <!-- JPG Logo with feathered edges -->
+            <div class="hero-logo-container">
+                <img src="/assets/images/cosmic-eye-hero.jpg" 
+                     alt="Project Context" 
+                     class="hero-logo-img">
+            </div>
             
-            <span class="featured-tag">Context is Everything</span>
+            <!-- Removed redundant "Context is Everything" tag since logo has text -->
+            
             <h1 class="hero-title">
                 Empower Your Faith Journey
             </h1>
@@ -503,7 +500,7 @@
             const starsContainer = document.getElementById('heroStars');
             if (!starsContainer) return;
             
-            const starCount = 60;
+            const starCount = 80;
             
             for (let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
@@ -522,26 +519,19 @@
             }
         }
         
-        // Initialize stars
         generateStars();
 
-        // Mobile menu toggle with overlay
+        // Mobile menu toggle
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const navLinks = document.getElementById('navLinks');
         const mobileOverlay = document.querySelector('.mobile-menu-overlay');
 
         mobileMenuToggle?.addEventListener('click', () => {
             const isActive = mobileMenuToggle.classList.contains('active');
-            
             mobileMenuToggle.classList.toggle('active');
             navLinks.classList.toggle('active');
             mobileOverlay?.classList.toggle('active');
-            
-            if (!isActive) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = '';
-            }
+            document.body.style.overflow = isActive ? '' : 'hidden';
         });
 
         mobileOverlay?.addEventListener('click', () => {
@@ -551,58 +541,25 @@
             document.body.style.overflow = '';
         });
 
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('#main-nav') && !e.target.closest('.mobile-menu-overlay')) {
-                mobileMenuToggle?.classList.remove('active');
-                navLinks?.classList.remove('active');
-                mobileOverlay?.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        });
-
-        // Add scroll effect to nav
+        // Scroll effect
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('main-nav');
-            if (window.scrollY > 100) {
-                nav?.classList.add('scrolled');
-            } else {
-                nav?.classList.remove('scrolled');
-            }
+            nav?.classList.toggle('scrolled', window.scrollY > 100);
 
             const backToTop = document.querySelector('.back-to-top');
-            if (backToTop) {
-                if (window.scrollY > 500) {
-                    backToTop.classList.add('visible');
-                } else {
-                    backToTop.classList.remove('visible');
-                }
-            }
+            backToTop?.classList.toggle('visible', window.scrollY > 500);
         });
 
         // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        const backToTopBtn = document.querySelector('.back-to-top');
-        if (backToTopBtn) {
-            backToTopBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
+                document.querySelector(this.getAttribute('href'))?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
                 });
             });
-        }
+        });
     </script>
 </body>
 </html>
