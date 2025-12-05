@@ -43,8 +43,8 @@ class HubCore {
             // Load featured characters
             this.loadFeaturedCharacters();
             
-            // Setup mobile menu
-            this.setupMobileMenu();
+            // Setup mobile menu - commented out becuase of migration to nav component w/ cosmic eye
+            //this.setupMobileMenu();
             
             // Setup scroll effects
             this.setupScrollEffects();
