@@ -357,6 +357,4 @@ window.initializeNavigation = function(options = {}) {
 };
 
 // Export for ES6 modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = NavigationComponent;
-}
+export default NavigationComponent;
