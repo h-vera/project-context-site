@@ -3,8 +3,8 @@
    Path: /assets/css/global-v2.css
    Purpose: Consolidated styles for new templates
    Primary use: Character profiles and study pages
-   Version: 2.1.0 - Updated with cosmic eye nav logo
-   Last Updated: 2025-01-15
+   Version: 2.0.0
+   Last Updated: 2024-12-15
    ============================================ */
 
 /* ============================================
@@ -21,14 +21,6 @@
   --accent-rose: #e11d48;
   --accent-gold: #d4af37;
   --accent-green: #10b981;
-  
-  /* Cosmic Logo Colors */
-  --cosmic-cyan: #3EE4FF;
-  --cosmic-blue: #57A9FF;
-  --cosmic-indigo: #6C4FF7;
-  --cosmic-magenta: #E94BFF;
-  --cosmic-pink: #FA4ABA;
-  --cosmic-orange: #FF9B4A;
   
   /* Neutral Colors */
   --text-gray: #6b7280;
@@ -109,7 +101,7 @@ nav.scrolled {
 .logo {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
   text-decoration: none;
   color: var(--primary-dark);
   transition: transform 0.3s ease;
@@ -119,23 +111,7 @@ nav.scrolled {
   transform: scale(1.05);
 }
 
-/* Updated logo-icon for cosmic eye image */
 .logo-icon {
-  width: auto;
-  height: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.logo-icon img {
-  height: 74px;
-  width: auto;
-  display: block;
-}
-
-.logo-icon svg {
-  /* Fallback for pages still using inline SVG */
   width: 40px;
   height: 40px;
 }
@@ -274,7 +250,7 @@ nav.scrolled {
 .content-section { 
   max-width: var(--max-width-content); 
   margin: 0 auto; 
-  padding: 7.5rem 1rem 2rem;
+  padding: 6rem 1rem 2rem;
 }
 
 .container {
@@ -516,15 +492,16 @@ tbody tr:hover {
   padding: 1.5rem;
   border-radius: 12px;
   margin: 2rem auto;
-  max-width: 1100px;
+  max-width: 1100px; /* Default width */
 }
 
+/* Adaptive width based on number of items */
 .page-navigation:has(.page-nav-item:nth-child(6)) {
-  max-width: 1200px;
+  max-width: 1200px; /* Wider for 6+ items */
 }
 
 .page-navigation:not(:has(.page-nav-item:nth-child(5))) {
-  max-width: 900px;
+  max-width: 900px; /* Narrower for 4 items only */
 }
 
 .page-navigation h3 {
@@ -534,15 +511,16 @@ tbody tr:hover {
   text-align: center;
 }
 
+/* Flexbox for better orphan handling */
 .page-nav-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  justify-content: center;
+  justify-content: center; /* This centers orphaned items */
 }
 
 .page-nav-item {
-  flex: 0 1 calc(20% - 1rem);
+  flex: 0 1 calc(20% - 1rem); /* Default: 5 items per row */
   min-width: 180px;
   max-width: 220px;
   background: white;
@@ -558,14 +536,15 @@ tbody tr:hover {
   cursor: pointer;
 }
 
+/* Adjust for different numbers of items */
 .page-nav-grid:has(.page-nav-item:nth-child(6)) .page-nav-item {
-  flex: 0 1 calc(16.666% - 1rem);
+  flex: 0 1 calc(16.666% - 1rem); /* 6 items per row */
   min-width: 160px;
   max-width: 200px;
 }
 
 .page-nav-grid:not(:has(.page-nav-item:nth-child(5))) .page-nav-item {
-  flex: 0 1 calc(25% - 1rem);
+  flex: 0 1 calc(25% - 1rem); /* 4 items per row */
   min-width: 200px;
   max-width: 250px;
 }
@@ -593,6 +572,7 @@ tbody tr:hover {
   color: white;
 }
 
+/* Text styles within nav items */
 .nav-subtitle {
   font-size: 0.85rem;
   color: #666;
@@ -631,14 +611,17 @@ tbody tr:hover {
 }
 
 /* ========================================
-   RESPONSIVE BREAKPOINTS FOR PAGE NAV
+   RESPONSIVE BREAKPOINTS
    ======================================== */
+
+/* Large screens: Keep all items in one row */
 @media (min-width: 1100px) {
   .page-nav-item {
-    max-width: none;
+    max-width: none; /* Remove max-width on large screens */
   }
 }
 
+/* Medium screens: 3 columns or 2x2 for 4 items */
 @media (min-width: 700px) and (max-width: 1099px) {
   .page-navigation {
     max-width: 800px;
@@ -650,12 +633,14 @@ tbody tr:hover {
     max-width: 250px;
   }
   
+  /* 4 items: 2x2 layout */
   .page-nav-grid:not(:has(.page-nav-item:nth-child(5))) .page-nav-item {
     flex: 0 1 calc(50% - 1rem);
     max-width: 300px;
   }
 }
 
+/* Small tablets: 2 columns */
 @media (min-width: 500px) and (max-width: 699px) {
   .page-navigation {
     max-width: 600px;
@@ -668,6 +653,7 @@ tbody tr:hover {
   }
 }
 
+/* Mobile: Single column */
 @media (max-width: 499px) {
   .page-navigation {
     padding: 1rem;
@@ -766,7 +752,7 @@ tbody tr:hover {
 
 .bibliography-text {
   flex: 1;
-  min-width: 0;
+  min-width: 0; /* Prevents text overflow */
 }
 
 .bibliography-title {
@@ -791,6 +777,7 @@ details[open] .expand-indicator {
   transform: rotate(180deg);
 }
 
+/* Source entries */
 .source-category {
   margin-bottom: 2.5rem;
 }
@@ -825,12 +812,13 @@ details[open] .expand-indicator {
 }
 
 .usage-tag {
+  /* Gradient pill style matching nav buttons */
   display: inline-flex;
   align-items: center;
   padding: 0.4rem 0.9rem;
-  background: linear-gradient(135deg, #e11d48, #7209b7);
+  background: linear-gradient(135deg, #e11d48, #7209b7); /* red to purple gradient */
   color: white;
-  border-radius: 25px;
+  border-radius: 25px; /* Pill shape */
   font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -861,7 +849,49 @@ details[open] .expand-indicator {
   margin: 0.5rem 0;
 }
 
-/* Enhanced bibliography variant */
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .bibliography-header {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  
+  .bibliography-title {
+    font-size: 1.1rem;
+  }
+  
+  .bibliography-subtitle {
+    font-size: 0.85rem;
+  }
+  
+  .bibliography-content {
+    padding: 1rem 0;
+  }
+  
+  .source-usage {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+/* Animation */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   ENHANCED BIBLIOGRAPHY VARIANT
+   Beautiful gradient header version
+   Use class="bibliography-section enhanced" for this style
+   ======================================== */
 .bibliography-section.enhanced {
   margin: 3rem 0;
   border: 2px solid var(--border-light);
@@ -928,13 +958,98 @@ details[open] .expand-indicator {
   border-bottom: none;
 }
 
+.bibliography-section.enhanced .usage-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  background: linear-gradient(135deg, #e11d48, #7209b7); /* red to purple gradient */
+  color: white;
+  border-radius: 25px; /* Fuller pill shape */
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  min-height: 32px;
+  transition: all 0.2s ease;
+}
+
+.bibliography-section.enhanced .usage-note {
+  color: var(--text-gray);
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.bibliography-section.enhanced .citation-note {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 8px;
+  border: 2px solid var(--accent-gold);
+}
+
+.bibliography-section.enhanced .expand-indicator {
+  transition: transform 0.3s ease;
+  color: white;
+}
+
+.bibliography-section.enhanced[open] .expand-indicator {
+  transform: rotate(180deg);
+}
+
 .bibliography-section.enhanced .expand-indicator svg {
   color: white;
 }
 
+/* Mobile responsiveness for enhanced version */
+@media (max-width: 768px) {
+  .bibliography-section.enhanced .bibliography-header {
+    padding: 1rem;
+  }
+  
+  .bibliography-section.enhanced .bibliography-title {
+    font-size: 1.1rem;
+  }
+  
+  .bibliography-section.enhanced .bibliography-icon {
+    font-size: 1.5rem;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .bibliography-header {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  
+  .bibliography-title {
+    font-size: 1.1rem;
+  }
+  
+  .bibliography-subtitle {
+    font-size: 0.85rem;
+  }
+  
+  .bibliography-content {
+    padding: 1rem 0;
+  }
+  
+  .source-usage {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
 /* ============================================
-   ANIMATIONS
+   ANIMATIONS - CONSOLIDATED SECTION
+   Place this single section in global-v2.css
+   Remove all duplicate keyframe definitions
    ============================================ */
+
+/* === KEYFRAME DEFINITIONS === */
+
+/* Vertical slide animations */
 @keyframes fadeSlideDown {
   from { 
     opacity: 0; 
@@ -946,6 +1061,7 @@ details[open] .expand-indicator {
   }
 }
 
+/* Horizontal slide animations */
 @keyframes fadeSlideLeft {
   from {
     opacity: 0;
@@ -957,31 +1073,30 @@ details[open] .expand-indicator {
   }
 }
 
+/* Fade only animation */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { 
+    opacity: 0; 
+  }
+  to { 
+    opacity: 1; 
+  }
 }
 
+/* Loading spinner */
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
+/* Skeleton loading */
 @keyframes loading {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
 
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* === ANIMATION CLASSES === */
 
+/* Scroll-triggered animations */
 .animate-on-scroll {
   opacity: 0;
   transform: translateY(30px);
@@ -994,6 +1109,7 @@ details[open] .expand-indicator {
   transform: translateY(0);
 }
 
+/* Direct animation applications */
 .fade-in {
   animation: fadeSlideDown 0.6s ease-out;
 }
@@ -1006,7 +1122,7 @@ details[open] .expand-indicator {
   animation: fadeSlideLeft 0.6s ease-out;
 }
 
-/* Timeline animations */
+/* Timeline specific animations */
 .timeline-item {
   position: relative;
   padding: 1rem 1rem 1rem 1.5rem;
@@ -1020,6 +1136,7 @@ details[open] .expand-indicator {
   animation: fadeSlideLeft 0.6s ease-out backwards;
 }
 
+/* Stagger animation for timeline items */
 .timeline-item:nth-child(1) { animation-delay: 0.1s; }
 .timeline-item:nth-child(2) { animation-delay: 0.2s; }
 .timeline-item:nth-child(3) { animation-delay: 0.3s; }
@@ -1029,6 +1146,7 @@ details[open] .expand-indicator {
 .timeline-item:nth-child(7) { animation-delay: 0.7s; }
 .timeline-item:nth-child(8) { animation-delay: 0.8s; }
 
+/* Tab content animation */
 .tab-content {
   display: none;
 }
@@ -1038,6 +1156,15 @@ details[open] .expand-indicator {
   animation: fadeIn 0.5s ease-in;
 }
 
+/* Bibliography content animation */
+.bibliography-content {
+  padding: 2rem 0;
+  animation: fadeSlideDown 0.3s ease-out;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Loading animations */
 .loading-spinner {
   width: 50px;
   height: 50px;
@@ -1053,12 +1180,114 @@ details[open] .expand-indicator {
   animation: loading 1.5s infinite;
 }
 
-/* Animation utilities */
+/* === ANIMATION UTILITIES === */
+
+/* Delay utilities */
 .animation-delay-100 { animation-delay: 0.1s; }
 .animation-delay-200 { animation-delay: 0.2s; }
 .animation-delay-300 { animation-delay: 0.3s; }
 .animation-delay-400 { animation-delay: 0.4s; }
 .animation-delay-500 { animation-delay: 0.5s; }
+
+/* Duration utilities */
+.animation-fast { animation-duration: 0.3s; }
+.animation-normal { animation-duration: 0.6s; }
+.animation-slow { animation-duration: 1s; }
+
+/* Easing utilities */
+.animation-ease-in { animation-timing-function: ease-in; }
+.animation-ease-out { animation-timing-function: ease-out; }
+.animation-ease-in-out { animation-timing-function: ease-in-out; }
+
+
+/* ========================================
+   PATTERN CARDS (for consistency)
+   ======================================== */
+.pattern-box {
+  padding: 1rem;
+  border-radius: 8px;
+  height: 100%;
+}
+
+.pattern-box h4 {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.pattern-box ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: 0.9rem;
+}
+
+.pattern-box ul li {
+  margin: 0.3rem 0;
+}
+
+/* ========================================
+   KEY INSIGHTS (Standardized)
+   ======================================== */
+.key-insight {
+  background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+  border-left: 4px solid #4a5fff;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  border-radius: 8px;
+}
+
+.key-insight strong {
+  color: #2a3aaa;
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+/* ========================================
+   NAVIGATION FOOTER
+   ======================================== */
+.nav-footer {
+  background: #f8f9ff;
+  border: 1px solid #d0d8ff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-top: 3rem;
+}
+
+.nav-footer h3 {
+  margin-bottom: 1rem;
+  color: #2a3aaa;
+}
+
+.nav-footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.nav-footer .cross-ref {
+  display: block;
+  padding: 0.75rem;
+  background: white;
+  border: 1px solid #d0d8ff;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #4a5fff;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.nav-footer .cross-ref:hover {
+  background: #4a5fff;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .nav-footer-grid {
+    grid-template-columns: 1fr;
+  }
+}
 
 /* ============================================
    UI ELEMENTS
@@ -1242,41 +1471,7 @@ details[open] .expand-indicator {
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
 }
 
-/* Cosmic gradient buttons - matching logo colors */
-.cosmic-button {
-  background: linear-gradient(135deg, var(--cosmic-cyan) 0%, var(--cosmic-blue) 30%, var(--cosmic-indigo) 70%, var(--cosmic-magenta) 100%);
-  color: #001B3A;
-  padding: 0.75rem 1.5rem;
-  border-radius: 50px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  border: none;
-  box-shadow: 0 4px 15px rgba(62,228,255,0.25);
-}
-
-.cosmic-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(62,228,255,0.4);
-  filter: brightness(1.05);
-}
-
-.cosmic-button.muted {
-  background: linear-gradient(135deg, #5BC0D6 0%, #6A9FD9 30%, #7B6BBD 70%, #8E7BB8 100%);
-  color: #ffffff;
-  box-shadow: 0 4px 15px rgba(107,107,189,0.2);
-}
-
-.cosmic-button.muted:hover {
-  box-shadow: 0 8px 25px rgba(107,107,189,0.35);
-  filter: brightness(1.08);
-}
-
-/* Tab Buttons */
+/* Tab Buttons - Pill-shaped like bibliography tags */
 .tab-button {
   padding: 0.6rem 1.25rem;
   background: #f8f9fa;
@@ -1284,11 +1479,11 @@ details[open] .expand-indicator {
   color: #6b7280;
   cursor: pointer;
   font-weight: 600;
-  border-radius: 25px;
+  border-radius: 25px; /* Pill shape */
   transition: all 0.3s ease;
   font-family: inherit;
   font-size: 0.95rem;
-  min-height: 44px;
+  min-height: 44px; /* Touch-friendly */
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1301,17 +1496,53 @@ details[open] .expand-indicator {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Active tab - matches bibliography tag gradient */
 .tab-button.active {
-  background: linear-gradient(135deg, #e11d48, #7209b7);
+  background: linear-gradient(135deg, #e11d48, #7209b7); /* red to purple gradient */
   color: white;
   border-color: transparent;
   box-shadow: 0 4px 12px rgba(225, 29, 72, 0.25);
   transform: translateY(0);
 }
 
+/* Tab Content */
+.tab-content {
+  display: none;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+/* Mobile responsiveness for tabs */
+@media (max-width: 768px) {
+  .tab-nav {
+    gap: 0.5rem;
+  }
+  
+  .tab-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    min-height: 40px;
+  }
+}
+
 /* ============================================
    UTILITY CLASSES
    ============================================ */
+/* Spacing */
 .mt-1 { margin-top: 0.5rem; }
 .mt-2 { margin-top: 1rem; }
 .mt-3 { margin-top: 1.5rem; }
@@ -1321,16 +1552,18 @@ details[open] .expand-indicator {
 .py-1 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
 .py-2 { padding-top: 1rem; padding-bottom: 1rem; }
 
+/* Text */
 .text-center { text-align: center; }
 .text-muted { color: var(--text-gray); }
 .font-bold { font-weight: 700; }
 
+/* Display */
 .hidden { display: none; }
 .block { display: block; }
 .inline-block { display: inline-block; }
 
 /* ============================================
-   LOADING & EMPTY STATES
+   LOADING STATES
    ============================================ */
 .loading {
   display: flex;
@@ -1339,6 +1572,33 @@ details[open] .expand-indicator {
   min-height: 400px;
 }
 
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid var(--border-light);
+  border-top-color: var(--accent-blue);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ============================================
+   EMPTY STATES
+   ============================================ */
 .empty-state {
   text-align: center;
   padding: 4rem 2rem;
@@ -1390,288 +1650,9 @@ footer p {
 }
 
 /* ============================================
-   CHARACTER PROFILE COMPONENTS
-   ============================================ */
-.hebrew, .hebrew-large {
-  font-family: 'SBL Hebrew', 'Ezra SIL', serif;
-  direction: rtl;
-  unicode-bidi: embed;
-  color: var(--accent-purple);
-}
-
-.greek, .greek-large {
-  font-family: 'SBL Greek', 'Times New Roman', serif;
-  direction: ltr;
-  unicode-bidi: normal;
-  color: var(--accent-purple);
-}
-
-.hebrew-large, .greek-large {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.hebrew-inline, .greek-inline {
-  display: inline-block;
-  padding: 0 0.3rem;
-  color: var(--accent-purple);
-}
-
-.hebrew-inline {
-  font-family: 'SBL Hebrew', 'Ezra SIL', serif;
-  direction: rtl;
-  unicode-bidi: embed;
-}
-
-.greek-inline {
-  font-family: 'SBL Greek', 'Times New Roman', serif;
-}
-
-/* Timeline */
-.timeline {
-  position: relative;
-  padding-left: 2rem;
-  margin: 1.5rem 0;
-}
-
-.timeline::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: linear-gradient(180deg, var(--accent-purple) 0%, var(--accent-rose) 100%);
-  border-radius: 2px;
-}
-
-.timeline-item::before {
-  content: '';
-  position: absolute;
-  left: -2.35rem;
-  top: 1.3rem;
-  width: 10px;
-  height: 10px;
-  background: var(--accent-purple);
-  border: 3px solid white;
-  border-radius: 50%;
-  box-shadow: 0 0 0 3px rgba(114, 9, 183, 0.2);
-  transition: all 0.3s ease;
-}
-
-.timeline-item:hover {
-  background: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-left-color: var(--accent-gold);
-  transform: translateX(5px);
-}
-
-.timeline-item:hover::before {
-  background: var(--accent-rose);
-  transform: scale(1.3);
-  box-shadow: 0 0 0 5px rgba(225, 29, 72, 0.2);
-}
-
-/* Chiasm Structure */
-.chiasm-card {
-  background: var(--bg);
-  border: 1px solid var(--border-light);
-  border-radius: 16px;
-  padding: 1.5rem 1.75rem;
-  margin: 1.5rem 0;
-  box-shadow: 0 4px 6px -1px var(--shadow);
-}
-
-.chiasm-card h3 {
-  margin: .1rem 0 1rem;
-  color: #1a202c;
-  font-size: 1.4rem;
-  font-weight: 700;
-}
-
-.chiasm-structure {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  background: linear-gradient(135deg, var(--panel) 0%, #f9fafb 100%);
-  border: 2px dashed var(--ring);
-  border-radius: 12px;
-  padding: 1.25rem;
-  margin: 1rem 0;
-}
-
-.chiasm-line {
-  padding: .3rem 0;
-  transition: background 0.2s;
-}
-
-.chiasm-center {
-  padding: .75rem 1rem;
-  margin: .75rem 0;
-  border-left: 4px solid var(--accent-blue);
-  background: linear-gradient(90deg, #ecfeff 0%, #cffafe 100%);
-  border-radius: 8px;
-  font-weight: 600;
-}
-
-.indent-1 { padding-left: 1.5rem; }
-.indent-2 { padding-left: 3rem; }
-.indent-3 { padding-left: 4.5rem; }
-.indent-4 { padding-left: 6rem; }
-
-/* Word Study */
-.word-study {
-  background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
-  border: 1px solid #fbbf24;
-  margin: 1.5rem 0;
-  padding: 1.5rem 1.75rem;
-  border-radius: 16px;
-}
-
-.word-study h4 {
-  margin: .5rem 0 .75rem;
-  color: #92400e;
-}
-
-/* Character Type Badge */
-.character-type-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: linear-gradient(135deg, var(--info) 0%, #60a5fa 100%);
-  color: white;
-  border-radius: 999px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  margin: 1rem 0;
-}
-
-/* Complexity Indicator */
-.complexity-indicator {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 1rem 0;
-  padding: 0.75rem;
-  background: var(--panel);
-  border-radius: 8px;
-  border: 1px solid var(--border-light);
-}
-
-.complexity-indicator .label {
-  font-weight: 600;
-  color: var(--muted);
-  font-size: 0.875rem;
-}
-
-.complexity-level {
-  display: flex;
-  gap: 0.25rem;
-}
-
-.complexity-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--border-light);
-}
-
-.complexity-dot.filled {
-  background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-rose) 100%);
-}
-
-/* Study Questions */
-.question-list {
-  counter-reset: question;
-  list-style: none;
-  padding: 0;
-}
-
-.question-list li {
-  counter-increment: question;
-  position: relative;
-  padding-left: 3rem;
-  margin-bottom: 1.5rem;
-  color: #475569;
-  line-height: 1.7;
-}
-
-.question-list li::before {
-  content: counter(question);
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 32px;
-  height: 32px;
-  background: var(--panel);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  color: var(--accent-purple);
-  border: 1px solid var(--border-light);
-}
-
-/* Song Links */
-.song-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.5rem 0.75rem;
-  background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-rose) 100%);
-  color: white;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-decoration: none;
-  margin: 0.25rem;
-  transition: all 0.2s;
-}
-
-.song-link:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(114, 9, 183, 0.3);
-}
-
-/* Nav grid */
-.nav-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-.nav-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  background: var(--panel);
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
-  text-decoration: none;
-  color: var(--primary);
-  font-weight: 500;
-  transition: all 0.2s;
-  min-height: 60px;
-}
-
-.nav-button:hover {
-  background: linear-gradient(135deg, var(--accent-purple), var(--accent-rose));
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
-}
-
-/* ============================================
    RESPONSIVE DESIGN
    ============================================ */
 @media (max-width: 768px) {
-  /* Mobile nav logo size */
-  .logo-icon img {
-    height: 56px;
-  }
-  
   .nav-links {
     position: fixed;
     top: 65px;
@@ -1685,8 +1666,6 @@ footer p {
     gap: 1rem;
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
     transition: right 0.3s ease;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
   }
 
   .nav-links.active {
@@ -1714,7 +1693,7 @@ footer p {
   }
   
   .content-section {
-    padding: 7rem 1rem 2rem;
+    padding: 5rem 1rem 2rem;
   }
   
   .section-title {
@@ -1729,148 +1708,6 @@ footer p {
     bottom: 1rem;
     right: 1rem;
   }
-  
-  .indent-1 { padding-left: 1rem; }
-  .indent-2 { padding-left: 2rem; }
-  .indent-3 { padding-left: 3rem; }
-  .indent-4 { padding-left: 4rem; }
-  
-  /* Enhanced dropdown states for mobile */
-  .nav-links .dropdown.active .dropdown-content {
-    display: block !important;
-  }
-  
-  .nav-links .dropdown.active .dropdown-toggle::after {
-    transform: rotate(180deg);
-  }
-  
-  /* Mobile nav dropdown tap-friendly */
-  .nav-links .dropdown .dropdown-content {
-    display: none;
-    margin: 0.25rem 0 0.5rem 0;
-    padding: 0.25rem 0;
-    border-left: 3px solid var(--border-light);
-    background: #fafafa;
-  }
-
-  .nav-links .dropdown:focus-within .dropdown-content {
-    display: block;
-  }
-
-  .nav-links .dropdown > .dropdown-toggle {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    min-height: 48px;
-    padding: 0.75rem 0.75rem;
-    background: #fff;
-    border: 1px solid var(--border-light);
-    border-radius: 8px;
-  }
-
-  .nav-links .dropdown > .dropdown-toggle::after {
-    content: '▸';
-    margin-left: 0.5rem;
-    transition: transform .2s ease;
-  }
-  
-  .nav-links .dropdown:focus-within > .dropdown-toggle::after {
-    transform: rotate(90deg);
-  }
-
-  .nav-links .dropdown .dropdown-content a {
-    padding: 0.6rem 0.75rem 0.6rem 1.25rem;
-    border-radius: 6px;
-    margin: 0.15rem 0;
-  }
-
-  .nav-links a {
-    min-height: 48px;
-    padding: 0.75rem;
-  }
-  
-  /* Page navigation mobile */
-  .page-navigation {
-    border-top: 1px solid #d0d8ff;
-    border-bottom: 1px solid #d0d8ff;
-    border-left: none;
-    border-right: none;
-    border-radius: 0;
-    margin-left: -1rem;
-    margin-right: -1rem;
-  }
-  
-  .page-nav-item {
-    text-align: left;
-  }
-  
-  .nav-footer-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .bibliography-header {
-    padding: 1rem;
-    border-radius: 8px;
-  }
-  
-  .bibliography-title {
-    font-size: 1.1rem;
-  }
-  
-  .bibliography-subtitle {
-    font-size: 0.85rem;
-  }
-  
-  .bibliography-content {
-    padding: 1rem 0;
-  }
-  
-  .source-usage {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-  
-  .tab-nav {
-    gap: 0.5rem;
-  }
-  
-  .tab-button {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    min-height: 40px;
-  }
-}
-
-/* Mobile Menu Overlay */
-.mobile-menu-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 998;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.mobile-menu-overlay.active {
-  display: block;
-  opacity: 1;
-}
-
-body.menu-open {
-  overflow: hidden;
-}
-
-/* About page special styling */
-body.about-page .section-title {
-  background: linear-gradient(135deg, var(--bg-soft, #f0f4ff), #e8eeff);
-  border: 2px solid var(--accent-blue, #4a5fff);
-  padding: 1rem 1.25rem;
-  border-radius: 1rem;
 }
 
 /* ============================================
@@ -1896,4 +1733,673 @@ body.about-page .section-title {
   details[open] summary ~ * {
     display: block !important;
   }
+}
+/* ===== Character Profile Components (moved from template v5.4) ===== */
+  
+    /* Hebrew/Greek Text - Character Profile Specific */
+    .hebrew, .hebrew-large {
+      font-family: 'SBL Hebrew', 'Ezra SIL', serif;
+      direction: rtl;
+      unicode-bidi: embed;
+      color: var(--accent-purple);
+    }
+
+    .greek, .greek-large {
+      font-family: 'SBL Greek', 'Times New Roman', serif;
+      direction: ltr;
+      unicode-bidi: normal;
+      color: var(--accent-purple);
+    }
+
+    .hebrew-large, .greek-large {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .hebrew-inline, .greek-inline {
+      display: inline-block;
+      padding: 0 0.3rem;
+      color: var(--accent-purple);
+    }
+
+    .hebrew-inline {
+      font-family: 'SBL Hebrew', 'Ezra SIL', serif;
+      direction: rtl;
+      unicode-bidi: embed;
+    }
+
+    .greek-inline {
+      font-family: 'SBL Greek', 'Times New Roman', serif;
+    }
+
+    /* Timeline - Character Specific */
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+  margin: 1.5rem 0;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--accent-purple) 0%, var(--accent-rose) 100%);
+  border-radius: 2px;
+}
+
+/* Keep loaded class for backward compatibility */
+.timeline-item.loaded {
+  /* No-op - animation handled above */
+}
+/* Timeline dot */
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -2.35rem;
+  top: 1.3rem;
+  width: 10px;
+  height: 10px;
+  background: var(--accent-purple);
+  border: 3px solid white;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(114, 9, 183, 0.2);
+  transition: all 0.3s ease;
+}
+
+/* Hover effects */
+.timeline-item:hover {
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-left-color: var(--accent-gold);
+  transform: translateX(5px);
+}
+
+/* Make the dot glow on hover */
+.timeline-item:hover::before {
+  background: var(--accent-rose);
+  transform: scale(1.3);
+  box-shadow: 0 0 0 5px rgba(225, 29, 72, 0.2);
+}
+
+/* Timeline Card - if used separately from theology-card */
+.timeline-card {
+  background: var(--bg);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 1.5rem 1.75rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 4px 6px -1px var(--shadow);
+}
+
+.timeline-card h3 {
+  margin: .1rem 0 1rem;
+  color: #1a202c;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+/* Stagger animation for multiple timeline items */
+.timeline-item:nth-child(1) { animation-delay: 0.1s; }
+.timeline-item:nth-child(2) { animation-delay: 0.2s; }
+.timeline-item:nth-child(3) { animation-delay: 0.3s; }
+.timeline-item:nth-child(4) { animation-delay: 0.4s; }
+.timeline-item:nth-child(5) { animation-delay: 0.5s; }
+.timeline-item:nth-child(6) { animation-delay: 0.6s; }
+.timeline-item:nth-child(7) { animation-delay: 0.7s; } 
+.timeline-item:nth-child(8) { animation-delay: 0.8s; }
+
+    /* Chiasm Structure - Character Specific */
+    .chiasm-card {
+      background: var(--bg);
+      border: 1px solid var(--border-light);
+      border-radius: 16px;
+      padding: 1.5rem 1.75rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 4px 6px -1px var(--shadow);
+    }
+
+    .chiasm-card h3 {
+      margin: .1rem 0 1rem;
+      color: #1a202c;
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .chiasm-structure {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      background: linear-gradient(135deg, var(--panel) 0%, #f9fafb 100%);
+      border: 2px dashed var(--ring);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin: 1rem 0;
+    }
+
+    .chiasm-line {
+      padding: .3rem 0;
+      transition: background 0.2s;
+    }
+
+    .chiasm-center {
+      padding: .75rem 1rem;
+      margin: .75rem 0;
+      border-left: 4px solid var(--accent-blue);
+      background: linear-gradient(90deg, #ecfeff 0%, #cffafe 100%);
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    .indent-1 { padding-left: 1.5rem; }
+    .indent-2 { padding-left: 3rem; }
+    .indent-3 { padding-left: 4.5rem; }
+    .indent-4 { padding-left: 6rem; }
+
+    /* Word Study - Character Specific */
+    .word-study {
+      background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
+      border: 1px solid #fbbf24;
+      margin: 1.5rem 0;
+      padding: 1.5rem 1.75rem;
+      border-radius: 16px;
+    }
+
+    .word-study h4 {
+      margin: .5rem 0 .75rem;
+      color: #92400e;
+    }
+
+    /* Character Type Badge */
+    .character-type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: linear-gradient(135deg, var(--info) 0%, #60a5fa 100%);
+      color: white;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin: 1rem 0;
+    }
+
+    /* Complexity Indicator */
+    .complexity-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 1rem 0;
+      padding: 0.75rem;
+      background: var(--panel);
+      border-radius: 8px;
+      border: 1px solid var(--border-light);
+    }
+
+    .complexity-indicator .label {
+      font-weight: 600;
+      color: var(--muted);
+      font-size: 0.875rem;
+    }
+
+    .complexity-level {
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    .complexity-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--border-light);
+    }
+
+    .complexity-dot.filled {
+      background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-rose) 100%);
+    }
+
+    /* Optional & Enhancement Indicators */
+    .optional-indicator {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      background: var(--warning);
+      color: white;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-left: 0.5rem;
+    }
+
+    .enhancement-indicator {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-rose) 100%);
+      color: white;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-left: 0.5rem;
+    }
+
+    /* Study Questions */
+    .question-list {
+      counter-reset: question;
+      list-style: none;
+      padding: 0;
+    }
+
+    .question-list li {
+      counter-increment: question;
+      position: relative;
+      padding-left: 3rem;
+      margin-bottom: 1.5rem;
+      color: #475569;
+      line-height: 1.7;
+    }
+
+    .question-list li::before {
+      content: counter(question);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 32px;
+      height: 32px;
+      background: var(--panel);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: var(--accent-purple);
+      border: 1px solid var(--border-light);
+    }
+
+    /* Profile Status Indicator */
+    .profile-status-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--warning);
+      color: white;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin: 1rem 0;
+    }
+
+    .profile-status-indicator.incomplete {
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    }
+
+    /* Improved touch targets for mobile */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px; /* Better mobile UX */
+      border: 1px solid var(--ring);
+      border-radius: 999px;
+      padding: .4rem .75rem;
+      font-size: .85rem;
+      margin: .15rem .35rem .15rem 0;
+      background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    /* Bibliography Styles */
+    .bibliography-section summary {
+      cursor: pointer;
+      list-style: none;
+      outline: none;
+    }
+
+    .bibliography-section[open] .expand-indicator {
+      transform: rotate(180deg);
+    }
+
+    .expand-indicator {
+      transition: transform 0.3s ease;
+    }
+
+    .source-category {
+      margin-bottom: 2.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .source-category:last-child {
+      border-bottom: none;
+    }
+
+    .source-category h4 {
+      color: var(--accent-purple);
+      margin-bottom: 1rem;
+    }
+
+    .source-entry {
+      background: var(--bg);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .source-entry:hover {
+      box-shadow: var(--shadow);
+      transform: translateX(4px);
+      border-color: var(--accent-purple);
+    }
+
+    .source-citation {
+      color: #111827;
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
+    }
+
+    .source-citation strong {
+      color: var(--accent-purple);
+      font-weight: 600;
+    }
+
+    .source-usage {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .usage-tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 0.25rem 0.75rem;
+      background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-rose) 100%);
+      color: white;
+      border-radius: 25px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .usage-note {
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-style: italic;
+      flex: 1;
+    }
+
+    .citation-note {
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      border-left: 4px solid var(--accent-blue);
+    }
+
+    .citation-note p {
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
+    }
+
+    /* ========================================
+   BIBLIOGRAPHY SVG ARROW ENHANCEMENT
+   Add to global-v2.css after existing bibliography styles
+   ======================================== */
+
+/* SVG Arrow styling for bibliography expand indicator */
+.bibliography-section .expand-indicator svg {
+  transition: transform 0.3s ease;
+  width: 24px;
+  height: 24px;
+  color: var(--muted);
+}
+
+.bibliography-section[open] .expand-indicator svg {
+  transform: rotate(180deg);
+}
+
+/* Hide the old text-based indicator if present */
+.bibliography-section .expand-indicator:not(:has(svg)) {
+  transition: transform 0.3s ease;
+}
+
+.bibliography-section[open] .expand-indicator:not(:has(svg)) {
+  transform: rotate(180deg);
+}
+    /* Song Links (for women with songs) */
+    .song-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.5rem 0.75rem;
+      background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-rose) 100%);
+      color: white;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      margin: 0.25rem;
+      transition: all 0.2s;
+    }
+
+    .song-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(114, 9, 183, 0.3);
+    }
+
+    /* Multi-page indicator */
+    .multi-page-indicator {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      background: var(--info);
+      color: white;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-left: 0.5rem;
+    }
+
+    /* Women-specific styles */
+    body.woman-profile .tag.primary {
+      background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-rose) 100%);
+    }
+
+    body.woman-profile .cross-ref:hover {
+      background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-rose) 100%);
+    }
+
+    /* Responsive adjustments for character-specific elements */
+    @media (max-width: 768px) {
+      .indent-1 { padding-left: 1rem; }
+      .indent-2 { padding-left: 2rem; }
+      .indent-3 { padding-left: 3rem; }
+      .indent-4 { padding-left: 4rem; }
+    }
+  /* --- Mobile nav fixes (append at end of global-v2.css) --- */
+
+/* 1) Make dropdowns tap-friendly on mobile using :focus-within
+   (works without changing HTML/JS) */
+@media (max-width: 768px) {
+  /* Default: keep submenu hidden in the drawer */
+  .nav-links .dropdown .dropdown-content {
+    display: none;
+    margin: 0.25rem 0 0.5rem 0;
+    padding: 0.25rem 0;
+    border-left: 3px solid var(--border-light);
+    background: #fafafa;
+  }
+
+  /* Show submenu when the parent gets focus (tap on the toggle) */
+  .nav-links .dropdown:focus-within .dropdown-content {
+    display: block;
+  }
+
+  /* Make the top-level toggle clearly tappable */
+  .nav-links .dropdown > .dropdown-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 48px;
+    padding: 0.75rem 0.75rem;
+    background: #fff;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+  }
+
+  /* Add an inline caret that rotates when focused */
+  .nav-links .dropdown > .dropdown-toggle::after {
+    content: '▸';
+    margin-left: 0.5rem;
+    transition: transform .2s ease;
+  }
+  .nav-links .dropdown:focus-within > .dropdown-toggle::after {
+    transform: rotate(90deg);
+  }
+
+  /* Submenu items look like a simple list in the drawer */
+  .nav-links .dropdown .dropdown-content a {
+    padding: 0.6rem 0.75rem 0.6rem 1.25rem;
+    border-radius: 6px;
+    margin: 0.15rem 0;
+  }
+
+  /* Improve vertical rhythm & touch area inside the drawer */
+  .nav-links a {
+    min-height: 48px;
+    padding: 0.75rem;
+  }
+
+  /* Prevent long menus from pushing content horizontally */
+  .nav-links {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* 2) Tighten the fixed header overlap on small screens
+   (so the first card isn’t cramped under the nav) */
+@media (max-width: 768px) {
+  .content-section {
+    padding-top: 6.5rem; /* was 5rem in base; gives more breathing room */
+  }
+}
+
+/* 3) Page Navigation card (on Eve pages) — make it extra-mobile friendly */
+@media (max-width: 768px) {
+  .page-navigation {
+    border-top: 1px solid #d0d8ff;
+    border-bottom: 1px solid #d0d8ff;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+    margin-left: -1rem;
+    margin-right: -1rem;
+  }
+  .page-nav-item {
+    text-align: left;
+  }
+}
+/* Optional: subtle hero treatment just for About */
+body.about-page .section-title {
+  background: linear-gradient(135deg, var(--bg-soft, #f0f4ff), #e8eeff);
+  border: 2px solid var(--accent-blue, #4a5fff);
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
+}
+/* ============================================
+   MOBILE MENU OVERLAY - Add to global-v2.css
+   ============================================ */
+
+/* Mobile Menu Overlay */
+.mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mobile-menu-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Prevent body scroll when menu is open */
+body.menu-open {
+    overflow: hidden;
+}
+
+/* Enhanced dropdown states for mobile */
+@media (max-width: 768px) {
+    .nav-links .dropdown.active .dropdown-content {
+        display: block !important;
+    }
+    
+    .nav-links .dropdown.active .dropdown-toggle::after {
+        transform: rotate(180deg);
+    }
+}
+/* Responsive grid for page navigation */
+.page-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+/* Force 3 columns on larger screens */
+@media (min-width: 1024px) {
+  .page-nav-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Force 2 columns on medium screens */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .page-nav-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.nav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.nav-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: var(--panel);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--primary);
+  font-weight: 500;
+  transition: all 0.2s;
+  min-height: 60px;
+}
+
+.nav-button:hover {
+  background: linear-gradient(135deg, var(--accent-purple), var(--accent-rose));
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }

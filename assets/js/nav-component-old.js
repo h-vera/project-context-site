@@ -1,8 +1,8 @@
 /**
  * Centralized Navigation Component
- * Path: /assets/js/nav-component-v1.js
+ * Path: /assets/js/nav-component.js
  * Purpose: Single source of truth for navigation across all pages
- * Version: 1.2.0 - Updated with cosmic eye logo image
+ * Version: 1.1.0 - Added New Covenant Studies and Methodology
  */
 
 class NavigationComponent {
@@ -19,7 +19,6 @@ class NavigationComponent {
 
     /**
      * Get the complete navigation HTML
-     * Updated: Now uses cosmic eye logo image instead of inline SVG
      */
     getNavigationHTML() {
         return `
@@ -27,7 +26,13 @@ class NavigationComponent {
                 <div class="nav-container">
                     <a href="/" class="logo">
                         <div class="logo-icon">
-                            <img src="/assets/images/color-cosmic-nav-logo.png" alt="Project Context Logo" />
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="40" height="40">
+                                <path d="M 25 15 L 10 15 L 10 85 L 25 85" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                <path d="M 75 15 L 90 15 L 90 85 L 75 85" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                <ellipse cx="50" cy="50" rx="25" ry="15" stroke="#0a0a0a" stroke-width="3" fill="none"/>
+                                <circle cx="50" cy="50" r="8" fill="#00b4d8"/>
+                                <circle cx="50" cy="50" r="3" fill="#0a0a0a"/>
+                            </svg>
                         </div>
                         <span class="logo-text">Project Context</span>
                     </a>
@@ -66,6 +71,7 @@ class NavigationComponent {
 
     /**
      * Determine if a nav item should be active
+     * FIXED: Now returns just the class name, not the full attribute
      */
     getActiveClass(section) {
         const currentPage = this.options.currentPage;
@@ -342,21 +348,10 @@ class NavigationComponent {
     }
 }
 
-// Auto-initialize if no custom options needed
-// Pages can override by calling initializeNavigation() with options before this runs
-document.addEventListener('DOMContentLoaded', function() {
-    // Only auto-init if no nav exists yet (allows manual override)
-    if (!document.getElementById('main-nav')) {
-        new NavigationComponent();
-    }
-});
-
-// Auto-initialize function for easy use with options
+// Auto-initialize function for easy use
 window.initializeNavigation = function(options = {}) {
     return new NavigationComponent(options);
 };
 
 // Export for ES6 modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = NavigationComponent;
-}
+export default NavigationComponent;
