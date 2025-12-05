@@ -357,4 +357,4 @@ window.initializeNavigation = function(options = {}) {
 };
 
 // Export for ES6 modules
-export default NavigationComponent;
+//export default NavigationComponent;
