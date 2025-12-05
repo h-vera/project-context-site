@@ -1,6 +1,6 @@
 /**
  * Centralized Navigation Component
- * Path: /assets/js/nav-component-v1.js
+ * Path: /assets/js/nav-component.js
  * Purpose: Single source of truth for navigation across all pages
  * Version: 1.2.0 - Updated with cosmic eye logo image
  */
