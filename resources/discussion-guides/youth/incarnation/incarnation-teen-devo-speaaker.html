@@ -316,6 +316,98 @@
       border: 1px solid rgba(139, 92, 246, 0.4);
     }
 
+    /* Card Flip System */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .flip-card {
+      background-color: transparent;
+      height: 160px;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,.3);
+      border: 2px solid rgba(139, 92, 246, 0.4);
+    }
+    .flip-card-front {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%);
+      color: white;
+    }
+    .flip-card-back {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.25) 0%, rgba(59, 130, 246, 0.25) 100%);
+      color: #f8fafc;
+      transform: rotateY(180deg);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    .card-number {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .card-prompt {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    .reset-cards {
+      display: inline-block;
+      margin: 1rem 0;
+      padding: 0.6rem 1.2rem;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: white;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+    }
+    .reset-cards:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    }
+    .reset-cards:active {
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      .card-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
     .footer {
       text-align: center;
       color: #cbd5e1;
@@ -329,6 +421,7 @@
       .card { padding: 16px; }
       .journey-row { flex-direction: column; }
       .journey-arrow { transform: rotate(90deg); }
+      .card-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -354,9 +447,9 @@
       </p>
       <div class="speaker-only">
         <strong>Timing:</strong> ~8 minutes total.<br>
-        <strong>Setup:</strong> Prepare 8–10 scenario cards. Teens pick a card, discuss in groups of 3–4, then quick share-out to the whole group.<br><br>
-        <strong>💡 Digital Option:</strong> If teens have their phones, they can use the <strong>Teen Discussion Guide page</strong> which has interactive flip cards! They click a card number and it flips to reveal the scenario. Makes it easy and fun!<br><br>
-        <strong>Sample Scenarios for Cards:</strong>
+        <strong>Setup:</strong> Teens can pick cards either physically or digitally using the flip cards below. Have them discuss in groups of 3–4, then quick share-out to the whole group.<br><br>
+        <strong>💡 How to Use the Flip Cards:</strong> Click any card below to flip it and reveal the scenario. Teens can do this on their own phones if you share the Discussion Guide link, or you can project this page and click to reveal scenarios for the group!<br><br>
+        <strong>Sample Scenarios on the Cards:</strong>
         <ul style="margin-left: 20px; margin-top: 6px; font-size: 0.9rem;">
           <li>Jesus sits next to you at lunch—what does He ask you first?</li>
           <li>Jesus enters your room—what item do you think He'd comment on?</li>
@@ -366,20 +459,156 @@
           <li>Jesus watches you interact with your family for a day—what does He say?</li>
           <li>Jesus sits in on your classes—which one does He find most interesting?</li>
           <li>Jesus sees how you spend your weekend—what surprises Him?</li>
+          <li>Jesus watches what you post on social media—what does He think?</li>
+          <li>Jesus overhears how you talk about people who aren't there—what does He hear?</li>
         </ul>
       </div>
       
+      <div class="card-grid">
+        <!-- Card 1 -->
+        <div class="flip-card" onclick="flipCard(this)">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="card-number">1</div>
+              <div class="card-prompt">Pick Me!</div>
+            </div>
+            <div class="flip-card-back">
+              Jesus sits next to you at lunch—what does He ask you first?
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="flip-card" onclick="flipCard(this)">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="card-number">2</div>
+              <div class="card-prompt">Pick Me!</div>
+            </div>
+            <div class="flip-card-back">
+              Jesus enters your room—what item do you think He'd comment on?
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="flip-card" onclick="flipCard(this)">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="card-number">3</div>
+              <div class="card-prompt">Pick Me!</div>
+            </div>
+            <div class="flip-card-back">
+              Jesus joins your group chat—what message does He send?
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="flip-card" onclick="flipCard(this)">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="card-number">4</div>
+              <div class="card-prompt">Pick Me!</div>
+            </div>
+            <div class="flip-card-back">
+              Jesus shows up at your practice/rehearsal—what does He notice?
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="flip-card" onclick="flipCard(this)">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="card-number">5</div>
+              <div class="card-prompt">Pick Me!</div>
+            </div>
+            <div class="flip-card-back">
+              Jesus scrolls through your phone for 30 seconds—what does He see?
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="flip-card" onclick="flipCard(this)">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="card-number">6</div>
+              <div class="card-prompt">Pick Me!</div>
+            </div>
+            <div class="flip-card-back">
+              Jesus watches you interact with your family for a day—what does He say?
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 7 -->
+        <div class="flip-card" onclick="flipCard(this)">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="card-number">7</div>
+              <div class="card-prompt">Pick Me!</div>
+            </div>
+            <div class="flip-card-back">
+              Jesus sits in on your classes—which one does He find most interesting?
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 8 -->
+        <div class="flip-card" onclick="flipCard(this)">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="card-number">8</div>
+              <div class="card-prompt">Pick Me!</div>
+            </div>
+            <div class="flip-card-back">
+              Jesus sees how you spend your weekend—what surprises Him?
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 9 -->
+        <div class="flip-card" onclick="flipCard(this)">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="card-number">9</div>
+              <div class="card-prompt">Pick Me!</div>
+            </div>
+            <div class="flip-card-back">
+              Jesus watches what you post on social media—what does He think?
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 10 -->
+        <div class="flip-card" onclick="flipCard(this)">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="card-number">10</div>
+              <div class="card-prompt">Pick Me!</div>
+            </div>
+            <div class="flip-card-back">
+              Jesus overhears how you talk about people who aren't there—what does He hear?
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="reset-cards" onclick="resetAllCards()">🔄 Reset All Cards</button>
+
       <div class="question">
         <div class="question-header">
           <span class="question-number">Q</span>
-          <span>Icebreaker Prompts</span>
+          <span>Discussion Questions</span>
         </div>
         <p style="margin-top: 8px;">
-          <strong>Pick a card and discuss:</strong> What would happen if Jesus stepped into this part of your life today?
+          After picking your card and reading the scenario, discuss in small groups:
         </p>
         <ul class="sub-points">
           <li>Would you feel excited, nervous, or awkward? Why?</li>
-          <li>What would change if He was actually there?</li>
+          <li>What would change if Jesus was actually there?</li>
           <li>What do you think He'd say or do?</li>
         </ul>
       </div>
@@ -807,6 +1036,17 @@
         }
       });
     });
+
+    // Flip card functions
+    function flipCard(card) {
+      card.classList.toggle('flipped');
+    }
+
+    function resetAllCards() {
+      document.querySelectorAll('.flip-card').forEach(card => {
+        card.classList.remove('flipped');
+      });
+    }
   </script>
 </body>
 </html>
