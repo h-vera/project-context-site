@@ -54,6 +54,7 @@
   <div class="quick-nav-sidebar" aria-label="Section navigation">
     <div class="quick-nav-item active" data-label="Overview" data-target="#overview"></div>
     <div class="quick-nav-item" data-label="Architecture" data-target="#architecture"></div>
+    <div class="quick-nav-item" data-label="Structure Map" data-target="#structure-map"></div>
     <div class="quick-nav-item" data-label="Detailed" data-target="#detailed-structure"></div>
     <div class="quick-nav-item" data-label="Chiastic" data-target="#chiastic-patterns"></div>
     <div class="quick-nav-item" data-label="Study Aids" data-target="#study-aids"></div>
@@ -405,782 +406,1942 @@
       </div>
     </div>
 
-    <!-- Detailed Chapter Structure -->
-    <div class="theology-card animate-on-scroll" id="detailed-structure">
-      <h2>
-        <span class="section-icon">📋</span>
-        Detailed Chapter Structure
-      </h2>
-      
-      <div class="key-insight">
-        <h3>Chapter-by-Chapter Analysis</h3>
-        <p>Each chapter in Hosea contributes to the overall theological and literary progression. The following analysis reveals how individual chapters function within the larger structural framework while developing key themes and advancing the redemptive narrative.</p>
-      </div>
+/* Structure Map Styles */
+.structure-map-container {
+  margin: 2rem 0;
+}
 
-      <!-- Controls -->
-      <div class="controls">
-        <div>
-          <h3>Complete 14-Chapter Analysis</h3>
-          <p>Click any chapter to expand • Hebrew terms included</p>
-        </div>
-        <button class="control-btn" onclick="toggleAllChapters()">Expand All</button>
-      </div>
+.map-controls {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
 
-      <!-- Chapter 1 -->
-      <div class="chapter-section">
-        <div class="chapter-header" onclick="toggleChapter(this)">
-          <div class="chapter-title">Chapter 1: The Symbolic Family</div>
-          <span class="chapter-toggle">▶</span>
-        </div>
-        <div class="chapter-content">
-          <div class="verse-group">
-            <span class="verse-ref">1:1</span>
-            <span class="verse-content">Superscription: Historical Setting</span>
-            <div class="sub-point">• "The word of the LORD that came to Hosea ben Beeri"</div>
-            <div class="sub-point">• During reigns of Uzziah, Jotham, Ahaz, Hezekiah (Judah)</div>
-            <div class="sub-point">• During reign of Jeroboam II (Israel)</div>
-            <div class="sub-point">• Spans approximately 750-725 BCE</div>
-          </div>
+.map-btn {
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--accent-purple);
+  background: white;
+  color: var(--accent-purple);
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
 
-          <div class="verse-group">
-            <span class="verse-ref">1:2-3</span>
-            <span class="verse-content">Divine Command to Marry</span>
-            <div class="sub-point">• "Go, take to yourself a wife of whoredom" (<span class="hebrew">אֵשֶׁת זְנוּנִים</span> <em>eshet zenunim</em>)</div>
-            <div class="sub-point">• "And children of whoredom" (<span class="hebrew">יַלְדֵי זְנוּנִים</span> <em>yaldei zenunim</em>)</div>
-            <div class="sub-point">• Rationale: "For the land commits great whoredom by forsaking the LORD"</div>
-            <div class="sub-point">• Marriage to Gomer bat Diblaim</div>
-            <div class="theme-note">Theme: The prophet's life becomes the message—embodied prophecy</div>
-          </div>
+.map-btn:hover {
+  background: linear-gradient(135deg, rgba(114, 9, 183, 0.1), rgba(0, 180, 216, 0.1));
+}
 
-          <div class="verse-group">
-            <span class="verse-ref">1:4-5</span>
-            <span class="verse-content">First Child: Jezreel</span>
-            <div class="sub-point">• Name meaning: "God sows/scatters" (<span class="hebrew">יִזְרְעֶאל</span>)</div>
-            <div class="sub-point">• Judgment oracle: "I will punish the house of Jehu for the blood of Jezreel"</div>
-            <div class="sub-point">• "I will put an end to the kingdom of the house of Israel"</div>
-            <div class="sub-point">• "I will break the bow of Israel in the Valley of Jezreel"</div>
-            <div class="theme-note">Wordplay: Jezreel functions both as judgment (scattering) and later as restoration (sowing)</div>
-          </div>
+.map-btn.active {
+  background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+  color: white;
+}
 
-          <div class="verse-group">
-            <span class="verse-ref">1:6-7</span>
-            <span class="verse-content">Second Child: Lo-Ruhamah</span>
-            <div class="sub-point">• Name meaning: "No Mercy/Not Pitied" (<span class="hebrew">לֹא רֻחָמָה</span>)</div>
-            <div class="sub-point">• "I will no more have mercy on the house of Israel"</div>
-            <div class="sub-point">• Contrast with Judah: "But I will have mercy on the house of Judah"</div>
-            <div class="sub-point">• Divine deliverance promised: "Not by bow, nor by sword, nor by battle"</div>
-          </div>
+.map-view {
+  display: none;
+}
 
-          <div class="verse-group">
-            <span class="verse-ref">1:8-9</span>
-            <span class="verse-content">Third Child: Lo-Ammi</span>
-            <div class="sub-point">• Name meaning: "Not My People" (<span class="hebrew">לֹא עַמִּי</span>)</div>
-            <div class="sub-point">• Covenant formula reversed: "You are not my people"</div>
-            <div class="sub-point">• "And I am not your God" (lit. "I am not 'I AM' to you")</div>
-            <div class="theme-note">Theological climax: The divine name itself is withdrawn</div>
-          </div>
+.map-view.active {
+  display: block;
+  animation: fadeIn 0.5s ease;
+}
 
-          <div class="verse-group">
-            <span class="verse-ref">1:10-2:1</span>
-            <span class="verse-content">Sudden Reversal: Promise of Restoration</span>
-            <div class="sub-point">• "The number of the children of Israel shall be like the sand of the sea"</div>
-            <div class="sub-point">• Echo of Abrahamic promise (Gen 22:17; 32:12)</div>
-            <div class="sub-point">• "In the place where it was said...'Not my people,' it shall be said...'Children of the living God'"</div>
-            <div class="sub-point">• Reunion prophecy: "The children of Judah and...Israel shall be gathered together"</div>
-            <div class="sub-point">• "Great shall be the day of Jezreel" (positive meaning restored)</div>
-          </div>
-        </div>
-      </div>
+/* Chiastic View */
+.chiasm-visual {
+  padding: 2rem;
+  background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+  border-radius: 16px;
+}
 
-      <!-- Chapter 2 -->
-      <div class="chapter-section">
-        <div class="chapter-header" onclick="toggleChapter(this)">
-          <div class="chapter-title">Chapter 2: The Divine Lawsuit (<span class="hebrew">רִיב</span> <em>riv</em>)</div>
-          <span class="chapter-toggle">▶</span>
-        </div>
-        <div class="chapter-content">
-          <div class="verse-group">
-            <span class="verse-ref">2:2-5</span>
-            <span class="verse-content">Call to Contend with Mother Israel</span>
-            <div class="sub-point">• "Plead with your mother, plead" (<span class="hebrew">רִיבוּ בְאִמְּכֶם רִיבוּ</span>)</div>
-            <div class="sub-point">• "For she is not my wife, and I am not her husband"</div>
-            <div class="sub-point">• Demand for repentance: "Remove her whoring from her face"</div>
-            <div class="sub-point">• Threat of judgment: "Lest I strip her naked...make her like a wilderness"</div>
-            <div class="sub-point">• Mother's pursuit of lovers: "I will go after my lovers"</div>
-          </div>
+.part-section {
+  margin: 3rem 0;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
 
-          <div class="verse-group">
-            <span class="verse-ref">2:6-13</span>
-            <span class="verse-content">Divine Restraint and Judgment</span>
-            <div class="sub-point">• "Therefore I will hedge up her way with thorns"</div>
-            <div class="sub-point">• "She shall pursue her lovers but not overtake them"</div>
-            <div class="sub-point">• v.8 - Divine lament: "She did not know that I gave her the grain, wine, and oil"</div>
-            <div class="sub-point">• v.9-13 - Judgment pronounced: removal of provisions, end of celebrations</div>
-          </div>
+.part-label {
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--accent-purple);
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid var(--accent-gold);
+}
 
-          <div class="verse-group">
-            <span class="verse-ref">2:14-23</span>
-            <span class="verse-content">Divine Allurement and New Covenant</span>
-            <div class="sub-point">• "Therefore, behold, I will allure her" (surprising turn)</div>
-            <div class="sub-point">• "Bring her into the wilderness and speak tenderly to her"</div>
-            <div class="sub-point">• v.19-20 - Five-fold betrothal formula:</div>
-            <div class="sub-point">  1. "In righteousness" (<span class="hebrew">בְּצֶדֶק</span>)</div>
-            <div class="sub-point">  2. "In justice" (<span class="hebrew">בְּמִשְׁפָּט</span>)</div>
-            <div class="sub-point">  3. "In steadfast love" (<span class="hebrew">בְּחֶסֶד</span>)</div>
-            <div class="sub-point">  4. "In mercy" (<span class="hebrew">בְּרַחֲמִים</span>)</div>
-            <div class="sub-point">  5. "In faithfulness" (<span class="hebrew">בֶּאֱמוּנָה</span>)</div>
-            <div class="sub-point">• Result: "And you shall know the LORD" (<span class="hebrew">וְיָדַעַתְּ אֶת־יְהוָה</span>)</div>
-          </div>
-        </div>
-      </div>
+.block-pair {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 2rem;
+  align-items: center;
+  margin: 2rem 0;
+}
 
-      <!-- Chapter 3 -->
-      <div class="chapter-section">
-        <div class="chapter-header" onclick="toggleChapter(this)">
-          <div class="chapter-title">Chapter 3: Redemptive Love Enacted</div>
-          <span class="chapter-toggle">▶</span>
-        </div>
-        <div class="chapter-content">
-          <div class="verse-group">
-            <span class="verse-ref">3:1-3</span>
-            <span class="verse-content">Command and Action</span>
-            <div class="sub-point">• v.1 - "Go again, love a woman who is loved by another man and is an adulteress"</div>
-            <div class="sub-point">• Divine parallel: "Even as the LORD loves the children of Israel"</div>
-            <div class="sub-point">• "Though they turn to other gods and love cakes of raisins" (cultic offerings)</div>
-            <div class="sub-point">• v.2 - Purchase price demonstrates redemptive love:</div>
-            <div class="sub-point">  • "Fifteen shekels of silver" (half the price of a slave, Exod 21:32)</div>
-            <div class="sub-point">  • "A homer and a lethech of barley" (agricultural payment)</div>
-            <div class="sub-point">• v.3 - Period of discipline: "You must dwell as mine for many days"</div>
-            <div class="sub-point">• "You shall not play the whore, or belong to another man"</div>
-            <div class="sub-point">• "So will I also be to you" (mutual commitment during restoration)</div>
-          </div>
+.block-item {
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 2px solid var(--accent-purple);
+  background: white;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
 
-          <div class="verse-group">
-            <span class="verse-ref">3:4-5</span>
-            <span class="verse-content">Prophetic Interpretation</span>
-            <div class="sub-point">• v.4 - "For the children of Israel shall dwell many days without:"</div>
-            <div class="sub-point">  • Political leadership: "king or prince" (loss of sovereignty)</div>
-            <div class="sub-point">  • Cultic practice: "sacrifice or pillar" (religious emptiness)</div>
-            <div class="sub-point">  • Oracular guidance: "ephod or household gods" (spiritual vacuum)</div>
-            <div class="sub-point">• v.5 - "Afterward the children of Israel shall return" (<span class="hebrew">שׁוּב</span>)</div>
-            <div class="sub-point">• Object of return: "seek the LORD their God and David their king"</div>
-            <div class="sub-point">• "They shall come in fear to the LORD and to his goodness"</div>
-            <div class="sub-point">• Timing: "in the latter days" (<span class="hebrew">בְּאַחֲרִית הַיָּמִים</span>)</div>
-            <div class="theme-note">Messianic hope: "David their king" points to future ideal ruler from Davidic line</div>
-          </div>
-        </div>
-      </div>
+.block-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(114, 9, 183, 0.2);
+  border-color: var(--accent-blue);
+}
 
-      <!-- Chapter 4 -->
-      <div class="chapter-section">
-        <div class="chapter-header" onclick="toggleChapter(this)">
-          <div class="chapter-title">Chapter 4: The Knowledge Crisis</div>
-          <span class="chapter-toggle">▶</span>
-        </div>
-        <div class="chapter-content">
-          <div class="verse-group">
-            <span class="verse-ref">4:1-3</span>
-            <span class="verse-content">YHWH's Controversy with the Land</span>
-            <div class="sub-point">• "Hear the word of the LORD, O children of Israel"</div>
-            <div class="sub-point">• "The LORD has a controversy (<span class="hebrew">רִיב</span>) with the inhabitants"</div>
-            <div class="sub-point">• Triple absence:</div>
-            <div class="sub-point">  1. "No faithfulness" (<span class="hebrew">אֵין־אֱמֶת</span>)</div>
-            <div class="sub-point">  2. "No steadfast love" (<span class="hebrew">וְאֵין־חֶסֶד</span>)</div>
-            <div class="sub-point">  3. "No knowledge of God" (<span class="hebrew">וְאֵין־דַּעַת אֱלֹהִים</span>)</div>
-            <div class="sub-point">• v.3 - Creation affected: "Therefore the land mourns"</div>
-          </div>
+.block-item.left {
+  background: linear-gradient(135deg, rgba(114, 9, 183, 0.05), transparent);
+}
 
-          <div class="verse-group">
-            <span class="verse-ref">4:4-10</span>
-            <span class="verse-content">Indictment of the Priesthood</span>
-            <div class="sub-point">• v.6 - Key verse: "My people are destroyed for lack of knowledge"</div>
-            <div class="sub-point">• "Because you have rejected knowledge, I reject you from being a priest"</div>
-            <div class="sub-point">• "Since you have forgotten the law of your God, I also will forget your children"</div>
-            <div class="sub-point">• v.9 - "Like people, like priest" - mutual corruption</div>
-          </div>
+.block-item.right {
+  background: linear-gradient(135deg, transparent, rgba(0, 180, 216, 0.05));
+}
 
-          <div class="verse-group">
-            <span class="verse-ref">4:11-19</span>
-            <span class="verse-content">Spirit of Prostitution</span>
-            <div class="sub-point">• v.11 - "Wine and new wine take away the understanding"</div>
-            <div class="sub-point">• v.12 - "My people inquire of a piece of wood"</div>
-            <div class="sub-point">• "And their staff gives them oracles" (divination practices)</div>
-            <div class="sub-point">• "For a spirit of whoredom (<span class="hebrew">רוּחַ זְנוּנִים</span>) has led them astray"</div>
-            <div class="sub-point">• "And they have left their God to play the whore"</div>
-            <div class="sub-point">• v.13 - Hilltop worship: "They sacrifice on the tops of the mountains"</div>
-            <div class="sub-point">• "Under oak, poplar, and terebinth, because their shade is good"</div>
-            <div class="sub-point">• Consequence: "Therefore your daughters play the whore"</div>
-            <div class="sub-point">• v.14 - Divine refusal to punish women: "I will not punish your daughters"</div>
-            <div class="sub-point">• "For the men themselves go aside with prostitutes"</div>
-            <div class="sub-point">• v.15 - Warning to Judah: "Though you play the whore, O Israel"</div>
-            <div class="sub-point">• "Let not Judah become guilty"</div>
-            <div class="sub-point">• v.16 - Stubborn Israel: "Like a stubborn heifer, Israel is stubborn"</div>
-            <div class="sub-point">• v.17 - "Ephraim is joined to idols; leave him alone"</div>
-            <div class="sub-point">• v.18-19 - Consequences of idol worship and divine judgment</div>
-          </div>
-        </div>
-      </div>
+.block-item.center {
+  background: linear-gradient(135deg, rgba(114, 9, 183, 0.05), rgba(0, 180, 216, 0.05));
+  margin: 2rem auto;
+  max-width: 600px;
+}
 
-      <!-- Chapter 5 -->
-      <div class="chapter-section">
-        <div class="chapter-header" onclick="toggleChapter(this)">
-          <div class="chapter-title">Chapter 5: Comprehensive Judgment</div>
-          <span class="chapter-toggle">▶</span>
-        </div>
-        <div class="chapter-content">
-          <div class="verse-group">
-            <span class="verse-ref">5:1-7</span>
-            <span class="verse-content">Leadership Indicted</span>
-            <div class="sub-point">• v.1 - Triple address: "Hear this, O priests! Pay attention, O house of Israel!"</div>
-            <div class="sub-point">• "Give ear, O house of the king! For the judgment is for you"</div>
-            <div class="sub-point">• Leadership becomes a snare: "For you have been a snare at Mizpah"</div>
-            <div class="sub-point">• "And a net spread upon Tabor" (corrupted worship sites)</div>
-            <div class="sub-point">• v.2 - "And the revolters have gone deep into slaughter"</div>
-            <div class="sub-point">• "But I will discipline all of them"</div>
-            <div class="sub-point">• v.3 - Divine knowledge vs. human self-deception:</div>
-            <div class="sub-point">  • "I know Ephraim, and Israel is not hidden from me"</div>
-            <div class="sub-point">  • "For now, O Ephraim, you have played the whore"</div>
-            <div class="sub-point">• v.4 - "Their deeds do not permit them to return to their God"</div>
-            <div class="sub-point">• "For the spirit of whoredom is within them"</div>
-            <div class="sub-point">• "And they know not the LORD" (lack of <span class="hebrew">דַּעַת יְהוָה</span>)</div>
-            <div class="sub-point">• v.5 - "The pride of Israel testifies to his face"</div>
-            <div class="sub-point">• "Israel and Ephraim shall stumble in their guilt"</div>
-            <div class="sub-point">• "Judah also shall stumble with them" (judgment extends south)</div>
-            <div class="sub-point">• v.6 - Futile worship: "With their flocks and herds they shall go"</div>
-            <div class="sub-point">• "To seek the LORD, but they will not find him"</div>
-            <div class="sub-point">• "He has withdrawn from them" (divine hiddenness)</div>
-            <div class="sub-point">• v.7 - "They have dealt faithlessly with the LORD"</div>
-            <div class="sub-point">• "For they have borne alien children" (covenant violation)</div>
-          </div>
+.block-number {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-purple);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
 
-          <div class="verse-group">
-            <span class="verse-ref">5:8-15</span>
-            <span class="verse-content">Divine Withdrawal</span>
-            <div class="sub-point">• v.8 - Alarm sounded: "Blow the horn in Gibeah, the trumpet in Ramah"</div>
-            <div class="sub-point">• "Sound the alarm at Beth-aven" (house of wickedness)</div>
-            <div class="sub-point">• "We follow you, O Benjamin!" (rallying cry)</div>
-            <div class="sub-point">• v.9 - "Ephraim shall become a desolation in the day of punishment"</div>
-            <div class="sub-point">• "Among the tribes of Israel I make known what is sure"</div>
-            <div class="sub-point">• v.10 - Judah's boundary violation: "The princes of Judah have become"</div>
-            <div class="sub-point">• "Like those who move the landmark" (violation of ancient law)</div>
-            <div class="sub-point">• v.11 - "Ephraim is oppressed, crushed in judgment"</div>
-            <div class="sub-point">• "Because he was determined to go after filth" (human commands)</div>
-            <div class="sub-point">• v.12 - Divine agents of decay: "But I am like a moth to Ephraim"</div>
-            <div class="sub-point">• "And like dry rot to the house of Judah"</div>
-            <div class="sub-point">• v.13 - Failed alliances: "When Ephraim saw his sickness"</div>
-            <div class="sub-point">• "And Judah his wound, then Ephraim went to Assyria"</div>
-            <div class="sub-point">• "And sent to the great king" (Tiglath-pileser III)</div>
-            <div class="sub-point">• "But he is not able to cure you or heal your wound"</div>
-            <div class="sub-point">• v.14 - Lion imagery: "For I will be like a lion to Ephraim"</div>
-            <div class="sub-point">• "And like a young lion to the house of Judah"</div>
-            <div class="sub-point">• "I, even I, will tear and go away"</div>
-            <div class="sub-point">• v.15 - Strategic withdrawal: "I will return again to my place"</div>
-            <div class="sub-point">• "Until they acknowledge their guilt and seek my face"</div>
-            <div class="sub-point">• "And in their distress earnestly seek me"</div>
-          </div>
-        </div>
-      </div>
+.block-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin-bottom: 0.5rem;
+}
 
-      <!-- Chapter 6 -->
-      <div class="chapter-section">
-        <div class="chapter-header" onclick="toggleChapter(this)">
-          <div class="chapter-title">Chapter 6: Shallow Repentance</div>
-          <span class="chapter-toggle">▶</span>
-        </div>
-        <div class="chapter-content">
-          <div class="verse-group">
-            <span class="verse-ref">6:1-3</span>
-            <span class="verse-content">Israel's Superficial Return</span>
-            <div class="sub-point">• v.1 - "Come, let us return to the LORD"</div>
-            <div class="sub-point">• v.2 - Formulaic expectation: "After two days he will revive us"</div>
-            <div class="sub-point">• "On the third day he will raise us up"</div>
-            <div class="sub-point">• v.3 - "Let us know; let us press on to know the LORD"</div>
-          </div>
+.block-ref {
+  font-size: 0.9rem;
+  color: var(--accent-blue);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
 
-          <div class="verse-group">
-            <span class="verse-ref">6:4-11</span>
-            <span class="verse-content">Divine Frustration and Judgment</span>
-            <div class="sub-point">• v.4 - Divine lament: "What shall I do with you, O Ephraim?"</div>
-            <div class="sub-point">• "What shall I do with you, O Judah?"</div>
-            <div class="sub-point">• "Your love (<span class="hebrew">חֶסֶד</span>) is like a morning cloud"</div>
-            <div class="sub-point">• "Like the dew that goes early away" (ephemeral faithfulness)</div>
-            <div class="sub-point">• v.5 - Divine response to shallow repentance:</div>
-            <div class="sub-point">  • "Therefore I have hewn them by the prophets"</div>
-            <div class="sub-point">  • "I have slain them by the words of my mouth"</div>
-            <div class="sub-point">  • "And my judgment goes forth as the light"</div>
-            <div class="sub-point">• v.6 - Key principle: "For I desire steadfast love (<span class="hebrew">חֶסֶד</span>) and not sacrifice"</div>
-            <div class="sub-point">• "The knowledge of God (<span class="hebrew">דַּעַת אֱלֹהִים</span>) rather than burnt offerings"</div>
-            <div class="sub-point">• v.7 - Historical pattern: "But like Adam they transgressed the covenant"</div>
-            <div class="sub-point">• "There they dealt faithlessly with me"</div>
-            <div class="sub-point">• v.8 - Geographic indictments:</div>
-            <div class="sub-point">  • "Gilead is a city of evildoers"</div>
-            <div class="sub-point">  • "Tracked with blood"</div>
-            <div class="sub-point">• v.9 - Priestly corruption: "As robbers lie in wait for a man"</div>
-            <div class="sub-point">• "So the priests band together"</div>
-            <div class="sub-point">• "They murder on the way to Shechem"</div>
-            <div class="sub-point">• v.10 - "In the house of Israel I have seen a horrible thing"</div>
-            <div class="sub-point">• "Ephraim's whoredom is there; Israel is defiled"</div>
-            <div class="sub-point">• v.11 - Extension to Judah: "For you also, O Judah, a harvest is appointed"</div>
-          </div>
-        </div>
-      </div>
+.block-theme {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+}
 
-      <!-- Chapter 7 -->
-      <div class="chapter-section">
-        <div class="chapter-header" onclick="toggleChapter(this)">
-          <div class="chapter-title">Chapter 7: Political Chaos and Failed Alliances</div>
-          <span class="chapter-toggle">▶</span>
-        </div>
-        <div class="chapter-content">
-          <div class="verse-group">
-            <span class="verse-ref">7:1-7</span>
-            <span class="verse-content">Internal Corruption</span>
-            <div class="sub-point">• v.1 - "When I would heal Israel, the iniquity of Ephraim is revealed"</div>
-            <div class="sub-point">• v.3-7 - Palace intrigue metaphor: "They are all adulterers"</div>
-            <div class="sub-point">• "They are like a heated oven whose baker ceases to stir the fire"</div>
-            <div class="sub-point">• Political instability: "All their kings have fallen"</div>
-          </div>
+.connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
 
-          <div class="verse-group">
-            <span class="verse-ref">7:8-16</span>
-            <span class="verse-content">Failed Foreign Policy</span>
-            <div class="sub-point">• v.8 - "Ephraim mixes himself with the peoples"</div>
-            <div class="sub-point">• "Ephraim is a cake not turned" (half-baked, incomplete)</div>
-            <div class="sub-point">• v.9 - Unconscious decline: "Strangers devour his strength"</div>
-            <div class="sub-point">• "And he knows it not"</div>
-            <div class="sub-point">• "Gray hairs are sprinkled upon him, and he knows it not"</div>
-            <div class="sub-point">• v.10 - "The pride of Israel testifies to his face"</div>
-            <div class="sub-point">• "Yet they do not return to the LORD their God"</div>
-            <div class="sub-point">• "Nor seek him, for all this"</div>
-            <div class="sub-point">• v.11 - "Ephraim is like a dove, silly and without sense"</div>
-            <div class="sub-point">• "Calling to Egypt, going to Assyria" (vacillating alliances)</div>
-            <div class="sub-point">• v.12 - Divine intervention: "As they go, I will spread over them my net"</div>
-            <div class="sub-point">• "I will bring them down like birds of the heavens"</div>
-            <div class="sub-point">• "I will discipline them according to the report made to their congregation"</div>
-            <div class="sub-point">• v.13 - "Woe to them, for they have strayed from me!"</div>
-            <div class="sub-point">• "Destruction to them, for they have rebelled against me!"</div>
-            <div class="sub-point">• "I would redeem them, but they speak lies against me"</div>
-            <div class="sub-point">• v.14 - False worship: "They do not cry to me from the heart"</div>
-            <div class="sub-point">• "But they wail upon their beds"</div>
-            <div class="sub-point">• "For grain and wine they gash themselves" (Baal rituals)</div>
-            <div class="sub-point">• v.15 - Divine frustration: "Although I trained and strengthened their arms"</div>
-            <div class="sub-point">• "Yet they devise evil against me"</div>
-            <div class="sub-point">• v.16 - "They return, but not upward" (false repentance)</div>
-            <div class="sub-point">• "They are like a treacherous bow" (unreliable weapon)</div>
-            <div class="sub-point">• "Their princes shall fall by the sword"</div>
-          </div>
-        </div>
-      </div>
+.arrow-line {
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+  position: relative;
+}
 
-      <!-- Chapter 8 -->
-      <div class="chapter-section">
-        <div class="chapter-header" onclick="toggleChapter(this)">
-          <div class="chapter-title">Chapter 8: Reaping the Whirlwind</div>
-          <span class="chapter-toggle">▶</span>
-        </div>
-        <div class="chapter-content">
-          <div class="verse-group">
-            <span class="verse-ref">8:1-6</span>
-            <span class="verse-content">Covenant Broken</span>
-            <div class="sub-point">• v.1 - "Set the trumpet to your lips!"</div>
-            <div class="sub-point">• "One like a vulture is over the house of the LORD"</div>
-            <div class="sub-point">• "Because they have transgressed my covenant"</div>
-            <div class="sub-point">• "And rebelled against my law" (<span class="hebrew">תּוֹרָה</span>)</div>
-            <div class="sub-point">• v.2 - Empty claim: "To me they cry"</div>
-            <div class="sub-point">• "My God, we—Israel—know you"</div>
-            <div class="sub-point">• v.3 - "Israel has spurned the good"</div>
-            <div class="sub-point">• "The enemy shall pursue him"</div>
-            <div class="sub-point">• v.4 - Political chaos: "They made kings, but not through me"</div>
-            <div class="sub-point">• "They set up princes, but I knew it not"</div>
-            <div class="sub-point">• "With their silver and gold they made idols"</div>
-            <div class="sub-point">• "For their own destruction"</div>
-            <div class="sub-point">• v.5-6 - Calf idol condemned:</div>
-            <div class="sub-point">  • "I have spurned your calf, O Samaria"</div>
-            <div class="sub-point">  • "My anger burns against them"</div>
-            <div class="sub-point">  • "How long will they be incapable of innocence?"</div>
-            <div class="sub-point">  • "For it is from Israel; a craftsman made it"</div>
-            <div class="sub-point">  • "It is not God"</div>
-            <div class="sub-point">  • "The calf of Samaria shall be broken to pieces"</div>
-          </div>
+.arrow-line::after {
+  content: '↔';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.2rem;
+  color: var(--accent-purple);
+}
 
-          <div class="verse-group">
-            <span class="verse-ref">8:7-14</span>
-            <span class="verse-content">Futile Alliances and Forgotten Maker</span>
-            <div class="sub-point">• v.7 - Proverbial judgment: "For they sow the wind"</div>
-            <div class="sub-point">• "And they shall reap the whirlwind"</div>
-            <div class="sub-point">• "The standing grain has no heads; it shall yield no flour"</div>
-            <div class="sub-point">• "If it were to yield, strangers would devour it"</div>
-            <div class="sub-point">• v.8 - "Israel is swallowed up"</div>
-            <div class="sub-point">• "Already they are among the nations"</div>
-            <div class="sub-point">• "As a useless vessel" (broken pottery)</div>
-            <div class="sub-point">• v.9 - "For they have gone up to Assyria"</div>
-            <div class="sub-point">• "A wild donkey wandering alone"</div>
-            <div class="sub-point">• "Ephraim has hired lovers" (mercenary alliances)</div>
-            <div class="sub-point">• v.10 - "Though they hire allies among the nations"</div>
-            <div class="sub-point">• "I will soon gather them up"</div>
-            <div class="sub-point">• "And they shall begin to diminish"</div>
-            <div class="sub-point">• "Because of the burden of the king of princes"</div>
-            <div class="sub-point">• v.11 - "Because Ephraim has multiplied altars for sinning"</div>
-            <div class="sub-point">• "They have become to him altars for sinning"</div>
-            <div class="sub-point">• v.12 - Rejected revelation: "Were I to write for him my laws by the ten thousands"</div>
-            <div class="sub-point">• "They would be regarded as a strange thing"</div>
-            <div class="sub-point">• v.13 - "As for my sacrificial offerings"</div>
-            <div class="sub-point">• "They sacrifice meat and eat it"</div>
-            <div class="sub-point">• "But the LORD does not accept them"</div>
-            <div class="sub-point">• "Now he will remember their iniquity and punish their sins"</div>
-            <div class="sub-point">• "They shall return to Egypt" (exile reversal)</div>
-            <div class="sub-point">• v.14 - Root problem: "For Israel has forgotten his Maker"</div>
-            <div class="sub-point">• "And built palaces"</div>
-            <div class="sub-point">• "And Judah has multiplied fortified cities"</div>
-            <div class="sub-point">• "So I will send a fire upon his cities"</div>
-            <div class="sub-point">• "And it shall devour her strongholds"</div>
-          </div>
-        </div>
-      </div>
+.connection-label {
+  font-size: 0.8rem;
+  color: var(--accent-purple);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
 
-      <!-- Chapter 9 -->
-      <div class="chapter-section">
-        <div class="chapter-header" onclick="toggleChapter(this)">
-          <div class="chapter-title">Chapter 9: Exile Announced</div>
-          <span class="chapter-toggle">▶</span>
-        </div>
-        <div class="chapter-content">
-          <div class="verse-group">
-            <span class="verse-ref">9:1-9</span>
-            <span class="verse-content">Festival Joy Ended</span>
-            <div class="sub-point">• v.1 - "Rejoice not, O Israel!"</div>
-            <div class="sub-point">• "Exult not like the peoples"</div>
-            <div class="sub-point">• "For you have played the whore, forsaking your God"</div>
-            <div class="sub-point">• "You have loved a prostitute's wages on all threshing floors"</div>
-            <div class="sub-point">• v.2 - Agricultural failure: "Threshing floor and wine vat shall not feed them"</div>
-            <div class="sub-point">• "And the new wine shall fail them"</div>
-            <div class="sub-point">• v.3 - "They shall not remain in the land of the LORD"</div>
-            <div class="sub-point">• "But Ephraim shall return to Egypt"</div>
-            <div class="sub-point">• "And in Assyria they shall eat unclean food"</div>
-            <div class="sub-point">• v.4 - Cultic impossibility in exile:</div>
-            <div class="sub-point">  • "They shall not pour drink offerings of wine to the LORD"</div>
-            <div class="sub-point">  • "And their sacrifices shall not please him"</div>
-            <div class="sub-point">  • "Their bread shall be like mourners' bread"</div>
-            <div class="sub-point">  • "All who eat of it shall be defiled"</div>
-            <div class="sub-point">• v.5 - "What will you do on the day of the appointed festival"</div>
-            <div class="sub-point">• "And on the day of the feast of the LORD?"</div>
-            <div class="sub-point">• v.6 - Death and destruction: "For behold, they are going away from destruction"</div>
-            <div class="sub-point">• "Egypt shall gather them; Memphis shall bury them"</div>
-            <div class="sub-point">• "Nettles shall possess their precious things of silver"</div>
-            <div class="sub-point">• "Thorns shall be in their tents"</div>
-            <div class="sub-point">• v.7 - "The days of punishment have come"</div>
-            <div class="sub-point">• "The days of recompense have come"</div>
-            <div class="sub-point">• "Israel shall know it"</div>
-            <div class="sub-point">• Prophet persecution: "The prophet is a fool; the man of the spirit is mad"</div>
-            <div class="sub-point">• "Because of your great iniquity and great hatred"</div>
-            <div class="sub-point">• v.8 - "The prophet is the watchman of Ephraim with my God"</div>
-            <div class="sub-point">• "Yet a fowler's snare is on all his ways"</div>
-            <div class="sub-point">• "And hatred in the house of his God"</div>
-            <div class="sub-point">• v.9 - "They have deeply corrupted themselves"</div>
-            <div class="sub-point">• "As in the days of Gibeah" (Judges 19 reference)</div>
-            <div class="sub-point">• "He will remember their iniquity; he will punish their sins"</div>
-          </div>
+/* Descending blocks */
+.block-descending {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1.5rem 0;
+}
 
-          <div class="verse-group">
-            <span class="verse-ref">9:10-17</span>
-            <span class="verse-content">Historical Retrospective: Lost Potential</span>
-            <div class="sub-point">• v.10 - Divine reminiscence: "Like grapes in the wilderness, I found Israel"</div>
-            <div class="sub-point">• "Like the first fruit on the fig tree in its first season"</div>
-            <div class="sub-point">• "I saw your fathers"</div>
-            <div class="sub-point">• Fall at Baal-peor: "But they came to Baal-peor"</div>
-            <div class="sub-point">• "And consecrated themselves to the thing of shame" (Numbers 25)</div>
-            <div class="sub-point">• "And became detestable like the thing they loved"</div>
-            <div class="sub-point">• v.11 - "Ephraim's glory shall fly away like a bird"</div>
-            <div class="sub-point">• Triple loss: "No birth, no pregnancy, no conception"</div>
-            <div class="sub-point">• v.12 - "Even if they bring up children"</div>
-            <div class="sub-point">• "I will bereave them till none is left"</div>
-            <div class="sub-point">• "Woe to them when I depart from them!"</div>
-            <div class="sub-point">• v.13 - Tyre comparison: "Ephraim, as I have seen, was like a young palm planted in a meadow"</div>
-            <div class="sub-point">• "But Ephraim must lead his children out to slaughter"</div>
-            <div class="sub-point">• v.14 - Prophetic intercession: "Give them, O LORD—what will you give?"</div>
-            <div class="sub-point">• "Give them a miscarrying womb and dry breasts"</div>
-            <div class="sub-point">• v.15 - Gilgal indictment: "Every evil of theirs is in Gilgal"</div>
-            <div class="sub-point">• "There I began to hate them"</div>
-            <div class="sub-point">• "Because of the wickedness of their deeds"</div>
-            <div class="sub-point">• "I will drive them from my house"</div>
-            <div class="sub-point">• "I will love them no more"</div>
-            <div class="sub-point">• "All their princes are rebels"</div>
-            <div class="sub-point">• v.16 - "Ephraim is stricken; their root is dried up"</div>
-            <div class="sub-point">• "They shall bear no fruit"</div>
-            <div class="sub-point">• "Even though they give birth"</div>
-            <div class="sub-point">• "I will put their beloved children to death"</div>
-            <div class="sub-point">• v.17 - "My God will reject them because they have not listened to him"</div>
-            <div class="sub-point">• "They shall be wanderers among the nations"</div>
-          </div>
-        </div>
-      </div>
+.block-item.descent {
+  max-width: 600px;
+  width: 100%;
+  background: linear-gradient(135deg, rgba(114, 9, 183, 0.03), rgba(220, 38, 38, 0.03));
+}
 
-      <!-- Chapter 10 -->
-      <div class="chapter-section">
-        <div class="chapter-header" onclick="toggleChapter(this)">
-          <div class="chapter-title">Chapter 10: From Luxury to Judgment</div>
-          <span class="chapter-toggle">▶</span>
-        </div>
-        <div class="chapter-content">
-          <div class="verse-group">
-            <span class="verse-ref">10:1-8</span>
-            <span class="verse-content">Luxuriant Vine Bears Rotten Fruit</span>
-            <div class="sub-point">• v.1 - "Israel is a luxuriant vine that yields its fruit"</div>
-            <div class="sub-point">• Prosperity paradox: "The more his fruit increased"</div>
-            <div class="sub-point">• "The more altars he built"</div>
-            <div class="sub-point">• "As his country improved, he improved his pillars"</div>
-            <div class="sub-point">• v.2 - "Their heart is false (<span class="hebrew">חָלַק לִבָּם</span>)"</div>
-            <div class="sub-point">• "Now they must bear their guilt"</div>
-            <div class="sub-point">• "The LORD will break down their altars"</div>
-            <div class="sub-point">• "And destroy their pillars"</div>
-            <div class="sub-point">• v.3 - Political bankruptcy: "For now they will say:"</div>
-            <div class="sub-point">• "'We have no king, for we do not fear the LORD'"</div>
-            <div class="sub-point">• "'And a king—what could he do for us?'"</div>
-            <div class="sub-point">• v.4 - Covenant breakdown: "They utter mere words"</div>
-            <div class="sub-point">• "With empty oaths they make covenants"</div>
-            <div class="sub-point">• "So judgment springs up like poisonous weeds"</div>
-            <div class="sub-point">• "In the furrows of the field"</div>
-            <div class="sub-point">• v.5 - Calf worship at Beth-aven:</div>
-            <div class="sub-point">  • "The inhabitants of Samaria tremble"</div>
-            <div class="sub-point">  • "For the calf of Beth-aven"</div>
-            <div class="sub-point">  • "Its people mourn for it"</div>
-            <div class="sub-point">  • "And so do its idolatrous priests"</div>
-            <div class="sub-point">  • "Those who rejoiced over it, over its glory"</div>
-            <div class="sub-point">  • "For it has departed from it"</div>
-            <div class="sub-point">• v.6 - "The thing itself shall be carried to Assyria"</div>
-            <div class="sub-point">• "As tribute to the great king"</div>
-            <div class="sub-point">• "Ephraim shall be put to shame"</div>
-            <div class="sub-point">• "And Israel shall be ashamed of his idol"</div>
-            <div class="sub-point">• v.7 - "Samaria's king shall perish"</div>
-            <div class="sub-point">• "Like a twig on the face of the waters"</div>
-            <div class="sub-point">• v.8 - "The high places of Aven, the sin of Israel, shall be destroyed"</div>
-            <div class="sub-point">• "Thorn and thistle shall grow up on their altars"</div>
-            <div class="sub-point">• Apocalyptic plea: "And they shall say to the mountains, 'Cover us'"</div>
-            <div class="sub-point">• "And to the hills, 'Fall on us'" (quoted in Luke 23:30; Rev 6:16)</div>
-          </div>
+.descent-arrow {
+  font-size: 2rem;
+  color: var(--accent-purple);
+  margin: 0.5rem 0;
+  animation: pulse 2s infinite;
+}
 
-          <div class="verse-group">
-            <span class="verse-ref">10:9-15</span>
-            <span class="verse-content">War Coming: Call to Righteousness</span>
-            <div class="sub-point">• v.9 - Historical continuity: "From the days of Gibeah, you have sinned, O Israel"</div>
-            <div class="sub-point">• "There they have continued"</div>
-            <div class="sub-point">• "Shall not the war against the unjust overtake them at Gibeah?"</div>
-            <div class="sub-point">• v.10 - Divine intention: "When I please, I will discipline them"</div>
-            <div class="sub-point">• "And nations shall be gathered against them"</div>
-            <div class="sub-point">• "When they are bound up for their double iniquity"</div>
-            <div class="sub-point">• v.11 - Agricultural metaphor:</div>
-            <div class="sub-point">  • "Ephraim was a trained calf that loved to thresh"</div>
-            <div class="sub-point">  • "And I spared her fair neck"</div>
-            <div class="sub-point">  • "But I will put Ephraim to the yoke"</div>
-            <div class="sub-point">  • "Judah must plow; Jacob must harrow for himself"</div>
-            <div class="sub-point">• v.12 - Call to righteousness: "Sow for yourselves righteousness"</div>
-            <div class="sub-point">• "Reap steadfast love (<span class="hebrew">חֶסֶד</span>)"</div>
-            <div class="sub-point">• "Break up your fallow ground"</div>
-            <div class="sub-point">• "For it is the time to seek the LORD"</div>
-            <div class="sub-point">• "That he may come and rain righteousness upon you"</div>
-            <div class="sub-point">• v.13 - Reality check: "You have plowed iniquity"</div>
-            <div class="sub-point">• "You have reaped injustice"</div>
-            <div class="sub-point">• "You have eaten the fruit of lies"</div>
-            <div class="sub-point">• "Because you have trusted in your own way"</div>
-            <div class="sub-point">• "And in the multitude of your warriors"</div>
-            <div class="sub-point">• v.14 - War's devastation: "Therefore the tumult of war shall arise among your people"</div>
-            <div class="sub-point">• "And all your fortresses shall be destroyed"</div>
-            <div class="sub-point">• Historical precedent: "As Shalman destroyed Beth-arbel on the day of battle"</div>
-            <div class="sub-point">• "Mothers were dashed in pieces with their children"</div>
-            <div class="sub-point">• v.15 - "Thus it shall be done to you, O Bethel"</div>
-            <div class="sub-point">• "Because of your great evil"</div>
-            <div class="sub-point">• "At dawn the king of Israel shall be utterly cut off"</div>
-          </div>
-        </div>
-      </div>
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: translateY(0); }
+  50% { opacity: 0.6; transform: translateY(5px); }
+}
 
-      <!-- Chapter 11 -->
-      <div class="chapter-section">
-        <div class="chapter-header" onclick="toggleChapter(this)">
-          <div class="chapter-title">Chapter 11: Divine Compassion Revealed</div>
-          <span class="chapter-toggle">▶</span>
-        </div>
-        <div class="chapter-content">
-          <div class="verse-group">
-            <span class="verse-ref">11:1-7</span>
-            <span class="verse-content">Parental Love Spurned</span>
-            <div class="sub-point">• v.1 - "When Israel was a child, I loved him"</div>
-            <div class="sub-point">• "And out of Egypt I called my son"</div>
-            <div class="sub-point">• v.3 - Tender care: "Yet it was I who taught Ephraim to walk"</div>
-            <div class="sub-point">• "I took them up by their arms"</div>
-            <div class="sub-point">• v.4 - "I led them with cords of kindness, with the bands of love"</div>
-          </div>
+/* Center Block */
+.center-block {
+  margin: 3rem 0;
+  display: flex;
+  justify-content: center;
+}
 
-          <div class="verse-group">
-            <span class="verse-ref">11:8-11</span>
-            <span class="verse-content">Divine Emotional Crisis</span>
-            <div class="sub-point">• v.8 - "How can I give you up, O Ephraim? How can I hand you over, O Israel?"</div>
-            <div class="sub-point">• "How can I make you like Admah? How can I treat you like Zeboiim?"</div>
-            <div class="sub-point">• "My heart recoils within me; my compassion grows warm and tender"</div>
-            <div class="sub-point">• v.9 - "I will not execute my burning anger"</div>
-            <div class="sub-point">• Theological foundation: "For I am God and not a man"</div>
-            <div class="sub-point">• "The Holy One in your midst"</div>
-            <div class="theme-note">Climax: Divine love triumphs over judgment</div>
-          </div>
-        </div>
-      </div>
+.block-item.center-highlight {
+  max-width: 700px;
+  padding: 2.5rem;
+  background: linear-gradient(135deg, rgba(114, 9, 183, 0.1), rgba(0, 180, 216, 0.1));
+  border: 3px solid var(--accent-gold);
+  box-shadow: 0 10px 40px rgba(114, 9, 183, 0.3);
+  position: relative;
+}
 
-      <!-- Chapter 12 -->
-      <div class="chapter-section">
-        <div class="chapter-header" onclick="toggleChapter(this)">
-          <div class="chapter-title">Chapter 12: Jacob's Legacy</div>
-          <span class="chapter-toggle">▶</span>
-        </div>
-        <div class="chapter-content">
-          <div class="verse-group">
-            <span class="verse-ref">12:1-6</span>
-            <span class="verse-content">Ephraim's Deception and Jacob's Example</span>
-            <div class="sub-point">• v.1 - "Ephraim feeds on the wind and pursues the east wind all day long"</div>
-            <div class="sub-point">• v.2 - "The LORD has an indictment against Judah"</div>
-            <div class="sub-point">• v.3-4 - Jacob typology:</div>
-            <div class="sub-point">  • "In the womb he took his brother by the heel"</div>
-            <div class="sub-point">  • "In his manhood he strove with God"</div>
-            <div class="sub-point">• v.6 - Call to return: "So you, by the help of your God, return"</div>
-            <div class="sub-point">• "Hold fast to love and justice"</div>
-          </div>
+.center-badge {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(114, 9, 183, 0.4);
+}
 
-          <div class="verse-group">
-            <span class="verse-ref">12:7-14</span>
-            <span class="verse-content">False Security and Divine Constancy</span>
-            <div class="sub-point">• v.8 - Ephraim's boast: "Ah, but I am rich; I have found wealth for myself"</div>
-            <div class="sub-point">• v.9 - Divine reminder: "I am the LORD your God from the land of Egypt"</div>
-            <div class="sub-point">• v.10 - "I spoke to the prophets; it was I who multiplied visions"</div>
-            <div class="sub-point">• v.13 - "By a prophet the LORD brought Israel up from Egypt"</div>
-          </div>
-        </div>
-      </div>
+.center-quote {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--accent-gold);
+  text-align: center;
+  font-style: italic;
+  color: #555;
+}
 
-      <!-- Chapter 13 -->
-      <div class="chapter-section">
-        <div class="chapter-header" onclick="toggleChapter(this)">
-          <div class="chapter-title">Chapter 13: Death Decree</div>
-          <span class="chapter-toggle">▶</span>
-        </div>
-        <div class="chapter-content">
-          <div class="verse-group">
-            <span class="verse-ref">13:1-8</span>
-            <span class="verse-content">From Exaltation to Death</span>
-            <div class="sub-point">• v.1 - "When Ephraim spoke, there was trembling; he was exalted in Israel"</div>
-            <div class="sub-point">• "But he incurred guilt through Baal and died" (spiritual death)</div>
-            <div class="sub-point">• v.2 - Escalating idolatry: "And now they sin more and more"</div>
-            <div class="sub-point">• "And make for themselves metal images"</div>
-            <div class="sub-point">• "Idols skillfully made of their silver"</div>
-            <div class="sub-point">• "All of them the work of craftsmen"</div>
-            <div class="sub-point">• Absurd worship: "It is said of them, 'Those who offer human sacrifice kiss calves!'"</div>
-            <div class="sub-point">• v.3 - Four similes of transience:</div>
-            <div class="sub-point">  1. "Therefore they shall be like the morning mist"</div>
-            <div class="sub-point">  2. "Like the dew that goes early away"</div>
-            <div class="sub-point">  3. "Like the chaff that swirls from the threshing floor"</div>
-            <div class="sub-point">  4. "Like smoke from a window"</div>
-            <div class="sub-point">• v.4 - Divine exclusive claim: "But I am the LORD your God"</div>
-            <div class="sub-point">• "From the land of Egypt"</div>
-            <div class="sub-point">• "You know no God but me"</div>
-            <div class="sub-point">• "And besides me there is no savior"</div>
-            <div class="sub-point">• v.5 - "It was I who knew you in the wilderness"</div>
-            <div class="sub-point">• "In the land of drought"</div>
-            <div class="sub-point">• v.6 - Pattern of apostasy: "But when they had grazed, they became full"</div>
-            <div class="sub-point">• "They were filled, and their heart was lifted up"</div>
-            <div class="sub-point">• "Therefore they forgot me"</div>
-            <div class="sub-point">• v.7-8 - Divine as predator:</div>
-            <div class="sub-point">  • "So I am to them like a lion"</div>
-            <div class="sub-point">  • "Like a leopard I will lurk beside the way"</div>
-            <div class="sub-point">  • "I will fall upon them like a bear robbed of her cubs"</div>
-            <div class="sub-point">  • "I will tear open their breast"</div>
-            <div class="sub-point">  • "And there I will devour them like a lion"</div>
-          </div>
+.center-quote .hebrew {
+  display: block;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  color: var(--accent-purple);
+}
 
-          <div class="verse-group">
-            <span class="verse-ref">13:9-16</span>
-            <span class="verse-content">No Escape from Judgment</span>
-            <div class="sub-point">• v.9 - Divine lament: "He destroys you, O Israel, for you are against me"</div>
-            <div class="sub-point">• "Against your helper"</div>
-            <div class="sub-point">• v.10 - "Where now is your king, to save you in all your cities?"</div>
-            <div class="sub-point">• "Where are all your rulers—those of whom you said"</div>
-            <div class="sub-point">• "'Give me a king and princes'?" (1 Samuel 8 allusion)</div>
-            <div class="sub-point">• v.11 - "I gave you a king in my anger"</div>
-            <div class="sub-point">• "And I took him away in my wrath"</div>
-            <div class="sub-point">• v.12 - "The iniquity of Ephraim is bound up"</div>
-            <div class="sub-point">• "His sin is kept in store" (accumulated guilt)</div>
-            <div class="sub-point">• v.13 - Birth metaphor: "The pangs of childbirth come for him"</div>
-            <div class="sub-point">• "But he is an unwise son"</div>
-            <div class="sub-point">• "For at the right time he does not present himself"</div>
-            <div class="sub-point">• "At the opening of the womb"</div>
-            <div class="sub-point">• v.14 - Ambiguous oracle (can be read as promise or threat):</div>
-            <div class="sub-point">  • "Shall I ransom them from the power of Sheol?"</div>
-            <div class="sub-point">  • "Shall I redeem them from Death?"</div>
-            <div class="sub-point">  • "O Death, where are your plagues?"</div>
-            <div class="sub-point">  • "O Sheol, where is your sting?"</div>
-            <div class="sub-point">  • "Compassion is hidden from my eyes"</div>
-            <div class="sub-point">• v.15 - East wind judgment: "Though he may flourish among his brothers"</div>
-            <div class="sub-point">• "The east wind, the wind of the LORD, shall come"</div>
-            <div class="sub-point">• "Rising from the wilderness"</div>
-            <div class="sub-point">• "And his fountain shall dry up; his spring shall be parched"</div>
-            <div class="sub-point">• v.16 - Final devastation: "Samaria shall bear her guilt"</div>
-            <div class="sub-point">• "Because she has rebelled against her God"</div>
-            <div class="sub-point">• "They shall fall by the sword"</div>
-            <div class="theme-note">Note: The ambiguity of v.14 allows both judgment and hope readings—Paul uses it positively in 1 Cor 15:55</div>
-          </div>
-        </div>
-      </div>
+/* Linear Timeline View */
+.linear-timeline {
+  padding: 2rem;
+  background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+  border-radius: 16px;
+}
 
-      <!-- Chapter 14 -->
-      <div class="chapter-section">
-        <div class="chapter-header" onclick="toggleChapter(this)">
-          <div class="chapter-title">Chapter 14: Final Call and Promise</div>
-          <span class="chapter-toggle">▶</span>
-        </div>
-        <div class="chapter-content">
-          <div class="verse-group">
-            <span class="verse-ref">14:1-3</span>
-            <span class="verse-content">Liturgy of Repentance</span>
-            <div class="sub-point">• v.1 - "Return, O Israel, to the LORD your God"</div>
-            <div class="sub-point">• "For you have stumbled because of your iniquity"</div>
-            <div class="sub-point">• v.2 - Instructions for return:</div>
-            <div class="sub-point">  • "Take with you words and return to the LORD"</div>
-            <div class="sub-point">  • Model prayer: "Take away all iniquity; accept what is good"</div>
-            <div class="sub-point">• v.3 - Triple renunciation:</div>
-            <div class="sub-point">  1. "Assyria shall not save us"</div>
-            <div class="sub-point">  2. "We will not ride on horses"</div>
-            <div class="sub-point">  3. "We will say no more, 'Our God,' to the work of our hands"</div>
-            <div class="sub-point">• Motivation: "In you the orphan finds mercy"</div>
-          </div>
+.timeline-section {
+  margin: 3rem 0;
+  position: relative;
+}
 
-          <div class="verse-group">
-            <span class="verse-ref">14:4-8</span>
-            <span class="verse-content">Divine Healing Promised</span>
-            <div class="sub-point">• v.4 - Divine response: "I will heal their apostasy"</div>
-            <div class="sub-point">• "I will love them freely, for my anger has turned from them"</div>
-            <div class="sub-point">• v.5-7 - Seven-fold blessing with botanical imagery:</div>
-            <div class="sub-point">  1. "I will be like the dew to Israel"</div>
-            <div class="sub-point">  2. "He shall blossom like the lily"</div>
-            <div class="sub-point">  3. "He shall take root like the trees of Lebanon"</div>
-            <div class="sub-point">  4. "His shoots shall spread out"</div>
-            <div class="sub-point">  5. "His beauty shall be like the olive"</div>
-            <div class="sub-point">  6. "His fragrance like Lebanon"</div>
-            <div class="sub-point">  7. "They shall return and dwell beneath my shadow"</div>
-            <div class="sub-point">• v.8 - Final dialogue:</div>
-            <div class="sub-point">  • "O Ephraim, what have I to do with idols?"</div>
-            <div class="sub-point">  • "I am like an evergreen cypress; from me comes your fruit"</div>
-            <div class="theme-note">Complete reversal: From death to life, drought to abundance</div>
-          </div>
+.timeline-label {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent-purple);
+  margin-bottom: 1.5rem;
+  padding-left: 2rem;
+}
 
-          <div class="verse-group">
-            <span class="verse-ref">14:9</span>
-            <span class="verse-content">Wisdom Epilogue</span>
-            <div class="sub-point">• "Whoever is wise, let him understand these things"</div>
-            <div class="sub-point">• "Whoever is discerning, let him know them"</div>
-            <div class="sub-point">• Theological summary: "For the ways of the LORD are right"</div>
-            <div class="sub-point">• Two responses: "The upright walk in them, but transgressors stumble in them"</div>
-            <div class="theme-note">Editorial conclusion: The book requires wisdom to understand and apply</div>
-          </div>
-        </div>
-      </div>
+.timeline-blocks {
+  position: relative;
+  padding-left: 3rem;
+}
+
+.timeline-blocks::before {
+  content: '';
+  position: absolute;
+  left: 1rem;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--accent-purple), var(--accent-blue));
+}
+
+.timeline-block {
+  position: relative;
+  margin: 1.5rem 0;
+  padding-left: 2rem;
+}
+
+.block-dot {
+  position: absolute;
+  left: -2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background: white;
+  border: 3px solid var(--accent-purple);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(114, 9, 183, 0.3);
+}
+
+.timeline-block.center-mark .block-dot {
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, var(--accent-purple), var(--accent-gold));
+  border: 4px solid var(--accent-gold);
+  animation: pulse-center 2s infinite;
+}
+
+@keyframes pulse-center {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(114, 9, 183, 0.7); }
+  50% { box-shadow: 0 0 0 15px rgba(114, 9, 183, 0); }
+}
+
+.block-mini {
+  background: white;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  border-left: 3px solid var(--accent-purple);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.block-mini:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 15px rgba(114, 9, 183, 0.15);
+}
+
+.block-mini.center-mini {
+  background: linear-gradient(135deg, rgba(114, 9, 183, 0.05), rgba(0, 180, 216, 0.05));
+  border-left-color: var(--accent-gold);
+  border-left-width: 5px;
+}
+
+.center-indicator {
+  margin-top: 0.5rem;
+  color: var(--accent-gold);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/* Thematic Clusters View */
+.thematic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.theme-cluster {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 2px solid var(--accent-purple);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.theme-cluster:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(114, 9, 183, 0.2);
+}
+
+.theme-cluster.center-theme {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, rgba(114, 9, 183, 0.1), rgba(0, 180, 216, 0.1));
+  border-color: var(--accent-gold);
+  border-width: 3px;
+}
+
+.theme-cluster h4 {
+  color: var(--accent-purple);
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--accent-gold);
+}
+
+.cluster-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.cluster-item {
+  padding: 0.75rem;
+  background: linear-gradient(135deg, rgba(114, 9, 183, 0.05), transparent);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  border-left: 3px solid var(--accent-purple);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.cluster-item:hover {
+  background: linear-gradient(135deg, rgba(114, 9, 183, 0.1), rgba(0, 180, 216, 0.1));
+  transform: translateX(5px);
+}
+
+.cluster-item.center {
+  background: linear-gradient(135deg, rgba(114, 9, 183, 0.15), rgba(0, 180, 216, 0.15));
+  border-left-color: var(--accent-gold);
+  border-left-width: 5px;
+  font-weight: 600;
+}
+
+.cluster-theme {
+  font-size: 0.85rem;
+  color: #666;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* Map Legend */
+.map-legend {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(114, 9, 183, 0.05), rgba(0, 180, 216, 0.05));
+  border-radius: 12px;
+  border: 2px solid var(--accent-purple);
+}
+
+.map-legend h4 {
+  color: var(--accent-purple);
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.legend-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.legend-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.legend-icon.mirror {
+  background: linear-gradient(135deg, rgba(114, 9, 183, 0.1), rgba(0, 180, 216, 0.1));
+  border: 2px solid var(--accent-purple);
+}
+
+.legend-icon.mirror::before {
+  content: '↔';
+  color: var(--accent-purple);
+}
+
+.legend-icon.center {
+  background: linear-gradient(135deg, var(--accent-purple), var(--accent-gold));
+}
+
+.legend-icon.center::before {
+  content: '★';
+  color: white;
+}
+
+.legend-icon.descent {
+  background: linear-gradient(180deg, rgba(114, 9, 183, 0.1), rgba(220, 38, 38, 0.1));
+  border: 2px solid var(--accent-purple);
+}
+
+.legend-icon.descent::before {
+  content: '↓';
+  color: var(--accent-purple);
+}
+
+.legend-icon.resolution {
+  background: linear-gradient(135deg, rgba(0, 180, 216, 0.1), rgba(34, 197, 94, 0.1));
+  border: 2px solid var(--accent-blue);
+}
+
+.legend-icon.resolution::before {
+  content: '✓';
+  color: var(--accent-blue);
+}
+
+.legend-text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .block-pair {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .connector {
+    flex-direction: row;
+    margin: 0.5rem 0;
+  }
+  
+  .arrow-line {
+    width: 2px;
+    height: 40px;
+  }
+  
+  .arrow-line::after {
+    content: '↕';
+    left: -8px;
+    top: 50%;
+  }
+  
+  .thematic-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .legend-grid {
+    grid-template-columns: 1fr;
+  }
+}
+    <!-- Detailed Rhetorical Structure -->
+<div class="theology-card animate-on-scroll" id="detailed-structure">
+  <h2>
+    <span class="section-icon">📋</span>
+    Detailed Rhetorical Structure
+  </h2>
+  
+  <div class="key-insight">
+    <h3>Following Hosea's Compositional Logic</h3>
+    <p>This analysis follows Hosea's actual rhetorical units rather than artificial chapter divisions. Each block represents a complete argument or literary movement, revealing how the prophet structured his message for maximum theological and emotional impact.</p>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div>
+      <h3>Complete Rhetorical Analysis</h3>
+      <p>Click any block to expand • Organized by literary units, not chapters</p>
     </div>
+    <button class="control-btn" onclick="toggleAllBlocks()">Expand All</button>
+  </div>
+
+  <!-- PART I: MARRIAGE ALLEGORY (CHS 1-3) -->
+  <div class="part-divider">
+    <h3>Part I: Marriage Allegory & Covenantal Embodiment (Chs. 1–3)</h3>
+  </div>
+
+  <!-- Block 1: Symbolic Marriage and Children -->
+  <div class="chapter-section">
+    <div class="chapter-header" onclick="toggleChapter(this)">
+      <div class="chapter-title">Block 1: Symbolic Marriage and Children (1:2–2:1)</div>
+      <span class="chapter-toggle">▶</span>
+    </div>
+    <div class="chapter-content">
+      
+      <div class="section-label">Superscription: Historical setting (1:1)</div>
+      <section class="block">
+        <div class="l">The word of the LORD that came to Hosea the son of Beeri,</div>
+        <div class="l i1">in the days of Uzziah, Jotham, Ahaz, and Hezekiah, kings of Judah,</div>
+        <div class="l i1">and in the days of Jeroboam the son of Joash, king of Israel.</div>
+      </section>
+
+      <div class="section-label">Divine command to marry (1:2-3)</div>
+      <section class="block" aria-label="Embodied prophecy begins">
+        <div class="l">When the LORD first spoke through Hosea, the LORD said to Hosea,</div>
+        <div class="l i1">"Go, take to yourself a wife of whoredom</div>
+        <div class="l i2">and have children of whoredom,</div>
+        <div class="l i1">for the land commits great whoredom</div>
+        <div class="l i2">by forsaking the LORD."</div>
+      </section>
+
+      <section class="block">
+        <div class="l">So he went and took Gomer, the daughter of Diblaim,</div>
+        <div class="l i1">and she conceived and bore him a son.</div>
+      </section>
+
+      <div class="section-label">First child: Jezreel — Judgment on royal house (1:4-5)</div>
+      <section class="block warning" aria-label="Jezreel: God scatters">
+        <div class="l">And the LORD said to him,</div>
+        <div class="l i1">"Call his name Jezreel (<span class="hebrew">יִזְרְעֶאל</span>),</div>
+        <div class="l i1">for in just a little while</div>
+        <div class="l i2">I will punish the house of Jehu for the blood of Jezreel,</div>
+        <div class="l i2">and I will put an end to the kingdom of the house of Israel.</div>
+        <div class="l">And on that day</div>
+        <div class="l i1">I will break the bow of Israel</div>
+        <div class="l i2">in the Valley of Jezreel."</div>
+      </section>
+
+      <div class="section-label">Second child: Lo-Ruhamah — Mercy withdrawn (1:6-7)</div>
+      <section class="block warning" aria-label="Lo-Ruhamah: No mercy">
+        <div class="l">She conceived again and bore a daughter.</div>
+        <div class="l">And the LORD said to him,</div>
+        <div class="l i1">"Call her name No Mercy (<span class="hebrew">לֹא רֻחָמָה</span>),</div>
+        <div class="l i1">for I will no more have mercy on the house of Israel,</div>
+        <div class="l i2">to forgive them at all.</div>
+      </section>
+
+      <section class="block">
+        <div class="l">But I will have mercy on the house of Judah,</div>
+        <div class="l i1">and I will save them by the LORD their God.</div>
+        <div class="l">I will not save them</div>
+        <div class="l i1">by bow or by sword or by war</div>
+        <div class="l i1">or by horses or by horsemen."</div>
+      </section>
+
+      <div class="section-label">Third child: Lo-Ammi — Covenant formula reversed (1:8-9)</div>
+      <section class="block warning" aria-label="Lo-Ammi: Not my people">
+        <div class="l">When she had weaned No Mercy,</div>
+        <div class="l i1">she conceived and bore a son.</div>
+        <div class="l">And the LORD said,</div>
+        <div class="l i1">"Call his name Not My People (<span class="hebrew">לֹא עַמִּי</span>),</div>
+        <div class="l i1">for you are not my people,</div>
+        <div class="l i2">and I am not your God."</div>
+      </section>
+
+      <div class="section-label">Sudden reversal: Promise of restoration (1:10–2:1)</div>
+      <section class="block promise" aria-label="Abrahamic promise renewed">
+        <div class="l">Yet the number of the children of Israel</div>
+        <div class="l i1">shall be like the sand of the sea,</div>
+        <div class="l i2">which cannot be measured or numbered.</div>
+        <div class="l">And in the place where it was said to them,</div>
+        <div class="l i1">"You are not my people,"</div>
+        <div class="l">it shall be said to them,</div>
+        <div class="l i1">"Children of the living God."</div>
+      </section>
+
+      <section class="block promise">
+        <div class="l">And the children of Judah and the children of Israel</div>
+        <div class="l i1">shall be gathered together,</div>
+        <div class="l">and they shall appoint for themselves one head.</div>
+        <div class="l i1">And they shall go up from the land,</div>
+        <div class="l i2">for great shall be the day of Jezreel.</div>
+      </section>
+
+      <section class="block promise">
+        <div class="l">Say to your brothers, "My People (<span class="hebrew">עַמִּי</span>),"</div>
+        <div class="l i1">and to your sisters, "She Has Received Mercy (<span class="hebrew">רֻחָמָה</span>)."</div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Block 2: Divine Lawsuit -->
+  <div class="chapter-section">
+    <div class="chapter-header" onclick="toggleChapter(this)">
+      <div class="chapter-title">Block 2: Divine Lawsuit (<span class="hebrew">רִיב</span>) (2:2-13)</div>
+      <span class="chapter-toggle">▶</span>
+    </div>
+    <div class="chapter-content">
+      
+      <div class="section-label">Call to contend with mother Israel (2:2-5)</div>
+      <section class="block lawsuit" aria-label="Covenant litigation begins">
+        <div class="l">Plead with your mother, plead—</div>
+        <div class="l i1">for she is not my wife,</div>
+        <div class="l i1">and I am not her husband—</div>
+        <div class="l">that she put away her whoring from her face,</div>
+        <div class="l i1">and her adultery from between her breasts;</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">lest I strip her naked</div>
+        <div class="l i1">and make her as in the day she was born,</div>
+        <div class="l">and make her like a wilderness,</div>
+        <div class="l i1">and make her like a parched land,</div>
+        <div class="l i1">and kill her with thirst.</div>
+      </section>
+
+      <section class="block">
+        <div class="l">Upon her children also I will have no mercy,</div>
+        <div class="l i1">because they are children of whoredom.</div>
+        <div class="l">For their mother has played the whore;</div>
+        <div class="l i1">she who conceived them has acted shamefully.</div>
+      </section>
+
+      <section class="block">
+        <div class="l">For she said,</div>
+        <div class="l i1">"I will go after my lovers,</div>
+        <div class="l i1">who give me my bread and my water,</div>
+        <div class="l i1">my wool and my flax,</div>
+        <div class="l i1">my oil and my drink."</div>
+      </section>
+
+      <div class="section-label">Divine restraint and Israel's pursuit (2:6-8)</div>
+      <section class="block">
+        <div class="l">Therefore I will hedge up her way with thorns,</div>
+        <div class="l i1">and I will build a wall against her,</div>
+        <div class="l i2">so that she cannot find her paths.</div>
+        <div class="l">She shall pursue her lovers</div>
+        <div class="l i1">but not overtake them,</div>
+        <div class="l">and she shall seek them</div>
+        <div class="l i1">but shall not find them.</div>
+      </section>
+
+      <section class="block">
+        <div class="l">Then she shall say,</div>
+        <div class="l i1">"I will go and return to my first husband,</div>
+        <div class="l i2">for it was better for me then than now."</div>
+      </section>
+
+      <section class="block warning" aria-label="Israel's ignorance">
+        <div class="l">And she did not know</div>
+        <div class="l i1">that it was I who gave her</div>
+        <div class="l i2">the grain, the wine, and the oil,</div>
+        <div class="l i1">and who lavished on her silver and gold,</div>
+        <div class="l i2">which they used for Baal.</div>
+      </section>
+
+      <div class="section-label">Judgment: Removal of provisions (2:9-13)</div>
+      <section class="block warning">
+        <div class="l">Therefore I will take back</div>
+        <div class="l i1">my grain in its time,</div>
+        <div class="l i1">and my wine in its season,</div>
+        <div class="l">and I will take away my wool and my flax,</div>
+        <div class="l i1">which were to cover her nakedness.</div>
+        <div class="l">Now I will uncover her lewdness</div>
+        <div class="l i1">in the sight of her lovers,</div>
+        <div class="l i2">and no one shall rescue her out of my hand.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">And I will put an end to all her mirth,</div>
+        <div class="l i1">her feasts, her new moons, her Sabbaths,</div>
+        <div class="l i2">and all her appointed feasts.</div>
+        <div class="l">And I will lay waste her vines and her fig trees,</div>
+        <div class="l i1">of which she said,</div>
+        <div class="l i2">"These are my wages,</div>
+        <div class="l i3">which my lovers have given me."</div>
+        <div class="l">I will make them a forest,</div>
+        <div class="l i1">and the beasts of the field shall devour them.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">And I will punish her for the feast days of the Baals</div>
+        <div class="l i1">when she burned offerings to them</div>
+        <div class="l i1">and adorned herself with her ring and jewelry,</div>
+        <div class="l i1">and went after her lovers</div>
+        <div class="l i2">and forgot me, declares the LORD.</div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Block 3: Allurement and Restoration -->
+  <div class="chapter-section">
+    <div class="chapter-header" onclick="toggleChapter(this)">
+      <div class="chapter-title">Block 3: Allurement and New Covenant (2:14-23)</div>
+      <span class="chapter-toggle">▶</span>
+    </div>
+    <div class="chapter-content">
+      
+      <div class="section-label">Divine allurement into wilderness (2:14-15)</div>
+      <section class="block promise" aria-label="Restoration begins">
+        <div class="l">Therefore, behold, I will allure her,</div>
+        <div class="l i1">and bring her into the wilderness,</div>
+        <div class="l i2">and speak tenderly to her.</div>
+        <div class="l">And there I will give her her vineyards</div>
+        <div class="l i1">and make the Valley of Achor a door of hope.</div>
+        <div class="l">And there she shall answer as in the days of her youth,</div>
+        <div class="l i1">as at the time when she came out of the land of Egypt.</div>
+      </section>
+
+      <div class="section-label">New relationship: From Baal to Husband (2:16-17)</div>
+      <section class="block promise">
+        <div class="l">And in that day, declares the LORD,</div>
+        <div class="l i1">you will call me "My Husband,"</div>
+        <div class="l i1">and no longer will you call me "My Baal."</div>
+        <div class="l">For I will remove the names of the Baals from her mouth,</div>
+        <div class="l i1">and they shall be remembered by name no more.</div>
+      </section>
+
+      <div class="section-label">Cosmic covenant of peace (2:18)</div>
+      <section class="block promise">
+        <div class="l">And I will make for them a covenant on that day</div>
+        <div class="l i1">with the beasts of the field,</div>
+        <div class="l i1">the birds of the heavens,</div>
+        <div class="l i1">and the creeping things of the ground.</div>
+        <div class="l">And I will abolish the bow, the sword, and war from the land,</div>
+        <div class="l i1">and I will make you lie down in safety.</div>
+      </section>
+
+      <div class="section-label">Five-fold betrothal formula (2:19-20)</div>
+      <section class="block creed" aria-label="Betrothal in five attributes">
+        <div class="l">And I will betroth you to me forever.</div>
+        <div class="l">I will betroth you to me</div>
+        <div class="l i1">in righteousness (<span class="hebrew">בְּצֶדֶק</span>)</div>
+        <div class="l i1">and in justice (<span class="hebrew">בְּמִשְׁפָּט</span>),</div>
+        <div class="l i1">in steadfast love (<span class="hebrew">בְּחֶסֶד</span>)</div>
+        <div class="l i1">and in mercy (<span class="hebrew">בְּרַחֲמִים</span>).</div>
+        <div class="l">I will betroth you to me in faithfulness (<span class="hebrew">בֶּאֱמוּנָה</span>).</div>
+        <div class="l i1">And you shall know the LORD (<span class="hebrew">וְיָדַעַתְּ אֶת־יְהוָה</span>).</div>
+      </section>
+
+      <div class="section-label">Cosmic response chain (2:21-22)</div>
+      <section class="block promise" aria-label="Heaven answers earth">
+        <div class="l">And in that day I will answer, declares the LORD,</div>
+        <div class="l i1">I will answer the heavens,</div>
+        <div class="l i2">and they shall answer the earth,</div>
+        <div class="l i1">and the earth shall answer the grain, the wine, and the oil,</div>
+        <div class="l i2">and they shall answer Jezreel,</div>
+      </section>
+
+      <div class="section-label">Reversal of symbolic names (2:23)</div>
+      <section class="block promise" aria-label="Names reversed">
+        <div class="l">and I will sow her for myself in the land.</div>
+        <div class="l">And I will have mercy on No Mercy (<span class="hebrew">לֹא רֻחָמָה</span>),</div>
+        <div class="l i1">and I will say to Not My People (<span class="hebrew">לֹא עַמִּי</span>),</div>
+        <div class="l i2">"You are my people (<span class="hebrew">עַמִּי־אַתָּה</span>);"</div>
+        <div class="l">and he shall say, "You are my God."</div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Block 4: Redemptive Love Enacted -->
+  <div class="chapter-section">
+    <div class="chapter-header" onclick="toggleChapter(this)">
+      <div class="chapter-title">Block 4: Redemptive Love Enacted (3:1-5)</div>
+      <span class="chapter-toggle">▶</span>
+    </div>
+    <div class="chapter-content">
+      
+      <div class="section-label">Command to love again (3:1)</div>
+      <section class="block" aria-label="Love that persists">
+        <div class="l">And the LORD said to me,</div>
+        <div class="l i1">"Go again, love a woman</div>
+        <div class="l i2">who is loved by another man and is an adulteress,</div>
+        <div class="l i1">even as the LORD loves the children of Israel,</div>
+        <div class="l i2">though they turn to other gods</div>
+        <div class="l i3">and love cakes of raisins."</div>
+      </section>
+
+      <div class="section-label">Purchase and discipline (3:2-3)</div>
+      <section class="block">
+        <div class="l">So I bought her for fifteen shekels of silver</div>
+        <div class="l i1">and a homer and a lethech of barley.</div>
+        <div class="l">And I said to her,</div>
+        <div class="l i1">"You must dwell as mine for many days.</div>
+        <div class="l i1">You shall not play the whore,</div>
+        <div class="l i2">or belong to another man;</div>
+        <div class="l i1">so will I also be to you."</div>
+      </section>
+
+      <div class="section-label">Prophetic interpretation: Exile and return (3:4-5)</div>
+      <section class="block warning" aria-label="Period of deprivation">
+        <div class="l">For the children of Israel shall dwell many days</div>
+        <div class="l i1">without king or prince,</div>
+        <div class="l i1">without sacrifice or pillar,</div>
+        <div class="l i1">without ephod or household gods.</div>
+      </section>
+
+      <section class="block promise" aria-label="Messianic hope">
+        <div class="l">Afterward the children of Israel shall return</div>
+        <div class="l i1">and seek the LORD their God,</div>
+        <div class="l i1">and David their king,</div>
+        <div class="l">and they shall come in fear to the LORD</div>
+        <div class="l i1">and to his goodness</div>
+        <div class="l i2">in the latter days.</div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- PART II: COVENANT LAWSUIT (CHS 4-11) -->
+  <div class="part-divider">
+    <h3>Part II: Covenant Lawsuit & Divine Pathos (Chs. 4–11)</h3>
+  </div>
+
+  <!-- Block 5: Comprehensive Indictment -->
+  <div class="chapter-section">
+    <div class="chapter-header" onclick="toggleChapter(this)">
+      <div class="chapter-title">Block 5: Comprehensive Indictment (4:1–5:7)</div>
+      <span class="chapter-toggle">▶</span>
+    </div>
+    <div class="chapter-content">
+      
+      <div class="section-label">YHWH's controversy with the land (4:1-3)</div>
+      <section class="block lawsuit" aria-label="Triple absence">
+        <div class="l">Hear the word of the LORD, O children of Israel,</div>
+        <div class="l i1">for the LORD has a controversy (<span class="hebrew">רִיב</span>)</div>
+        <div class="l i2">with the inhabitants of the land.</div>
+        <div class="l">There is no faithfulness (<span class="hebrew">אֵין־אֱמֶת</span>)</div>
+        <div class="l i1">or steadfast love (<span class="hebrew">וְאֵין־חֶסֶד</span>),</div>
+        <div class="l i1">and no knowledge of God (<span class="hebrew">וְאֵין־דַּעַת אֱלֹהִים</span>)</div>
+        <div class="l i2">in the land.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">There is swearing, lying, murder, stealing, and committing adultery;</div>
+        <div class="l i1">they break all bounds,</div>
+        <div class="l i1">and bloodshed follows bloodshed.</div>
+        <div class="l">Therefore the land mourns,</div>
+        <div class="l i1">and all who dwell in it languish,</div>
+        <div class="l">and also the beasts of the field</div>
+        <div class="l i1">and the birds of the heavens,</div>
+        <div class="l i1">and even the fish of the sea are taken away.</div>
+      </section>
+
+      <div class="section-label">Indictment of the priesthood (4:4-10)</div>
+      <section class="block warning" aria-label="Priestly failure">
+        <div class="l">Yet let no one contend,</div>
+        <div class="l i1">and let none accuse,</div>
+        <div class="l">for with you is my contention, O priest.</div>
+        <div class="l i1">You shall stumble by day;</div>
+        <div class="l i1">the prophet also shall stumble with you by night;</div>
+        <div class="l i2">and I will destroy your mother.</div>
+      </section>
+
+      <section class="block warning" aria-label="Knowledge crisis">
+        <div class="l">My people are destroyed for lack of knowledge;</div>
+        <div class="l i1">because you have rejected knowledge,</div>
+        <div class="l i2">I reject you from being a priest to me.</div>
+        <div class="l">And since you have forgotten the law of your God,</div>
+        <div class="l i1">I also will forget your children.</div>
+      </section>
+
+      <section class="block">
+        <div class="l">The more they increased,</div>
+        <div class="l i1">the more they sinned against me;</div>
+        <div class="l">I will change their glory into shame.</div>
+        <div class="l i1">They feed on the sin of my people;</div>
+        <div class="l i1">they are greedy for their iniquity.</div>
+        <div class="l">And it shall be like people, like priest;</div>
+        <div class="l i1">I will punish them for their ways</div>
+        <div class="l i2">and repay them for their deeds.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">They shall eat, but not be satisfied;</div>
+        <div class="l i1">they shall play the whore, but not multiply,</div>
+        <div class="l">because they have forsaken the LORD</div>
+        <div class="l i1">to cherish whoredom, wine, and new wine,</div>
+        <div class="l i2">which take away the understanding.</div>
+      </section>
+
+      <div class="section-label">Spirit of prostitution (4:11-19)</div>
+      <section class="block warning" aria-label="Cultic prostitution">
+        <div class="l">My people inquire of a piece of wood,</div>
+        <div class="l i1">and their staff gives them oracles.</div>
+        <div class="l">For a spirit of whoredom (<span class="hebrew">רוּחַ זְנוּנִים</span>)</div>
+        <div class="l i1">has led them astray,</div>
+        <div class="l">and they have left their God to play the whore.</div>
+      </section>
+
+      <section class="block">
+        <div class="l">They sacrifice on the tops of the mountains</div>
+        <div class="l i1">and burn offerings on the hills,</div>
+        <div class="l">under oak, poplar, and terebinth,</div>
+        <div class="l i1">because their shade is good.</div>
+        <div class="l">Therefore your daughters play the whore,</div>
+        <div class="l i1">and your brides commit adultery.</div>
+      </section>
+
+      <section class="block">
+        <div class="l">I will not punish your daughters when they play the whore,</div>
+        <div class="l i1">nor your brides when they commit adultery;</div>
+        <div class="l">for the men themselves go aside with prostitutes</div>
+        <div class="l i1">and sacrifice with cult prostitutes,</div>
+        <div class="l">and a people without understanding shall come to ruin.</div>
+      </section>
+
+      <section class="block warning" aria-label="Warning to Judah">
+        <div class="l">Though you play the whore, O Israel,</div>
+        <div class="l i1">let not Judah become guilty.</div>
+        <div class="l">Enter not into Gilgal,</div>
+        <div class="l i1">nor go up to Beth-aven,</div>
+        <div class="l i1">and swear not, "As the LORD lives."</div>
+      </section>
+
+      <section class="block">
+        <div class="l">Like a stubborn heifer,</div>
+        <div class="l i1">Israel is stubborn;</div>
+        <div class="l">can the LORD now feed them</div>
+        <div class="l i1">like a lamb in a broad pasture?</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">Ephraim is joined to idols;</div>
+        <div class="l i1">leave him alone.</div>
+        <div class="l">When their drink is gone, they give themselves to whoring;</div>
+        <div class="l i1">their rulers dearly love shame.</div>
+        <div class="l">A wind has wrapped them in its wings,</div>
+        <div class="l i1">and they shall be ashamed because of their sacrifices.</div>
+      </section>
+
+      <div class="section-label">Leadership indicted (5:1-7)</div>
+      <section class="block lawsuit" aria-label="Triple address">
+        <div class="l">Hear this, O priests!</div>
+        <div class="l">Pay attention, O house of Israel!</div>
+        <div class="l">Give ear, O house of the king!</div>
+        <div class="l i1">For the judgment is for you;</div>
+        <div class="l">for you have been a snare at Mizpah</div>
+        <div class="l i1">and a net spread upon Tabor.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">And the revolters have gone deep into slaughter,</div>
+        <div class="l i1">but I will discipline all of them.</div>
+      </section>
+
+      <section class="block" aria-label="Divine knowledge vs. human ignorance">
+        <div class="l">I know Ephraim,</div>
+        <div class="l i1">and Israel is not hidden from me;</div>
+        <div class="l">for now, O Ephraim, you have played the whore;</div>
+        <div class="l i1">Israel is defiled.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">Their deeds do not permit them</div>
+        <div class="l i1">to return to their God.</div>
+        <div class="l">For the spirit of whoredom is within them,</div>
+        <div class="l i1">and they know not the LORD.</div>
+      </section>
+
+      <section class="block">
+        <div class="l">The pride of Israel testifies to his face;</div>
+        <div class="l i1">Israel and Ephraim shall stumble in their guilt;</div>
+        <div class="l i1">Judah also shall stumble with them.</div>
+      </section>
+
+      <section class="block warning" aria-label="Futile worship">
+        <div class="l">With their flocks and herds they shall go</div>
+        <div class="l i1">to seek the LORD,</div>
+        <div class="l">but they will not find him;</div>
+        <div class="l i1">he has withdrawn from them.</div>
+        <div class="l">They have dealt faithlessly with the LORD;</div>
+        <div class="l i1">for they have borne alien children.</div>
+        <div class="l">Now the new moon shall devour them with their fields.</div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Block 6: Political and Religious Chaos -->
+  <div class="chapter-section">
+    <div class="chapter-header" onclick="toggleChapter(this)">
+      <div class="chapter-title">Block 6: Political and Religious Chaos (5:8–8:14)</div>
+      <span class="chapter-toggle">▶</span>
+    </div>
+    <div class="chapter-content">
+      
+      <div class="section-label">War alarm and divine withdrawal (5:8-15)</div>
+      <section class="block warning" aria-label="Trumpet sounds">
+        <div class="l">Blow the horn in Gibeah,</div>
+        <div class="l i1">the trumpet in Ramah.</div>
+        <div class="l">Sound the alarm at Beth-aven;</div>
+        <div class="l i1">we follow you, O Benjamin!</div>
+        <div class="l">Ephraim shall become a desolation</div>
+        <div class="l i1">in the day of punishment;</div>
+        <div class="l">among the tribes of Israel</div>
+        <div class="l i1">I make known what is sure.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">The princes of Judah have become</div>
+        <div class="l i1">like those who move the landmark;</div>
+        <div class="l">upon them I will pour out</div>
+        <div class="l i1">my wrath like water.</div>
+        <div class="l">Ephraim is oppressed, crushed in judgment,</div>
+        <div class="l i1">because he was determined to go after filth.</div>
+      </section>
+
+      <section class="block" aria-label="Divine agents of decay">
+        <div class="l">But I am like a moth to Ephraim,</div>
+        <div class="l i1">and like dry rot to the house of Judah.</div>
+      </section>
+
+      <section class="block warning" aria-label="Failed alliances">
+        <div class="l">When Ephraim saw his sickness,</div>
+        <div class="l i1">and Judah his wound,</div>
+        <div class="l">then Ephraim went to Assyria,</div>
+        <div class="l i1">and sent to the great king.</div>
+        <div class="l">But he is not able to cure you</div>
+        <div class="l i1">or heal your wound.</div>
+      </section>
+
+      <section class="block warning" aria-label="Lion imagery">
+        <div class="l">For I will be like a lion to Ephraim,</div>
+        <div class="l i1">and like a young lion to the house of Judah.</div>
+        <div class="l">I, even I, will tear and go away;</div>
+        <div class="l i1">I will carry off, and no one shall rescue.</div>
+      </section>
+
+      <section class="block" aria-label="Strategic withdrawal">
+        <div class="l">I will return again to my place,</div>
+        <div class="l i1">until they acknowledge their guilt and seek my face,</div>
+        <div class="l">and in their distress</div>
+        <div class="l i1">earnestly seek me.</div>
+      </section>
+
+      <div class="section-label">Shallow repentance rejected (6:1-11)</div>
+      <section class="block" aria-label="Israel's superficial return">
+        <div class="l">"Come, let us return to the LORD;</div>
+        <div class="l i1">for he has torn us, that he may heal us;</div>
+        <div class="l i1">he has struck us down, and he will bind us up.</div>
+        <div class="l">After two days he will revive us;</div>
+        <div class="l i1">on the third day he will raise us up,</div>
+        <div class="l i2">that we may live before him.</div>
+        <div class="l">Let us know; let us press on to know the LORD;</div>
+        <div class="l i1">his going out is sure as the dawn;</div>
+        <div class="l">he will come to us as the showers,</div>
+        <div class="l i1">as the spring rains that water the earth."</div>
+      </section>
+
+      <section class="block" aria-label="Divine frustration">
+        <div class="l">What shall I do with you, O Ephraim?</div>
+        <div class="l i1">What shall I do with you, O Judah?</div>
+        <div class="l">Your love (<span class="hebrew">חֶסֶד</span>) is like a morning cloud,</div>
+        <div class="l i1">like the dew that goes early away.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">Therefore I have hewn them by the prophets;</div>
+        <div class="l i1">I have slain them by the words of my mouth,</div>
+        <div class="l i1">and my judgment goes forth as the light.</div>
+      </section>
+
+      <section class="block creed" aria-label="Key principle">
+        <div class="l">For I desire steadfast love (<span class="hebrew">חֶסֶד</span>) and not sacrifice,</div>
+        <div class="l i1">the knowledge of God (<span class="hebrew">דַּעַת אֱלֹהִים</span>)</div>
+        <div class="l i2">rather than burnt offerings.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">But like Adam they transgressed the covenant;</div>
+        <div class="l i1">there they dealt faithlessly with me.</div>
+        <div class="l">Gilead is a city of evildoers,</div>
+        <div class="l i1">tracked with blood.</div>
+        <div class="l">As robbers lie in wait for a man,</div>
+        <div class="l i1">so the priests band together;</div>
+        <div class="l">they murder on the way to Shechem;</div>
+        <div class="l i1">they commit villainy.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">In the house of Israel I have seen a horrible thing;</div>
+        <div class="l i1">Ephraim's whoredom is there;</div>
+        <div class="l i1">Israel is defiled.</div>
+      </section>
+
+      <section class="block">
+        <div class="l">For you also, O Judah, a harvest is appointed.</div>
+      </section>
+
+      <div class="section-label">Internal corruption and palace intrigue (7:1-7)</div>
+      <section class="block warning">
+        <div class="l">When I would heal Israel,</div>
+        <div class="l i1">the iniquity of Ephraim is revealed,</div>
+        <div class="l i1">and the evil deeds of Samaria,</div>
+        <div class="l">for they deal falsely;</div>
+        <div class="l i1">the thief breaks in,</div>
+        <div class="l i1">and the bandits raid outside.</div>
+      </section>
+
+      <section class="block">
+        <div class="l">But they do not consider</div>
+        <div class="l i1">that I remember all their evil.</div>
+        <div class="l">Now their deeds surround them;</div>
+        <div class="l i1">they are before my face.</div>
+      </section>
+
+      <section class="block warning" aria-label="Oven metaphor">
+        <div class="l">By their evil they make the king glad,</div>
+        <div class="l i1">and the princes by their treachery.</div>
+        <div class="l">They are all adulterers;</div>
+        <div class="l i1">they are like a heated oven</div>
+        <div class="l i2">whose baker ceases to stir the fire,</div>
+        <div class="l">from the kneading of the dough</div>
+        <div class="l i1">until it is leavened.</div>
+      </section>
+
+      <section class="block">
+        <div class="l">On the day of our king, the princes</div>
+        <div class="l i1">became sick with the heat of wine;</div>
+        <div class="l">he stretched out his hand with mockers.</div>
+        <div class="l i1">For with hearts like an oven they approach their intrigue;</div>
+        <div class="l">all night their anger smolders;</div>
+        <div class="l i1">in the morning it blazes like a flaming fire.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">All of them are hot as an oven,</div>
+        <div class="l i1">and they devour their rulers.</div>
+        <div class="l">All their kings have fallen,</div>
+        <div class="l i1">and none of them calls upon me.</div>
+      </section>
+
+      <div class="section-label">Failed foreign policy (7:8-16)</div>
+      <section class="block warning" aria-label="Half-baked">
+        <div class="l">Ephraim mixes himself with the peoples;</div>
+        <div class="l i1">Ephraim is a cake not turned.</div>
+        <div class="l">Strangers devour his strength,</div>
+        <div class="l i1">and he knows it not;</div>
+        <div class="l">gray hairs are sprinkled upon him,</div>
+        <div class="l i1">and he knows it not.</div>
+      </section>
+
+      <section class="block">
+        <div class="l">The pride of Israel testifies to his face;</div>
+        <div class="l i1">yet they do not return to the LORD their God,</div>
+        <div class="l i1">nor seek him, for all this.</div>
+      </section>
+
+      <section class="block warning" aria-label="Silly dove">
+        <div class="l">Ephraim is like a dove,</div>
+        <div class="l i1">silly and without sense,</div>
+        <div class="l">calling to Egypt,</div>
+        <div class="l i1">going to Assyria.</div>
+      </section>
+
+      <section class="block">
+        <div class="l">As they go, I will spread over them my net;</div>
+        <div class="l i1">I will bring them down like birds of the heavens;</div>
+        <div class="l">I will discipline them</div>
+        <div class="l i1">according to the report made to their congregation.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">Woe to them, for they have strayed from me!</div>
+        <div class="l i1">Destruction to them, for they have rebelled against me!</div>
+        <div class="l">I would redeem them,</div>
+        <div class="l i1">but they speak lies against me.</div>
+      </section>
+
+      <section class="block">
+        <div class="l">They do not cry to me from the heart,</div>
+        <div class="l i1">but they wail upon their beds;</div>
+        <div class="l">for grain and wine they gash themselves;</div>
+        <div class="l i1">they rebel against me.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">Although I trained and strengthened their arms,</div>
+        <div class="l i1">yet they devise evil against me.</div>
+        <div class="l">They return, but not upward;</div>
+        <div class="l i1">they are like a treacherous bow;</div>
+        <div class="l">their princes shall fall by the sword</div>
+        <div class="l i1">because of the insolence of their tongue.</div>
+        <div class="l">This shall be their derision in the land of Egypt.</div>
+      </section>
+
+      <div class="section-label">Reaping the whirlwind (8:1-14)</div>
+      <section class="block warning" aria-label="Vulture approaches">
+        <div class="l">Set the trumpet to your lips!</div>
+        <div class="l i1">One like a vulture is over the house of the LORD,</div>
+        <div class="l">because they have transgressed my covenant</div>
+        <div class="l i1">and rebelled against my law (<span class="hebrew">תּוֹרָה</span>).</div>
+      </section>
+
+      <section class="block">
+        <div class="l">To me they cry,</div>
+        <div class="l i1">"My God, we—Israel—know you."</div>
+        <div class="l">Israel has spurned the good;</div>
+        <div class="l i1">the enemy shall pursue him.</div>
+      </section>
+
+      <section class="block warning" aria-label="Political chaos">
+        <div class="l">They made kings, but not through me.</div>
+        <div class="l i1">They set up princes, but I knew it not.</div>
+        <div class="l">With their silver and gold they made idols</div>
+        <div class="l i1">for their own destruction.</div>
+      </section>
+
+      <section class="block warning" aria-label="Calf idol">
+        <div class="l">I have spurned your calf, O Samaria.</div>
+        <div class="l i1">My anger burns against them.</div>
+        <div class="l">How long will they be incapable of innocence?</div>
+        <div class="l i1">For it is from Israel;</div>
+        <div class="l i2">a craftsman made it;</div>
+        <div class="l i2">it is not God.</div>
+        <div class="l">The calf of Samaria</div>
+        <div class="l i1">shall be broken to pieces.</div>
+      </section>
+
+      <section class="block warning" aria-label="Proverbial judgment">
+        <div class="l">For they sow the wind,</div>
+        <div class="l i1">and they shall reap the whirlwind.</div>
+        <div class="l">The standing grain has no heads;</div>
+        <div class="l i1">it shall yield no flour;</div>
+        <div class="l">if it were to yield,</div>
+        <div class="l i1">strangers would devour it.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">Israel is swallowed up;</div>
+        <div class="l i1">already they are among the nations</div>
+        <div class="l i2">as a useless vessel.</div>
+        <div class="l">For they have gone up to Assyria,</div>
+        <div class="l i1">a wild donkey wandering alone;</div>
+        <div class="l">Ephraim has hired lovers.</div>
+      </section>
+
+      <section class="block">
+        <div class="l">Though they hire allies among the nations,</div>
+        <div class="l i1">I will soon gather them up.</div>
+        <div class="l">And the king and princes</div>
+        <div class="l i1">shall soon writhe</div>
+        <div class="l i2">because of the tribute.</div>
+      </section>
+
+      <section class="block warning" aria-label="Multiplied altars">
+        <div class="l">Because Ephraim has multiplied altars for sinning,</div>
+        <div class="l i1">they have become to him altars for sinning.</div>
+      </section>
+
+      <section class="block warning" aria-label="Rejected revelation">
+        <div class="l">Were I to write for him my laws by the ten thousands,</div>
+        <div class="l i1">they would be regarded as a strange thing.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">As for my sacrificial offerings,</div>
+        <div class="l i1">they sacrifice meat and eat it,</div>
+        <div class="l i2">but the LORD does not accept them.</div>
+        <div class="l">Now he will remember their iniquity</div>
+        <div class="l i1">and punish their sins;</div>
+        <div class="l i1">they shall return to Egypt.</div>
+      </section>
+
+      <section class="block warning" aria-label="Forgotten Maker">
+        <div class="l">For Israel has forgotten his Maker</div>
+        <div class="l i1">and built palaces,</div>
+        <div class="l">and Judah has multiplied fortified cities;</div>
+        <div class="l i1">so I will send a fire upon his cities,</div>
+        <div class="l i2">and it shall devour her strongholds.</div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Block 7: Historical Retrospective -->
+  <div class="chapter-section">
+    <div class="chapter-header" onclick="toggleChapter(this)">
+      <div class="chapter-title">Block 7: Historical Retrospective (9:1–10:15)</div>
+      <span class="chapter-toggle">▶</span>
+    </div>
+    <div class="chapter-content">
+      
+      <div class="section-label">Festival joy ended (9:1-9)</div>
+      <section class="block warning" aria-label="Exile announced">
+        <div class="l">Rejoice not, O Israel!</div>
+        <div class="l i1">Exult not like the peoples;</div>
+        <div class="l">for you have played the whore, forsaking your God.</div>
+        <div class="l i1">You have loved a prostitute's wages</div>
+        <div class="l i2">on all threshing floors.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">Threshing floor and wine vat shall not feed them,</div>
+        <div class="l i1">and the new wine shall fail them.</div>
+      </section>
+
+      <section class="block warning" aria-label="Return to Egypt/Assyria">
+        <div class="l">They shall not remain in the land of the LORD,</div>
+        <div class="l i1">but Ephraim shall return to Egypt,</div>
+        <div class="l i1">and they shall eat unclean food in Assyria.</div>
+      </section>
+
+      <section class="block warning" aria-label="Cultic impossibility">
+        <div class="l">They shall not pour drink offerings of wine to the LORD,</div>
+        <div class="l i1">and their sacrifices shall not please him.</div>
+        <div class="l">Their bread shall be like mourners' bread;</div>
+        <div class="l i1">all who eat of it shall be defiled;</div>
+        <div class="l">for their bread shall be for their hunger only;</div>
+        <div class="l i1">it shall not come to the house of the LORD.</div>
+      </section>
+
+      <section class="block">
+        <div class="l">What will you do on the day of the appointed festival,</div>
+        <div class="l i1">and on the day of the feast of the LORD?</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">For behold, they are going away from destruction;</div>
+        <div class="l i1">Egypt shall gather them;</div>
+        <div class="l i1">Memphis shall bury them.</div>
+        <div class="l">Nettles shall possess their precious things of silver;</div>
+        <div class="l i1">thorns shall be in their tents.</div>
+      </section>
+
+      <section class="block warning" aria-label="Days of punishment">
+        <div class="l">The days of punishment have come;</div>
+        <div class="l i1">the days of recompense have come;</div>
+        <div class="l i1">Israel shall know it.</div>
+        <div class="l">The prophet is a fool;</div>
+        <div class="l i1">the man of the spirit is mad,</div>
+        <div class="l">because of your great iniquity</div>
+        <div class="l i1">and great hatred.</div>
+      </section>
+
+      <section class="block">
+        <div class="l">The prophet is the watchman of Ephraim with my God;</div>
+        <div class="l i1">yet a fowler's snare is on all his ways,</div>
+        <div class="l i1">and hatred in the house of his God.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">They have deeply corrupted themselves</div>
+        <div class="l i1">as in the days of Gibeah;</div>
+        <div class="l">he will remember their iniquity;</div>
+        <div class="l i1">he will punish their sins.</div>
+      </section>
+
+      <div class="section-label">Lost potential: From grapes to shame (9:10-17)</div>
+      <section class="block" aria-label="Divine reminiscence">
+        <div class="l">Like grapes in the wilderness,</div>
+        <div class="l i1">I found Israel.</div>
+        <div class="l">Like the first fruit on the fig tree in its first season,</div>
+        <div class="l i1">I saw your fathers.</div>
+      </section>
+
+      <section class="block warning" aria-label="Fall at Baal-peor">
+        <div class="l">But they came to Baal-peor</div>
+        <div class="l i1">and consecrated themselves to the thing of shame,</div>
+        <div class="l">and became detestable</div>
+        <div class="l i1">like the thing they loved.</div>
+      </section>
+
+      <section class="block warning" aria-label="Loss of fertility">
+        <div class="l">Ephraim's glory shall fly away like a bird—</div>
+        <div class="l i1">no birth, no pregnancy, no conception!</div>
+        <div class="l">Even if they bring up children,</div>
+        <div class="l i1">I will bereave them till none is left.</div>
+        <div class="l">Woe to them</div>
+        <div class="l i1">when I depart from them!</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">Ephraim, as I have seen, was like a young palm planted in a meadow;</div>
+        <div class="l i1">but Ephraim must lead his children out to slaughter.</div>
+      </section>
+
+      <section class="block" aria-label="Prophetic intercession">
+        <div class="l">Give them, O LORD—</div>
+        <div class="l i1">what will you give?</div>
+        <div class="l">Give them a miscarrying womb</div>
+        <div class="l i1">and dry breasts.</div>
+      </section>
+
+      <section class="block warning" aria-label="Gilgal indictment">
+        <div class="l">Every evil of theirs is in Gilgal;</div>
+        <div class="l i1">there I began to hate them.</div>
+        <div class="l">Because of the wickedness of their deeds</div>
+        <div class="l i1">I will drive them from my house.</div>
+        <div class="l">I will love them no more;</div>
+        <div class="l i1">all their princes are rebels.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">Ephraim is stricken;</div>
+        <div class="l i1">their root is dried up;</div>
+        <div class="l i1">they shall bear no fruit.</div>
+        <div class="l">Even though they give birth,</div>
+        <div class="l i1">I will put their beloved children to death.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">My God will reject them</div>
+        <div class="l i1">because they have not listened to him;</div>
+        <div class="l">they shall be wanderers among the nations.</div>
+      </section>
+
+      <div class="section-label">Luxuriant vine bears rotten fruit (10:1-8)</div>
+      <section class="block" aria-label="Prosperity paradox">
+        <div class="l">Israel is a luxuriant vine</div>
+        <div class="l i1">that yields its fruit.</div>
+        <div class="l">The more his fruit increased,</div>
+        <div class="l i1">the more altars he built;</div>
+        <div class="l">as his country improved,</div>
+        <div class="l i1">he improved his pillars.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">Their heart is false (<span class="hebrew">חָלַק לִבָּם</span>);</div>
+        <div class="l i1">now they must bear their guilt.</div>
+        <div class="l">The LORD will break down their altars</div>
+        <div class="l i1">and destroy their pillars.</div>
+      </section>
+
+      <section class="block" aria-label="Political bankruptcy">
+        <div class="l">For now they will say:</div>
+        <div class="l i1">"We have no king,</div>
+        <div class="l i1">for we do not fear the LORD;</div>
+        <div class="l i1">and a king—what could he do for us?"</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">They utter mere words;</div>
+        <div class="l i1">with empty oaths they make covenants;</div>
+        <div class="l">so judgment springs up like poisonous weeds</div>
+        <div class="l i1">in the furrows of the field.</div>
+      </section>
+
+      <section class="block warning" aria-label="Calf of Beth-aven">
+        <div class="l">The inhabitants of Samaria tremble</div>
+        <div class="l i1">for the calf of Beth-aven.</div>
+        <div class="l">Its people mourn for it,</div>
+        <div class="l i1">and so do its idolatrous priests—</div>
+        <div class="l">those who rejoiced over it,</div>
+        <div class="l i1">over its glory—</div>
+        <div class="l i2">for it has departed from it.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">The thing itself shall be carried to Assyria</div>
+        <div class="l i1">as tribute to the great king.</div>
+        <div class="l">Ephraim shall be put to shame,</div>
+        <div class="l i1">and Israel shall be ashamed of his idol.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">Samaria's king shall perish</div>
+        <div class="l i1">like a twig on the face of the waters.</div>
+        <div class="l">The high places of Aven, the sin of Israel, shall be destroyed.</div>
+        <div class="l i1">Thorn and thistle shall grow up</div>
+        <div class="l i2">on their altars,</div>
+        <div class="l">and they shall say to the mountains, "Cover us,"</div>
+        <div class="l i1">and to the hills, "Fall on us."</div>
+      </section>
+
+      <div class="section-label">War coming: Call to righteousness (10:9-15)</div>
+      <section class="block warning" aria-label="Gibeah pattern continues">
+        <div class="l">From the days of Gibeah, you have sinned, O Israel;</div>
+        <div class="l i1">there they have continued.</div>
+        <div class="l">Shall not the war against the unjust</div>
+        <div class="l i1">overtake them at Gibeah?</div>
+      </section>
+
+      <section class="block">
+        <div class="l">When I please, I will discipline them,</div>
+        <div class="l i1">and nations shall be gathered against them</div>
+        <div class="l i2">when they are bound up for their double iniquity.</div>
+      </section>
+
+      <section class="block" aria-label="Agricultural metaphor">
+        <div class="l">Ephraim was a trained calf</div>
+        <div class="l i1">that loved to thresh,</div>
+        <div class="l">and I spared her fair neck;</div>
+        <div class="l i1">but I will put Ephraim to the yoke;</div>
+        <div class="l">Judah must plow;</div>
+        <div class="l i1">Jacob must harrow for himself.</div>
+      </section>
+
+      <section class="block promise" aria-label="Call to righteousness">
+        <div class="l">Sow for yourselves righteousness;</div>
+        <div class="l i1">reap steadfast love (<span class="hebrew">חֶסֶד</span>);</div>
+        <div class="l">break up your fallow ground,</div>
+        <div class="l i1">for it is the time to seek the LORD,</div>
+        <div class="l i2">that he may come and rain righteousness upon you.</div>
+      </section>
+
+      <section class="block warning" aria-label="Reality check">
+        <div class="l">You have plowed iniquity;</div>
+        <div class="l i1">you have reaped injustice;</div>
+        <div class="l i1">you have eaten the fruit of lies.</div>
+        <div class="l">Because you have trusted in your own way</div>
+        <div class="l i1">and in the multitude of your warriors,</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">therefore the tumult of war shall arise among your people,</div>
+        <div class="l i1">and all your fortresses shall be destroyed,</div>
+        <div class="l">as Shalman destroyed Beth-arbel on the day of battle;</div>
+        <div class="l i1">mothers were dashed in pieces with their children.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">Thus it shall be done to you, O Bethel,</div>
+        <div class="l i1">because of your great evil.</div>
+        <div class="l">At dawn the king of Israel</div>
+        <div class="l i1">shall be utterly cut off.</div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Block 8: Divine Pathos Climax -->
+  <div class="chapter-section">
+    <div class="chapter-header" onclick="toggleChapter(this)">
+      <div class="chapter-title">Block 8: Divine Pathos Climax (11:1-11)</div>
+      <span class="chapter-toggle">▶</span>
+    </div>
+    <div class="chapter-content">
+      
+      <div class="section-label">Parental love spurned (11:1-7)</div>
+      <section class="block" aria-label="Divine parental love">
+        <div class="l">When Israel was a child, I loved him,</div>
+        <div class="l i1">and out of Egypt I called my son.</div>
+        <div class="l">The more they were called,</div>
+        <div class="l i1">the more they went away;</div>
+        <div class="l">they kept sacrificing to the Baals</div>
+        <div class="l i1">and burning offerings to idols.</div>
+      </section>
+
+      <section class="block">
+        <div class="l">Yet it was I who taught Ephraim to walk;</div>
+        <div class="l i1">I took them up by their arms,</div>
+        <div class="l i2">but they did not know that I healed them.</div>
+        <div class="l">I led them with cords of kindness,</div>
+        <div class="l i1">with the bands of love,</div>
+        <div class="l">and I became to them as one who eases the yoke on their jaws,</div>
+        <div class="l i1">and I bent down to them and fed them.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">They shall not return to the land of Egypt,</div>
+        <div class="l i1">but Assyria shall be their king,</div>
+        <div class="l i2">because they have refused to return to me.</div>
+        <div class="l">The sword shall rage against their cities,</div>
+        <div class="l i1">consume the bars of their gates,</div>
+        <div class="l i2">and devour them because of their own counsels.</div>
+        <div class="l">My people are bent on turning away from me,</div>
+        <div class="l i1">and though they call out to the Most High,</div>
+        <div class="l i2">he shall not raise them up at all.</div>
+      </section>
+
+      <div class="section-label">Divine emotional crisis (11:8-9) — Theological Center</div>
+      <section class="block doxo" aria-label="Divine pathos climax - Structural Anchor">
+        <div class="l"><strong>How can I give you up, O Ephraim?</strong></div>
+        <div class="l i1"><strong>How can I hand you over, O Israel?</strong></div>
+        <div class="l"><strong>How can I make you like Admah?</strong></div>
+        <div class="l i1"><strong>How can I treat you like Zeboiim?</strong></div>
+        <div class="l"><strong>My heart recoils within me;</strong></div>
+        <div class="l i1"><strong>my compassion grows warm and tender.</strong></div>
+      </section>
+
+      <section class="block promise" aria-label="Divine self-disclosure">
+        <div class="l">I will not execute my burning anger;</div>
+        <div class="l i1">I will not again destroy Ephraim;</div>
+        <div class="l">for I am God and not a man,</div>
+        <div class="l i1">the Holy One in your midst,</div>
+        <div class="l i2">and I will not come in wrath.</div>
+      </section>
+
+      <div class="section-label">Promise of return (11:10-11)</div>
+      <section class="block promise">
+        <div class="l">They shall go after the LORD;</div>
+        <div class="l i1">he will roar like a lion;</div>
+        <div class="l">when he roars,</div>
+        <div class="l i1">his children shall come trembling from the west;</div>
+        <div class="l">they shall come trembling like birds from Egypt,</div>
+        <div class="l i1">and like doves from the land of Assyria,</div>
+        <div class="l">and I will return them to their homes,</div>
+        <div class="l i1">declares the LORD.</div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- PART III: HISTORICAL POLEMIC & RESTORATION (CHS 12-14) -->
+  <div class="part-divider">
+    <h3>Part III: Historical Polemic & Eschatological Renewal (Chs. 12–14)</h3>
+  </div>
+
+  <!-- Block 9: Jacob Typology and Final Judgment -->
+  <div class="chapter-section">
+    <div class="chapter-header" onclick="toggleChapter(this)">
+      <div class="chapter-title">Block 9: Jacob Typology and Final Judgment (12:1–13:16)</div>
+      <span class="chapter-toggle">▶</span>
+    </div>
+    <div class="chapter-content">
+      
+      <div class="section-label">Ephraim's deception and Jacob's example (12:1-6)</div>
+      <section class="block warning">
+        <div class="l">Ephraim feeds on the wind</div>
+        <div class="l i1">and pursues the east wind all day long;</div>
+        <div class="l">they multiply falsehood and violence;</div>
+        <div class="l i1">they make a covenant with Assyria,</div>
+        <div class="l i1">and oil is carried to Egypt.</div>
+      </section>
+
+      <section class="block lawsuit">
+        <div class="l">The LORD has an indictment against Judah</div>
+        <div class="l i1">and will punish Jacob according to his ways;</div>
+        <div class="l i1">he will repay him according to his deeds.</div>
+      </section>
+
+      <section class="block" aria-label="Jacob typology">
+        <div class="l">In the womb he took his brother by the heel,</div>
+        <div class="l i1">and in his manhood he strove with God.</div>
+        <div class="l">He strove with the angel and prevailed;</div>
+        <div class="l i1">he wept and sought his favor.</div>
+        <div class="l">He met God at Bethel,</div>
+        <div class="l i1">and there God spoke with us—</div>
+        <div class="l">the LORD, the God of hosts,</div>
+        <div class="l i1">the LORD is his memorial name.</div>
+      </section>
+
+      <section class="block promise" aria-label="Call to return">
+        <div class="l">So you, by the help of your God, return,</div>
+        <div class="l i1">hold fast to love and justice,</div>
+        <div class="l i2">and wait continually for your God.</div>
+      </section>
+
+      <div class="section-label">Canaanite merchant and divine constancy (12:7-14)</div>
+      <section class="block warning">
+        <div class="l">A merchant, in whose hands are false balances,</div>
+        <div class="l i1">he loves to oppress.</div>
+        <div class="l">Ephraim has said,</div>
+        <div class="l i1">"Ah, but I am rich;</div>
+        <div class="l i1">I have found wealth for myself;</div>
+        <div class="l">in all my labors</div>
+        <div class="l i1">they cannot find in me iniquity or sin."</div>
+      </section>
+
+      <section class="block">
+        <div class="l">I am the LORD your God</div>
+        <div class="l i1">from the land of Egypt;</div>
+        <div class="l">I will again make you dwell in tents,</div>
+        <div class="l i1">as in the days of the appointed feast.</div>
+      </section>
+
+      <section class="block">
+        <div class="l">I spoke to the prophets;</div>
+        <div class="l i1">it was I who multiplied visions,</div>
+        <div class="l i1">and through the prophets gave parables.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">If there is iniquity in Gilead,</div>
+        <div class="l i1">they shall surely come to nothing;</div>
+        <div class="l">if in Gilgal they sacrifice bulls,</div>
+        <div class="l i1">their altars also shall be like stone heaps</div>
+        <div class="l i2">on the furrows of the field.</div>
+      </section>
+
+      <section class="block">
+        <div class="l">Jacob fled to the land of Aram;</div>
+        <div class="l i1">there Israel served for a wife,</div>
+        <div class="l i1">and for a wife he guarded sheep.</div>
+        <div class="l">By a prophet the LORD brought Israel up from Egypt,</div>
+        <div class="l i1">and by a prophet he was guarded.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">Ephraim has given bitter provocation;</div>
+        <div class="l i1">so his Lord will leave his bloodguilt on him</div>
+        <div class="l i1">and will repay him for his disgraceful deeds.</div>
+      </section>
+
+      <div class="section-label">From exaltation to death (13:1-8)</div>
+      <section class="block warning" aria-label="Spiritual death through Baal">
+        <div class="l">When Ephraim spoke, there was trembling;</div>
+        <div class="l i1">he was exalted in Israel,</div>
+        <div class="l">but he incurred guilt through Baal</div>
+        <div class="l i1">and died.</div>
+      </section>
+
+      <section class="block warning" aria-label="Escalating idolatry">
+        <div class="l">And now they sin more and more,</div>
+        <div class="l i1">and make for themselves metal images,</div>
+        <div class="l">idols skillfully made of their silver,</div>
+        <div class="l i1">all of them the work of craftsmen.</div>
+        <div class="l">It is said of them,</div>
+        <div class="l i1">"Those who offer human sacrifice kiss calves!"</div>
+      </section>
+
+      <section class="block warning" aria-label="Four similes of transience">
+        <div class="l">Therefore they shall be like the morning mist</div>
+        <div class="l i1">or like the dew that goes early away,</div>
+        <div class="l">like the chaff that swirls from the threshing floor</div>
+        <div class="l i1">or like smoke from a window.</div>
+      </section>
+
+      <section class="block creed" aria-label="Divine exclusive claim">
+        <div class="l">But I am the LORD your God</div>
+        <div class="l i1">from the land of Egypt;</div>
+        <div class="l">you know no God but me,</div>
+        <div class="l i1">and besides me there is no savior.</div>
+      </section>
+
+      <section class="block">
+        <div class="l">It was I who knew you in the wilderness,</div>
+        <div class="l i1">in the land of drought.</div>
+      </section>
+
+      <section class="block warning" aria-label="Pattern of apostasy">
+        <div class="l">But when they had grazed, they became full,</div>
+        <div class="l i1">they were filled, and their heart was lifted up;</div>
+        <div class="l i2">therefore they forgot me.</div>
+      </section>
+
+      <section class="block warning" aria-label="Divine as predator">
+        <div class="l">So I am to them like a lion;</div>
+        <div class="l i1">like a leopard I will lurk beside the way.</div>
+        <div class="l">I will fall upon them like a bear robbed of her cubs;</div>
+        <div class="l i1">I will tear open their breast,</div>
+        <div class="l">and there I will devour them like a lion,</div>
+        <div class="l i1">as a wild beast would rip them open.</div>
+      </section>
+
+      <div class="section-label">No escape from judgment (13:9-16)</div>
+      <section class="block" aria-label="Divine lament">
+        <div class="l">He destroys you, O Israel,</div>
+        <div class="l i1">for you are against me, against your helper.</div>
+      </section>
+
+      <section class="block warning">
+        <div class="l">Where now is your king, to save you in all your cities?</div>
+        <div class="l i1">Where are all your rulers—</div>
+        <div class="l i2">those of whom you said,</div>
+        <div class="l i3">"Give me a king and princes"?</div>
+      </section>
+
+      <section class="block">
+        <div class="l">I gave you a king in my anger,</div>
+        <div class="l i1">and I took him away in my wrath.</div>
+      </section>
+
+      <section class="block warning" aria-label="Accumulated guilt">
+        <div class="l">The iniquity of Ephraim is bound up;</div>
+        <div class="l i1">his sin is kept in store.</div>
+      </section>
+
+      <section class="block warning" aria-label="Birth metaphor">
+        <div class="l">The pangs of childbirth come for him,</div>
+        <div class="l i1">but he is an unwise son,</div>
+        <div class="l">for at the right time he does not present himself</div>
+        <div class="l i1">at the opening of the womb.</div>
+      </section>
+
+      <section class="block" aria-label="Ambiguous oracle on death and Sheol">
+        <div class="l">Shall I ransom them from the power of Sheol?</div>
+        <div class="l i1">Shall I redeem them from Death?</div>
+        <div class="l">O Death, where are your plagues?</div>
+        <div class="l i1">O Sheol, where is your sting?</div>
+        <div class="l">Compassion is hidden from my eyes.</div>
+      </section>
+
+      <section class="block warning" aria-label="East wind judgment">
+        <div class="l">Though he may flourish among his brothers,</div>
+        <div class="l i1">the east wind, the wind of the LORD, shall come,</div>
+        <div class="l i2">rising from the wilderness,</div>
+        <div class="l">and his fountain shall dry up;</div>
+        <div class="l i1">his spring shall be parched;</div>
+        <div class="l">it shall strip his treasury</div>
+        <div class="l i1">of every precious thing.</div>
+      </section>
+
+      <section class="block warning" aria-label="Final devastation">
+        <div class="l">Samaria shall bear her guilt,</div>
+        <div class="l i1">because she has rebelled against her God;</div>
+        <div class="l">they shall fall by the sword;</div>
+        <div class="l i1">their little ones shall be dashed in pieces,</div>
+        <div class="l i1">and their pregnant women ripped open.</div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Block 10: Call to Return and Divine Healing -->
+  <div class="chapter-section">
+    <div class="chapter-header" onclick="toggleChapter(this)">
+      <div class="chapter-title">Block 10: Call to Return and Divine Healing (14:1-8)</div>
+      <span class="chapter-toggle">▶</span>
+    </div>
+    <div class="chapter-content">
+      
+      <div class="section-label">Liturgy of repentance (14:1-3)</div>
+      <section class="block promise" aria-label="Call to return">
+        <div class="l">Return, O Israel, to the LORD your God,</div>
+        <div class="l i1">for you have stumbled because of your iniquity.</div>
+      </section>
+
+      <section class="block" aria-label="Model prayer">
+        <div class="l">Take with you words</div>
+        <div class="l i1">and return to the LORD;</div>
+        <div class="l">say to him,</div>
+        <div class="l i1">"Take away all iniquity;</div>
+        <div class="l i1">accept what is good,</div>
+        <div class="l i2">and we will pay with bulls</div>
+        <div class="l i3">the vows of our lips.</div>
+      </section>
+
+      <section class="block promise" aria-label="Triple renunciation">
+        <div class="l">Assyria shall not save us;</div>
+        <div class="l i1">we will not ride on horses;</div>
+        <div class="l">and we will say no more, 'Our God,'</div>
+        <div class="l i1">to the work of our hands.</div>
+        <div class="l">In you the orphan finds mercy."</div>
+      </section>
+
+      <div class="section-label">Divine healing promised (14:4-8)</div>
+      <section class="block promise" aria-label="Divine response">
+        <div class="l">I will heal their apostasy;</div>
+        <div class="l i1">I will love them freely,</div>
+        <div class="l i2">for my anger has turned from them.</div>
+      </section>
+
+      <section class="block promise" aria-label="Seven-fold blessing with botanical imagery">
+        <div class="l">I will be like the dew to Israel;</div>
+        <div class="l i1">he shall blossom like the lily;</div>
+        <div class="l i1">he shall take root like the trees of Lebanon;</div>
+        <div class="l">his shoots shall spread out;</div>
+        <div class="l i1">his beauty shall be like the olive,</div>
+        <div class="l i1">and his fragrance like Lebanon.</div>
+      </section>
+
+      <section class="block promise">
+        <div class="l">They shall return and dwell beneath my shadow;</div>
+        <div class="l i1">they shall flourish like the grain;</div>
+        <div class="l">they shall blossom like the vine;</div>
+        <div class="l i1">their fame shall be like the wine of Lebanon.</div>
+      </section>
+
+      <section class="block promise" aria-label="Final dialogue">
+        <div class="l">O Ephraim, what have I to do with idols?</div>
+        <div class="l i1">It is I who answer and look after you.</div>
+        <div class="l">I am like an evergreen cypress;</div>
+        <div class="l i1">from me comes your fruit.</div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Block 11: Wisdom Epilogue -->
+  <div class="chapter-section">
+    <div class="chapter-header" onclick="toggleChapter(this)">
+      <div class="chapter-title">Block 11: Wisdom Epilogue (14:9)</div>
+      <span class="chapter-toggle">▶</span>
+    </div>
+    <div class="chapter-content">
+      
+      <div class="section-label">Editorial conclusion: Two paths</div>
+      <section class="block" aria-label="Wisdom reflection">
+        <div class="l">Whoever is wise, let him understand these things;</div>
+        <div class="l i1">whoever is discerning, let him know them;</div>
+        <div class="l">for the ways of the LORD are right,</div>
+        <div class="l i1">and the upright walk in them,</div>
+        <div class="l i2">but transgressors stumble in them.</div>
+      </section>
+
+    </div>
+  </div>
+
+</div>
 
     <!-- Chiastic Patterns -->
     <div class="theology-card animate-on-scroll" id="chiastic-patterns">
@@ -1436,7 +2597,7 @@
         });
       });
 
-      // Chapter toggle functionality
+      // Block toggle functionality (renamed from chapter)
       window.toggleChapter = function(header) {
         const content = header.nextElementSibling;
         const isExpanded = content.classList.contains('expanded');
@@ -1445,11 +2606,11 @@
         header.classList.toggle('expanded');
       };
 
-      // Toggle all chapters
+      // Toggle all blocks (renamed from chapters)
       let allExpanded = false;
-      window.toggleAllChapters = function() {
-        const headers = document.querySelectorAll('.chapter-header');
-        const contents = document.querySelectorAll('.chapter-content');
+      window.toggleAllBlocks = function() {
+        const headers = document.querySelectorAll('.chapter-header'); // Keep class name for CSS
+        const contents = document.querySelectorAll('.chapter-content'); // Keep class name for CSS
         const button = document.querySelector('.control-btn');
         
         allExpanded = !allExpanded;
@@ -1569,6 +2730,27 @@
           bibliographySection.toggleAttribute('open');
         });
       }
+
+      // Structure Map View Switching
+      window.showMapView = function(viewName) {
+        // Hide all views
+        document.querySelectorAll('.map-view').forEach(view => {
+          view.classList.remove('active');
+        });
+        
+        // Show selected view
+        const selectedView = document.getElementById(viewName + '-view');
+        if (selectedView) {
+          selectedView.classList.add('active');
+        }
+        
+        // Update button states
+        document.querySelectorAll('.map-btn').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        event.target.classList.add('active');
+      };
+      
     });
   </script>
 
