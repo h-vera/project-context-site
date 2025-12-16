@@ -2,14 +2,14 @@
  * Centralized Navigation Component
  * Path: /assets/js/nav-component.js
  * Purpose: Single source of truth for navigation across all pages
- * Version: 1.2.0 - Updated with cosmic eye logo image
+ * Version: 1.2.1 - Fixed placeholder and initialization issues
  */
 
 class NavigationComponent {
     constructor(options = {}) {
         this.options = {
             currentPage: options.currentPage || '',
-            hubType: options.hubType || '', // 'characters', 'women', 'tanakh', 'new-covenant', 'thematic', 'methodology'
+            hubType: options.hubType || '',
             ...options
         };
         
@@ -19,7 +19,6 @@ class NavigationComponent {
 
     /**
      * Get the complete navigation HTML
-     * Updated: Now uses cosmic eye logo image instead of inline SVG
      */
     getNavigationHTML() {
         return `
@@ -71,12 +70,10 @@ class NavigationComponent {
         const currentPage = this.options.currentPage;
         const hubType = this.options.hubType;
         
-        // Home page
         if (section === 'home' && (currentPage === 'home' || currentPage === '')) {
             return 'active';
         }
         
-        // Studies section (main dropdown)
         if (section === 'studies' && (
             currentPage.includes('studies') || 
             currentPage.includes('characters') || 
@@ -89,7 +86,6 @@ class NavigationComponent {
             return 'active';
         }
         
-        // Specific hub types
         if (section === 'characters' && (hubType === 'characters' || currentPage.includes('characters'))) {
             return 'active';
         }
@@ -109,7 +105,6 @@ class NavigationComponent {
             return 'active';
         }
         
-        // Other sections
         if (section === 'resources' && currentPage.includes('resources')) {
             return 'active';
         }
@@ -124,7 +119,6 @@ class NavigationComponent {
      * Initialize the navigation
      */
     init() {
-        // Wait for DOM to be ready
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => this.render());
         } else {
@@ -136,25 +130,27 @@ class NavigationComponent {
      * Render the navigation into the DOM
      */
     render() {
-        // Find existing nav or create container
+        // Look for placeholder first, then existing nav
+        let placeholder = document.getElementById('nav-placeholder');
         let existingNav = document.getElementById('main-nav');
-        let navContainer;
         
+        // If nav already exists, remove it (prevents duplicates)
         if (existingNav) {
-            // Replace existing nav
-            navContainer = existingNav.parentNode;
             existingNav.remove();
-        } else {
-            // Create new container at top of body
-            navContainer = document.body;
         }
         
-        // Insert the navigation HTML
+        // Create the navigation element
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = this.navHTML;
         const newNav = tempDiv.firstElementChild;
         
-        navContainer.insertBefore(newNav, navContainer.firstChild);
+        // Insert into placeholder if it exists, otherwise at top of body
+        if (placeholder) {
+            placeholder.innerHTML = '';
+            placeholder.appendChild(newNav);
+        } else {
+            document.body.insertBefore(newNav, document.body.firstChild);
+        }
         
         // Initialize mobile menu functionality
         this.initializeMobileMenu();
@@ -167,7 +163,7 @@ class NavigationComponent {
     }
 
     /**
-     * Initialize mobile menu (consolidated from mobile-menu.js)
+     * Initialize mobile menu
      */
     initializeMobileMenu() {
         const menuToggle = document.getElementById('mobileMenuToggle');
@@ -175,9 +171,6 @@ class NavigationComponent {
         
         if (!menuToggle || !navLinks) return;
         
-        let scrollPosition = 0;
-        
-        // Create overlay if it doesn't exist
         if (!document.querySelector('.mobile-menu-overlay')) {
             const overlay = document.createElement('div');
             overlay.className = 'mobile-menu-overlay';
@@ -186,7 +179,6 @@ class NavigationComponent {
             overlay.addEventListener('click', () => this.closeMobileMenu());
         }
         
-        // Toggle menu
         menuToggle.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -198,10 +190,8 @@ class NavigationComponent {
             }
         });
         
-        // Close menu when clicking nav links (not dropdown toggles)
         navLinks.querySelectorAll('a:not(.dropdown-toggle)').forEach(link => {
             link.addEventListener('click', () => {
-                // Don't close for hash links to current page
                 const href = link.getAttribute('href');
                 if (href && href !== '#' && !href.startsWith('#')) {
                     this.closeMobileMenu();
@@ -209,7 +199,6 @@ class NavigationComponent {
             });
         });
         
-        // Handle dropdowns in mobile menu
         navLinks.querySelectorAll('.dropdown-toggle').forEach(toggle => {
             toggle.addEventListener('click', (e) => {
                 if (window.matchMedia('(max-width: 768px)').matches) {
@@ -220,14 +209,12 @@ class NavigationComponent {
             });
         });
         
-        // Close on escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && menuToggle.classList.contains('active')) {
                 this.closeMobileMenu();
             }
         });
         
-        // Close on window resize
         window.addEventListener('resize', () => {
             if (window.innerWidth > 768 && menuToggle.classList.contains('active')) {
                 this.closeMobileMenu();
@@ -240,7 +227,6 @@ class NavigationComponent {
         const navLinks = document.getElementById('navLinks');
         const overlay = document.querySelector('.mobile-menu-overlay');
         
-        // Save scroll position
         this.scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
         
         menuToggle.classList.add('active');
@@ -248,7 +234,6 @@ class NavigationComponent {
         overlay?.classList.add('active');
         document.body.classList.add('menu-open');
         
-        // Prevent background scrolling (iOS fix)
         document.body.style.position = 'fixed';
         document.body.style.width = '100%';
         document.body.style.top = `-${this.scrollPosition}px`;
@@ -270,13 +255,11 @@ class NavigationComponent {
         overlay?.classList.remove('active');
         document.body.classList.remove('menu-open');
         
-        // Restore background scrolling
         document.body.style.position = '';
         document.body.style.width = '';
         document.body.style.top = '';
         document.body.style.overflow = '';
         
-        // Restore scroll position
         if (this.scrollPosition) {
             window.scrollTo(0, this.scrollPosition);
         }
@@ -326,13 +309,13 @@ class NavigationComponent {
             dropdown.addEventListener('mouseleave', function() {
                 timeout = setTimeout(() => {
                     this.classList.remove('active');
-                }, 700); // Small delay before closing
+                }, 700);
             });
         });
     }
 
     /**
-     * Update navigation for current page (can be called after page load)
+     * Update navigation for current page
      */
     updateCurrentPage(currentPage, hubType = '') {
         this.options.currentPage = currentPage;
@@ -342,18 +325,19 @@ class NavigationComponent {
     }
 }
 
-// Auto-initialize if no custom options needed
-// Pages can override by calling initializeNavigation() with options before this runs
-document.addEventListener('DOMContentLoaded', function() {
-    // Only auto-init if no nav exists yet (allows manual override)
-    if (!document.getElementById('main-nav')) {
-        new NavigationComponent();
-    }
-});
+// REMOVED: Auto-initialization to prevent double initialization
+// Pages should manually initialize with their own options
 
-// Auto-initialize function for easy use with options
+// Global initialization function
 window.initializeNavigation = function(options = {}) {
-    return new NavigationComponent(options);
+    // Check if already initialized to prevent duplicates
+    if (window.__navigationInstance) {
+        console.warn('Navigation already initialized');
+        return window.__navigationInstance;
+    }
+    
+    window.__navigationInstance = new NavigationComponent(options);
+    return window.__navigationInstance;
 };
 
 // Export for ES6 modules
