@@ -8,7 +8,7 @@
   
   <!-- Enhanced v5.8.1 Metadata -->
   <meta name="study-type" content="thematic-study">
-  <meta name="template-version" content="5.8-enhanced">
+  <meta name="template-version" content="5.8.1-enhanced">
   <meta name="page-category" content="thematic-studies">
   <meta name="nav-hub" content="studies">
   <meta name="nav-section" content="image-of-god">
@@ -178,6 +178,14 @@
       padding: 2rem;
       margin-bottom: 2rem;
       box-shadow: 0 4px 6px -1px var(--shadow), 0 2px 4px -1px var(--shadow);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    .content-section.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
     
     h2 {
@@ -228,13 +236,9 @@
       width: 100%;
       border-collapse: collapse;
       margin: 1.5rem 0;
-      overflow-x: auto;
-      display: block;
-    }
-    
-    .comparison-table table {
-      width: 100%;
-      min-width: 500px;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
     }
     
     .comparison-table th,
@@ -254,48 +258,6 @@
       background: var(--bg-gray);
     }
     
-    /* Timeline Display */
-    .timeline {
-      position: relative;
-      padding: 2rem 0;
-      margin: 2rem 0;
-    }
-    
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 30px;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: var(--accent-green-light);
-    }
-    
-    .timeline-item {
-      position: relative;
-      padding-left: 60px;
-      margin-bottom: 2rem;
-    }
-    
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: 24px;
-      top: 5px;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--accent-green);
-      border: 2px solid white;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-    
-    .timeline-date {
-      font-weight: 600;
-      color: var(--accent-emerald);
-      margin-bottom: 0.5rem;
-    }
-    
     /* Key Insight Box */
     .key-insight {
       background: white;
@@ -313,10 +275,18 @@
     /* Transformation Box */
     .transformation-box {
       background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-      border: 1px solid #86efac;
+      border: 2px solid #86efac;
       border-radius: 12px;
       padding: 1.5rem;
       margin: 2rem 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    .transformation-box.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
     
     .transformation-box h3 {
@@ -338,10 +308,17 @@
       border-radius: 12px;
       padding: 1.5rem;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease;
+    }
+    
+    .culture-card.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
     
     .culture-card:hover {
-      transform: translateY(-2px);
       box-shadow: 0 8px 16px rgba(0,0,0,0.1);
     }
     
@@ -385,7 +362,9 @@
     
     .hierarchy-level {
       padding: 0.5rem;
-      margin: 0.25rem 0;
+      margin: 0.25rem auto;
+      border-radius: 4px;
+      max-width: 300px;
     }
     
     .hierarchy-level.divine {
@@ -403,6 +382,184 @@
     .hierarchy-level.common {
       background: var(--bg-gray);
       color: var(--text-gray);
+    }
+    
+    /* Quick Nav Sidebar (Desktop) */
+    .quick-nav-sidebar {
+      position: fixed;
+      right: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 100;
+      display: none;
+    }
+    
+    @media (min-width: 1400px) {
+      .quick-nav-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+    
+    .quick-nav-item {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--border);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .quick-nav-item:hover,
+    .quick-nav-item.active {
+      background: var(--accent-green);
+      transform: scale(1.3);
+    }
+    
+    .quick-nav-item::before {
+      content: attr(data-label);
+      position: absolute;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--primary-dark);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+    }
+    
+    .quick-nav-item:hover::before {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    /* Bibliography Section */
+    .bibliography-section {
+      background: white;
+      border-radius: 16px;
+      margin-top: 2rem;
+      box-shadow: 0 4px 6px -1px var(--shadow);
+      overflow: hidden;
+    }
+    
+    .bibliography-section summary {
+      cursor: pointer;
+      list-style: none;
+    }
+    
+    .bibliography-section summary::-webkit-details-marker {
+      display: none;
+    }
+    
+    .bibliography-header {
+      padding: 1.5rem 2rem;
+      background: linear-gradient(135deg, var(--panel) 0%, #f1f5f9 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .bibliography-inner {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .bibliography-icon {
+      font-size: 1.5rem;
+    }
+    
+    .bibliography-text {
+      flex: 1;
+    }
+    
+    .bibliography-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #1a202c;
+      margin: 0;
+    }
+    
+    .bibliography-subtitle {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0.25rem 0 0 0;
+    }
+    
+    .expand-indicator {
+      transition: transform 0.3s ease;
+    }
+    
+    .bibliography-section[open] .expand-indicator {
+      transform: rotate(180deg);
+    }
+    
+    .bibliography-content {
+      padding: 2rem;
+    }
+    
+    .source-category {
+      margin-bottom: 2rem;
+    }
+    
+    .source-category:last-child {
+      margin-bottom: 0;
+    }
+    
+    .source-category h4 {
+      color: var(--accent-green-dark);
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .source-entry {
+      margin-bottom: 1rem;
+      padding-left: 1rem;
+      border-left: 2px solid var(--border);
+    }
+    
+    .source-citation {
+      font-size: 0.95rem;
+      color: #374151;
+      margin-bottom: 0.5rem;
+    }
+    
+    .source-usage {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    
+    .usage-tag {
+      background: var(--bg-gray);
+      color: var(--muted);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    
+    .usage-note {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+    
+    .citation-note {
+      background: var(--bg-gray);
+      padding: 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 1.5rem;
     }
     
     /* Bottom Navigation */
@@ -498,16 +655,23 @@
         width: 100%;
         justify-content: center;
       }
+      
+      body.has-mobile-tabs {
+        padding-bottom: 70px;
+      }
     }
   </style>
 </head>
-<body>
+<body class="thematic-study">
   <a href="#main-content" class="skip-link">Skip to main content</a>
   
   <div class="reading-progress"></div>
   
   <!-- Navigation will be injected by nav-component.js -->
   <div id="nav-placeholder"></div>
+  
+  <!-- Quick Navigation Sidebar (Desktop) -->
+  <div class="quick-nav-sidebar" aria-label="Section navigation"></div>
   
   <header class="page-header">
     <div class="header-content">
@@ -524,7 +688,7 @@
     </div>
     
     <!-- Introduction -->
-    <section class="content-section">
+    <section class="content-section animate-on-scroll" id="introduction">
       <h2>Introduction</h2>
       <p>The phrase <strong>צֶלֶם אֱלֹהִים</strong> (tselem elohim) in Genesis 1–2 did not emerge in a cultural vacuum. Throughout the Ancient Near East, "image" language was loaded with meaning tied to <strong>kingship, idolatry, and temples</strong>.</p>
       
@@ -536,8 +700,254 @@
       </div>
     </section>
     
-    <!-- Rest of content continues exactly as before... -->
-    <!-- [Content preserved from original file] -->
+    <!-- Mesopotamian Background -->
+    <section class="content-section animate-on-scroll" id="mesopotamia">
+      <h2>Mesopotamian Background</h2>
+      
+      <p>In Mesopotamian thought, the phrase "image of god" was exclusively applied to two contexts: <strong>kings</strong> and <strong>cult statues</strong>.</p>
+      
+      <h3>Royal Ideology</h3>
+      <p>Mesopotamian kings bore titles like:</p>
+      <ul>
+        <li><strong>ṣalam ili</strong> — "image of the god"</li>
+        <li><strong>ṣalam Marduk</strong> — "image of Marduk" (Babylonian chief god)</li>
+        <li><strong>ṣalam Šamaš</strong> — "image of Shamash" (sun god)</li>
+      </ul>
+      
+      <p>These titles legitimized royal authority. The king was the god's representative on earth, authorized to rule on the deity's behalf. This was <strong>strictly hierarchical</strong> — ordinary people were not images of the gods but servants of the king.</p>
+      
+      <h3>Cult Statue Theology</h3>
+      <p>Temple statues were also called "images" of the gods. Through elaborate rituals (the "mouth-washing" and "mouth-opening" ceremonies), these statues were believed to become the living presence of the deity:</p>
+      
+      <div class="artifact-box">
+        <h4>The Mis-pî Ritual</h4>
+        <p>This Mesopotamian ritual transformed a crafted statue into a "living" divine image. The statue's "mouth was opened" so it could eat, drink, and receive worship. The craftsmen who made it would ritually have their hands cut off (symbolically) to deny human origin.</p>
+        <div class="artifact-details">Source: Walker & Dick, "The Induction of the Cult Image in Ancient Mesopotamia"</div>
+      </div>
+      
+      <p>Genesis subverts both concepts: humans (not kings alone) are the image, and they are <strong>living images</strong> — no statue needed.</p>
+    </section>
+    
+    <!-- Egyptian Background -->
+    <section class="content-section animate-on-scroll" id="egypt">
+      <h2>Egyptian Background</h2>
+      
+      <p>Egyptian royal ideology similarly reserved "image of god" language for Pharaoh:</p>
+      
+      <ul>
+        <li>Pharaoh was <strong>tut</strong> (image) of the gods, particularly Re and Horus</li>
+        <li>The Instruction of Merikare declares: "Humans are the cattle of god... They are his images who came from his body"</li>
+        <li>Yet the functional authority to rule as god's representative was Pharaoh's alone</li>
+      </ul>
+      
+      <div class="hierarchy-diagram">
+        <div class="hierarchy-level divine">GODS (Ra, Horus, etc.)</div>
+        <div style="text-align: center; color: var(--muted);">↓</div>
+        <div class="hierarchy-level royal">PHARAOH (Living Image)</div>
+        <div style="text-align: center; color: var(--muted);">↓</div>
+        <div class="hierarchy-level common">Common People (Servants)</div>
+      </div>
+      
+      <p>Egypt comes closest to Genesis in the Merikare text's claim that humans are "images" from the god's body. But the <strong>functional authority</strong> to rule remained with Pharaoh. Genesis democratizes what Egypt reserved for royalty.</p>
+      
+      <h3>Temple and Image</h3>
+      <p>Egyptian temples housed divine statues that were the gods' earthly presence. These were clothed, fed, and served daily by priests. Genesis presents a radical alternative: God doesn't dwell in a statue but <strong>walks with His images</strong> in the garden (Gen 3:8).</p>
+    </section>
+    
+    <!-- Canaanite Background -->
+    <section class="content-section animate-on-scroll" id="canaan">
+      <h2>Canaanite Context</h2>
+      
+      <p>Israel's immediate neighbors also maintained idol-centric worship:</p>
+      
+      <ul>
+        <li>Baal, Asherah, and other deities were represented by <strong>carved images</strong></li>
+        <li>These images functioned as localized divine presence</li>
+        <li>Kingship was tied to divine favor but less explicitly "image" language than Mesopotamia/Egypt</li>
+      </ul>
+      
+      <p>The Hebrew Bible consistently polemicizes against this idol theology:</p>
+      
+      <blockquote style="border-left: 4px solid var(--accent-green); padding-left: 1rem; margin: 1.5rem 0; font-style: italic; color: var(--text-gray);">
+        "They have mouths, but cannot speak, eyes, but cannot see... Those who make them will be like them, and so will all who trust in them." (Psalm 115:5, 8)
+      </blockquote>
+      
+      <p>The polemic isn't just against idolatry but against the <strong>entire system</strong> of localizing divine presence in objects. God's true images are human beings, and they are <strong>mobile, living, and breathing</strong>.</p>
+    </section>
+    
+    <!-- Genesis Transformation -->
+    <section class="transformation-box animate-on-scroll" id="genesis-transformation">
+      <h3>The Genesis Transformation</h3>
+      <p>Against this backdrop, Genesis makes three revolutionary moves:</p>
+      
+      <table class="comparison-table" style="margin-top: 1.5rem;">
+        <thead>
+          <tr>
+            <th>ANE Concept</th>
+            <th>Genesis Transformation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Kings alone</strong> are images of the gods</td>
+            <td><strong>All humans</strong> are images of God</td>
+          </tr>
+          <tr>
+            <td>Divine images are <strong>carved statues</strong></td>
+            <td>Divine images are <strong>living humans</strong></td>
+          </tr>
+          <tr>
+            <td>Images <strong>localize</strong> divine presence in temples</td>
+            <td>Images <strong>extend</strong> divine presence throughout creation</td>
+          </tr>
+          <tr>
+            <td>Image-bearing is <strong>hierarchical privilege</strong></td>
+            <td>Image-bearing is <strong>universal endowment</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Male</strong> rulers bear the image</td>
+            <td><strong>Male and female</strong> together bear the image</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <p style="margin-top: 1.5rem;">This isn't merely theological innovation — it's <strong>social revolution</strong>. Genesis grounds human dignity not in social status, political power, or biological traits, but in the creative act of God that endows every human with royal-priestly vocation.</p>
+    </section>
+    
+    <!-- Archaeological Evidence -->
+    <section class="content-section animate-on-scroll" id="archaeological-evidence">
+      <h2>Archaeological Evidence</h2>
+      
+      <div class="culture-grid">
+        <div class="culture-card animate-on-scroll">
+          <h4>Code of Hammurabi</h4>
+          <p>The famous law code portrays Hammurabi receiving authority from Shamash. The king is mediator between gods and people — a role Genesis assigns to all humanity.</p>
+        </div>
+        
+        <div class="culture-card animate-on-scroll">
+          <h4>Egyptian Boundary Stelae</h4>
+          <p>Royal images marked boundaries of Pharaoh's dominion. Genesis assigns humanity dominion over all the earth — no boundary markers needed.</p>
+        </div>
+        
+        <div class="culture-card animate-on-scroll">
+          <h4>Tell Fakhariyeh Inscription</h4>
+          <p>A bilingual inscription (Akkadian and Aramaic) using both ṣalmu and demûtu for a royal statue — the same pair Genesis uses for humanity.</p>
+        </div>
+        
+        <div class="culture-card animate-on-scroll">
+          <h4>Enuma Elish</h4>
+          <p>Babylon's creation myth presents humans made from divine blood to serve the gods as slaves. Genesis presents humans as royal children, not divine slaves.</p>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Synthesis -->
+    <section class="content-section animate-on-scroll" id="ane-synthesis">
+      <h2>Theological Synthesis</h2>
+      
+      <ol>
+        <li><strong>Democratization of Royalty</strong> — What ANE cultures reserved for kings, Genesis extends to every human. All people share in royal dignity and vocation.</li>
+        
+        <li><strong>Living vs. Carved Images</strong> — God doesn't need statues; He has living representatives who can move, speak, create, and relate.</li>
+        
+        <li><strong>Presence Throughout Creation</strong> — Rather than localizing God in temples, humans extend His presence everywhere they go.</li>
+        
+        <li><strong>Gender Inclusion</strong> — Genesis explicitly includes both male and female in image-bearing, countering male-only royal ideology.</li>
+        
+        <li><strong>Functional Vocation</strong> — The image isn't passive representation but active vocation: ruling, cultivating, filling, subduing.</li>
+      </ol>
+      
+      <div class="key-insight">
+        <h4>Revolutionary Implications</h4>
+        <p>Genesis uses the language of power (royal images, divine representation) to subvert systems of power. If every human is God's image, no human can claim exclusive divine authority over others. This levels hierarchies while elevating human dignity universally.</p>
+      </div>
+    </section>
+    
+    <!-- Conclusion -->
+    <section class="content-section animate-on-scroll" id="conclusion">
+      <h2>Conclusion</h2>
+      
+      <p>Understanding the Ancient Near Eastern background illuminates Genesis' radical claims. The biblical authors weren't inventing new vocabulary but <strong>subverting familiar concepts</strong>. They took the language of royal ideology and idol theology and transformed it into a declaration of universal human dignity.</p>
+      
+      <p>This transformation has echoed through history:</p>
+      <ul>
+        <li>No human being is merely a servant of the powerful</li>
+        <li>No carved image can represent the living God</li>
+        <li>Every person — regardless of status, gender, or ethnicity — bears the dignity of divine representation</li>
+        <li>Human authority is delegated from God, not seized from others</li>
+      </ul>
+      
+      <p>The revolutionary nature of Genesis' claim continues to challenge every system that creates hierarchies of human value. In a world still plagued by racism, sexism, and oppression, the ancient declaration remains urgent: <strong>every human is צֶלֶם אֱלֹהִים</strong>.</p>
+    </section>
+    
+    <!-- Bibliography Section -->
+    <details class="bibliography-section" id="bibliography">
+      <summary>
+        <div class="bibliography-header">
+          <div class="bibliography-inner">
+            <span class="bibliography-icon">📚</span>
+            <div class="bibliography-text">
+              <h3 class="bibliography-title">Bibliography & Sources</h3>
+              <p class="bibliography-subtitle">Academic references for ANE Background study</p>
+            </div>
+            <div class="expand-indicator">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </summary>
+      <div class="bibliography-content">
+        <div class="source-category">
+          <h4>Ancient Near Eastern Sources</h4>
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Pritchard, James B., ed.</strong> <em>Ancient Near Eastern Texts Relating to the Old Testament.</em> 3rd ed. Princeton: Princeton University Press, 1969.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">All ANE Sections</span>
+              <span class="usage-note">Primary text collection</span>
+            </div>
+          </div>
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Walker, Christopher and Michael Dick.</strong> <em>The Induction of the Cult Image in Ancient Mesopotamia.</em> Helsinki: Neo-Assyrian Text Corpus Project, 2001.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Mesopotamia</span>
+              <span class="usage-tag">Cult Statues</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="source-category">
+          <h4>Theological Studies</h4>
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Walton, John H.</strong> <em>Ancient Near Eastern Thought and the Old Testament.</em> Grand Rapids: Baker Academic, 2006.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">All Sections</span>
+              <span class="usage-tag">Methodology</span>
+            </div>
+          </div>
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Middleton, J. Richard.</strong> <em>The Liberating Image: The Imago Dei in Genesis 1.</em> Grand Rapids: Brazos Press, 2005.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Transformation</span>
+              <span class="usage-tag">Democratization</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="citation-note">
+          <p><strong>Note:</strong> This bibliography focuses on ANE sources. See the main study hub for comprehensive bibliography.</p>
+        </div>
+      </div>
+    </details>
     
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
@@ -550,7 +960,6 @@
   
   <!-- v5.8.1 Enhanced JavaScript -->
   <script type="module">
-    // Import modular navigation component
     import NavigationComponent from '/assets/js/nav-component.js';
     const navigation = new NavigationComponent({
       currentPage: 'studies/thematic/image-of-god/ane-background',
@@ -558,31 +967,14 @@
     });
   </script>
   
+  <!-- Character/Study Page Script with Dynamic Mobile Tabs -->
+  <script src="/assets/js/character-page-v5-8.js" defer></script>
+  
   <script>
-    // Reading progress
-    window.addEventListener('scroll', () => {
-      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      const progressBar = document.querySelector('.reading-progress');
-      if (progressBar) {
-        progressBar.style.width = scrolled + '%';
-      }
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('ANE Background - v5.8.1 Enhanced initialized');
+      console.log('Mobile Tabs: Auto-generated based on present sections');
     });
-
-    // Back to top visibility
-    window.addEventListener('scroll', () => {
-      const backToTop = document.querySelector('.back-to-top');
-      if (window.scrollY > 500) {
-        backToTop?.classList.add('visible');
-      } else {
-        backToTop?.classList.remove('visible');
-      }
-    });
-
-    // Initialize page
-    console.log("ANE Background - v5.8 Enhanced initialized");
-    console.log('Features: Enhanced metadata, mobile tabs support, modular navigation');
   </script>
 </body>
 </html>

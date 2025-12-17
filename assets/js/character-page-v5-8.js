@@ -3,7 +3,7 @@
  * Path: /assets/js/character-page-v5-8.js
  * Purpose: Enhanced page utilities with dynamic mobile section navigation
  * Version: 5.8.1 - Added Image of God thematic study sections
- * Created: 2024
+ * Created: 2025-10-01
  */
 
 (function() {
@@ -115,6 +115,33 @@
     { id: 'living-today', icon: '', label: 'Living Today', priority: 2 },
     { id: 'rpp-synthesis', icon: '', label: 'Synthesis', priority: 3 },
     { id: 'rpp-takeaway', icon: '', label: 'Takeaway', priority: 4 },
+
+    // ANE Background page
+    { id: 'mesopotamia', icon: '', label: 'Mesopotamia', priority: 1 },
+    { id: 'egypt', icon: '', label: 'Egypt', priority: 1 },
+    { id: 'canaan', icon: '', label: 'Canaan', priority: 2 },
+    { id: 'genesis-transformation', icon: '', label: 'Transform', priority: 1 },
+    { id: 'archaeological-evidence', icon: '', label: 'Evidence', priority: 3 },
+    { id: 'ane-synthesis', icon: '', label: 'Synthesis', priority: 2 },
+
+    // Literary Design page
+    { id: 'forming-filling', icon: '', label: 'Form/Fill', priority: 1 },
+    { id: 'chiasm-structure', icon: '', label: 'Chiasm', priority: 1 },
+    { id: 'poetic-structure', icon: '', label: 'Poetry', priority: 2 },
+    { id: 'genesis-2-symmetry', icon: '', label: 'Gen 2', priority: 2 },
+    { id: 'number-seven', icon: '', label: 'Sevens', priority: 2 },
+    { id: 'sabbath-climax', icon: '', label: 'Sabbath', priority: 1 },
+    { id: 'canonical-resonances', icon: '', label: 'Canon', priority: 3 },
+    { id: 'literary-implications', icon: '', label: 'Implications', priority: 3 },
+
+    // Male & Female page
+    { id: 'unity-in-difference', icon: '', label: 'Unity', priority: 1 },
+    { id: 'shared-commission', icon: '', label: 'Commission', priority: 1 },
+    { id: 'tough-texts', icon: '', label: 'Tough Texts', priority: 3 },
+    { id: 'distortions-fall', icon: '', label: 'Fall', priority: 2 },
+    { id: 'canonical-development', icon: '', label: 'Canon', priority: 2 },
+    { id: 'mf-synthesis', icon: '', label: 'Synthesis', priority: 2 },
+    { id: 'mf-implications', icon: '', label: 'Today', priority: 2 },
 
     // ============================================
     // HEBREW WORDPLAY PAGE SECTIONS (Ruth, etc.)
