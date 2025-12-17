@@ -2,7 +2,7 @@
  * Character Page v5.8 - Dynamic Mobile Tabs
  * Path: /assets/js/character-page-v5-8.js
  * Purpose: Enhanced page utilities with dynamic mobile section navigation
- * Version: 5.8.0 - COMPLETE FIXED VERSION
+ * Version: 5.8.1 - Added Image of God thematic study sections
  * Created: 2024
  */
 
@@ -79,52 +79,90 @@
     { id: 'intertext', icon: '', label: 'Intertext', priority: 4 },
 
     // ============================================
-// HEBREW WORDPLAY PAGE SECTIONS (Ruth, etc.)
-// ============================================
-{ id: 'quick-reference', icon: '', label: 'Quick Ref', priority: 1 },
-{ id: 'abraham-parallel', icon: '', label: 'Abraham', priority: 2 },
-{ id: 'key-words', icon: '', label: 'Keywords', priority: 2 },
-{ id: 'shuv', icon: '', label: 'Return', priority: 2 },
-{ id: 'hesed', icon: '', label: 'Hesed', priority: 1 },
-{ id: 'davaq', icon: '', label: 'Clinging', priority: 3 },
-{ id: 'wings', icon: '', label: 'Wings', priority: 3 },
-{ id: 'goel', icon: '', label: 'Redeemer', priority: 2 },
-{ id: 'names', icon: '', label: 'Names', priority: 3 },
-{ id: 'rest', icon: '', label: 'Rest', priority: 3 },
-{ id: 'artistry', icon: '', label: 'Artistry', priority: 4 },
-{ id: 'torah', icon: '', label: 'Torah Links', priority: 1 },
-{ id: 'genesis', icon: '', label: 'Genesis Echoes', priority: 2 },
-{ id: 'wisdom', icon: '', label: 'Wisdom', priority: 2 },
-{ id: 'threads', icon: '', label: 'Threads', priority: 3 },
-{ id: 'ot-intertext', icon: '', label: 'OT Intertext', priority: 3 },
-{ id: 'nt-intertext', icon: '', label: 'NT Intertext', priority: 3 },
-{ id: 'synthesis', icon: '', label: 'Synthesis', priority: 2 },
-{ id: 'redemption', icon: '', label: 'Redemption', priority: 1 },
-{ id: 'inclusion', icon: '', label: 'Inclusion', priority: 2 },
-{ id: 'fullness', icon: '', label: 'Fullness', priority: 2 },
-{ id: 'hiddenness', icon: '', label: 'Hiddenness', priority: 3 },
+    // IMAGE OF GOD THEMATIC STUDY SECTIONS
+    // ============================================
+    // Overview page
+    { id: 'models', icon: '', label: 'Models', priority: 2 },
+    { id: 'literary-function', icon: '', label: 'Literary', priority: 2 },
+    { id: 'ane-transformation', icon: '', label: 'ANE', priority: 3 },
+    { id: 'historical-reception', icon: '', label: 'History', priority: 3 },
+    { id: 'core-claims', icon: '', label: 'Core Claims', priority: 2 },
+    { id: 'why-matters', icon: '', label: 'Why It Matters', priority: 2 },
+    { id: 'bridge', icon: '', label: 'Navigation', priority: 4 },
+    { id: 'quick-ref', icon: '', label: 'Quick Ref', priority: 3 },
 
-// Ruth Study Kit Specific Sections
-{ id: 'introduction', icon: '', label: 'Intro', priority: 1 },
-{ id: 'session1', icon: '', label: 'Session 1', priority: 1 },
-{ id: 'session2', icon: '', label: 'Session 2', priority: 1 },
-{ id: 'session3', icon: '', label: 'Session 3', priority: 1 },
-{ id: 'session4', icon: '', label: 'Session 4', priority: 1 },
-{ id: 'assessment', icon: '', label: 'Assessment', priority: 2 },
-{ id: 'resources', icon: '', label: 'Resources', priority: 3 },
-{ id: 'further-study', icon: '', label: 'Study More', priority: 4 },
+    // NT Trajectory page
+    { id: 'christ-image', icon: '', label: 'Christ', priority: 1 },
+    { id: 'two-adams', icon: '', label: 'Two Adams', priority: 2 },
+    { id: 'believers-renewed', icon: '', label: 'Renewed', priority: 2 },
+    { id: 'new-humanity-vocation', icon: '', label: 'Vocation', priority: 2 },
+    { id: 'already-not-yet', icon: '', label: 'Already/Not Yet', priority: 3 },
+    { id: 'eschatology', icon: '', label: 'Eschatology', priority: 3 },
+    { id: 'nt-synthesis', icon: '', label: 'Synthesis', priority: 3 },
+    { id: 'nt-implications', icon: '', label: 'Today', priority: 2 },
+    { id: 'nt-conclusion', icon: '', label: 'Conclusion', priority: 4 },
 
-// ============================================
-// HOSEA THEOLOGY PAGE SECTIONS (Covenant, Sin, etc.)
-// ============================================
-{ id: 'foundation', icon: '', label: 'Foundation', priority: 1 },
-{ id: 'knowledge', icon: '', label: 'Knowledge', priority: 1 },
-{ id: 'relationship', icon: '', label: 'Relationship', priority: 2 },
-{ id: 'dynamics', icon: '', label: 'Dynamics', priority: 2 },
-{ id: 'breakdown', icon: '', label: 'Breakdown', priority: 2 },
-{ id: 'failure', icon: '', label: 'Failure', priority: 3 },
-{ id: 'lawsuit', icon: '', label: 'Lawsuit', priority: 2 },
-{ id: 'renewal', icon: '', label: 'Renewal', priority: 1 },
+    // Royal-Priest-Prophet page
+    { id: 'royal', icon: '', label: 'Royal', priority: 1 },
+    { id: 'priestly', icon: '', label: 'Priestly', priority: 1 },
+    { id: 'prophetic', icon: '', label: 'Prophetic', priority: 1 },
+    { id: 'genesis-blueprint', icon: '', label: 'Genesis', priority: 2 },
+    { id: 'eden-template', icon: '', label: 'Eden Template', priority: 3 },
+    { id: 'vocation-integration', icon: '', label: 'Integration', priority: 2 },
+    { id: 'israel-offices', icon: '', label: 'Israel', priority: 3 },
+    { id: 'christ-fulfillment', icon: '', label: 'Fulfillment', priority: 2 },
+    { id: 'believers-participation', icon: '', label: 'Participation', priority: 2 },
+    { id: 'living-today', icon: '', label: 'Living Today', priority: 2 },
+    { id: 'rpp-synthesis', icon: '', label: 'Synthesis', priority: 3 },
+    { id: 'rpp-takeaway', icon: '', label: 'Takeaway', priority: 4 },
+
+    // ============================================
+    // HEBREW WORDPLAY PAGE SECTIONS (Ruth, etc.)
+    // ============================================
+    { id: 'quick-reference', icon: '', label: 'Quick Ref', priority: 1 },
+    { id: 'abraham-parallel', icon: '', label: 'Abraham', priority: 2 },
+    { id: 'key-words', icon: '', label: 'Keywords', priority: 2 },
+    { id: 'shuv', icon: '', label: 'Return', priority: 2 },
+    { id: 'hesed', icon: '', label: 'Hesed', priority: 1 },
+    { id: 'davaq', icon: '', label: 'Clinging', priority: 3 },
+    { id: 'wings', icon: '', label: 'Wings', priority: 3 },
+    { id: 'goel', icon: '', label: 'Redeemer', priority: 2 },
+    { id: 'names', icon: '', label: 'Names', priority: 3 },
+    { id: 'rest', icon: '', label: 'Rest', priority: 3 },
+    { id: 'artistry', icon: '', label: 'Artistry', priority: 4 },
+    { id: 'torah', icon: '', label: 'Torah Links', priority: 1 },
+    { id: 'genesis', icon: '', label: 'Genesis Echoes', priority: 2 },
+    { id: 'wisdom', icon: '', label: 'Wisdom', priority: 2 },
+    { id: 'threads', icon: '', label: 'Threads', priority: 3 },
+    { id: 'ot-intertext', icon: '', label: 'OT Intertext', priority: 3 },
+    { id: 'nt-intertext', icon: '', label: 'NT Intertext', priority: 3 },
+    { id: 'synthesis', icon: '', label: 'Synthesis', priority: 2 },
+    { id: 'redemption', icon: '', label: 'Redemption', priority: 1 },
+    { id: 'inclusion', icon: '', label: 'Inclusion', priority: 2 },
+    { id: 'fullness', icon: '', label: 'Fullness', priority: 2 },
+    { id: 'hiddenness', icon: '', label: 'Hiddenness', priority: 3 },
+
+    // Ruth Study Kit Specific Sections
+    { id: 'introduction', icon: '', label: 'Intro', priority: 1 },
+    { id: 'session1', icon: '', label: 'Session 1', priority: 1 },
+    { id: 'session2', icon: '', label: 'Session 2', priority: 1 },
+    { id: 'session3', icon: '', label: 'Session 3', priority: 1 },
+    { id: 'session4', icon: '', label: 'Session 4', priority: 1 },
+    { id: 'assessment', icon: '', label: 'Assessment', priority: 2 },
+    { id: 'resources', icon: '', label: 'Resources', priority: 3 },
+    { id: 'further-study', icon: '', label: 'Study More', priority: 4 },
+
+    // ============================================
+    // HOSEA THEOLOGY PAGE SECTIONS (Covenant, Sin, etc.)
+    // ============================================
+    { id: 'foundation', icon: '', label: 'Foundation', priority: 1 },
+    { id: 'knowledge', icon: '', label: 'Knowledge', priority: 1 },
+    { id: 'relationship', icon: '', label: 'Relationship', priority: 2 },
+    { id: 'dynamics', icon: '', label: 'Dynamics', priority: 2 },
+    { id: 'breakdown', icon: '', label: 'Breakdown', priority: 2 },
+    { id: 'failure', icon: '', label: 'Failure', priority: 3 },
+    { id: 'lawsuit', icon: '', label: 'Lawsuit', priority: 2 },
+    { id: 'renewal', icon: '', label: 'Renewal', priority: 1 },
   ];
 
   // ============================================
@@ -211,6 +249,20 @@ init() {
         '.devices-card[id]',
         '.legal-card[id]',
         '.structure-card[id]',
+        '.content-section[id]',
+        '.models-grid[id]',
+        '.ethics-box[id]',
+        '.transformation-box[id]',
+        '.christ-focus[id]',
+        '.two-adams-comparison[id]',
+        '.renewal-process[id]',
+        '.already-not-yet[id]',
+        '.eschatological-vision[id]',
+        '.vocation-cards[id]',
+        '.integration-box[id]',
+        '.christ-box[id]',
+        '.eden-blueprint[id]',
+        '.application-box[id]',
         'section[id]',
         'div[id]'
       ];
@@ -763,7 +815,7 @@ observeSections() {
     if (!quickNavSidebar || window.innerWidth <= 1400) return;
     
     // Find all sections
-    const sections = $$('.theology-card[id], .chiasm-card[id], .hook-section[id], .transformation-ribbon[id], [id^="section-"]');
+    const sections = $$('.theology-card[id], .chiasm-card[id], .hook-section[id], .transformation-ribbon[id], .content-section[id], .models-grid[id], .ethics-box[id], .transformation-box[id], .christ-focus[id], .two-adams-comparison[id], .renewal-process[id], .already-not-yet[id], .eschatological-vision[id], .vocation-cards[id], .integration-box[id], .christ-box[id], .eden-blueprint[id], .application-box[id], [id^="section-"]');
     
     // Clear existing items
     quickNavSidebar.innerHTML = '';
@@ -882,7 +934,7 @@ observeSections() {
   // ============================================
   
   document.addEventListener('DOMContentLoaded', function() {
-    console.log('Character Page v5.8 initialized - Complete Fixed Version');
+    console.log('Character Page v5.8.1 initialized - With Image of God sections');
     
     // Initialize mobile tabs
     window.mobileTabs = new MobileSectionTabs();
