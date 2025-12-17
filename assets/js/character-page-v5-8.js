@@ -698,7 +698,7 @@ observeSections() {
     }
     
     scrollTimeout = window.requestAnimationFrame(() => {
-      const nav = $('nav');
+      const nav = document.querySelector('#main-nav');
       const backToTop = $('.back-to-top');
       
       if (window.scrollY > 100) {
