@@ -8,7 +8,7 @@
   
   <!-- Enhanced v5.8.1 Metadata -->
   <meta name="study-type" content="thematic-study">
-  <meta name="template-version" content="5.8-enhanced">
+  <meta name="template-version" content="5.8.1-enhanced">
   <meta name="page-category" content="thematic-studies">
   <meta name="nav-hub" content="studies">
   <meta name="nav-section" content="image-of-god">
@@ -113,98 +113,6 @@
       width: 0%;
     }
     
-    /* Navigation */
-    nav {
-      width: 100%;
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(10px);
-      z-index: 1000;
-      padding: 1rem 2rem;
-      box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-    }
-
-    nav.scrolled {
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    }
-
-    .nav-container {
-      max-width: 1400px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      text-decoration: none;
-      color: var(--primary-dark);
-      transition: transform 0.3s ease;
-    }
-
-    .logo:hover {
-      transform: scale(1.05);
-    }
-
-    .logo-icon {
-      width: 40px;
-      height: 40px;
-    }
-
-    .logo-text {
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: var(--text-gray);
-      font-weight: 500;
-      transition: all 0.3s ease;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      min-height: 44px;
-      display: flex;
-      align-items: center;
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active {
-      color: var(--accent-green-dark);
-      background-color: rgba(16, 185, 129, 0.1);
-    }
-
-    .mobile-menu-toggle {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0.5rem;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .mobile-menu-toggle span {
-      display: block;
-      width: 25px;
-      height: 3px;
-      background: var(--primary-dark);
-      transition: all 0.3s ease;
-      border-radius: 2px;
-    }
-    
     /* Page Header */
     .page-header {
       background: linear-gradient(135deg, #047857 0%, #10b981 50%, #34d399 100%);
@@ -271,13 +179,21 @@
       color: var(--accent-green);
     }
     
-    /* Content Sections */
+    /* Content Sections - with animation support */
     .content-section {
       background: white;
       border-radius: 16px;
       padding: 2rem;
       margin-bottom: 2rem;
       box-shadow: 0 4px 6px -1px var(--shadow), 0 2px 4px -1px var(--shadow);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    .content-section.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
     
     h2 {
@@ -330,6 +246,14 @@
       border-radius: 16px;
       padding: 2rem;
       margin: 2rem 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    .models-grid.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
     
     .models-grid h3 {
@@ -383,6 +307,14 @@
       border-radius: 16px;
       padding: 2rem;
       margin: 2rem 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    .ethics-box.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
     
     .ethics-box h4 {
@@ -441,6 +373,14 @@
       border-radius: 16px;
       padding: 2rem;
       margin: 2rem 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    .transformation-box.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
     
     .transformation-box h3 {
@@ -626,31 +566,186 @@
       box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
     }
     
+    /* Quick Nav Sidebar (Desktop) */
+    .quick-nav-sidebar {
+      position: fixed;
+      right: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 100;
+      display: none;
+    }
+    
+    @media (min-width: 1400px) {
+      .quick-nav-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+    
+    .quick-nav-item {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--border);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .quick-nav-item:hover,
+    .quick-nav-item.active {
+      background: var(--accent-green);
+      transform: scale(1.3);
+    }
+    
+    .quick-nav-item::before {
+      content: attr(data-label);
+      position: absolute;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--primary-dark);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+    }
+    
+    .quick-nav-item:hover::before {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    /* Bibliography Section */
+    .bibliography-section {
+      background: white;
+      border-radius: 16px;
+      margin-top: 2rem;
+      box-shadow: 0 4px 6px -1px var(--shadow);
+      overflow: hidden;
+    }
+    
+    .bibliography-section summary {
+      cursor: pointer;
+      list-style: none;
+    }
+    
+    .bibliography-section summary::-webkit-details-marker {
+      display: none;
+    }
+    
+    .bibliography-header {
+      padding: 1.5rem 2rem;
+      background: linear-gradient(135deg, var(--panel) 0%, #f1f5f9 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .bibliography-inner {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .bibliography-icon {
+      font-size: 1.5rem;
+    }
+    
+    .bibliography-text {
+      flex: 1;
+    }
+    
+    .bibliography-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #1a202c;
+      margin: 0;
+    }
+    
+    .bibliography-subtitle {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0.25rem 0 0 0;
+    }
+    
+    .expand-indicator {
+      transition: transform 0.3s ease;
+    }
+    
+    .bibliography-section[open] .expand-indicator {
+      transform: rotate(180deg);
+    }
+    
+    .bibliography-content {
+      padding: 2rem;
+    }
+    
+    .source-category {
+      margin-bottom: 2rem;
+    }
+    
+    .source-category:last-child {
+      margin-bottom: 0;
+    }
+    
+    .source-category h4 {
+      color: var(--accent-green-dark);
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .source-entry {
+      margin-bottom: 1rem;
+      padding-left: 1rem;
+      border-left: 2px solid var(--border);
+    }
+    
+    .source-citation {
+      font-size: 0.95rem;
+      color: #374151;
+      margin-bottom: 0.5rem;
+    }
+    
+    .source-usage {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    
+    .usage-tag {
+      background: var(--bg-gray);
+      color: var(--muted);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    
+    .usage-note {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+    
+    .citation-note {
+      background: var(--bg-gray);
+      padding: 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 1.5rem;
+    }
+    
     /* Responsive */
     @media (max-width: 768px) {
-      .nav-links {
-        position: fixed;
-        top: 65px;
-        right: -100%;
-        width: 80%;
-        max-width: 300px;
-        height: 100vh;
-        background: white;
-        flex-direction: column;
-        padding: 2rem;
-        gap: 1rem;
-        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-        transition: right 0.3s ease;
-      }
-
-      .nav-links.active {
-        right: 0;
-      }
-
-      .mobile-menu-toggle {
-        display: flex;
-      }
-      
       .page-title {
         font-size: 2rem;
       }
@@ -681,10 +776,15 @@
       .models-table td {
         padding: 0.75rem;
       }
+      
+      /* Mobile tabs adjustment */
+      body.has-mobile-tabs {
+        padding-bottom: 70px;
+      }
     }
   </style>
 </head>
-<body>
+<body class="thematic-study">
   <!-- Accessibility Skip Link -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
   
@@ -693,6 +793,9 @@
   
   <!-- Navigation will be injected by nav-component.js -->
   <div id="nav-placeholder"></div>
+  
+  <!-- Quick Navigation Sidebar (Desktop) -->
+  <div class="quick-nav-sidebar" aria-label="Section navigation"></div>
   
   <!-- Page Header -->
   <header class="page-header">
@@ -710,7 +813,7 @@
     </div>
     
     <!-- Introduction Section -->
-    <section class="content-section">
+    <section class="content-section animate-on-scroll" id="introduction">
       <h2>Introduction</h2>
       <p>Few Hebrew phrases have had as much influence as "<strong>צֶלֶם אֱלֹהִים</strong>" (tselem elohim) — "the Image of God." This ancient concept has shaped theology, ethics, and culture across millennia — grounding human dignity, sparking debates about reason and the soul, and providing a foundation for justice and human rights.</p>
       
@@ -722,7 +825,7 @@
     </section>
     
     <!-- Models of the Image Grid -->
-    <section class="models-grid">
+    <section class="models-grid animate-on-scroll" id="models">
       <h3>Models of the Image of God</h3>
       <table class="models-table">
         <thead>
@@ -766,7 +869,7 @@
     </section>
     
     <!-- Literary Function Section -->
-    <section class="content-section">
+    <section class="content-section animate-on-scroll" id="literary-function">
       <h2>Literary Function in Genesis</h2>
       <p>Genesis 1 unfolds in a carefully structured pattern of forming and filling. Each day builds toward the climax: the creation of humanity.</p>
       
@@ -783,11 +886,11 @@
     </section>
     
     <!-- ANE Context Section with Radical Transformation -->
-    <section class="content-section">
+    <section class="content-section animate-on-scroll" id="ane-transformation">
       <h2>Ancient Near Eastern Context</h2>
       <p>In the cultures surrounding Israel, the phrase "image of god" was reserved for <strong>kings</strong> or for <strong>idols</strong> placed in temples. Kings bore the image of the gods as their earthly representatives, and statues localized divine presence.</p>
       
-      <div class="transformation-box">
+      <div class="transformation-box animate-on-scroll">
         <h3>Radical Transformation</h3>
         <p>Against this background, Genesis presents three revolutionary shifts:</p>
         <ul class="transformation-bullets">
@@ -800,7 +903,7 @@
     </section>
     
     <!-- Genesis 9:6 Ethics & Justice -->
-    <section class="ethics-box">
+    <section class="ethics-box animate-on-scroll" id="ethics">
       <h4>Genesis 9:6 — Ethics & Justice Implication</h4>
       <div class="ethics-verse">
         "Whoever sheds the blood of man, by man shall his blood be shed; for in the image of God has God made mankind." (Genesis 9:6)
@@ -811,7 +914,7 @@
     </section>
     
     <!-- Historical Reception Section -->
-    <section class="content-section">
+    <section class="content-section animate-on-scroll" id="historical-reception">
       <h2>Historical Reception</h2>
       
       <h3>Jewish Tradition</h3>
@@ -837,7 +940,7 @@
     </section>
     
     <!-- Core Claims Section -->
-    <section class="content-section">
+    <section class="content-section animate-on-scroll" id="core-claims">
       <h2>Core Claims</h2>
       
       <ol>
@@ -869,7 +972,7 @@
     </section>
     
     <!-- Why It Matters Section -->
-    <section class="content-section">
+    <section class="content-section animate-on-scroll" id="why-matters">
       <h2>Why It Matters Today</h2>
       
       <h3>1. Human Dignity & Justice</h3>
@@ -892,7 +995,7 @@
     </section>
     
     <!-- Bridge to Study Section -->
-    <section class="content-section">
+    <section class="content-section animate-on-scroll" id="bridge">
       <h2>Bridge to the Study</h2>
       <p>This overview frames the study, but each aspect requires deeper exploration:</p>
       
@@ -933,7 +1036,7 @@
     </section>
     
     <!-- Takeaway Section -->
-    <section class="content-section">
+    <section class="content-section animate-on-scroll" id="takeaway">
       <h2>Takeaway</h2>
       <p>The Image of God is <strong>identity and mission</strong>: we are God's royal-priestly partners, called to reflect His character and extend His blessing, until the whole creation is renewed in Christ.</p>
       
@@ -943,7 +1046,7 @@
     </section>
     
     <!-- Quick Reference -->
-    <div class="quick-reference">
+    <div class="quick-reference" id="quick-ref">
       <h3>Quick Reference</h3>
       
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
@@ -992,6 +1095,100 @@
       </div>
     </div>
     
+    <!-- Bibliography Section -->
+    <details class="bibliography-section" id="bibliography">
+      <summary>
+        <div class="bibliography-header">
+          <div class="bibliography-inner">
+            <span class="bibliography-icon">📚</span>
+            <div class="bibliography-text">
+              <h3 class="bibliography-title">Bibliography & Sources</h3>
+              <p class="bibliography-subtitle">Academic references for Image of God study</p>
+            </div>
+            <div class="expand-indicator">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </summary>
+      <div class="bibliography-content">
+        <div class="source-category">
+          <h4>Primary Sources</h4>
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Biblia Hebraica Stuttgartensia.</strong> Stuttgart: Deutsche Bibelgesellschaft, 1997.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">All Sections</span>
+              <span class="usage-note">Hebrew text for Genesis 1-2, 9:6</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="source-category">
+          <h4>Major Commentaries</h4>
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Wenham, Gordon J.</strong> <em>Genesis 1-15.</em> Word Biblical Commentary. Waco: Word Books, 1987.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Exegesis</span>
+              <span class="usage-tag">Literary Analysis</span>
+            </div>
+          </div>
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Walton, John H.</strong> <em>Genesis.</em> NIV Application Commentary. Grand Rapids: Zondervan, 2001.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">ANE Context</span>
+              <span class="usage-tag">Application</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="source-category">
+          <h4>Theological Studies</h4>
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Middleton, J. Richard.</strong> <em>The Liberating Image: The Imago Dei in Genesis 1.</em> Grand Rapids: Brazos Press, 2005.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Core Claims</span>
+              <span class="usage-tag">ANE Background</span>
+            </div>
+          </div>
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Beale, G.K.</strong> <em>The Temple and the Church's Mission.</em> New Studies in Biblical Theology 17. Downers Grove: IVP Academic, 2004.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Eden Temple</span>
+              <span class="usage-tag">Vocation</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="source-category">
+          <h4>Ancient Near Eastern Context</h4>
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Walton, John H.</strong> <em>Ancient Near Eastern Thought and the Old Testament.</em> Grand Rapids: Baker Academic, 2006.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">ANE Background</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="citation-note">
+          <p><strong>Note:</strong> This bibliography focuses on sources for the Image of God overview. Individual pages in this study contain additional specialized sources.</p>
+        </div>
+      </div>
+    </details>
+    
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
       <a href="/studies/thematic/image-of-god/image-of-god.html" class="nav-button prev">Study Hub</a>
@@ -1012,81 +1209,15 @@
     });
   </script>
   
+  <!-- Character/Study Page Script with Dynamic Mobile Tabs -->
+  <script src="/assets/js/character-page-v5-8.js" defer></script>
+  
   <script>
-    // Mobile menu toggle
-    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-    const navLinks = document.getElementById('navLinks');
-
-    mobileMenuToggle?.addEventListener('click', () => {
-      mobileMenuToggle.classList.toggle('active');
-      navLinks.classList.toggle('active');
-      const isExpanded = mobileMenuToggle.classList.contains('active');
-      mobileMenuToggle.setAttribute('aria-expanded', isExpanded);
+    // Page Initialization
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Image of God Overview - v5.8.1 Enhanced initialized');
+      console.log('Mobile Tabs: Auto-generated based on present sections');
     });
-
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('#main-nav')) {
-        mobileMenuToggle?.classList.remove('active');
-        navLinks?.classList.remove('active');
-        mobileMenuToggle?.setAttribute('aria-expanded', 'false');
-      }
-    });
-    
-    // Reading progress indicator
-    window.addEventListener('scroll', () => {
-      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      const progressBar = document.querySelector('.reading-progress');
-      if (progressBar) {
-        progressBar.style.width = scrolled + '%';
-      }
-    });
-
-    // Scroll effects
-    let scrollTimeout;
-    window.addEventListener('scroll', () => {
-      if (scrollTimeout) {
-        window.cancelAnimationFrame(scrollTimeout);
-      }
-      
-      scrollTimeout = window.requestAnimationFrame(() => {
-        const nav = document.querySelector('nav');
-        const backToTop = document.querySelector('.back-to-top');
-        
-        if (window.scrollY > 100) {
-          nav?.classList.add('scrolled');
-        } else {
-          nav?.classList.remove('scrolled');
-        }
-        
-        if (window.scrollY > 500) {
-          backToTop?.classList.add('visible');
-        } else {
-          backToTop?.classList.remove('visible');
-        }
-      });
-    });
-    
-    // Smooth scrolling for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - 100;
-          window.scrollTo({
-            top: targetPosition,
-            behavior: 'smooth'
-          });
-        }
-      });
-    });
-
-    // Initialize page
-    console.log("Overview - v5.8 Enhanced initialized");
-    console.log('Features: Enhanced metadata, mobile tabs support, modular navigation');
   </script>
 </body>
 </html>

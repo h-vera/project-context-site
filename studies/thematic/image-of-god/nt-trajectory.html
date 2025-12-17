@@ -8,7 +8,7 @@
   
   <!-- Enhanced v5.8.1 Metadata -->
   <meta name="study-type" content="thematic-study">
-  <meta name="template-version" content="5.8-enhanced">
+  <meta name="template-version" content="5.8.1-enhanced">
   <meta name="page-category" content="thematic-studies">
   <meta name="nav-hub" content="studies">
   <meta name="nav-section" content="image-of-god">
@@ -105,68 +105,6 @@
       width: 0%;
     }
     
-    /* Navigation */
-    nav {
-      width: 100%;
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(10px);
-      z-index: 1000;
-      padding: 1rem 2rem;
-      box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
-    }
-
-    .nav-container {
-      max-width: 1400px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      text-decoration: none;
-      color: var(--primary-dark);
-      transition: transform 0.3s ease;
-    }
-
-    .logo:hover {
-      transform: scale(1.05);
-    }
-
-    .logo-text {
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: var(--text-gray);
-      font-weight: 500;
-      transition: all 0.3s ease;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active {
-      color: var(--accent-green-dark);
-      background-color: rgba(16, 185, 129, 0.1);
-    }
-    
     /* Page Header */
     .page-header {
       background: linear-gradient(135deg, #047857 0%, #10b981 50%, #34d399 100%);
@@ -239,6 +177,14 @@
       padding: 2rem;
       margin-bottom: 2rem;
       box-shadow: 0 4px 6px -1px var(--shadow), 0 2px 4px -1px var(--shadow);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    .content-section.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
     
     h2 {
@@ -272,6 +218,14 @@
       padding: 2rem;
       margin: 2rem 0;
       text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    .christ-focus.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
     
     .christ-focus h3 {
@@ -295,6 +249,14 @@
       border-radius: 16px;
       padding: 2rem;
       margin: 2rem 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    .two-adams-comparison.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
     
     .two-adams-comparison h3 {
@@ -411,6 +373,14 @@
       border-radius: 12px;
       padding: 2rem;
       margin: 2rem 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    .renewal-process.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
     
     .renewal-process h3 {
@@ -421,6 +391,7 @@
     .renewal-steps {
       list-style: none;
       padding: 0;
+      counter-reset: step-counter;
     }
     
     .renewal-steps li {
@@ -446,10 +417,6 @@
       justify-content: center;
       font-weight: bold;
       font-size: 0.9rem;
-    }
-    
-    .renewal-steps {
-      counter-reset: step-counter;
     }
     
     /* Key Insight Box */
@@ -487,6 +454,11 @@
       position: relative;
       padding-left: 4rem;
       margin-bottom: 2rem;
+      transition: transform 0.3s ease;
+    }
+    
+    .timeline-item:hover {
+      transform: translateX(10px);
     }
     
     .timeline-marker {
@@ -521,6 +493,14 @@
       border-radius: 12px;
       padding: 2rem;
       margin: 2rem 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    .eschatological-vision.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
     
     .eschatological-vision h3 {
@@ -535,6 +515,14 @@
       border-radius: 12px;
       padding: 2rem;
       margin: 2rem 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    .already-not-yet.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
     
     .already-not-yet h3 {
@@ -632,6 +620,184 @@
       visibility: visible;
     }
     
+    /* Quick Nav Sidebar (Desktop) */
+    .quick-nav-sidebar {
+      position: fixed;
+      right: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 100;
+      display: none;
+    }
+    
+    @media (min-width: 1400px) {
+      .quick-nav-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+    
+    .quick-nav-item {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--border);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .quick-nav-item:hover,
+    .quick-nav-item.active {
+      background: var(--accent-green);
+      transform: scale(1.3);
+    }
+    
+    .quick-nav-item::before {
+      content: attr(data-label);
+      position: absolute;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--primary-dark);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+    }
+    
+    .quick-nav-item:hover::before {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    /* Bibliography Section */
+    .bibliography-section {
+      background: white;
+      border-radius: 16px;
+      margin-top: 2rem;
+      box-shadow: 0 4px 6px -1px var(--shadow);
+      overflow: hidden;
+    }
+    
+    .bibliography-section summary {
+      cursor: pointer;
+      list-style: none;
+    }
+    
+    .bibliography-section summary::-webkit-details-marker {
+      display: none;
+    }
+    
+    .bibliography-header {
+      padding: 1.5rem 2rem;
+      background: linear-gradient(135deg, var(--panel) 0%, #f1f5f9 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .bibliography-inner {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .bibliography-icon {
+      font-size: 1.5rem;
+    }
+    
+    .bibliography-text {
+      flex: 1;
+    }
+    
+    .bibliography-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #1a202c;
+      margin: 0;
+    }
+    
+    .bibliography-subtitle {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0.25rem 0 0 0;
+    }
+    
+    .expand-indicator {
+      transition: transform 0.3s ease;
+    }
+    
+    .bibliography-section[open] .expand-indicator {
+      transform: rotate(180deg);
+    }
+    
+    .bibliography-content {
+      padding: 2rem;
+    }
+    
+    .source-category {
+      margin-bottom: 2rem;
+    }
+    
+    .source-category:last-child {
+      margin-bottom: 0;
+    }
+    
+    .source-category h4 {
+      color: var(--accent-green-dark);
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .source-entry {
+      margin-bottom: 1rem;
+      padding-left: 1rem;
+      border-left: 2px solid var(--border);
+    }
+    
+    .source-citation {
+      font-size: 0.95rem;
+      color: #374151;
+      margin-bottom: 0.5rem;
+    }
+    
+    .source-usage {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    
+    .usage-tag {
+      background: var(--bg-gray);
+      color: var(--muted);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    
+    .usage-note {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+    
+    .citation-note {
+      background: var(--bg-gray);
+      padding: 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 1.5rem;
+    }
+    
     /* Mobile */
     @media (max-width: 768px) {
       .page-title {
@@ -681,16 +847,23 @@
       .adams-table td {
         padding: 0.75rem;
       }
+      
+      body.has-mobile-tabs {
+        padding-bottom: 70px;
+      }
     }
   </style>
 </head>
-<body>
+<body class="thematic-study">
   <a href="#main-content" class="skip-link">Skip to main content</a>
   
   <div class="reading-progress"></div>
   
   <!-- Navigation will be injected by nav-component.js -->
   <div id="nav-placeholder"></div>
+  
+  <!-- Quick Navigation Sidebar (Desktop) -->
+  <div class="quick-nav-sidebar" aria-label="Section navigation"></div>
   
   <header class="page-header">
     <div class="header-content">
@@ -707,7 +880,7 @@
     </div>
     
     <!-- Introduction -->
-    <section class="content-section">
+    <section class="content-section animate-on-scroll" id="introduction">
       <h2>Introduction</h2>
       <p>The New Testament transforms the Image of God theme by re-centering it around <strong>Christ</strong>. What was fractured in Genesis 3 finds restoration in Jesus, the true Image. Through Him, the church is re-created as a <strong>new humanity</strong> reflecting God's glory and extending His mission throughout creation.</p>
       
@@ -720,10 +893,10 @@
     </section>
     
     <!-- Christ as True Image -->
-    <section class="content-section">
+    <section class="content-section animate-on-scroll" id="christ-image">
       <h2>Christ as the True Image</h2>
       
-      <div class="christ-focus">
+      <div class="christ-focus animate-on-scroll">
         <h3>The Perfect Image Revealed</h3>
         <div class="verse">
           "He is the image (εἰκών / eikōn) of the invisible God, the firstborn over all creation."
@@ -782,7 +955,7 @@
     </section>
     
     <!-- Two Adams Comparison -->
-    <section class="two-adams-comparison">
+    <section class="two-adams-comparison animate-on-scroll" id="two-adams">
       <h3>Two Adams Comparison (Romans 5, 1 Corinthians 15)</h3>
       <table class="adams-table">
         <thead>
@@ -831,10 +1004,10 @@
     </section>
     
     <!-- Believers Renewed -->
-    <section class="content-section">
+    <section class="content-section animate-on-scroll" id="believers-renewed">
       <h2>Believers Renewed in the Image</h2>
       
-      <div class="renewal-process">
+      <div class="renewal-process animate-on-scroll">
         <h3>The Process of Transformation</h3>
         <ol class="renewal-steps">
           <li><strong>New Creation</strong> — "Put on the new self, created in righteousness and holiness" (Ephesians 4:24)</li>
@@ -867,7 +1040,7 @@
     </section>
     
     <!-- Vocation of New Humanity -->
-    <section class="content-section">
+    <section class="content-section animate-on-scroll" id="new-humanity-vocation">
       <h2>Vocation of the New Humanity</h2>
       
       <p>The church inherits humanity's original threefold calling, now empowered by the Spirit and patterned after Christ:</p>
@@ -898,7 +1071,7 @@
     </section>
     
     <!-- Already/Not Yet -->
-    <section class="already-not-yet">
+    <section class="already-not-yet animate-on-scroll" id="already-not-yet">
       <h3>The Already/Not Yet Tension</h3>
       <p>The NT presents image renewal as both present reality and future hope:</p>
       
@@ -933,10 +1106,10 @@
     </section>
     
     <!-- Eschatological Fulfillment -->
-    <section class="content-section">
+    <section class="content-section animate-on-scroll" id="eschatology">
       <h2>Eschatological Fulfillment</h2>
       
-      <div class="eschatological-vision">
+      <div class="eschatological-vision animate-on-scroll">
         <h3>The Ultimate Destiny</h3>
         <p>Revelation 21–22 presents the new creation as the universalized Eden. Humanity's vocation finds its consummation in eternal fellowship with God, where the redeemed exercise their calling perfectly:</p>
         
@@ -964,7 +1137,7 @@
     </section>
     
     <!-- Theological Synthesis -->
-    <section class="content-section">
+    <section class="content-section animate-on-scroll" id="nt-synthesis">
       <h2>Theological Synthesis</h2>
       
       <ol>
@@ -979,7 +1152,7 @@
     </section>
     
     <!-- Contemporary Implications -->
-    <section class="content-section">
+    <section class="content-section animate-on-scroll" id="nt-implications">
       <h2>Implications for Today</h2>
       
       <h3>Identity</h3>
@@ -1001,7 +1174,7 @@
     </section>
     
     <!-- Conclusion -->
-    <section class="content-section">
+    <section class="content-section animate-on-scroll" id="nt-conclusion">
       <h2>Conclusion</h2>
       
       <p>The New Testament proclaims the stunning news:</p>
@@ -1020,6 +1193,88 @@
       
       <p>In Christ, humanity's ancient calling is not only restored but glorified. We are not just dust that bears God's image — we are being transformed into the very likeness of Christ, destined for eternal participation in the divine life and mission.</p>
     </section>
+    
+    <!-- Bibliography Section -->
+    <details class="bibliography-section" id="bibliography">
+      <summary>
+        <div class="bibliography-header">
+          <div class="bibliography-inner">
+            <span class="bibliography-icon">📚</span>
+            <div class="bibliography-text">
+              <h3 class="bibliography-title">Bibliography & Sources</h3>
+              <p class="bibliography-subtitle">Academic references for NT Trajectory study</p>
+            </div>
+            <div class="expand-indicator">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </summary>
+      <div class="bibliography-content">
+        <div class="source-category">
+          <h4>Primary Sources</h4>
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Nestle-Aland.</strong> <em>Novum Testamentum Graece.</em> 28th ed. Stuttgart: Deutsche Bibelgesellschaft, 2012.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">All Sections</span>
+              <span class="usage-note">Greek text and textual apparatus</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="source-category">
+          <h4>Major Commentaries</h4>
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Dunn, James D.G.</strong> <em>The Epistle to the Colossians and to Philemon.</em> NIGTC. Grand Rapids: Eerdmans, 1996.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Christ as Image</span>
+              <span class="usage-tag">Col 1:15-20</span>
+            </div>
+          </div>
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Thiselton, Anthony C.</strong> <em>The First Epistle to the Corinthians.</em> NIGTC. Grand Rapids: Eerdmans, 2000.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Two Adams</span>
+              <span class="usage-tag">1 Cor 15</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="source-category">
+          <h4>Theological Studies</h4>
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Wright, N.T.</strong> <em>The Resurrection of the Son of God.</em> Minneapolis: Fortress Press, 2003.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Eschatology</span>
+              <span class="usage-tag">New Creation</span>
+            </div>
+          </div>
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Beale, G.K.</strong> <em>A New Testament Biblical Theology.</em> Grand Rapids: Baker Academic, 2011.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Biblical Theology</span>
+              <span class="usage-tag">Image Theme</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="citation-note">
+          <p><strong>Note:</strong> This bibliography focuses on NT sources for the Image of God trajectory. See the main study hub for comprehensive bibliography.</p>
+        </div>
+      </div>
+    </details>
     
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
@@ -1040,57 +1295,15 @@
     });
   </script>
   
+  <!-- Character/Study Page Script with Dynamic Mobile Tabs -->
+  <script src="/assets/js/character-page-v5-8.js" defer></script>
+  
   <script>
-    // Reading progress
-    window.addEventListener('scroll', () => {
-      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      const progressBar = document.querySelector('.reading-progress');
-      if (progressBar) {
-        progressBar.style.width = scrolled + '%';
-      }
+    // Page Initialization
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('NT Trajectory - v5.8.1 Enhanced initialized');
+      console.log('Mobile Tabs: Auto-generated based on present sections');
     });
-
-    // Back to top visibility
-    window.addEventListener('scroll', () => {
-      const backToTop = document.querySelector('.back-to-top');
-      if (window.scrollY > 500) {
-        backToTop?.classList.add('visible');
-      } else {
-        backToTop?.classList.remove('visible');
-      }
-    });
-
-    // Interactive timeline
-    document.querySelectorAll('.timeline-item').forEach(item => {
-      item.addEventListener('mouseenter', () => {
-        item.style.transform = 'translateX(10px)';
-        item.style.transition = 'transform 0.3s ease';
-      });
-      
-      item.addEventListener('mouseleave', () => {
-        item.style.transform = 'translateX(0)';
-      });
-    });
-
-    // Vocation card interactions
-    document.querySelectorAll('.vocation-card').forEach(card => {
-      card.addEventListener('mouseenter', () => {
-        const icon = card.querySelector('.vocation-icon');
-        icon.style.transform = 'scale(1.1) rotate(5deg)';
-        icon.style.transition = 'transform 0.3s ease';
-      });
-      
-      card.addEventListener('mouseleave', () => {
-        const icon = card.querySelector('.vocation-icon');
-        icon.style.transform = 'scale(1) rotate(0deg)';
-      });
-    });
-
-    // Initialize page
-    console.log("NT Trajectory - v5.8 Enhanced initialized");
-    console.log('Features: Enhanced metadata, mobile tabs support, modular navigation');
   </script>
 </body>
 </html>
