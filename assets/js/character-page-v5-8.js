@@ -2,8 +2,9 @@
  * Character Page v5.8 - Dynamic Mobile Tabs
  * Path: /assets/js/character-page-v5-8.js
  * Purpose: Enhanced page utilities with dynamic mobile section navigation
- * Version: 5.8.1 - Added Image of God thematic study sections
+ * Version: 5.8.2 - Added Daniel study sections
  * Created: 2025-10-01
+ * Updated: 2025-12-18 - Added Daniel multi-page study sections
  */
 
 (function() {
@@ -35,6 +36,33 @@
     { id: 'application', icon: '', label: 'Apply', priority: 3 },
     { id: 'questions', icon: '', label: 'Questions', priority: 4 },
     { id: 'bibliography', icon: '', label: 'Sources', priority: 5 },
+    
+    // ============================================
+    // DANIEL MULTI-PAGE STUDY SECTIONS
+    // ============================================
+    
+    // Navigation section (all Daniel pages)
+    { id: 'navigation', icon: '', label: 'Navigate', priority: 4 },
+    
+    // Faithful Exile page (Daniel 1-6)
+    { id: 'setting', icon: '', label: 'Setting', priority: 2 },
+    { id: 'new-adam', icon: '', label: 'New Adam', priority: 1 },
+    { id: 'nebuchadnezzar', icon: '', label: 'Nebuchadnezzar', priority: 2 },
+    { id: 'third-way', icon: '', label: 'Third Way', priority: 2 },
+    { id: 'nt-connections', icon: '', label: 'NT Links', priority: 3 },
+    
+    // Son of Man page (Daniel 7)
+    { id: 'son-of-man', icon: '', label: 'Son of Man', priority: 1 },
+    { id: 'beasts', icon: '', label: 'Beasts', priority: 2 },
+    { id: 'ancient-of-days', icon: '', label: 'Ancient', priority: 2 },
+    { id: 'throne-room', icon: '', label: 'Throne', priority: 2 },
+    { id: 'true-humanity', icon: '', label: 'Humanity', priority: 2 },
+    
+    // Prophetic Hope page (Daniel 8-12)
+    { id: 'movement', icon: '', label: 'Movement', priority: 2 },
+    { id: 'seventy-sevens', icon: '', label: '70 Sevens', priority: 1 },
+    { id: 'imagery', icon: '', label: 'Imagery', priority: 3 },
+    { id: 'resurrection', icon: '', label: 'Resurrection', priority: 2 },
     
     // ============================================
     // BOOK STUDY SECTIONS (Ruth, etc.)
@@ -961,7 +989,7 @@ observeSections() {
   // ============================================
   
   document.addEventListener('DOMContentLoaded', function() {
-    console.log('Character Page v5.8.1 initialized - With Image of God sections');
+    console.log('Character Page v5.8.2 initialized - With Daniel study sections');
     
     // Initialize mobile tabs
     window.mobileTabs = new MobileSectionTabs();

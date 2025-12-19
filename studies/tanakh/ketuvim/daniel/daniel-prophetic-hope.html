@@ -11,7 +11,7 @@
   <meta name="profile-type" content="multi-page">
   <meta name="character-id" content="daniel">
   <meta name="book-id" content="daniel">
-  <meta name="template-version" content="5.8.1">
+  <meta name="template-version" content="5.8.2">
   <meta name="study-type" content="character-study">
   <meta name="page-number" content="3">
   <meta name="page-category" content="prophetic-hope">
@@ -22,7 +22,7 @@
   <meta name="twitter:description" content="Explore Daniel 8–12: apocalyptic visions, seventy sevens, Jubilee math, and resurrection hope.">
 
   <!-- Navigation Context -->
-  <meta name="nav-hub" content="tanakh/characters">
+  <meta name="nav-hub" content="tanakh">
   <meta name="nav-section" content="ketuvim">
 
   <!-- Content Indicators -->
@@ -39,14 +39,14 @@
   <meta property="og:title" content="Daniel – Prophetic Hope & Seventy Sevens (Daniel 8–12)">
   <meta property="og:description" content="Daniel 8–12: beasts, seventy sevens, Jubilee math, Second Temple interpretation, and resurrection hope.">
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://projectcontext.org/studies/characters/daniel/daniel-prophetic-hope.html">
+  <meta property="og:url" content="https://projectcontext.org/studies/tanakh/ketuvim/daniel/daniel-prophetic-hope.html">
 
   <!-- Preload Critical Resources -->
   <link rel="preload" href="/assets/css/global-v2.css" as="style">
   <link rel="preload" href="https://projectcontext.org/assets/fonts/SBL_Hebrew.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Canonical URL -->
-  <link rel="canonical" href="https://projectcontext.org/studies/characters/daniel/daniel-prophetic-hope.html">
+  <link rel="canonical" href="https://projectcontext.org/studies/tanakh/ketuvim/daniel/daniel-prophetic-hope.html">
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="/assets/css/global-v2.css">
@@ -127,42 +127,75 @@
       font-weight: 600;
     }
 
-    /* Diagram Flow */
+    /* Diagram Flow – Seventy Sevens & Jubilee Math (Enhanced) */
     .diagram-flow {
-      display: grid;
+      display: flex;
+      flex-wrap: wrap;
       gap: 1.5rem;
+      align-items: stretch;
     }
-    @media (min-width: 768px) {
-      .diagram-flow {
-        grid-auto-flow: column;
-        grid-auto-columns: minmax(220px, 1fr);
-        align-items: stretch;
-      }
+
+    /* One step = card + arrow */
+    .diagram-step {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex: 1 1 240px;
     }
+
+    /* Card styling */
     .diagram-box {
       background: #ffffff;
       border-radius: 10px;
       border: 1px solid var(--border-color, #e0e0e0);
       padding: 1rem 1.25rem;
       font-size: 0.9rem;
+      flex: 1;
     }
+
     .diagram-box h4 {
-      margin-top: 0;
+      margin: 0 0 0.5rem 0;
       font-size: 1rem;
-      margin-bottom: 0.5rem;
     }
+
+    /* Arrow styling */
     .diagram-arrow {
+      font-size: 1.75rem;
+      color: var(--text-muted, #777);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
-      color: var(--text-muted, #666);
     }
+
+    /* Mobile: stack steps and point arrows down */
+    @media (max-width: 767px) {
+      .diagram-flow {
+        flex-direction: column;
+      }
+
+      .diagram-step {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .diagram-arrow {
+        transform: rotate(90deg);
+      }
+    }
+
+    /* Note under diagram */
     .diagram-note {
       font-size: 0.85rem;
       color: var(--text-muted, #666);
       margin-top: 0.75rem;
       text-align: center;
+    }
+
+    /* Jesus highlight box */
+    .diagram-box.jesus-highlight {
+      background: linear-gradient(135deg, #fff4d6 0%, #ffe9b3 100%);
+      border: 2px solid #d69e2e;
+      box-shadow: 0 4px 12px rgba(214, 158, 46, 0.25);
     }
 
     /* Prophetic Timeline */
@@ -382,9 +415,9 @@
     <nav class="breadcrumbs" aria-label="Breadcrumb">
       <a href="/">Home</a> › 
       <a href="/studies/">Studies</a> › 
-      <a href="/studies/characters/">Biblical Characters</a> › 
-      <a href="/studies/characters/#daniel">Daniel</a> › 
-      <a href="daniel-overview.html">Overview</a> ›
+      <a href="/studies/tanakh/">Tanakh</a> › 
+      <a href="/studies/tanakh/ketuvim/">Ketuvim</a> › 
+      <a href="/studies/tanakh/ketuvim/daniel/">Daniel</a> ›
       Prophetic Hope
     </nav>
 
@@ -409,7 +442,7 @@
       <p>This is Page 3 of a four-part Daniel study. Use these links to move between pages:</p>
       <div class="page-nav-grid">
         <!-- Hub -->
-        <a href="daniel-overview.html" class="page-nav-card">
+        <a href="daniel-hub.html" class="page-nav-card">
           <span class="page-icon">📋</span>
           <h4>Hub Profile</h4>
           <p class="page-desc">Overview, book architecture, navigation, and study pathways</p>
@@ -516,49 +549,58 @@
       <p>Daniel 9 sits at the center of this section's theological weight. Daniel reads Jeremiah's prophecy that Jerusalem's desolation will last seventy years. He responds with repentance and intercession—and is told that the story is bigger than a single lifetime: "seventy sevens" are decreed.</p>
 
       <div class="diagram-flow">
-        <div class="diagram-box">
-          <h4>📖 Sabbath &amp; Jubilee (Torah)</h4>
-          <ul>
-            <li>Every 7th day: sabbath rest</li>
-            <li>Every 7th year: land sabbath (Lev 25)</li>
-            <li>After 7×7 years (49): Jubilee year — debts canceled, land returned, slaves freed</li>
-            <li>Time structured around cycles of 7 and 7×7</li>
-          </ul>
+        <!-- Step 1 -->
+        <div class="diagram-step">
+          <div class="diagram-box">
+            <h4>📖 Sabbath &amp; Jubilee (Torah)</h4>
+            <ul>
+              <li>Every 7th day: sabbath rest</li>
+              <li>Every 7th year: land sabbath (Lev 25)</li>
+              <li>After 7×7 years (49): Jubilee year — debts canceled, land returned, slaves freed</li>
+              <li>Time structured around cycles of 7 and 7×7</li>
+            </ul>
+          </div>
+          <div class="diagram-arrow">➡️</div>
         </div>
 
-        <div class="diagram-arrow">➡️</div>
-
-        <div class="diagram-box">
-          <h4>🪦 Exile as Missed Sabbaths</h4>
-          <ul>
-            <li>Israel ignores sabbath and Jubilee commands</li>
-            <li>Prophets warn that the land will "enjoy its sabbaths" while the people are exiled (2 Chr 36:21)</li>
-            <li>Jeremiah speaks of 70 years of Babylonian domination</li>
-            <li>Exile interpreted as accumulated sabbath debt</li>
-          </ul>
+        <!-- Step 2 -->
+        <div class="diagram-step">
+          <div class="diagram-box">
+            <h4>🪦 Exile as Missed Sabbaths</h4>
+            <ul>
+              <li>Israel ignores sabbath and Jubilee commands</li>
+              <li>Prophets warn that the land will "enjoy its sabbaths" while the people are exiled (2 Chr 36:21)</li>
+              <li>Jeremiah speaks of 70 years of Babylonian domination</li>
+              <li>Exile interpreted as accumulated sabbath debt</li>
+            </ul>
+          </div>
+          <div class="diagram-arrow">➡️</div>
         </div>
 
-        <div class="diagram-arrow">➡️</div>
-
-        <div class="diagram-box">
-          <h4>⏳ Daniel's Seventy Sevens (490)</h4>
-          <ul>
-            <li>70 × 7 = 490 — a Jubilee of Jubilees</li>
-            <li>Extends Jeremiah's horizon from one lifetime to a long, complete sabbath cycle</li>
-            <li>Promises: sin dealt with, atonement made, everlasting righteousness, anointed sanctuary (Dan 9:24)</li>
-            <li>Hope: exile will end at a deeper level than just return to land</li>
-          </ul>
+        <!-- Step 3 -->
+        <div class="diagram-step">
+          <div class="diagram-box">
+            <h4>⏳ Daniel's Seventy Sevens (490)</h4>
+            <ul>
+              <li>70 × 7 = 490 — a Jubilee of Jubilees</li>
+              <li>Extends Jeremiah's horizon from one lifetime to a long, complete sabbath cycle</li>
+              <li>Promises: sin dealt with, atonement made, everlasting righteousness, anointed sanctuary (Dan 9:24)</li>
+              <li>Hope: exile will end at a deeper level than just return to land</li>
+            </ul>
+          </div>
+          <div class="diagram-arrow">➡️</div>
         </div>
 
-        <div class="diagram-arrow">➡️</div>
-
-        <div class="diagram-box">
-          <h4>✝️ Jesus &amp; Seventy Times Seven</h4>
-          <ul>
-            <li>Jesus tells Peter to forgive "seventy times seven" (Matt 18:22)</li>
-            <li>Not random: echoes Daniel's 70×7 and Jubilee math</li>
-            <li>Jesus reframes the end of exile around forgiveness, cross, and resurrection</li>
-          </ul>
+        <!-- Step 4 (no arrow after the last card) -->
+        <div class="diagram-step">
+          <div class="diagram-box jesus-highlight">
+            <h4>✝️ Jesus &amp; Seventy Times Seven</h4>
+            <ul>
+              <li>Jesus tells Peter to forgive "seventy times seven" (Matt 18:22)</li>
+              <li>Not random: echoes Daniel's 70×7 and Jubilee math</li>
+              <li>Jesus reframes the end of exile around forgiveness, cross, and resurrection</li>
+            </ul>
+          </div>
         </div>
       </div>
 
@@ -836,7 +878,7 @@
         </li>
       </ul>
 
-      <p class="note" style="margin-top: 1.5rem;">For the full multi-page Daniel bibliography, see the master list on the <a href="daniel-overview.html#bibliography">Daniel Hub Overview</a>.</p>
+      <p class="note" style="margin-top: 1.5rem;">For the full multi-page Daniel bibliography, see the master list on the <a href="daniel-hub.html#bibliography">Daniel Hub</a>.</p>
     </div>
 
     <!-- Page Navigation Footer -->
@@ -844,9 +886,9 @@
       <div class="page-nav-grid">
         <a href="daniel-son-of-man.html" class="page-nav-card">
           <span class="page-icon">👑</span>
-          <h4>← Page 2: Daniel – Son of Man</h4>
+          <h4>← Page 2: Son of Man</h4>
         </a>
-        <a href="daniel-overview.html" class="page-nav-card">
+        <a href="daniel-hub.html" class="page-nav-card">
           <span class="page-icon">📋</span>
           <h4>Back to Daniel Hub →</h4>
         </a>
@@ -865,8 +907,8 @@
   <script type="module">
     import NavigationComponent from '/assets/js/nav-component.js';
     const navigation = new NavigationComponent({
-      currentPage: 'studies/characters/daniel/daniel-prophetic-hope',
-      hubType: 'tanakh/characters'
+      currentPage: 'studies/tanakh/ketuvim/daniel/daniel-prophetic-hope',
+      hubType: 'tanakh'
     });
   </script>
 
@@ -876,7 +918,7 @@
   <!-- Page Initialization -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('Daniel Page 3 – Prophetic Hope (Dan 8–12) v5.8.1 initialized');
+      console.log('Daniel Page 3 – Prophetic Hope (Dan 8–12) v5.8.2 initialized');
     });
   </script>
 </body>
