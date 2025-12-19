@@ -250,36 +250,129 @@
     .function-name{font-size:1.1rem;font-weight:800;color:var(--primary-dark);margin-bottom:.5rem}
     .function-desc{font-size:.9rem;color:var(--text-gray);line-height:1.5}
 
-    /* Interactive Diagram */
+    /* Interactive 4-Ellipse Diagram */
     .diagram-section{
-      background:linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
-      border-radius:20px;padding:3rem;margin-bottom:3rem;color:white;text-align:center
+      background:linear-gradient(135deg, #faf5ff 0%, #fff1f2 50%, #f0f9ff 100%);
+      border-radius:20px;padding:3rem;margin-bottom:3rem;text-align:center;
+      border:2px solid rgba(114,9,183,.15)
     }
-    .diagram-section h2{font-size:1.8rem;margin-bottom:1rem}
-    .diagram-section p{opacity:.85;margin-bottom:2rem;max-width:700px;margin-left:auto;margin-right:auto}
+    .diagram-section h2{font-size:1.8rem;margin-bottom:1rem;color:var(--primary-dark)}
+    .diagram-section > p{color:var(--text-gray);margin-bottom:2rem;max-width:700px;margin-left:auto;margin-right:auto}
     .diagram-container{
-      position:relative;width:100%;max-width:600px;margin:0 auto;aspect-ratio:1;min-height:400px
+      position:relative;width:100%;max-width:650px;margin:0 auto;aspect-ratio:1;min-height:500px
     }
-    .diagram-center{
-      position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-      width:120px;height:120px;border-radius:50%;
-      background:linear-gradient(135deg, var(--accent-gold) 0%, #f4a460 100%);
-      display:flex;align-items:center;justify-content:center;
-      font-weight:800;font-size:1rem;color:#1a1a1a;text-align:center;
-      box-shadow:0 0 30px rgba(212,175,55,.5);z-index:10
+    
+    /* Ellipse Wrapper with Flip */
+    .ellipse-wrapper{
+      position:absolute;cursor:pointer;transition:all .3s ease;perspective:1000px
     }
-    .diagram-node{
-      position:absolute;width:110px;height:110px;border-radius:50%;
+    .ellipse-inner{
+      position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d
+    }
+    .ellipse-wrapper.flipped .ellipse-inner{transform:rotateY(180deg)}
+    .ellipse-front,.ellipse-back{
+      position:absolute;width:100%;height:100%;backface-visibility:hidden;
       display:flex;align-items:center;justify-content:center;flex-direction:column;
-      font-weight:700;font-size:.85rem;cursor:pointer;transition:all .3s ease;
-      box-shadow:0 8px 24px rgba(0,0,0,.3)
+      border-radius:50%;padding:1.5rem;text-align:center
     }
-    .diagram-node:hover{transform:scale(1.15);z-index:5}
-    .diagram-node.top{top:5%;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#dc2626,#ef4444)}
-    .diagram-node.right{top:50%;right:5%;transform:translateY(-50%);background:linear-gradient(135deg,#7209b7,#a855f7)}
-    .diagram-node.bottom{bottom:5%;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#0ea5e9,#38bdf8)}
-    .diagram-node.left{top:50%;left:5%;transform:translateY(-50%);background:linear-gradient(135deg,#10b981,#34d399)}
-    .diagram-node span{font-size:.75rem;opacity:.9;margin-top:.25rem}
+    .ellipse-back{transform:rotateY(180deg)}
+    .ellipse-wrapper:hover{transform:scale(1.08)}
+
+    /* Ephesians - Top - Red/Coral */
+    #eph-ellipse{width:54%;height:54%;top:-6%;left:23%}
+    #eph-ellipse .ellipse-front{
+      background:linear-gradient(135deg,rgba(239,68,68,.9) 0%,rgba(251,113,133,.9) 100%);
+      border:3px solid rgba(239,68,68,.7);box-shadow:0 8px 32px rgba(239,68,68,.35)
+    }
+    #eph-ellipse .ellipse-back{
+      background:linear-gradient(135deg,rgba(220,38,38,.95) 0%,rgba(239,68,68,.95) 100%);
+      border:3px solid rgba(239,68,68,.9)
+    }
+
+    /* 1 Corinthians - Right - Magenta/Purple */
+    #cor-ellipse{width:54%;height:54%;top:23%;right:-6%}
+    #cor-ellipse .ellipse-front{
+      background:linear-gradient(135deg,rgba(219,39,119,.9) 0%,rgba(236,72,153,.9) 100%);
+      border:3px solid rgba(219,39,119,.7);box-shadow:0 8px 32px rgba(219,39,119,.35)
+    }
+    #cor-ellipse .ellipse-back{
+      background:linear-gradient(135deg,rgba(190,24,93,.95) 0%,rgba(219,39,119,.95) 100%);
+      border:3px solid rgba(219,39,119,.9)
+    }
+
+    /* 2 Timothy - Bottom - Blue/Cyan */
+    #tim2-ellipse{width:54%;height:54%;bottom:-6%;left:23%}
+    #tim2-ellipse .ellipse-front{
+      background:linear-gradient(135deg,rgba(14,165,233,.9) 0%,rgba(6,182,212,.9) 100%);
+      border:3px solid rgba(14,165,233,.7);box-shadow:0 8px 32px rgba(14,165,233,.35)
+    }
+    #tim2-ellipse .ellipse-back{
+      background:linear-gradient(135deg,rgba(3,105,161,.95) 0%,rgba(14,165,233,.95) 100%);
+      border:3px solid rgba(14,165,233,.9)
+    }
+
+    /* 1 Timothy - Left - Purple/Violet */
+    #tim1-ellipse{width:54%;height:54%;top:23%;left:-6%}
+    #tim1-ellipse .ellipse-front{
+      background:linear-gradient(135deg,rgba(139,92,246,.9) 0%,rgba(167,139,250,.9) 100%);
+      border:3px solid rgba(139,92,246,.7);box-shadow:0 8px 32px rgba(139,92,246,.35)
+    }
+    #tim1-ellipse .ellipse-back{
+      background:linear-gradient(135deg,rgba(109,40,217,.95) 0%,rgba(139,92,246,.95) 100%);
+      border:3px solid rgba(139,92,246,.9)
+    }
+
+    /* Z-index layering - ellipses go over center on hover/flip */
+    .ellipse-wrapper{z-index:1}
+    .ellipse-wrapper:hover,.ellipse-wrapper.flipped{z-index:20}
+
+    /* Center Circle - Risen Messiah with Hero Gradient */
+    .diagram-center{
+      position:absolute;width:24%;height:24%;top:38%;left:38%;
+      background:linear-gradient(135deg,#dc2626 0%,#7209b7 50%,#dc2626 100%);
+      border-radius:50%;display:flex;align-items:center;justify-content:center;
+      text-align:center;font-weight:800;font-size:1rem;color:white;
+      border:4px solid rgba(255,255,255,.8);
+      box-shadow:0 0 40px rgba(220,38,38,.4),0 0 60px rgba(114,9,183,.3);
+      z-index:10;padding:1rem;line-height:1.3;text-shadow:1px 1px 2px rgba(0,0,0,.3)
+    }
+
+    /* Ellipse Content Styling */
+    .letter-title{font-size:1.5rem;font-weight:800;color:white;text-shadow:0 2px 4px rgba(0,0,0,.3);margin-bottom:.5rem}
+    .front-content{padding:.75rem;color:white}
+    .front-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;opacity:.85;margin-bottom:.25rem;font-weight:700}
+    .front-text{font-size:.85rem;line-height:1.4;font-weight:500}
+    .front-section{margin-bottom:.5rem}
+    .front-section:last-child{margin-bottom:0}
+    .back-function{font-size:1.1rem;font-weight:700;color:rgba(255,255,255,.95);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem}
+    .scripture-back{font-size:.85rem;color:white;font-style:italic;line-height:1.5;padding:.5rem}
+    .scripture-ref{display:block;margin-top:.5rem;font-style:normal;font-weight:700;opacity:.9;font-size:.8rem}
+
+    .reset-btn{
+      margin-top:2rem;padding:.75rem 1.5rem;
+      background:linear-gradient(135deg,var(--accent-red),var(--accent-purple));
+      color:white;border:none;border-radius:999px;font-weight:600;font-size:1rem;
+      cursor:pointer;transition:all .3s;box-shadow:0 4px 12px rgba(114,9,183,.3)
+    }
+    .reset-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(114,9,183,.5)}
+
+    @media(max-width:768px){
+      .diagram-container{max-width:480px;min-height:480px}
+      .letter-title{font-size:1.2rem}
+      .front-text{font-size:.75rem}
+      .diagram-center{font-size:.85rem;width:22%;height:22%;top:39%;left:39%}
+      .scripture-back{font-size:.75rem}
+      .back-function{font-size:.95rem}
+    }
+    @media(max-width:480px){
+      .diagram-container{max-width:360px;min-height:360px}
+      .letter-title{font-size:1rem}
+      .front-label{font-size:.6rem}
+      .front-text{font-size:.7rem}
+      .diagram-center{font-size:.7rem;padding:.5rem;width:20%;height:20%;top:40%;left:40%}
+      .scripture-back{font-size:.7rem}
+      .back-function{font-size:.85rem}
+    }
 
     /* Context Section */
     .context-section{background:white;border-radius:20px;padding:2.5rem;box-shadow:var(--shadow-lg);margin-bottom:3rem}
@@ -335,23 +428,58 @@
       transform: translateY(-5px);
     }
 
-    /* Bibliography */
-    .bibliography-section{margin:2rem 0}
-    .bibliography-section summary{
-      list-style:none;cursor:pointer;padding:1.5rem;background:#f8fafc;
+    /* Bibliography - v5.8.1 Enhanced Format */
+    .bibliography-section.enhanced{margin:3rem 0}
+    .bibliography-section.enhanced summary{
+      list-style:none;cursor:pointer;padding:1.5rem;
+      background:linear-gradient(135deg,#f8fafc 0%,#faf5ff 100%);
       border:1px solid var(--border-light);border-radius:12px;transition:all .3s
     }
-    .bibliography-section summary:hover{background:white;box-shadow:var(--shadow-md)}
-    .bibliography-section summary::-webkit-details-marker{display:none}
-    .bibliography-header{display:flex;align-items:center;justify-content:space-between}
-    .bibliography-title{margin:0;font-size:1.5rem;color:var(--accent-purple)}
-    .source-category{margin:2rem 0}
-    .source-category h4{color:var(--accent-red);margin-bottom:1rem;font-size:1.2rem}
-    .source-entry{background:white;border:1px solid var(--border-light);border-radius:8px;padding:1rem;margin-bottom:.75rem}
+    .bibliography-section.enhanced summary:hover{background:white;box-shadow:var(--shadow-md)}
+    .bibliography-section.enhanced summary::-webkit-details-marker{display:none}
+    .bibliography-section.enhanced[open] summary{border-radius:12px 12px 0 0;border-bottom:none}
+    .bibliography-header{display:flex;align-items:center;justify-content:space-between;width:100%}
+    .bibliography-inner{display:flex;align-items:center;gap:1rem;flex:1}
+    .bibliography-icon{font-size:2rem}
+    .bibliography-text{flex:1}
+    .bibliography-title{margin:0;font-size:1.4rem;color:var(--accent-purple);font-weight:700}
+    .bibliography-subtitle{margin:.25rem 0 0;color:var(--text-gray);font-size:.9rem}
+    .expand-indicator{
+      transition:transform .3s;color:var(--accent-purple);
+      display:flex;align-items:center;justify-content:center
+    }
+    .bibliography-section.enhanced[open] .expand-indicator{transform:rotate(180deg)}
+    .bibliography-content{
+      padding:2rem;background:white;
+      border:1px solid var(--border-light);border-top:none;border-radius:0 0 12px 12px
+    }
+    .source-category{margin:0 0 2rem}
+    .source-category:last-of-type{margin-bottom:1.5rem}
+    .source-category h4{
+      color:var(--accent-purple);margin:0 0 1rem;font-size:1.15rem;font-weight:700;
+      border-bottom:2px solid var(--accent-purple);padding-bottom:.5rem
+    }
+    .source-entry{
+      background:linear-gradient(135deg,#fafbfc 0%,#f8fafc 100%);
+      border:1px solid var(--border-light);border-radius:8px;padding:1rem 1.25rem;margin-bottom:.75rem
+    }
+    .source-entry:last-child{margin-bottom:0}
+    .source-citation{line-height:1.6;color:#334155}
+    .source-citation strong{color:var(--primary-dark)}
+    .source-citation em{color:#475569}
+    .source-usage{margin-top:.75rem;display:flex;flex-wrap:wrap;align-items:flex-start;gap:.5rem}
     .usage-tag{
       display:inline-block;background:linear-gradient(135deg,var(--accent-red),var(--accent-purple));
-      color:white;padding:.2rem .6rem;border-radius:4px;font-size:.75rem;font-weight:600;margin-right:.5rem
+      color:white;padding:.2rem .6rem;border-radius:4px;font-size:.7rem;font-weight:600;
+      text-transform:uppercase;letter-spacing:.02em;flex-shrink:0
     }
+    .usage-note{color:var(--text-gray);font-size:.85rem;line-height:1.5;flex:1;min-width:200px}
+    .citation-note{
+      background:linear-gradient(135deg,#fef3f2 0%,#f8f9ff 100%);
+      border-left:4px solid var(--accent-red);padding:1.25rem 1.5rem;border-radius:0 8px 8px 0;margin-top:1rem
+    }
+    .citation-note p{margin:0;color:#334155;line-height:1.7;font-size:.95rem}
+    .citation-note strong{color:var(--accent-red)}
 
     footer{background:linear-gradient(135deg,var(--primary-dark) 0%, #2c2c2c 100%);color:var(--primary-light);text-align:center;padding:3rem 2rem;margin-top:6rem;position:relative;overflow:hidden}
     footer::before{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at 50% 0%, rgba(220,38,38,.12) 0%, transparent 70%)}
@@ -371,6 +499,14 @@
       .diagram-container{min-height:350px}
       .diagram-node{width:90px;height:90px;font-size:.75rem}
       .diagram-center{width:100px;height:100px;font-size:.9rem}
+      .bibliography-section.enhanced summary{padding:1rem}
+      .bibliography-inner{gap:.75rem}
+      .bibliography-icon{font-size:1.5rem}
+      .bibliography-title{font-size:1.2rem}
+      .bibliography-content{padding:1.25rem}
+      .source-entry{padding:.875rem 1rem}
+      .source-usage{flex-direction:column;gap:.5rem}
+      .usage-note{min-width:auto}
       .back-to-top {
         bottom: 1rem;
         right: 1rem;
@@ -448,31 +584,124 @@
         </div>
       </div>
 
-      <!-- Visual Diagram Section -->
+      <!-- Visual Diagram Section - 4-Ellipse Flip -->
       <div class="diagram-section" id="diagram">
         <h2>One Resurrection → Four Functions</h2>
-        <p>Across four letters, Paul applies resurrection logic to radically different problems. The center remains the same; the applications vary.</p>
+        <p>Click each ellipse to see Paul's scripture solution. The front shows the problems; the back reveals how resurrection addresses them.</p>
+        
         <div class="diagram-container">
+          <!-- Ephesians - Top -->
+          <div class="ellipse-wrapper" id="eph-ellipse" onclick="flipEllipse(this)">
+            <div class="ellipse-inner">
+              <div class="ellipse-front">
+                <div class="letter-title">Ephesians</div>
+                <div class="front-content">
+                  <div class="front-section">
+                    <div class="front-label">Problems</div>
+                    <div class="front-text">Jew/Gentile division, cosmic powers, identity confusion</div>
+                  </div>
+                  <div class="front-section">
+                    <div class="front-label">Main Problem</div>
+                    <div class="front-text">They don't see reality as it truly is</div>
+                  </div>
+                </div>
+              </div>
+              <div class="ellipse-back">
+                <div class="back-function">Revelation</div>
+                <div class="scripture-back">
+                  "God raised him from the dead and seated him at his right hand in the heavenly realms, far above all rule and authority"
+                  <span class="scripture-ref">— Ephesians 1:20-21</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 1 Corinthians - Right -->
+          <div class="ellipse-wrapper" id="cor-ellipse" onclick="flipEllipse(this)">
+            <div class="ellipse-inner">
+              <div class="ellipse-front">
+                <div class="letter-title">1 Corinthians</div>
+                <div class="front-content">
+                  <div class="front-section">
+                    <div class="front-label">Problems</div>
+                    <div class="front-text">Divisions, sexual sin, lawsuits, chaotic worship</div>
+                  </div>
+                  <div class="front-section">
+                    <div class="front-label">Main Problem</div>
+                    <div class="front-text">Over-realized eschatology—they think they've "arrived"</div>
+                  </div>
+                </div>
+              </div>
+              <div class="ellipse-back">
+                <div class="back-function">Diagnostic</div>
+                <div class="scripture-back">
+                  "Christ has indeed been raised from the dead, the firstfruits of those who have fallen asleep"
+                  <span class="scripture-ref">— 1 Corinthians 15:20</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2 Timothy - Bottom -->
+          <div class="ellipse-wrapper" id="tim2-ellipse" onclick="flipEllipse(this)">
+            <div class="ellipse-inner">
+              <div class="ellipse-front">
+                <div class="letter-title">2 Timothy</div>
+                <div class="front-content">
+                  <div class="front-section">
+                    <div class="front-label">Problems</div>
+                    <div class="front-text">Desertion, false teachers, Paul in chains</div>
+                  </div>
+                  <div class="front-section">
+                    <div class="front-label">Main Problem</div>
+                    <div class="front-text">Shame tempts abandonment—suffering disproves gospel?</div>
+                  </div>
+                </div>
+              </div>
+              <div class="ellipse-back">
+                <div class="back-function">Endurance</div>
+                <div class="scripture-back">
+                  "Remember Jesus Christ, raised from the dead, descended from David. This is my gospel"
+                  <span class="scripture-ref">— 2 Timothy 2:8</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 1 Timothy - Left -->
+          <div class="ellipse-wrapper" id="tim1-ellipse" onclick="flipEllipse(this)">
+            <div class="ellipse-inner">
+              <div class="ellipse-front">
+                <div class="letter-title">1 Timothy</div>
+                <div class="front-content">
+                  <div class="front-section">
+                    <div class="front-label">Problems</div>
+                    <div class="front-text">Unqualified leaders, speculative teaching, wealth abuse</div>
+                  </div>
+                  <div class="front-section">
+                    <div class="front-label">Main Problem</div>
+                    <div class="front-text">Significance sought through status, not transformation</div>
+                  </div>
+                </div>
+              </div>
+              <div class="ellipse-back">
+                <div class="back-function">Formation</div>
+                <div class="scripture-back">
+                  "He appeared in the flesh, was vindicated by the Spirit... was taken up in glory"
+                  <span class="scripture-ref">— 1 Timothy 3:16</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Center Circle -->
           <div class="diagram-center">
-            <div>RISEN<br>MESSIAH</div>
-          </div>
-          <div class="diagram-node top" title="Ephesians: Revelation">
-            Ephesians
-            <span>Revelation</span>
-          </div>
-          <div class="diagram-node right" title="1 Corinthians: Diagnostic">
-            1 Corinthians
-            <span>Diagnostic</span>
-          </div>
-          <div class="diagram-node bottom" title="2 Timothy: Endurance">
-            2 Timothy
-            <span>Endurance</span>
-          </div>
-          <div class="diagram-node left" title="1 Timothy: Formation">
-            1 Timothy
-            <span>Formation</span>
+            <div>RISEN<br><strong style="font-size:1.2em;">MESSIAH</strong></div>
           </div>
         </div>
+
+        <p style="color:var(--text-gray);font-style:italic;margin-top:1.5rem;font-size:.95rem;">💡 Click any ellipse to see Paul's resurrection solution</p>
+        <button class="reset-btn" onclick="resetAllEllipses()">🔄 Reset All</button>
       </div>
 
       <!-- Study Parts -->
@@ -632,7 +861,7 @@
         <div class="context-grid">
           <div class="context-item" style="border-left-color:var(--accent-rose)">
             <h3>📚 Lucy Peppiatt on 1 Corinthians</h3>
-            <p>Dr. Lucy Peppiatt's work on 1 Corinthians emphasizes how Paul's resurrection theology shapes his entire argument—from wisdom (ch. 1–4) to bodies (ch. 5–7, 15) to spiritual gifts (ch. 12–14). Her reading of 1 Corinthians 15 shows resurrection as the capstone that makes sense of everything that comes before: <strong>if the dead are not raised, the entire Corinthian experiment collapses.</strong></p>
+            <p>In BibleProject Classroom's 1 Corinthians course, Dr. Lucy Peppiatt emphasizes how Paul's resurrection theology shapes his entire argument—from wisdom (ch. 1–4) to bodies (ch. 5–7, 15) to spiritual gifts (ch. 12–14). Her reading of 1 Corinthians 15 shows resurrection as the capstone that makes sense of everything that comes before: <strong>if the dead are not raised, the entire Corinthian experiment collapses.</strong></p>
           </div>
           <div class="context-item" style="border-left-color:var(--accent-green)">
             <h3>🎬 BibleProject Visual Commentaries</h3>
@@ -641,78 +870,189 @@
         </div>
       </div>
 
-      <!-- Bibliography -->
-      <details class="bibliography-section" id="sources">
+      <!-- Bibliography - v5.8.1 Format -->
+      <details class="bibliography-section enhanced" id="bibliography">
         <summary>
           <div class="bibliography-header">
-            <h3 class="bibliography-title">📚 Bibliography & Sources</h3>
-            <span style="font-size:1.5rem">▼</span>
+            <div class="bibliography-inner">
+              <span class="bibliography-icon">📚</span>
+              <div class="bibliography-text">
+                <h3 class="bibliography-title">Bibliography & Sources</h3>
+                <p class="bibliography-subtitle">Primary sources and scholarly works shaping the interpretive framework</p>
+              </div>
+              <div class="expand-indicator">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </div>
+            </div>
           </div>
         </summary>
-        <div style="padding:1.5rem 0">
+        <div class="bibliography-content">
+          
           <div class="source-category">
             <h4>Primary Texts</h4>
             <div class="source-entry">
-              <strong>The New Testament</strong> (Greek text; major English translations)
-              <div style="margin-top:.5rem"><span class="usage-tag">All Parts</span></div>
+              <div class="source-citation">
+                <strong>The New Testament</strong> (Greek text; major English translations)
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">All Parts</span>
+                <span class="usage-note">Greek structure and literary flow inform Scripture citations, especially where resurrection language, apocalyptic imagery, and communal identity are central to Paul's argument.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="source-category">
+            <h4>Translation & Literary Design</h4>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Tim Mackie.</strong> <em>Instructor Translation & Literary Design of Ephesians.</em> BibleProject Classroom.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Part 1</span>
+                <span class="usage-tag">Literary Structure</span>
+                <span class="usage-note">Line-by-line translation with attention to symmetry, poetic structure, and narrative movement. Especially influential for reading Ephesians as apocalyptic revelation structured around resurrection power.</span>
+              </div>
             </div>
           </div>
 
           <div class="source-category">
             <h4>Teaching & Visual Commentaries</h4>
             <div class="source-entry">
-              <strong>BibleProject</strong> — <em>Ephesians: Animated Overview</em>, <em>1 Corinthians: Animated Overview</em>, <em>Visual Commentary Series</em>
-              <div style="margin-top:.5rem"><span class="usage-tag">Structure</span><span class="usage-tag">Themes</span></div>
+              <div class="source-citation">
+                <strong>BibleProject Classroom.</strong> <em>Ephesians</em> (Tim Mackie, Instructor).
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Part 1</span>
+                <span class="usage-tag">Apocalyptic Framework</span>
+                <span class="usage-note">Class lectures emphasizing apocalypse as the unveiling of Heaven and Earth's reunification in the risen Messiah.</span>
+              </div>
             </div>
             <div class="source-entry">
-              <strong>Project Context</strong> — Ephesians Teacher Notes, 1 Corinthians Teacher Notes, LLT-SSE resources
-              <div style="margin-top:.5rem"><span class="usage-tag">Anchor Texts</span></div>
+              <div class="source-citation">
+                <strong>BibleProject Classroom.</strong> <em>1 Corinthians</em> (Lucy Peppiatt, Instructor).
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Part 2</span>
+                <span class="usage-tag">Chapter 15 Analysis</span>
+                <span class="usage-note">Module 8 on Resurrection: rhetorical structure of chapter 15, honor-shame dynamics, seed metaphor analysis, and communal coherence shaped by resurrection.</span>
+              </div>
+            </div>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>BibleProject.</strong> <em>Visual Commentary Series: Ephesians, 1 Corinthians, 1 Timothy, 2 Timothy.</em>
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">All Parts</span>
+                <span class="usage-tag">Literary Flow</span>
+                <span class="usage-note">Informs emphasis on repeated motifs and thematic cohesion, especially how resurrection reshapes ethics, worship, leadership, and suffering.</span>
+              </div>
+            </div>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>BibleProject.</strong> <em>Animated Overviews: Ephesians, 1 Corinthians.</em>
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Parts 1–2</span>
+                <span class="usage-tag">Narrative Framing</span>
+                <span class="usage-note">Whole-letter narrative framing reinforcing resurrection as the hinge between belief and communal practice.</span>
+              </div>
             </div>
           </div>
 
           <div class="source-category">
             <h4>Pauline Theology & Resurrection</h4>
             <div class="source-entry">
-              <strong>N. T. Wright</strong> — <em>The Resurrection of the Son of God</em>, <em>Paul and the Faithfulness of God</em>
-              <div style="margin-top:.5rem"><span class="usage-tag">Theological Framework</span></div>
+              <div class="source-citation">
+                <strong>Wright, N. T.</strong> <em>The Resurrection of the Son of God.</em> Christian Origins and the Question of God 3. Minneapolis: Fortress, 2003.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">All Parts</span>
+                <span class="usage-tag">Foundational</span>
+                <span class="usage-note">Foundational for understanding resurrection as historical and worldview-altering event—not merely doctrinal but revelatory.</span>
+              </div>
             </div>
             <div class="source-entry">
-              <strong>Richard B. Hays</strong> — <em>The Moral Vision of the New Testament</em>
-              <div style="margin-top:.5rem"><span class="usage-tag">Ethics</span></div>
+              <div class="source-citation">
+                <strong>Wright, N. T.</strong> <em>Paul and the Faithfulness of God.</em> Christian Origins and the Question of God 4. Minneapolis: Fortress, 2013.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Thesis Framework</span>
+                <span class="usage-note">Frames Paul as coherent theologian whose letters respond to local problems through resurrection-anchored narrative of God's faithfulness.</span>
+              </div>
+            </div>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Hays, Richard B.</strong> <em>The Moral Vision of the New Testament.</em> San Francisco: HarperOne, 1996.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Ethics</span>
+                <span class="usage-note">Supports integration of theology and ethics—how resurrection hope reshapes communal life and moral imagination.</span>
+              </div>
             </div>
           </div>
 
           <div class="source-category">
-            <h4>1 Corinthians</h4>
+            <h4>1 Corinthians Scholarship</h4>
             <div class="source-entry">
-              <strong>Lucy Peppiatt</strong> — <em>Women and Worship at Corinth</em>, 1 Corinthians Class Notes
-              <div style="margin-top:.5rem"><span class="usage-tag">Part 2</span><span class="usage-tag">Resurrection Module</span></div>
+              <div class="source-citation">
+                <strong>Fee, Gordon D.</strong> <em>The First Epistle to the Corinthians.</em> NICNT. Grand Rapids: Eerdmans, 1987.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Part 2</span>
+                <span class="usage-tag">Exegesis</span>
+                <span class="usage-note">Exegetical grounding and historical context, reinforcing unity of Paul's argument and central role of resurrection.</span>
+              </div>
             </div>
             <div class="source-entry">
-              <strong>Gordon D. Fee</strong> — <em>The First Epistle to the Corinthians</em>
-              <div style="margin-top:.5rem"><span class="usage-tag">Commentary</span></div>
+              <div class="source-citation">
+                <strong>Thiselton, Anthony C.</strong> <em>The First Epistle to the Corinthians.</em> NIGTC. Grand Rapids: Eerdmans, 2000.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Part 2</span>
+                <span class="usage-tag">Greek Analysis</span>
+                <span class="usage-note">Detailed Greek analysis and theological depth on resurrection discourse.</span>
+              </div>
             </div>
             <div class="source-entry">
-              <strong>Anthony C. Thiselton</strong> — <em>1 Corinthians</em> (NIGTC)
-              <div style="margin-top:.5rem"><span class="usage-tag">Technical</span></div>
+              <div class="source-citation">
+                <strong>Barth, Karl.</strong> <em>The Resurrection of the Dead.</em> London: Hodder & Stoughton, 1933.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Part 2</span>
+                <span class="usage-tag">Theological</span>
+                <span class="usage-note">Theological framework for reading 1 Corinthians 15 as the interpretive key to the entire letter.</span>
+              </div>
             </div>
           </div>
 
           <div class="source-category">
             <h4>Pastoral Epistles</h4>
             <div class="source-entry">
-              <strong>Philip H. Towner</strong> — <em>The Letters to Timothy and Titus</em>
-              <div style="margin-top:.5rem"><span class="usage-tag">Parts 3–4</span></div>
+              <div class="source-citation">
+                <strong>Towner, Philip H.</strong> <em>The Letters to Timothy and Titus.</em> NICNT. Grand Rapids: Eerdmans, 2006.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Parts 3–4</span>
+                <span class="usage-tag">Primary Commentary</span>
+                <span class="usage-note">Shapes reading of Pastorals as formative letters cultivating embodied faithfulness grounded in the risen Messiah.</span>
+              </div>
             </div>
             <div class="source-entry">
-              <strong>Ben Witherington III</strong> — <em>Letters and Homilies for Hellenized Christians</em>
-              <div style="margin-top:.5rem"><span class="usage-tag">Historical Context</span></div>
+              <div class="source-citation">
+                <strong>Witherington, Ben III.</strong> <em>Letters and Homilies for Hellenized Christians.</em> Vol. 1. Downers Grove: IVP Academic, 2006.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Parts 3–4</span>
+                <span class="usage-tag">Socio-Rhetorical</span>
+                <span class="usage-note">Socio-rhetorical context for honor, shame, teaching, and leadership dynamics in the Pastorals.</span>
+              </div>
             </div>
           </div>
 
-          <div style="background:linear-gradient(135deg,#f8f9ff,#fef3f2);border-left:4px solid var(--accent-purple);padding:1.5rem;border-radius:12px;margin-top:2rem">
-            <p style="margin:0;font-weight:600;color:var(--accent-purple);margin-bottom:.5rem">Scope & Method Note</p>
-            <p style="margin:0;font-size:.95rem;color:#334155">This bibliography reflects a <strong>whole-letter, resurrection-centered</strong> reading strategy. Visual commentaries shape structural awareness; teacher notes guide pedagogical emphasis; scholarly works provide historical and theological depth. The flagship series integrates these streams rather than treating them as competing authorities.</p>
+          <div class="citation-note">
+            <p><strong>Scope & Method Note:</strong> These sources are integrated through a <strong>whole-letter, resurrection-as-revelation</strong> reading strategy. Translation and literary design clarify structure, visual commentaries shape narrative flow, and scholarly works provide historical and theological depth. Together, they support the claim that resurrection is Paul's consistent answer to the problems beneath the problems.</p>
           </div>
         </div>
       </details>
@@ -824,6 +1164,16 @@
     document.addEventListener('DOMContentLoaded', function() {
       console.log('Resurrection as Revelation Hub - v5.8.1 initialized');
     });
+
+    // Ellipse Flip Functions
+    function flipEllipse(element) {
+      element.classList.toggle('flipped');
+    }
+    function resetAllEllipses() {
+      document.querySelectorAll('.ellipse-wrapper').forEach(el => {
+        el.classList.remove('flipped');
+      });
+    }
   </script>
 
   <!-- Navigation Component Integration -->
