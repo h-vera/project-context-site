@@ -52,11 +52,14 @@
     { id: 'nt-connections', icon: '', label: 'NT Links', priority: 3 },
     
     // Son of Man page (Daniel 7)
-    { id: 'son-of-man', icon: '', label: 'Son of Man', priority: 1 },
+    { id: 'genesis-backstory', icon: '', label: 'Genesis', priority: 2 },
     { id: 'beasts', icon: '', label: 'Beasts', priority: 2 },
-    { id: 'ancient-of-days', icon: '', label: 'Ancient', priority: 2 },
     { id: 'throne-room', icon: '', label: 'Throne', priority: 2 },
-    { id: 'true-humanity', icon: '', label: 'Humanity', priority: 2 },
+    { id: 'son-of-man', icon: '', label: 'Son of Man', priority: 1 },
+    { id: 'neb-preview', icon: '', label: 'Neb Preview', priority: 3 },
+    { id: 'interpretation', icon: '', label: 'Interpret', priority: 3 },
+    { id: 'why-son-of-man', icon: '', label: 'Why Title', priority: 3 },
+    { id: 'jesus', icon: '', label: 'Jesus', priority: 2 },
     
     // Prophetic Hope page (Daniel 8-12)
     { id: 'movement', icon: '', label: 'Movement', priority: 2 },
