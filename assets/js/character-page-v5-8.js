@@ -225,6 +225,14 @@
   // ============================================
     // RESURRECTION AS REVELATION STUDY SECTIONS
     // ============================================
+    
+    // Hub page
+    { id: 'parts', icon: '', label: 'Parts', priority: 1 },
+    { id: 'double-revelation', icon: '', label: 'Double Rev', priority: 1 },
+    { id: 'functions', icon: '', label: 'Functions', priority: 2 },
+    { id: 'anchor-texts', icon: '', label: 'Anchor Texts', priority: 2 },
+    { id: 'context', icon: '', label: 'Context', priority: 3 },
+
     // Part 1 - Ephesians
     { id: 'thesis', icon: '', label: 'Thesis', priority: 1 },
     { id: 'beneath', icon: '', label: 'Beneath', priority: 2 },
@@ -233,6 +241,26 @@
     { id: 'ephesians', icon: '', label: 'Ephesians', priority: 1 },
     { id: 'next', icon: '', label: 'Next', priority: 4 },
   
+    // Part 2 - 1 Corinthians
+    { id: 'diagnosis', icon: '', label: 'Diagnosis', priority: 1 },
+    { id: 'anchors', icon: '', label: 'Anchors', priority: 2 },
+    { id: 'discipline', icon: '', label: 'Discipline', priority: 2 },
+    { id: 'chapter15', icon: '', label: 'Ch 15', priority: 1 },
+    { id: 'honorshame', icon: '', label: 'Honor/Shame', priority: 2 },
+    { id: 'problems', icon: '', label: 'Problems', priority: 3 },
+    { id: 'how-it-solves', icon: '', label: 'Solution', priority: 2 },
+    { id: 'bridge', icon: '', label: 'Bridge', priority: 4 },
+    { id: 'sources', icon: '', label: 'Sources', priority: 5 },
+
+    // Part 3 - 1 Timothy (placeholders for future)
+    { id: 'formation', icon: '', label: 'Formation', priority: 1 },
+    { id: 'creed', icon: '', label: 'Creed', priority: 2 },
+    { id: 'household', icon: '', label: 'Household', priority: 2 },
+    
+    // Part 4 - 2 Timothy (placeholders for future)  
+    { id: 'endurance', icon: '', label: 'Endurance', priority: 1 },
+    { id: 'chains', icon: '', label: 'Chains', priority: 2 },
+    { id: 'completion', icon: '', label: 'Completion', priority: 2 },
   ];
   
   // ============================================
