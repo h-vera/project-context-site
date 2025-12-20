@@ -221,8 +221,20 @@
     { id: 'failure', icon: '', label: 'Failure', priority: 3 },
     { id: 'lawsuit', icon: '', label: 'Lawsuit', priority: 2 },
     { id: 'renewal', icon: '', label: 'Renewal', priority: 1 },
-  ];
 
+  // ============================================
+    // RESURRECTION AS REVELATION STUDY SECTIONS
+    // ============================================
+    // Part 1 - Ephesians
+    { id: 'thesis', icon: '', label: 'Thesis', priority: 1 },
+    { id: 'beneath', icon: '', label: 'Beneath', priority: 2 },
+    { id: 'double-revelation', icon: '', label: 'Double Rev', priority: 1 },
+    { id: 'ephesians-apocalypse', icon: '', label: 'Apocalypse', priority: 2 },
+    { id: 'ephesians', icon: '', label: 'Ephesians', priority: 1 },
+    { id: 'next', icon: '', label: 'Next', priority: 4 },
+  
+  ];
+  
   // ============================================
   // MOBILE TABS CLASS
   // ============================================
