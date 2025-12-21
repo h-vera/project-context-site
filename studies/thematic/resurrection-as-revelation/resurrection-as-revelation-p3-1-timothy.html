@@ -36,6 +36,7 @@
     --accent-gold-light: #f59e0b;
     --accent-purple: #7c3aed;
     --accent-purple-light: #8b5cf6;
+    --accent-red: #dc2626;
     --primary-dark: #1a202c;
     --text-primary: #1e293b;
     --text-secondary: #64748b;
@@ -43,6 +44,7 @@
     --border-light: #e2e8f0;
     --bg-cream: #fefdfb;
     --bg-warm: #faf8f5;
+    --bg-gray: #f5f5f5;
     --shadow: rgba(0,0,0,0.1);
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
     --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
@@ -846,14 +848,14 @@ p {
     line-height: 1.7;
 }
 
-/* Pillar Cards Track */
+/* Pillar Cards Track with Connecting Line */
 .pillars-track {
     position: absolute;
     top: 95vh;
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
-    max-width: 340px;
+    max-width: 380px;
     display: flex;
     flex-direction: column;
     gap: 80vh;
@@ -861,14 +863,39 @@ p {
     z-index: 20;
 }
 
-/* Pillar Card - Pill Style */
+/* Connecting Line - spans from first to last pillar */
+.pillars-track::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 35px;
+    bottom: calc(150vh + 35px);
+    width: 3px;
+    background: linear-gradient(180deg, 
+        var(--accent-teal) 0%, 
+        var(--accent-gold) 50%, 
+        var(--accent-purple) 100%);
+    transform: translateX(-50%);
+    border-radius: 2px;
+    opacity: 0.6;
+    transition: opacity 0.5s ease;
+    z-index: -1;
+}
+
+/* Line fades when all pillars are flipped */
+.pillars-track.all-flipped::before {
+    opacity: 0;
+}
+
+/* Pillar Card - Pill Style - INCREASED SIZE */
 .pillar-card {
     perspective: 1200px;
     height: 70px;
     transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
 }
 .pillar-card.expanded {
-    height: 200px;
+    height: 280px; /* Increased from 200px */
 }
 .pillar-inner {
     position: relative;
@@ -920,23 +947,24 @@ p {
     color: var(--text-muted);
 }
 
-/* Back Face - Expanded Card */
+/* Back Face - Expanded Card - INCREASED SIZE */
 .pillar-back {
     background: linear-gradient(135deg, var(--accent-teal), var(--accent-teal-dark));
     color: white;
     transform: rotateX(180deg);
     border-radius: 20px;
-    padding: 1.5rem;
+    padding: 1.75rem;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
     text-align: left;
+    overflow: hidden;
 }
 .pillar-back-header {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
     width: 100%;
 }
 .pillar-back-icon {
@@ -944,23 +972,23 @@ p {
 }
 .pillar-back-title {
     font-family: var(--font-display);
-    font-size: 1.15rem;
+    font-size: 1.25rem;
     font-weight: 700;
 }
 .pillar-back-label {
-    font-size: 0.65rem;
+    font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
     opacity: 0.85;
     background: rgba(255,255,255,0.15);
-    padding: 0.25rem 0.75rem;
+    padding: 0.3rem 0.85rem;
     border-radius: 999px;
     display: inline-block;
 }
 .pillar-back-text {
-    font-size: 0.9rem;
-    line-height: 1.6;
+    font-size: 0.95rem;
+    line-height: 1.7;
     opacity: 0.95;
 }
 
@@ -975,13 +1003,20 @@ p {
         height: 65px;
     }
     .pillar-card.expanded {
-        height: 220px;
+        height: 300px; /* More height on mobile for text */
     }
     .two-ages-flip-container {
         height: 480px;
     }
     .two-ages-face {
         padding: 2rem 1.5rem;
+    }
+    .pillar-back {
+        padding: 1.5rem;
+    }
+    .pillar-back-text {
+        font-size: 0.9rem;
+        line-height: 1.6;
     }
 }
 
@@ -1279,89 +1314,180 @@ p {
 }
 
 /* ============================================
-   SOURCES / BIBLIOGRAPHY
+   BIBLIOGRAPHY - v5.8.1 Enhanced Format
    ============================================ */
-.sources-section {
-    margin: 4rem 0;
-    background: transparent;
-    box-shadow: none;
+.bibliography-section.enhanced {
+    margin: 3rem 0;
 }
-.sources-section:hover {
-    transform: none;
-    box-shadow: none;
-}
-.sources-section details {
-    background: white;
-    border-radius: 16px;
+.bibliography-section.enhanced summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #faf5ff 100%);
     border: 1px solid var(--border-light);
-    overflow: hidden;
+    border-radius: 12px;
+    transition: all 0.3s;
+}
+.bibliography-section.enhanced summary:hover {
+    background: white;
     box-shadow: var(--shadow-md);
 }
-.sources-section summary {
-    padding: 1.5rem 2rem;
-    cursor: pointer;
+.bibliography-section.enhanced summary::-webkit-details-marker {
+    display: none;
+}
+.bibliography-section.enhanced[open] summary {
+    border-radius: 12px 12px 0 0;
+    border-bottom: none;
+}
+.bibliography-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    list-style: none;
-    transition: background 0.2s;
+    width: 100%;
 }
-.sources-section summary:hover {
-    background: var(--bg-warm);
-}
-.sources-section summary::-webkit-details-marker {
-    display: none;
-}
-.sources-header {
+.bibliography-inner {
     display: flex;
     align-items: center;
     gap: 1rem;
+    flex: 1;
 }
-.sources-icon {
-    font-size: 1.5rem;
+.bibliography-icon {
+    font-size: 2rem;
 }
-.sources-title {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    font-weight: 600;
+.bibliography-text {
+    flex: 1;
+}
+.bibliography-title {
+    margin: 0;
+    font-size: 1.4rem;
     color: var(--accent-purple);
+    font-weight: 700;
 }
-.sources-subtitle {
-    font-size: 0.85rem;
+.bibliography-subtitle {
+    margin: 0.25rem 0 0;
     color: var(--text-muted);
+    font-size: 0.9rem;
 }
-.expand-icon {
+.expand-indicator {
     transition: transform 0.3s;
+    color: var(--accent-purple);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-details[open] .expand-icon {
+.bibliography-section.enhanced[open] .expand-indicator {
     transform: rotate(180deg);
 }
-.sources-content {
-    padding: 0 2rem 2rem;
+.bibliography-content {
+    padding: 2rem;
+    background: white;
+    border: 1px solid var(--border-light);
+    border-top: none;
+    border-radius: 0 0 12px 12px;
 }
 .source-category {
+    margin: 0 0 2rem;
+}
+.source-category:last-of-type {
     margin-bottom: 1.5rem;
 }
 .source-category h4 {
-    color: var(--accent-teal);
-    font-size: 1rem;
+    color: var(--accent-purple);
+    margin: 0 0 1rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+    border-bottom: 2px solid var(--accent-purple);
+    padding-bottom: 0.5rem;
+}
+.source-entry {
+    background: linear-gradient(135deg, #fafbfc 0%, #f8fafc 100%);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
     margin-bottom: 0.75rem;
 }
-.source-item {
-    padding: 0.75rem 0;
-    border-bottom: 1px solid var(--border-light);
-    font-size: 0.9rem;
+.source-entry:last-child {
+    margin-bottom: 0;
+}
+.source-citation {
     line-height: 1.6;
+    color: #334155;
 }
-.source-item:last-child {
-    border-bottom: none;
+.source-citation strong {
+    color: var(--primary-dark);
 }
-.source-item a {
-    color: var(--accent-teal);
-    text-decoration: none;
+.source-citation em {
+    color: #475569;
 }
-.source-item a:hover {
-    text-decoration: underline;
+.source-usage {
+    margin-top: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+.usage-tag {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent-red), var(--accent-purple));
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+}
+.usage-note {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    flex: 1;
+    min-width: 200px;
+}
+.citation-note {
+    background: linear-gradient(135deg, #fef3f2 0%, #f8f9ff 100%);
+    border-left: 4px solid var(--accent-red);
+    padding: 1.25rem 1.5rem;
+    border-radius: 0 8px 8px 0;
+    margin-top: 1rem;
+}
+.citation-note p {
+    margin: 0;
+    color: #334155;
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+.citation-note strong {
+    color: var(--accent-red);
+}
+
+@media (max-width: 768px) {
+    .bibliography-section.enhanced summary {
+        padding: 1rem;
+    }
+    .bibliography-inner {
+        gap: 0.75rem;
+    }
+    .bibliography-icon {
+        font-size: 1.5rem;
+    }
+    .bibliography-title {
+        font-size: 1.2rem;
+    }
+    .bibliography-content {
+        padding: 1.25rem;
+    }
+    .source-entry {
+        padding: 0.875rem 1rem;
+    }
+    .source-usage {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .usage-note {
+        min-width: auto;
+    }
 }
 
 /* ============================================
@@ -1679,7 +1805,7 @@ details[open] .expand-icon {
     <section class="scroll-experience" id="mystery">
       <div class="scroll-experience-header">
         <h2><span class="icon">🔄</span> Formation Flows from the Mystery</h2>
-        <p class="lead">Scroll to see how each pillar of church life emerges from the christological center. Click any pillar to reveal its resurrection connection.</p>
+        <p class="lead">Scroll to see how each pillar of church life emerges from the christological center. The pillars flip as they pass the center.</p>
       </div>
 
       <!-- Sticky Mystery Box -->
@@ -1726,8 +1852,8 @@ details[open] .expand-icon {
         </div>
       </div>
 
-      <!-- Pillar Cards Track -->
-      <div class="pillars-track">
+      <!-- Pillar Cards Track with Connecting Line -->
+      <div class="pillars-track" id="pillarsTrack">
         <!-- Pillar 1: Sound Doctrine -->
         <div class="pillar-card" data-pillar="1">
           <div class="pillar-inner">
@@ -1744,7 +1870,7 @@ details[open] .expand-icon {
                 <span class="pillar-back-title">Sound Doctrine</span>
               </div>
               <div class="pillar-back-label">Resurrection Connection</div>
-              <div class="pillar-back-text">Healthy teaching produces healthy community. The risen Christ is the content of "the gospel of the glory of the blessed God" (1:11). Sound doctrine is medicine against the disease of false teaching.</div>
+              <div class="pillar-back-text">Healthy teaching produces healthy community. The risen Christ is the content of "the gospel of the glory of the blessed God" (1:11). Sound doctrine is medicine against the disease of false teaching—rooted in the one who was vindicated by the Spirit.</div>
             </div>
           </div>
         </div>
@@ -1765,7 +1891,7 @@ details[open] .expand-icon {
                 <span class="pillar-back-title">Qualified Leaders</span>
               </div>
               <div class="pillar-back-label">Resurrection Connection</div>
-              <div class="pillar-back-text">Leaders must be "above reproach" because they represent the risen Lord to outsiders. Character over charisma—the resurrection produces transformed lives that can withstand scrutiny.</div>
+              <div class="pillar-back-text">Leaders must be "above reproach" because they represent the risen Lord to outsiders. Character over charisma—the resurrection produces transformed lives that can withstand scrutiny. Overseers steward the household of the living God.</div>
             </div>
           </div>
         </div>
@@ -1786,7 +1912,7 @@ details[open] .expand-icon {
                 <span class="pillar-back-title">Ordered Household</span>
               </div>
               <div class="pillar-back-label">Resurrection Connection</div>
-              <div class="pillar-back-text">The church as God's household anticipates age-to-come community. Every relationship—elders and widows, men and women, masters and servants—should reflect resurrection dignity.</div>
+              <div class="pillar-back-text">The church as God's household anticipates age-to-come community. Every relationship—elders and widows, men and women, masters and servants—should reflect resurrection dignity. The one taken up in glory orders his family.</div>
             </div>
           </div>
         </div>
@@ -1807,7 +1933,7 @@ details[open] .expand-icon {
                 <span class="pillar-back-title">Public Witness</span>
               </div>
               <div class="pillar-back-label">Resurrection Connection</div>
-              <div class="pillar-back-text">"Well thought of by outsiders" (3:7) because resurrection people embody a compelling alternative to Artemisian culture. Formation produces credibility; credibility enables witness.</div>
+              <div class="pillar-back-text">"Well thought of by outsiders" (3:7) because resurrection people embody a compelling alternative to Artemisian culture. Formation produces credibility; credibility enables witness. Proclaimed among nations, believed on in the world.</div>
             </div>
           </div>
         </div>
@@ -1942,45 +2068,155 @@ details[open] .expand-icon {
     </section>
 
     <!-- ============================================
-         SOURCES
+         BIBLIOGRAPHY - v5.8.1 Enhanced Format
          ============================================ -->
-    <section class="section sources-section" id="sources">
-      <details>
-        <summary>
-          <div class="sources-header">
-            <span class="sources-icon">📚</span>
-            <div>
-              <div class="sources-title">Sources & Further Reading</div>
-              <div class="sources-subtitle">Academic references for deeper study</div>
+    <details class="bibliography-section enhanced" id="sources">
+      <summary>
+        <div class="bibliography-header">
+          <div class="bibliography-inner">
+            <span class="bibliography-icon">📚</span>
+            <div class="bibliography-text">
+              <h3 class="bibliography-title">Bibliography & Sources</h3>
+              <p class="bibliography-subtitle">Academic references for the 1 Timothy resurrection study</p>
+            </div>
+            <div class="expand-indicator">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
             </div>
           </div>
-          <span class="expand-icon">▼</span>
-        </summary>
-        <div class="sources-content">
-          <div class="source-category">
-            <h4>Commentaries</h4>
-            <div class="source-item">Mounce, William D. <em>Pastoral Epistles</em>. Word Biblical Commentary. Nashville: Thomas Nelson, 2000.</div>
-            <div class="source-item">Marshall, I. Howard. <em>The Pastoral Epistles</em>. ICC. Edinburgh: T&T Clark, 1999.</div>
-            <div class="source-item">Towner, Philip H. <em>The Letters to Timothy and Titus</em>. NICNT. Grand Rapids: Eerdmans, 2006.</div>
+        </div>
+      </summary>
+      <div class="bibliography-content">
+
+        <!-- Commentaries -->
+        <div class="source-category">
+          <h4>Major Commentaries</h4>
+          
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Mounce, William D.</strong> <em>Pastoral Epistles.</em> Word Biblical Commentary. Nashville: Thomas Nelson, 2000.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Primary</span>
+              <span class="usage-tag">Exegesis</span>
+              <span class="usage-note">Primary source for Greek analysis, false teaching identification, and household code interpretation.</span>
+            </div>
           </div>
-          <div class="source-category">
-            <h4>Ephesian Context</h4>
-            <div class="source-item">Trebilco, Paul R. <em>The Early Christians in Ephesus from Paul to Ignatius</em>. WUNT 166. Tübingen: Mohr Siebeck, 2004.</div>
-            <div class="source-item">Arnold, Clinton E. <em>Ephesians: Power and Magic</em>. Cambridge: CUP, 1989.</div>
+          
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Marshall, I. Howard.</strong> <em>The Pastoral Epistles.</em> International Critical Commentary. Edinburgh: T&T Clark, 1999.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Critical</span>
+              <span class="usage-tag">Historical</span>
+              <span class="usage-note">Authorship questions, historical context, and intertextual connections.</span>
+            </div>
           </div>
-          <div class="source-category">
-            <h4>Women in 1 Timothy</h4>
-            <div class="source-item">Baugh, S. M. "A Foreign World: Ephesus in the First Century." <em>Women in the Church</em>. Ed. Köstenberger et al. Grand Rapids: Baker, 2005.</div>
-            <div class="source-item">Westfall, Cynthia Long. <em>Paul and Gender</em>. Grand Rapids: Baker Academic, 2016.</div>
-          </div>
-          <div class="source-category">
-            <h4>Digital Resources</h4>
-            <div class="source-item">Bible Project: <a href="https://bibleproject.com/explore/video/1-timothy/" target="_blank">1 Timothy Overview</a></div>
-            <div class="source-item">Full 1 Timothy Commentary: <a href="/studies/new-covenant/timothy/1-timothy-commentary.html">Project Context</a></div>
+
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Towner, Philip H.</strong> <em>The Letters to Timothy and Titus.</em> New International Commentary on the New Testament. Grand Rapids: Eerdmans, 2006.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Theology</span>
+              <span class="usage-tag">Formation</span>
+              <span class="usage-note">Resurrection as formational framework; godliness theology.</span>
+            </div>
           </div>
         </div>
-      </details>
-    </section>
+
+        <!-- Ephesian Context -->
+        <div class="source-category">
+          <h4>Ephesian Context</h4>
+          
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Trebilco, Paul R.</strong> <em>The Early Christians in Ephesus from Paul to Ignatius.</em> WUNT 166. Tübingen: Mohr Siebeck, 2004.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Context</span>
+              <span class="usage-note">Comprehensive social history of the Ephesian church.</span>
+            </div>
+          </div>
+          
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Arnold, Clinton E.</strong> <em>Ephesians: Power and Magic.</em> Cambridge: Cambridge University Press, 1989.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">ANE</span>
+              <span class="usage-tag">Artemis</span>
+              <span class="usage-note">Artemis cult, magical practices, spiritual powers in Ephesian context.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Women in 1 Timothy -->
+        <div class="source-category">
+          <h4>Women & Household</h4>
+          
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Baugh, S. M.</strong> "A Foreign World: Ephesus in the First Century." In <em>Women in the Church.</em> Ed. Köstenberger et al. Grand Rapids: Baker, 2005.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Women</span>
+              <span class="usage-note">Archaeological and social evidence for women's roles in Ephesus.</span>
+            </div>
+          </div>
+          
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Westfall, Cynthia Long.</strong> <em>Paul and Gender: Reclaiming the Apostle's Vision for Men and Women in Christ.</em> Grand Rapids: Baker Academic, 2016.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Gender</span>
+              <span class="usage-tag">Household</span>
+              <span class="usage-note">Egalitarian reading of household codes; formation emphasis.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resurrection Theology -->
+        <div class="source-category">
+          <h4>Resurrection Theology</h4>
+          
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Wright, N. T.</strong> <em>The Resurrection of the Son of God.</em> Christian Origins and the Question of God 3. Minneapolis: Fortress, 2003.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Foundation</span>
+              <span class="usage-note">Foundational for resurrection as worldview-shaping event.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Digital Resources -->
+        <div class="source-category">
+          <h4>Digital Resources</h4>
+          
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Bible Project.</strong> "1 Timothy Overview." Available at <a href="https://bibleproject.com/explore/video/1-timothy/" target="_blank" style="color: var(--accent-teal);">bibleproject.com</a>
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Overview</span>
+              <span class="usage-note">Structural awareness and literary flow.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Citation Note -->
+        <div class="citation-note">
+          <p><strong>Note on Sources:</strong> This study emphasizes resurrection as the assumed foundation for Paul's pastoral instructions—formation over argumentation. Sources were selected for their attention to the Ephesian context, household ethics, and the theological coherence of the Pastoral Epistles.</p>
+          <p><strong>Citation Format:</strong> Chicago Manual of Style, 17th edition</p>
+        </div>
+
+      </div>
+    </details>
 
     <!-- PAGE NAVIGATION -->
     <nav class="page-nav">
@@ -2016,6 +2252,7 @@ details[open] .expand-icon {
     const mysteryBox = document.getElementById('mysteryBox');
     const scrollExperience = document.querySelector('.scroll-experience');
     const pillarCards = document.querySelectorAll('.pillar-card');
+    const pillarsTrack = document.getElementById('pillarsTrack');
     
     function handleScrollExperience() {
       if (!scrollExperience || !mysteryBox) return;
@@ -2029,7 +2266,7 @@ details[open] .expand-icon {
       const mysteryCenter = mysteryRect.top + mysteryRect.height / 2;
       
       // Check each pillar card for flip
-      let allFlipped = true;
+      let flippedCount = 0;
       pillarCards.forEach((card, index) => {
         const cardRect = card.getBoundingClientRect();
         const cardCenter = cardRect.top + cardRect.height / 2;
@@ -2041,14 +2278,22 @@ details[open] .expand-icon {
             inner.classList.add('flipped');
             card.classList.add('expanded');
           }
-        } else {
-          allFlipped = false;
+          flippedCount++;
         }
       });
       
+      // Add class to track when all pillars are flipped (to fade line)
+      if (pillarsTrack) {
+        if (flippedCount === pillarCards.length) {
+          pillarsTrack.classList.add('all-flipped');
+        } else {
+          pillarsTrack.classList.remove('all-flipped');
+        }
+      }
+      
       // Expand mystery box based on scroll progress through the section
       // After ~85% through the scroll experience, expand the mystery box
-      if (scrollProgress > 0.82 && allFlipped) {
+      if (scrollProgress > 0.82 && flippedCount === pillarCards.length) {
         mysteryBox.classList.add('expanded');
       } else if (scrollProgress < 0.75) {
         mysteryBox.classList.remove('expanded');
