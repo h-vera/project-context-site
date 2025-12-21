@@ -2291,13 +2291,21 @@ p {
         }
       }
       
-      // Expand mystery box based on scroll progress through the section
-      // After ~85% through the scroll experience, expand the mystery box
-      if (scrollProgress > 0.82 && flippedCount === pillarCards.length) {
+      // Expand mystery box only after Pillar 4 is fully clear
+        const lastCard = pillarCards[pillarCards.length - 1];
+        const lastRect = lastCard.getBoundingClientRect();
+
+        // tuning knobs
+        const CLEAR_PX = 60;   // gap between pillar 4 and mystery card
+        const EXPAND_AT = 0.88;
+
+        const lastIsClear = lastRect.bottom < (mysteryRect.top - CLEAR_PX);
+
+        if (scrollProgress > EXPAND_AT && flippedCount === pillarCards.length && lastIsClear) {
         mysteryBox.classList.add('expanded');
-      } else if (scrollProgress < 0.75) {
+        } else if (scrollProgress < 0.78) {
         mysteryBox.classList.remove('expanded');
-      }
+        }
     }
 
     window.addEventListener('scroll', handleScrollExperience);
