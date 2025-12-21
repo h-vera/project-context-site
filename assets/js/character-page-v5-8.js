@@ -252,15 +252,29 @@
     { id: 'bridge', icon: '', label: 'Bridge', priority: 4 },
     { id: 'sources', icon: '', label: 'Sources', priority: 5 },
 
-    // Part 3 - 1 Timothy (placeholders for future)
+    // Part 3 - 1 Timothy
     { id: 'formation', icon: '', label: 'Formation', priority: 1 },
-    { id: 'creed', icon: '', label: 'Creed', priority: 2 },
+    { id: 'context', icon: '', label: 'Context', priority: 2 },
+    { id: 'creed', icon: '', label: 'Creed', priority: 1 },
+    { id: 'two-ages', icon: '', label: 'Two Ages', priority: 2 },
+    { id: 'mystery', icon: '', label: 'Mystery', priority: 1 },
     { id: 'household', icon: '', label: 'Household', priority: 2 },
+    { id: 'eternal', icon: '', label: 'Eternal Life', priority: 2 },
+    { id: 'credibility', icon: '', label: 'Credibility', priority: 3 },
+    { id: 'bridge', icon: '', label: 'Bridge', priority: 4 },
+    { id: 'sources', icon: '', label: 'Sources', priority: 5 },
     
-    // Part 4 - 2 Timothy (placeholders for future)  
+    // Part 4 - 2 Timothy
     { id: 'endurance', icon: '', label: 'Endurance', priority: 1 },
     { id: 'chains', icon: '', label: 'Chains', priority: 2 },
     { id: 'completion', icon: '', label: 'Completion', priority: 2 },
+    { id: 'suffering', icon: '', label: 'Suffering', priority: 2 },
+    { id: 'shame', icon: '', label: 'Shame', priority: 2 },
+    { id: 'false-teachers', icon: '', label: 'False Teachers', priority: 2 },
+    { id: 'lens', icon: '', label: 'Reading Lens', priority: 3 },
+    { id: 'closing', icon: '', label: 'Final Word', priority: 4 },
+    { id: 'metaphors', icon: '', label: 'Metaphors', priority: 2 },
+    { id: 'scripture', icon: '', label: 'Scripture', priority: 2 },
   ];
   
   // ============================================
