@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Resurrection as Revelation — Iceberg (Interactive)</title>
+
+  <style>
+    :root{
+      --bg: #0a1628;
+      --panel: rgba(255,255,255,.06);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --muted2: rgba(255,255,255,.55);
+      --border: rgba(255,255,255,.16);
+      --shadow: 0 18px 55px rgba(0,0,0,.45);
+
+      --accent-primary: #7c1d3f;
+      --accent-secondary: #5b2d8b;
+      --accent-gradient: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+
+      --radius: 18px;
+      --max: 1160px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: var(--font);
+      color: var(--text);
+      background:
+        radial-gradient(ellipse 1100px 700px at 15% 10%, rgba(91,45,139,.25), transparent 55%),
+        radial-gradient(ellipse 1000px 700px at 85% 15%, rgba(124,29,63,.18), transparent 55%),
+        radial-gradient(ellipse 900px 900px at 50% 95%, rgba(60,120,180,.18), transparent 55%),
+        linear-gradient(180deg, #050810 0%, var(--bg) 100%);
+      min-height:100vh;
+    }
+
+    .wrap{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 2rem 1.2rem 2.5rem;
+    }
+
+    header{
+      display:flex;
+      gap:1rem;
+      justify-content:space-between;
+      align-items:flex-start;
+      flex-wrap:wrap;
+      margin-bottom: 1.25rem;
+    }
+
+    .title{ flex: 1 1 520px; }
+
+    h1{
+      margin:.2rem 0 .5rem;
+      font-size: clamp(1.5rem, 2.2vw, 2.2rem);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+    .sub{
+      margin:0;
+      color: var(--muted);
+      max-width: 72ch;
+      line-height: 1.55;
+    }
+
+    .pillbar{
+      display:flex;
+      gap:.6rem;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+    .pill{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      padding: .45rem .75rem;
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: .9rem;
+      display:inline-flex;
+      gap:.5rem;
+      align-items:center;
+    }
+    .pill strong{ color: var(--text); font-weight: 700; }
+    .pill .dot{ width: 10px; height: 10px; border-radius: 50%; background: var(--accent-gradient); }
+
+    @media (max-width: 700px){
+      .pillbar{ justify-content:flex-start; }
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 1.1rem;
+      align-items: start;
+    }
+    @media (max-width: 960px){
+      .layout{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .card-hd{
+      padding: 1rem 1.1rem;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      display:flex;
+      justify-content:space-between;
+      gap: 1rem;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .card-hd h2{ margin:0; font-size: 1.05rem; }
+    .hint{ color: var(--muted2); font-size: .9rem; margin:0; }
+
+    .stage-inner{
+      position: relative;
+      background: linear-gradient(180deg, 
+        #0a1832 0%,
+        #1a3a5c 25%,
+        #2a5a7c 35%,
+        #3a7a9c 42%,
+        #2a6a8c 50%,
+        #1a4a6c 65%,
+        #0a2a4c 85%,
+        #051828 100%);
+      aspect-ratio: 16 / 11;
+      min-height: 450px;
+    }
+    svg{ width:100%; height:100%; display:block; }
+
+    .hit{
+      cursor:pointer;
+      transition: filter .2s ease;
+      outline: none;
+    }
+    .hit:hover, .hit:focus-visible{
+      filter: brightness(1.1) drop-shadow(0 8px 20px rgba(0,0,0,.3));
+    }
+
+    .tooltip{
+      position:absolute;
+      pointer-events:none;
+      opacity:0;
+      transform: translateY(6px);
+      transition: opacity .12s ease, transform .12s ease;
+      max-width: 360px;
+      z-index: 20;
+    }
+    .tooltip.on{ opacity:1; transform: translateY(0); }
+    .tipbox{
+      border: 1px solid var(--border);
+      background: rgba(10,20,40,.94);
+      backdrop-filter: blur(10px);
+      border-radius: 14px;
+      padding: .75rem .85rem;
+      box-shadow: 0 14px 40px rgba(0,0,0,.5);
+    }
+    .tipbox .t{ margin:0 0 .25rem; font-weight: 700; font-size: .95rem; }
+    .tipbox .b{ margin:0; color: var(--muted); font-size: .9rem; line-height: 1.45; }
+
+    .side-inner{ padding: 1rem 1.1rem 1.1rem; }
+    .kicker{ display:flex; gap:.6rem; flex-wrap:wrap; margin: .25rem 0 .75rem; }
+    .tag{
+      display:inline-flex; align-items:center; gap:.45rem;
+      padding: .35rem .65rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      font-size: .82rem;
+      color: var(--muted);
+    }
+    .tag .sw{ width: 10px; height:10px; border-radius: 50%; background: var(--accent-gradient); }
+
+    .panel-title{ margin: .2rem 0 .35rem; font-size: 1.1rem; }
+    .panel-desc{ margin:0 0 .9rem; color: var(--muted); line-height:1.55; font-size: .95rem; }
+
+    .list{ display:flex; flex-direction:column; gap:.65rem; margin-top: .75rem; max-height: 400px; overflow-y: auto; }
+    .item{
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      border-radius: 14px;
+      padding: .75rem .85rem;
+    }
+    .item h4{
+      margin:0 0 .35rem;
+      font-size: .95rem;
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:.6rem;
+      flex-wrap:wrap;
+    }
+    .refs{ font-family: var(--mono); font-size: .78rem; color: rgba(255,255,255,.6); }
+    .item ul{ margin: .35rem 0 0 1.1rem; padding:0; color: rgba(255,255,255,.78); line-height:1.45; font-size: .92rem; }
+    .item li{ margin:.25rem 0; }
+
+    .cta{ margin-top: 1rem; display:flex; gap:.7rem; flex-wrap:wrap; }
+    .btn{
+      appearance:none; border: 0; cursor:pointer;
+      border-radius: 999px;
+      padding: .6rem .95rem;
+      font-weight: 700;
+      background: var(--accent-gradient);
+      color: white;
+      box-shadow: 0 10px 28px rgba(0,0,0,.22);
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .btn:hover{ transform: translateY(-2px); box-shadow: 0 16px 36px rgba(0,0,0,.30); }
+    .btn.secondary{
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.16);
+      color: var(--text);
+      box-shadow: none;
+    }
+
+    .footnote{
+      padding: .85rem 1.1rem;
+      border-top: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.12);
+      color: rgba(255,255,255,.7);
+      font-size: .88rem;
+      line-height: 1.5;
+      font-style: italic;
+    }
+    .footnote strong{ font-style: normal; color: rgba(255,255,255,.9); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <h1>Iceberg: Church Problems vs. Resurrection Reality</h1>
+        <p class="sub">
+          Hover or click the iceberg layers. The tip shows visible church issues;
+          the submerged mass names the deeper problem: communities not living inside
+          the resurrection as a present revelation.
+        </p>
+      </div>
+      <div class="pillbar">
+        <div class="pill"><span class="dot"></span><strong>Hover</strong> for preview</div>
+        <div class="pill"><span class="dot"></span><strong>Click</strong> to load letters</div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <section class="card stage">
+        <div class="card-hd">
+          <h2>The Iceberg</h2>
+          <p class="hint">Tip = symptoms · Underwater = diagnosis · Sky = solution</p>
+        </div>
+
+        <div class="stage-inner" id="stage">
+          <svg viewBox="0 0 1000 700" role="img" aria-label="Iceberg diagram">
+            <defs>
+              <!-- Sky gradient - deep cosmic blue -->
+              <linearGradient id="skyGrad" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#050a18"/>
+                <stop offset="40%" stop-color="#0a1832"/>
+                <stop offset="100%" stop-color="#1a3a5c"/>
+              </linearGradient>
+
+              <!-- Water gradient - ocean blue -->
+              <linearGradient id="waterGrad" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#2a6a8c"/>
+                <stop offset="30%" stop-color="#1a5070"/>
+                <stop offset="70%" stop-color="#0a3050"/>
+                <stop offset="100%" stop-color="#051828"/>
+              </linearGradient>
+
+              <!-- Ice above water - bright white/snow -->
+              <linearGradient id="iceAbove" x1="0.3" x2="0.7" y1="0" y2="1">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="50%" stop-color="#f0f8ff"/>
+                <stop offset="100%" stop-color="#d8ecf8"/>
+              </linearGradient>
+
+              <!-- Ice underwater - blue-white with depth -->
+              <linearGradient id="iceUnder" x1="0.5" x2="0.5" y1="0" y2="1">
+                <stop offset="0%" stop-color="#c8e8f8"/>
+                <stop offset="20%" stop-color="#90d0e8"/>
+                <stop offset="50%" stop-color="#58a8c8"/>
+                <stop offset="80%" stop-color="#3080a0"/>
+                <stop offset="100%" stop-color="#206080"/>
+              </linearGradient>
+
+              <!-- Cosmic glow for title -->
+              <radialGradient id="cosmicGlow" cx="50%" cy="50%" r="60%">
+                <stop offset="0%" stop-color="rgba(200,180,255,0.4)"/>
+                <stop offset="40%" stop-color="rgba(150,120,220,0.2)"/>
+                <stop offset="100%" stop-color="rgba(100,80,180,0)"/>
+              </radialGradient>
+
+              <!-- Golden accent glow -->
+              <radialGradient id="goldenGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="rgba(255,200,100,0.5)"/>
+                <stop offset="60%" stop-color="rgba(255,180,80,0.2)"/>
+                <stop offset="100%" stop-color="rgba(255,150,50,0)"/>
+              </radialGradient>
+
+              <!-- Ice shadow -->
+              <filter id="iceShadow" x="-20%" y="-10%" width="140%" height="130%">
+                <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,60,100,0.4)"/>
+              </filter>
+
+              <!-- Underwater blur -->
+              <filter id="underwaterSoft">
+                <feGaussianBlur stdDeviation="0.5"/>
+              </filter>
+
+              <!-- Text glow -->
+              <filter id="cosmicTextGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="4" result="glow"/>
+                <feMerge>
+                  <feMergeNode in="glow"/>
+                  <feMergeNode in="glow"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+
+            <!-- Sky background -->
+            <rect x="0" y="0" width="1000" height="280" fill="url(#skyGrad)"/>
+
+            <!-- Stars - cosmic feel -->
+            <g class="stars">
+              <!-- Bright stars -->
+              <circle cx="80" cy="50" r="1.8" fill="rgba(255,255,255,0.95)"/>
+              <circle cx="180" cy="90" r="1.4" fill="rgba(255,255,255,0.85)"/>
+              <circle cx="290" cy="40" r="2" fill="rgba(255,255,255,0.9)"/>
+              <circle cx="420" cy="100" r="1.2" fill="rgba(255,255,255,0.8)"/>
+              <circle cx="550" cy="35" r="1.6" fill="rgba(255,255,255,0.9)"/>
+              <circle cx="680" cy="75" r="1.5" fill="rgba(255,255,255,0.85)"/>
+              <circle cx="780" cy="45" r="1.8" fill="rgba(255,255,255,0.9)"/>
+              <circle cx="880" cy="95" r="1.3" fill="rgba(255,255,255,0.8)"/>
+              <circle cx="950" cy="55" r="1.5" fill="rgba(255,255,255,0.85)"/>
+              
+              <!-- Medium stars -->
+              <circle cx="120" cy="70" r="1" fill="rgba(255,255,255,0.7)"/>
+              <circle cx="240" cy="110" r="0.9" fill="rgba(255,255,255,0.65)"/>
+              <circle cx="350" cy="65" r="1.1" fill="rgba(255,255,255,0.7)"/>
+              <circle cx="480" cy="55" r="0.8" fill="rgba(255,255,255,0.6)"/>
+              <circle cx="620" cy="105" r="1" fill="rgba(255,255,255,0.7)"/>
+              <circle cx="730" cy="60" r="0.9" fill="rgba(255,255,255,0.65)"/>
+              <circle cx="830" cy="80" r="1" fill="rgba(255,255,255,0.7)"/>
+              
+              <!-- Dim stars -->
+              <circle cx="60" cy="95" r="0.6" fill="rgba(255,255,255,0.45)"/>
+              <circle cx="150" cy="45" r="0.5" fill="rgba(255,255,255,0.4)"/>
+              <circle cx="320" cy="90" r="0.6" fill="rgba(255,255,255,0.45)"/>
+              <circle cx="450" cy="30" r="0.5" fill="rgba(255,255,255,0.4)"/>
+              <circle cx="590" cy="85" r="0.6" fill="rgba(255,255,255,0.45)"/>
+              <circle cx="710" cy="35" r="0.5" fill="rgba(255,255,255,0.4)"/>
+              <circle cx="850" cy="65" r="0.6" fill="rgba(255,255,255,0.45)"/>
+              <circle cx="920" cy="30" r="0.5" fill="rgba(255,255,255,0.4)"/>
+            </g>
+
+            <!-- SOLUTION: Cosmic text in sky -->
+            <g class="hit" tabindex="0" role="button" data-layer="solution" aria-label="Resurrection-shaped solution">
+              <!-- Cosmic glow backdrop -->
+              <ellipse cx="500" cy="65" rx="280" ry="55" fill="url(#cosmicGlow)"/>
+              <ellipse cx="500" cy="65" rx="180" ry="35" fill="url(#goldenGlow)" opacity="0.5"/>
+              
+              <!-- Main title with cosmic glow -->
+              <text x="500" y="55" text-anchor="middle" 
+                    font-size="30" font-weight="300" letter-spacing="4"
+                    fill="rgba(255,240,220,0.95)" filter="url(#cosmicTextGlow)">
+                RESURRECTION AS REVELATION
+              </text>
+              
+              <!-- Subtitle -->
+              <text x="500" y="88" text-anchor="middle" 
+                    font-size="14" font-weight="500" letter-spacing="2"
+                    fill="rgba(220,200,255,0.85)">
+                The Solution — New Creation Life
+              </text>
+              
+              <!-- Decorative cosmic accents -->
+              <circle cx="165" cy="55" r="3" fill="rgba(255,220,150,0.8)"/>
+              <circle cx="835" cy="55" r="3" fill="rgba(255,220,150,0.8)"/>
+              <circle cx="200" cy="75" r="1.5" fill="rgba(200,180,255,0.6)"/>
+              <circle cx="800" cy="75" r="1.5" fill="rgba(200,180,255,0.6)"/>
+            </g>
+
+            <!-- Water body -->
+            <rect x="0" y="275" width="1000" height="425" fill="url(#waterGrad)"/>
+
+            <!-- Waterline - crisp horizon -->
+            <line x1="0" y1="275" x2="1000" y2="275" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+            
+            <!-- Reflection shimmer on water surface -->
+            <ellipse cx="500" cy="280" rx="150" ry="8" fill="rgba(255,255,255,0.08)"/>
+
+            <!-- ICEBERG UNDERWATER - realistic triangular shape -->
+            <g class="hit" tabindex="0" role="button" data-layer="underlying" aria-label="Underlying problem beneath the surface">
+              <!-- Main underwater mass - large triangle pointing down -->
+              <path d="M340,280 
+                       L320,320 L300,380 L290,450 L295,520 L320,580 L380,630 L460,665 L500,680 L540,665 L620,630 L680,580 L705,520 L710,450 L700,380 L680,320 L660,280
+                       L580,282 L500,284 L420,282 Z" 
+                    fill="url(#iceUnder)" opacity="0.92"/>
+              
+              <!-- Ice texture - vertical striations -->
+              <path d="M420,290 L400,450 L420,600 L440,450 Z" fill="rgba(255,255,255,0.08)"/>
+              <path d="M500,290 L480,500 L500,660 L520,500 Z" fill="rgba(255,255,255,0.06)"/>
+              <path d="M580,290 L600,450 L580,600 L560,450 Z" fill="rgba(255,255,255,0.08)"/>
+              
+              <!-- Depth shadows -->
+              <path d="M350,400 L320,550 L400,620 L420,500 Z" fill="rgba(0,40,80,0.2)"/>
+              <path d="M650,400 L680,550 L600,620 L580,500 Z" fill="rgba(0,40,80,0.2)"/>
+              
+              <!-- Bottom point highlight -->
+              <path d="M480,640 L500,680 L520,640 L500,650 Z" fill="rgba(100,180,220,0.5)"/>
+
+              <!-- Labels -->
+              <text x="500" y="420" text-anchor="middle" 
+                    font-size="24" font-weight="600" fill="rgba(255,255,255,0.95)">
+                Underlying Reality Gap
+              </text>
+              <text x="500" y="455" text-anchor="middle" 
+                    font-size="16" font-weight="400" fill="rgba(255,255,255,0.85)">
+                not living inside resurrection revelation
+              </text>
+              <text x="500" y="530" text-anchor="middle" 
+                    font-size="14" font-weight="500" fill="rgba(200,230,255,0.75)">
+                Identity · Ethics · Community · Hope
+              </text>
+              <text x="500" y="560" text-anchor="middle" 
+                    font-size="13" font-style="italic" fill="rgba(180,220,255,0.65)">
+                still shaped by old-age logic
+              </text>
+            </g>
+
+            <!-- ICEBERG TIP - small snowy peak -->
+            <g class="hit" tabindex="0" role="button" data-layer="surface" aria-label="Surface-level problems (symptoms)" filter="url(#iceShadow)">
+              <!-- Main peak - rounded snowy top -->
+              <path d="M420,175 
+                       Q450,140 500,130 Q550,140 580,175
+                       Q610,200 630,230 Q650,255 660,280
+                       L580,282 L500,284 L420,282 L340,280
+                       Q350,255 370,230 Q390,200 420,175 Z" 
+                    fill="url(#iceAbove)"/>
+              
+              <!-- Snow texture highlights -->
+              <path d="M460,145 Q480,135 500,133 Q520,135 540,145 Q520,155 500,150 Q480,155 460,145 Z" 
+                    fill="rgba(255,255,255,0.95)"/>
+              <path d="M430,180 Q450,165 480,160 L470,190 Q445,195 430,180 Z" 
+                    fill="rgba(255,255,255,0.8)"/>
+              <path d="M570,180 Q550,165 520,160 L530,190 Q555,195 570,180 Z" 
+                    fill="rgba(255,255,255,0.8)"/>
+              
+              <!-- Shadow on right side -->
+              <path d="M540,160 Q570,175 590,210 Q610,245 625,275 L580,278 Q570,250 550,220 Q530,190 540,160 Z" 
+                    fill="rgba(180,210,235,0.6)"/>
+
+              <!-- Labels -->
+              <text x="500" y="215" text-anchor="middle" 
+                    font-size="18" font-weight="600" fill="rgba(30,70,110,0.95)">
+                Surface Problems
+              </text>
+              <text x="500" y="240" text-anchor="middle" 
+                    font-size="13" font-weight="500" fill="rgba(50,90,130,0.85)">
+                conflicts · ethics · identity · order
+              </text>
+            </g>
+
+            <!-- Water overlay for depth effect -->
+            <rect x="0" y="275" width="1000" height="425" fill="rgba(20,80,120,0.08)"/>
+
+            <!-- CHURCH BADGES - on the iceberg tip -->
+            <g class="hit" tabindex="0" role="button" data-layer="corinth" aria-label="Corinth">
+              <circle cx="395" cy="205" r="20" fill="rgba(124,29,63,.92)"/>
+              <text x="395" y="211" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">C</text>
+            </g>
+            <g class="hit" tabindex="0" role="button" data-layer="galatia" aria-label="Galatia">
+              <circle cx="450" cy="175" r="18" fill="rgba(91,45,139,.92)"/>
+              <text x="450" y="181" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">G</text>
+            </g>
+            <g class="hit" tabindex="0" role="button" data-layer="ephesus" aria-label="Ephesus">
+              <circle cx="500" cy="160" r="18" fill="rgba(124,29,63,.92)"/>
+              <text x="500" y="166" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">E</text>
+            </g>
+            <g class="hit" tabindex="0" role="button" data-layer="philippi" aria-label="Philippi">
+              <circle cx="550" cy="175" r="18" fill="rgba(91,45,139,.92)"/>
+              <text x="550" y="181" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">P</text>
+            </g>
+            <g class="hit" tabindex="0" role="button" data-layer="thess" aria-label="Thessalonica">
+              <circle cx="605" cy="205" r="20" fill="rgba(124,29,63,.92)"/>
+              <text x="605" y="211" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">T</text>
+            </g>
+            <g class="hit" tabindex="0" role="button" data-layer="pastorals" aria-label="Pastorals">
+              <circle cx="640" cy="248" r="20" fill="rgba(91,45,139,.92)"/>
+              <text x="640" y="254" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">PT</text>
+            </g>
+
+          </svg>
+
+          <div class="tooltip" id="tooltip" aria-hidden="true">
+            <div class="tipbox">
+              <p class="t" id="tipTitle">Title</p>
+              <p class="b" id="tipBody">Body</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="footnote">
+          <strong>2 Corinthians 11:28</strong> — "Apart from other things, there is the daily pressure on me of my anxiety for all the churches."
+        </div>
+      </section>
+
+      <aside class="card side">
+        <div class="card-hd">
+          <h2>Layer Details</h2>
+          <p class="hint">Each click loads related letters + key texts.</p>
+        </div>
+        <div class="side-inner">
+          <div class="kicker">
+            <span class="tag"><span class="sw"></span> Resurrection-as-revelation lens</span>
+            <span class="tag"><span class="sw"></span> Symptom → Cause → Solution</span>
+          </div>
+
+          <h3 class="panel-title" id="panelTitle">Start with the iceberg</h3>
+          <p class="panel-desc" id="panelDesc">
+            Click any iceberg region or church badge to populate the letter connections.
+          </p>
+
+          <div class="list" id="panelList" aria-live="polite"></div>
+
+          <div class="cta">
+            <button class="btn" id="btnAll" type="button">Load all churches</button>
+            <button class="btn secondary" id="btnReset" type="button">Reset</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const DATA = {
+      surface: {
+        title: "Surface Problems (Symptoms)",
+        desc: "Visible issues: conflicts, ethics confusion, identity markers, disorder, anxiety, hope-confusion. Real problems — but not the deepest cause.",
+        items: [
+          { letter: "1 Corinthians", refs: "1 Cor 1–4; 5–7; 11–14; 15", bullets: ["Factionalism / status contests", "Sexual ethics + body confusion", "Worship disorder + gift rivalry"] },
+          { letter: "Galatians", refs: "Gal 1–6", bullets: ["Belonging redefined by law-markers", "Spirit-life misframed as rule-keeping"] },
+          { letter: "Ephesians", refs: "Eph 2–6", bullets: ["Old humanity patterns lingering", "Household relationships needing re-formation"] },
+          { letter: "Philippians", refs: "Phil 1–4", bullets: ["Rivalry vs humility", "Anxiety + suffering misread"] },
+          { letter: "1–2 Thessalonians", refs: "1 Thess 4–5; 2 Thess 2–3", bullets: ["Confusion about death/hope", "Idleness and disruption"] },
+          { letter: "1–2 Timothy", refs: "1 Tim 1–6; 2 Tim 1–4", bullets: ["False teaching", "Leadership credibility + order"] }
+        ]
+      },
+      underlying: {
+        title: "Underlying Problem (Below the Waterline)",
+        desc: "One deeper issue expressed many ways: not living inside the resurrection as a present revelation — so the old age keeps defining identity, ethics, and belonging.",
+        items: [
+          { letter: "1 Corinthians", refs: "1 Cor 15; 6:12–20", bullets: ["Resurrection must define bodies + holiness now", "Old story still shapes power/status"] },
+          { letter: "2 Corinthians", refs: "2 Cor 4–5; 11:28", bullets: ["New creation / reconciliation is operating reality", "Paul's pressure assumes one gospel confronting many distortions"] },
+          { letter: "Galatians", refs: "Gal 2:19–21; 3; 5", bullets: ["Union-with-Christ identity vs old markers", "Spirit replaces identity-by-law"] },
+          { letter: "Ephesians", refs: "Eph 2:4–10; 4:17–24", bullets: ["Raised-with-Christ identity must reshape daily walk", "New humanity vs old habits"] },
+          { letter: "Philippians", refs: "Phil 2:5–11; 3:20–21", bullets: ["Status redefined by Jesus' pattern", "Citizenship hope re-anchored"] },
+          { letter: "Thessalonians", refs: "1 Thess 4:13–18; 5:1–11", bullets: ["Hope must be resurrection-shaped", "Present sobriety and love flow from future certainty"] },
+          { letter: "Pastorals", refs: "1 Tim 3:15; 2 Tim 2:8", bullets: ["Public witness of God's household", "Remember the risen Christ as anchor"] }
+        ]
+      },
+      solution: {
+        title: "Solution (Resurrection as Revelation → New Creation Life)",
+        desc: "Paul's consistent remedy: re-anchor imagination + practice in the risen Jesus — reshaping identity, ethics, unity, suffering, and hope.",
+        items: [
+          { letter: "1 Corinthians", refs: "1 Cor 15; 12–13", bullets: ["Resurrection redefines power and success", "Love and unity become social logic"] },
+          { letter: "2 Corinthians", refs: "2 Cor 5:17–21; 4:7–18", bullets: ["New creation + reconciliation as vocation", "Suffering interpreted through resurrection endurance"] },
+          { letter: "Galatians", refs: "Gal 5:16–26; 6:14–15", bullets: ["Spirit-formed life embodies new creation", "Cross/resurrection collapses boasting in old badges"] },
+          { letter: "Ephesians", refs: "Eph 1:19–23; 4:1–6", bullets: ["Resurrection power forms unity + maturity", "Church as public display of new humanity"] },
+          { letter: "Philippians", refs: "Phil 2:5–11; 4:4–9", bullets: ["Humility and joy shaped by Christ's pattern", "Peace practices grounded in the Lord's nearness"] },
+          { letter: "Thessalonians", refs: "1 Thess 4–5; 2 Thess 3", bullets: ["Hope stabilizes grief and energizes holiness", "Faithfulness and steady work as embodied eschatology"] },
+          { letter: "Pastorals", refs: "2 Tim 2:8; 1 Tim 6:11–16", bullets: ["Remembering the risen Christ fuels resilience", "A credible public witness flows from gospel-shaped order"] }
+        ]
+      },
+      corinth: {
+        title: "Corinth (1–2 Corinthians)",
+        desc: "Status, bodies, and spiritual performance — needing resurrection reality to reframe power, holiness, unity, and hope.",
+        items: [
+          { letter: "1 Corinthians — Symptoms", refs: "1 Cor 1–4; 5–7; 11–14", bullets: ["Factionalism, lawsuits, sexual confusion, worship disorder"]},
+          { letter: "1 Corinthians — Underwater", refs: "1 Cor 15; 6:12–20", bullets: ["Resurrection defines bodies, identity, community logic"]},
+          { letter: "2 Corinthians — Burden", refs: "2 Cor 4–5; 11:28", bullets: ["New creation + reconciliation; daily pressure for all churches"]},
+          { letter: "2 Corinthians — Solution", refs: "2 Cor 5:17–21", bullets: ["Reconciliation vocation flows from new-creation reality"]}
+        ]
+      },
+      galatia: {
+        title: "Galatia (Galatians)",
+        desc: "Identity pressure: returning to boundary markers. Paul reframes belonging as union-with-Christ and Spirit-life (new creation).",
+        items: [
+          { letter: "Symptoms", refs: "Gal 1–3", bullets: ["Belonging measured by law-markers"]},
+          { letter: "Underwater", refs: "Gal 2:19–21; 3:26–29", bullets: ["Identity crucified/raised-with-Christ; one family in Christ"]},
+          { letter: "Solution", refs: "Gal 5:16–26; 6:14–15", bullets: ["Spirit-formed life; new creation axis"]}
+        ]
+      },
+      ephesus: {
+        title: "Ephesus (Ephesians)",
+        desc: "Resurrection-shaped imagination: raised-with-Christ life, new humanity, unity, resilience against powers.",
+        items: [
+          { letter: "Symptoms", refs: "Eph 4–6", bullets: ["Old humanity habits, relational breakdowns, household tensions"]},
+          { letter: "Underwater", refs: "Eph 2:4–7; 4:17–24", bullets: ["Raised-with-Christ identity reshapes daily walking"]},
+          { letter: "Solution", refs: "Eph 1:19–23; 4:1–6", bullets: ["Resurrection power → unity, maturity, new-community ethics"]}
+        ]
+      },
+      philippi: {
+        title: "Philippi (Philippians)",
+        desc: "Rivalry and anxiety healed by cruciform humility and resurrection hope — citizenship redefined beyond empire narratives.",
+        items: [
+          { letter: "Symptoms", refs: "Phil 1–2; 4", bullets: ["Rivalry, anxiety, conflict"]},
+          { letter: "Underwater", refs: "Phil 2:5–11", bullets: ["Status redefined by Jesus' pattern"]},
+          { letter: "Solution", refs: "Phil 3:20–21; 4:4–9", bullets: ["Resurrection hope stabilizes joy and peace practices"]}
+        ]
+      },
+      thess: {
+        title: "Thessalonica (1–2 Thessalonians)",
+        desc: "Hope-confusion produces panic or idleness. Paul anchors grief, holiness, and daily life in resurrection-grounded expectation.",
+        items: [
+          { letter: "Symptoms", refs: "1 Thess 4–5; 2 Thess 3", bullets: ["Confusion about the dead; idleness and disorder"]},
+          { letter: "Underwater", refs: "1 Thess 4:13–18", bullets: ["Hope must be resurrection-shaped, not fear-shaped"]},
+          { letter: "Solution", refs: "1 Thess 5:1–11", bullets: ["Steady faithfulness; embodied eschatology"]}
+        ]
+      },
+      pastorals: {
+        title: "Pastorals (1–2 Timothy)",
+        desc: "False teaching and public witness issues addressed by guarding the gospel and shaping credible household life in view of the risen Christ.",
+        items: [
+          { letter: "Symptoms", refs: "1 Tim 1–3; 2 Tim 3–4", bullets: ["False teaching; leadership credibility; community order"]},
+          { letter: "Underwater", refs: "1 Tim 3:15; 2 Tim 2:8", bullets: ["Church lives publicly as God's household under risen-Christ reality"]},
+          { letter: "Solution", refs: "1 Tim 6:11–16", bullets: ["Fidelity and good works shaped by the gospel"]}
+        ]
+      }
+    };
+
+    const stage = document.getElementById("stage");
+    const tooltip = document.getElementById("tooltip");
+    const tipTitle = document.getElementById("tipTitle");
+    const tipBody = document.getElementById("tipBody");
+    const panelTitle = document.getElementById("panelTitle");
+    const panelDesc = document.getElementById("panelDesc");
+    const panelList = document.getElementById("panelList");
+    const btnAll = document.getElementById("btnAll");
+    const btnReset = document.getElementById("btnReset");
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"})[m]);
+    }
+
+    function setPanel(key){
+      const d = DATA[key];
+      if(!d) return;
+      panelTitle.textContent = d.title;
+      panelDesc.textContent = d.desc;
+      panelList.innerHTML = "";
+      (d.items || []).forEach(it=>{
+        const el = document.createElement("div");
+        el.className = "item";
+        el.innerHTML = `
+          <h4><span>${escapeHtml(it.letter)}</span><span class="refs">${escapeHtml(it.refs || "")}</span></h4>
+          ${it.bullets?.length ? `<ul>${it.bullets.map(b=>`<li>${escapeHtml(b)}</li>`).join("")}</ul>` : ``}
+        `;
+        panelList.appendChild(el);
+      });
+    }
+
+    function showTip(key, x, y){
+      const d = DATA[key];
+      if(!d) return;
+      tipTitle.textContent = d.title;
+      tipBody.textContent = d.desc;
+      tooltip.classList.add("on");
+      const rect = stage.getBoundingClientRect();
+      let left = x - rect.left + 16;
+      let top = y - rect.top + 16;
+      if(left + 340 > rect.width - 14) left = rect.width - 340 - 14;
+      if(top + 100 > rect.height - 14) top = rect.height - 100 - 14;
+      if(left < 14) left = 14;
+      if(top < 14) top = 14;
+      tooltip.style.left = left + "px";
+      tooltip.style.top = top + "px";
+    }
+    function hideTip(){ tooltip.classList.remove("on"); }
+
+    document.querySelectorAll(".hit").forEach(node=>{
+      const key = node.getAttribute("data-layer");
+      if(!key) return;
+      node.addEventListener("mousemove", e => showTip(key, e.clientX, e.clientY));
+      node.addEventListener("mouseenter", e => showTip(key, e.clientX, e.clientY));
+      node.addEventListener("mouseleave", hideTip);
+      node.addEventListener("click", () => setPanel(key));
+      node.addEventListener("keydown", e => {
+        if(e.key === "Enter" || e.key === " "){ e.preventDefault(); setPanel(key); }
+      });
+    });
+
+    window.addEventListener("scroll", hideTip, {passive:true});
+    window.addEventListener("resize", hideTip, {passive:true});
+
+    btnAll.addEventListener("click", ()=>{
+      setPanel("surface");
+      const div = document.createElement("div");
+      div.style.cssText = "height:1px;background:rgba(255,255,255,.12);margin:.85rem 0";
+      panelList.appendChild(div);
+      
+      const addSection = (key) => {
+        const d = DATA[key];
+        const head = document.createElement("div");
+        head.className = "item";
+        head.innerHTML = `<h4><span style="font-weight:800">${escapeHtml(d.title)}</span></h4><p style="margin:.3rem 0 0;color:rgba(255,255,255,.72);font-size:.9rem">${escapeHtml(d.desc)}</p>`;
+        panelList.appendChild(head);
+        d.items.forEach(it=>{
+          const el = document.createElement("div");
+          el.className = "item";
+          el.innerHTML = `<h4><span>${escapeHtml(it.letter)}</span><span class="refs">${escapeHtml(it.refs||"")}</span></h4>${it.bullets?.length ? `<ul>${it.bullets.map(b=>`<li>${escapeHtml(b)}</li>`).join("")}</ul>` : ``}`;
+          panelList.appendChild(el);
+        });
+      };
+      
+      addSection("underlying");
+      panelList.appendChild(div.cloneNode());
+      addSection("solution");
+      
+      panelTitle.textContent = "All Churches: One Iceberg, One Gospel Logic";
+      panelDesc.textContent = "Combined view: symptoms → diagnosis → solution.";
+    });
+
+    btnReset.addEventListener("click", ()=>{
+      panelTitle.textContent = "Start with the iceberg";
+      panelDesc.textContent = "Click any iceberg region or church badge to populate the letter connections.";
+      panelList.innerHTML = "";
+    });
+  </script>
+</body>
+</html>
