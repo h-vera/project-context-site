@@ -47,7 +47,7 @@ class NavigationComponent {
                             <div class="dropdown-content">
                                 <a href="/studies/methodology/lltse-orientation-methodology.html" class="${this.getActiveClass('methodology')}">Methodology (LLTSE)</a>
                                 <a href="/resources/discussion-guides/">Discussion Guides</a>
-                                <a href="/resources/study-tools/">Study Tools</a>
+                                <a href="/resources/study-tools/biblical-study-resources.html">Study Tools</a>
                                 <a href="/resources/downloads/">Downloads</a>
                             </div>
                         </li>
