@@ -2,7 +2,7 @@
  * Global Stylesheet for Project Context
  * Path: /assets/css/global.css
  * Used by: index.html and other root-level pages
- * Updated: Added glossy effects, mobile overlay, back-to-top button
+ * Updated: Mobile section clarity improvements (v2.0)
  */
 
 * {
@@ -25,6 +25,10 @@
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    
+    /* NEW: Mobile section clarity colors */
+    --section-band-cool: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%);
+    --section-divider: rgba(114, 9, 183, 0.15);
 }
 
 body {
@@ -417,6 +421,54 @@ nav.scrolled {
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
 }
 
+/* ============================================
+   MOBILE SECTION CLARITY (v2.0)
+   Improves visual distinction between sections
+   ============================================ */
+
+/* 1. Cooler background band - matches cosmic palette */
+.section--band {
+    background: var(--section-band-cool) !important;
+}
+
+/* 2. Section heading anchors */
+.features-title {
+    position: relative;
+}
+
+/* 3. Section divider - gradient fade between sections */
+.section-divider-home {
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        transparent,
+        var(--section-divider),
+        transparent
+    );
+    margin: 0;
+    border: none;
+}
+
+/* Auto-divider between consecutive .features sections */
+.features + .features {
+    position: relative;
+}
+
+.features + .features::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        transparent,
+        rgba(0, 0, 0, 0.06),
+        transparent
+    );
+}
+
 /* Features Section */
 .features {
     padding: 5rem 2rem;
@@ -611,7 +663,9 @@ footer p {
     z-index: 1;
 }
 
-/* Mobile Responsive */
+/* ============================================
+   MOBILE RESPONSIVE
+   ============================================ */
 @media (max-width: 768px) {
     .nav-links {
         position: fixed;
@@ -672,6 +726,47 @@ footer p {
         right: 1rem;
         width: 45px;
         height: 45px;
+    }
+    
+    /* ============================================
+       MOBILE SECTION CLARITY ENHANCEMENTS
+       ============================================ */
+    
+    /* 1. Stronger background contrast on mobile */
+    .section--band {
+        background: linear-gradient(135deg, #e8eeff 0%, #dbe4ff 100%) !important;
+    }
+    
+    /* 2. Section heading anchors - accent border for visibility */
+    .features-title {
+        border-left: 4px solid var(--accent-purple);
+        padding-left: 1rem;
+        text-align: left;
+        margin-left: 0;
+    }
+    
+    /* 3. Enhanced dividers on mobile */
+    .features + .features::before {
+        left: 5%;
+        right: 5%;
+        height: 2px;
+        background: linear-gradient(
+            to right,
+            transparent 0%,
+            var(--section-divider) 20%,
+            var(--section-divider) 80%,
+            transparent 100%
+        );
+    }
+    
+    /* Increase section padding for visual rhythm */
+    .features {
+        padding: 4rem 1.5rem;
+    }
+    
+    /* Slightly stronger card shadows for depth */
+    .feature-card {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     }
 }
 
