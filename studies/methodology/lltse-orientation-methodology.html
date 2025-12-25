@@ -1751,42 +1751,61 @@
     document.addEventListener('DOMContentLoaded', function() {
       console.log('LLTSE Orientation – Template Version: 5.8.1');
       
-      // Toggle handler for Paragraph ⇄ Structured demos
-      document.querySelectorAll('input[data-toggle]').forEach(cb => {
-        cb.addEventListener('change', e => {
-          const key = e.target.getAttribute('data-toggle');
-          const demo = e.target.closest('.demo');
-          const para = demo.querySelector(`[data-target="${key}"]`);
-          const alt = demo.querySelector('[data-alt]');
-          if(!para || !alt) return;
-          para.hidden = e.target.checked;
-          alt.hidden = !e.target.checked;
-        });
-      });
+      // Toggle handler for Paragraph ⇄ Structured demos (generic)
+document.querySelectorAll('input[data-toggle]').forEach(cb => {
+  cb.addEventListener('change', e => {
+    const key = e.target.getAttribute('data-toggle');
 
-      // Handle 1 Timothy 3:16 dual toggles
-document.querySelectorAll('[data-toggle="tim316-structure"], [data-toggle="tim316-greek"]').forEach(toggle => {
-  toggle.addEventListener('change', function() {
-    const structureOn = document.querySelector('[data-toggle="tim316-structure"]').checked;
-    const greekOn = document.querySelector('[data-toggle="tim316-greek"]').checked;
-    
-    // Hide all four states
-    document.querySelectorAll('.english-para, .english-struct, .greek-para, .greek-struct').forEach(el => {
-      el.hidden = true;
-    });
-    
-    // Show the correct state
-    if (!structureOn && !greekOn) {
-      document.querySelector('.english-para').hidden = false; // State 1
-    } else if (structureOn && !greekOn) {
-      document.querySelector('.english-struct').hidden = false; // State 2
-    } else if (!structureOn && greekOn) {
-      document.querySelector('.greek-para').hidden = false; // State 3
-    } else if (structureOn && greekOn) {
-      document.querySelector('.greek-struct').hidden = false; // State 4
-    }
+    // IMPORTANT: skip the 1 Timothy 3:16 toggles (handled below)
+    if (key === 'tim316-structure' || key === 'tim316-greek') return;
+
+    const demo = e.target.closest('.demo');
+    if (!demo) return;
+
+    const para = demo.querySelector(`[data-target="${key}"]`);
+    const alt  = demo.querySelector('[data-alt]');
+    if (!para || !alt) return;
+
+    para.hidden = e.target.checked;
+    alt.hidden  = !e.target.checked;
   });
 });
+
+
+// Handle 1 Timothy 3:16 dual toggles (scoped to that demo ONLY)
+const tim316Demo = document.querySelector('article.demo[aria-labelledby="1tim316-label"]');
+
+if (tim316Demo) {
+  const structureToggle = tim316Demo.querySelector('[data-toggle="tim316-structure"]');
+  const greekToggle     = tim316Demo.querySelector('[data-toggle="tim316-greek"]');
+
+  function renderTim316() {
+    const structureOn = !!structureToggle?.checked;
+    const greekOn     = !!greekToggle?.checked;
+
+    // Hide all four states (ONLY inside tim316Demo)
+    tim316Demo
+      .querySelectorAll('.english-para, .english-struct, .greek-para, .greek-struct')
+      .forEach(el => (el.hidden = true));
+
+    // Show the correct state
+    if (!structureOn && !greekOn) {
+      tim316Demo.querySelector('.english-para').hidden = false;
+    } else if (structureOn && !greekOn) {
+      tim316Demo.querySelector('.english-struct').hidden = false;
+    } else if (!structureOn && greekOn) {
+      tim316Demo.querySelector('.greek-para').hidden = false;
+    } else {
+      tim316Demo.querySelector('.greek-struct').hidden = false;
+    }
+  }
+
+  structureToggle?.addEventListener('change', renderTim316);
+  greekToggle?.addEventListener('change', renderTim316);
+
+  // Set correct initial state on load
+  renderTim316();
+}
 
       // Reading progress bar
       window.addEventListener('scroll', () => {
