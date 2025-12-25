@@ -673,14 +673,18 @@ footer p {
         right: -100%;
         width: 80%;
         max-width: 300px;
-        height: 100vh;
+        height: calc(100vh - 65px); /* Adjust for nav height */
         background: white;
         flex-direction: column;
         padding: 2rem;
+        padding-bottom: 4rem; /* Extra padding at bottom for scroll comfort */
         gap: 1rem;
         box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
         transition: right 0.3s ease;
         z-index: 999;
+        overflow-y: auto; /* Enable vertical scrolling */
+        overflow-x: hidden; /* Prevent horizontal scroll */
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
     }
 
     .nav-links.active {
@@ -691,20 +695,36 @@ footer p {
         display: flex;
     }
 
+    /* Make dropdowns collapsible on mobile */
     .dropdown-content {
         position: static;
-        display: block;
+        display: none; /* Hidden by default */
         box-shadow: none;
         background: var(--bg-gray);
         margin-left: 1rem;
         margin-top: 0.5rem;
-        border-radius: 0;
+        border-radius: 8px;
         border: none;
         border-left: 2px solid var(--border-light);
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+    
+    /* Show dropdown when parent is active */
+    .dropdown.active .dropdown-content {
+        display: block;
+        max-height: 500px; /* Allow expansion */
     }
 
     .dropdown-toggle::after {
-        display: none;
+        display: inline-block; /* Show arrow on mobile */
+        transition: transform 0.3s ease;
+    }
+    
+    /* Rotate arrow when dropdown is active */
+    .dropdown.active .dropdown-toggle::after {
+        transform: rotate(180deg);
     }
 
     .hero-buttons {
