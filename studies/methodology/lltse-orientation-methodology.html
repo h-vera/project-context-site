@@ -1204,42 +1204,42 @@
     </div>
   </header>
   
-  <!-- ENGLISH VERSION (default visible) -->
-  <div class="language-pane" data-lang="english">
-    <!-- Paragraph view -->
-    <div class="pane paragraph" data-target="tim316-structure">
-      And confessedly great is the mystery of godliness: He who was manifested in flesh, was vindicated in spirit, was seen by angels, was proclaimed among nations, was believed in the world, was taken up in glory.
-    </div>
-    <!-- Structured view -->
-    <div class="pane structured" data-alt hidden>
-      <span class="l">Confessedly great is the mystery of godliness:</span>
-      <span class="l i1">He who was manifested in flesh,</span>
-      <span class="l i1">was vindicated in spirit,</span>
-      <span class="l i1">was seen by angels,</span>
-      <span class="l i1">was proclaimed among nations,</span>
-      <span class="l i1">was believed in the world,</span>
-      <span class="l i1">was taken up in glory.</span>
-    </div>
+  <!-- STATE 1: English Paragraph (default visible) -->
+  <div class="pane paragraph english-para" data-target="tim316-structure" data-lang="tim316-greek">
+    And confessedly great is the mystery of godliness: He who was manifested in flesh, was vindicated in spirit, was seen by angels, was proclaimed among nations, was believed in the world, was taken up in glory.
   </div>
   
-  <!-- GREEK VERSION (hidden by default) -->
-  <div class="language-pane" data-target="tim316-greek" hidden lang="el">
-    <!-- Paragraph view -->
-    <div class="pane paragraph" data-target="tim316-structure">
-      Καὶ ὁμολογουμένως μέγα ἐστὶν τὸ τῆς εὐσεβείας μυστήριον· ὃς ἐφανερώθη ἐν σαρκί, ἐδικαιώθη ἐν πνεύματι, ὤφθη ἀγγέλοις, ἐκηρύχθη ἐν ἔθνεσιν, ἐπιστεύθη ἐν κόσμῳ, ἀνελήμφθη ἐν δόξῃ.
-    </div>
-    <!-- Structured view -->
-    <div class="pane structured" data-alt hidden>
-      <span class="l">Ὁμολογουμένως μέγα τὸ τῆς εὐσεβείας μυστήριον·</span>
-      <span class="l i1">ὃς ἐφανερώθη ἐν σαρκί,</span>
-      <span class="l i1">ἐδικαιώθη ἐν πνεύματι,</span>
-      <span class="l i1">ὤφθη ἀγγέλοις,</span>
-      <span class="l i1">ἐκηρύχθη ἐν ἔθνεσιν,</span>
-      <span class="l i1">ἐπιστεύθη ἐν κόσμῳ,</span>
-      <span class="l i1">ἀνελήμφθη ἐν δόξῃ.</span>
-    </div>
+  <!-- STATE 2: English Structured (hidden by default) -->
+  <div class="pane structured english-struct" data-alt hidden data-lang="tim316-greek">
+    <span class="l">Confessedly great is the mystery of godliness:</span>
+    <span class="l i1">He who was manifested in flesh,</span>
+    <span class="l i1">was vindicated in spirit,</span>
+    <span class="l i1">was seen by angels,</span>
+    <span class="l i1">was proclaimed among nations,</span>
+    <span class="l i1">was believed in the world,</span>
+    <span class="l i1">was taken up in glory.</span>
+  </div>
+  
+  <!-- STATE 3: Greek Paragraph (hidden by default) -->
+  <div class="pane paragraph greek-para" data-target="tim316-structure" data-alt hidden lang="el">
+    Καὶ ὁμολογουμένως μέγα ἐστὶν τὸ τῆς εὐσεβείας μυστήριον· ὃς ἐφανερώθη ἐν σαρκί, ἐδικαιώθη ἐν πνεύματι, ὤφθη ἀγγέλοις, ἐκηρύχθη ἐν ἔθνεσιν, ἐπιστεύθη ἐν κόσμῳ, ἀνελήμφθη ἐν δόξῃ.
+  </div>
+  
+  <!-- STATE 4: Greek Structured (hidden by default) -->
+  <div class="pane structured greek-struct" data-alt hidden lang="el">
+    <span class="l">Ὁμολογουμένως μέγα τὸ τῆς εὐσεβείας μυστήριον·</span>
+    <span class="l i1">ὃς ἐφανερώθη ἐν σαρκί,</span>
+    <span class="l i1">ἐδικαιώθη ἐν πνεύματι,</span>
+    <span class="l i1">ὤφθη ἀγγέλοις,</span>
+    <span class="l i1">ἐκηρύχθη ἐν ἔθνεσιν,</span>
+    <span class="l i1">ἐπιστεύθη ἐν κόσμῳ,</span>
+    <span class="l i1">ἀνελήμφθη ἐν δόξῃ.</span>
   </div>
 </article>
+
+<div class="key-insight" style="margin-top: 2rem;">
+  <strong>The Difference:</strong> In paragraph format, these passages read like continuous prose. In structured format, the parallel lines, subordinate clauses, and rhythmic patterns become immediately visible—restoring what ancient hearers would have recognized aurally.
+</div>
 
 <div class="key-insight" style="margin-top: 2rem;">
   <strong>The Difference:</strong> In paragraph format, these passages read like continuous prose. In structured format, the parallel lines, subordinate clauses, and rhythmic patterns become immediately visible—restoring what ancient hearers would have recognized aurally.
@@ -1767,6 +1767,30 @@
           alt.hidden = !e.target.checked;
         });
       });
+
+      // Handle 1 Timothy 3:16 dual toggles
+document.querySelectorAll('[data-toggle="tim316-structure"], [data-toggle="tim316-greek"]').forEach(toggle => {
+  toggle.addEventListener('change', function() {
+    const structureOn = document.querySelector('[data-toggle="tim316-structure"]').checked;
+    const greekOn = document.querySelector('[data-toggle="tim316-greek"]').checked;
+    
+    // Hide all four states
+    document.querySelectorAll('.english-para, .english-struct, .greek-para, .greek-struct').forEach(el => {
+      el.hidden = true;
+    });
+    
+    // Show the correct state
+    if (!structureOn && !greekOn) {
+      document.querySelector('.english-para').hidden = false; // State 1
+    } else if (structureOn && !greekOn) {
+      document.querySelector('.english-struct').hidden = false; // State 2
+    } else if (!structureOn && greekOn) {
+      document.querySelector('.greek-para').hidden = false; // State 3
+    } else if (structureOn && greekOn) {
+      document.querySelector('.greek-struct').hidden = false; // State 4
+    }
+  });
+});
 
       // Reading progress bar
       window.addEventListener('scroll', () => {
