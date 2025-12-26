@@ -211,6 +211,62 @@
     { id: 'further-study', icon: '', label: 'Study More', priority: 4 },
 
     // ============================================
+    // NOAH MULTI-PAGE STUDY SECTIONS
+    // ============================================
+
+    // Page 2: Corruption
+    { id: 'sons-of-god', icon: '', label: 'Sons of God', priority: 2 },
+    { id: 'violence', icon: '', label: 'Violence', priority: 1 },
+    { id: 'gods-grief', icon: '', label: 'God\'s Grief', priority: 1 },
+    { id: 'flood-decision', icon: '', label: 'Judgment', priority: 2 },
+
+    // Page 3: Election
+    { id: 'righteous', icon: '', label: 'Righteous', priority: 1 },
+    { id: 'ten-generations', icon: '', label: '10 Gens', priority: 2 },
+    { id: 'walked-with-god', icon: '', label: 'Walked', priority: 1 },
+    { id: 'blameless', icon: '', label: 'Blameless', priority: 2 },
+
+    // Page 4: The Ark
+    { id: 'tebah', icon: '', label: 'Tebah', priority: 1 },
+    { id: 'three-tiers', icon: '', label: 'Three Tiers', priority: 2 },
+    { id: 'dimensions', icon: '', label: 'Dimensions', priority: 3 },
+    { id: 'microcosm', icon: '', label: 'Microcosm', priority: 2 },
+    { id: 'refuge', icon: '', label: 'Refuge', priority: 1 },
+    { id: 'jesus-storm', icon: '', label: 'Jesus Storm', priority: 3 },
+    { id: 'tupos', icon: '', label: 'Pattern', priority: 2 },
+    { id: 'cosmic-hyperbole', icon: '', label: 'Hyperbole', priority: 3 },
+    { id: 'meaning', icon: '', label: 'Meaning', priority: 1 },
+
+    // Page 5: The Flood
+    { id: 'cosmic-collapse', icon: '', label: 'Collapse', priority: 1 },
+    { id: 'overwhelm', icon: '', label: 'Overwhelm', priority: 2 },
+    { id: 'pivot', icon: '', label: 'Pivot', priority: 1 },
+    { id: 'genesis-replay', icon: '', label: 'Genesis 1', priority: 1 },
+    { id: 'ararat', icon: '', label: 'Ararat', priority: 2 },
+    { id: 'birds', icon: '', label: 'Birds', priority: 2 },
+    { id: 'isaiah54', icon: '', label: 'Isaiah 54', priority: 3 },
+    { id: 'bridge-forward', icon: '', label: 'Forward', priority: 4 },
+
+    // Page 6: Covenant
+    { id: 'sacrifice', icon: '', label: 'Sacrifice', priority: 1 },
+    { id: 'concessions', icon: '', label: 'Concessions', priority: 2 },
+    { id: 'rainbow', icon: '', label: 'Rainbow', priority: 1 },
+    { id: 'priest', icon: '', label: 'Priest', priority: 3 },
+    { id: 'next', icon: '', label: 'Next', priority: 4 },
+    { id: 'bridge-babel', icon: '', label: 'To Babel', priority: 4 },
+
+    // Page 7: Babel
+    { id: 'cycle', icon: '', label: 'Cycle', priority: 1 },
+    { id: 'ham', icon: '', label: 'Ham', priority: 1 },
+    { id: 'blessing-curse', icon: '', label: 'Blessing', priority: 1 },
+    { id: 'scattered', icon: '', label: 'Scattered', priority: 2 },
+    { id: 'nations', icon: '', label: 'Nations', priority: 2 },
+    { id: 'nimrod', icon: '', label: 'Nimrod', priority: 1 },
+    { id: 'babel', icon: '', label: 'Babel', priority: 1 },
+    { id: 'abraham', icon: '', label: 'Abraham', priority: 1 },
+    { id: 'key-verses', icon: '', label: 'Verses', priority: 4 },
+
+    // ============================================
     // HOSEA THEOLOGY PAGE SECTIONS (Covenant, Sin, etc.)
     // ============================================
     { id: 'foundation', icon: '', label: 'Foundation', priority: 1 },
