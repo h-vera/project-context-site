@@ -474,132 +474,132 @@ class HubCore {
     }
 
     /**
-     * Load featured characters
-     * Updated to respect gender filter
-     */
-    async loadFeaturedCharacters() {
-        const featuredGrid = document.getElementById('featured-grid');
-        if (!featuredGrid) return;
-        
-        let featured = [];
-        
-        if (this.filterGender === 'female') {
-            // Women-only featured characters
-            featured = [
-                { 
-                    book: 'judges', 
-                    id: 'deborah', 
-                    name: 'Deborah', 
-                    hebrew: 'דְּבוֹרָה',
-                    desc: 'Prophet, judge, and military leader. The only female judge who led Israel to victory over Canaanite oppression.',
-                    meta: 'Judges 4-5 • Multi-page Study',
-                    multiPage: true
-                },
-                { 
-                    book: 'genesis', 
-                    id: 'sarah', 
-                    name: 'Sarah', 
-                    hebrew: 'שָׂרָה',
-                    desc: 'Mother of nations, wife of Abraham. Her story demonstrates faith through struggle with infertility and God\'s promise fulfillment.',
-                    meta: 'Genesis 11-25 • Complete Profile',
-                    multiPage: false
-                },
-                { 
-                    book: 'ruth', 
-                    id: 'ruth', 
-                    name: 'Ruth', 
-                    hebrew: 'רוּת',
-                    desc: 'Moabite woman whose loyalty and faithfulness led to her becoming great-grandmother of King David.',
-                    meta: 'Book of Ruth • Complete Profile',
-                    multiPage: false
-                },
-                { 
-                    book: 'exodus', 
-                    id: 'miriam', 
-                    name: 'Miriam', 
-                    hebrew: 'מִרְיָם',
-                    desc: 'Prophetess and sister of Moses who led women in worship after crossing the Red Sea.',
-                    meta: 'Exodus • Complete Profile',
-                    multiPage: false
-                },
-                { 
-                    book: 'genesis', 
-                    id: 'hagar', 
-                    name: 'Hagar', 
-                    hebrew: 'הָגָר',
-                    desc: 'Egyptian servant who became mother of Ishmael. Her encounters with God reveal His compassion for the marginalized.',
-                    meta: 'Genesis 16, 21 • Complete Profile',
-                    multiPage: false
-                },
-                { 
-                    book: 'judges', 
-                    id: 'delilah', 
-                    name: 'Delilah', 
-                    hebrew: 'דְּלִילָה',
-                    desc: 'Philistine woman who betrayed Samson. Her story explores themes of deception, weakness, and divine sovereignty.',
-                    meta: 'Judges 16 • Complete Profile',
-                    multiPage: false
-                }
-            ];
-        } else {
-            // Default featured characters (mixed gender or all)
-            featured = [
-                { 
-                    book: 'genesis', 
-                    id: 'abraham', 
-                    name: 'Abraham', 
-                    hebrew: 'אַבְרָהָם',
-                    desc: 'Father of faith, covenant recipient, and patriarch of Israel. His journey from Ur to Canaan exemplifies faith and obedience.',
-                    meta: 'Genesis 11-25 • Multi-page Study',
-                    multiPage: true
-                },
-                { 
-                    book: 'genesis', 
-                    id: 'sarah', 
-                    name: 'Sarah', 
-                    hebrew: 'שָׂרָה',
-                    desc: 'Mother of nations, wife of Abraham. Her story demonstrates faith through struggle with infertility and God\'s promise fulfillment.',
-                    meta: 'Genesis 11-25 • Complete Profile',
-                    multiPage: false
-                },
-                { 
-                    book: 'samuel', 
-                    id: 'david', 
-                    name: 'David', 
-                    hebrew: 'דָּוִד',
-                    desc: 'Shepherd boy anointed as king, giant-killer, musician, man after God\'s own heart who fell into sin.',
-                    meta: '1-2 Samuel • Multi-page Study',
-                    multiPage: true
-                },
-                { 
-                    book: 'judges', 
-                    id: 'deborah', 
-                    name: 'Deborah', 
-                    hebrew: 'דְּבוֹרָה',
-                    desc: 'Prophet, judge, and military leader. The only female judge who led Israel to victory over Canaanite oppression.',
-                    meta: 'Judges 4-5 • Multi-page Study',
-                    multiPage: true
-                },
-                { 
-                    book: 'genesis', 
-                    id: 'hagar', 
-                    name: 'Hagar', 
-                    hebrew: 'הָגָר',
-                    desc: 'Egyptian servant who became mother of Ishmael. Her encounters with God reveal His compassion for the marginalized.',
-                    meta: 'Genesis 16, 21 • Complete Profile',
-                    multiPage: false
-                },
-                { 
-                    book: 'judges', 
-                    id: 'delilah', 
-                    name: 'Delilah', 
-                    hebrew: 'דְּלִילָה',
-                    desc: 'Philistine woman who betrayed Samson. Her story explores themes of deception, weakness, and divine sovereignty.',
-                    meta: 'Judges 16 • Complete Profile',
-                    multiPage: false
-                }
-            ];
-        }
+ * Load featured characters
+ * Updated to respect gender filter
+ */
+async loadFeaturedCharacters() {
+    const featuredGrid = document.getElementById('featured-grid');
+    if (!featuredGrid) return;
+    
+    let featured = [];
+    
+    if (this.filterGender === 'female') {
+        // Women-only featured characters (chronological order)
+        featured = [
+            { 
+                book: 'genesis', 
+                id: 'eve', 
+                name: 'Eve', 
+                hebrew: 'חַוָּה',
+                desc: 'First woman, created as ʿēzer kĕnegdô (corresponding strength), co-image bearer with Adam, archetypal wife and mother, recipient of proto-evangelium.',
+                meta: 'Genesis 2-4 • Multi-page Study',
+                multiPage: true
+            },
+            { 
+                book: 'genesis', 
+                id: 'sarah', 
+                name: 'Sarah', 
+                hebrew: 'שָׂרָה',
+                desc: 'Mother of nations, wife of Abraham. Her story demonstrates faith through struggle with infertility and God\'s promise fulfillment.',
+                meta: 'Genesis 11-25 • Complete Profile',
+                multiPage: false
+            },
+            { 
+                book: 'ruth', 
+                id: 'ruth', 
+                name: 'Ruth', 
+                hebrew: 'רוּת',
+                desc: 'Moabite woman whose loyalty to Naomi and faith in Yahweh made her an ancestor of David and Jesus.',
+                meta: 'Book of Ruth • Complete Profile',
+                multiPage: false
+            },
+            { 
+                book: 'judges', 
+                id: 'deborah', 
+                name: 'Deborah', 
+                hebrew: 'דְּבוֹרָה',
+                desc: 'Prophet, judge, and military leader. The only female judge who led Israel to victory over Canaanite oppression.',
+                meta: 'Judges 4-5 • Multi-page Study',
+                multiPage: true
+            },
+            { 
+                book: 'exodus', 
+                id: 'miriam', 
+                name: 'Miriam', 
+                hebrew: 'מִרְיָם',
+                desc: 'Prophetess and sister of Moses who led women in worship after crossing the Red Sea.',
+                meta: 'Exodus • Complete Profile',
+                multiPage: false
+            },
+            { 
+                book: 'genesis', 
+                id: 'hagar', 
+                name: 'Hagar', 
+                hebrew: 'הָגָר',
+                desc: 'Egyptian servant who became mother of Ishmael. Her encounters with God reveal His compassion for the marginalized.',
+                meta: 'Genesis 16, 21 • Complete Profile',
+                multiPage: false
+            }
+        ];
+    } else {
+        // Default featured characters (chronological order)
+        featured = [
+            { 
+                book: 'genesis', 
+                id: 'eve', 
+                name: 'Eve', 
+                hebrew: 'חַוָּה',
+                desc: 'First woman, created as ʿēzer kĕnegdô (corresponding strength), co-image bearer with Adam, archetypal wife and mother, recipient of proto-evangelium.',
+                meta: 'Genesis 2-4 • Multi-page Study',
+                multiPage: true
+            },
+            { 
+                book: 'genesis', 
+                id: 'noah', 
+                name: 'Noah', 
+                hebrew: 'נֹחַ',
+                desc: 'Righteous man who built the ark and saved humanity from the flood. Received the first explicit covenant with the rainbow sign.',
+                meta: 'Genesis 5-10 • Multi-page Study',
+                multiPage: true
+            },
+            { 
+                book: 'genesis', 
+                id: 'abraham', 
+                name: 'Abraham', 
+                hebrew: 'אַבְרָהָם',
+                desc: 'Father of faith, covenant recipient, and patriarch of Israel. His journey from Ur to Canaan exemplifies faith and obedience.',
+                meta: 'Genesis 11-25 • Multi-page Study',
+                multiPage: true
+            },
+            { 
+                book: 'genesis', 
+                id: 'sarah', 
+                name: 'Sarah', 
+                hebrew: 'שָׂרָה',
+                desc: 'Mother of nations, wife of Abraham. Her story demonstrates faith through struggle with infertility and God\'s promise fulfillment.',
+                meta: 'Genesis 11-25 • Complete Profile',
+                multiPage: false
+            },
+            { 
+                book: 'ruth', 
+                id: 'ruth', 
+                name: 'Ruth', 
+                hebrew: 'רוּת',
+                desc: 'Moabite woman whose loyalty to Naomi and faith in Yahweh made her an ancestor of David and Jesus.',
+                meta: 'Book of Ruth • Complete Profile',
+                multiPage: false
+            },
+            { 
+                book: 'samuel', 
+                id: 'david', 
+                name: 'David', 
+                hebrew: 'דָּוִד',
+                desc: 'Greatest king of Israel—shepherd, warrior, poet, and ancestor of the Messiah. His reign establishes the Davidic covenant.',
+                meta: '1-2 Samuel • Multi-page Study',
+                multiPage: true
+            }
+        ];
+    }
         
         // Render featured cards with correct paths
         const html = featured.map(char => {
