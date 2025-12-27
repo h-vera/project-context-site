@@ -214,6 +214,16 @@
     // NOAH MULTI-PAGE STUDY SECTIONS
     // ============================================
 
+    // Page 1: Overview
+    { id: 'introduction', icon: '', label: 'Intro', priority: 1 },
+    { id: 'name-meaning', icon: '', label: 'Name', priority: 1 },
+    { id: 'genesis5-design', icon: '', label: 'Gen 5', priority: 2 },
+    { id: 'walked-with-god', icon: '', label: 'Walked', priority: 1 },
+    { id: 'grace-first', icon: '', label: 'Grace', priority: 1 },
+    { id: 'new-adam', icon: '', label: 'New Adam', priority: 1 },
+    { id: 'seed-hope', icon: '', label: 'Seed', priority: 2 },
+    { id: 'key-verses', icon: '', label: 'Verses', priority: 4 },
+
     // Page 2: Corruption
     { id: 'sons-of-god', icon: '', label: 'Sons of God', priority: 2 },
     { id: 'violence', icon: '', label: 'Violence', priority: 1 },
