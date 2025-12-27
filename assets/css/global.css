@@ -695,47 +695,60 @@ footer p {
         display: flex;
     }
 
-    /* Make dropdowns collapsible on mobile */
-    .dropdown-content {
-        position: static;
-        box-shadow: none;
-        background: var(--bg-gray);
-        margin-left: 1rem;
-        margin-top: 0;
-        border-radius: 8px;
-        border: none;
-        border-left: 2px solid var(--border-light);
-        max-height: 0;
-        overflow: hidden;
-        opacity: 0;
-        transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.3s ease;
-    }
-    
-    /* Show dropdown when parent is active */
-    .dropdown.active .dropdown-content {
-        max-height: 600px; /* Allow expansion for all items */
-        opacity: 1;
-        margin-top: 0.5rem;
-    }
+    /* Neutralize desktop hover behavior on touch (iOS Safari especially) */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
 
-    .dropdown-toggle::after {
-        display: inline-block; /* Show arrow on mobile */
-        transition: transform 0.3s ease;
-    }
-    
-    /* Rotate arrow when dropdown is active */
-    .dropdown.active .dropdown-toggle::after {
-        transform: rotate(180deg);
-    }
+/* Make dropdowns collapsible on mobile */
+.dropdown-content {
+    position: static;
+    box-shadow: none;
+    background: var(--bg-gray);
+    margin-left: 1rem;
+    margin-top: 0;
+    border-radius: 8px;
+    border: none;
+    border-left: 2px solid var(--border-light);
 
-    .hero-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
+    display: block;          /* key: allow max-height animation */
+    padding: 0;              /* prevent “partial pill” look when collapsed */
 
-    .hero-title {
-        font-size: 2.5rem;
-    }
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s ease,
+                opacity 0.3s ease,
+                margin-top 0.3s ease,
+                padding 0.3s ease;
+}
+
+/* Show dropdown when parent is active */
+.dropdown.active .dropdown-content {
+    max-height: 600px;       /* Allow expansion for all items */
+    opacity: 1;
+    margin-top: 0.5rem;
+    padding: 0.5rem 0;       /* restore padding only when open */
+}
+
+.dropdown-toggle::after {
+    display: inline-block; /* Show arrow on mobile */
+    transition: transform 0.3s ease;
+}
+
+/* Rotate arrow when dropdown is active */
+.dropdown.active .dropdown-toggle::after {
+    transform: rotate(180deg);
+}
+
+.hero-buttons {
+    flex-direction: column;
+    align-items: center;
+}
+
+.hero-title {
+    font-size: 2.5rem;
+}
 
     /* Featured cards stay subtle on mobile (no hover states) */
     #featured .feature-card.featured-glossy {
