@@ -243,21 +243,25 @@
     { id: 'flood-decision', icon: '', label: 'Judgment', priority: 2 },
 
     // Page 3: Election
-    { id: 'righteous', icon: '', label: 'Righteous', priority: 1 },
-    { id: 'ten-generations', icon: '', label: '10 Gens', priority: 2 },
-    { id: 'walked-with-god', icon: '', label: 'Walked', priority: 1 },
-    { id: 'blameless', icon: '', label: 'Blameless', priority: 2 },
+    { id: 'introduction', label: 'Why Chosen?' },
+    { id: 'genealogy', label: '10 Generations' },
+    { id: 'two-seeds', label: 'Two Seeds' },
+    { id: 'tested', label: 'Tested' },
+    { id: 'one-for-many', label: 'One for Many' },
+    { id: 'name-prophecy', label: 'Name Prophecy' },
+    { id: 'quilt-insert', label: 'Quilt Insert' },
+    { id: 'key-verses', label: 'Key Verses' }
 
     // Page 4: The Ark
-    { id: 'tebah', icon: '', label: 'Tebah', priority: 1 },
-    { id: 'three-tiers', icon: '', label: 'Three Tiers', priority: 2 },
-    { id: 'dimensions', icon: '', label: 'Dimensions', priority: 3 },
-    { id: 'microcosm', icon: '', label: 'Microcosm', priority: 2 },
-    { id: 'refuge', icon: '', label: 'Refuge', priority: 1 },
-    { id: 'jesus-storm', icon: '', label: 'Jesus Storm', priority: 3 },
-    { id: 'tupos', icon: '', label: 'Pattern', priority: 2 },
-    { id: 'cosmic-hyperbole', icon: '', label: 'Hyperbole', priority: 3 },
-    { id: 'meaning', icon: '', label: 'Meaning', priority: 1 },
+    { id: 'tebah', label: 'The Word', priority: 1 },
+    { id: 'three-tiers', label: '3 Tiers', priority: 2 },
+    { id: 'dimensions', label: 'Dimensions', priority: 3 },
+    { id: 'microcosm', label: 'Microcosm', priority: 2 },
+    { id: 'refuge', label: 'God = Ark', priority: 1 },
+    { id: 'jesus-storm', label: 'Jesus', priority: 3 },
+    { id: 'tupos', label: 'Pattern', priority: 2 },
+    { id: 'cosmic-hyperbole', label: 'Language', priority: 3 },
+    { id: 'meaning', label: 'Meaning', priority: 1 },
 
     // Page 5: The Flood
     { id: 'cosmic-collapse', icon: '', label: 'Collapse', priority: 1 },
