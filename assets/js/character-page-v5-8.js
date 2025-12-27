@@ -214,6 +214,18 @@
     // NOAH MULTI-PAGE STUDY SECTIONS
     // ============================================
 
+    
+    // HUB SECTION (Overview, Significance, Pattern, etc.)
+    { id: 'hub-overview', icon: '📋', label: 'Overview', priority: 1 },
+    { id: 'significance', icon: '⚡', label: 'Why Matters', priority: 1 },
+    { id: 'pattern', icon: '🔄', label: 'Pattern', priority: 2 },
+    { id: 'pages', icon: '🧭', label: 'Pages', priority: 1 },
+    { id: 'timeline', icon: '📅', label: 'Timeline', priority: 3 },
+    { id: 'bridge-forward', icon: '🌉', label: 'Bridge', priority: 3 },
+    { id: 'theology-summary', icon: '📖', label: 'Theology', priority: 2 },
+    { id: 'source-note', icon: '📚', label: 'Foundations', priority: 4 },
+    { id: 'notes', icon: '📝', label: 'Notes', priority: 5 },
+    
     // Page 1: Overview
     { id: 'introduction', icon: '', label: 'Intro', priority: 1 },
     { id: 'name-meaning', icon: '', label: 'Name', priority: 1 },
@@ -275,6 +287,15 @@
     { id: 'babel', icon: '', label: 'Babel', priority: 1 },
     { id: 'abraham', icon: '', label: 'Abraham', priority: 1 },
     { id: 'key-verses', icon: '', label: 'Verses', priority: 4 },
+
+    // Page 8: Sources & Notes
+    { id: 'how-to-use', icon: '', label: 'How to Use', priority: 1 },
+    { id: 'primary-sources', icon: '📖', label: 'Primary', priority: 1 },
+    { id: 'commentaries', icon: '📚', label: 'Commentary', priority: 2 },
+    { id: 'ane-context', icon: '🏛️', label: 'ANE', priority: 2 },
+    { id: 'additional', icon: '➕', label: 'Additional', priority: 3 },
+    { id: 'citation-notes', icon: 'ℹ️', label: 'Notes', priority: 3 },
+    { id: 'reading-approach', icon: '📖', label: 'Approach', priority: 4 },
 
     // ============================================
     // HOSEA THEOLOGY PAGE SECTIONS (Covenant, Sin, etc.)
