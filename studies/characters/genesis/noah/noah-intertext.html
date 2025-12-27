@@ -25,17 +25,133 @@
   <!-- Canonical URL -->
   <link rel="canonical" href="https://projectcontext.org/studies/characters/genesis/noah/noah-intertext.html">
 
+  <!-- Preload Critical Resources -->
+  <link rel="preload" href="/assets/css/global-v2.css" as="style">
+  <link rel="preload" href="https://projectcontext.org/assets/fonts/SBL_Hebrew.woff2" as="font" type="font/woff2" crossorigin>
+
   <!-- Stylesheets -->
   <link rel="stylesheet" href="/assets/css/global-v2.css">
   <link rel="stylesheet" href="/assets/css/mobile-tabs-v5-8.css">
   <link rel="stylesheet" href="/assets/css/mobile-tabs-patch.css">
 
   <style>
-    /* Page-specific accent: Full rainbow gradient (complete circle = final page) */
+    /* Page-specific accent: Violet from rainbow (eighth color = eighth page) */
     :root {
-      --page-accent: #5c6bc0;
-      --page-accent-light: rgba(92, 107, 192, 0.12);
-      --page-accent-dark: #303f9f;
+      --page-accent: #7e57c2;
+      --page-accent-light: rgba(126, 87, 194, 0.12);
+      --page-accent-dark: #5e35b1;
+    }
+
+    /* ═══════════════════════════════════════════
+       ENHANCEMENT FEATURES CSS
+    ════════════════════════════════════════════ */
+
+    /* Cross-reference boxes */
+    .cross-ref-box {
+      background: linear-gradient(135deg, rgba(92, 107, 192, 0.08), rgba(92, 107, 192, 0.05));
+      border-left: 4px solid var(--page-accent, #5c6bc0);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      font-size: 0.92rem;
+    }
+
+    .cross-ref-box strong {
+      color: var(--page-accent-dark, #303f9f);
+      font-weight: 700;
+    }
+
+    .cross-ref-box a {
+      color: var(--page-accent-dark, #303f9f);
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-bottom 0.2s ease;
+    }
+
+    .cross-ref-box a:hover {
+      border-bottom-color: var(--page-accent-dark, #303f9f);
+    }
+
+    .cross-ref-box .page-ref {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-right: 0.5rem;
+    }
+
+    /* Pattern tracker */
+    .pattern-tracker {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 1.25rem;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 12px;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+    }
+
+    .pattern-tracker .tracker-label {
+      font-weight: 700;
+      color: var(--page-accent-dark, #333);
+      margin-right: 0.5rem;
+    }
+
+    .pattern-tracker .stage {
+      padding: 0.35rem 0.7rem;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.08);
+      color: #666;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .pattern-tracker .stage.current {
+      background: var(--page-accent, #5c6bc0);
+      color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      transform: scale(1.05);
+    }
+
+    .pattern-tracker .arrow {
+      color: #999;
+      font-size: 0.9rem;
+    }
+
+    /* Covenant thread indicator */
+    .covenant-thread {
+      position: relative;
+      padding: 1rem 1rem 1rem 3rem;
+      margin: 1.5rem 0;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(102, 187, 106, 0.08), rgba(102, 187, 106, 0.05));
+      border-left: 4px solid #66bb6a;
+    }
+
+    .covenant-thread::before {
+      content: "🌈";
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+    }
+
+    .covenant-thread .thread-stage {
+      font-weight: 700;
+      color: #2e7d32;
+      margin-bottom: 0.35rem;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .covenant-thread p {
+      margin: 0;
+      font-size: 0.92rem;
+      line-height: 1.6;
     }
 
     /* Connection thread visual */
@@ -367,68 +483,6 @@
       font-size: 0.9rem;
     }
 
-    /* Section styling */
-    .section-title {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-size: 1.4rem;
-      margin: 2.5rem 0 1.25rem;
-      color: #1e293b;
-    }
-
-    .section-icon {
-      font-size: 1.3rem;
-    }
-
-    /* Navigation styling */
-    .page-nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      margin: 3rem 0 2rem;
-      padding: 1.5rem;
-      background: #f5f5f5;
-      border-radius: 14px;
-      flex-wrap: wrap;
-    }
-
-    .page-nav a {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1.25rem;
-      background: var(--page-accent);
-      color: white;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .page-nav a:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-
-    .page-indicator {
-      font-size: 0.9rem;
-      color: #666;
-      font-weight: 500;
-    }
-
-    @media (max-width: 500px) {
-      .page-nav {
-        flex-direction: column;
-        text-align: center;
-      }
-      .page-nav a {
-        width: 100%;
-        justify-content: center;
-      }
-    }
-
     /* Study complete banner */
     .study-complete {
       background: linear-gradient(135deg, 
@@ -466,49 +520,101 @@
       margin: 0 auto;
     }
 
-    /* Animation */
-    .animate-on-scroll {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+    /* Page navigation */
+    .page-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      margin-top: 2rem;
+      border-top: 1px solid #e5e7eb;
     }
 
-    .animate-on-scroll.visible {
-      opacity: 1;
-      transform: translateY(0);
+    .page-nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: var(--page-accent-dark);
+      font-weight: 600;
+      padding: 0.6rem 1rem;
+      border-radius: 10px;
+      transition: background 0.2s ease;
     }
-    /* Enhanced Purple theme for Page 8 */
+
+    .page-nav a:hover {
+      background: var(--page-accent-light);
+    }
+
+    /* Enhanced Violet theme for Page 8 */
     .key-insight {
-    background: linear-gradient(135deg, rgba(126, 87, 194, 0.12), rgba(126, 87, 194, 0.08));
-    border-left: 4px solid #7e57c2;
+      background: linear-gradient(135deg, rgba(126, 87, 194, 0.12), rgba(126, 87, 194, 0.08));
+      border-left: 4px solid #7e57c2;
     }
 
     .section-title .section-icon {
-    background: linear-gradient(135deg, #7e57c2, #9575cd);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+      background: linear-gradient(135deg, #7e57c2, #9575cd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .theology-card {
-    border-top: 3px solid rgba(126, 87, 194, 0.3);
+      border-top: 3px solid rgba(126, 87, 194, 0.3);
     }
   </style>
 </head>
 
-<body>
-  <main class="content-wrapper">
+<body class="character-profile" dir="ltr">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div class="reading-progress"></div>
+  <div class="mobile-menu-overlay"></div>
+  <div class="quick-nav-sidebar" aria-label="Section navigation"></div>
 
-    <!-- Page Header -->
-    <header class="page-header" style="background: linear-gradient(135deg, #e53935, #ff7043, #ffca28, #66bb6a, #29b6f6, #5c6bc0, #ab47bc); color: white; padding: 2rem; border-radius: 16px; margin-bottom: 2rem;">
-      <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.5rem;">
-        <a href="noah.html" style="color: white; text-decoration: none;">Noah Study</a>
-        <span>›</span>
-        <span>Page 8 of 9</span>
+  <main id="main-content" class="container" role="main" aria-label="Noah intertextual connections page">
+
+    <div class="breadcrumbs">
+      <a href="/">Home</a> ›
+      <a href="/studies/">Studies</a> ›
+      <a href="/studies/characters/">Characters</a> ›
+      <a href="/studies/characters/genesis/noah/noah.html">Noah</a> ›
+      Page 8: Intertextual Threads
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         PAGE HEADER
+    ════════════════════════════════════════════ -->
+    <header class="profile-header" style="background: linear-gradient(135deg, #e53935, #ff7043, #ffca28, #66bb6a, #29b6f6, #5c6bc0, #ab47bc); color: white; padding: 2rem; border-radius: 16px; margin-bottom: 1.5rem;">
+      <div class="header-content">
+        <div class="name-block">
+          <span class="page-kicker" style="color: rgba(255,255,255,0.9);">Page 8 of 9</span>
+          <h1 style="color: white;">Noah Across Scripture</h1>
+          <p class="subtitle" style="color: rgba(255,255,255,0.95);">Intertextual Threads from Genesis to Revelation</p>
+        </div>
       </div>
-      <h1 style="margin: 0 0 0.5rem; font-size: clamp(1.75rem, 4vw, 2.25rem);">Noah Across Scripture</h1>
-      <p style="margin: 0; opacity: 0.9;">Intertextual Threads from Genesis to Revelation</p>
     </header>
+
+    <!-- ═══════════════════════════════════════════
+         PATTERN TRACKER
+    ════════════════════════════════════════════ -->
+    <div class="pattern-tracker">
+      <span class="tracker-label">Story Arc:</span>
+      <span class="stage">Corruption</span>
+      <span class="arrow">→</span>
+      <span class="stage">Election</span>
+      <span class="arrow">→</span>
+      <span class="stage">Ark Built</span>
+      <span class="arrow">→</span>
+      <span class="stage">Flood</span>
+      <span class="arrow">→</span>
+      <span class="stage">Covenant</span>
+      <span class="arrow">→</span>
+      <span class="stage">Failure</span>
+      <span class="arrow">→</span>
+      <span class="stage">Babel</span>
+      <span class="arrow">→</span>
+      <span class="stage current">Echoes</span>
+    </div>
 
     <!-- ═══════════════════════════════════════════
          THE "GOD REMEMBERED" PATTERN
@@ -536,6 +642,11 @@
           that will echo through every book. Jesus and the apostles read it this way: as part 
           of a quilt pointing to Him.
         </p>
+      </div>
+
+      <div class="cross-ref-box">
+        <strong>Related:</strong> 
+        <span class="page-ref">→ <a href="noah-flood.html">Page 5: The Flood</a></span> explores Genesis 8:1 as the narrative's pivot point—the moment "God remembered" and the waters began to recede.
       </div>
 
       <div class="pattern-box">
@@ -667,6 +778,7 @@
             </p>
           </div>
         </div>
+      </div>
     </section>
 
     <!-- ═══════════════════════════════════════════
@@ -727,6 +839,11 @@
         remembers her infant. The flood pattern teaches that the waiting feels 
         like abandonment, but the "remembering" always comes.
       </p>
+
+      <div class="cross-ref-box">
+        <strong>Connection:</strong> 
+        <span class="page-ref">→ <a href="noah-flood.html">Page 5: The Flood</a></span> discusses Isaiah 54's connection to Noah's covenant and the "God remembered" turning point.
+      </div>
     </section>
 
     <!-- ═══════════════════════════════════════════
@@ -790,6 +907,11 @@
           the waters of death into freedom. The flood → Exodus → Jesus pattern 
           is complete.
         </p>
+      </div>
+
+      <div class="cross-ref-box">
+        <strong>Related:</strong> 
+        <span class="page-ref">→ <a href="noah-flood.html">Page 5: The Flood</a></span> explores the three-dove sequence and manoakh (rest) wordplay that connects to Jesus as the one who brings ultimate rest.
       </div>
     </section>
 
@@ -916,6 +1038,11 @@
           people live as exiles.
         </p>
       </div>
+
+      <div class="cross-ref-box">
+        <strong>Connection:</strong> 
+        <span class="page-ref">→ <a href="noah-ark.html">Page 4: The Ark</a></span> explores the ark as tupos and Peter's antitupos baptism theology in detail.
+      </div>
     </section>
 
     <!-- ═══════════════════════════════════════════
@@ -980,6 +1107,14 @@
     </section>
 
     <!-- ═══════════════════════════════════════════
+         COVENANT THREAD INDICATOR
+    ════════════════════════════════════════════ -->
+    <div class="covenant-thread">
+      <div class="thread-stage">Covenant Stage: Fulfilled</div>
+      <p>The rainbow covenant promised "never again" would God destroy the earth by flood—but the pattern of "God remembered" echoes through Scripture until Jesus fulfills all covenant promises. In Him, God doesn't just preserve a remnant; He transforms humanity into a new creation.</p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
          STUDY COMPLETE
     ════════════════════════════════════════════ -->
     <div class="study-complete">
@@ -994,18 +1129,18 @@
     <!-- ═══════════════════════════════════════════
          PAGE NAVIGATION
     ════════════════════════════════════════════ -->
-    <nav class="page-nav">
-      <a href="noah-babel.html">
+    <nav class="page-nav" aria-label="Page navigation">
+      <a href="noah-babel.html" class="nav-prev">
         <span>←</span> Page 7: Babel
       </a>
-      <span class="page-indicator">Page 8 of 9</span>
-      <a href="noah-sources.html">
+      <span style="color:#999;font-size:0.9rem;">Page 8 of 9</span>
+      <a href="noah-sources.html" class="nav-next">
         Page 9: Sources <span>→</span>
       </a>
     </nav>
 
     <!-- Back to Hub -->
-    <div style="text-align: center; margin-bottom: 2rem;">
+    <div style="text-align: center; margin: 2rem 0;">
       <a href="noah.html" style="color: var(--page-accent-dark); font-weight: 600; text-decoration: none;">
         ← Return to Noah Hub
       </a>
@@ -1013,20 +1148,32 @@
 
   </main>
 
+  <!-- Back to Top Button -->
+  <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
+
+  <!-- Reading Progress Script -->
+  <script>
+    const progressBar = document.querySelector('.reading-progress');
+    window.addEventListener('scroll', () => {
+      if (!progressBar) return;
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      progressBar.style.width = progress + '%';
+    });
+  </script>
+
   <!-- Navigation Component -->
-<script type="module">
-  import NavigationComponent from '/assets/js/nav-component.js';
-  new NavigationComponent({
-    currentPage: 'characters',
-    hubType: 'characters'
-  });
-</script>
+  <script type="module">
+    import NavigationComponent from '/assets/js/nav-component.js';
+    new NavigationComponent({
+      currentPage: 'characters',
+      hubType: 'characters'
+    });
+  </script>
 
-<!-- Character Page Utilities -->
-<script src="/assets/js/character-page-v5-8.js" defer></script>
-
-<!-- Back to Top Button -->
-<a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
+  <!-- Character Page Utilities -->
+  <script src="/assets/js/character-page-v5-8.js" defer></script>
 
   <!-- Animation Script -->
   <script>
