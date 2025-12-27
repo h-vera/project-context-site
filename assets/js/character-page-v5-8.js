@@ -250,7 +250,7 @@
     { id: 'one-for-many', label: 'One for Many' },
     { id: 'name-prophecy', label: 'Name Prophecy' },
     { id: 'quilt-insert', label: 'Quilt Insert' },
-    { id: 'key-verses', label: 'Key Verses' }
+    { id: 'key-verses', label: 'Key Verses' },
 
     // Page 4: The Ark
     { id: 'tebah', label: 'The Word', priority: 1 },
