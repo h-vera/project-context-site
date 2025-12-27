@@ -243,14 +243,14 @@
     { id: 'flood-decision', icon: '', label: 'Judgment', priority: 2 },
 
     // Page 3: Election
-    { id: 'introduction', label: 'Why Chosen?' },
-    { id: 'genealogy', label: '10 Generations' },
-    { id: 'two-seeds', label: 'Two Seeds' },
-    { id: 'tested', label: 'Tested' },
-    { id: 'one-for-many', label: 'One for Many' },
-    { id: 'name-prophecy', label: 'Name Prophecy' },
-    { id: 'quilt-insert', label: 'Quilt Insert' },
-    { id: 'key-verses', label: 'Key Verses' },
+    { id: 'introduction', icon: '', label: 'Why Chosen?', priority: 1 },
+    { id: 'genealogy', icon: '', label: '10 Generations', priority: 1 },
+    { id: 'two-seeds', icon: '', label: 'Two Seeds', priority: 2 },
+    { id: 'tested', icon: '', label: 'Tested', priority: 1 },
+    { id: 'one-for-many', icon: '', label: 'One for Many', priority: 1 },
+    { id: 'name-prophecy', icon: '', label: 'Name Prophecy', priority: 2 },
+    { id: 'quilt-insert', icon: '', label: 'Quilt Insert', priority: 3 },
+    { id: 'key-verses', icon: '', label: 'Key Verses', priority: 4 },
 
     // Page 4: The Ark
     { id: 'tebah', label: 'The Word', priority: 1 },
