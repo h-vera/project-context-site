@@ -35,7 +35,7 @@
   
   <style>
     /* ============================================
-       ENHANCED HERO WITH COSMIC GRADIENT + ANIMATIONS
+       ENHANCED HERO WITH ANIMATED GRADIENT
        ============================================ */
     .about-hero {
       background: linear-gradient(
@@ -52,6 +52,8 @@
         #F06050 90%,     /* orange-red */
         #FF7A4A 100%     /* warm orange - bottom right */
       );
+      background-size: 200% 200%;
+      animation: gradientShift 15s ease infinite;
       padding: 5rem 2rem 3rem;
       margin-top: 65px;
       text-align: center;
@@ -60,39 +62,47 @@
       overflow: hidden;
     }
 
-    /* ANIMATED GRADIENT ORBS */
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ANIMATED GRADIENT ORBS - More visible */
     .about-hero::before {
       content: '';
       position: absolute;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
       animation: float1 20s infinite ease-in-out;
-      top: -200px;
-      left: -200px;
+      top: -300px;
+      left: -300px;
+      filter: blur(60px);
     }
 
     .about-hero::after {
       content: '';
       position: absolute;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(0,0,0,0.25) 0%, transparent 70%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(0,0,0,0.3) 0%, transparent 70%);
       animation: float2 20s infinite ease-in-out;
-      bottom: -150px;
-      right: -150px;
+      bottom: -200px;
+      right: -200px;
+      filter: blur(60px);
     }
 
     @keyframes float1 {
       0%, 100% { transform: translate(0, 0) scale(1); }
-      33% { transform: translate(50px, -50px) scale(1.1); }
-      66% { transform: translate(-30px, 40px) scale(0.9); }
+      33% { transform: translate(100px, -80px) scale(1.2); }
+      66% { transform: translate(-60px, 60px) scale(0.9); }
     }
 
     @keyframes float2 {
       0%, 100% { transform: translate(0, 0) scale(1); }
-      33% { transform: translate(-40px, 30px) scale(1.05); }
-      66% { transform: translate(50px, -40px) scale(0.95); }
+      33% { transform: translate(-80px, 60px) scale(1.1); }
+      66% { transform: translate(100px, -80px) scale(0.95); }
     }
 
     .about-hero > div {
@@ -107,12 +117,146 @@
       font-weight: 800;
       margin-bottom: 1rem;
       text-shadow: 2px 2px 4px rgba(0,0,0,.3);
+      animation: fadeSlideDown 0.8s ease-out;
     }
 
     .about-hero p {
       font-size: clamp(1rem, 2vw, 1.25rem);
       line-height: 1.6;
       opacity: 0.95;
+      animation: fadeSlideDown 1s ease-out;
+      animation-delay: 0.2s;
+      animation-fill-mode: backwards;
+    }
+
+    /* ============================================
+       IMPACT METRICS SECTION
+       ============================================ */
+    .impact-metrics {
+      background: white;
+      padding: 3rem 2rem;
+      margin: -2rem 0 3rem;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    }
+
+    .metrics-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      text-align: center;
+    }
+
+    .metric-item {
+      animation: fadeSlideDown 0.6s ease-out backwards;
+    }
+
+    .metric-item:nth-child(1) { animation-delay: 0.2s; }
+    .metric-item:nth-child(2) { animation-delay: 0.3s; }
+    .metric-item:nth-child(3) { animation-delay: 0.4s; }
+
+    .metric-number {
+      font-size: 2.5rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #4a5fff, #7209b7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-number.green {
+      background: linear-gradient(135deg, #10b981, #059669);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .metric-number.gold {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .metric-label {
+      color: #666;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    /* ============================================
+       FOUNDER'S NOTE - Enhanced animations
+       ============================================ */
+    .founder-note {
+      animation: fadeSlideDown 0.8s ease-out;
+    }
+
+    .founder-note h3 {
+      animation: fadeSlideLeft 0.6s ease-out;
+    }
+
+    .founder-note p {
+      opacity: 0;
+      transform: translateX(-20px);
+      animation: slideInLeft 0.6s ease-out forwards;
+    }
+
+    .founder-note p:nth-of-type(1) { animation-delay: 0.2s; }
+    .founder-note p:nth-of-type(2) { animation-delay: 0.4s; }
+
+    .founder-note .special-debt {
+      opacity: 0;
+      transform: scale(0.95);
+      animation: fadeScaleIn 0.6s ease-out forwards;
+      animation-delay: 0.6s;
+    }
+
+    .founder-note .signature {
+      opacity: 0;
+      transform: translateX(20px);
+      animation: slideInRight 0.6s ease-out forwards;
+      animation-delay: 0.8s;
+    }
+
+    @keyframes slideInLeft {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInRight {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeScaleIn {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* Highlight key phrases on scroll into view */
+    .founder-note.visible em {
+      background: linear-gradient(120deg, transparent 0%, rgba(255,235,59,0.3) 50%, transparent 100%);
+      background-size: 200% 100%;
+      animation: highlightSweep 2s ease-out;
+      animation-delay: 1s;
+    }
+
+    @keyframes highlightSweep {
+      0% { background-position: -100% 0; }
+      50% { background-position: 0 0; }
+      100% { background-position: 100% 0; }
     }
 
     /* ============================================
@@ -213,147 +357,241 @@
       border-width: 5px !important;
     }
 
-    /* ============================================
-       IMPACT METRICS SECTION
-       ============================================ */
-    .impact-metrics {
+    /* Mobile-friendly dimension cards */
+    .mobile-dimensions {
+      display: none;
+    }
+
+    .mobile-dimension-card {
       background: white;
-      padding: 3rem 2rem;
-      margin: -2rem 0 3rem;
-      position: relative;
-      z-index: 2;
-      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-    }
-
-    .metrics-grid {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 2rem;
-      text-align: center;
-    }
-
-    .metric-item {
-      animation: fadeSlideDown 0.6s ease-out backwards;
-    }
-
-    .metric-item:nth-child(1) { animation-delay: 0.2s; }
-    .metric-item:nth-child(2) { animation-delay: 0.3s; }
-    .metric-item:nth-child(3) { animation-delay: 0.4s; }
-
-    .metric-number {
-      font-size: 2.5rem;
-      font-weight: 900;
-      background: linear-gradient(135deg, #4a5fff, #7209b7);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 0.5rem;
-    }
-
-    .metric-number.green {
-      background: linear-gradient(135deg, #10b981, #059669);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .metric-number.gold {
-      background: linear-gradient(135deg, #f59e0b, #d97706);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .metric-label {
-      color: #666;
-      text-transform: uppercase;
-      font-size: 0.85rem;
-      letter-spacing: 1px;
-      font-weight: 600;
-    }
-
-    /* ============================================
-       STUDY TYPE CARDS (Bible Project inspired)
-       ============================================ */
-    .study-types-section {
-      background: white;
-      padding: 4rem 2rem;
-      margin: 3rem 0;
-    }
-
-    .study-types-grid {
-      max-width: 1200px;
-      margin: 2rem auto 0;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-    }
-
-    .study-type-card {
-      background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
-      border: 2px solid #e0e7ff;
-      border-radius: 16px;
-      padding: 2rem;
-      text-align: center;
+      border-radius: 12px;
+      padding: 1.25rem;
+      border-left: 4px solid;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      cursor: pointer;
       transition: all 0.3s ease;
-      text-decoration: none;
-      color: inherit;
-      display: block;
+      min-height: 44px;
+    }
+
+    .mobile-dimension-card:active {
+      transform: scale(0.98);
+    }
+
+    .mobile-dimension-card h4 {
+      margin: 0 0 0.75rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .mobile-dimension-card .example {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #4b5563;
+      margin: 0;
+    }
+
+    /* ============================================
+       CARD FAN SECTION - Interactive overlapping cards
+       ============================================ */
+    .card-fan-section {
+      background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%);
+      padding: 5rem 2rem;
+      margin: 3rem 0;
+      overflow: hidden;
+    }
+
+    .card-fan-section h2 {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      color: #2a3aaa;
+    }
+
+    .card-fan-section .subtitle {
+      text-align: center;
+      color: #666;
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 0 auto 4rem;
+    }
+
+    /* Card Fan Container */
+    .card-fan-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+      min-height: 500px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      perspective: 1000px;
+    }
+
+    /* Individual Study Card */
+    .study-card {
+      position: absolute;
+      width: 280px;
+      height: 400px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      cursor: pointer;
+      transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform-style: preserve-3d;
+      overflow: hidden;
+    }
+
+    /* Card positions when fanned (initial state) */
+    .card-fan-container:not(.expanded) .study-card:nth-child(1) {
+      transform: translateX(-80px) rotate(-12deg);
+      z-index: 1;
+    }
+
+    .card-fan-container:not(.expanded) .study-card:nth-child(2) {
+      transform: translateX(-40px) rotate(-6deg);
+      z-index: 2;
+    }
+
+    .card-fan-container:not(.expanded) .study-card:nth-child(3) {
+      transform: translateX(0) rotate(0deg);
+      z-index: 3;
+    }
+
+    .card-fan-container:not(.expanded) .study-card:nth-child(4) {
+      transform: translateX(40px) rotate(6deg);
+      z-index: 2;
+    }
+
+    .card-fan-container:not(.expanded) .study-card:nth-child(5) {
+      transform: translateX(80px) rotate(12deg);
+      z-index: 1;
+    }
+
+    /* Card positions when expanded (hover state) */
+    .card-fan-container.expanded .study-card:nth-child(1) {
+      transform: translateX(-480px) rotate(0deg) scale(1);
+      z-index: 5;
+    }
+
+    .card-fan-container.expanded .study-card:nth-child(2) {
+      transform: translateX(-240px) rotate(0deg) scale(1);
+      z-index: 5;
+    }
+
+    .card-fan-container.expanded .study-card:nth-child(3) {
+      transform: translateX(0) rotate(0deg) scale(1);
+      z-index: 5;
+    }
+
+    .card-fan-container.expanded .study-card:nth-child(4) {
+      transform: translateX(240px) rotate(0deg) scale(1);
+      z-index: 5;
+    }
+
+    .card-fan-container.expanded .study-card:nth-child(5) {
+      transform: translateX(480px) rotate(0deg) scale(1);
+      z-index: 5;
+    }
+
+    /* Card hover effect when expanded */
+    .card-fan-container.expanded .study-card:hover {
+      transform: translateY(-20px) scale(1.05);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    .card-fan-container.expanded .study-card:nth-child(1):hover {
+      transform: translateX(-480px) translateY(-20px) scale(1.05);
+    }
+
+    .card-fan-container.expanded .study-card:nth-child(2):hover {
+      transform: translateX(-240px) translateY(-20px) scale(1.05);
+    }
+
+    .card-fan-container.expanded .study-card:nth-child(3):hover {
+      transform: translateX(0) translateY(-20px) scale(1.05);
+    }
+
+    .card-fan-container.expanded .study-card:nth-child(4):hover {
+      transform: translateX(240px) translateY(-20px) scale(1.05);
+    }
+
+    .card-fan-container.expanded .study-card:nth-child(5):hover {
+      transform: translateX(480px) translateY(-20px) scale(1.05);
+    }
+
+    /* Card gradient backgrounds */
+    .study-card:nth-child(1) .card-gradient {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .study-card:nth-child(2) .card-gradient {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .study-card:nth-child(3) .card-gradient {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .study-card:nth-child(4) .card-gradient {
+      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+
+    .study-card:nth-child(5) .card-gradient {
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+
+    /* Card content */
+    .card-gradient {
+      width: 100%;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
       position: relative;
       overflow: hidden;
     }
 
-    .study-type-card::before {
+    .card-gradient::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(90deg, #4a5fff, #7209b7);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.3s ease;
+      inset: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 0%, transparent 60%);
     }
 
-    .study-type-card:hover::before {
-      transform: scaleX(1);
+    .card-body {
+      padding: 1.5rem;
     }
 
-    .study-type-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 24px rgba(74, 95, 255, 0.15);
-      border-color: #4a5fff;
-    }
-
-    .study-type-icon {
-      font-size: 3.5rem;
-      margin-bottom: 1rem;
-      display: block;
-      transition: transform 0.3s ease;
-    }
-
-    .study-type-card:hover .study-type-icon {
-      transform: scale(1.1);
-    }
-
-    .study-type-title {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: #2a3aaa;
+    .card-type {
+      display: inline-block;
+      background: rgba(74, 95, 255, 0.1);
+      color: #4a5fff;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       margin-bottom: 0.75rem;
     }
 
-    .study-type-desc {
-      font-size: 0.95rem;
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #2a3aaa;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-description {
+      font-size: 0.9rem;
       color: #666;
       line-height: 1.6;
       margin-bottom: 1rem;
     }
 
-    .study-type-count {
+    .card-count {
       display: inline-block;
       background: linear-gradient(135deg, rgba(74, 95, 255, 0.1), rgba(114, 9, 183, 0.1));
       color: #4a5fff;
@@ -367,7 +605,7 @@
        FEATURED STUDIES GRID
        ============================================ */
     .featured-studies-section {
-      background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+      background: white;
       padding: 4rem 2rem;
       margin: 3rem 0;
     }
@@ -463,8 +701,113 @@
     }
 
     /* ============================================
-       RESPONSIVE ENHANCEMENTS
+       READY TO EXPLORE SECTION - Animated
        ============================================ */
+    .ready-to-explore {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ready-to-explore::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(74,95,255,0.1), transparent);
+      animation: shimmer 3s infinite;
+      animation-delay: 1s;
+    }
+
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    .ready-to-explore.visible h3 {
+      animation: fadeScaleIn 0.8s ease-out;
+    }
+
+    .ready-to-explore.visible p {
+      animation: fadeSlideDown 0.8s ease-out;
+      animation-delay: 0.2s;
+      animation-fill-mode: backwards;
+    }
+
+    .ready-to-explore.visible a {
+      animation: fadeScaleIn 0.8s ease-out;
+      animation-delay: 0.4s;
+      animation-fill-mode: backwards;
+    }
+
+    .ready-to-explore a {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ready-to-explore a::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+    }
+
+    .ready-to-explore a:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .ready-to-explore a span {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ============================================
+       MOBILE RESPONSIVE ENHANCEMENTS
+       ============================================ */
+    @media (max-width: 1200px) {
+      .card-fan-container.expanded .study-card:nth-child(1) {
+        transform: translateX(-320px) rotate(0deg);
+      }
+      .card-fan-container.expanded .study-card:nth-child(2) {
+        transform: translateX(-160px) rotate(0deg);
+      }
+      .card-fan-container.expanded .study-card:nth-child(4) {
+        transform: translateX(160px) rotate(0deg);
+      }
+      .card-fan-container.expanded .study-card:nth-child(5) {
+        transform: translateX(320px) rotate(0deg);
+      }
+    }
+
+    @media (max-width: 900px) {
+      /* Stack cards vertically on mobile */
+      .card-fan-container {
+        flex-direction: column;
+        min-height: auto;
+        gap: 1rem;
+      }
+
+      .card-fan-container:not(.expanded) .study-card,
+      .card-fan-container.expanded .study-card {
+        position: relative;
+        transform: none !important;
+        margin: 0 auto;
+      }
+
+      .study-card {
+        width: 100%;
+        max-width: 400px;
+      }
+    }
+
     @media (max-width: 768px) {
       .about-hero h1 {
         font-size: clamp(1.75rem, 8vw, 2.8rem);
@@ -479,43 +822,46 @@
         gap: 1.5rem;
       }
 
-      .study-types-grid {
-        grid-template-columns: 1fr;
-      }
-
       .featured-studies-grid {
         grid-template-columns: 1fr;
       }
 
+      /* Mobile Venn Diagram */
       .venn-diagram-container {
-        min-height: 500px !important;
+        display: none !important;
       }
 
-      .diagram-center {
-        font-size: 0.85rem !important;
-        width: 22% !important;
-        height: 22% !important;
-        top: 39% !important;
-        left: 39% !important;
+      .mobile-dimensions {
+        display: grid !important;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      /* Enhanced touch targets for mobile */
+      .study-card,
+      .featured-study-card,
+      .mobile-dimension-card {
+        min-height: 44px;
+        -webkit-tap-highlight-color: rgba(74, 95, 255, 0.1);
+      }
+
+      /* Prevent iOS zoom on input focus */
+      input, select, textarea {
+        font-size: 16px;
+      }
+
+      /* Better button press feedback */
+      a, button {
+        -webkit-tap-highlight-color: rgba(74, 95, 255, 0.2);
+        touch-action: manipulation;
       }
     }
 
     @media (max-width: 480px) {
-      .venn-diagram-container {
-        min-height: 400px !important;
-      }
-
       .dimension-title {
         font-size: 1rem !important;
-      }
-
-      .diagram-center {
-        font-size: 0.7rem !important;
-        padding: 0.5rem !important;
-        width: 20% !important;
-        height: 20% !important;
-        top: 40% !important;
-        left: 40% !important;
       }
     }
 
@@ -533,6 +879,17 @@
       }
     }
 
+    @keyframes fadeSlideLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
     .fade-in-section {
       opacity: 0;
       transform: translateY(20px);
@@ -544,10 +901,33 @@
       transform: translateY(0);
     }
 
+    /* Smoother scrolling on iOS */
+    .about-page {
+      -webkit-overflow-scrolling: touch;
+    }
+
     @media (prefers-reduced-motion: reduce) {
+      .about-hero,
       .about-hero::before,
-      .about-hero::after {
+      .about-hero::after,
+      .ready-to-explore::before {
         animation: none;
+      }
+      
+      .about-hero h1,
+      .about-hero p,
+      .metric-item,
+      .founder-note,
+      .founder-note h3,
+      .founder-note p,
+      .founder-note .special-debt,
+      .founder-note .signature,
+      .ready-to-explore h3,
+      .ready-to-explore p,
+      .ready-to-explore a {
+        animation: none;
+        opacity: 1;
+        transform: none;
       }
       
       .circle-inner {
@@ -569,7 +949,7 @@
   
   <main id="main-content" class="content-section">
     
-    <!-- ENHANCED HERO SECTION WITH ANIMATIONS -->
+    <!-- ENHANCED HERO SECTION WITH ANIMATED GRADIENT -->
     <section class="about-hero">
       <div>
         <h1>Context Is Everything</h1>
@@ -595,19 +975,19 @@
       </div>
     </section>
 
-    <!-- FOUNDER'S NOTE (CONDENSED) -->
-    <div class="theology-card fade-in-section" id="founder-note" style="background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%); border: 2px solid #4a5fff;">
+    <!-- FOUNDER'S NOTE (ANIMATED) -->
+    <div class="theology-card fade-in-section founder-note" id="founder-note" style="background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%); border: 2px solid #4a5fff;">
       <h3 style="color: #2a3aaa;">Why This Project Exists</h3>
       
       <p style="line-height: 1.8;">I've always needed context to make sense of things. Without it, I feel anchorless. A strengths assessment once identified <em>Context</em> as one of my top strengths: the drive to understand what came before so I can clearly see the present. When it comes to Scripture, this shapes everything—to truly hear what the authors were saying, we need to step into their world: their audience, culture, literary patterns, and the stories that shaped them.</p>
       
       <p style="line-height: 1.8; margin-top: 1rem;">Over the years, I've read widely and found incredible insights scattered across books, articles, and commentaries. Project Context exists to bring these essential pieces together in one place—so when you explore a biblical character, book, or theme here, you can quickly grasp the full landscape without hunting through multiple sources.</p>
 
-      <div style="background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%); border-radius: 12px; padding: 1.25rem; margin: 1.5rem 0; border-left: 4px solid #f59e0b;">
+      <div class="special-debt" style="background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%); border-radius: 12px; padding: 1.25rem; margin: 1.5rem 0; border-left: 4px solid #f59e0b;">
         <p style="margin: 0; color: #78350f;"><strong style="color: #92400e;">🙏 A Special Debt:</strong> I owe much to the Bible Project. Their videos, podcasts, classroom, and articles expanded my understanding and showed me how literary design, theology, and ancient worldviews fit together. Much of what shaped this project comes from insights I gained through their generosity in making biblical scholarship accessible.</p>
       </div>
 
-      <p style="text-align: right; font-style: italic; margin-top: 1.5rem; color: #4a5fff;">
+      <p class="signature" style="text-align: right; font-style: italic; margin-top: 1.5rem; color: #4a5fff;">
         – Henry Rivera, Founder
       </p>
     </div>
@@ -692,6 +1072,7 @@
         <h4 style="color: #6d28d9; margin-bottom: 0.5rem; text-align: center;">📋 Interactive Example: Abraham's Four Dimensions</h4>
         <p style="text-align: center; color: #666; margin-bottom: 2rem;">Click each circle to see how the four dimensions work together in practice</p>
         
+        <!-- DESKTOP VENN DIAGRAM -->
         <div class="venn-diagram-container" style="position: relative; width: 100%; max-width: 700px; margin: 2rem auto; aspect-ratio: 1; min-height: 600px;">
           <!-- SVG for visual overlap only -->
           <svg id="venn-svg" viewBox="0 0 700 700" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: 0;">
@@ -713,11 +1094,16 @@
               </div>
               <div class="circle-back" style="background: linear-gradient(135deg, rgba(67,56,202,0.95) 0%, rgba(99,102,241,0.95) 100%); border: 3px solid rgba(99,102,241,0.9);">
                 <div style="color: white; padding: 0.75rem;">
-                  <div style="font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem;">Chiastic Frame</div>
+                  <div style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem;">Chiastic Frame</div>
                   <div style="font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.9; text-align: left; padding: 0 0.75rem;">
                     <div style="margin-left: 0; font-weight: 600;">A&nbsp;&nbsp;Gen 12:1 — לֶךְ־לְךָ</div>
                     <div style="margin-left: 1.5rem;">&nbsp;&nbsp;B&nbsp;&nbsp;Promise 15:5</div>
-                    <div style="margin-left: 2.5rem; font-weight: 700; color: rgba(255,255,255,0.95);">&nbsp;&nbsp;&nbsp;C&nbsp;&nbsp;17 — ה</div>
+                    
+                    <!-- ENHANCED CENTER MARKER -->
+                    <div style="margin-left: 2rem; padding: 0.4rem 0.6rem; background: rgba(255,255,255,0.2); border-radius: 4px; border-left: 3px solid #fbbf24; font-weight: 800; color: #fef3c7; font-size: 0.85rem;">
+                      &nbsp;⭐ CENTER: Gen 17 — ה
+                    </div>
+                    
                     <div style="margin-left: 1.5rem;">&nbsp;&nbsp;B'&nbsp;Test 22:1</div>
                     <div style="margin-left: 0; font-weight: 600;">A'&nbsp;Gen 22:2 — לֶךְ־לְךָ</div>
                   </div>
@@ -798,6 +1184,34 @@
           </div>
         </div>
 
+        <!-- MOBILE DIMENSIONS (hidden on desktop) -->
+        <div class="mobile-dimensions">
+          <div class="mobile-dimension-card" onclick="updateInfo('textual')" style="border-color: #6366f1;">
+            <h4 style="color: #4338ca;">📖 Textual & Literary</h4>
+            <p class="example">Hebrew wordplay reveals covenant transformation (אַבְרָם → אַבְרָהָם)</p>
+          </div>
+          
+          <div class="mobile-dimension-card" onclick="updateInfo('historical')" style="border-color: #ec4899;">
+            <h4 style="color: #be185d;">🌍 Historical & Cultural</h4>
+            <p class="example">ANE context shows God alone passing through the covenant pieces</p>
+          </div>
+          
+          <div class="mobile-dimension-card" onclick="updateInfo('theological')" style="border-color: #22c55e;">
+            <h4 style="color: #15803d;">✨ Theological Connections</h4>
+            <p class="example">Seed promise flows from Gen 12:3 to Gal 3:16—all nations blessed</p>
+          </div>
+          
+          <div class="mobile-dimension-card" onclick="updateInfo('practical')" style="border-color: #f59e0b;">
+            <h4 style="color: #b45309;">💡 Practical Engagement</h4>
+            <p class="example">25-year faith journey: from fear in Egypt to trust at Moriah</p>
+          </div>
+          
+          <div class="mobile-dimension-card" onclick="showAllDimensions()" style="border-color: #8b5cf6; background: linear-gradient(135deg, #faf5ff, #f3e8ff);">
+            <h4 style="color: #6d28d9;">🔗 See All Together</h4>
+            <p class="example">Tap to see how all four dimensions integrate</p>
+          </div>
+        </div>
+
         <p style="color:#666;font-style:italic;margin-top:2rem;text-align:center;font-size:0.95rem;">💡 Click any circle to flip and see integration details</p>
         <button onclick="resetAllCircles()" style="display: block; margin: 1.5rem auto 0; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #dc2626, #7209b7); color: white; border: none; border-radius: 999px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 12px rgba(114,9,183,0.3);">🔄 Reset All</button>
 
@@ -822,32 +1236,86 @@
       </div>
     </div>
 
-    <!-- STUDY TYPES SECTION (Bible Project inspired) -->
-    <section class="study-types-section fade-in-section">
-      <div style="max-width: 1200px; margin: 0 auto;">
-        <h2 style="text-align: center; font-size: 2rem; font-weight: 800; margin-bottom: 1rem; color: #2a3aaa;">What We Offer</h2>
-        <p style="text-align: center; color: #666; font-size: 1.1rem; max-width: 700px; margin: 0 auto 0;">Three types of biblical studies, each integrating historical context, literary design, and theological depth.</p>
+    <!-- CARD FAN SECTION - What We Offer -->
+    <section class="card-fan-section fade-in-section">
+      <div>
+        <h2>What We Offer</h2>
+        <p class="subtitle">Five types of biblical studies, each integrating historical context, literary design, and theological depth. Hover to explore all options.</p>
         
-        <div class="study-types-grid">
-          <a href="/studies/characters/characters_hub.html" class="study-type-card">
-            <span class="study-type-icon">👤</span>
-            <h3 class="study-type-title">Character Studies</h3>
-            <p class="study-type-desc">In-depth profiles exploring biblical figures' narratives, Hebrew/Greek name meanings, and theological significance.</p>
-            <span class="study-type-count">300+ Characters</span>
+        <div class="card-fan-container" id="cardFan">
+          <!-- Card 1: Biblical Characters -->
+          <a href="/studies/characters/characters_hub.html" class="study-card">
+            <div class="card-gradient">
+              <span style="position: relative; z-index: 1;">👤</span>
+            </div>
+            <div class="card-body">
+              <span class="card-type">Character Studies</span>
+              <h3 class="card-title">Biblical Characters</h3>
+              <p class="card-description">
+                In-depth profiles exploring biblical figures' narratives, Hebrew/Greek name meanings, and theological significance.
+              </p>
+              <span class="card-count">300+ Characters</span>
+            </div>
           </a>
 
-          <a href="/studies/studies-overview.html#book-studies" class="study-type-card">
-            <span class="study-type-icon">📖</span>
-            <h3 class="study-type-title">Book Studies</h3>
-            <p class="study-type-desc">Comprehensive analyses of biblical books with literary structure, historical background, and theological themes.</p>
-            <span class="study-type-count">66 Books</span>
+          <!-- Card 2: Women in the Bible -->
+          <a href="/studies/women/women-bible-hub.html" class="study-card">
+            <div class="card-gradient">
+              <span style="position: relative; z-index: 1;">👩</span>
+            </div>
+            <div class="card-body">
+              <span class="card-type">Character Studies</span>
+              <h3 class="card-title">Women in the Bible</h3>
+              <p class="card-description">
+                Comprehensive profiles of every woman in Scripture, exploring their narratives, theological significance, and lasting impact.
+              </p>
+              <span class="card-count">170+ Women</span>
+            </div>
           </a>
 
-          <a href="/studies/thematic/thematic-hub.html" class="study-type-card">
-            <span class="study-type-icon">🔗</span>
-            <h3 class="study-type-title">Thematic Studies</h3>
-            <p class="study-type-desc">Cross-biblical explorations tracing theological concepts, literary patterns, and redemptive themes across Scripture.</p>
-            <span class="study-type-count">Multiple Themes</span>
+          <!-- Card 3: Tanakh Studies -->
+          <a href="/studies/tanakh/tanakh-hub.html" class="study-card">
+            <div class="card-gradient">
+              <span style="position: relative; z-index: 1;">📜</span>
+            </div>
+            <div class="card-body">
+              <span class="card-type">Book Studies</span>
+              <h3 class="card-title">Tanakh Studies</h3>
+              <p class="card-description">
+                Comprehensive book studies of the Hebrew Bible exploring Torah, Prophets, and Writings with historical context and literary analysis.
+              </p>
+              <span class="card-count">39 Books</span>
+            </div>
+          </a>
+
+          <!-- Card 4: New Covenant Studies -->
+          <a href="/studies/new-covenant/new-covenant-hub.html" class="study-card">
+            <div class="card-gradient">
+              <span style="position: relative; z-index: 1;">✝️</span>
+            </div>
+            <div class="card-body">
+              <span class="card-type">Book Studies</span>
+              <h3 class="card-title">New Covenant Studies</h3>
+              <p class="card-description">
+                Structured editions of the apostolic writings revealing Greek rhetoric, triads, creeds, and chiastic patterns.
+              </p>
+              <span class="card-count">27 Books</span>
+            </div>
+          </a>
+
+          <!-- Card 5: Thematic Studies -->
+          <a href="/studies/thematic/thematic-hub.html" class="study-card">
+            <div class="card-gradient">
+              <span style="position: relative; z-index: 1;">🔗</span>
+            </div>
+            <div class="card-body">
+              <span class="card-type">Thematic Studies</span>
+              <h3 class="card-title">Thematic Studies</h3>
+              <p class="card-description">
+                Cross-biblical explorations tracing theological concepts, literary patterns, and redemptive themes across Scripture.
+              </p>
+              <span class="card-count">Multiple Themes</span>
+            </div>
           </a>
         </div>
       </div>
@@ -907,14 +1375,14 @@
       </div>
     </section>
 
-    <!-- SIMPLE CLOSING -->
-    <div class="theology-card fade-in-section" style="text-align: center; background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%); border: 2px solid #4a5fff;">
-      <h3 style="color: #2a3aaa;">Ready to Explore?</h3>
-      <p style="font-size: 1.1rem; line-height: 1.7; max-width: 600px; margin: 1rem auto;">
-        Whether you're preparing a sermon, leading a study, or deepening your personal faith, these resources are here to help you engage Scripture with greater clarity and depth.
+    <!-- READY TO EXPLORE SECTION - ANIMATED -->
+    <div class="theology-card fade-in-section ready-to-explore" style="text-align: center; background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%); border: 2px solid #4a5fff;">
+      <h3 style="color: #2a3aaa;">Dive In Wherever You're Drawn</h3>
+      <p style="font-size: 1.1rem; line-height: 1.7; max-width: 650px; margin: 1rem auto;">
+        Every page is an invitation to meditate on Scripture. Patterns surface. Context deepens. Connections form—drawing characters, themes, and theology together across the canon, revealing a story richer and more surprising than it first appeared.
       </p>
       <a href="/studies/studies-overview.html" style="display: inline-block; margin-top: 1.5rem; padding: 0.875rem 2rem; background: linear-gradient(135deg, #4a5fff, #7209b7); color: white; text-decoration: none; border-radius: 50px; font-weight: 700; font-size: 1rem; transition: all 0.3s ease;">
-        Browse Studies →
+        <span>Browse All Resources →</span>
       </a>
     </div>
 
@@ -938,165 +1406,118 @@
 
   <!-- VENN DIAGRAM + PAGE JavaScript -->
   <script>
-    // Venn Diagram Data and Functions
+    // SIMPLIFIED Info Data - Focus on CONCEPT, not exhaustive detail
     const infoData = {
       textual: {
-        title: '📖 Textual & Literary Analysis',
+        title: '📖 Textual & Literary',
         color: '#6366f1',
         content: `
-          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #4338ca;">Name Transformation: אַבְרָם → אַבְרָהָם</h4>
-          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
-            <li>The ה (heh) represents divine breath — God inserts His own character into Abram's identity</li>
-            <li>"Exalted father" → "father of multitudes" (Gen 17:5) at covenant of circumcision</li>
-            <li>Transformation marks the chiastic center — the hinge between promise and testing</li>
-            <li>Sarai → Sarah receives parallel transformation (Gen 17:15)</li>
+          <p style="margin: 0 0 1rem; line-height: 1.7;">
+            <strong>How it works:</strong> We examine the Hebrew text for wordplay, literary patterns, and structural design.
+          </p>
+          
+          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #4338ca;">Abraham Example:</h4>
+          <ul style="margin: 0 0 0 1.25rem; line-height: 1.8;">
+            <li><strong>Name change:</strong> אַבְרָם → אַבְרָהָם (God adds "breath" = ה)</li>
+            <li><strong>Chiastic bookends:</strong> "Lekh Lekha" appears only twice (Gen 12:1, 22:2)</li>
+            <li><strong>Literary center:</strong> Name change marks transformation (Gen 17)</li>
           </ul>
           
-          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #4338ca;">Chiastic Structure: לֶךְ־לְךָ Bookends</h4>
-          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
-            <li><strong>A — Gen 12:1:</strong> "Lekh Lekha" (go forth) — leave your father's house</li>
-            <li style="margin-left: 1.5rem;"><strong>B — Gen 15:5:</strong> Promise of descendants like the stars</li>
-            <li style="margin-left: 2.5rem;"><strong>C — Gen 17:</strong> Name change + covenant sign (circumcision)</li>
-            <li style="margin-left: 1.5rem;"><strong>B' — Gen 22:1:</strong> Testing of the promised son</li>
-            <li><strong>A' — Gen 22:2:</strong> "Lekh Lekha" — offer your son (only other occurrence in Torah)</li>
-            <li>This massive inclusio frames the entire Abraham narrative as a journey from abandonment to ultimate trust</li>
-          </ul>
-          
-          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #4338ca;">Literary Intentionality</h4>
-          <ul style="margin: 0 0 0 1.25rem; line-height: 1.6;">
-            <li>The symmetry reveals deliberate literary design emphasizing covenant transformation</li>
-            <li>Center (C) contains both the name change and the physical sign — identity and embodiment united</li>
-            <li>The two Lekh Lekha commands mirror each other: leave everything → give everything</li>
-          </ul>
+          <p style="margin: 1rem 0 0; padding: 0.75rem; background: rgba(99,102,241,0.08); border-left: 3px solid #6366f1; border-radius: 4px; font-size: 0.9rem;">
+            💡 This reveals <strong>intentional design</strong> showing covenant transformation as the narrative's pivot point.
+          </p>
         `
       },
+      
       historical: {
-        title: '🌍 Historical & Cultural Context',
+        title: '🌍 Historical & Cultural',
         color: '#ec4899',
         content: `
-          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #be185d;">Ancient Near Eastern Treaty Ceremony (Gen 15)</h4>
-          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
-            <li><strong>Standard ANE practice:</strong> Both parties walk between cut animal pieces invoking self-curse if covenant broken</li>
-            <li><strong>The ritual declaration:</strong> "May I become like these animals if I break this covenant"</li>
-            <li>Documented in Hittite, Assyrian, and Aramaic treaties from 2nd millennium BCE</li>
-            <li>Archaeological parallel: Mari texts describe similar blood-covenant ceremonies</li>
+          <p style="margin: 0 0 1rem; line-height: 1.7;">
+            <strong>How it works:</strong> We compare Scripture with Ancient Near Eastern customs to highlight both parallels and biblical distinctives.
+          </p>
+          
+          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #be185d;">Abraham Example:</h4>
+          <ul style="margin: 0 0 0 1.25rem; line-height: 1.8;">
+            <li><strong>ANE parallel:</strong> Covenant ceremonies involved cutting animals</li>
+            <li><strong>Biblical distinctive:</strong> Only God passes through (Gen 15)</li>
+            <li><strong>Significance:</strong> Suzerain takes vassal's curse—unprecedented!</li>
           </ul>
           
-          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #be185d;">The Revolutionary Reversal</h4>
-          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
-            <li><strong>God alone passes between the pieces</strong> while Abraham is in deep sleep (Gen 15:12, 17)</li>
-            <li>The Suzerain (superior party) assumes the vassal's curse — unheard of in ANE diplomacy</li>
-            <li>Smoking firepot and flaming torch = visible manifestation of Yahweh's presence</li>
-            <li>Abraham's passivity echoes Adam's sleep during Eve's creation (Gen 2:21) — grace through non-participation</li>
-          </ul>
-          
-          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #be185d;">Theological Significance</h4>
-          <ul style="margin: 0 0 0 1.25rem; line-height: 1.6;">
-            <li>This is a <strong>unilateral covenant</strong> — God binds Himself unconditionally</li>
-            <li>Prefigures the cross: God takes the curse upon Himself (Gal 3:13)</li>
-            <li>Establishes pattern: human inability + divine initiative = covenant foundation</li>
-          </ul>
+          <p style="margin: 1rem 0 0; padding: 0.75rem; background: rgba(236,72,153,0.08); border-left: 3px solid #ec4899; border-radius: 4px; font-size: 0.9rem;">
+            💡 This shows <strong>God's radical grace</strong>—He bears the covenant obligation while Abraham sleeps.
+          </p>
         `
       },
+      
       theological: {
         title: '✨ Theological Connections',
         color: '#22c55e',
         content: `
-          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #15803d;">The Singular "Seed" Promise</h4>
-          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
-            <li><strong>Gen 12:3:</strong> "Through your seed (זֶרַע) all nations of the earth will be blessed"</li>
-            <li><strong>Paul's interpretation (Gal 3:16):</strong> Singular "seed" = Christ, not many seeds</li>
-            <li>The promise flows through one descendant who embodies Israel's vocation</li>
-            <li>This reading assumes the entire Abraham narrative points forward to Messiah</li>
+          <p style="margin: 0 0 1rem; line-height: 1.7;">
+            <strong>How it works:</strong> We trace themes through the entire biblical canon to show how stories connect to God's larger redemptive plan.
+          </p>
+          
+          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #15803d;">Abraham Example:</h4>
+          <ul style="margin: 0 0 0 1.25rem; line-height: 1.8;">
+            <li><strong>Seed promise:</strong> "All nations blessed" (Gen 12:3)</li>
+            <li><strong>Paul's reading:</strong> Singular "seed" = Christ (Gal 3:16)</li>
+            <li><strong>Pattern:</strong> Barren → fruitful (Sarah, Rebekah, Rachel...)</li>
           </ul>
           
-          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #15803d;">Justification by Faith Foundation</h4>
-          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
-            <li><strong>Gen 15:6:</strong> "Abraham believed the LORD, and He credited it to him as righteousness"</li>
-            <li>Paul uses this verse as the foundation for justification by faith (Rom 4:1-25; Gal 3:6-9)</li>
-            <li>Righteousness comes <strong>before</strong> circumcision (Gen 17), not through it</li>
-            <li>Faith = trust in God's character and promises when circumstances actively contradict them</li>
-          </ul>
-          
-          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #15803d;">Barrenness → Fruitfulness Pattern</h4>
-          <ul style="margin: 0 0 0 1.25rem; line-height: 1.6;">
-            <li>Sarah's barrenness (Gen 11:30) makes the promise humanly impossible</li>
-            <li>Pattern repeated: Rebekah, Rachel, Hannah, Elizabeth, Mary — life from death/impossibility</li>
-            <li>Theological point: God's promises are fulfilled by <strong>divine power</strong>, not human capacity</li>
-            <li>Foreshadows resurrection: Isaac as "good as dead" (Heb 11:12), then born; later offered and "received back" (Heb 11:19)</li>
-          </ul>
+          <p style="margin: 1rem 0 0; padding: 0.75rem; background: rgba(34,197,94,0.08); border-left: 3px solid #22c55e; border-radius: 4px; font-size: 0.9rem;">
+            💡 This reveals <strong>Christ-centered trajectory</strong> from Genesis to Galatians.
+          </p>
         `
       },
+      
       practical: {
         title: '💡 Practical Engagement',
         color: '#f59e0b',
         content: `
-          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #b45309;">Faith Model: Rom 4:18-21</h4>
-          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
-            <li>"Against all hope, Abraham in hope believed" — trusting God's promise when circumstances mock it</li>
-            <li><strong>25-year wait</strong> between promise (Gen 12; Abraham age 75) and fulfillment (Gen 21; Abraham age 100)</li>
-            <li>"He did not waver through unbelief... being fully persuaded that God had power" (Rom 4:20-21)</li>
-            <li>Faith rests on <strong>God's character</strong>, not visible circumstances or personal capacity</li>
+          <p style="margin: 0 0 1rem; line-height: 1.7;">
+            <strong>How it works:</strong> We explore how ancient stories speak to contemporary life, offering both personal and community application.
+          </p>
+          
+          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #b45309;">Abraham Example:</h4>
+          <ul style="margin: 0 0 0 1.25rem; line-height: 1.8;">
+            <li><strong>Faith journey:</strong> 25-year wait teaches patience</li>
+            <li><strong>Character growth:</strong> Fear (Egypt) → trust (Moriah)</li>
+            <li><strong>Discipleship:</strong> Faith rests on God's character, not circumstances</li>
           </ul>
           
-          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #b45309;">Character Arc: Growth Through Testing</h4>
-          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
-            <li><strong>Gen 12 (Egypt):</strong> Fear-driven deception — "Say you are my sister" to protect himself</li>
-            <li><strong>Gen 18 (Sodom):</strong> Bold intercession — "Will not the Judge of all the earth do right?"</li>
-            <li><strong>Gen 22 (Moriah):</strong> Ultimate surrender — "God will provide the lamb" (faith + obedience)</li>
-            <li>Progression shows spiritual formation: from self-preservation → advocacy → total trust</li>
-          </ul>
-          
-          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #b45309;">Discipleship Application</h4>
-          <ul style="margin: 0 0 0 1.25rem; line-height: 1.6;">
-            <li><strong>Patience in waiting:</strong> God's timing ≠ our timeline; faithfulness during the gap</li>
-            <li><strong>Loyalty through testing:</strong> Suffering and delay don't disprove God's promises</li>
-            <li><strong>Faith vs. sight:</strong> Believe God's word over present evidence (2 Cor 5:7)</li>
-            <li><strong>Community impact:</strong> Abraham's faith becomes example for "all who believe" (Rom 4:24)</li>
-          </ul>
+          <p style="margin: 1rem 0 0; padding: 0.75rem; background: rgba(245,158,11,0.08); border-left: 3px solid #f59e0b; border-radius: 4px; font-size: 0.9rem;">
+            💡 This shows <strong>progressive transformation</strong>—God works through our failures.
+          </p>
         `
       },
+      
       all: {
-        title: '🔗 Full Four-Dimensional Integration',
+        title: '🔗 Four Dimensions Working Together',
         color: '#8b5cf6',
         content: `
-          <h4 style="margin: 0 0 0.5rem; font-size: 1.05rem; color: #6d28d9;">How Project Context Reads Biblical Characters</h4>
-          <p style="margin: 0 0 1rem; line-height: 1.6;">One Abraham profile synthesizes all four dimensions simultaneously — this is the methodology applied to every character study:</p>
+          <h4 style="margin: 0 0 1rem; font-size: 1.1rem; color: #6d28d9;">Project Context's Integrated Approach</h4>
           
-          <h4 style="margin: 0.75rem 0 0.5rem; font-size: 1rem; color: #7c3aed;">📖 Textual & Literary</h4>
-          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
-            <li>Hebrew wordplay: ה (heh) = divine breath inserted into identity</li>
-            <li>Chiastic structure: Lekh Lekha bookends (Gen 12:1, 22:2) frame entire narrative</li>
-            <li>Name transformation at covenant center (Gen 17) as literary hinge</li>
-            <li>Parallel patterns: Abram → Abraham // Sarai → Sarah</li>
-          </ul>
+          <div style="display: grid; gap: 1rem;">
+            <div style="padding: 0.75rem; background: rgba(99,102,241,0.08); border-left: 3px solid #6366f1; border-radius: 4px;">
+              <strong style="color: #4338ca;">📖 Textual:</strong> Hebrew wordplay reveals covenant transformation
+            </div>
+            
+            <div style="padding: 0.75rem; background: rgba(236,72,153,0.08); border-left: 3px solid #ec4899; border-radius: 4px;">
+              <strong style="color: #be185d;">🌍 Historical:</strong> ANE context highlights God's radical grace
+            </div>
+            
+            <div style="padding: 0.75rem; background: rgba(34,197,94,0.08); border-left: 3px solid #22c55e; border-radius: 4px;">
+              <strong style="color: #15803d;">✨ Theological:</strong> Seed promise flows from Genesis to Galatians
+            </div>
+            
+            <div style="padding: 0.75rem; background: rgba(245,158,11,0.08); border-left: 3px solid #f59e0b; border-radius: 4px;">
+              <strong style="color: #b45309;">💡 Practical:</strong> Faith journey models progressive transformation
+            </div>
+          </div>
           
-          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #7c3aed;">🌍 Historical & Cultural</h4>
-          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
-            <li>ANE treaty ceremonies: both parties walk between pieces, invoking self-curse</li>
-            <li>Revolutionary reversal: Suzerain (God) takes vassal's curse unilaterally</li>
-            <li>Archaeological parallels: Mari texts, Hittite treaties, Aramaic covenants</li>
-            <li>Cultural context: Ancient Near East honor-shame dynamics, patriarchal household structures</li>
-          </ul>
-          
-          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #7c3aed;">✨ Theological & Canonical</h4>
-          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
-            <li>Messianic trajectory: Singular "seed" → Christ (Gen 12:3 → Gal 3:16)</li>
-            <li>Justification foundation: Gen 15:6 becomes Paul's anchor (Rom 4, Gal 3)</li>
-            <li>Barren → fruitful pattern repeated throughout Scripture</li>
-            <li>Prefigures cross: God taking curse upon Himself (Gen 15 → Gal 3:13)</li>
-          </ul>
-          
-          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #7c3aed;">💡 Practical & Formational</h4>
-          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
-            <li>Faith model: 25-year wait teaching patience and trust (Rom 4:18-21)</li>
-            <li>Character growth: Egypt fear → Sodom intercession → Moriah surrender</li>
-            <li>Discipleship pattern: Faith rests on God's character, not circumstances</li>
-            <li>Community example: "Father of all who believe" (Rom 4:11-12)</li>
-          </ul>
-          
-          <p style="margin: 1rem 0 0; padding: 1rem; background: rgba(139,92,246,0.08); border-left: 3px solid #8b5cf6; border-radius: 4px; line-height: 1.6; font-style: italic;">
-            <strong style="font-style: normal; color: #7c3aed;">This is Project Context's integrated approach:</strong> Every character study weaves together literary design, historical context, theological trajectory, and practical application — seeing Scripture as a unified, multi-layered revelation pointing to Christ and forming disciples.
+          <p style="margin: 1.5rem 0 0; padding: 1rem; background: rgba(139,92,246,0.1); border-radius: 8px; line-height: 1.7; font-style: italic;">
+            <strong style="font-style: normal; color: #7c3aed;">The Result:</strong> Instead of scattered insights across multiple sources, you get a comprehensive, integrated understanding—seeing how literary design, historical context, theological trajectory, and practical application work together to illuminate Scripture's unified message.
           </p>
         `
       }
@@ -1145,6 +1566,23 @@
         el.classList.remove('flipped');
       });
       resetInfo();
+    }
+
+    // Card Fan Interaction
+    const cardFan = document.getElementById('cardFan');
+    let expandTimeout;
+
+    if (cardFan) {
+      cardFan.addEventListener('mouseenter', () => {
+        clearTimeout(expandTimeout);
+        cardFan.classList.add('expanded');
+      });
+
+      cardFan.addEventListener('mouseleave', () => {
+        expandTimeout = setTimeout(() => {
+          cardFan.classList.remove('expanded');
+        }, 300);
+      });
     }
 
     // Page initialization
