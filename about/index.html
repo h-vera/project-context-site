@@ -35,7 +35,7 @@
   
   <style>
     /* ============================================
-       ENHANCED HERO WITH COSMIC GRADIENT
+       ENHANCED HERO WITH COSMIC GRADIENT + ANIMATIONS
        ============================================ */
     .about-hero {
       background: linear-gradient(
@@ -60,14 +60,39 @@
       overflow: hidden;
     }
 
+    /* ANIMATED GRADIENT ORBS */
     .about-hero::before {
       content: '';
       position: absolute;
-      inset: 0;
-      background: 
-        radial-gradient(ellipse at 30% 30%, rgba(255,255,255,0.1) 0%, transparent 50%),
-        radial-gradient(ellipse at 70% 70%, rgba(0,0,0,0.1) 0%, transparent 50%);
-      pointer-events: none;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+      animation: float1 20s infinite ease-in-out;
+      top: -200px;
+      left: -200px;
+    }
+
+    .about-hero::after {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(0,0,0,0.25) 0%, transparent 70%);
+      animation: float2 20s infinite ease-in-out;
+      bottom: -150px;
+      right: -150px;
+    }
+
+    @keyframes float1 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(50px, -50px) scale(1.1); }
+      66% { transform: translate(-30px, 40px) scale(0.9); }
+    }
+
+    @keyframes float2 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(-40px, 30px) scale(1.05); }
+      66% { transform: translate(50px, -40px) scale(0.95); }
     }
 
     .about-hero > div {
@@ -88,6 +113,104 @@
       font-size: clamp(1rem, 2vw, 1.25rem);
       line-height: 1.6;
       opacity: 0.95;
+    }
+
+    /* ============================================
+       CORE COMPONENTS - ENHANCED HOVER ANIMATIONS
+       ============================================ */
+    .core-component-card {
+      background: white;
+      border: 2px solid #e0e7ff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .core-component-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(74,95,255,0.05), rgba(114,9,183,0.05));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .core-component-card:hover::before {
+      opacity: 1;
+    }
+
+    .core-component-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 12px 24px rgba(74,95,255,0.2);
+      border-color: #4a5fff;
+    }
+
+    .core-component-card h4 {
+      transition: transform 0.3s ease;
+    }
+
+    .core-component-card:hover h4 {
+      transform: translateX(5px);
+    }
+
+    /* ============================================
+       VENN DIAGRAM STYLES
+       ============================================ */
+    .circle-wrapper {
+      position: absolute;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      perspective: 1000px;
+      z-index: 1;
+    }
+
+    .circle-wrapper:hover,
+    .circle-wrapper.flipped {
+      z-index: 20 !important;
+      transform: scale(1.05) !important;
+    }
+
+    .circle-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+
+    .circle-wrapper.flipped .circle-inner {
+      transform: rotateY(180deg);
+    }
+
+    .circle-front,
+    .circle-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      border-radius: 50%;
+      padding: 2rem;
+      text-align: center;
+      transition: border-width 0.3s ease;
+    }
+
+    .circle-back {
+      transform: rotateY(180deg);
+    }
+
+    .circle-wrapper:hover .circle-front,
+    .circle-wrapper.flipped .circle-back {
+      border-width: 5px !important;
     }
 
     /* ============================================
@@ -363,6 +486,37 @@
       .featured-studies-grid {
         grid-template-columns: 1fr;
       }
+
+      .venn-diagram-container {
+        min-height: 500px !important;
+      }
+
+      .diagram-center {
+        font-size: 0.85rem !important;
+        width: 22% !important;
+        height: 22% !important;
+        top: 39% !important;
+        left: 39% !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .venn-diagram-container {
+        min-height: 400px !important;
+      }
+
+      .dimension-title {
+        font-size: 1rem !important;
+      }
+
+      .diagram-center {
+        font-size: 0.7rem !important;
+        padding: 0.5rem !important;
+        width: 20% !important;
+        height: 20% !important;
+        top: 40% !important;
+        left: 40% !important;
+      }
     }
 
     /* ============================================
@@ -389,6 +543,17 @@
       opacity: 1;
       transform: translateY(0);
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      .about-hero::before,
+      .about-hero::after {
+        animation: none;
+      }
+      
+      .circle-inner {
+        transition: none;
+      }
+    }
   </style>
 </head>
 
@@ -404,7 +569,7 @@
   
   <main id="main-content" class="content-section">
     
-    <!-- ENHANCED HERO SECTION -->
+    <!-- ENHANCED HERO SECTION WITH ANIMATIONS -->
     <section class="about-hero">
       <div>
         <h1>Context Is Everything</h1>
@@ -456,9 +621,9 @@
       
       <h4>Core Components</h4>
       
-      <!-- VISUAL GRID -->
+      <!-- VISUAL GRID WITH ENHANCED HOVER -->
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
-        <div style="background: white; border: 2px solid #e0e7ff; border-radius: 12px; padding: 1.5rem; transition: all 0.3s ease; border-top: 3px solid #4a5fff;">
+        <div class="core-component-card" style="border-top: 3px solid #4a5fff;">
           <h4 style="color: #4a5fff; margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
             📖 Textual & Literary
           </h4>
@@ -469,7 +634,7 @@
           </ul>
         </div>
 
-        <div style="background: white; border: 2px solid #e0e7ff; border-radius: 12px; padding: 1.5rem; transition: all 0.3s ease; border-top: 3px solid #7209b7;">
+        <div class="core-component-card" style="border-top: 3px solid #7209b7;">
           <h4 style="color: #7209b7; margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
             🌍 Historical & Cultural
           </h4>
@@ -480,7 +645,7 @@
           </ul>
         </div>
 
-        <div style="background: white; border: 2px solid #e0e7ff; border-radius: 12px; padding: 1.5rem; transition: all 0.3s ease; border-top: 3px solid #10b981;">
+        <div class="core-component-card" style="border-top: 3px solid #10b981;">
           <h4 style="color: #10b981; margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
             ✨ Theological Connections
           </h4>
@@ -491,7 +656,7 @@
           </ul>
         </div>
 
-        <div style="background: white; border: 2px solid #e0e7ff; border-radius: 12px; padding: 1.5rem; transition: all 0.3s ease; border-top: 3px solid #f59e0b;">
+        <div class="core-component-card" style="border-top: 3px solid #f59e0b;">
           <h4 style="color: #f59e0b; margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
             💡 Practical Engagement
           </h4>
@@ -522,24 +687,125 @@
         </span>
       </div>
 
-      <!-- CONCRETE EXAMPLE -->
-      <div style="background: white; border: 2px solid #10b981; border-radius: 12px; padding: 1.5rem; margin-top: 2rem;">
-        <h4 style="color: #166534; margin-bottom: 1rem;">📋 Example: Abraham's Profile</h4>
-        <div style="display: grid; gap: 1rem;">
-          <div style="padding-left: 1rem; border-left: 3px solid #10b981;">
-            <strong>Name Transformation:</strong> אַבְרָם → אַבְרָהָם — divine breath (ה) transforms "exalted father" to "father of multitudes"
+      <!-- INTERACTIVE VENN DIAGRAM EXAMPLE -->
+      <div style="background: linear-gradient(135deg, #faf5ff 0%, #fff1f2 50%, #f0f9ff 100%); border: 2px solid rgba(114,9,183,0.15); border-radius: 16px; padding: 2rem; margin-top: 2rem;">
+        <h4 style="color: #6d28d9; margin-bottom: 0.5rem; text-align: center;">📋 Interactive Example: Abraham's Four Dimensions</h4>
+        <p style="text-align: center; color: #666; margin-bottom: 2rem;">Click each circle to see how the four dimensions work together in practice</p>
+        
+        <div class="venn-diagram-container" style="position: relative; width: 100%; max-width: 700px; margin: 2rem auto; aspect-ratio: 1; min-height: 600px;">
+          <!-- SVG for visual overlap only -->
+          <svg id="venn-svg" viewBox="0 0 700 700" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: 0;">
+            <circle cx="182" cy="182" r="182" fill="rgba(99,102,241,0.15)" stroke="rgba(99,102,241,0.3)" stroke-width="2"/>
+            <circle cx="518" cy="182" r="182" fill="rgba(236,72,153,0.15)" stroke="rgba(236,72,153,0.3)" stroke-width="2"/>
+            <circle cx="182" cy="518" r="182" fill="rgba(34,197,94,0.15)" stroke="rgba(34,197,94,0.3)" stroke-width="2"/>
+            <circle cx="518" cy="518" r="182" fill="rgba(245,158,11,0.15)" stroke="rgba(245,158,11,0.3)" stroke-width="2"/>
+          </svg>
+
+          <!-- Textual Circle -->
+          <div class="circle-wrapper" id="textual-circle" onclick="flipCircle(this, 'textual')" style="width: 52%; height: 52%; top: 0%; left: 0%;">
+            <div class="circle-inner">
+              <div class="circle-front" style="background: linear-gradient(135deg, rgba(99,102,241,0.9) 0%, rgba(129,140,248,0.9) 100%); border: 3px solid rgba(99,102,241,0.7); box-shadow: 0 8px 32px rgba(99,102,241,0.35);">
+                <div class="dimension-title" style="font-size: 1.5rem; font-weight: 800; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.3); margin-bottom: 0.5rem;">📖 Textual</div>
+                <div style="color: white; padding: 0.5rem;">
+                  <div style="font-family: 'Times New Roman', serif; font-size: 1.15rem; font-weight: 700; margin: 0.5rem 0;">אַבְרָם → אַבְרָהָם</div>
+                  <div style="font-size: 0.85rem; opacity: 0.9; margin-top: 0.5rem;">Divine breath inserted</div>
+                </div>
+              </div>
+              <div class="circle-back" style="background: linear-gradient(135deg, rgba(67,56,202,0.95) 0%, rgba(99,102,241,0.95) 100%); border: 3px solid rgba(99,102,241,0.9);">
+                <div style="color: white; padding: 0.75rem;">
+                  <div style="font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem;">Chiastic Frame</div>
+                  <div style="font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.9; text-align: left; padding: 0 0.75rem;">
+                    <div style="margin-left: 0; font-weight: 600;">A&nbsp;&nbsp;Gen 12:1 — לֶךְ־לְךָ</div>
+                    <div style="margin-left: 1.5rem;">&nbsp;&nbsp;B&nbsp;&nbsp;Promise 15:5</div>
+                    <div style="margin-left: 2.5rem; font-weight: 700; color: rgba(255,255,255,0.95);">&nbsp;&nbsp;&nbsp;C&nbsp;&nbsp;17 — ה</div>
+                    <div style="margin-left: 1.5rem;">&nbsp;&nbsp;B'&nbsp;Test 22:1</div>
+                    <div style="margin-left: 0; font-weight: 600;">A'&nbsp;Gen 22:2 — לֶךְ־לְךָ</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div style="padding-left: 1rem; border-left: 3px solid #10b981;">
-            <strong>Literary Bookends:</strong> "Lekh lekha" appears only twice in Scripture (Gen 12:1, 22:2), framing the journey from leaving to offering
+
+          <!-- Historical Circle -->
+          <div class="circle-wrapper" id="historical-circle" onclick="flipCircle(this, 'historical')" style="width: 52%; height: 52%; top: 0%; right: 0%;">
+            <div class="circle-inner">
+              <div class="circle-front" style="background: linear-gradient(135deg, rgba(236,72,153,0.9) 0%, rgba(251,113,133,0.9) 100%); border: 3px solid rgba(236,72,153,0.7); box-shadow: 0 8px 32px rgba(236,72,153,0.35);">
+                <div style="font-size: 1.5rem; font-weight: 800; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.3); margin-bottom: 0.5rem;">🌍 Historical</div>
+                <div style="color: white; padding: 0.5rem;">
+                  <div style="font-weight: 600;">God alone passes</div>
+                  <div style="font-size: 0.85rem; opacity: 0.9; margin-top: 0.5rem;">between the pieces</div>
+                </div>
+              </div>
+              <div class="circle-back" style="background: linear-gradient(135deg, rgba(219,39,119,0.95) 0%, rgba(236,72,153,0.95) 100%); border: 3px solid rgba(236,72,153,0.9);">
+                <div style="color: white; padding: 0.75rem; font-size: 0.85rem; line-height: 1.6;">
+                  <div style="font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem;">Covenant Reversal</div>
+                  <strong style="font-size: 1rem;">Gen 15</strong><br>
+                  Suzerain takes curse<br>
+                  Abraham sleeps<br>
+                  <em style="display: block; margin-top: 0.75rem; font-size: 0.85rem;">Grace through<br>passivity</em>
+                </div>
+              </div>
+            </div>
           </div>
-          <div style="padding-left: 1rem; border-left: 3px solid #10b981;">
-            <strong>Chiastic Center:</strong> Abraham cycle centers on Gen 17 covenant transformation, with parallel episodes showing character growth
+
+          <!-- Theological Circle -->
+          <div class="circle-wrapper" id="theological-circle" onclick="flipCircle(this, 'theological')" style="width: 52%; height: 52%; bottom: 0%; left: 0%;">
+            <div class="circle-inner">
+              <div class="circle-front" style="background: linear-gradient(135deg, rgba(34,197,94,0.9) 0%, rgba(74,222,128,0.9) 100%); border: 3px solid rgba(34,197,94,0.7); box-shadow: 0 8px 32px rgba(34,197,94,0.35);">
+                <div style="font-size: 1.5rem; font-weight: 800; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.3); margin-bottom: 0.5rem;">✨ Theological</div>
+                <div style="color: white; padding: 0.5rem;">
+                  <div style="font-weight: 600;">"In your seed..."</div>
+                  <div style="font-size: 0.85rem; opacity: 0.9; margin-top: 0.5rem;">all nations blessed</div>
+                </div>
+              </div>
+              <div class="circle-back" style="background: linear-gradient(135deg, rgba(22,163,74,0.95) 0%, rgba(34,197,94,0.95) 100%); border: 3px solid rgba(34,197,94,0.9);">
+                <div style="color: white; padding: 0.75rem; font-size: 0.85rem; line-height: 1.6;">
+                  <div style="font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem;">Messianic Seed</div>
+                  Singular "seed" = Christ<br>
+                  <strong style="font-size: 0.95rem; display: block; margin: 0.5rem 0;">Gen 12:3 → Gal 3:16</strong>
+                  Faith credited<br>
+                  <em style="display: block; margin-top: 0.75rem; font-size: 0.85rem;">Barren → Nations</em>
+                </div>
+              </div>
+            </div>
           </div>
-          <div style="padding-left: 1rem; border-left: 3px solid #10b981;">
-            <strong>ANE Revolution:</strong> God alone passes between pieces (Gen 15), reversing standard treaty patterns where vassals bear obligations
+
+          <!-- Practical Circle -->
+          <div class="circle-wrapper" id="practical-circle" onclick="flipCircle(this, 'practical')" style="width: 52%; height: 52%; bottom: 0%; right: 0%;">
+            <div class="circle-inner">
+              <div class="circle-front" style="background: linear-gradient(135deg, rgba(245,158,11,0.9) 0%, rgba(251,191,36,0.9) 100%); border: 3px solid rgba(245,158,11,0.7); box-shadow: 0 8px 32px rgba(245,158,11,0.35);">
+                <div style="font-size: 1.5rem; font-weight: 800; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.3); margin-bottom: 0.5rem;">💡 Practical</div>
+                <div style="color: white; padding: 0.5rem;">
+                  <div style="font-weight: 600;">Faith Model</div>
+                  <div style="font-size: 0.85rem; opacity: 0.9; margin-top: 0.5rem;">trust when impossible</div>
+                </div>
+              </div>
+              <div class="circle-back" style="background: linear-gradient(135deg, rgba(217,119,6,0.95) 0%, rgba(245,158,11,0.95) 100%); border: 3px solid rgba(245,158,11,0.9);">
+                <div style="color: white; padding: 0.75rem; font-size: 0.85rem; line-height: 1.6;">
+                  <div style="font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem;">Endurance Path</div>
+                  <strong style="font-size: 0.95rem;">Rom 4:18-21</strong><br>
+                  25-year wait<br>
+                  Character growth<br>
+                  <em style="display: block; margin-top: 0.75rem; font-size: 0.85rem;">Egypt → Moriah</em>
+                </div>
+              </div>
+            </div>
           </div>
-          <div style="padding-left: 1rem; border-left: 3px solid #10b981;">
-            <strong>Messianic Thread:</strong> "In your seed all nations blessed" (Gen 12:3) connects through Gal 3:16 to Christ as the singular Seed
+
+          <!-- Center Circle -->
+          <div class="diagram-center" onclick="showAllDimensions()" style="position: absolute; width: 24%; height: 24%; top: 38%; left: 38%; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #6366f1 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 800; font-size: 0.95rem; color: white; border: 4px solid rgba(255,255,255,0.8); box-shadow: 0 0 40px rgba(99,102,241,0.4), 0 0 60px rgba(139,92,246,0.3); z-index: 10; padding: 0.75rem; line-height: 1.2; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); cursor: pointer;">
+            <div>ABRAHAM<br><strong style="font-size:1.2em;">INTEGRATED</strong></div>
+          </div>
+        </div>
+
+        <p style="color:#666;font-style:italic;margin-top:2rem;text-align:center;font-size:0.95rem;">💡 Click any circle to flip and see integration details</p>
+        <button onclick="resetAllCircles()" style="display: block; margin: 1.5rem auto 0; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #dc2626, #7209b7); color: white; border: none; border-radius: 999px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 12px rgba(114,9,183,0.3);">🔄 Reset All</button>
+
+        <!-- Info Panel -->
+        <div id="info-panel" style="margin-top: 2rem; padding: 2rem; background: white; border-radius: 12px; border: 2px solid #e5e7eb; min-height: 250px; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+          <div style="text-align:center;color:#6b7280;">
+            <p style="margin:0;">👆 Click any circle to see how that dimension appears in Abraham's story</p>
+            <p style="margin:0.5rem 0 0;font-style:italic;font-size:0.9rem;">The circles will flip 180° to reveal integration details</p>
           </div>
         </div>
       </div>
@@ -670,10 +936,220 @@
     });
   </script>
 
-  <!-- Page initialization -->
+  <!-- VENN DIAGRAM + PAGE JavaScript -->
   <script>
+    // Venn Diagram Data and Functions
+    const infoData = {
+      textual: {
+        title: '📖 Textual & Literary Analysis',
+        color: '#6366f1',
+        content: `
+          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #4338ca;">Name Transformation: אַבְרָם → אַבְרָהָם</h4>
+          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
+            <li>The ה (heh) represents divine breath — God inserts His own character into Abram's identity</li>
+            <li>"Exalted father" → "father of multitudes" (Gen 17:5) at covenant of circumcision</li>
+            <li>Transformation marks the chiastic center — the hinge between promise and testing</li>
+            <li>Sarai → Sarah receives parallel transformation (Gen 17:15)</li>
+          </ul>
+          
+          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #4338ca;">Chiastic Structure: לֶךְ־לְךָ Bookends</h4>
+          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
+            <li><strong>A — Gen 12:1:</strong> "Lekh Lekha" (go forth) — leave your father's house</li>
+            <li style="margin-left: 1.5rem;"><strong>B — Gen 15:5:</strong> Promise of descendants like the stars</li>
+            <li style="margin-left: 2.5rem;"><strong>C — Gen 17:</strong> Name change + covenant sign (circumcision)</li>
+            <li style="margin-left: 1.5rem;"><strong>B' — Gen 22:1:</strong> Testing of the promised son</li>
+            <li><strong>A' — Gen 22:2:</strong> "Lekh Lekha" — offer your son (only other occurrence in Torah)</li>
+            <li>This massive inclusio frames the entire Abraham narrative as a journey from abandonment to ultimate trust</li>
+          </ul>
+          
+          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #4338ca;">Literary Intentionality</h4>
+          <ul style="margin: 0 0 0 1.25rem; line-height: 1.6;">
+            <li>The symmetry reveals deliberate literary design emphasizing covenant transformation</li>
+            <li>Center (C) contains both the name change and the physical sign — identity and embodiment united</li>
+            <li>The two Lekh Lekha commands mirror each other: leave everything → give everything</li>
+          </ul>
+        `
+      },
+      historical: {
+        title: '🌍 Historical & Cultural Context',
+        color: '#ec4899',
+        content: `
+          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #be185d;">Ancient Near Eastern Treaty Ceremony (Gen 15)</h4>
+          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
+            <li><strong>Standard ANE practice:</strong> Both parties walk between cut animal pieces invoking self-curse if covenant broken</li>
+            <li><strong>The ritual declaration:</strong> "May I become like these animals if I break this covenant"</li>
+            <li>Documented in Hittite, Assyrian, and Aramaic treaties from 2nd millennium BCE</li>
+            <li>Archaeological parallel: Mari texts describe similar blood-covenant ceremonies</li>
+          </ul>
+          
+          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #be185d;">The Revolutionary Reversal</h4>
+          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
+            <li><strong>God alone passes between the pieces</strong> while Abraham is in deep sleep (Gen 15:12, 17)</li>
+            <li>The Suzerain (superior party) assumes the vassal's curse — unheard of in ANE diplomacy</li>
+            <li>Smoking firepot and flaming torch = visible manifestation of Yahweh's presence</li>
+            <li>Abraham's passivity echoes Adam's sleep during Eve's creation (Gen 2:21) — grace through non-participation</li>
+          </ul>
+          
+          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #be185d;">Theological Significance</h4>
+          <ul style="margin: 0 0 0 1.25rem; line-height: 1.6;">
+            <li>This is a <strong>unilateral covenant</strong> — God binds Himself unconditionally</li>
+            <li>Prefigures the cross: God takes the curse upon Himself (Gal 3:13)</li>
+            <li>Establishes pattern: human inability + divine initiative = covenant foundation</li>
+          </ul>
+        `
+      },
+      theological: {
+        title: '✨ Theological Connections',
+        color: '#22c55e',
+        content: `
+          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #15803d;">The Singular "Seed" Promise</h4>
+          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
+            <li><strong>Gen 12:3:</strong> "Through your seed (זֶרַע) all nations of the earth will be blessed"</li>
+            <li><strong>Paul's interpretation (Gal 3:16):</strong> Singular "seed" = Christ, not many seeds</li>
+            <li>The promise flows through one descendant who embodies Israel's vocation</li>
+            <li>This reading assumes the entire Abraham narrative points forward to Messiah</li>
+          </ul>
+          
+          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #15803d;">Justification by Faith Foundation</h4>
+          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
+            <li><strong>Gen 15:6:</strong> "Abraham believed the LORD, and He credited it to him as righteousness"</li>
+            <li>Paul uses this verse as the foundation for justification by faith (Rom 4:1-25; Gal 3:6-9)</li>
+            <li>Righteousness comes <strong>before</strong> circumcision (Gen 17), not through it</li>
+            <li>Faith = trust in God's character and promises when circumstances actively contradict them</li>
+          </ul>
+          
+          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #15803d;">Barrenness → Fruitfulness Pattern</h4>
+          <ul style="margin: 0 0 0 1.25rem; line-height: 1.6;">
+            <li>Sarah's barrenness (Gen 11:30) makes the promise humanly impossible</li>
+            <li>Pattern repeated: Rebekah, Rachel, Hannah, Elizabeth, Mary — life from death/impossibility</li>
+            <li>Theological point: God's promises are fulfilled by <strong>divine power</strong>, not human capacity</li>
+            <li>Foreshadows resurrection: Isaac as "good as dead" (Heb 11:12), then born; later offered and "received back" (Heb 11:19)</li>
+          </ul>
+        `
+      },
+      practical: {
+        title: '💡 Practical Engagement',
+        color: '#f59e0b',
+        content: `
+          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #b45309;">Faith Model: Rom 4:18-21</h4>
+          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
+            <li>"Against all hope, Abraham in hope believed" — trusting God's promise when circumstances mock it</li>
+            <li><strong>25-year wait</strong> between promise (Gen 12; Abraham age 75) and fulfillment (Gen 21; Abraham age 100)</li>
+            <li>"He did not waver through unbelief... being fully persuaded that God had power" (Rom 4:20-21)</li>
+            <li>Faith rests on <strong>God's character</strong>, not visible circumstances or personal capacity</li>
+          </ul>
+          
+          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #b45309;">Character Arc: Growth Through Testing</h4>
+          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
+            <li><strong>Gen 12 (Egypt):</strong> Fear-driven deception — "Say you are my sister" to protect himself</li>
+            <li><strong>Gen 18 (Sodom):</strong> Bold intercession — "Will not the Judge of all the earth do right?"</li>
+            <li><strong>Gen 22 (Moriah):</strong> Ultimate surrender — "God will provide the lamb" (faith + obedience)</li>
+            <li>Progression shows spiritual formation: from self-preservation → advocacy → total trust</li>
+          </ul>
+          
+          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #b45309;">Discipleship Application</h4>
+          <ul style="margin: 0 0 0 1.25rem; line-height: 1.6;">
+            <li><strong>Patience in waiting:</strong> God's timing ≠ our timeline; faithfulness during the gap</li>
+            <li><strong>Loyalty through testing:</strong> Suffering and delay don't disprove God's promises</li>
+            <li><strong>Faith vs. sight:</strong> Believe God's word over present evidence (2 Cor 5:7)</li>
+            <li><strong>Community impact:</strong> Abraham's faith becomes example for "all who believe" (Rom 4:24)</li>
+          </ul>
+        `
+      },
+      all: {
+        title: '🔗 Full Four-Dimensional Integration',
+        color: '#8b5cf6',
+        content: `
+          <h4 style="margin: 0 0 0.5rem; font-size: 1.05rem; color: #6d28d9;">How Project Context Reads Biblical Characters</h4>
+          <p style="margin: 0 0 1rem; line-height: 1.6;">One Abraham profile synthesizes all four dimensions simultaneously — this is the methodology applied to every character study:</p>
+          
+          <h4 style="margin: 0.75rem 0 0.5rem; font-size: 1rem; color: #7c3aed;">📖 Textual & Literary</h4>
+          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
+            <li>Hebrew wordplay: ה (heh) = divine breath inserted into identity</li>
+            <li>Chiastic structure: Lekh Lekha bookends (Gen 12:1, 22:2) frame entire narrative</li>
+            <li>Name transformation at covenant center (Gen 17) as literary hinge</li>
+            <li>Parallel patterns: Abram → Abraham // Sarai → Sarah</li>
+          </ul>
+          
+          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #7c3aed;">🌍 Historical & Cultural</h4>
+          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
+            <li>ANE treaty ceremonies: both parties walk between pieces, invoking self-curse</li>
+            <li>Revolutionary reversal: Suzerain (God) takes vassal's curse unilaterally</li>
+            <li>Archaeological parallels: Mari texts, Hittite treaties, Aramaic covenants</li>
+            <li>Cultural context: Ancient Near East honor-shame dynamics, patriarchal household structures</li>
+          </ul>
+          
+          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #7c3aed;">✨ Theological & Canonical</h4>
+          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
+            <li>Messianic trajectory: Singular "seed" → Christ (Gen 12:3 → Gal 3:16)</li>
+            <li>Justification foundation: Gen 15:6 becomes Paul's anchor (Rom 4, Gal 3)</li>
+            <li>Barren → fruitful pattern repeated throughout Scripture</li>
+            <li>Prefigures cross: God taking curse upon Himself (Gen 15 → Gal 3:13)</li>
+          </ul>
+          
+          <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: #7c3aed;">💡 Practical & Formational</h4>
+          <ul style="margin: 0 0 1rem 1.25rem; line-height: 1.6;">
+            <li>Faith model: 25-year wait teaching patience and trust (Rom 4:18-21)</li>
+            <li>Character growth: Egypt fear → Sodom intercession → Moriah surrender</li>
+            <li>Discipleship pattern: Faith rests on God's character, not circumstances</li>
+            <li>Community example: "Father of all who believe" (Rom 4:11-12)</li>
+          </ul>
+          
+          <p style="margin: 1rem 0 0; padding: 1rem; background: rgba(139,92,246,0.08); border-left: 3px solid #8b5cf6; border-radius: 4px; line-height: 1.6; font-style: italic;">
+            <strong style="font-style: normal; color: #7c3aed;">This is Project Context's integrated approach:</strong> Every character study weaves together literary design, historical context, theological trajectory, and practical application — seeing Scripture as a unified, multi-layered revelation pointing to Christ and forming disciples.
+          </p>
+        `
+      }
+    };
+
+    function flipCircle(element, dimension) {
+      element.classList.toggle('flipped');
+      
+      if (element.classList.contains('flipped')) {
+        updateInfo(dimension);
+      } else {
+        resetInfo();
+      }
+    }
+
+    function updateInfo(dimension) {
+      const data = infoData[dimension];
+      const panel = document.getElementById('info-panel');
+      
+      panel.style.borderColor = data.color;
+      panel.style.background = `linear-gradient(135deg, ${data.color}08 0%, ${data.color}05 100%)`;
+      panel.innerHTML = `
+        <h3 style="color:${data.color};">${data.title}</h3>
+        ${data.content}
+      `;
+    }
+
+    function showAllDimensions() {
+      updateInfo('all');
+    }
+
+    function resetInfo() {
+      const panel = document.getElementById('info-panel');
+      panel.style.borderColor = '#e5e7eb';
+      panel.style.background = 'white';
+      panel.innerHTML = `
+        <div style="text-align:center;color:#6b7280;">
+          <p style="margin:0;">👆 Click any circle to see how that dimension appears in Abraham's story</p>
+          <p style="margin:0.5rem 0 0;font-style:italic;font-size:0.9rem;">The circles will flip 180° to reveal integration details</p>
+        </div>
+      `;
+    }
+
+    function resetAllCircles() {
+      document.querySelectorAll('.circle-wrapper').forEach(el => {
+        el.classList.remove('flipped');
+      });
+      resetInfo();
+    }
+
+    // Page initialization
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('About Page initialized with redesigned layout');
+      console.log('About Page initialized with all enhancements');
       
       // Fade-in scroll animations
       const fadeElements = document.querySelectorAll('.fade-in-section');
