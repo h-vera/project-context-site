@@ -1,7 +1,7 @@
 # Biblical Character Profile Template Documentation
 ## Complete Guide for Seminary-Level Character Studies
 
-### Template Version: 5.8 | Documentation Version: 4.1
+### Template Version: 5.8.1 | Documentation Version: 4.1
 
 ---
 
@@ -31,12 +31,12 @@
 <meta name="profile-type" content="[single-page/multi-page]">
 <meta name="character-id" content="[character-id]">
 <meta name="book-id" content="[book-id]">
-<meta name="template-version" content="5.8">
+<meta name="template-version" content="5.8.1">
 ```
 
 ---
 
-## 🆕 Version 5.8 Key Features
+## 🆕 Version 5.8.1 Key Features
 
 ### Dynamic Mobile Navigation
 **Mobile tabs are now automatically generated based on present sections!**
@@ -317,7 +317,7 @@
 
 ---
 
-## 📱 Mobile Navigation (New in v5.8)
+## 📱 Mobile Navigation (New in v5.8.1)
 
 ### Automatic Tab Generation
 **No manual configuration needed!** The system automatically:
@@ -349,7 +349,7 @@
    - Maximum 5 tabs for usability
 
 ### Customization (Optional)
-To modify tab configuration, edit the `sectionConfig` array in `character-page.js`:
+To modify tab configuration, edit the `sectionConfig` array in `character-page-v5-8.js`:
 
 ```javascript
 const sectionConfig = [
@@ -366,7 +366,7 @@ const sectionConfig = [
 ### Pre-Publication Checklist
 
 #### **Metadata & Structure**
-- [ ] Template version set to "5.8"
+- [ ] Template version set to "5.8.1"
 - [ ] Character gender, profile-type, character-id, book-id configured
 - [ ] Data attributes on title element match metadata
 - [ ] Body class includes `woman-profile` if female
@@ -379,7 +379,7 @@ const sectionConfig = [
 - [ ] All interactive elements meet 44px minimum touch target
 - [ ] Reading progress bar implemented
 - [ ] Back to top button functional
-- [ ] **Mobile tabs auto-generating correctly** (new in v5.8)
+- [ ] **Mobile tabs auto-generating correctly** (new in v5.8.1)
 
 #### **Content Completeness**
 - [ ] All 7 core sections present and substantial
@@ -578,7 +578,7 @@ const sectionConfig = [
 - `.animate-on-scroll` - Scroll-triggered animations
 - `.hebrew` / `.greek` - Language formatting
 - `.bibliography-section` - Expandable bibliography
-- `.mobile-section-tabs` - Auto-generated mobile nav (v5.8)
+- `.mobile-section-tabs` - Auto-generated mobile nav (v5.8.1)
 
 ### JavaScript Features
 - **Reading Progress:** Calculates scroll percentage
@@ -586,14 +586,14 @@ const sectionConfig = [
 - **Intersection Observer:** Lazy-load animations
 - **Mobile Menu:** Responsive navigation
 - **Bibliography Toggle:** Expand/collapse functionality
-- **Dynamic Mobile Tabs:** Auto-generation based on content (v5.8)
+- **Dynamic Mobile Tabs:** Auto-generation based on content (v5.8.1)
 
 ### Performance Optimization
 - **Minified CSS:** Use `global-v2.css`
 - **Font Preloading:** SBL Hebrew/Greek fonts
 - **Image Optimization:** WebP format preferred
 - **Lazy Loading:** Images and heavy content sections
-- **Efficient Mobile Tabs:** Only generated when needed (v5.8)
+- **Efficient Mobile Tabs:** Only generated when needed (v5.8.1)
 
 ---
 
@@ -607,7 +607,7 @@ const sectionConfig = [
 5. **Missing Second Temple:** NT connections without background analysis
 6. **Chiasm confusion:** Minor patterns in major chiasm sections
 7. **Generic questions:** Make study questions character-specific
-8. **Manual mobile tabs:** Never hardcode mobile navigation (v5.8)
+8. **Manual mobile tabs:** Never hardcode mobile navigation (v5.8.1)
 
 ### ✅ Excellence Indicators
 1. **Character-specific insights:** Not generic biblical information
@@ -617,7 +617,7 @@ const sectionConfig = [
 5. **Practical application:** Contemporary relevance without forcing
 6. **Cross-textual awareness:** Biblical theology connections
 7. **User experience:** Professional presentation with smooth functionality
-8. **Adaptive navigation:** Mobile tabs match actual content (v5.8)
+8. **Adaptive navigation:** Mobile tabs match actual content (v5.8.1)
 
 ---
 
@@ -648,8 +648,8 @@ const sectionConfig = [
 ## 📝 Template Files & Examples
 
 ### Available Templates
-- `biblical-character-template-v5-8.html` - Current template with dynamic mobile tabs
-- `character-page.js` - Enhanced with auto-generating mobile navigation
+- `biblical-character-template-v5-8-1.html` - Current template with dynamic mobile tabs
+- `character-page-v5-8.js` - Enhanced with auto-generating mobile navigation
 - `sarah.html` - Complete example (complex character)
 - `hagar.html` - Example with Second Temple section
 - `delilah.html` - Moderate character example
@@ -677,11 +677,11 @@ console.log('Tab Priority:', window.innerWidth <= 768 ? 'Active' : 'Desktop mode
 ## 📊 Version Changelog
 
 ### Version 4.1 (Current)
-- **Dynamic Mobile Navigation:** Complete documentation for v5.8 auto-generating tabs
+- **Dynamic Mobile Navigation:** Complete documentation for v5.8.1 auto-generating tabs
 - **Priority System:** Explanation of smart tab selection algorithm
 - **No Manual Configuration:** Removed all references to hardcoded mobile tabs
 - **Enhanced Testing:** Added mobile tab verification to checklist
-- **Template v5.8 Integration:** Full documentation of dynamic features
+- **Template v5.8.1 Integration:** Full documentation of dynamic features
 
 ### Version 4.0
 - **Template v5.7 Integration:** Initial mobile tabs documentation
@@ -725,8 +725,8 @@ console.log('Tab Priority:', window.innerWidth <= 768 ? 'Active' : 'Desktop mode
 
 ---
 
-*Last Updated: September 2025*  
-*Template Version: 5.8*  
+*Last Updated: December 2025*  
+*Template Version: 5.8.1*  
 *Documentation Version: 4.1*
 
 ---
