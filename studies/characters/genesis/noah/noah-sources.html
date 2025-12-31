@@ -42,26 +42,115 @@
       --page-accent-dark: #7b1fa2;
     }
 
-    /* Hero section */
+    /* Enhanced Hero Section - Matching Hub Style */
     .sources-hero {
-      padding: 3.25rem 2rem 2.25rem;
-      background: linear-gradient(135deg, rgba(156, 39, 176, 0.92), rgba(233, 30, 99, 0.85), rgba(118, 84, 255, 0.85));
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      padding: clamp(2.5rem, 6vw, 4rem) clamp(1.5rem, 4vw, 2.5rem);
+      margin: 1.25rem 0 1.75rem;
       color: #fff;
-      border-radius: 14px;
-      margin-bottom: 2rem;
+      box-shadow: 
+        0 20px 50px rgba(0,0,0,.25),
+        0 0 0 1px rgba(255,255,255,.1) inset;
+      
+      /* Violet/Purple gradient for bibliography */
+      background:
+        radial-gradient(ellipse 120% 80% at 15% 10%, rgba(255,255,255,.2), transparent 50%),
+        radial-gradient(ellipse 100% 70% at 85% 5%, rgba(255,255,255,.15), transparent 50%),
+        linear-gradient(135deg,
+          #9c27b0 0%,
+          #7b1fa2 30%,
+          #6a1b9a 60%,
+          #4a148c 100%
+        );
+    }
+
+    .sources-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 90% 60% at 25% 90%, rgba(0,0,0,.25), transparent 60%),
+        radial-gradient(ellipse 80% 50% at 80% 70%, rgba(0,0,0,.2), transparent 65%);
+      pointer-events: none;
+    }
+
+    /* Animated shimmer effect */
+    .sources-hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        105deg,
+        transparent 40%,
+        rgba(255,255,255,.08) 45%,
+        rgba(255,255,255,.15) 50%,
+        rgba(255,255,255,.08) 55%,
+        transparent 60%
+      );
+      background-size: 200% 100%;
+      animation: shimmer 8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { background-position: 200% 0; }
+      50% { background-position: -200% 0; }
+    }
+
+    .sources-hero .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 980px;
+    }
+
+    .sources-hero .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .5rem .85rem;
+      border-radius: 999px;
+      background: rgba(0,0,0,.2);
+      border: 1px solid rgba(255,255,255,.25);
+      backdrop-filter: blur(10px);
+      font-size: .9rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      letter-spacing: .02em;
     }
 
     .sources-hero h1 {
-      margin: 0;
-      font-size: 2rem;
-      color: white;
+      font-size: clamp(2.25rem, 5vw, 3.5rem);
+      line-height: 1.05;
+      margin: 0 0 .5rem 0;
+      letter-spacing: -.025em;
+      font-weight: 800;
+      text-shadow: 
+        0 2px 4px rgba(0,0,0,.5),
+        0 4px 8px rgba(0,0,0,.3);
+    }
+
+    .sources-hero .hero-subtitle {
+      font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+      opacity: .95;
+      margin: 0 0 .5rem 0;
+      font-weight: 500;
+      letter-spacing: .01em;
+      text-shadow: 
+        0 2px 4px rgba(0,0,0,.5),
+        0 4px 8px rgba(0,0,0,.3);
     }
 
     .sources-hero p {
-      margin: 0.75rem 0 0;
-      max-width: 70ch;
-      opacity: 0.95;
+      margin: 0 0 1.25rem 0;
+      font-size: clamp(.95rem, 1.2vw, 1.05rem);
+      opacity: .9;
+      max-width: 65ch;
       line-height: 1.6;
+      text-shadow: 
+        0 2px 4px rgba(0,0,0,.5),
+        0 4px 8px rgba(0,0,0,.3);
     }
 
     .sources-hero .format-note {
@@ -70,7 +159,7 @@
       font-size: 0.95rem;
     }
 
-    /* Source categories */
+    /* Enhanced source categories with animations */
     .source-category {
       margin: 2rem 0;
     }
@@ -81,20 +170,61 @@
       color: var(--page-accent-dark);
       padding-bottom: 0.5rem;
       border-bottom: 2px solid var(--page-accent-light);
+      position: relative;
+      overflow: hidden;
     }
 
-    /* Source entries */
+    .source-category h4::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--page-accent);
+      transition: width 0.6s ease;
+    }
+
+    .source-category:hover h4::after {
+      width: 100%;
+    }
+
+    /* Enhanced source entries with timeline-style animations */
     .source-entry {
       background: #fafafa;
       border-left: 4px solid var(--page-accent);
       border-radius: 10px;
       padding: 1.25rem;
       margin-bottom: 1rem;
+      opacity: 0;
+      transform: translateX(-30px);
+      transition: all 0.3s ease;
+    }
+
+    .source-entry.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .source-entry:hover {
+      background: white;
+      transform: translateX(5px);
+      box-shadow: 0 8px 20px rgba(156, 39, 176, 0.15);
     }
 
     .source-entry:last-child {
       margin-bottom: 0;
     }
+
+    /* Staggered animations for source entries */
+    .source-entry:nth-child(1) { animation-delay: 0.1s; }
+    .source-entry:nth-child(2) { animation-delay: 0.2s; }
+    .source-entry:nth-child(3) { animation-delay: 0.3s; }
+    .source-entry:nth-child(4) { animation-delay: 0.4s; }
+    .source-entry:nth-child(5) { animation-delay: 0.5s; }
+    .source-entry:nth-child(6) { animation-delay: 0.6s; }
+    .source-entry:nth-child(7) { animation-delay: 0.7s; }
+    .source-entry:nth-child(8) { animation-delay: 0.8s; }
 
     .source-citation {
       font-size: 0.95rem;
@@ -118,6 +248,27 @@
       align-items: center;
     }
 
+    /* Enhanced usage tags with hover effects */
+    .usage-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.4rem 0.9rem;
+      background: linear-gradient(135deg, #9c27b0, #7b1fa2);
+      color: white;
+      border-radius: 25px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      min-height: 32px;
+      transition: all 0.2s ease;
+    }
+
+    .usage-tag:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);
+    }
+
     .usage-note {
       font-size: 0.85rem;
       color: #666;
@@ -125,19 +276,39 @@
       min-width: 200px;
     }
 
-    /* Citation note box */
+    /* Enhanced citation note box */
     .citation-note {
       background: linear-gradient(135deg, #f3e5f5, #e1bee7);
       border-left: 4px solid var(--page-accent-dark);
       border-radius: 12px;
       padding: 1.5rem;
       margin: 2rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .citation-note::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: pulse-glow 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 0.8; }
     }
 
     .citation-note p {
       margin: 0 0 0.75rem 0;
       font-size: 0.92rem;
       line-height: 1.6;
+      position: relative;
+      z-index: 1;
     }
 
     .citation-note p:last-child {
@@ -148,7 +319,7 @@
       color: var(--page-accent-dark);
     }
 
-    /* Recommended starting points - styled list */
+    /* Recommended starting points - enhanced with cards */
     .recommended-list {
       list-style: none;
       padding: 0;
@@ -156,13 +327,32 @@
     }
 
     .recommended-list li {
-      background: #fafafa;
+      background: white;
       border-left: 4px solid var(--page-accent);
       border-radius: 10px;
       padding: 1rem;
       margin-bottom: 0.75rem;
       line-height: 1.6;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
     }
+
+    .recommended-list li.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .recommended-list li:hover {
+      transform: translateX(8px);
+      box-shadow: 0 8px 20px rgba(156, 39, 176, 0.15);
+      background: linear-gradient(135deg, #fafafa, white);
+    }
+
+    .recommended-list li:nth-child(1) { animation-delay: 0.1s; }
+    .recommended-list li:nth-child(2) { animation-delay: 0.2s; }
+    .recommended-list li:nth-child(3) { animation-delay: 0.3s; }
+    .recommended-list li:nth-child(4) { animation-delay: 0.4s; }
 
     .recommended-list li:last-child {
       margin-bottom: 0;
@@ -171,16 +361,35 @@
     .recommended-list strong {
       color: var(--page-accent-dark);
       font-weight: 700;
+      font-size: 1.05rem;
+      display: block;
+      margin-bottom: 0.35rem;
     }
 
-    /* Page navigation */
+    /* Enhanced page navigation */
     .page-nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 0;
+      padding: 1.5rem 0;
       margin-top: 2rem;
-      border-top: 1px solid #e5e7eb;
+      border-top: 2px solid var(--page-accent-light);
+      position: relative;
+    }
+
+    .page-nav::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--page-accent);
+      transition: width 0.6s ease;
+    }
+
+    .page-nav:hover::before {
+      width: 100%;
     }
 
     .page-nav a {
@@ -190,16 +399,70 @@
       text-decoration: none;
       color: var(--page-accent);
       font-weight: 600;
-      padding: 0.6rem 1rem;
-      border-radius: 10px;
-      transition: background 0.2s ease;
+      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      background: rgba(156, 39, 176, 0.05);
+      border: 2px solid transparent;
     }
 
     .page-nav a:hover {
-      background: var(--page-accent-light);
+      background: var(--page-accent);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(156, 39, 176, 0.25);
+      border-color: var(--page-accent);
+    }
+
+    /* Enhanced stat badges */
+    .sources-stats {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid rgba(255,255,255,.2);
+    }
+
+    .sources-stat {
+      display: flex;
+      flex-direction: column;
+      gap: .15rem;
+    }
+
+    .sources-stat .stat-value {
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -.02em;
+      background: rgba(255,255,255,0.2);
+      padding: 0.25rem 0.5rem;
+      border-radius: 8px;
+      display: inline-block;
+    }
+
+    .sources-stat .stat-label {
+      font-size: .8rem;
+      opacity: .8;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 600;
     }
 
     @media (max-width: 768px) {
+      .sources-hero {
+        padding: 2rem 1.5rem;
+        border-radius: 18px;
+      }
+
+      .sources-hero h1 {
+        font-size: 2rem;
+      }
+
+      .sources-stats {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
       .source-usage {
         flex-direction: column;
         align-items: flex-start;
@@ -207,6 +470,16 @@
 
       .usage-note {
         min-width: 100%;
+      }
+
+      .page-nav {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+      }
+
+      .page-nav a {
+        justify-content: center;
       }
     }
   </style>
@@ -220,7 +493,7 @@
 
   <main id="main-content" class="container" role="main" aria-label="Noah sources page">
 
-    <div class="breadcrumbs">
+    <div class="breadcrumbs fade-in">
       <a href="/">Home</a> ›
       <a href="/studies/">Studies</a> ›
       <a href="/studies/characters/">Characters</a> ›
@@ -229,29 +502,54 @@
     </div>
 
     <!-- ═══════════════════════════════════════════
-         PAGE HEADER
+         ENHANCED PAGE HEADER
     ════════════════════════════════════════════ -->
-    <div class="sources-hero">
-      <h1><span class="section-icon">📚</span> Noah — Bibliography & Sources</h1>
-      <p>
-        Curated sources for Genesis 5–11: genealogy and "pre-flood" humanity, ark and new-creation themes,
-        flood narrative design, covenant sign (rainbow), blessing/curse trajectories, and Babel's aftermath.
-      </p>
-      <p class="format-note">
-        <strong>Format:</strong> Chicago-style citations with specific page/section references
-      </p>
-    </div>
+    <header class="sources-hero fade-in" aria-labelledby="sources-hero-title">
+      <div class="hero-inner">
+        <div class="hero-badge fade-slide-down animation-delay-100">
+          <span>📚</span> Page 9 of 9 · Bibliography
+        </div>
+        
+        <h1 id="sources-hero-title" class="fade-slide-down animation-delay-200">
+          <span class="section-icon">📚</span> Noah — Bibliography & Sources
+        </h1>
+        
+        <p class="fade-slide-down animation-delay-300">
+          Curated sources for Genesis 5–11: genealogy and "pre-flood" humanity, ark and new-creation themes,
+          flood narrative design, covenant sign (rainbow), blessing/curse trajectories, and Babel's aftermath.
+        </p>
+        
+        <p class="format-note fade-slide-down animation-delay-400">
+          <strong>Format:</strong> Chicago-style citations with specific page/section references
+        </p>
+
+        <div class="sources-stats">
+          <div class="sources-stat fade-slide-left animation-delay-500">
+            <span class="stat-value">50+</span>
+            <span class="stat-label">Sources</span>
+          </div>
+          <div class="sources-stat fade-slide-left animation-delay-600">
+            <span class="stat-value">8</span>
+            <span class="stat-label">Categories</span>
+          </div>
+          <div class="sources-stat fade-slide-left animation-delay-700">
+            <span class="stat-value">Full</span>
+            <span class="stat-label">Citations</span>
+          </div>
+        </div>
+      </div>
+    </header>
 
     <!-- How to Use -->
     <section class="theology-card animate-on-scroll" id="how-to-use">
-      <div class="key-insight">
+      <div class="key-insight fade-slide-down animation-delay-100">
         <strong>How to use this page:</strong>
         This is the master bibliography for all Noah study pages. Each source entry indicates which 
         specific pages use that material and what content it supports. Citations include session numbers 
         and page references where applicable.
       </div>
 
-      <div class="key-insight" style="margin-top: 1.5rem;">
+      <div class="key-insight fade-slide-down animation-delay-200" style="margin-top: 1.5rem;">
         <strong>Why These Sources:</strong>
         Sources were selected based on their ability to illuminate
         (1) Genesis 1–11 literary design,
@@ -261,7 +559,7 @@
         and (5) canonical development from Noah to Abraham.
       </div>
 
-      <div class="key-insight" style="margin-top: 1.5rem;">
+      <div class="key-insight fade-slide-down animation-delay-300" style="margin-top: 1.5rem;">
         <strong>Note on BibleProject Classroom Sources:</strong>
         BibleProject Classroom materials cited here consist of recorded lectures,
         teacher notes, and visual commentaries intended for instructional use.
@@ -274,12 +572,14 @@
          BIBLIOGRAPHY
     ════════════════════════════════════════════ -->
     <section class="theology-card animate-on-scroll" id="primary-sources">
-      <h2 class="section-title"><span class="section-icon">📖</span> Primary Sources</h2>
+      <h2 class="section-title fade-slide-down">
+        <span class="section-icon">📖</span> Primary Sources
+      </h2>
 
-      <div class="source-category">
-        <h4>Biblical Text</h4>
+      <div class="source-category animate-on-scroll">
+        <h4 class="fade-slide-down animation-delay-100">Biblical Text</h4>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-100">
           <div class="source-citation">
             <strong>The Holy Bible.</strong> Genesis 5–11; especially 6:1–9:29; 10:1–11:9.
           </div>
@@ -289,7 +589,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-200">
           <div class="source-citation">
             <strong>The Holy Bible.</strong> Matthew 24:37-39; Luke 1:54-55, 72; 3:22; 9:31; Hebrews 11:7; 1 Peter 3:18-22; 2 Peter 2:5.
           </div>
@@ -299,7 +599,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-300">
           <div class="source-citation">
             <strong>The Holy Bible.</strong> Isaiah 49:15; 54:9-10; Ezekiel 14:14, 20; Psalm 13:1; 46:1-3; 77:9.
           </div>
@@ -310,10 +610,10 @@
         </div>
       </div>
 
-      <div class="source-category">
-        <h4>BibleProject Classroom Materials (Tim Mackie)</h4>
+      <div class="source-category animate-on-scroll">
+        <h4 class="fade-slide-down animation-delay-100">BibleProject Classroom Materials (Tim Mackie)</h4>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-100">
           <div class="source-citation">
             <strong>Mackie, Tim.</strong> "Genesis 1-11: A Literal Literary Translation." BibleProject Classroom.
           </div>
@@ -323,7 +623,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-200">
           <div class="source-citation">
             <strong>Mackie, Tim.</strong> "Adam to Noah Teacher Notes." BibleProject Classroom.
           </div>
@@ -335,7 +635,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-300">
           <div class="source-citation">
             <strong>Mackie, Tim.</strong> "Noah to Abraham Teacher Notes: Session 11 – The Rebellion of the Sons of Adam." BibleProject Classroom.
           </div>
@@ -345,7 +645,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-400">
           <div class="source-citation">
             <strong>Mackie, Tim.</strong> "Noah to Abraham Teacher Notes: Cosmic Collapse Section." BibleProject Classroom.
           </div>
@@ -355,7 +655,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-500">
           <div class="source-citation">
             <strong>Mackie, Tim.</strong> "Noah to Abraham Teacher Notes: Flood Waters Recede Section." BibleProject Classroom.
           </div>
@@ -365,7 +665,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-600">
           <div class="source-citation">
             <strong>Mackie, Tim.</strong> "Noah to Abraham Teacher Notes: Session 18 – Noah's Sacrifice and God's Blessing." BibleProject Classroom.
           </div>
@@ -375,7 +675,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-700">
           <div class="source-citation">
             <strong>Mackie, Tim.</strong> "Noah to Abraham Teacher Notes: Session 20 – God's Inner Resolve." BibleProject Classroom.
           </div>
@@ -385,7 +685,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-800">
           <div class="source-citation">
             <strong>Mackie, Tim.</strong> "Noah to Abraham Teacher Notes: Rainbow/Bow Section." BibleProject Classroom.
           </div>
@@ -395,7 +695,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-100">
           <div class="source-citation">
             <strong>Mackie, Tim.</strong> "Noah to Abraham Teacher Notes: Session 24 – The Sin of Ham." BibleProject Classroom.
           </div>
@@ -405,7 +705,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-200">
           <div class="source-citation">
             <strong>Mackie, Tim.</strong> "The Seams of the TaNaK Overview." BibleProject Classroom.
           </div>
@@ -416,10 +716,10 @@
         </div>
       </div>
 
-      <div class="source-category">
-        <h4>BibleProject Video & Written Resources</h4>
+      <div class="source-category animate-on-scroll">
+        <h4 class="fade-slide-down animation-delay-100">BibleProject Video & Written Resources</h4>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-100">
           <div class="source-citation">
             <strong>BibleProject.</strong> "Visual Commentary on Genesis 1-11." BibleProject.com.
           </div>
@@ -431,7 +731,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-200">
           <div class="source-citation">
             <strong>BibleProject.</strong> "1 Peter Overview." BibleProject.com.
           </div>
@@ -441,7 +741,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-300">
           <div class="source-citation">
             <strong>BibleProject.</strong> "If God Remembers." BibleProject blog.
           </div>
@@ -457,24 +757,28 @@
          RECOMMENDED STARTING POINTS
     ════════════════════════════════════════════ -->
     <section class="theology-card animate-on-scroll" id="recommended-starting-points">
-      <h2 class="section-title"><span class="section-icon">⭐</span> Recommended Starting Points</h2>
+      <h2 class="section-title fade-slide-down">
+        <span class="section-icon">⭐</span> Recommended Starting Points
+      </h2>
       
-      <p>For readers new to Noah study or seeking the most essential resources, these works provide the strongest foundation:</p>
+      <p class="fade-slide-down animation-delay-100">
+        For readers new to Noah study or seeking the most essential resources, these works provide the strongest foundation:
+      </p>
 
       <ul class="recommended-list">
-        <li>
+        <li class="animate-on-scroll animation-delay-100">
           <strong>Wenham, Genesis 1–15</strong> – Best single-volume exegetical anchor for Gen 6–9. 
           Provides detailed Hebrew analysis, chiastic structure, and balanced treatment of interpretive options.
         </li>
-        <li>
+        <li class="animate-on-scroll animation-delay-200">
           <strong>BibleProject Classroom: Adam to Noah</strong> – Accessible entry point for literary design and Hebrew structure. 
           Tim Mackie's teacher notes offer clear explanations of wordplay, repetition patterns, and narrative flow.
         </li>
-        <li>
+        <li class="animate-on-scroll animation-delay-300">
           <strong>Morales, The Tabernacle Pre-Figured</strong> – Essential for understanding ark, temple, and cosmic mountain theology. 
           Shows how the ark functions as a portable sanctuary and Noah as a priestly figure.
         </li>
-        <li>
+        <li class="animate-on-scroll animation-delay-400">
           <strong>Frymer-Kensky, Creation and Chaos</strong> – Excellent framework for flood as de-creation/new-creation. 
           Explains how the flood undoes Genesis 1 and how God re-establishes order through the covenant.
         </li>
@@ -485,12 +789,14 @@
          COMMENTARIES & ACADEMIC SOURCES
     ════════════════════════════════════════════ -->
     <section class="theology-card animate-on-scroll" id="commentaries">
-      <h2 class="section-title"><span class="section-icon">📚</span> Commentaries & Academic Sources</h2>
+      <h2 class="section-title fade-slide-down">
+        <span class="section-icon">📚</span> Commentaries & Academic Sources
+      </h2>
 
-      <div class="source-category">
-        <h4>Genesis Commentaries</h4>
+      <div class="source-category animate-on-scroll">
+        <h4 class="fade-slide-down animation-delay-100">Genesis Commentaries</h4>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-100">
           <div class="source-citation">
             <strong>Wenham, Gordon J.</strong> <em>Genesis 1–15, Volume 1.</em> Word Biblical Commentary. Waco: Word Books, 1987.
           </div>
@@ -501,7 +807,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-200">
           <div class="source-citation">
             <strong>Cassuto, Umberto.</strong> <em>A Commentary on the Book of Genesis: Part Two, From Noah to Abraham.</em> Translated by Israel Abrahams. Jerusalem: The Magnes Press, 1964.
           </div>
@@ -511,7 +817,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-300">
           <div class="source-citation">
             <strong>Waltke, Bruce K.</strong> <em>Genesis: A Commentary.</em> Grand Rapids: Zondervan, 2001.
           </div>
@@ -522,7 +828,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-400">
           <div class="source-citation">
             <strong>Bandstra, Barry.</strong> <em>Genesis 1–11: A Handbook on the Hebrew Text.</em> Baylor Handbook on the Hebrew Bible. Waco: Baylor University Press, 2008.
           </div>
@@ -533,7 +839,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-500">
           <div class="source-citation">
             <strong>Scullion, John J., S.J., ed.</strong> <em>Genesis 1–11.</em> Continental Commentaries. Minneapolis: Fortress Press, 1990.
           </div>
@@ -544,7 +850,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-600">
           <div class="source-citation">
             <strong>Hamilton, Victor P.</strong> <em>The Book of Genesis: Chapters 1–17.</em> New International Commentary on the Old Testament. Grand Rapids: Eerdmans, 1990.
           </div>
@@ -554,7 +860,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-700">
           <div class="source-citation">
             <strong>Keil, C. F., and F. Delitzsch.</strong> <em>Commentary on the Old Testament, Volume 1: The Pentateuch.</em> Peabody: Hendrickson, 1996 [1866-1891].
           </div>
@@ -565,10 +871,10 @@
         </div>
       </div>
 
-      <div class="source-category">
-        <h4>New Testament Commentaries</h4>
+      <div class="source-category animate-on-scroll">
+        <h4 class="fade-slide-down animation-delay-100">New Testament Commentaries</h4>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-100">
           <div class="source-citation">
             <strong>France, R.T.</strong> <em>The Gospel of Matthew.</em> New International Commentary on the New Testament. Grand Rapids: Eerdmans, 2007.
           </div>
@@ -578,7 +884,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-200">
           <div class="source-citation">
             <strong>Green, Joel B.</strong> <em>The Gospel of Luke.</em> New International Commentary on the New Testament. Grand Rapids: Eerdmans, 1997.
           </div>
@@ -588,7 +894,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-300">
           <div class="source-citation">
             <strong>Jobes, Karen H.</strong> <em>1 Peter.</em> Baker Exegetical Commentary on the New Testament. Grand Rapids: Baker Academic, 2005.
           </div>
@@ -598,7 +904,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-400">
           <div class="source-citation">
             <strong>Lane, William L.</strong> <em>Hebrews 9-13.</em> Word Biblical Commentary 47B. Dallas: Word Books, 1991.
           </div>
@@ -609,10 +915,10 @@
         </div>
       </div>
 
-      <div class="source-category">
-        <h4>Temple & Tabernacle Studies</h4>
+      <div class="source-category animate-on-scroll">
+        <h4 class="fade-slide-down animation-delay-100">Temple & Tabernacle Studies</h4>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-100">
           <div class="source-citation">
             <strong>Morales, L. Michael.</strong> <em>The Tabernacle Pre-Figured: Cosmic Mountain Ideology in Genesis and Exodus.</em> Leuven: Peeters, 2012.
           </div>
@@ -623,7 +929,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-200">
           <div class="source-citation">
             <strong>Yahudah, Abraham S.</strong> <em>The Language of the Pentateuch in its Relation to Egyptian.</em> Oxford: Oxford University Press, 1933.
           </div>
@@ -634,10 +940,10 @@
         </div>
       </div>
 
-      <div class="source-category">
-        <h4>Literary & Theological Studies</h4>
+      <div class="source-category animate-on-scroll">
+        <h4 class="fade-slide-down animation-delay-100">Literary & Theological Studies</h4>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-100">
           <div class="source-citation">
             <strong>Wenham, Gordon J.</strong> <em>Rethinking Genesis 1–11: Gateway to the Bible.</em> Eugene: Cascade Books, 2015.
           </div>
@@ -647,7 +953,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-200">
           <div class="source-citation">
             <strong>Collins, C. John.</strong> <em>Reading Genesis Well: Navigating History, Poetry, Science, and Truth in Genesis 1–11.</em> Grand Rapids: Zondervan, 2018.
           </div>
@@ -658,7 +964,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-300">
           <div class="source-citation">
             <strong>Lowery, Daniel DeWitt.</strong> <em>Toward a Poetics of Genesis 1–11: Reading Genesis 4:17–22 in an Ancient Near Eastern Context.</em> Bulletin for Biblical Research Supplement. Winona Lake: Eisenbrauns, 2013.
           </div>
@@ -668,7 +974,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-400">
           <div class="source-citation">
             <strong>Gage, Warren.</strong> <em>The Gospel of Genesis: Studies in Protology and Eschatology.</em> Eugene: Wipf & Stock, 2001.
           </div>
@@ -678,7 +984,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-500">
           <div class="source-citation">
             <strong>Ackerman, James S.</strong> "The Captivity of Innocence: Babel and the Yahwist." In <em>Literary Interpretations of Biblical Narratives, Volume II</em>, edited by Kenneth R. R. Gros Louis. Nashville: Abingdon, 1982.
           </div>
@@ -694,12 +1000,14 @@
          ANE CONTEXT
     ════════════════════════════════════════════ -->
     <section class="theology-card animate-on-scroll" id="ane-context">
-      <h2 class="section-title"><span class="section-icon">🏛️</span> Ancient Near Eastern Context</h2>
+      <h2 class="section-title fade-slide-down">
+        <span class="section-icon">🏛️</span> Ancient Near Eastern Context
+      </h2>
 
-      <div class="source-category">
-        <h4>Flood Parallels</h4>
+      <div class="source-category animate-on-scroll">
+        <h4 class="fade-slide-down animation-delay-100">Flood Parallels</h4>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-100">
           <div class="source-citation">
             <strong>George, Andrew R.</strong> <em>The Babylonian Gilgamesh Epic: Introduction, Critical Edition and Cuneiform Texts (2 Volumes).</em> Oxford: Oxford University Press, 2003.
           </div>
@@ -710,7 +1018,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-200">
           <div class="source-citation">
             <strong>Berman, Joshua.</strong> <em>Inconsistency in the Torah: Ancient Literary Convention and the Limits of Source Criticism.</em> Oxford: Oxford University Press, 2017.
           </div>
@@ -720,7 +1028,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-300">
           <div class="source-citation">
             <strong>Lambert, W. G.</strong> <em>Enuma Elish (2 Volumes in One): The Seven Tablets of Creation.</em> Winona Lake: Eisenbrauns, 2013.
           </div>
@@ -730,7 +1038,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-400">
           <div class="source-citation">
             <strong>Frymer-Kensky, Tikva.</strong> <em>Creation and Chaos in the Primeval Era and the Eschaton: A Religio-Historical Study of Genesis 1 and Revelation 12.</em> Winona Lake: Eisenbrauns, 2006.
           </div>
@@ -742,10 +1050,10 @@
         </div>
       </div>
 
-      <div class="source-category">
-        <h4>Mesopotamian Wisdom & Watchers Traditions</h4>
+      <div class="source-category animate-on-scroll">
+        <h4 class="fade-slide-down animation-delay-100">Mesopotamian Wisdom & Watchers Traditions</h4>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-100">
           <div class="source-citation">
             <strong>Rochberg, Francesca.</strong> <em>The Heavenly Writing: Divination, Horoscopy, and Astronomy in Mesopotamian Culture.</em> Cambridge: Cambridge University Press, 2007.
           </div>
@@ -755,7 +1063,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-200">
           <div class="source-citation">
             <strong>Heiser, Michael S.</strong> <em>Reversing Hermon: Enoch, the Watchers, and the Forgotten Mission of Jesus Christ.</em> Bellingham: Lexham Press, 2017.
           </div>
@@ -765,7 +1073,7 @@
           </div>
         </div>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-300">
           <div class="source-citation">
             <strong>Annus, Amar.</strong> "On the Origin of Watchers: A Comparative Study of the Antediluvian Wisdom in Mesopotamian and Jewish Traditions." <em>Journal for the Study of the Pseudepigrapha</em> 19.4 (2010): 277–320.
           </div>
@@ -781,12 +1089,14 @@
          ADDITIONAL RESOURCES
     ════════════════════════════════════════════ -->
     <section class="theology-card animate-on-scroll" id="additional">
-      <h2 class="section-title"><span class="section-icon">➕</span> Additional Resources</h2>
+      <h2 class="section-title fade-slide-down">
+        <span class="section-icon">➕</span> Additional Resources
+      </h2>
 
-      <div class="source-category">
-        <h4>Optional / Specialized Topics</h4>
+      <div class="source-category animate-on-scroll">
+        <h4 class="fade-slide-down animation-delay-100">Optional / Specialized Topics</h4>
 
-        <div class="source-entry">
+        <div class="source-entry animate-on-scroll animation-delay-100">
           <div class="source-citation">
             <strong>Walton, John H.</strong> <em>The Lost World of the Flood: Mythology, Theology, and the Deluge Debate.</em> Downers Grove: IVP Academic, 2018.
           </div>
@@ -803,9 +1113,11 @@
          CITATION NOTES
     ════════════════════════════════════════════ -->
     <section class="theology-card animate-on-scroll" id="citation-notes">
-      <h2 class="section-title"><span class="section-icon">ℹ️</span> Citation Notes</h2>
+      <h2 class="section-title fade-slide-down">
+        <span class="section-icon">ℹ️</span> Citation Notes
+      </h2>
 
-      <div class="citation-note">
+      <div class="citation-note animate-on-scroll">
         <p><strong>Source Selection Rationale:</strong> Priority given to works that address (1) Genesis 1–11 literary design,
           (2) flood as de-creation/new-creation, (3) Hebrew word/phrase repetition and translation decisions, (4) ANE flood parallels,
           (5) the Gen 6:1–4 "cosmic rebellion" interpretive tradition, (6) ark as temple symbolism, and (7) New Testament typological 
@@ -832,16 +1144,18 @@
          READING APPROACH
     ════════════════════════════════════════════ -->
     <section class="theology-card animate-on-scroll" id="reading-approach">
-      <h2 class="section-title"><span class="section-icon">📖</span> How This Study Reads Genesis</h2>
+      <h2 class="section-title fade-slide-down">
+        <span class="section-icon">📖</span> How This Study Reads Genesis
+      </h2>
 
-      <p>
+      <p class="fade-slide-down animation-delay-100">
         This study approaches the Noah narrative primarily as theological literature,
         attentive to structure, repetition, and narrative flow. The focus is on how
         Genesis explains the problem of human violence, divine judgment, and covenant
         restraint within the story itself.
       </p>
 
-      <div class="key-insight">
+      <div class="key-insight fade-slide-down animation-delay-200">
         <strong>Methodological Note:</strong>
         Questions about the flood's extent (local vs. global) are acknowledged,
         but the study prioritizes the text's cosmological and theological framing.
@@ -853,19 +1167,19 @@
     <!-- ═══════════════════════════════════════════
          PAGE NAVIGATION
     ════════════════════════════════════════════ -->
-    <nav class="page-nav" aria-label="Page navigation">
-      <a href="noah-intertext.html" class="nav-prev">
+    <nav class="page-nav animate-on-scroll" aria-label="Page navigation">
+      <a href="noah-intertext.html" class="nav-prev fade-slide-left animation-delay-100">
         <span>←</span> Page 8: Intertext
       </a>
-      <span style="color:#999;font-size:0.9rem;">Page 9 of 9</span>
-      <a href="noah.html" class="nav-next">
+      <span style="color:#999;font-size:0.9rem;" class="fade-in animation-delay-200">Page 9 of 9</span>
+      <a href="noah.html" class="nav-next fade-slide-left animation-delay-300">
         Return to Hub <span>→</span>
       </a>
     </nav>
 
     <!-- Back to Hub -->
-    <div style="text-align: center; margin: 2rem 0;">
-      <a href="noah.html" style="color: var(--page-accent-dark); font-weight: 600; text-decoration: none;">
+    <div style="text-align: center; margin: 2rem 0;" class="fade-in animation-delay-400">
+      <a href="noah.html" style="color: var(--page-accent-dark); font-weight: 600; text-decoration: none; padding: 0.75rem 1.5rem; background: rgba(156, 39, 176, 0.1); border-radius: 12px; display: inline-block; transition: all 0.3s ease;">
         ← Return to Noah Hub
       </a>
     </div>
@@ -884,6 +1198,28 @@
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
       progressBar.style.width = progress + '%';
+    });
+  </script>
+
+  <!-- Scroll Animation Observer -->
+  <script>
+    // Intersection Observer for scroll animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    // Observe all elements with animate-on-scroll class
+    document.querySelectorAll('.animate-on-scroll, .source-entry, .recommended-list li').forEach(el => {
+      observer.observe(el);
     });
   </script>
 
