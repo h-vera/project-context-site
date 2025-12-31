@@ -60,57 +60,13 @@
   <link rel="stylesheet" href="/assets/css/mobile-tabs-v5-8.css">
   <link rel="stylesheet" href="/assets/css/mobile-tabs-patch.css">
 
-  <style>
-    /* Page-specific accent: Indigo from rainbow (sixth color = sixth page) */
-    :root {
+ <style>
+  /* Page-specific accent: Indigo from rainbow (sixth color = sixth page) */
+:root {
   --page-accent: #5c6bc0;
   --page-accent-light: rgba(92, 107, 192, 0.12);
   --page-accent-dark: #3949ab;
 }
-
-/* ═══════════════════════════════════════════
-   ENTRY ANIMATIONS - Global-v2 Integration
-   ════════════════════════════════════════════ */
-.fade-in {
-  animation: fadeSlideDown 0.6s ease-out;
-}
-
-.fade-slide-down {
-  animation: fadeSlideDown 0.6s ease-out;
-}
-
-.fade-slide-left {
-  animation: fadeSlideLeft 0.6s ease-out;
-}
-
-@keyframes fadeSlideDown {
-  from { 
-    opacity: 0; 
-    transform: translateY(20px); 
-  }
-  to { 
-    opacity: 1; 
-    transform: translateY(0); 
-  }
-}
-
-@keyframes fadeSlideLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* Animation delay utilities */
-.animation-delay-100 { animation-delay: 0.1s; }
-.animation-delay-200 { animation-delay: 0.2s; }
-.animation-delay-300 { animation-delay: 0.3s; }
-.animation-delay-400 { animation-delay: 0.4s; }
-.animation-delay-500 { animation-delay: 0.5s; }
 
 /* ═══════════════════════════════════════════
    THEOLOGY CARDS - Hub Pattern Integration
@@ -137,33 +93,10 @@
    PAGE-THEMED ELEMENTS - Use global base
    ════════════════════════════════════════════ */
 
-/* Key Insights - Page accent with breathe effect */
+/* Key Insights - Page accent */
 .key-insight {
   background: linear-gradient(135deg, var(--page-accent-light), rgba(92, 107, 192, 0.08));
   border-left: 4px solid var(--page-accent);
-  position: relative;
-  overflow: hidden;
-}
-
-.key-insight::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 50%, 
-    rgba(92, 107, 192, 0.15) 0%, 
-    transparent 70%);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-.key-insight:hover::before {
-  opacity: 1;
-  animation: breathe 3s ease-in-out infinite;
-}
-
-@keyframes breathe {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
 }
 
 /* Section Icons - Page accent */
@@ -172,6 +105,79 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* ═══════════════════════════════════════════
+   SCRIPTURE BLOCKS - Enhanced with Page Flip
+   ════════════════════════════════════════════ */
+.scripture-block {
+  background: white !important;
+  border: 2px solid var(--page-accent) !important;
+  border-radius: 12px !important;
+  padding: 1.5rem 1.75rem !important;
+  margin: 1.75rem 0 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: all 0.4s ease;
+}
+
+.scripture-block:hover {
+  transform: translateY(-4px) rotateX(2deg);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2) !important;
+}
+
+.scripture-block::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: linear-gradient(180deg, var(--page-accent), var(--page-accent-dark));
+  border-radius: 12px 0 0 12px;
+  transition: all 0.3s ease;
+}
+
+.scripture-block:hover::before {
+  width: 8px;
+  background: linear-gradient(180deg, 
+    var(--page-accent), 
+    var(--page-accent-dark),
+    var(--page-accent));
+}
+
+.scripture-block p {
+  font-style: normal;
+  margin: 0;
+  line-height: 1.8;
+  color: #1a1a1a;
+  font-size: 1rem;
+}
+
+.scripture-block cite {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 1rem;
+  font-style: normal;
+  font-weight: 700;
+  color: var(--page-accent-dark);
+  font-size: 0.9rem;
+  padding: 0.35rem 0.75rem;
+  background: var(--page-accent-light);
+  border-radius: 6px;
+  border-left: 3px solid var(--page-accent);
+}
+
+.scripture-block:nth-child(even) {
+  background: linear-gradient(135deg, var(--page-accent-light), rgba(255, 255, 255, 0.8)) !important;
+  border-color: var(--page-accent-dark) !important;
+}
+
+.scripture-block cite::before {
+  content: "📖";
+  margin-right: 0.5rem;
+  font-size: 1rem;
 }
 
 /* ═══════════════════════════════════════════
@@ -217,18 +223,6 @@
   box-shadow: 0 2px 8px rgba(92, 107, 192, 0.25);
   transform: scale(1.05);
   border-color: transparent;
-  animation: stage-pulse 2s ease-in-out infinite;
-}
-
-@keyframes stage-pulse {
-  0%, 100% {
-    transform: scale(1.05);
-    box-shadow: 0 2px 8px rgba(92, 107, 192, 0.25);
-  }
-  50% {
-    transform: scale(1.1);
-    box-shadow: 0 4px 15px rgba(92, 107, 192, 0.4);
-  }
 }
 
 .pattern-tracker .arrow {
@@ -251,8 +245,8 @@
 }
 
 .covenant-thread:hover {
-  transform: translateX(8px);
-  box-shadow: 0 6px 20px rgba(102, 187, 106, 0.2);
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(102, 187, 106, 0.15);
 }
 
 .covenant-thread::before {
@@ -262,16 +256,6 @@
   top: 50%;
   transform: translateY(-50%);
   font-size: 1.8rem;
-  animation: gentle-pulse 2s ease-in-out infinite;
-}
-
-@keyframes gentle-pulse {
-  0%, 100% { 
-    transform: translateY(-50%) scale(1); 
-  }
-  50% { 
-    transform: translateY(-50%) scale(1.1); 
-  }
 }
 
 .covenant-thread .thread-stage {
@@ -392,7 +376,7 @@
   gap: 0.5rem;
 }
 
-/* Rainbow Box - Signature covenant element with shimmer */
+/* Rainbow Box - Signature covenant element */
 .rainbow-box {
   background: linear-gradient(135deg, 
     rgba(244,67,54,0.1), 
@@ -410,30 +394,6 @@
   text-align: center;
   box-shadow: 0 4px 20px rgba(156, 39, 176, 0.15);
   transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.rainbow-box::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 40%,
-    rgba(255,255,255,.15) 45%,
-    rgba(255,255,255,.25) 50%,
-    rgba(255,255,255,.15) 55%,
-    transparent 60%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 6s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes shimmer {
-  0%, 100% { background-position: 200% 0; }
-  50% { background-position: -200% 0; }
 }
 
 .rainbow-box:hover {
@@ -445,8 +405,6 @@
   margin: 0 0 1rem 0;
   color: #7b1fa2;
   font-weight: 700;
-  position: relative;
-  z-index: 1;
 }
 
 .rainbow-box .bow-hebrew {
@@ -458,8 +416,6 @@
   background-clip: text;
   margin-bottom: 0.5rem;
   display: block;
-  position: relative;
-  z-index: 1;
 }
 
 .rainbow-box .bow-meaning {
@@ -467,8 +423,6 @@
   color: #555;
   margin-bottom: 1rem;
   font-weight: 500;
-  position: relative;
-  z-index: 1;
 }
 
 /* War Bow Quote - Enhanced blockquote */
@@ -529,27 +483,17 @@
   padding: 0.75rem 0;
   border-bottom: 1px solid #e5e7eb;
   align-items: start;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .chiasm-row-cov:hover {
-  background: rgba(92, 107, 192, 0.08);
-  padding-left: 0.75rem;
-  transform: translateX(4px);
+  background: rgba(92, 107, 192, 0.05);
+  padding-left: 0.5rem;
 }
 
 .chiasm-row-cov:last-child {
   border-bottom: none;
 }
-
-/* Staggered entry animation for chiasm rows */
-.chiasm-row-cov:nth-child(1) { animation: fade-slide-left 0.5s ease-out 0.1s backwards; }
-.chiasm-row-cov:nth-child(2) { animation: fade-slide-left 0.5s ease-out 0.2s backwards; }
-.chiasm-row-cov:nth-child(3) { animation: fade-slide-left 0.5s ease-out 0.3s backwards; }
-.chiasm-row-cov:nth-child(4) { animation: fade-slide-left 0.5s ease-out 0.4s backwards; }
-.chiasm-row-cov:nth-child(5) { animation: fade-slide-left 0.5s ease-out 0.5s backwards; }
-.chiasm-row-cov:nth-child(6) { animation: fade-slide-left 0.5s ease-out 0.6s backwards; }
-.chiasm-row-cov:nth-child(7) { animation: fade-slide-left 0.5s ease-out 0.7s backwards; }
 
 .chiasm-row-cov .chiasm-label {
   font-weight: 700;
@@ -648,27 +592,12 @@
   font-weight: 700;
   font-size: 0.95rem;
   box-shadow: 0 2px 8px rgba(92, 107, 192, 0.3);
-  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition: all 0.2s ease;
 }
 
 .covenant-count .count-item:hover {
-  transform: scale(1.15) rotate(5deg);
-  box-shadow: 0 4px 15px rgba(92, 107, 192, 0.5);
-}
-
-/* Sequential pulse on page load */
-.covenant-count .count-item:nth-child(1) { animation: pulse-in 0.5s ease-out 0.1s backwards; }
-.covenant-count .count-item:nth-child(2) { animation: pulse-in 0.5s ease-out 0.2s backwards; }
-.covenant-count .count-item:nth-child(3) { animation: pulse-in 0.5s ease-out 0.3s backwards; }
-.covenant-count .count-item:nth-child(4) { animation: pulse-in 0.5s ease-out 0.4s backwards; }
-.covenant-count .count-item:nth-child(5) { animation: pulse-in 0.5s ease-out 0.5s backwards; }
-.covenant-count .count-item:nth-child(6) { animation: pulse-in 0.5s ease-out 0.6s backwards; }
-.covenant-count .count-item:nth-child(7) { animation: pulse-in 0.5s ease-out 0.7s backwards; }
-
-@keyframes pulse-in {
-  0% { transform: scale(0); opacity: 0; }
-  50% { transform: scale(1.15); }
-  100% { transform: scale(1); opacity: 1; }
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(92, 107, 192, 0.4);
 }
 
 .covenant-parties {
@@ -704,7 +633,7 @@
    COMPARISON GRIDS - Simplified using global
    ════════════════════════════════════════════ */
 
-/* Concession Cards - with staggered entry */
+/* Concession Cards - Could use .grid-2 but kept for specific styling */
 .concession-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -721,14 +650,9 @@
   transition: all 0.3s ease;
 }
 
-.concession-card:nth-child(1) { animation: fade-in 0.5s ease-out 0.1s backwards; }
-.concession-card:nth-child(2) { animation: fade-in 0.5s ease-out 0.2s backwards; }
-.concession-card:nth-child(3) { animation: fade-in 0.5s ease-out 0.3s backwards; }
-.concession-card:nth-child(4) { animation: fade-in 0.5s ease-out 0.4s backwards; }
-
 .concession-card:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .concession-card.ideal {
@@ -757,7 +681,7 @@
   line-height: 1.6;
 }
 
-/* Genesis 1 Comparison - Enhanced hover with cascade */
+/* Genesis 1 Comparison - Enhanced hover */
 .gen1-comparison {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -794,14 +718,6 @@
   font-size: 0.9rem;
   color: #555;
   line-height: 1.6;
-  opacity: 0.8;
-  transform: translateX(0);
-  transition: all 0.2s ease;
-}
-
-.gen1-comparison .compare-col:hover p {
-  opacity: 1;
-  transform: translateX(5px);
 }
 
 .gen1-comparison .compare-col .hebrew-inline {
@@ -809,6 +725,120 @@
   direction: rtl;
   color: var(--page-accent-dark);
   font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════
+   EDEN IDEAL vs CONCESSION - Enhanced Table
+   ════════════════════════════════════════════ */
+.eden-comparison-wrapper {
+  background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 2rem 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.eden-comparison-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #66bb6a, #ffa726);
+}
+
+.eden-comparison-wrapper h3 {
+  color: #1f2937;
+  margin: 0 0 1.25rem 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.eden-comparison-wrapper .intro-text {
+  text-align: center;
+  color: #4b5563;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.eden-table-container {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.eden-comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.eden-comparison-table thead th {
+  padding: 1rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-align: left;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.eden-comparison-table thead th:first-child {
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  color: #2e7d32;
+}
+
+.eden-comparison-table thead th:last-child {
+  background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+  color: #e65100;
+}
+
+.eden-comparison-table tbody td {
+  padding: 1rem;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: #374151;
+  vertical-align: top;
+}
+
+.eden-comparison-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.eden-comparison-table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.eden-comparison-table tbody tr:hover {
+  background: linear-gradient(135deg, rgba(92, 107, 192, 0.03), rgba(92, 107, 192, 0.01));
+}
+
+.eden-comparison-table tbody td:first-child {
+  border-left: 3px solid #66bb6a;
+}
+
+.eden-comparison-table tbody td:last-child {
+  border-left: 3px solid #ffa726;
+}
+
+.eden-comparison-wrapper .conclusion-text {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  background: white;
+  border-radius: 10px;
+  border-left: 4px solid var(--page-accent);
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: #374151;
+}
+
+.eden-comparison-wrapper .conclusion-text strong {
+  color: var(--page-accent-dark);
 }
 
 /* ═══════════════════════════════════════════
@@ -899,71 +929,98 @@
 }
 
 /* ═══════════════════════════════════════════
-   SCRIPTURE BLOCKS - Page Flip Effect
+   ENHANCED SECTION BACKGROUNDS - Flat sections
    ════════════════════════════════════════════ */
-.scripture-block {
-  background: white;
-  border: 2px solid var(--page-accent);
-  border-radius: 12px;
-  padding: 1.5rem 1.75rem;
-  margin: 1.75rem 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+/* Priest Section */
+#priest {
+  background: linear-gradient(135deg, #fff8e1, #ffecb3);
+  border: 2px solid #ffa726;
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 2rem 0;
   position: relative;
-  transform-style: preserve-3d;
-  transition: all 0.4s ease;
-}
-
-.scripture-block:hover {
-  transform: translateY(-4px) rotateX(2deg);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-}
-
-.scripture-block::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 6px;
-  background: linear-gradient(180deg, var(--page-accent), var(--page-accent-dark));
-  border-radius: 12px 0 0 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(255, 152, 0, 0.15);
   transition: all 0.3s ease;
 }
 
-.scripture-block:hover::before {
-  width: 8px;
-  background: linear-gradient(180deg, 
-    var(--page-accent), 
-    var(--page-accent-dark),
-    var(--page-accent));
+#priest::before {
+  background: linear-gradient(90deg, #ff9800, #fb8c00);
 }
 
-.scripture-block p {
-  font-style: normal;
-  margin: 0;
-  line-height: 1.8;
-  color: #1a1a1a;
-  font-size: 1rem;
+#priest:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(255, 152, 0, 0.25);
 }
 
-.scripture-block cite {
-  display: inline-flex;
-  align-items: center;
-  margin-top: 1rem;
-  font-style: normal;
-  font-weight: 700;
+#priest .section-title {
+  color: #e65100;
+  margin-bottom: 1.5rem;
+}
+
+/* Cycle Begins Section */
+#next {
+  background: linear-gradient(135deg, #ffebee, #ffcdd2);
+  border: 2px solid #ef5350;
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 2rem 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(239, 83, 80, 0.15);
+  transition: all 0.3s ease;
+}
+
+#next::before {
+  background: linear-gradient(90deg, #f44336, #e53935);
+}
+
+#next:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(239, 83, 80, 0.25);
+}
+
+#next .section-title {
+  color: #c62828;
+  margin-bottom: 1.5rem;
+}
+
+#next p {
+  line-height: 1.7;
+  color: #5d4037;
+}
+
+/* Covenant Tested Section */
+#bridge-babel {
+  background: linear-gradient(135deg, #e8eaf6, #c5cae9);
+  border: 2px solid var(--page-accent);
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 2rem 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(92, 107, 192, 0.15);
+  transition: all 0.3s ease;
+}
+
+#bridge-babel::before {
+  background: linear-gradient(90deg, var(--page-accent), var(--page-accent-dark));
+}
+
+#bridge-babel:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(92, 107, 192, 0.25);
+}
+
+#bridge-babel .section-title {
   color: var(--page-accent-dark);
-  font-size: 0.9rem;
-  padding: 0.35rem 0.75rem;
-  background: var(--page-accent-light);
-  border-radius: 6px;
-  border-left: 3px solid var(--page-accent);
+  margin-bottom: 1.5rem;
 }
 
-.scripture-block cite::before {
-  content: "📖";
-  margin-right: 0.5rem;
-  font-size: 1rem;
+#bridge-babel p {
+  line-height: 1.7;
+  color: #475569;
 }
 
 /* ═══════════════════════════════════════════
@@ -1075,6 +1132,16 @@
   .covenant-thread::before {
     font-size: 1.5rem;
   }
+  
+  .eden-comparison-wrapper {
+    padding: 1.5rem;
+  }
+  
+  .eden-comparison-table thead th,
+  .eden-comparison-table tbody td {
+    padding: 0.75rem;
+    font-size: 0.88rem;
+  }
 }
 
 @media (max-width: 500px) {
@@ -1092,6 +1159,11 @@
     width: 32px;
     height: 32px;
     font-size: 0.85rem;
+  }
+  
+  .eden-comparison-table {
+    display: block;
+    overflow-x: auto;
   }
 }
 </style>
@@ -1459,162 +1531,171 @@
 </section>
     
     <!-- ═══════════════════════════════════════════
-         DIVINE CONCESSIONS
-    ════════════════════════════════════════════ -->
-      <section class="theology-card animate-on-scroll animation-delay-300" id="concessions">
-      <h2 class="section-title"><span class="section-icon">⚖️</span> Divine Concessions</h2>
+     DIVINE CONCESSIONS
+════════════════════════════════════════════ -->
+<section class="theology-card animate-on-scroll animation-delay-300" id="concessions">
+  <h2 class="section-title"><span class="section-icon">⚖️</span> Divine Concessions</h2>
 
-      <p>
-        Genesis 9:1-7 replays the blessing of Genesis 1—"be fruitful and multiply"—but 
-        with significant changes. God is accommodating His ideals to make room for human 
-        evil. Not to endorse it, but because that's the humanity He has to work with.
-      </p>
-
-      <h3>Explicit Links to Genesis 1:29-30</h3>
-      <p>
-        The narrator signals these connections through precise vocabulary:
-      </p>
-
-      <div class="gen1-comparison">
-        <div class="compare-col">
-          <h5>Genesis 1:29-30</h5>
-          <p>
-            "I have given you every plant... it shall be 
-            <strong>food for you</strong>"<br>
-            <span class="hebrew-inline">לָכֶם יִהְיֶה לְאָכְלָה</span>
-          </p>
-        </div>
-        <div class="compare-col">
-          <h5>Genesis 9:3</h5>
-          <p>
-            "Every creature... for you it will be 
-            <strong>for food</strong>"<br>
-            <span class="hebrew-inline">לָכֶם יִהְיֶה לְאָכְלָה</span>
-          </p>
-        </div>
-      </div>
-
-      <p>
-        The identical Hebrew phrase (<em>lakhem yihyeh le'okhlah</em>) connects the two 
-        passages deliberately. But now animals are added to the menu.
-      </p>
-
-      <!-- ENHANCEMENT: Eden Ideal vs Post-Flood Concession Table -->
-      <section class="study-table-wrap" aria-label="Eden Ideal vs Post-Flood Concession" style="margin: 1.5rem 0;">
-        <h3 style="margin:0 0 0.75rem 0;">Eden Ideal vs. Post-Flood Concession</h3>
-
-        <div style="overflow-x:auto;">
-          <table class="study-table" style="width:100%; border-collapse:collapse;">
-            <thead>
-              <tr>
-                <th style="text-align:left; padding:0.75rem; border-bottom:1px solid #e5e7eb;">Eden Ideal (Genesis 1–2)</th>
-                <th style="text-align:left; padding:0.75rem; border-bottom:1px solid #e5e7eb;">Post-Flood Concession (Genesis 9)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style="padding:0.75rem; border-bottom:1px solid #f0f2f4;">Life without death for food</td>
-                <td style="padding:0.75rem; border-bottom:1px solid #f0f2f4;">Meat permitted (human appetite acknowledged)</td>
-              </tr>
-              <tr>
-                <td style="padding:0.75rem; border-bottom:1px solid #f0f2f4;">No violence as the norm</td>
-                <td style="padding:0.75rem; border-bottom:1px solid #f0f2f4;">Violence regulated and constrained (image-of-God logic)</td>
-              </tr>
-              <tr>
-                <td style="padding:0.75rem;">Creation's abundance provides</td>
-                <td style="padding:0.75rem;">Blood prohibited: life belongs to God; every taking of life is marked as borrowed</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-  <p style="margin:0.75rem 0 0 0;">
-    The point is not endorsement of violence, but God's <strong>self-limiting mercy</strong>—working with humans as they are,
-    while restraining the spread of death.
+  <p>
+    Genesis 9:1-7 replays the blessing of Genesis 1—"be fruitful and multiply"—but 
+    with significant changes. God is accommodating His ideals to make room for human 
+    evil. Not to endorse it, but because that's the humanity He has to work with.
   </p>
-</section>
 
-      <div class="concession-grid">
-        <div class="concession-card ideal">
-          <h5>Eden Ideal (Gen 1:29-30)</h5>
-          <p>
-            Vegan diet for all. "Every plant with seed shall be food for you, and for 
-            every beast and bird." No creature has to exist at the expense of the life 
-            of another.
-          </p>
-        </div>
-        <div class="concession-card concession">
-          <h5>Post-Flood Reality (Gen 9:3)</h5>
-          <p>
-            "Every creeper that is living, for you it will be for food." God permits eating 
-            animals because humans have shown themselves to be violent—they're going to 
-            kill anyway.
-          </p>
-        </div>
-        <div class="concession-card ideal">
-          <h5>Eden Ideal (Gen 1:28)</h5>
-          <p>
-            Humans rule over animals in harmony. The relationship is one of stewardship 
-            and care, not domination.
-          </p>
-        </div>
-        <div class="concession-card concession">
-          <h5>Post-Flood Reality (Gen 9:2)</h5>
-          <p>
-            "The fear of you and the terror of you will be upon every living creature." 
-            This is God <em>naming</em> a sad new reality, not assigning what He wanted. 
-            The animals will now run from violent humans.
-          </p>
-        </div>
-      </div>
+  <h3>Explicit Links to Genesis 1:29-30</h3>
+  <p>
+    The narrator signals these connections through precise vocabulary:
+  </p>
 
-      <div class="blood-life-box">
-        <h4>🩸 Blood Is Life</h4>
-        <blockquote class="scripture-block" style="background:white;border-radius:10px;margin:0 0 1rem 0;">
-          <p>
-            "Only the flesh with its life, its blood, you will not eat; indeed, I will 
-            require your life-blood; from every beast I will require it, and from every 
-            human, from a man's brother, I will require the life of a human."
-          </p>
-          <cite>— Genesis 9:4-5 (Mackie)</cite>
-        </blockquote>
-        <p>
-          God allows borrowing the flesh but not the blood. Why? The blood is the creature's 
-          <strong>life</strong>, and life belongs to the One who created it. Every time 
-          you kill an animal and withhold the blood, you're symbolically acknowledging: 
-          "This life is not mine. I'm borrowing it. The real life belongs to God."
-        </p>
-        <p style="margin-top:0.75rem;">
-          This is the foundation of the Jewish kosher laws—not arbitrary rules, but a 
-          worldview that trades heavily in symbolism. Every meal becomes a reminder that 
-          humans don't create life; we receive it and steward it.
-        </p>
-      </div>
-
-      <h3>The Image of God and Bloodshed</h3>
-      <blockquote class="scripture-block">
-        <p>
-          "He who pours out the blood of a human, by a human will his blood be poured out, 
-          because in the image of God he made humanity."
-        </p>
-        <cite>— Genesis 9:6 (Mackie)</cite>
-      </blockquote>
-
+  <div class="gen1-comparison animate-on-scroll animation-delay-100">
+    <div class="compare-col">
+      <h5>Genesis 1:29-30</h5>
       <p>
-        If the life of an animal belongs to God, how much more the life of a human—made 
-        in God's image? This is a direct response to Cain's murder and Lamech's violence. 
-        But note: this is a <strong>divine concession</strong>, not a divine ideal. God 
-        didn't execute Cain; He protected him. The stringent rule here stems from the 
-        fact that violence had become cosmic. God doesn't want another flood.
+        "I have given you every plant... it shall be 
+        <strong>food for you</strong>"<br>
+        <span class="hebrew-inline">לָכֶם יִהְיֶה לְאָכְלָה</span>
       </p>
+    </div>
+    <div class="compare-col">
+      <h5>Genesis 9:3</h5>
+      <p>
+        "Every creature... for you it will be 
+        <strong>for food</strong>"<br>
+        <span class="hebrew-inline">לָכֶם יִהְיֶה לְאָכְלָה</span>
+      </p>
+    </div>
+  </div>
 
-      <div class="key-insight">
-        <strong>Important Context:</strong> Whatever view one holds on capital punishment, 
-        this verse should not be taken out of context as God's ultimate ideal. It's a 
-        concession to human evil, a guardrail against the escalation that led to the 
-        flood. The narrative placement matters.
-      </div>
-    </section>
+  <p>
+    The identical Hebrew phrase (<em>lakhem yihyeh le'okhlah</em>) connects the two 
+    passages deliberately. But now animals are added to the menu.
+  </p>
+
+  <!-- ENHANCED: Eden Ideal vs Post-Flood Concession -->
+  <div class="eden-comparison-wrapper animate-on-scroll animation-delay-200" aria-label="Eden vs Post-Flood comparison">
+    <h3>⚖️ Eden Ideal vs. Post-Flood Concession</h3>
+    
+    <p class="intro-text">
+      God's commands in Genesis 9 deliberately echo Genesis 1, but with crucial modifications. 
+      These aren't endorsements of violence—they're divine accommodations, working with humanity 
+      as they are while constraining the spread of death.
+    </p>
+
+    <div class="eden-table-container">
+      <table class="eden-comparison-table">
+        <thead>
+          <tr>
+            <th>🌿 Eden Ideal (Genesis 1–2)</th>
+            <th>🌊 Post-Flood Concession (Genesis 9)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <strong>Vegan diet for all:</strong> "Every plant with seed shall be food for you, 
+              and for every beast and bird" (Gen 1:29-30). No creature exists at the expense 
+              of another's life.
+            </td>
+            <td>
+              <strong>Meat permitted:</strong> "Every creeper that is living, for you it will 
+              be for food" (Gen 9:3). God allows eating animals because humans have shown 
+              themselves to be violent—they're going to kill anyway.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Peaceful stewardship:</strong> Humans "rule over" animals in harmony 
+              (Gen 1:28). The relationship is one of care, not domination.
+            </td>
+            <td>
+              <strong>Fear and terror:</strong> "The fear of you and the terror of you will 
+              be upon every living creature" (Gen 9:2). God names a sad new reality—animals 
+              now flee from violent humans.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>No bloodshed:</strong> Life without death for food. Creation's abundance 
+              provides for all needs without violence.
+            </td>
+            <td>
+              <strong>Blood prohibited:</strong> Life belongs to God alone (Gen 9:4-5). Every 
+              taking of life is marked as borrowed—"only the flesh... its blood, you will not eat." 
+              The blood represents the life force that humans may never claim as their own.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Image-bearing dignity:</strong> Humans reflect God's image (Gen 1:26-27), 
+              with no need for laws protecting life because violence is unthinkable in Eden's order.
+            </td>
+            <td>
+              <strong>Image-based restraint:</strong> "He who pours out the blood of a human, 
+              by a human will his blood be poured out, because in the image of God he made humanity" 
+              (Gen 9:6). The image-of-God logic now functions as guardrail against escalating violence.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="conclusion-text">
+      <strong>The Theological Point:</strong> God's concessions are not endorsements of violence but 
+      <strong>merciful constraints</strong>—working with humans as they are while preventing another 
+      flood-level catastrophe. The blood prohibition especially reveals this: every meal becomes a 
+      reminder that life is borrowed from God, not owned by humans. This is self-limiting mercy—
+      restraining death's spread until the greater deliverer comes.
+    </div>
+  </div>
+
+  <!-- Blood Is Life - Enhanced -->
+  <div class="blood-life-box animate-on-scroll animation-delay-300">
+    <h4>🩸 Blood Is Life</h4>
+    <blockquote class="scripture-block">
+      <p>
+        "Only the flesh with its life, its blood, you will not eat; indeed, I will 
+        require your life-blood; from every beast I will require it, and from every 
+        human, from a man's brother, I will require the life of a human."
+      </p>
+      <cite>— Genesis 9:4-5 (Mackie)</cite>
+    </blockquote>
+    <p>
+      God allows borrowing the flesh but not the blood. Why? The blood is the creature's 
+      <strong>life</strong>, and life belongs to the One who created it. Every time 
+      you kill an animal and withhold the blood, you're symbolically acknowledging: 
+      "This life is not mine. I'm borrowing it. The real life belongs to God."
+    </p>
+    <p style="margin-top:0.75rem;">
+      This is the foundation of the Jewish kosher laws—not arbitrary rules, but a 
+      worldview that trades heavily in symbolism. Every meal becomes a reminder that 
+      humans don't create life; we receive it and steward it.
+    </p>
+  </div>
+
+  <h3>The Image of God and Bloodshed</h3>
+  <blockquote class="scripture-block animate-on-scroll animation-delay-100">
+    <p>
+      "He who pours out the blood of a human, by a human will his blood be poured out, 
+      because in the image of God he made humanity."
+    </p>
+    <cite>— Genesis 9:6 (Mackie)</cite>
+  </blockquote>
+
+  <p>
+    If the life of an animal belongs to God, how much more the life of a human—made 
+    in God's image? This is a direct response to Cain's murder and Lamech's violence. 
+    But note: this is a <strong>divine concession</strong>, not a divine ideal. God 
+    didn't execute Cain; He protected him. The stringent rule here stems from the 
+    fact that violence had become cosmic. God doesn't want another flood.
+  </p>
+
+  <div class="key-insight animate-on-scroll animation-delay-200">
+    <strong>Important Context:</strong> Whatever view one holds on capital punishment, 
+    this verse should not be taken out of context as God's ultimate ideal. It's a 
+    concession to human evil, a guardrail against the escalation that led to the 
+    flood. The narrative placement matters.
+  </div>
+</section>
 
     <!-- ═══════════════════════════════════════════
          THE RAINBOW SIGN
@@ -1698,106 +1779,229 @@
     </div>
 
     <!-- ═══════════════════════════════════════════
-         NOAH AS PRIEST
-    ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll animation-delay-200" id="priest">
-      <h2 class="section-title"><span class="section-icon">⛰️</span> Noakh as Archetypal Priest</h2>
+     NOAH AS PRIEST
+════════════════════════════════════════════ -->
+<section class="theology-card animate-on-scroll animation-delay-200" id="priest">
+  <h2 class="section-title"><span class="section-icon">⛰️</span> Noakh as Archetypal Priest</h2>
 
-      <p>
-        Scholar Michael Morales draws attention to the priestly role Noakh plays in this 
-        narrative:
-      </p>
+  <div class="key-insight animate-on-scroll animation-delay-100">
+    <strong>Pattern Recognition:</strong> Noah's sacrifice on the mountain anticipates the entire 
+    Levitical priesthood. The righteous one ascending the mountain to offer life on behalf of 
+    the unrighteous becomes the archetypal image of mediation between God and humanity.
+  </div>
 
-      <blockquote class="scripture-block">
-        <p>
-          "The flood narrative is really about Noakh. The purpose of the story is not to 
-          show why God sent the flood, but to show <strong>why God saved Noakh</strong>. 
-          The ark, not the flood, is the focus of the author's attention... As a priestly 
-          figure who is able to ascend the mountain of Yahweh, Noakh stands as a new Adam, 
-          the primordial human who can dwell in the divine presence. As such he foreshadows 
-          the high priest in the tabernacle, who alone can enter the paradise of the holy 
-          of holies to purge the micro-cosmic tabernacle by making atonement."
-        </p>
-        <cite>— Michael Morales, The Tabernacle Pre-Figured</cite>
-      </blockquote>
+  <p>
+    Scholar Michael Morales draws attention to the priestly role Noakh plays in this 
+    narrative:
+  </p>
 
-      <p>
-        Noakh is one example in the larger pattern that leads to the ultimate anointed 
-        one who will suffer on behalf of the wicked—a righteous one who will die for 
-        the unrighteous—and make atonement to open the way back to Eden.
-      </p>
-    </section>
+  <blockquote class="scripture-block animate-on-scroll animation-delay-200">
+    <p>
+      "The flood narrative is really about Noakh. The purpose of the story is not to 
+      show why God sent the flood, but to show <strong>why God saved Noakh</strong>. 
+      The ark, not the flood, is the focus of the author's attention... As a priestly 
+      figure who is able to ascend the mountain of Yahweh, Noakh stands as a new Adam, 
+      the primordial human who can dwell in the divine presence. As such he foreshadows 
+      the high priest in the tabernacle, who alone can enter the paradise of the holy 
+      of holies to purge the micro-cosmic tabernacle by making atonement."
+    </p>
+    <cite>— Michael Morales, The Tabernacle Pre-Figured</cite>
+  </blockquote>
 
-    <!-- ═══════════════════════════════════════════
-         WHAT COMES NEXT
-    ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll animation-delay-300" id="next">
-      <h2 class="section-title"><span class="section-icon">🔄</span> The Cycle Begins Again</h2>
+  <!-- Priestly Parallels Grid -->
+  <div class="grid-2" style="margin: 1.5rem 0;">
+    <div class="panel animate-on-scroll animation-delay-100" style="border-left: 4px solid #ff9800;">
+      <h4 style="color: #e65100; margin: 0 0 0.75rem 0;">🔥 Noah's Priestly Actions</h4>
+      <ul style="margin: 0.5rem 0 0 1.25rem; font-size: 0.92rem; line-height: 1.7;">
+        <li>Builds an altar on the mountain</li>
+        <li>Selects ritually pure animals</li>
+        <li>Offers burnt offerings (<em>olah</em>)</li>
+        <li>Mediates between God and creation</li>
+        <li>Brings "rest-giving" (<em>nikhoakh</em>) aroma</li>
+      </ul>
+    </div>
 
-      <p>
-        The covenant is established. The blessing is given. "Be fruitful and multiply." 
-        This is going to go great, right?
-      </p>
+    <div class="panel animate-on-scroll animation-delay-200" style="border-left: 4px solid #ff9800;">
+      <h4 style="color: #e65100; margin: 0 0 0.75rem 0;">⛰️ The Pattern Forward</h4>
+      <ul style="margin: 0.5rem 0 0 1.25rem; font-size: 0.92rem; line-height: 1.7;">
+        <li>Abraham offers Isaac on Mount Moriah</li>
+        <li>Moses mediates covenant at Sinai</li>
+        <li>High priest enters the Holy of Holies</li>
+        <li>Christ offers Himself on Golgotha</li>
+        <li>The ultimate sacrifice brings eternal rest</li>
+      </ul>
+    </div>
+  </div>
 
-      <blockquote class="scripture-block">
-        <p>
-          "And Noakh began to be a man of the ground and he planted a vineyard; and he 
-          drank of the wine and became drunk, and he uncovered himself in the middle of 
-          his tent."
-        </p>
-        <cite>— Genesis 9:20-21 (Mackie)</cite>
-      </blockquote>
+  <p>
+    Noakh is one example in the larger pattern that leads to the ultimate anointed 
+    one who will suffer on behalf of the wicked—a righteous one who will die for 
+    the unrighteous—and make atonement to open the way back to Eden.
+  </p>
 
-      <p>
-        A garden. Eating of the fruit. Becoming naked. The vocabulary of Genesis 3 
-        returns in just two verses. The righteous one who walked with God now replays 
-        Adam's folly.
-      </p>
+  <div class="cross-ref-box animate-on-scroll animation-delay-300">
+    <strong>Connect the Pattern:</strong> 
+    <span class="page-ref">→ <a href="noah-ark.html">Page 4: The Ark</a></span> explores Noah's sacred space preparation
+    <span class="page-ref">→ <a href="noah-intertext.html">Page 8: Intertext</a></span> traces the priesthood theme through Scripture
+  </div>
+</section>
 
-      <div class="key-insight">
-        <strong>The Pattern:</strong> Garden folly (Noakh) → Son's crime (Ham) → 
-        Grandson magnifies (Canaan/Nimrod) → Cosmic rebellion (Babel) → Divine judgment 
-        (scattering). The same melody plays again, teaching us what to expect as the 
-        story continues into Abraham and beyond.
-      </div>
+<!-- ═══════════════════════════════════════════
+     THE CYCLE BEGINS AGAIN
+════════════════════════════════════════════ -->
+<section class="theology-card animate-on-scroll animation-delay-300" id="next">
+  <h2 class="section-title"><span class="section-icon">🔄</span> The Cycle Begins Again</h2>
 
-      <p>
-        The flood hasn't solved the problem of the human heart. But it has established 
-        something crucial: God will keep working with humanity. He will keep the cosmos 
-        stable. He will keep looking for humans who will surrender. And through one 
-        particular family—the line of Shem—He will bring the ultimate Seed who will 
-        crush the serpent's head.
-      </p>
-    </section>
+  <p>
+    The covenant is established. The blessing is given. "Be fruitful and multiply." 
+    Surely Noah—the righteous one who walked with God, who survived the flood, who 
+    offered the perfect sacrifice—surely <em>this</em> new beginning will succeed where 
+    Eden failed?
+  </p>
 
-    <!-- ═══════════════════════════════════════════
-         BRIDGE TO BABEL
-    ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll animation-delay-100" id="bridge-babel">
-      <h2 class="section-title"><span class="section-icon">🌉</span> The Covenant Tested</h2>
+  <blockquote class="scripture-block animate-on-scroll animation-delay-100">
+    <p>
+      "And Noakh began to be a man of the ground and he planted a vineyard; and he 
+      drank of the wine and became drunk, and he uncovered himself in the middle of 
+      his tent."
+    </p>
+    <cite>— Genesis 9:20-21 (Mackie)</cite>
+  </blockquote>
 
-      <p>
-        God has made His promise. The rainbow hangs in the sky. The blessing is renewed: 
-        "Be fruitful and multiply." Noah has become the new Adam, standing on a cleansed 
-        earth with God's covenant assurance ringing in his ears.
-      </p>
+  <!-- Eden Parallels Comparison -->
+  <div class="grid-2" style="margin: 1.5rem 0;">
+    <div class="panel animate-on-scroll animation-delay-100" style="border-left: 4px solid #ef5350;">
+      <h4 style="color: #c62828; margin: 0 0 0.75rem 0;">🌳 Genesis 3 (Eden)</h4>
+      <ul style="margin: 0.5rem 0 0 1.25rem; font-size: 0.92rem; line-height: 1.7;">
+        <li>Adam in a garden</li>
+        <li>Eats forbidden fruit</li>
+        <li>Becomes naked</li>
+        <li>Son murders brother (Gen 4)</li>
+        <li>Grandson boasts of violence (Gen 4:23)</li>
+        <li>Cosmic rebellion follows (Gen 6)</li>
+      </ul>
+    </div>
 
-      <p>
-        Surely <em>this time</em> things will be different?
-      </p>
+    <div class="panel animate-on-scroll animation-delay-200" style="border-left: 4px solid #ef5350;">
+      <h4 style="color: #c62828; margin: 0 0 0.75rem 0;">🍇 Genesis 9 (Vineyard)</h4>
+      <ul style="margin: 0.5rem 0 0 1.25rem; font-size: 0.92rem; line-height: 1.7;">
+        <li>Noah in a garden (vineyard)</li>
+        <li>Eats forbidden fruit (wine)</li>
+        <li>Becomes naked</li>
+        <li>Son dishonors father (Gen 9:22)</li>
+        <li>Grandson builds violent empire (Gen 10:8-12)</li>
+        <li>Cosmic rebellion follows (Gen 11—Babel)</li>
+      </ul>
+    </div>
+  </div>
 
-      <p>
-        But watch what happens in the very next scene. The vocabulary of Genesis 3 returns 
-        with stunning precision. A garden. Eating fruit. Nakedness. Shame. The cycle begins 
-        again—and the reader who knows their Genesis can see the warning signs.
-      </p>
+  <div class="key-insight animate-on-scroll animation-delay-300">
+    <strong>The Pattern Revealed:</strong> Garden folly (Noah) → Son's crime (Ham) → 
+    Grandson magnifies (Canaan/Nimrod) → Cosmic rebellion (Babel) → Divine judgment 
+    (scattering). The same melody plays again, teaching us what to expect as the 
+    story continues into Abraham and beyond.
+  </div>
 
-      <div class="key-insight">
-        <strong>Next:</strong> Noah's vineyard failure, Ham's crime, the scattering of nations, 
-        and the road to Babel—revealing that the flood solved violence but not the deeper 
-        problem of the human heart.
-      </div>
-    </section>
+  <p>
+    The vocabulary of Genesis 3 returns with stunning precision. A garden. Eating fruit. 
+    Nakedness. Shame. The righteous one who walked with God now replays Adam's folly. 
+    The narrator is showing us: <strong>the flood changed the world, but it didn't change 
+    the human heart</strong>.
+  </p>
+
+  <blockquote class="scripture-block animate-on-scroll animation-delay-100" style="border-color: #c62828;">
+    <p>
+      "The purpose of the heart of humanity is bad from his youth."
+    </p>
+    <cite>— Genesis 8:21 (God's own diagnosis)</cite>
+  </blockquote>
+
+  <p>
+    The flood hasn't solved the problem of the human heart. But it has established 
+    something crucial: God will keep working with humanity. He will keep the cosmos 
+    stable. He will keep looking for humans who will surrender. And through one 
+    particular family—the line of Shem—He will bring the ultimate Seed who will 
+    crush the serpent's head.
+  </p>
+
+  <div class="cross-ref-box animate-on-scroll animation-delay-200">
+    <strong>What Happens Next:</strong> 
+    <span class="page-ref">→ <a href="noah-babel.html">Page 7: Babel</a></span> traces Noah's failure through Ham, Canaan, Nimrod, and the Tower
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     BRIDGE TO BABEL
+════════════════════════════════════════════ -->
+<section class="theology-card animate-on-scroll animation-delay-100" id="bridge-babel">
+  <h2 class="section-title"><span class="section-icon">🌉</span> The Covenant Tested</h2>
+
+  <p>
+    God has made His promise. The rainbow hangs in the sky. The blessing is renewed: 
+    "Be fruitful and multiply." Noah has become the new Adam, standing on a cleansed 
+    earth with God's covenant assurance ringing in his ears.
+  </p>
+
+  <p>
+    Surely <em>this time</em> things will be different?
+  </p>
+
+  <!-- Tension Builder -->
+  <div class="panel animate-on-scroll animation-delay-100" style="background: linear-gradient(135deg, rgba(92, 107, 192, 0.1), rgba(92, 107, 192, 0.05)); border-left: 4px solid var(--page-accent); margin: 1.5rem 0; padding: 1.5rem; border-radius: 12px;">
+    <h4 style="margin: 0 0 0.75rem 0; color: var(--page-accent-dark); font-size: 1.05rem;">🎭 The Dramatic Irony</h4>
+    <p style="margin: 0; font-size: 0.92rem; line-height: 1.7;">
+      The reader who knows Genesis 3 already recognizes the warning signs. The vocabulary 
+      echoes Eden's failure with chilling precision. But the characters don't know what's 
+      coming. The tension builds as the pattern repeats—will humanity break the cycle, 
+      or will the serpent's seed flourish once again?
+    </p>
+  </div>
+
+  <p>
+    But watch what happens in the very next scene. The vocabulary of Genesis 3 returns 
+    with stunning precision:
+  </p>
+
+  <!-- Vocabulary Parallels -->
+  <div class="grid-2" style="margin: 1.5rem 0;">
+    <div class="panel animate-on-scroll animation-delay-100">
+      <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; color: #4b5563;">Eden Vocabulary</h4>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.9rem;">
+        <li><strong>Garden</strong> — place of testing</li>
+        <li><strong>Eating fruit</strong> — crossing boundaries</li>
+        <li><strong>Nakedness</strong> — shame revealed</li>
+        <li><strong>Covering</strong> — inadequate human solution</li>
+      </ul>
+    </div>
+    <div class="panel animate-on-scroll animation-delay-200">
+      <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; color: #4b5563;">Vineyard Vocabulary</h4>
+      <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.9rem;">
+        <li><strong>Garden</strong> — Noah plants vineyard</li>
+        <li><strong>Eating fruit</strong> — wine to drunkenness</li>
+        <li><strong>Nakedness</strong> — Noah uncovered in tent</li>
+        <li><strong>Covering</strong> — Shem & Japheth's backward walk</li>
+      </ul>
+    </div>
+  </div>
+
+  <p>
+    A garden. Eating fruit. Nakedness. Shame. The cycle begins again—and the reader 
+    who knows their Genesis can see the warning signs.
+  </p>
+
+  <div class="key-insight animate-on-scroll animation-delay-300">
+    <strong>The Question Noah Raises:</strong> If the righteous remnant survives judgment, 
+    receives covenant blessing, and still fails immediately—what hope is there? The answer 
+    won't come through preservation alone. It will require <em>transformation</em>—a new 
+    heart, not just a new beginning.
+  </div>
+
+  <div class="key-insight animate-on-scroll animation-delay-100" style="margin-top: 1rem;">
+    <strong>Next:</strong> Noah's vineyard failure, Ham's crime, the scattering of nations, 
+    and the road to Babel—revealing that the flood solved violence but not the deeper 
+    problem of the human heart.
+  </div>
+</section>
 
     <!-- ═══════════════════════════════════════════
          KEY VERSES
