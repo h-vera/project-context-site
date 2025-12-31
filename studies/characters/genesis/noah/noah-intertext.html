@@ -61,472 +61,742 @@
   <link rel="stylesheet" href="/assets/css/mobile-tabs-patch.css">
 
   <style>
-    /* Page-specific accent: Violet from rainbow (eighth color = eighth page) */
+    /* ═══════════════════════════════════════════
+       PAGE 8: VIOLET THEME (Rainbow Position 8)
+       Leveraging global-v2 + visual patterns from corruption page
+    ════════════════════════════════════════════ */
     :root {
       --page-accent: #7e57c2;
       --page-accent-light: rgba(126, 87, 194, 0.12);
       --page-accent-dark: #5e35b1;
+      --page-gradient: linear-gradient(135deg, #7e57c2, #9575cd);
+    }
+
+    /* Page-specific accent overrides */
+    .section-title .section-icon {
+      background: var(--page-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .theology-card {
+      border-top: 3px solid var(--page-accent-light);
+    }
+
+    .key-insight {
+      background: linear-gradient(135deg, rgba(126, 87, 194, 0.12), rgba(126, 87, 194, 0.08));
+      border-left: 4px solid #7e57c2;
     }
 
     /* ═══════════════════════════════════════════
-       ENHANCEMENT FEATURES CSS
+       PATTERN TRACKER (from corruption page)
     ════════════════════════════════════════════ */
-
-    /* Cross-reference boxes */
-    .cross-ref-box {
-      background: linear-gradient(135deg, rgba(92, 107, 192, 0.08), rgba(92, 107, 192, 0.05));
-      border-left: 4px solid var(--page-accent, #5c6bc0);
-      border-radius: 12px;
-      padding: 1rem 1.25rem;
-      margin: 1.25rem 0;
-      font-size: 0.92rem;
-    }
-
-    .cross-ref-box strong {
-      color: var(--page-accent-dark, #303f9f);
-      font-weight: 700;
-    }
-
-    .cross-ref-box a {
-      color: var(--page-accent-dark, #303f9f);
-      font-weight: 600;
-      text-decoration: none;
-      border-bottom: 1px solid transparent;
-      transition: border-bottom 0.2s ease;
-    }
-
-    .cross-ref-box a:hover {
-      border-bottom-color: var(--page-accent-dark, #303f9f);
-    }
-
-    .cross-ref-box .page-ref {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      margin-right: 0.5rem;
-    }
-
-    /* Pattern tracker */
     .pattern-tracker {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 1rem 1.25rem;
-      background: rgba(0, 0, 0, 0.05);
-      border-radius: 12px;
+      gap: 0.75rem;
+      padding: 1.25rem 1.5rem;
+      background: linear-gradient(135deg, var(--page-accent-light), rgba(255,255,255,0.8));
+      border: 2px solid var(--page-accent);
+      border-radius: 16px;
       margin: 1.5rem 0;
       flex-wrap: wrap;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
+      box-shadow: var(--shadow-md);
     }
 
     .pattern-tracker .tracker-label {
-      font-weight: 700;
-      color: var(--page-accent-dark, #333);
+      font-weight: 800;
+      color: var(--page-accent-dark);
       margin-right: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.85rem;
     }
 
     .pattern-tracker .stage {
-      padding: 0.35rem 0.7rem;
-      border-radius: 6px;
-      background: rgba(0, 0, 0, 0.08);
+      padding: 0.5rem 0.85rem;
+      border-radius: 8px;
+      background: white;
       color: #666;
       font-weight: 600;
-      transition: all 0.2s ease;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
     }
 
     .pattern-tracker .stage.current {
-      background: var(--page-accent, #5c6bc0);
+      background: var(--page-gradient);
       color: white;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(126, 87, 194, 0.3);
+      transform: scale(1.08);
+      border-color: var(--page-accent);
     }
 
     .pattern-tracker .arrow {
-      color: #999;
-      font-size: 0.9rem;
+      color: var(--page-accent);
+      font-size: 1.1rem;
+      font-weight: bold;
     }
 
-    /* Covenant thread indicator */
+    /* ═══════════════════════════════════════════
+       CALLOUT BOX (from corruption page)
+    ════════════════════════════════════════════ */
+    .callout-box {
+      background: linear-gradient(135deg, rgba(126, 87, 194, 0.08), rgba(126, 87, 194, 0.05));
+      border-left: 4px solid var(--page-accent);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .callout-box h3 {
+      margin: 0 0 0.75rem 0;
+      color: var(--page-accent-dark);
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+
+    .callout-box h4 {
+      margin: 1rem 0 0.5rem 0;
+      color: var(--page-accent-dark);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .callout-box p {
+      margin: 0.5rem 0;
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    .callout-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ═══════════════════════════════════════════
+       CONCEPT GRID PATTERN
+    ════════════════════════════════════════════ */
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+
+    .concept-card {
+      background: white;
+      border-radius: 14px;
+      padding: 1.5rem;
+      text-align: center;
+      border: 2px solid var(--page-accent-light);
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .concept-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--page-accent);
+    }
+
+    .concept-card .concept-icon {
+      font-size: 2.5rem;
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+
+    .concept-card h5 {
+      margin: 0 0 0.5rem 0;
+      color: var(--page-accent-dark);
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .concept-card .concept-label {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .concept-card p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #64748b;
+      line-height: 1.5;
+    }
+
+    /* ═══════════════════════════════════════════
+       PATTERN BREAKDOWN (inspired by grief-verbs)
+    ════════════════════════════════════════════ */
+    .pattern-breakdown {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .pattern-element {
+      background: linear-gradient(135deg, var(--page-accent-light), rgba(255,255,255,0.9));
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-align: center;
+      border: 2px solid var(--page-accent);
+      transition: all 0.3s ease;
+    }
+
+    .pattern-element:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .pattern-element .element-number {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      background: var(--page-gradient);
+      color: white;
+      border-radius: 50%;
+      font-weight: 800;
+      font-size: 0.9rem;
+      line-height: 32px;
+      margin-bottom: 0.5rem;
+    }
+
+    .pattern-element .element-label {
+      font-weight: 800;
+      color: var(--page-accent-dark);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .pattern-element .element-detail {
+      font-size: 0.9rem;
+      color: #475569;
+      line-height: 1.5;
+    }
+
+    /* ═══════════════════════════════════════════
+       SIMPLIFIED TIMELINE (from corruption page)
+    ════════════════════════════════════════════ */
+    .simple-timeline {
+      background: linear-gradient(135deg, #f8f9fa, #f1f5f9);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border: 1px solid #e2e8f0;
+    }
+
+    .simple-timeline h4 {
+      margin: 0 0 1.25rem 0;
+      color: var(--page-accent-dark);
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+
+    .simple-timeline-item {
+      position: relative;
+      padding-left: 2rem;
+      margin-bottom: 1.25rem;
+      border-left: 3px solid var(--page-accent-light);
+    }
+
+    .simple-timeline-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .simple-timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -8px;
+      top: 0.25rem;
+      width: 14px;
+      height: 14px;
+      background: white;
+      border: 3px solid var(--page-accent);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .simple-timeline-item:hover::before {
+      transform: scale(1.3);
+      box-shadow: 0 0 0 4px rgba(126, 87, 194, 0.15);
+    }
+
+    .timeline-ref {
+      font-weight: 800;
+      color: var(--page-accent-dark);
+      font-size: 0.9rem;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .timeline-event {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #475569;
+    }
+
+    /* ═══════════════════════════════════════════
+       COVENANT THREAD INDICATOR
+    ════════════════════════════════════════════ */
     .covenant-thread {
       position: relative;
-      padding: 1rem 1rem 1rem 3rem;
-      margin: 1.5rem 0;
-      border-radius: 12px;
-      background: linear-gradient(135deg, rgba(102, 187, 106, 0.08), rgba(102, 187, 106, 0.05));
-      border-left: 4px solid #66bb6a;
+      padding: 1.5rem 1.5rem 1.5rem 4rem;
+      margin: 2rem 0;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(102, 187, 106, 0.1), rgba(102, 187, 106, 0.05));
+      border-left: 5px solid #66bb6a;
+      box-shadow: var(--shadow-md);
     }
 
     .covenant-thread::before {
       content: "🌈";
       position: absolute;
-      left: 1rem;
+      left: 1.25rem;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 1.5rem;
+      font-size: 2rem;
     }
 
     .covenant-thread .thread-stage {
-      font-weight: 700;
+      font-weight: 800;
       color: #2e7d32;
-      margin-bottom: 0.35rem;
-      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.08em;
     }
 
     .covenant-thread p {
       margin: 0;
-      font-size: 0.92rem;
-      line-height: 1.6;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #475569;
     }
 
-    /* Connection thread visual */
-    .thread-container {
+    /* ═══════════════════════════════════════════
+       DOVE PARALLEL - ENHANCED
+    ════════════════════════════════════════════ */
+    .dove-parallel {
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+      border: 3px solid #42a5f5;
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      margin: 2.5rem 0;
+      box-shadow: var(--shadow-lg);
       position: relative;
-      padding-left: 2rem;
-      margin: 2rem 0;
+      overflow: hidden;
     }
 
-    .thread-container::before {
-      content: "";
+    .dove-parallel::before {
+      content: '';
       position: absolute;
-      left: 8px;
       top: 0;
-      bottom: 0;
-      width: 3px;
-      background: linear-gradient(to bottom, 
-        #e53935, #ff7043, #ffca28, #66bb6a, #29b6f6, #5c6bc0, #ab47bc);
-      border-radius: 2px;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, #42a5f5, #1976d2);
     }
 
-    .thread-item {
-      position: relative;
-      background: #fafafa;
-      border-radius: 12px;
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 1rem;
-      border: 1px solid #e5e7eb;
+    .dove-parallel h3 {
+      margin: 0 0 1.75rem 0;
+      color: #0d47a1;
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
     }
 
-    .thread-item::before {
-      content: "";
-      position: absolute;
-      left: -1.5rem;
-      top: 1.5rem;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
+    .dove-columns {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .dove-scene {
       background: white;
-      border: 3px solid var(--page-accent);
-    }
-
-    .thread-item .reference {
-      font-weight: 700;
-      color: var(--page-accent-dark);
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
-    }
-
-    /* Pattern box */
-    .pattern-box {
-      background: linear-gradient(135deg, #e8eaf6, #c5cae9);
-      border: 2px solid var(--page-accent);
       border-radius: 16px;
-      padding: 2rem;
+      padding: 1.75rem;
+      text-align: center;
+      border: 2px solid #e3f2fd;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .dove-scene:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: #42a5f5;
+    }
+
+    .dove-scene .icon {
+      font-size: 3rem;
+      margin-bottom: 0.75rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .dove-scene .label {
+      font-weight: 800;
+      color: #0d47a1;
+      font-size: 1rem;
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .dove-scene p {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #475569;
+    }
+
+    .dove-scene strong {
+      display: block;
+      color: #1976d2;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .dove-columns .arrow {
+      font-size: 2.5rem;
+      color: #42a5f5;
+      font-weight: bold;
+    }
+
+    .dove-parallel .dove-note {
+      margin-top: 1.5rem;
+      padding: 1.25rem;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 12px;
+      border-left: 4px solid #1976d2;
+      font-size: 0.95rem;
+      text-align: center;
+      color: #0d47a1;
+      font-weight: 600;
+    }
+
+    /* ═══════════════════════════════════════════
+       NT CONNECTION CARDS
+    ════════════════════════════════════════════ */
+    .nt-grid {
+      display: grid;
+      gap: 1.5rem;
       margin: 2rem 0;
     }
 
-    .pattern-box h3 {
-      margin: 0 0 1rem 0;
-      color: var(--page-accent-dark);
-      font-size: 1.15rem;
-    }
-
-    .pattern-steps {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .pattern-step {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
+    .nt-card {
       background: white;
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
+      border-radius: 18px;
+      padding: 2rem;
+      border: 2px solid #e5e7eb;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1.5rem;
+      align-items: start;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
     }
 
-    .pattern-step .step-num {
-      background: var(--page-accent);
+    .nt-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--page-accent);
+    }
+
+    .nt-card .book-badge {
+      background: var(--page-gradient);
       color: white;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 0.85rem;
-      flex-shrink: 0;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      text-align: center;
+      min-width: 90px;
+      box-shadow: 0 4px 12px rgba(126, 87, 194, 0.2);
     }
 
-    /* Prophet quote boxes */
+    .nt-card .content h4 {
+      margin: 0 0 0.75rem 0;
+      color: #1e293b;
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .nt-card .verse {
+      font-style: italic;
+      color: #64748b;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+      padding-left: 1rem;
+      border-left: 3px solid var(--page-accent-light);
+      line-height: 1.7;
+    }
+
+    .nt-card p {
+      margin: 0.5rem 0;
+      line-height: 1.7;
+      color: #475569;
+    }
+
+    .nt-card .insight {
+      margin-top: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: var(--page-accent-light);
+      border-radius: 8px;
+      border-left: 3px solid var(--page-accent);
+      font-size: 0.92rem;
+    }
+
+    .nt-card .insight strong {
+      color: var(--page-accent-dark);
+    }
+
+    /* ═══════════════════════════════════════════
+       BAPTISM THEOLOGY BOX
+    ════════════════════════════════════════════ */
+    .baptism-box {
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+      border: 3px solid #66bb6a;
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      margin: 2.5rem 0;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .baptism-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, #66bb6a, #388e3c);
+    }
+
+    .baptism-box h3 {
+      margin: 0 0 1.5rem 0;
+      color: #2e7d32;
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+
+    .baptism-box .logic-chain {
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border: 2px solid #a5d6a7;
+    }
+
+    .baptism-box .logic-chain h4 {
+      margin: 0 0 1rem 0;
+      color: #2e7d32;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .baptism-box .logic-chain ol {
+      margin: 0;
+      padding-left: 1.5rem;
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+
+    .baptism-box .logic-chain li {
+      margin: 0.5rem 0;
+      color: #475569;
+    }
+
+    .baptism-box blockquote {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-left: 5px solid #66bb6a;
+      font-style: italic;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .baptism-box blockquote p {
+      margin: 0;
+      line-height: 1.7;
+      color: #334155;
+    }
+
+    .baptism-box blockquote cite {
+      display: block;
+      margin-top: 1rem;
+      font-style: normal;
+      font-weight: 700;
+      color: #1b5e20;
+    }
+
+    /* ═══════════════════════════════════════════
+       FULFILLMENT BOX
+    ════════════════════════════════════════════ */
+    .fulfillment-box {
+      background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%);
+      border: 3px solid #ec407a;
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      margin: 2.5rem 0;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fulfillment-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, #ec407a, #c2185b);
+    }
+
+    .fulfillment-box h3 {
+      margin: 0 0 1.75rem 0;
+      color: #880e4f;
+      font-size: 1.3rem;
+      text-align: center;
+      font-weight: 800;
+    }
+
+    .fulfillment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+
+    .fulfillment-item {
+      background: white;
+      border-radius: 14px;
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      border: 2px solid #f8bbd9;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .fulfillment-item:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: #ec407a;
+    }
+
+    .fulfillment-item .noah-type {
+      font-size: 0.9rem;
+      color: #78909c;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .fulfillment-item .jesus-anti {
+      font-weight: 800;
+      color: #880e4f;
+      font-size: 1.05rem;
+      line-height: 1.4;
+    }
+
+    /* ═══════════════════════════════════════════
+       PROPHET GRID
+    ════════════════════════════════════════════ */
     .prophet-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1rem;
-      margin: 1.5rem 0;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
     }
 
     .prophet-card {
       background: linear-gradient(135deg, #fff3e0, #ffe0b2);
-      border-radius: 14px;
-      padding: 1.5rem;
-      border-left: 4px solid #ff9800;
+      border-radius: 16px;
+      padding: 1.75rem;
+      border-left: 5px solid #ff9800;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+    }
+
+    .prophet-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
     }
 
     .prophet-card h4 {
-      margin: 0 0 0.75rem 0;
+      margin: 0 0 1rem 0;
       color: #e65100;
-      font-size: 1rem;
+      font-size: 1.1rem;
+      font-weight: 800;
     }
 
     .prophet-card blockquote {
-      margin: 0;
+      margin: 0 0 1rem 0;
       font-style: italic;
-      font-size: 0.95rem;
-      line-height: 1.6;
+      font-size: 0.98rem;
+      line-height: 1.7;
+      color: #5d4037;
     }
 
     .prophet-card cite {
       display: block;
       margin-top: 0.75rem;
       font-style: normal;
-      font-weight: 600;
+      font-weight: 700;
       color: #bf360c;
-      font-size: 0.85rem;
-    }
-
-    /* NT connection cards */
-    .nt-grid {
-      display: grid;
-      gap: 1rem;
-      margin: 1.5rem 0;
-    }
-
-    .nt-card {
-      background: white;
-      border-radius: 14px;
-      padding: 1.5rem;
-      border: 1px solid #e5e7eb;
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 1.25rem;
-      align-items: start;
-    }
-
-    @media (max-width: 500px) {
-      .nt-card {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .nt-card .book-badge {
-      background: var(--page-accent);
-      color: white;
-      padding: 0.5rem 0.75rem;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 0.85rem;
-      text-align: center;
-      min-width: 80px;
-    }
-
-    .nt-card .content h4 {
-      margin: 0 0 0.5rem 0;
-      color: #1e293b;
-      font-size: 1.05rem;
-    }
-
-    .nt-card .verse {
-      font-style: italic;
-      color: #666;
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
-    }
-
-    /* Dove imagery box */
-    .dove-parallel {
-      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-      border: 2px solid #42a5f5;
-      border-radius: 16px;
-      padding: 2rem;
-      margin: 2rem 0;
-    }
-
-    .dove-parallel h3 {
-      margin: 0 0 1.25rem 0;
-      color: #0d47a1;
-      text-align: center;
-      font-size: 1.2rem;
-    }
-
-    .dove-columns {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      gap: 1rem;
-      align-items: center;
-    }
-
-    @media (max-width: 600px) {
-      .dove-columns {
-        grid-template-columns: 1fr;
-      }
-      .dove-columns .arrow {
-        transform: rotate(90deg);
-      }
-    }
-
-    .dove-scene {
-      background: white;
-      border-radius: 12px;
-      padding: 1.25rem;
-      text-align: center;
-    }
-
-    .dove-scene .icon {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .dove-scene .label {
-      font-weight: 700;
-      color: #0d47a1;
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .dove-columns .arrow {
-      font-size: 2rem;
-      color: #42a5f5;
-    }
-
-    /* Baptism theology */
-    .baptism-box {
-      background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-      border: 2px solid #66bb6a;
-      border-radius: 16px;
-      padding: 2rem;
-      margin: 2rem 0;
-    }
-
-    .baptism-box h3 {
-      margin: 0 0 1rem 0;
-      color: #2e7d32;
-      font-size: 1.15rem;
-    }
-
-    .baptism-box blockquote {
-      background: white;
-      border-radius: 10px;
-      padding: 1.25rem;
-      margin: 1rem 0;
-      border-left: 4px solid #66bb6a;
-      font-style: italic;
-    }
-
-    .baptism-box blockquote cite {
-      display: block;
-      margin-top: 0.75rem;
-      font-style: normal;
-      font-weight: 600;
-      color: #1b5e20;
-    }
-
-    /* Jesus fulfillment */
-    .fulfillment-box {
-      background: linear-gradient(135deg, #fce4ec, #f8bbd9);
-      border: 2px solid #ec407a;
-      border-radius: 16px;
-      padding: 2rem;
-      margin: 2rem 0;
-    }
-
-    .fulfillment-box h3 {
-      margin: 0 0 1rem 0;
-      color: #880e4f;
-      font-size: 1.2rem;
-      text-align: center;
-    }
-
-    .fulfillment-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    .fulfillment-item {
-      background: white;
-      border-radius: 10px;
-      padding: 1rem;
-      text-align: center;
-    }
-
-    .fulfillment-item .noah-type {
-      font-size: 0.85rem;
-      color: #666;
-      margin-bottom: 0.25rem;
-    }
-
-    .fulfillment-item .jesus-anti {
-      font-weight: 700;
-      color: #880e4f;
-    }
-
-    /* Scripture block */
-    .scripture-block {
-      background: linear-gradient(135deg, #f5f5f5, #eeeeee);
-      border-left: 4px solid var(--page-accent);
-      border-radius: 0 12px 12px 0;
-      padding: 1.25rem 1.5rem;
-      margin: 1.5rem 0;
-    }
-
-    .scripture-block p {
-      font-style: italic;
-      margin: 0;
-      line-height: 1.7;
-    }
-
-    .scripture-block cite {
-      display: block;
-      margin-top: 0.75rem;
-      font-style: normal;
-      font-weight: 600;
-      color: var(--page-accent-dark);
       font-size: 0.9rem;
     }
 
-    /* Study complete banner */
+    .prophet-card p {
+      margin: 0.75rem 0 0 0;
+      font-size: 0.9rem;
+      color: #6d4c41;
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════════════
+       STUDY COMPLETE BANNER
+    ════════════════════════════════════════════ */
     .study-complete {
       background: linear-gradient(135deg, 
-        #e53935, #ff7043, #ffca28, #66bb6a, #29b6f6, #5c6bc0, #ab47bc);
+        #e53935 0%, #ff7043 12%, #ffca28 24%, 
+        #66bb6a 38%, #29b6f6 52%, #5c6bc0 68%, 
+        #ab47bc 82%, #7e57c2 100%);
       color: white;
-      border-radius: 16px;
-      padding: 2.5rem 2rem;
-      margin: 2rem 0;
+      border-radius: 20px;
+      padding: 3rem 2rem;
+      margin: 3rem 0;
       text-align: center;
       position: relative;
       overflow: hidden;
+      box-shadow: var(--shadow-xl);
     }
 
     .study-complete::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: rgba(0,0,0,0.2);
+      background: rgba(0,0,0,0.25);
+      backdrop-filter: blur(2px);
     }
 
     .study-complete * {
@@ -535,86 +805,32 @@
     }
 
     .study-complete h2 {
-      margin: 0 0 0.75rem;
-      font-size: 1.5rem;
+      margin: 0 0 1rem;
+      font-size: 1.75rem;
+      font-weight: 900;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
 
     .study-complete p {
       margin: 0;
       opacity: 0.95;
-      max-width: 50ch;
+      max-width: 60ch;
       margin: 0 auto;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.2);
     }
 
-    /* Enhanced scripture blocks */
-    .scripture-block {
-      background: white;
-      border: 2px solid var(--page-accent);
-      border-radius: 12px;
-      padding: 1.5rem 1.75rem;
-      margin: 1.75rem 0;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      position: relative;
-    }
-
-    .scripture-block:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-    }
-
-    .scripture-block::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 6px;
-      background: linear-gradient(180deg, var(--page-accent), var(--page-accent-dark));
-      border-radius: 12px 0 0 12px;
-    }
-
-    .scripture-block p {
-      font-style: normal;
-      margin: 0;
-      line-height: 1.8;
-      color: #1a1a1a;
-      font-size: 1rem;
-    }
-
-    .scripture-block cite {
-      display: inline-flex;
-      align-items: center;
-      margin-top: 1rem;
-      font-style: normal;
-      font-weight: 700;
-      color: var(--page-accent-dark);
-      font-size: 0.9rem;
-      padding: 0.35rem 0.75rem;
-      background: var(--page-accent-light);
-      border-radius: 6px;
-      border-left: 3px solid var(--page-accent);
-    }
-
-    .scripture-block:nth-child(even) {
-      background: linear-gradient(135deg, var(--page-accent-light), rgba(255, 255, 255, 0.8));
-      border-color: var(--page-accent-dark);
-    }
-
-    .scripture-block cite::before {
-      content: "📖";
-      margin-right: 0.5rem;
-      font-size: 1rem;
-    }
-
-    /* Page navigation */
+    /* ═══════════════════════════════════════════
+       PAGE NAVIGATION
+    ════════════════════════════════════════════ */
     .page-nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 0;
-      margin-top: 2rem;
-      border-top: 1px solid #e5e7eb;
+      padding: 1.5rem 0;
+      margin-top: 3rem;
+      border-top: 2px solid #e5e7eb;
     }
 
     .page-nav a {
@@ -623,31 +839,90 @@
       gap: 0.5rem;
       text-decoration: none;
       color: var(--page-accent-dark);
-      font-weight: 600;
-      padding: 0.6rem 1rem;
-      border-radius: 10px;
-      transition: background 0.2s ease;
+      font-weight: 700;
+      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      background: var(--page-accent-light);
+      border: 2px solid transparent;
     }
 
     .page-nav a:hover {
-      background: var(--page-accent-light);
+      background: var(--page-gradient);
+      color: white;
+      transform: translateX(0px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--page-accent);
     }
 
-    /* Enhanced Violet theme for Page 8 */
-    .key-insight {
-      background: linear-gradient(135deg, rgba(126, 87, 194, 0.12), rgba(126, 87, 194, 0.08));
-      border-left: 4px solid #7e57c2;
+    .page-nav .nav-prev:hover {
+      transform: translateX(-4px);
     }
 
-    .section-title .section-icon {
-      background: linear-gradient(135deg, #7e57c2, #9575cd);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .page-nav .nav-next:hover {
+      transform: translateX(4px);
     }
 
-    .theology-card {
-      border-top: 3px solid rgba(126, 87, 194, 0.3);
+    /* ═══════════════════════════════════════════
+       RESPONSIVE ADJUSTMENTS
+    ════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      .dove-columns {
+        grid-template-columns: 1fr;
+      }
+      
+      .dove-columns .arrow {
+        transform: rotate(90deg);
+        margin: 1rem 0;
+      }
+
+      .nt-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .nt-card .book-badge {
+        margin: 0 auto 1rem;
+      }
+
+      .fulfillment-grid,
+      .concept-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pattern-breakdown {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      }
+
+      .prophet-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .simple-timeline-item {
+        padding-left: 1.75rem;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .nt-card,
+      .baptism-box,
+      .fulfillment-box,
+      .dove-parallel {
+        padding: 1.5rem 1.25rem;
+        border-radius: 12px;
+      }
+
+      .callout-box {
+        padding: 1rem 1.25rem;
+      }
+
+      .concept-grid {
+        gap: 1rem;
+      }
+
+      .pattern-breakdown {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -671,12 +946,12 @@
     <!-- ═══════════════════════════════════════════
          PAGE HEADER
     ════════════════════════════════════════════ -->
-    <header class="profile-header" style="background: linear-gradient(135deg, #e53935, #ff7043, #ffca28, #66bb6a, #29b6f6, #5c6bc0, #ab47bc); color: white; padding: 2rem; border-radius: 16px; margin-bottom: 1.5rem;">
+    <header class="profile-header" style="background: linear-gradient(135deg, #e53935, #ff7043, #ffca28, #66bb6a, #29b6f6, #5c6bc0, #ab47bc, #7e57c2); color: white; padding: 2.5rem 2rem; border-radius: 20px; margin-bottom: 2rem; box-shadow: var(--shadow-xl);">
       <div class="header-content">
         <div class="name-block">
-          <span class="page-kicker" style="color: rgba(255,255,255,0.9);">Page 8 of 9</span>
-          <h1 style="color: white;">Noah Across Scripture</h1>
-          <p class="subtitle" style="color: rgba(255,255,255,0.95);">Intertextual Threads from Genesis to Revelation</p>
+          <span class="page-kicker" style="color: rgba(255,255,255,0.9); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.08em;">Page 8 of 9</span>
+          <h1 style="color: white; margin: 0.5rem 0; font-size: clamp(2rem, 5vw, 2.75rem); text-shadow: 0 2px 8px rgba(0,0,0,0.3);">Noah Across Scripture</h1>
+          <p class="subtitle" style="color: rgba(255,255,255,0.95); margin: 0; font-size: 1.1rem; text-shadow: 0 1px 4px rgba(0,0,0,0.2);">Intertextual Threads from Genesis to Revelation</p>
         </div>
       </div>
     </header>
@@ -684,7 +959,7 @@
     <!-- ═══════════════════════════════════════════
          PATTERN TRACKER
     ════════════════════════════════════════════ -->
-    <div class="pattern-tracker">
+    <div class="pattern-tracker fade-slide-down">
       <span class="tracker-label">Story Arc:</span>
       <span class="stage">Corruption</span>
       <span class="arrow">→</span>
@@ -710,20 +985,21 @@
       <h2 class="section-title"><span class="section-icon">🔗</span> The "God Remembered" Pattern</h2>
 
       <p>
-        At the center of the flood narrative stands a single Hebrew word: <strong>זָכַר</strong> 
+        At the center of the flood narrative stands a single Hebrew word: <strong class="hebrew-inline">זָכַר</strong> 
         (<em>zakar</em>)—"God remembered Noah" (Gen 8:1). This isn't God suddenly recalling 
         someone He'd forgotten. In Hebrew, "remembering" marks the moment God <em>acts</em> 
         on His promise. It's the pivot from death to new life.
       </p>
 
-      <div style="background: linear-gradient(135deg, #fff3e0, #ffe0b2); border: 1px solid #ffb74d; border-radius: 14px; padding: 1.5rem; margin: 1.5rem 0;">
-        <h4 style="margin: 0 0 0.75rem; color: #e65100;">📜 Reading the Bible as a "Family Quilt"</h4>
-        <p style="margin: 0; font-size: 0.95rem;">
+      <!-- ENHANCED: Callout Box for Methodology -->
+      <div class="callout-box fade-in">
+        <h3>📜 Reading the Bible as a "Family Quilt"</h3>
+        <p>
           The Hebrew Bible is like a family quilt—made of many pieces from different times 
           and places, but arranged into a unified design that tells one story. A piece of 
           fabric meant one thing in its original dress; it means something new in the quilt.
         </p>
-        <p style="margin: 0.75rem 0 0; font-size: 0.95rem;">
+        <p>
           The flood narrative isn't just an ancient Babylonian story or an Israelite memory—
           it's been placed as an introduction to the Torah, setting up patterns (<em>tupos</em>) 
           that will echo through every book. Jesus and the apostles read it this way: as part 
@@ -731,37 +1007,46 @@
         </p>
       </div>
 
-      <div class="cross-ref-box">
+      <!-- Using global-v2 cross-ref component -->
+      <div class="cross-ref">
         <strong>Related:</strong> 
-        <span class="page-ref">→ <a href="noah-flood.html">Page 5: The Flood</a></span> explores Genesis 8:1 as the narrative's pivot point—the moment "God remembered" and the waters began to recede.
+        <a href="noah-flood.html">Page 5: The Flood</a> explores Genesis 8:1 as the narrative's pivot point.
       </div>
 
-      <div class="pattern-box">
-        <h3>The Recurring Pattern</h3>
-        <div class="pattern-steps">
-          <div class="pattern-step">
-            <span class="step-num">1</span>
-            <span>Human evil reaches a tipping point</span>
+      <!-- ENHANCED: Pattern Breakdown instead of old pattern-box -->
+      <div class="panel" style="background: linear-gradient(135deg, var(--page-accent-light), rgba(255,255,255,0.9)); border: 2px solid var(--page-accent); border-radius: 16px; padding: 2rem; margin: 2rem 0;">
+        <h3 style="margin: 0 0 1.5rem; color: var(--page-accent-dark); font-size: 1.2rem; font-weight: 800;">The Recurring Pattern</h3>
+        
+        <div class="pattern-breakdown">
+          <div class="pattern-element fade-in animation-delay-100">
+            <span class="element-number">1</span>
+            <span class="element-label">Tipping Point</span>
+            <div class="element-detail">Human evil reaches crisis level</div>
           </div>
-          <div class="pattern-step">
-            <span class="step-num">2</span>
-            <span>God sees and grieves the corruption</span>
+          <div class="pattern-element fade-in animation-delay-200">
+            <span class="element-number">2</span>
+            <span class="element-label">Divine Grief</span>
+            <div class="element-detail">God sees and grieves corruption</div>
           </div>
-          <div class="pattern-step">
-            <span class="step-num">3</span>
-            <span><strong>"God remembers"</strong> — He acts on His promise</span>
+          <div class="pattern-element fade-in animation-delay-300">
+            <span class="element-number">3</span>
+            <span class="element-label">God Remembers</span>
+            <div class="element-detail">He acts on His promise</div>
           </div>
-          <div class="pattern-step">
-            <span class="step-num">4</span>
-            <span>De-creation event (painful for all involved)</span>
+          <div class="pattern-element fade-in animation-delay-400">
+            <span class="element-number">4</span>
+            <span class="element-label">De-Creation</span>
+            <div class="element-detail">Painful for all involved</div>
           </div>
-          <div class="pattern-step">
-            <span class="step-num">5</span>
-            <span>A remnant is rescued through the judgment</span>
+          <div class="pattern-element fade-in animation-delay-500">
+            <span class="element-number">5</span>
+            <span class="element-label">Remnant Saved</span>
+            <div class="element-detail">Rescued through judgment</div>
           </div>
-          <div class="pattern-step">
-            <span class="step-num">6</span>
-            <span>New beginning on holy ground</span>
+          <div class="pattern-element fade-in">
+            <span class="element-number">6</span>
+            <span class="element-label">New Beginning</span>
+            <div class="element-detail">Fresh start on holy ground</div>
           </div>
         </div>
       </div>
@@ -772,99 +1057,69 @@
         by corruption but unwilling to abandon creation.
       </p>
 
-      <!-- Visual Timeline of "God Remembered" -->
-      <div style="position: relative; padding: 2rem 0; margin: 2rem 0;">
-        <div style="position: absolute; left: 0; right: 0; top: 50%; height: 3px; background: linear-gradient(90deg, #e53935, #ff9800, #ffca28, #66bb6a, #2196f3, #5c6bc0, #9c27b0); opacity: 0.2;"></div>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.5rem; position: relative;">
-          
-          <div style="text-align: center;">
-            <div style="width: 14px; height: 14px; background: #e53935; border-radius: 50%; margin: 0 auto 0.5rem; border: 3px solid white; box-shadow: 0 0 0 2px #e53935;"></div>
-            <div style="font-weight: 700; font-size: 0.8rem; color: #e53935;">Gen 8:1</div>
-            <div style="font-size: 0.7rem; color: #666;">Noah</div>
-          </div>
-
-          <div style="text-align: center;">
-            <div style="width: 14px; height: 14px; background: #ff9800; border-radius: 50%; margin: 0 auto 0.5rem; border: 3px solid white; box-shadow: 0 0 0 2px #ff9800;"></div>
-            <div style="font-weight: 700; font-size: 0.8rem; color: #ff9800;">Gen 19:29</div>
-            <div style="font-size: 0.7rem; color: #666;">Lot</div>
-          </div>
-
-          <div style="text-align: center;">
-            <div style="width: 14px; height: 14px; background: #66bb6a; border-radius: 50%; margin: 0 auto 0.5rem; border: 3px solid white; box-shadow: 0 0 0 2px #66bb6a;"></div>
-            <div style="font-weight: 700; font-size: 0.8rem; color: #66bb6a;">Ex 2:24</div>
-            <div style="font-size: 0.7rem; color: #666;">Exodus</div>
-          </div>
-
-          <div style="text-align: center;">
-            <div style="width: 14px; height: 14px; background: #2196f3; border-radius: 50%; margin: 0 auto 0.5rem; border: 3px solid white; box-shadow: 0 0 0 2px #2196f3;"></div>
-            <div style="font-weight: 700; font-size: 0.8rem; color: #2196f3;">1 Sam 1:19</div>
-            <div style="font-size: 0.7rem; color: #666;">Hannah</div>
-          </div>
-
-          <div style="text-align: center;">
-            <div style="width: 14px; height: 14px; background: #9c27b0; border-radius: 50%; margin: 0 auto 0.5rem; border: 3px solid white; box-shadow: 0 0 0 2px #9c27b0;"></div>
-            <div style="font-weight: 700; font-size: 0.8rem; color: #9c27b0;">Luke 1:72</div>
-            <div style="font-size: 0.7rem; color: #666;">Jesus</div>
-          </div>
-
-        </div>
-      </div>
-
-      <h3 style="margin: 2rem 0 1rem; font-size: 1.1rem; color: var(--page-accent-dark);">
+      <h3 style="margin: 2.5rem 0 1.5rem; font-size: 1.15rem; color: var(--page-accent-dark); font-weight: 800;">
         📖 The Pattern Through Scripture
       </h3>
 
-      <div class="thread-container">
-        <div class="thread-item">
-          <div class="reference">Genesis 8:1 — Noah</div>
-          <p>
+      <!-- ENHANCED: Simplified Timeline instead of complex thread-container -->
+      <div class="simple-timeline fade-in">
+        <h4>The Thread of Divine Remembrance</h4>
+        
+        <div class="simple-timeline-item animation-delay-100">
+          <span class="timeline-ref">Genesis 8:1 — Noah</span>
+          <div class="timeline-event">
             "God <em>remembered</em> Noah and all the animals..." The flood waters recede. 
             Noah emerges to a washed world and builds an altar on the cosmic mountain.
-          </p>
+          </div>
         </div>
-        <div class="thread-item">
-          <div class="reference">Genesis 19:29 — Sodom</div>
-          <p>
+
+        <div class="simple-timeline-item animation-delay-200">
+          <span class="timeline-ref">Genesis 19:29 — Sodom</span>
+          <div class="timeline-event">
             "God <em>remembered</em> Abraham and sent Lot out of the catastrophe..." 
             Fire falls instead of water, but the pattern holds: de-creation, rescue, 
             Lot settles on a mountain.
-          </p>
+          </div>
         </div>
-        <div class="thread-item">
-          <div class="reference">Exodus 2:24 — Egypt</div>
-          <p>
+
+        <div class="simple-timeline-item animation-delay-300">
+          <span class="timeline-ref">Exodus 2:24 — Egypt</span>
+          <div class="timeline-event">
             "God <em>remembered</em> his covenant with Abraham, Isaac, and Jacob..." 
             Moses is saved through a <em>tebah</em> (ark—same Hebrew word as Noah's). 
             Plagues rain down. Israel walks through water on dry land.
-          </p>
+          </div>
         </div>
-        <div class="thread-item">
-          <div class="reference">1 Samuel 1:19 — Hannah</div>
-          <p>
+
+        <div class="simple-timeline-item animation-delay-400">
+          <span class="timeline-ref">1 Samuel 1:19 — Hannah</span>
+          <div class="timeline-event">
             "Yahweh <em>remembered</em> her..." A barren woman receives life. 
             Samuel is born and becomes the hinge-point of Israel's history.
-          </p>
+          </div>
         </div>
-        <div class="thread-item" style="background: linear-gradient(135deg, #e8eaf6, #c5cae9); border-left-color: #5c6bc0;">
-          <div class="reference">Luke 1:54-55, 72 — Jesus</div>
-          <p>
+
+        <div class="simple-timeline-item animation-delay-500" style="background: linear-gradient(135deg, rgba(126, 87, 194, 0.08), rgba(126, 87, 194, 0.05)); border-radius: 10px; padding: 1rem; padding-left: 2rem; border-left-color: var(--page-accent); border-left-width: 4px;">
+          <span class="timeline-ref">Luke 1:54-55, 72 — Jesus</span>
+          <div class="timeline-event">
             Luke opens his Gospel with parallel birth announcements. The elderly 
             priest <strong>Zechariah</strong>—whose name literally means <em>"God 
             remembered"</em>—sings a blessing declaring that God "has <em>remembered</em> 
             his holy covenant" (Luke 1:72). Mary's song praises God for 
             "remembering his mercy" to Abraham's descendants (Luke 1:54-55).
-          </p>
-          <div style="background: rgba(63,81,181,0.1); border-radius: 8px; padding: 0.75rem; margin-top: 0.75rem;">
-            <strong style="color: #303f9f;">📛 The Name Connection:</strong>
-            <p style="margin: 0.5rem 0 0; font-size: 0.9rem;">
-              Luke deliberately chose <strong>Zechariah</strong> (זְכַרְיָה, <em>Zekharyah</em> = "Yahweh remembers") 
-              to announce the Messiah's arrival. The entire birth narrative is saturated with 
-              Old Testament echoes, showing that in Jesus, God is acting on His ancient promises—
-              the ultimate "God remembered" moment.
-            </p>
           </div>
         </div>
+      </div>
+
+      <!-- ENHANCED: Callout for Name Connection -->
+      <div class="callout-box fade-in" style="margin-top: 1rem;">
+        <h4>📛 The Name Connection: Zechariah</h4>
+        <p>
+          Luke deliberately chose <strong>Zechariah</strong> (<span class="hebrew-inline">זְכַרְיָה</span>, <em>Zekharyah</em> = "Yahweh remembers") 
+          to announce the Messiah's arrival. The entire birth narrative is saturated with 
+          Old Testament echoes, showing that in Jesus, God is acting on His ancient promises—
+          the ultimate "God remembered" moment.
+        </p>
       </div>
     </section>
 
@@ -881,7 +1136,7 @@
       </p>
 
       <div class="prophet-grid">
-        <div class="prophet-card">
+        <div class="prophet-card fade-in animation-delay-100">
           <h4>Isaiah 54:9-10</h4>
           <blockquote>
             "To me this is like the days of Noah, when I swore that the waters of 
@@ -890,20 +1145,20 @@
             removed, yet my unfailing love for you will not be shaken."
           </blockquote>
           <cite>— Isaiah 54:9-10</cite>
-          <p style="margin-top:0.75rem;font-size:0.85rem;">
+          <p>
             God compares His promise to post-exilic Israel to His promise to Noah. 
             The exile was a flood of judgment, but restoration is coming.
           </p>
         </div>
 
-        <div class="prophet-card">
+        <div class="prophet-card fade-in animation-delay-200">
           <h4>Ezekiel 14:14, 20</h4>
           <blockquote>
             "Even if these three men—Noah, Daniel and Job—were in it, they could 
             save only themselves by their righteousness..."
           </blockquote>
           <cite>— Ezekiel 14:14</cite>
-          <p style="margin-top:0.75rem;font-size:0.85rem;">
+          <p>
             Noah stands as the paradigmatic righteous person. His righteousness 
             saved his household through judgment—but Ezekiel warns that Jerusalem's 
             corruption is so deep that even Noah couldn't save others this time.
@@ -911,7 +1166,8 @@
         </div>
       </div>
 
-      <blockquote class="scripture-block">
+      <!-- Using global-v2 scripture-block -->
+      <blockquote class="scripture-block fade-in">
         <p>
           "Can a mother forget the baby at her breast and have no compassion on 
           the child she has borne? Though she may forget, I will not forget you!"
@@ -927,9 +1183,10 @@
         like abandonment, but the "remembering" always comes.
       </p>
 
-      <div class="cross-ref-box">
+      <!-- Using global-v2 cross-ref -->
+      <div class="cross-ref">
         <strong>Connection:</strong> 
-        <span class="page-ref">→ <a href="noah-flood.html">Page 5: The Flood</a></span> discusses Isaiah 54's connection to Noah's covenant and the "God remembered" turning point.
+        <a href="noah-flood.html">Page 5: The Flood</a> discusses Isaiah 54's connection to Noah's covenant.
       </div>
     </section>
 
@@ -945,35 +1202,35 @@
         "in bodily form like a dove" (Luke 3:22). This isn't random symbolism.
       </p>
 
-      <div class="dove-parallel">
+      <div class="dove-parallel fade-in">
         <h3>Noah's Dove → Jesus' Baptism</h3>
         <div class="dove-columns">
-          <div class="dove-scene">
+          <div class="dove-scene animation-delay-100">
             <div class="icon">🕊️</div>
             <div class="label">Genesis 8</div>
-            <p style="font-size:0.9rem;margin:0;">
+            <p>
               Noah rises from the waters.<br>
-              The dove returns with an olive branch.<br>
-              <strong>Signal:</strong> There is good land for a new beginning.
+              The dove returns with an olive branch.
             </p>
+            <strong>Signal: There is good land for a new beginning.</strong>
           </div>
           <div class="arrow">→</div>
-          <div class="dove-scene">
+          <div class="dove-scene animation-delay-200">
             <div class="icon">🕊️</div>
             <div class="label">Luke 3</div>
-            <p style="font-size:0.9rem;margin:0;">
+            <p>
               Jesus rises from the baptismal waters.<br>
-              The Spirit descends like a dove.<br>
-              <strong>Signal:</strong> Here is humanity's new beginning.
+              The Spirit descends like a dove.
             </p>
+            <strong>Signal: Here is humanity's new beginning.</strong>
           </div>
         </div>
-        <p style="margin-top:1rem;font-size:0.9rem;text-align:center;color:#0d47a1;">
+        <div class="dove-note">
           Immediately after, Luke traces Jesus' genealogy back through David, 
           through Abraham, all the way to <strong>Adam, the son of God</strong> (Luke 3:38). 
           Jesus isn't just Israel's Messiah—He is here for all the sons of Adam, 
           for all humanity.
-        </p>
+        </div>
       </div>
 
       <p>
@@ -984,9 +1241,10 @@
         "the flood of sin and death is being reversed."
       </p>
 
-      <div style="background: #fafafa; border-radius: 12px; padding: 1.25rem; margin: 1.5rem 0; border-left: 4px solid #7986cb;">
-        <h4 style="margin: 0 0 0.5rem; color: #303f9f; font-size: 1rem;">🏔️ The Transfiguration: Jesus' "Exodus"</h4>
-        <p style="margin: 0; font-size: 0.95rem;">
+      <!-- Using global-v2 panel -->
+      <div class="panel fade-in" style="margin: 1.5rem 0;">
+        <h4 style="color: #303f9f; margin: 0 0 0.75rem;">🏔️ The Transfiguration: Jesus' "Exodus"</h4>
+        <p style="margin: 0;">
           On the mountain, Moses and Elijah appear with Jesus. Luke tells us they 
           were discussing "his <strong>Exodus</strong> that he was about to fulfill 
           in Jerusalem" (Luke 9:31). The Greek word <em>exodos</em> is deliberate—
@@ -996,9 +1254,10 @@
         </p>
       </div>
 
-      <div class="cross-ref-box">
+      <!-- Using global-v2 cross-ref -->
+      <div class="cross-ref">
         <strong>Related:</strong> 
-        <span class="page-ref">→ <a href="noah-flood.html">Page 5: The Flood</a></span> explores the three-dove sequence and manoakh (rest) wordplay that connects to Jesus as the one who brings ultimate rest.
+        <a href="noah-flood.html">Page 5: The Flood</a> explores the three-dove sequence and <em>manoakh</em> (rest) wordplay.
       </div>
     </section>
 
@@ -1014,7 +1273,7 @@
       </p>
 
       <div class="nt-grid">
-        <div class="nt-card">
+        <div class="nt-card fade-in animation-delay-100">
           <div class="book-badge">Matthew 24</div>
           <div class="content">
             <h4>"As in the Days of Noah"</h4>
@@ -1032,16 +1291,16 @@
               another"). The disciples ask <em>when</em>, and Jesus reaches for 
               flood imagery.
             </p>
-            <p style="margin-top:0.5rem;font-size:0.9rem;color:#555;">
+            <div class="insight">
               <strong>Key insight:</strong> The flood gave Jesus vocabulary for 
               "when God brings down the corrupt powers and the Babylons of our 
               world." Life seems normal until suddenly it isn't. Be like Noah—
               awake, building, prepared.
-            </p>
+            </div>
           </div>
         </div>
 
-        <div class="nt-card">
+        <div class="nt-card fade-in animation-delay-200">
           <div class="book-badge">Hebrews 11</div>
           <div class="content">
             <h4>By Faith, Noah...</h4>
@@ -1057,17 +1316,16 @@
               everything in Israel's story, then challenge readers to "follow all 
               the great models of faith found throughout the story of the Scriptures."
             </p>
-            <p style="margin-top:0.5rem;font-size:0.9rem;color:#555;">
-              Noah is the model of faith responding to divine warning. He acted on 
-              what he couldn't see—building for 120 years while the world mocked. 
-              His obedience became a judgment on those who refused to believe. 
-              The exhortation: remain faithful despite hardship, trusting that 
-              God will not abandon his people.
-            </p>
+            <div class="insight">
+              <strong>Faith model:</strong> Noah acted on what he couldn't see—
+              building for 120 years while the world mocked. His obedience became 
+              a judgment on those who refused to believe. The exhortation: remain 
+              faithful despite hardship, trusting that God will not abandon his people.
+            </div>
           </div>
         </div>
 
-        <div class="nt-card">
+        <div class="nt-card fade-in animation-delay-300">
           <div class="book-badge">2 Peter 2</div>
           <div class="content">
             <h4>Preacher of Righteousness</h4>
@@ -1085,7 +1343,8 @@
         </div>
       </div>
 
-      <div class="baptism-box">
+      <!-- Baptism Box - ENHANCED -->
+      <div class="baptism-box fade-in">
         <h3>1 Peter 3:18-22 — Baptism and the Ark</h3>
         <p>
           Peter makes the most explicit typological connection between Noah and 
@@ -1094,9 +1353,9 @@
           a pattern; the <em>antitupos</em> is what the pattern points toward.
         </p>
         
-        <div style="background: rgba(255,255,255,0.7); border-radius: 10px; padding: 1.25rem; margin: 1rem 0;">
-          <h4 style="margin: 0 0 0.75rem; color: #2e7d32; font-size: 0.95rem;">Peter's Logic Chain (1 Pet 3:18-22)</h4>
-          <ol style="margin: 0; padding-left: 1.25rem; font-size: 0.9rem; line-height: 1.7;">
+        <div class="logic-chain">
+          <h4>Peter's Logic Chain (1 Pet 3:18-22)</h4>
+          <ol>
             <li>Christ died for sins, the righteous for the unrighteous</li>
             <li>Put to death in flesh, made alive in the Spirit</li>
             <li>In the Spirit, he proclaimed to <em>spirits in prison</em>—those disobedient in Noah's day</li>
@@ -1109,11 +1368,14 @@
         </div>
 
         <blockquote>
-          "Like Noah they have been saved through the waters—not as a magic ritual, 
-          but as a sacred symbol that shows their change of heart, their desire to 
-          be joined to Jesus in his death and his resurrection."
+          <p>
+            "Like Noah they have been saved through the waters—not as a magic ritual, 
+            but as a sacred symbol that shows their change of heart, their desire to 
+            be joined to Jesus in his death and his resurrection."
+          </p>
           <cite>— BibleProject, 1 Peter Overview</cite>
         </blockquote>
+        
         <p>
           The flood waters were simultaneously judgment and salvation—death for 
           the world, but the means by which the ark carried Noah to safety. 
@@ -1126,9 +1388,10 @@
         </p>
       </div>
 
-      <div class="cross-ref-box">
+      <!-- Using global-v2 cross-ref -->
+      <div class="cross-ref">
         <strong>Connection:</strong> 
-        <span class="page-ref">→ <a href="noah-ark.html">Page 4: The Ark</a></span> explores the ark as tupos and Peter's antitupos baptism theology in detail.
+        <a href="noah-ark.html">Page 4: The Ark</a> explores Peter's <em>antitupos</em> baptism theology in detail.
       </div>
     </section>
 
@@ -1144,26 +1407,26 @@
         one who <em>takes</em> the judgment so others can survive.
       </p>
 
-      <div class="fulfillment-box">
+      <div class="fulfillment-box fade-in">
         <h3>Pattern → Fulfillment</h3>
         <div class="fulfillment-grid">
-          <div class="fulfillment-item">
+          <div class="fulfillment-item animation-delay-100">
             <div class="noah-type">Noah builds an ark</div>
             <div class="jesus-anti">Jesus <em>is</em> the ark</div>
           </div>
-          <div class="fulfillment-item">
+          <div class="fulfillment-item animation-delay-200">
             <div class="noah-type">Flood washes away the wicked</div>
             <div class="jesus-anti">Jesus absorbs the flood of judgment</div>
           </div>
-          <div class="fulfillment-item">
+          <div class="fulfillment-item animation-delay-300">
             <div class="noah-type">Dove signals new land</div>
             <div class="jesus-anti">Spirit signals new creation</div>
           </div>
-          <div class="fulfillment-item">
+          <div class="fulfillment-item animation-delay-400">
             <div class="noah-type">Remnant ascends to mountain</div>
             <div class="jesus-anti">Heaven descends to earth</div>
           </div>
-          <div class="fulfillment-item">
+          <div class="fulfillment-item animation-delay-500">
             <div class="noah-type">Noah offers sacrifice</div>
             <div class="jesus-anti">Jesus <em>is</em> the sacrifice</div>
           </div>
@@ -1181,7 +1444,8 @@
         the flood of death so we can emerge into resurrection life.
       </p>
 
-      <blockquote class="scripture-block">
+      <!-- Using global-v2 scripture-block -->
+      <blockquote class="scripture-block fade-in">
         <p>
           "Because God remembers, he becomes a human, the laborer from Nazareth 
           named Jesus. Because God remembers, Jesus himself undergoes the violent 
@@ -1191,20 +1455,53 @@
         </p>
         <cite>— BibleProject, "If God Remembers"</cite>
       </blockquote>
+
+      <!-- ENHANCED: Concept Grid Summary -->
+      <div class="concept-grid fade-in" style="margin-top: 2rem;">
+        <div class="concept-card animation-delay-100">
+          <span class="concept-icon">🛶</span>
+          <span class="concept-label">The Ark</span>
+          <h5>From Container to Identity</h5>
+          <p>Noah builds the ark; Jesus IS the ark—the space of safety through judgment</p>
+        </div>
+        <div class="concept-card animation-delay-200">
+          <span class="concept-icon">🕊️</span>
+          <span class="concept-label">The Spirit</span>
+          <h5>From Sign to Presence</h5>
+          <p>Dove signals new land; Spirit signals new creation has arrived</p>
+        </div>
+        <div class="concept-card animation-delay-300">
+          <span class="concept-icon">💧</span>
+          <span class="concept-label">The Waters</span>
+          <h5>From Judgment to Baptism</h5>
+          <p>Flood destroys evil; baptism identifies with Christ's death and resurrection</p>
+        </div>
+        <div class="concept-card animation-delay-400">
+          <span class="concept-icon">⛰️</span>
+          <span class="concept-label">The Mountain</span>
+          <h5>From Ascent to Descent</h5>
+          <p>Remnant ascends to safety; heaven descends to dwell with humanity</p>
+        </div>
+      </div>
     </section>
 
     <!-- ═══════════════════════════════════════════
          COVENANT THREAD INDICATOR
     ════════════════════════════════════════════ -->
-    <div class="covenant-thread">
+    <div class="covenant-thread fade-in">
       <div class="thread-stage">Covenant Stage: Fulfilled</div>
-      <p>The rainbow covenant promised "never again" would God destroy the earth by flood—but the pattern of "God remembered" echoes through Scripture until Jesus fulfills all covenant promises. In Him, God doesn't just preserve a remnant; He transforms humanity into a new creation.</p>
+      <p>
+        The rainbow covenant promised "never again" would God destroy the earth by flood—
+        but the pattern of "God remembered" echoes through Scripture until Jesus fulfills 
+        all covenant promises. In Him, God doesn't just preserve a remnant; He transforms 
+        humanity into a new creation.
+      </p>
     </div>
 
     <!-- ═══════════════════════════════════════════
          STUDY COMPLETE
     ════════════════════════════════════════════ -->
-    <div class="study-complete">
+    <div class="study-complete fade-in">
       <h2>🌈 Study Complete</h2>
       <p>
         You've traced Noah's story from the pre-flood chaos through covenant 
@@ -1220,15 +1517,15 @@
       <a href="noah-babel.html" class="nav-prev">
         <span>←</span> Page 7: Babel
       </a>
-      <span style="color:#999;font-size:0.9rem;">Page 8 of 9</span>
+      <span style="color:#999;font-size:0.9rem;font-weight:600;">Page 8 of 9</span>
       <a href="noah-sources.html" class="nav-next">
         Page 9: Sources <span>→</span>
       </a>
     </nav>
 
     <!-- Back to Hub -->
-    <div style="text-align: center; margin: 2rem 0;">
-      <a href="noah.html" style="color: var(--page-accent-dark); font-weight: 600; text-decoration: none;">
+    <div style="text-align: center; margin: 3rem 0 2rem;">
+      <a href="noah.html" class="cross-ref" style="display: inline-flex; font-size: 1rem; padding: 0.75rem 1.25rem;">
         ← Return to Noah Hub
       </a>
     </div>
