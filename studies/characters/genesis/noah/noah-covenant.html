@@ -69,6 +69,50 @@
 }
 
 /* ═══════════════════════════════════════════
+   ENTRY ANIMATIONS - Global-v2 Integration
+   ════════════════════════════════════════════ */
+.fade-in {
+  animation: fadeSlideDown 0.6s ease-out;
+}
+
+.fade-slide-down {
+  animation: fadeSlideDown 0.6s ease-out;
+}
+
+.fade-slide-left {
+  animation: fadeSlideLeft 0.6s ease-out;
+}
+
+@keyframes fadeSlideDown {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes fadeSlideLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Animation delay utilities */
+.animation-delay-100 { animation-delay: 0.1s; }
+.animation-delay-200 { animation-delay: 0.2s; }
+.animation-delay-300 { animation-delay: 0.3s; }
+.animation-delay-400 { animation-delay: 0.4s; }
+.animation-delay-500 { animation-delay: 0.5s; }
+
+/* ═══════════════════════════════════════════
    THEOLOGY CARDS - Hub Pattern Integration
    ════════════════════════════════════════════ */
 .theology-card {
@@ -93,10 +137,33 @@
    PAGE-THEMED ELEMENTS - Use global base
    ════════════════════════════════════════════ */
 
-/* Key Insights - Page accent */
+/* Key Insights - Page accent with breathe effect */
 .key-insight {
   background: linear-gradient(135deg, var(--page-accent-light), rgba(92, 107, 192, 0.08));
   border-left: 4px solid var(--page-accent);
+  position: relative;
+  overflow: hidden;
+}
+
+.key-insight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, 
+    rgba(92, 107, 192, 0.15) 0%, 
+    transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.key-insight:hover::before {
+  opacity: 1;
+  animation: breathe 3s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 /* Section Icons - Page accent */
@@ -150,6 +217,18 @@
   box-shadow: 0 2px 8px rgba(92, 107, 192, 0.25);
   transform: scale(1.05);
   border-color: transparent;
+  animation: stage-pulse 2s ease-in-out infinite;
+}
+
+@keyframes stage-pulse {
+  0%, 100% {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(92, 107, 192, 0.25);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(92, 107, 192, 0.4);
+  }
 }
 
 .pattern-tracker .arrow {
@@ -172,8 +251,8 @@
 }
 
 .covenant-thread:hover {
-  transform: translateX(4px);
-  box-shadow: 0 4px 12px rgba(102, 187, 106, 0.15);
+  transform: translateX(8px);
+  box-shadow: 0 6px 20px rgba(102, 187, 106, 0.2);
 }
 
 .covenant-thread::before {
@@ -183,6 +262,16 @@
   top: 50%;
   transform: translateY(-50%);
   font-size: 1.8rem;
+  animation: gentle-pulse 2s ease-in-out infinite;
+}
+
+@keyframes gentle-pulse {
+  0%, 100% { 
+    transform: translateY(-50%) scale(1); 
+  }
+  50% { 
+    transform: translateY(-50%) scale(1.1); 
+  }
 }
 
 .covenant-thread .thread-stage {
@@ -303,7 +392,7 @@
   gap: 0.5rem;
 }
 
-/* Rainbow Box - Signature covenant element */
+/* Rainbow Box - Signature covenant element with shimmer */
 .rainbow-box {
   background: linear-gradient(135deg, 
     rgba(244,67,54,0.1), 
@@ -321,6 +410,30 @@
   text-align: center;
   box-shadow: 0 4px 20px rgba(156, 39, 176, 0.15);
   transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.rainbow-box::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255,255,255,.15) 45%,
+    rgba(255,255,255,.25) 50%,
+    rgba(255,255,255,.15) 55%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 200% 0; }
+  50% { background-position: -200% 0; }
 }
 
 .rainbow-box:hover {
@@ -332,6 +445,8 @@
   margin: 0 0 1rem 0;
   color: #7b1fa2;
   font-weight: 700;
+  position: relative;
+  z-index: 1;
 }
 
 .rainbow-box .bow-hebrew {
@@ -343,6 +458,8 @@
   background-clip: text;
   margin-bottom: 0.5rem;
   display: block;
+  position: relative;
+  z-index: 1;
 }
 
 .rainbow-box .bow-meaning {
@@ -350,6 +467,8 @@
   color: #555;
   margin-bottom: 1rem;
   font-weight: 500;
+  position: relative;
+  z-index: 1;
 }
 
 /* War Bow Quote - Enhanced blockquote */
@@ -410,17 +529,27 @@
   padding: 0.75rem 0;
   border-bottom: 1px solid #e5e7eb;
   align-items: start;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .chiasm-row-cov:hover {
-  background: rgba(92, 107, 192, 0.05);
-  padding-left: 0.5rem;
+  background: rgba(92, 107, 192, 0.08);
+  padding-left: 0.75rem;
+  transform: translateX(4px);
 }
 
 .chiasm-row-cov:last-child {
   border-bottom: none;
 }
+
+/* Staggered entry animation for chiasm rows */
+.chiasm-row-cov:nth-child(1) { animation: fade-slide-left 0.5s ease-out 0.1s backwards; }
+.chiasm-row-cov:nth-child(2) { animation: fade-slide-left 0.5s ease-out 0.2s backwards; }
+.chiasm-row-cov:nth-child(3) { animation: fade-slide-left 0.5s ease-out 0.3s backwards; }
+.chiasm-row-cov:nth-child(4) { animation: fade-slide-left 0.5s ease-out 0.4s backwards; }
+.chiasm-row-cov:nth-child(5) { animation: fade-slide-left 0.5s ease-out 0.5s backwards; }
+.chiasm-row-cov:nth-child(6) { animation: fade-slide-left 0.5s ease-out 0.6s backwards; }
+.chiasm-row-cov:nth-child(7) { animation: fade-slide-left 0.5s ease-out 0.7s backwards; }
 
 .chiasm-row-cov .chiasm-label {
   font-weight: 700;
@@ -519,12 +648,27 @@
   font-weight: 700;
   font-size: 0.95rem;
   box-shadow: 0 2px 8px rgba(92, 107, 192, 0.3);
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .covenant-count .count-item:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(92, 107, 192, 0.4);
+  transform: scale(1.15) rotate(5deg);
+  box-shadow: 0 4px 15px rgba(92, 107, 192, 0.5);
+}
+
+/* Sequential pulse on page load */
+.covenant-count .count-item:nth-child(1) { animation: pulse-in 0.5s ease-out 0.1s backwards; }
+.covenant-count .count-item:nth-child(2) { animation: pulse-in 0.5s ease-out 0.2s backwards; }
+.covenant-count .count-item:nth-child(3) { animation: pulse-in 0.5s ease-out 0.3s backwards; }
+.covenant-count .count-item:nth-child(4) { animation: pulse-in 0.5s ease-out 0.4s backwards; }
+.covenant-count .count-item:nth-child(5) { animation: pulse-in 0.5s ease-out 0.5s backwards; }
+.covenant-count .count-item:nth-child(6) { animation: pulse-in 0.5s ease-out 0.6s backwards; }
+.covenant-count .count-item:nth-child(7) { animation: pulse-in 0.5s ease-out 0.7s backwards; }
+
+@keyframes pulse-in {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 .covenant-parties {
@@ -560,7 +704,7 @@
    COMPARISON GRIDS - Simplified using global
    ════════════════════════════════════════════ */
 
-/* Concession Cards - Could use .grid-2 but kept for specific styling */
+/* Concession Cards - with staggered entry */
 .concession-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -577,9 +721,14 @@
   transition: all 0.3s ease;
 }
 
+.concession-card:nth-child(1) { animation: fade-in 0.5s ease-out 0.1s backwards; }
+.concession-card:nth-child(2) { animation: fade-in 0.5s ease-out 0.2s backwards; }
+.concession-card:nth-child(3) { animation: fade-in 0.5s ease-out 0.3s backwards; }
+.concession-card:nth-child(4) { animation: fade-in 0.5s ease-out 0.4s backwards; }
+
 .concession-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .concession-card.ideal {
@@ -608,7 +757,7 @@
   line-height: 1.6;
 }
 
-/* Genesis 1 Comparison - Enhanced hover */
+/* Genesis 1 Comparison - Enhanced hover with cascade */
 .gen1-comparison {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -645,6 +794,14 @@
   font-size: 0.9rem;
   color: #555;
   line-height: 1.6;
+  opacity: 0.8;
+  transform: translateX(0);
+  transition: all 0.2s ease;
+}
+
+.gen1-comparison .compare-col:hover p {
+  opacity: 1;
+  transform: translateX(5px);
 }
 
 .gen1-comparison .compare-col .hebrew-inline {
@@ -739,6 +896,74 @@
 
 .study-table tbody tr:hover {
   background: var(--page-accent-light);
+}
+
+/* ═══════════════════════════════════════════
+   SCRIPTURE BLOCKS - Page Flip Effect
+   ════════════════════════════════════════════ */
+.scripture-block {
+  background: white;
+  border: 2px solid var(--page-accent);
+  border-radius: 12px;
+  padding: 1.5rem 1.75rem;
+  margin: 1.75rem 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: relative;
+  transform-style: preserve-3d;
+  transition: all 0.4s ease;
+}
+
+.scripture-block:hover {
+  transform: translateY(-4px) rotateX(2deg);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.scripture-block::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: linear-gradient(180deg, var(--page-accent), var(--page-accent-dark));
+  border-radius: 12px 0 0 12px;
+  transition: all 0.3s ease;
+}
+
+.scripture-block:hover::before {
+  width: 8px;
+  background: linear-gradient(180deg, 
+    var(--page-accent), 
+    var(--page-accent-dark),
+    var(--page-accent));
+}
+
+.scripture-block p {
+  font-style: normal;
+  margin: 0;
+  line-height: 1.8;
+  color: #1a1a1a;
+  font-size: 1rem;
+}
+
+.scripture-block cite {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 1rem;
+  font-style: normal;
+  font-weight: 700;
+  color: var(--page-accent-dark);
+  font-size: 0.9rem;
+  padding: 0.35rem 0.75rem;
+  background: var(--page-accent-light);
+  border-radius: 6px;
+  border-left: 3px solid var(--page-accent);
+}
+
+.scripture-block cite::before {
+  content: "📖";
+  margin-right: 0.5rem;
+  font-size: 1rem;
 }
 
 /* ═══════════════════════════════════════════
@@ -869,7 +1094,7 @@
     font-size: 0.85rem;
   }
 }
-  </style>
+</style>
 </head>
 
 <body class="character-profile" dir="ltr">
