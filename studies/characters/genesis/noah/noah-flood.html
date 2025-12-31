@@ -69,26 +69,119 @@
     }
 
     /* ═══════════════════════════════════════════
-       ENHANCEMENT FEATURES CSS
-    ════════════════════════════════════════════ */
+       THEOLOGY CARDS - Hub Pattern Integration
+       ════════════════════════════════════════════ */
+    .theology-card {
+      border-top: 3px solid var(--page-accent);
+      position: relative;
+      overflow: hidden;
+    }
 
-    /* Cross-reference boxes */
+    /* Top color accent bar (hub pattern) */
+    .theology-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--page-accent), var(--page-accent-dark));
+      z-index: 1;
+    }
+
+    /* ═══════════════════════════════════════════
+       PAGE-THEMED ELEMENTS
+       ════════════════════════════════════════════ */
+
+    /* Key Insights - Page accent */
+    .key-insight {
+      background: linear-gradient(135deg, var(--page-accent-light), rgba(30, 136, 229, 0.08));
+      border-left: 4px solid var(--page-accent);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .key-insight::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, 
+        rgba(30, 136, 229, 0.1) 0%, 
+        transparent 70%);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .key-insight:hover::before {
+      opacity: 1;
+      animation: breathe 3s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    /* Section Icons - Page accent */
+    .section-title .section-icon {
+      background: linear-gradient(135deg, var(--page-accent), #4fc3f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+
+    .section-title:hover .section-icon {
+      transform: rotate(10deg) scale(1.1);
+    }
+
+    /* Animated underline on section titles */
+    .section-title {
+      position: relative;
+      cursor: default;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--page-accent), var(--page-accent-dark));
+      transition: width 0.4s ease;
+    }
+
+    .section-title:hover::after {
+      width: 100%;
+    }
+
+    /* ═══════════════════════════════════════════
+       CROSS-REFERENCE BOXES - Enhanced
+       ════════════════════════════════════════════ */
     .cross-ref-box {
-      background: linear-gradient(135deg, rgba(92, 107, 192, 0.08), rgba(92, 107, 192, 0.05));
-      border-left: 4px solid var(--page-accent, #5c6bc0);
+      background: linear-gradient(135deg, rgba(30, 136, 229, 0.08), rgba(30, 136, 229, 0.05));
+      border-left: 4px solid var(--page-accent);
       border-radius: 12px;
       padding: 1rem 1.25rem;
       margin: 1.25rem 0;
       font-size: 0.92rem;
+      transition: all 0.3s ease;
+    }
+
+    .cross-ref-box:hover {
+      box-shadow: 0 2px 8px rgba(30, 136, 229, 0.1);
+      transform: translateY(-1px);
     }
 
     .cross-ref-box strong {
-      color: var(--page-accent-dark, #303f9f);
+      color: var(--page-accent-dark);
       font-weight: 700;
     }
 
     .cross-ref-box a {
-      color: var(--page-accent-dark, #303f9f);
+      color: var(--page-accent-dark);
       font-weight: 600;
       text-decoration: none;
       border-bottom: 1px solid transparent;
@@ -96,7 +189,7 @@
     }
 
     .cross-ref-box a:hover {
-      border-bottom-color: var(--page-accent-dark, #303f9f);
+      border-bottom-color: var(--page-accent-dark);
     }
 
     .cross-ref-box .page-ref {
@@ -106,54 +199,90 @@
       margin-right: 0.5rem;
     }
 
-    /* Pattern tracker */
+    /* ═══════════════════════════════════════════
+       PATTERN TRACKER - Enhanced with Animation
+       ════════════════════════════════════════════ */
     .pattern-tracker {
       display: flex;
       align-items: center;
       gap: 0.5rem;
       padding: 1rem 1.25rem;
-      background: rgba(0, 0, 0, 0.05);
+      background: linear-gradient(135deg, var(--page-accent-light), rgba(30, 136, 229, 0.05));
       border-radius: 12px;
       margin: 1.5rem 0;
       flex-wrap: wrap;
       font-size: 0.85rem;
+      border: 1px solid var(--page-accent-light);
     }
 
     .pattern-tracker .tracker-label {
       font-weight: 700;
-      color: var(--page-accent-dark, #333);
+      color: var(--page-accent-dark);
       margin-right: 0.5rem;
     }
 
     .pattern-tracker .stage {
       padding: 0.35rem 0.7rem;
       border-radius: 6px;
-      background: rgba(0, 0, 0, 0.08);
+      background: white;
       color: #666;
       font-weight: 600;
       transition: all 0.2s ease;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .pattern-tracker .stage:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
 
     .pattern-tracker .stage.current {
-      background: var(--page-accent, #5c6bc0);
+      background: var(--page-accent);
       color: white;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 2px 8px rgba(30, 136, 229, 0.25);
       transform: scale(1.05);
+      border-color: transparent;
+      animation: stage-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes stage-pulse {
+      0%, 100% {
+        transform: scale(1.05);
+        box-shadow: 0 2px 8px rgba(30, 136, 229, 0.25);
+      }
+      50% {
+        transform: scale(1.1);
+        box-shadow: 0 4px 15px rgba(30, 136, 229, 0.4);
+      }
     }
 
     .pattern-tracker .arrow {
-      color: #999;
+      color: var(--page-accent);
       font-size: 0.9rem;
+      font-weight: 700;
+      transition: all 0.3s ease;
     }
 
-    /* Covenant thread indicator */
+    .pattern-tracker .stage:hover ~ .arrow {
+      transform: translateX(3px);
+    }
+
+    /* ═══════════════════════════════════════════
+       COVENANT THREAD - Enhanced
+       ════════════════════════════════════════════ */
     .covenant-thread {
       position: relative;
-      padding: 1rem 1rem 1rem 3rem;
+      padding: 1rem 1rem 1rem 3.5rem;
       margin: 1.5rem 0;
       border-radius: 12px;
-      background: linear-gradient(135deg, rgba(102, 187, 106, 0.08), rgba(102, 187, 106, 0.05));
+      background: linear-gradient(135deg, rgba(102, 187, 106, 0.12), rgba(102, 187, 106, 0.05));
       border-left: 4px solid #66bb6a;
+      transition: all 0.3s ease;
+    }
+
+    .covenant-thread:hover {
+      transform: translateX(4px);
+      box-shadow: 0 4px 12px rgba(102, 187, 106, 0.15);
     }
 
     .covenant-thread::before {
@@ -162,7 +291,7 @@
       left: 1rem;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 1.5rem;
+      font-size: 1.8rem;
     }
 
     .covenant-thread .thread-stage {
@@ -178,9 +307,12 @@
       margin: 0;
       font-size: 0.92rem;
       line-height: 1.6;
+      color: #475569;
     }
 
-    /* Pivot point visual */
+    /* ═══════════════════════════════════════════
+       PIVOT BOX - Enhanced Animation
+       ════════════════════════════════════════════ */
     .pivot-box {
       background: linear-gradient(135deg, #e3f2fd, #bbdefb);
       border: 2px solid var(--page-accent);
@@ -188,6 +320,32 @@
       padding: 2rem;
       margin: 2rem 0;
       text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .pivot-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(30, 136, 229, 0.1), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .pivot-box:hover::before {
+      opacity: 1;
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(30, 136, 229, 0.4);
+      }
+      50% {
+        box-shadow: 0 0 0 10px rgba(30, 136, 229, 0);
+      }
     }
 
     .pivot-box .pivot-verse {
@@ -195,12 +353,16 @@
       font-weight: 700;
       color: var(--page-accent-dark);
       margin-bottom: 0.75rem;
+      position: relative;
+      z-index: 1;
     }
 
     .pivot-box .pivot-ref {
       font-size: 1rem;
       color: #555;
       margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
     }
 
     .pivot-box .pivot-note {
@@ -208,9 +370,13 @@
       color: #333;
       max-width: 600px;
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
 
-    /* Chiastic structure */
+    /* ═══════════════════════════════════════════
+       CHIASTIC STRUCTURE - Enhanced Hover
+       ════════════════════════════════════════════ */
     .chiasm-visual {
       display: flex;
       flex-direction: column;
@@ -226,6 +392,12 @@
       gap: 0.5rem;
       padding: 0.6rem 1rem;
       border-bottom: 1px solid #e5e7eb;
+      transition: all 0.2s ease;
+    }
+
+    .chiasm-row:hover {
+      background: var(--page-accent-light);
+      padding-left: 1.5rem;
     }
 
     .chiasm-row:last-child {
@@ -235,6 +407,11 @@
     .chiasm-left {
       text-align: right;
       color: #555;
+      transition: color 0.2s ease;
+    }
+
+    .chiasm-row:hover .chiasm-left {
+      color: var(--page-accent-dark);
     }
 
     .chiasm-center {
@@ -244,11 +421,22 @@
       background: var(--page-accent-light);
       border-radius: 6px;
       font-size: 0.85rem;
+      transition: all 0.2s ease;
+    }
+
+    .chiasm-row:hover .chiasm-center {
+      background: var(--page-accent);
+      color: white;
     }
 
     .chiasm-right {
       text-align: left;
       color: #555;
+      transition: color 0.2s ease;
+    }
+
+    .chiasm-row:hover .chiasm-right {
+      color: var(--page-accent-dark);
     }
 
     .chiasm-pivot {
@@ -261,7 +449,9 @@
       color: white;
     }
 
-    /* Genesis 1 parallel table */
+    /* ═══════════════════════════════════════════
+       GENESIS 1 PARALLEL TABLE - Enhanced
+       ════════════════════════════════════════════ */
     .genesis-parallel {
       display: grid;
       grid-template-columns: 80px 1fr 1fr;
@@ -270,6 +460,7 @@
       border: 1px solid #e5e7eb;
       border-radius: 12px;
       overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
 
     .genesis-parallel-header {
@@ -285,6 +476,11 @@
       padding: 0.75rem;
       border-bottom: 1px solid #e5e7eb;
       font-size: 0.88rem;
+      transition: all 0.2s ease;
+    }
+
+    .genesis-parallel-cell:hover {
+      background: var(--page-accent-light) !important;
     }
 
     .genesis-parallel-cell:nth-child(3n+1) {
@@ -302,7 +498,9 @@
       background: #e3f2fd;
     }
 
-    /* Mesopotamian comparison */
+    /* ═══════════════════════════════════════════
+       MESOPOTAMIAN COMPARISON - Enhanced Cascade
+       ════════════════════════════════════════════ */
     .meso-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -315,12 +513,41 @@
       border-radius: 12px;
       padding: 1.25rem;
       border: 1px solid #e5e7eb;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .meso-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .meso-card:hover::before {
+      left: 100%;
+    }
+
+    .meso-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+      border-color: var(--page-accent);
     }
 
     .meso-card h4 {
       margin: 0 0 0.75rem 0;
       font-size: 1rem;
       color: #333;
+      transition: transform 0.3s ease;
+    }
+
+    .meso-card:hover h4 {
+      transform: translateX(5px);
     }
 
     .meso-card .label {
@@ -334,15 +561,31 @@
       font-size: 0.9rem;
       color: #555;
       margin: 0;
+      opacity: 0.8;
+      transform: translateX(0);
+      transition: all 0.2s ease;
     }
 
-    /* Wordplay highlight */
+    .meso-card:hover p {
+      opacity: 1;
+      transform: translateX(5px);
+    }
+
+    /* ═══════════════════════════════════════════
+       WORDPLAY HIGHLIGHT - Enhanced
+       ════════════════════════════════════════════ */
     .wordplay-highlight {
       background: linear-gradient(135deg, var(--page-accent-light), rgba(21,101,192,0.08));
       border-left: 4px solid var(--page-accent);
       border-radius: 12px;
       padding: 1.25rem 1.5rem;
       margin: 1.25rem 0;
+      transition: all 0.3s ease;
+    }
+
+    .wordplay-highlight:hover {
+      transform: translateX(4px);
+      box-shadow: 0 4px 12px rgba(30, 136, 229, 0.15);
     }
 
     .wordplay-highlight h4 {
@@ -351,13 +594,21 @@
       font-size: 1rem;
     }
 
-    /* Remnant callout */
+    /* ═══════════════════════════════════════════
+       REMNANT BOX - Enhanced
+       ════════════════════════════════════════════ */
     .remnant-box {
       background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
       border: 1px solid #81c784;
       border-radius: 14px;
       padding: 1.5rem;
       margin: 1.5rem 0;
+      transition: all 0.3s ease;
+    }
+
+    .remnant-box:hover {
+      box-shadow: 0 6px 20px rgba(102, 187, 106, 0.2);
+      transform: scale(1.01);
     }
 
     .remnant-box h4 {
@@ -366,7 +617,9 @@
       font-size: 1.05rem;
     }
 
-    /* Waiting theme */
+    /* ═══════════════════════════════════════════
+       WAITING SEQUENCE - Enhanced Animation
+       ════════════════════════════════════════════ */
     .waiting-sequence {
       display: flex;
       flex-direction: column;
@@ -382,6 +635,15 @@
       background: #fafafa;
       border-radius: 10px;
       border-left: 3px solid #e0e0e0;
+      opacity: 0.8;
+      transform: translateX(0);
+      transition: all 0.3s ease;
+    }
+
+    .waiting-step:hover {
+      opacity: 1;
+      transform: translateX(5px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     .waiting-step.raven { border-left-color: #616161; }
@@ -393,6 +655,11 @@
       font-size: 1.5rem;
       min-width: 40px;
       text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .waiting-step:hover .step-icon {
+      transform: scale(1.2);
     }
 
     .waiting-step .step-content h5 {
@@ -407,7 +674,9 @@
       color: #666;
     }
 
-    /* Cosmic collapse visual */
+    /* ═══════════════════════════════════════════
+       COSMOS DIAGRAM - Enhanced
+       ════════════════════════════════════════════ */
     .cosmos-diagram {
       background: linear-gradient(180deg, #1a237e 0%, #283593 20%, #5c6bc0 40%, #7986cb 50%, #9fa8da 60%, #3949ab 80%, #1a237e 100%);
       border-radius: 16px;
@@ -415,6 +684,13 @@
       margin: 1.5rem 0;
       color: white;
       text-align: center;
+      box-shadow: 0 8px 20px rgba(30, 136, 229, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .cosmos-diagram:hover {
+      box-shadow: 0 12px 30px rgba(30, 136, 229, 0.4);
+      transform: scale(1.01);
     }
 
     .cosmos-layer {
@@ -422,6 +698,11 @@
       margin: 0.5rem 0;
       border-radius: 8px;
       font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .cosmos-layer:hover {
+      transform: scale(1.02);
     }
 
     .cosmos-layer.waters-above {
@@ -445,14 +726,9 @@
       border: 1px dashed rgba(255,255,255,0.4);
     }
 
-    .cosmos-arrows {
-      display: flex;
-      justify-content: space-around;
-      margin: 1rem 0;
-      font-size: 1.5rem;
-    }
-
-    /* Flood reversal comparison */
+    /* ═══════════════════════════════════════════
+       FLOOD REVERSAL COMPARISON - Enhanced
+       ════════════════════════════════════════════ */
     .flood-reversal {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -465,15 +741,21 @@
       border-radius: 12px;
       padding: 1.25rem;
       border: 1px solid #e5e7eb;
+      transition: all 0.3s ease;
+    }
+
+    .flood-reversal-col:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     }
 
     .flood-reversal-col h4 {
       margin: 0 0 1rem 0;
       font-size: 0.95rem;
-      color: var(--page-accent-dark);
       text-align: center;
       padding-bottom: 0.5rem;
       border-bottom: 2px solid var(--page-accent);
+      color: var(--page-accent-dark);
     }
 
     .flood-reversal-col.creation { border-left: 4px solid #4caf50; }
@@ -489,9 +771,16 @@
 
     .flood-reversal-col li {
       margin-bottom: 0.5rem;
+      transition: all 0.2s ease;
     }
 
-    /* Enhanced scripture blocks */
+    .flood-reversal-col:hover li {
+      transform: translateX(3px);
+    }
+
+    /* ═══════════════════════════════════════════
+       SCRIPTURE BLOCKS - Page Flip Effect from Election
+       ════════════════════════════════════════════ */
     .scripture-block {
       background: white;
       border: 2px solid var(--page-accent);
@@ -499,13 +788,14 @@
       padding: 1.5rem 1.75rem;
       margin: 1.75rem 0;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
       position: relative;
+      transform-style: preserve-3d;
+      transition: all 0.4s ease;
     }
 
     .scripture-block:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      transform: translateY(-4px) rotateX(2deg);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
     }
 
     .scripture-block::before {
@@ -517,6 +807,15 @@
       width: 6px;
       background: linear-gradient(180deg, var(--page-accent), var(--page-accent-dark));
       border-radius: 12px 0 0 12px;
+      transition: all 0.3s ease;
+    }
+
+    .scripture-block:hover::before {
+      width: 8px;
+      background: linear-gradient(180deg, 
+        var(--page-accent), 
+        var(--page-accent-dark),
+        var(--page-accent));
     }
 
     .scripture-block p {
@@ -552,53 +851,21 @@
       font-size: 1rem;
     }
 
-    /* Page navigation */
-    .page-nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 0;
-      margin-top: 2rem;
-      border-top: 1px solid #e5e7eb;
-    }
-
-    .page-nav a {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      text-decoration: none;
-      color: var(--page-accent-dark);
-      font-weight: 600;
-      padding: 0.6rem 1rem;
-      border-radius: 10px;
-      transition: background 0.2s ease;
-    }
-
-    .page-nav a:hover {
-      background: var(--page-accent-light);
-    }
-
-    @media (max-width: 600px) {
-      .flood-reversal {
-        grid-template-columns: 1fr;
-      }
-      .chiasm-row {
-        grid-template-columns: 1fr;
-        text-align: center;
-        gap: 0.25rem;
-      }
-      .chiasm-left, .chiasm-right {
-        text-align: center;
-      }
-    }
-
-    /* Theology of Numbers - Dimension boxes */
+    /* ═══════════════════════════════════════════
+       DIMENSION BOX - Enhanced
+       ════════════════════════════════════════════ */
     .dimension-box {
       background: linear-gradient(135deg, #f3e5f5, #e1bee7);
       border: 2px solid #ab47bc;
       border-radius: 16px;
       padding: 1.5rem;
       margin: 1.5rem 0;
+      transition: all 0.3s ease;
+    }
+
+    .dimension-box:hover {
+      box-shadow: 0 8px 25px rgba(171, 71, 188, 0.2);
+      transform: scale(1.01);
     }
 
     .dimension-box h4 {
@@ -620,6 +887,13 @@
       border-radius: 10px;
       padding: 1rem;
       border: 1px solid rgba(123, 31, 162, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .dimension-item:hover {
+      background: rgba(255, 255, 255, 0.9);
+      transform: translateY(-4px);
+      box-shadow: 0 6px 15px rgba(123, 31, 162, 0.15);
     }
 
     .dimension-item .label {
@@ -636,26 +910,79 @@
       margin-bottom: 0.5rem;
     }
 
+    /* ═══════════════════════════════════════════
+       PAGE NAVIGATION - Enhanced
+       ════════════════════════════════════════════ */
+    .page-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 0;
+      margin-top: 2rem;
+      border-top: 2px solid var(--page-accent-light);
+    }
+
+    .page-nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: var(--page-accent-dark);
+      font-weight: 600;
+      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    .page-nav a:hover {
+      background: var(--page-accent-light);
+      border-color: var(--page-accent);
+      transform: translateX(2px);
+    }
+
+    .page-nav a.nav-prev:hover {
+      transform: translateX(-2px);
+    }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE DESIGN
+       ════════════════════════════════════════════ */
     @media (max-width: 600px) {
+      .flood-reversal {
+        grid-template-columns: 1fr;
+      }
+      .chiasm-row {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 0.25rem;
+      }
+      .chiasm-left, .chiasm-right {
+        text-align: center;
+      }
       .dimension-compare {
         grid-template-columns: 1fr;
       }
     }
-    /* Enhanced Blue theme for Page 5 */
-    .key-insight {
-    background: linear-gradient(135deg, rgba(41, 182, 246, 0.12), rgba(41, 182, 246, 0.08));
-    border-left: 4px solid #29b6f6;
-    }
 
-    .section-title .section-icon {
-    background: linear-gradient(135deg, #29b6f6, #4fc3f7);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    }
+    @media (max-width: 500px) {
+      .pattern-tracker {
+        font-size: 0.8rem;
+        padding: 0.75rem 1rem;
+      }
 
-    .theology-card {
-    border-top: 3px solid rgba(41, 182, 246, 0.3);
+      .pattern-tracker .stage {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.8rem;
+      }
+
+      .covenant-thread {
+        padding-left: 3rem;
+      }
+
+      .covenant-thread::before {
+        font-size: 1.5rem;
+      }
     }
   </style>
 </head>
@@ -668,7 +995,7 @@
 
   <main id="main-content" class="container" role="main" aria-label="Noah flood page">
 
-    <div class="breadcrumbs">
+    <div class="breadcrumbs fade-in">
       <a href="/">Home</a> ›
       <a href="/studies/">Studies</a> ›
       <a href="/studies/characters/">Characters</a> ›
@@ -679,7 +1006,7 @@
     <!-- ═══════════════════════════════════════════
          PAGE HEADER
     ════════════════════════════════════════════ -->
-    <header class="profile-header">
+    <header class="profile-header fade-slide-down">
       <div class="header-content">
         <div class="name-block">
           <span class="page-kicker">Page 5 of 9</span>
@@ -692,27 +1019,27 @@
     <!-- ═══════════════════════════════════════════
          PATTERN TRACKER
     ════════════════════════════════════════════ -->
-    <div class="pattern-tracker">
+    <div class="pattern-tracker fade-slide-down animation-delay-100">
       <span class="tracker-label">Story Arc:</span>
-      <span class="stage">Corruption</span>
-      <span class="arrow">→</span>
-      <span class="stage">Election</span>
-      <span class="arrow">→</span>
-      <span class="stage">Ark Built</span>
-      <span class="arrow">→</span>
-      <span class="stage current">Flood</span>
-      <span class="arrow">→</span>
-      <span class="stage">Covenant</span>
-      <span class="arrow">→</span>
-      <span class="stage">Failure</span>
-      <span class="arrow">→</span>
-      <span class="stage">Babel</span>
+      <span class="stage fade-in animation-delay-100">Corruption</span>
+      <span class="arrow fade-in animation-delay-100">→</span>
+      <span class="stage fade-in animation-delay-200">Election</span>
+      <span class="arrow fade-in animation-delay-200">→</span>
+      <span class="stage fade-in animation-delay-300">Ark Built</span>
+      <span class="arrow fade-in animation-delay-300">→</span>
+      <span class="stage current fade-in animation-delay-400">Flood</span>
+      <span class="arrow fade-in animation-delay-400">→</span>
+      <span class="stage fade-in animation-delay-500">Covenant</span>
+      <span class="arrow fade-in animation-delay-500">→</span>
+      <span class="stage fade-in">Failure</span>
+      <span class="arrow fade-in">→</span>
+      <span class="stage fade-in">Babel</span>
     </div>
 
     <!-- ═══════════════════════════════════════════
          COSMIC COLLAPSE
     ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll" id="cosmic-collapse">
+    <section class="theology-card animate-on-scroll animation-delay-100" id="cosmic-collapse">
       <h2 class="section-title"><span class="section-icon">🌌</span> Cosmic Collapse: Beyond the "Local vs. Global" Debate</h2>
 
       <p>
@@ -730,17 +1057,17 @@
         dome or expanse of the sky. This is the world God ordered on Day 2 of creation.
       </p>
 
-      <div class="cosmos-diagram">
-        <div class="cosmos-layer waters-above">
+      <div class="cosmos-diagram animate-on-scroll animation-delay-200">
+        <div class="cosmos-layer waters-above fade-slide-down animation-delay-100">
           Waters Above the Raqia' (מַיִם מֵעַל לָרָקִיעַ)
         </div>
-        <div class="cosmos-layer raqia">
+        <div class="cosmos-layer raqia fade-slide-down animation-delay-200">
           The Raqia' / Sky Dome (רָקִיעַ) — "Windows of the Skies"
         </div>
-        <div class="cosmos-layer dry-land">
+        <div class="cosmos-layer dry-land fade-slide-down animation-delay-300">
           Dry Land (אֶרֶץ) — Mountains, Valleys, Living Creatures
         </div>
-        <div class="cosmos-layer waters-below">
+        <div class="cosmos-layer waters-below fade-slide-down animation-delay-400">
           Waters Below — The Great Deep (תְּהוֹם) — "Fountains of the Deep"
         </div>
         <p style="margin-top:1rem;font-size:0.85rem;opacity:0.9;">
@@ -755,7 +1082,7 @@
         reverses Day 2 of creation:
       </p>
 
-      <blockquote class="scripture-block">
+      <blockquote class="scripture-block animate-on-scroll animation-delay-100">
         <p>
           "On that day <strong>all the fountains of the great deep burst open</strong>, 
           and <strong>the windows of the skies were opened</strong>. And there was rain 
@@ -764,8 +1091,8 @@
         <cite>— Genesis 7:11-12 (Mackie)</cite>
       </blockquote>
 
-      <div class="flood-reversal">
-        <div class="flood-reversal-col creation">
+      <div class="flood-reversal animate-on-scroll animation-delay-200">
+        <div class="flood-reversal-col creation fade-slide-left animation-delay-100">
           <h4>Day 2: Creation (Gen 1:6-8)</h4>
           <ul>
             <li>Waters above <strong>separated</strong> from waters below</li>
@@ -774,7 +1101,7 @@
             <li>Habitable space created</li>
           </ul>
         </div>
-        <div class="flood-reversal-col flood">
+        <div class="flood-reversal-col flood fade-slide-left animation-delay-200">
           <h4>The Flood (Gen 7:11)</h4>
           <ul>
             <li>Fountains of the deep <strong>burst open</strong></li>
@@ -785,7 +1112,7 @@
         </div>
       </div>
 
-      <div class="key-insight">
+      <div class="key-insight fade-slide-left animation-delay-100">
         <strong>The Theological Point:</strong> The language of Genesis 7:11-12 is describing 
         neither a local flood nor a global flood as we might conceive it. It's describing 
         <strong>cosmic collapse</strong>—the undoing of creation itself. God "releases" the 
@@ -805,7 +1132,7 @@
     <!-- ═══════════════════════════════════════════
          THE WATERS OVERWHELM
     ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll" id="overwhelm">
+    <section class="theology-card animate-on-scroll animation-delay-200" id="overwhelm">
       <h2 class="section-title"><span class="section-icon">🌊</span> The Waters Overwhelm the Land</h2>
 
       <p>
@@ -814,7 +1141,7 @@
         be sung. The waters come at you in waves:
       </p>
 
-      <blockquote class="scripture-block">
+      <blockquote class="scripture-block animate-on-scroll animation-delay-100">
         <p>
           "And the flood was 40 days upon the land, and the waters were great and they 
           lifted up the ark... And the waters were <strong>mighty</strong>... And the 
@@ -826,7 +1153,7 @@
         <cite>— Genesis 7:17-24 (Mackie, condensed)</cite>
       </blockquote>
 
-      <div class="wordplay-highlight">
+      <div class="wordplay-highlight animate-on-scroll animation-delay-200">
         <h4>🔤 The Gibborim/Gavar Wordplay</h4>
         <p>
           The Hebrew word for the waters being "mighty" is <strong>גָּבַר</strong> (<em>gavar</em>)—
@@ -844,7 +1171,7 @@
         all, all" language stands one stark contrast:
       </p>
 
-      <div class="remnant-box">
+      <div class="remnant-box animate-on-scroll animation-delay-300">
         <h4>🌱 The Remnant: First Appearance</h4>
         <p>
           "And <strong>only Noakh was left remaining</strong>, and those with him in the ark."
@@ -861,7 +1188,7 @@
     <!-- ═══════════════════════════════════════════
          THE PIVOT POINT
     ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll" id="pivot">
+    <section class="theology-card animate-on-scroll animation-delay-300" id="pivot">
       <h2 class="section-title"><span class="section-icon">🔄</span> The Pivot: God Remembered</h2>
 
       <p>
@@ -870,7 +1197,7 @@
         composition—stands one verse:
       </p>
 
-      <div class="pivot-box">
+      <div class="pivot-box animate-on-scroll animation-delay-100">
         <div class="pivot-verse">"And Elohim remembered Noakh."</div>
         <div class="pivot-ref">— Genesis 8:1 (Mackie)</div>
         <div class="pivot-note">
@@ -881,7 +1208,7 @@
         </div>
       </div>
 
-      <div class="cross-ref-box">
+      <div class="cross-ref-box fade-slide-left animation-delay-100">
         <strong>This Pattern Echoes:</strong> 
         <span class="page-ref">→ <a href="noah-intertext.html">Page 8: Intertext</a></span> traces "God remembered" through the Exodus (Ex 2:24), Hannah's story (1 Sam 1:19), and Jesus' birth narratives.
       </div>
@@ -898,38 +1225,38 @@
         the center are mirrored after it:
       </p>
 
-      <div class="chiasm-visual">
-        <div class="chiasm-row">
+      <div class="chiasm-visual animate-on-scroll animation-delay-200">
+        <div class="chiasm-row fade-slide-left animation-delay-100">
           <span class="chiasm-left">Noah's genealogy begins (5:32)</span>
           <span class="chiasm-center">A</span>
           <span class="chiasm-right">Noah's genealogy resumes (9:28-29)</span>
         </div>
-        <div class="chiasm-row">
+        <div class="chiasm-row fade-slide-left animation-delay-200">
           <span class="chiasm-left">Sons of God / cosmic rebellion (6:1-8)</span>
           <span class="chiasm-center">B</span>
           <span class="chiasm-right">Noah's sons / sin repeats (9:20-27)</span>
         </div>
-        <div class="chiasm-row">
+        <div class="chiasm-row fade-slide-left animation-delay-300">
           <span class="chiasm-left">Humans ruining the land (6:9-12)</span>
           <span class="chiasm-center">C</span>
           <span class="chiasm-right">God blesses: be fruitful, multiply (9:1-17)</span>
         </div>
-        <div class="chiasm-row">
+        <div class="chiasm-row fade-slide-left animation-delay-400">
           <span class="chiasm-left">Command to enter ark (6:13-22)</span>
           <span class="chiasm-center">D</span>
           <span class="chiasm-right">Command to exit ark (8:15-19)</span>
         </div>
-        <div class="chiasm-row">
+        <div class="chiasm-row fade-slide-left animation-delay-500">
           <span class="chiasm-left">Entering the ark (7:1-16)</span>
           <span class="chiasm-center">E</span>
           <span class="chiasm-right">Noah's sacrifice (8:20-22)</span>
         </div>
-        <div class="chiasm-row">
+        <div class="chiasm-row fade-slide-left">
           <span class="chiasm-left">Waters rise (7:17-24)</span>
           <span class="chiasm-center">F</span>
           <span class="chiasm-right">Waters recede (8:1-14)</span>
         </div>
-        <div class="chiasm-row chiasm-pivot">
+        <div class="chiasm-row chiasm-pivot fade-in">
           <span class="chiasm-left"></span>
           <span class="chiasm-center">GOD REMEMBERED NOAH (8:1)</span>
           <span class="chiasm-right"></span>
@@ -947,7 +1274,7 @@
     <!-- ═══════════════════════════════════════════
          GENESIS 1 REPLAYED
     ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll" id="genesis-replay">
+    <section class="theology-card animate-on-scroll animation-delay-100" id="genesis-replay">
       <h2 class="section-title"><span class="section-icon">🌅</span> Genesis 1 Replayed: The Re-Creation Sequence</h2>
 
       <p>
@@ -958,7 +1285,7 @@
         a creative act.
       </p>
 
-      <div class="genesis-parallel">
+      <div class="genesis-parallel animate-on-scroll animation-delay-200">
         <div class="genesis-parallel-header">Day</div>
         <div class="genesis-parallel-header">Creation (Genesis 1)</div>
         <div class="genesis-parallel-header">Re-Creation (Genesis 8-9)</div>
@@ -1004,7 +1331,7 @@
         <div class="genesis-parallel-cell">The ark <em>rested</em> (נוּחַ, <em>nuakh</em>) on Ararat (8:4); God blessed (9:1); seasons "will not rest" (8:22)</div>
       </div>
 
-      <div class="wordplay-highlight">
+      <div class="wordplay-highlight animate-on-scroll animation-delay-300">
         <h4>🔤 Noah's Name Becomes Action</h4>
         <p>
           Notice Day 7: while Genesis 1 uses <em>shabbat</em> ("ceased/rested"), Genesis 8 uses 
@@ -1015,7 +1342,7 @@
         </p>
       </div>
 
-      <div class="key-insight">
+      <div class="key-insight fade-slide-left animation-delay-100">
         <strong>Theological Claim:</strong> When God delivers from death, that itself is 
         a creative act. The Exodus from Egypt, the return from exile, the resurrection 
         of Jesus—these are all "new creation" moments. Creation in the Bible isn't just 
@@ -1027,7 +1354,7 @@
     <!-- ═══════════════════════════════════════════
          MOUNT ARARAT
     ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll" id="ararat">
+    <section class="theology-card animate-on-scroll animation-delay-200" id="ararat">
       <h2 class="section-title"><span class="section-icon">⛰️</span> Mount Ararat: Mount Curse</h2>
 
       <p>
@@ -1037,7 +1364,7 @@
         derived from Akkadian <em>Urartu</em>. But why does the narrator tell us this name?
       </p>
 
-      <div class="wordplay-highlight">
+      <div class="wordplay-highlight animate-on-scroll animation-delay-100">
         <h4>🔤 The Ararat/Curse Wordplay</h4>
         <p>
           Remember Noakh's father Lamech? At Noakh's birth, he prophesied: "This one will give us 
@@ -1061,7 +1388,7 @@
         The narrator has woven Noah's name and destiny into the geography itself:
       </p>
 
-      <blockquote class="scripture-block">
+      <blockquote class="scripture-block animate-on-scroll animation-delay-200">
         <p>
           <strong>Birth:</strong> "He called his name 'Noakh,' saying, 'This one will give us 
           <em>comfort</em> (נָחַם) from our work and from the toil of our hands from the ground 
@@ -1090,7 +1417,7 @@
     <!-- ═══════════════════════════════════════════
          THE BIRDS: WAITING ON THE LORD
     ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll" id="birds">
+    <section class="theology-card animate-on-scroll animation-delay-300" id="birds">
       <h2 class="section-title"><span class="section-icon">🕊️</span> The Birds: Waiting on the Lord</h2>
 
       <p>
@@ -1099,8 +1426,8 @@
         <strong>faithfully waiting for God's word to be fulfilled</strong>.
       </p>
 
-      <div class="waiting-sequence">
-        <div class="waiting-step raven">
+      <div class="waiting-sequence animate-on-scroll animation-delay-100">
+        <div class="waiting-step raven fade-slide-left animation-delay-100">
           <span class="step-icon">🐦‍⬛</span>
           <div class="step-content">
             <h5>The Raven</h5>
@@ -1108,7 +1435,7 @@
             the raven is ritually impure—a boundary crosser. The impure bird goes away.</p>
           </div>
         </div>
-        <div class="waiting-step dove1">
+        <div class="waiting-step dove1 fade-slide-left animation-delay-200">
           <span class="step-icon">🕊️</span>
           <div class="step-content">
             <h5>First Dove</h5>
@@ -1116,7 +1443,7 @@
             as a noun! Returns to the ark. Noakh reaches out, takes it, brings it back in.</p>
           </div>
         </div>
-        <div class="waiting-step dove2">
+        <div class="waiting-step dove2 fade-slide-left animation-delay-300">
           <span class="step-icon">🕊️</span>
           <div class="step-content">
             <h5>Second Dove (7 days later)</h5>
@@ -1124,7 +1451,7 @@
             Noah knows the waters have receded. Day 3 vegetation meets Day 4 time marker.</p>
           </div>
         </div>
-        <div class="waiting-step dove3">
+        <div class="waiting-step dove3 fade-slide-left animation-delay-400">
           <span class="step-icon">🕊️</span>
           <div class="step-content">
             <h5>Third Dove (7 days later)</h5>
@@ -1141,25 +1468,24 @@
         waits on the word of the Lord.
       </p>
 
-      <blockquote class="scripture-block">
+      <blockquote class="scripture-block animate-on-scroll animation-delay-200">
         <p>
           "Those who <strong>wait</strong> on Yahweh will renew their strength. 
           They will mount up on wings like eagles."
         </p>
         <cite>— Isaiah 40:31</cite>
       </blockquote>
-    </section>
 
-    <h3>The Theology of Numbers</h3>
+      <h3>The Theology of Numbers</h3>
       <p>
         The flood narrative is saturated with symbolic numbers—not arbitrary, but 
         theologically loaded. Each number signals a deeper meaning:
       </p>
 
-      <div class="dimension-box" style="background: linear-gradient(135deg, #f3e5f5, #e1bee7); border-color: #ab47bc;">
+      <div class="dimension-box animate-on-scroll animation-delay-300">
         <h4>🔢 The Numeric Pattern</h4>
         <div class="dimension-compare">
-          <div class="dimension-item">
+          <div class="dimension-item fade-in animation-delay-100">
             <div class="label">The Number 7</div>
             <div class="pattern">Completion · Perfection</div>
             <div style="font-size:0.85rem;color:#666;margin-top:0.5rem;">
@@ -1169,7 +1495,7 @@
               7 days waiting between doves (8:10, 12)
             </div>
           </div>
-          <div class="dimension-item">
+          <div class="dimension-item fade-in animation-delay-200">
             <div class="label">The Number 40</div>
             <div class="pattern">Testing · Trial</div>
             <div style="font-size:0.85rem;color:#666;margin-top:0.5rem;">
@@ -1196,7 +1522,7 @@
     <!-- ═══════════════════════════════════════════
          ANE CONTEXT
     ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll" id="ane-context">
+    <section class="theology-card animate-on-scroll animation-delay-100" id="ane-context">
       <h2 class="section-title"><span class="section-icon">📜</span> The Flood in Ancient Near Eastern Context</h2>
 
       <p>
@@ -1221,29 +1547,29 @@
       </p>
 
       <h3>Key Differences</h3>
-      <div class="meso-grid">
-        <div class="meso-card">
+      <div class="meso-grid animate-on-scroll animation-delay-200">
+        <div class="meso-card fade-slide-left animation-delay-100">
           <h4>Why the Flood Comes</h4>
           <div class="label">Mesopotamian:</div>
           <p>Humans are noisy and disturb the gods' sleep. Flood is pest control.</p>
           <div class="label" style="margin-top:0.75rem;">Biblical:</div>
           <p>The outcry of innocent blood rises to God. Violence fills the land. Flood is ethical judgment.</p>
         </div>
-        <div class="meso-card">
+        <div class="meso-card fade-slide-left animation-delay-200">
           <h4>View of Human Life</h4>
           <div class="label">Mesopotamian:</div>
           <p>Humans exist to feed the gods with sacrifices. Low view of human dignity.</p>
           <div class="label" style="margin-top:0.75rem;">Biblical:</div>
           <p>Humans are the image of God. Their blood cannot be shed without consequence.</p>
         </div>
-        <div class="meso-card">
+        <div class="meso-card fade-slide-left animation-delay-300">
           <h4>The Gods' Response</h4>
           <div class="label">Mesopotamian:</div>
           <p>The gods cry because they're hungry—no one is offering sacrifices. They crowd "like flies" around the hero's offering.</p>
           <div class="label" style="margin-top:0.75rem;">Biblical:</div>
           <p>God smells Noah's sacrifice and makes a covenant promise. He doesn't need the sacrifice—He responds to the faith behind it.</p>
         </div>
-        <div class="meso-card">
+        <div class="meso-card fade-slide-left animation-delay-400">
           <h4>Aftermath</h4>
           <div class="label">Mesopotamian:</div>
           <p>The hero becomes a god or is taken to paradise.</p>
@@ -1252,7 +1578,7 @@
         </div>
       </div>
 
-      <div class="key-insight">
+      <div class="key-insight fade-slide-left animation-delay-100">
         <strong>Rival Worldviews:</strong> The biblical flood narrative isn't just a story—
         it's a theological statement consciously critiquing rival portraits of the gods. 
         What Babylon celebrated, the biblical authors subverted. The lazy, hungry gods of 
@@ -1264,7 +1590,7 @@
     <!-- ═══════════════════════════════════════════
          ISAIAH 54 CONNECTION
     ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll" id="isaiah54">
+    <section class="theology-card animate-on-scroll animation-delay-200" id="isaiah54">
       <h2 class="section-title"><span class="section-icon">📖</span> The Flood as Pattern: Isaiah 54</h2>
 
       <p>
@@ -1273,7 +1599,7 @@
         addressing Israel's exile to Babylon:
       </p>
 
-      <blockquote class="scripture-block">
+      <blockquote class="scripture-block animate-on-scroll animation-delay-100">
         <p>
           "In a surge of anger I hid my face from you for a moment, but with everlasting 
           love I will have compassion on you... <strong>To me this is like the days of 
@@ -1303,7 +1629,7 @@
     <!-- ═══════════════════════════════════════════
          COVENANT THREAD INDICATOR
     ════════════════════════════════════════════ -->
-    <div class="covenant-thread">
+    <div class="covenant-thread fade-slide-down">
       <div class="thread-stage">Covenant Stage: Approaching</div>
       <p>The flood waters recede, the ark rests on Ararat, and Noah waits for God's word. The re-creation sequence mirrors Genesis 1, preparing for God's explicit covenant promise that will soon transform judgment into perpetual mercy.</p>
     </div>
@@ -1311,10 +1637,10 @@
     <!-- ═══════════════════════════════════════════
          KEY VERSES
     ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll" id="key-verses">
+    <section class="theology-card animate-on-scroll animation-delay-300" id="key-verses">
       <h2 class="section-title"><span class="section-icon">📜</span> Key Verses</h2>
 
-      <blockquote class="scripture-block">
+      <blockquote class="scripture-block animate-on-scroll animation-delay-100">
         <p>
           "On that day all the fountains of the great deep burst open, and the windows 
           of the skies were opened."
@@ -1322,7 +1648,7 @@
         <cite>— Genesis 7:11 (Mackie)</cite>
       </blockquote>
 
-      <blockquote class="scripture-block">
+      <blockquote class="scripture-block animate-on-scroll animation-delay-200">
         <p>
           "The waters were mighty, very very much, upon the land, and they covered all 
           the high mountains which are under the skies."
@@ -1330,7 +1656,7 @@
         <cite>— Genesis 7:19-20 (Mackie)</cite>
       </blockquote>
 
-      <blockquote class="scripture-block">
+      <blockquote class="scripture-block animate-on-scroll animation-delay-300">
         <p>
           "And Elohim remembered Noakh and all the living creatures and all the beasts 
           that were with him in the ark, and Elohim caused a Spirit/wind to pass over 
@@ -1339,7 +1665,7 @@
         <cite>— Genesis 8:1 (Mackie)</cite>
       </blockquote>
 
-      <blockquote class="scripture-block">
+      <blockquote class="scripture-block animate-on-scroll animation-delay-400">
         <p>
           "And the ark rested, in the seventh month, on the 17th day of the month, 
           upon the mountains of Ararat."
@@ -1347,7 +1673,7 @@
         <cite>— Genesis 8:4 (Mackie)</cite>
       </blockquote>
 
-      <blockquote class="scripture-block">
+      <blockquote class="scripture-block animate-on-scroll animation-delay-500">
         <p>
           "To me this is like the days of Noah, when I swore that the waters would never 
           again cover the earth."
@@ -1359,7 +1685,7 @@
     <!-- ═══════════════════════════════════════════
          BRIDGE TO COVENANT
     ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll" id="bridge-forward">
+    <section class="theology-card animate-on-scroll animation-delay-100" id="bridge-forward">
       <h2 class="section-title"><span class="section-icon">🌉</span> From Chaos to Covenant</h2>
 
       <p>
@@ -1373,7 +1699,7 @@
         Noah steps onto the mountain, builds an altar, and offers a sacrifice that changes everything.
       </p>
 
-      <div class="key-insight">
+      <div class="key-insight fade-slide-left animation-delay-100">
         <strong>Next:</strong> The sacrifice that brings God's "rest-giving aroma" and leads to 
         the first explicit covenant in Scripture—God's rainbow promise that transforms divine 
         judgment into perpetual mercy.
@@ -1383,7 +1709,7 @@
     <!-- ═══════════════════════════════════════════
          PAGE NAVIGATION
     ════════════════════════════════════════════ -->
-    <nav class="page-nav" aria-label="Page navigation">
+    <nav class="page-nav fade-slide-down" aria-label="Page navigation">
       <a href="noah-ark.html" class="nav-prev">
         <span>←</span> Page 4: The Ark
       </a>
@@ -1394,7 +1720,7 @@
     </nav>
 
     <!-- Back to Hub -->
-    <div style="text-align: center; margin: 2rem 0;">
+    <div style="text-align: center; margin: 2rem 0;" class="fade-in">
       <a href="noah.html" style="color: var(--page-accent-dark); font-weight: 600; text-decoration: none;">
         ← Return to Noah Hub
       </a>
