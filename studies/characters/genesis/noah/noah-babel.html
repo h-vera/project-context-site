@@ -68,6 +68,99 @@
     }
 
     /* ═══════════════════════════════════════════
+       ANIMATION FRAMEWORK - CRITICAL FOUNDATION
+    ════════════════════════════════════════════ */
+
+    /* Keyframe Definitions */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeSlideDown {
+      from { 
+        opacity: 0; 
+        transform: translateY(-20px); 
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0); 
+      }
+    }
+
+    @keyframes fadeSlideLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+
+    @keyframes gentlePulse {
+      0%, 100% { box-shadow: 0 2px 8px rgba(102, 187, 106, 0.15); }
+      50% { box-shadow: 0 4px 12px rgba(102, 187, 106, 0.25); }
+    }
+
+    @keyframes stage-pulse {
+      0%, 100% {
+        transform: scale(1.05);
+        box-shadow: 0 2px 8px rgba(171, 71, 188, 0.25);
+      }
+      50% {
+        transform: scale(1.1);
+        box-shadow: 0 4px 15px rgba(171, 71, 188, 0.4);
+      }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+
+    /* Animation Classes */
+    .fade-in {
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    .fade-slide-down {
+      animation: fadeSlideDown 0.6s ease-out;
+    }
+
+    .fade-slide-left {
+      animation: fadeSlideLeft 0.6s ease-out;
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      will-change: transform, opacity;
+    }
+
+    .animate-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Animation Delays */
+    .animation-delay-100 { animation-delay: 0.1s; }
+    .animation-delay-200 { animation-delay: 0.2s; }
+    .animation-delay-300 { animation-delay: 0.3s; }
+    .animation-delay-400 { animation-delay: 0.4s; }
+    .animation-delay-500 { animation-delay: 0.5s; }
+    .animation-delay-600 { animation-delay: 0.6s; }
+    .animation-delay-700 { animation-delay: 0.7s; }
+    .animation-delay-800 { animation-delay: 0.8s; }
+
+    /* ═══════════════════════════════════════════
        HEBREW VISIBILITY FIXES
     ════════════════════════════════════════════ */
 
@@ -93,83 +186,184 @@
     }
 
     /* ═══════════════════════════════════════════
-       VISUAL DEPTH ENHANCEMENTS
+       THEOLOGY CARDS - HUB PATTERN INTEGRATION
     ════════════════════════════════════════════ */
 
-    /* Enhanced scripture blocks */
-    .scripture-block {
-      box-shadow: 
-        0 4px 12px rgba(0, 0, 0, 0.1),
-        0 2px 4px rgba(171, 71, 188, 0.15);
+    .theology-card {
+      position: relative;
+      overflow: hidden;
       transition: all 0.3s ease;
     }
 
-    .scripture-block:hover {
+    /* Top color accent bar (hub pattern) */
+    .theology-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--page-accent), var(--page-accent-dark));
+      z-index: 1;
+    }
+
+    .theology-card:hover {
       transform: translateY(-3px);
       box-shadow: 
         0 8px 20px rgba(0, 0, 0, 0.15),
         0 4px 8px rgba(171, 71, 188, 0.2);
     }
 
-    /* Enhanced theology cards */
-    .theology-card {
-      box-shadow: 
-        0 2px 8px rgba(0, 0, 0, 0.08),
-        0 1px 3px rgba(171, 71, 188, 0.1);
-      transition: all 0.3s ease;
-    }
+    /* ═══════════════════════════════════════════
+       SCRIPTURE BLOCKS - PAGE FLIP EFFECT
+    ════════════════════════════════════════════ */
 
-    .theology-card:hover {
-      box-shadow: 
-        0 6px 16px rgba(0, 0, 0, 0.12),
-        0 3px 6px rgba(171, 71, 188, 0.15);
-      transform: translateY(-2px);
-    }
-
-    /* Enhanced pattern replay */
-    .pattern-replay {
-      background: linear-gradient(135deg, 
-        rgba(171, 71, 188, 0.12) 0%, 
-        rgba(225, 190, 231, 0.18) 100%);
-      box-shadow: 
-        0 4px 12px rgba(171, 71, 188, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5);
-    }
-
-    .pattern-column {
+    .scripture-block {
+      background: white;
+      border: 2px solid var(--page-accent);
+      border-radius: 12px;
+      padding: 1.5rem 1.75rem;
+      margin: 1.75rem 0;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      position: relative;
+      transform-style: preserve-3d;
+      transition: all 0.4s ease;
+    }
+
+    .scripture-block:hover {
+      transform: translateY(-4px) rotateX(2deg);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .scripture-block::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 6px;
+      background: linear-gradient(180deg, var(--page-accent), var(--page-accent-dark));
+      border-radius: 12px 0 0 12px;
       transition: all 0.3s ease;
     }
 
-    .pattern-column:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    .scripture-block:hover::before {
+      width: 8px;
+      background: linear-gradient(180deg, 
+        var(--page-accent), 
+        var(--page-accent-dark),
+        var(--page-accent));
     }
 
-    /* Enhanced interpretation cards */
-    .interpretation-card {
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    .scripture-block p {
+      font-style: normal;
+      margin: 0;
+      line-height: 1.8;
+      color: #1a1a1a;
+      font-size: 1rem;
+    }
+
+    .scripture-block cite {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 1rem;
+      font-style: normal;
+      font-weight: 700;
+      color: var(--page-accent-dark);
+      font-size: 0.9rem;
+      padding: 0.35rem 0.75rem;
+      background: var(--page-accent-light);
+      border-radius: 6px;
+      border-left: 3px solid var(--page-accent);
+    }
+
+    .scripture-block:nth-child(even) {
+      background: linear-gradient(135deg, var(--page-accent-light), rgba(255, 255, 255, 0.8));
+      border-color: var(--page-accent-dark);
+    }
+
+    .scripture-block cite::before {
+      content: "📖";
+      margin-right: 0.5rem;
+      font-size: 1rem;
+    }
+
+    /* ═══════════════════════════════════════════
+       SECTION TITLES - ANIMATED UNDERLINE
+    ════════════════════════════════════════════ */
+
+    .section-title {
+      position: relative;
+      cursor: default;
+    }
+
+    .section-title .section-icon {
+      background: linear-gradient(135deg, var(--page-accent), #ba68c8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+
+    .section-title:hover .section-icon {
+      transform: rotate(10deg) scale(1.1);
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--page-accent), var(--page-accent-dark));
+      transition: width 0.4s ease;
+    }
+
+    .section-title:hover::after {
+      width: 100%;
+    }
+
+    /* ═══════════════════════════════════════════
+       KEY INSIGHTS - BREATHE EFFECT
+    ════════════════════════════════════════════ */
+
+    .key-insight {
+      background: linear-gradient(135deg, var(--page-accent-light), rgba(171, 71, 188, 0.08));
+      border-left: 4px solid var(--page-accent);
+      position: relative;
+      overflow: hidden;
       transition: all 0.3s ease;
     }
 
-    .interpretation-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    .key-insight::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, 
+        rgba(171, 71, 188, 0.1) 0%, 
+        transparent 70%);
+      opacity: 0;
+      transition: opacity 0.5s ease;
     }
 
-    .interpretation-card.primary {
+    .key-insight:hover {
+      transform: scale(1.01);
       box-shadow: 
-        0 3px 8px rgba(255, 152, 0, 0.2),
-        0 1px 3px rgba(0, 0, 0, 0.1);
+        0 6px 16px rgba(171, 71, 188, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
     }
 
-    .interpretation-card.primary:hover {
-      box-shadow: 
-        0 6px 16px rgba(255, 152, 0, 0.25),
-        0 2px 6px rgba(0, 0, 0, 0.15);
+    .key-insight:hover::before {
+      opacity: 1;
+      animation: breathe 3s ease-in-out infinite;
     }
 
-    /* Enhanced cross-ref boxes */
+    /* ═══════════════════════════════════════════
+       CROSS-REFERENCE BOXES - ENHANCED
+    ════════════════════════════════════════════ */
+
     .cross-ref-box {
       background: linear-gradient(135deg, 
         rgba(92, 107, 192, 0.1) 0%, 
@@ -177,185 +371,16 @@
       border-left: 4px solid transparent;
       border-image: linear-gradient(180deg, #5c6bc0, #ab47bc) 1;
       box-shadow: 0 2px 6px rgba(92, 107, 192, 0.1);
-    }
-
-    /* Enhanced poem box */
-    .poem-box {
-      box-shadow: 
-        0 4px 12px rgba(63, 81, 181, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
-    }
-
-    .poem-line {
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-      transition: all 0.3s ease;
-    }
-
-    .poem-line:hover {
-      transform: translateX(4px);
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
-    }
-
-    /* Enhanced dual meaning */
-    .dual-meaning {
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    }
-
-    .dual-option {
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-      transition: all 0.3s ease;
-    }
-
-    .dual-option:hover {
-      transform: scale(1.02);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
-    }
-
-    /* Enhanced nations table */
-    .nations-table {
-      box-shadow: 
-        0 4px 12px rgba(13, 71, 161, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
-    }
-
-    .nation-card {
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-      transition: all 0.3s ease;
-    }
-
-    .nation-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-    }
-
-    /* Enhanced Nimrod box */
-    .nimrod-box {
-      box-shadow: 
-        0 10px 30px rgba(171, 71, 188, 0.3),
-        0 4px 12px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    }
-
-    .nimrod-link {
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-      transition: all 0.3s ease;
-    }
-
-    .nimrod-link:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      transform: translateY(-2px);
-    }
-
-    /* Enhanced Babel scene */
-    .babel-scene {
-      box-shadow: 
-        0 10px 30px rgba(74, 20, 140, 0.3),
-        0 4px 12px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    }
-
-    .babel-speech {
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-      transition: all 0.3s ease;
-    }
-
-    .babel-speech:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      transform: translateX(3px);
-    }
-
-    /* Enhanced cities chain */
-    .cities-chain {
-      box-shadow: 0 3px 10px rgba(55, 71, 79, 0.15);
-    }
-
-    .city-card {
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-      transition: all 0.3s ease;
-    }
-
-    .city-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-    }
-
-    /* Enhanced scattered thread */
-    .scattered-thread {
-      box-shadow: 0 3px 10px rgba(255, 152, 0, 0.15);
-    }
-
-    .thread-item {
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-      transition: all 0.3s ease;
-    }
-
-    .thread-item:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
-    }
-
-    /* Enhanced Abraham transition */
-    .abraham-transition {
-      box-shadow: 
-        0 6px 20px rgba(46, 125, 50, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
-    }
-
-    /* Enhanced callout boxes */
-    .pentecost-box,
-    .zephaniah-box,
-    .anti-eden {
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-    }
-
-    .pentecost-box:hover,
-    .zephaniah-box:hover,
-    .anti-eden:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-    }
-
-    /* Covenant thread pulse */
-    .covenant-thread {
-      box-shadow: 0 2px 8px rgba(102, 187, 106, 0.15);
-      animation: gentlePulse 4s ease-in-out infinite;
-    }
-
-    @keyframes gentlePulse {
-      0%, 100% { box-shadow: 0 2px 8px rgba(102, 187, 106, 0.15); }
-      50% { box-shadow: 0 4px 12px rgba(102, 187, 106, 0.25); }
-    }
-
-    /* Enhanced key insights */
-    .key-insight {
-      box-shadow: 
-        0 3px 10px rgba(171, 71, 188, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-      transition: all 0.3s ease;
-    }
-
-    .key-insight:hover {
-      box-shadow: 
-        0 6px 16px rgba(171, 71, 188, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
-    }
-
-    /* Section titles */
-    .section-title {
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    /* ═══════════════════════════════════════════
-       ORIGINAL ENHANCEMENT FEATURES CSS
-    ════════════════════════════════════════════ */
-
-    /* Cross-reference boxes */
-    .cross-ref-box {
       border-radius: 12px;
       padding: 1rem 1.25rem;
       margin: 1.25rem 0;
       font-size: 0.92rem;
+      transition: all 0.3s ease;
+    }
+
+    .cross-ref-box:hover {
+      transform: translateX(4px);
+      box-shadow: 0 4px 12px rgba(92, 107, 192, 0.15);
     }
 
     .cross-ref-box strong {
@@ -382,54 +407,90 @@
       margin-right: 0.5rem;
     }
 
-    /* Pattern tracker (keeping for compatibility) */
-    .pattern-tracker {
+    /* ═══════════════════════════════════════════
+       PATTERN PROGRESSION - ENHANCED RAINBOW
+    ════════════════════════════════════════════ */
+
+    .pattern-progression {
+      background: linear-gradient(135deg, var(--page-accent-light), rgba(171, 71, 188, 0.05));
+      border-radius: 16px;
+      padding: 2rem;
+      margin: 2rem 0;
+      border: 2px solid var(--page-accent-light);
+    }
+
+    .pattern-stages {
       display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 1rem 1.25rem;
-      background: rgba(0, 0, 0, 0.05);
-      border-radius: 12px;
-      margin: 1.5rem 0;
+      gap: 0.75rem;
+      justify-content: center;
       flex-wrap: wrap;
-      font-size: 0.85rem;
+      margin-top: 1rem;
     }
 
-    .pattern-tracker .tracker-label {
+    .pattern-stage-card {
+      flex: 0 0 auto;
+      min-width: 100px;
+      background: white;
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .pattern-stage-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .pattern-stage-card:nth-child(7) {
+      border-color: var(--page-accent);
+      box-shadow: 0 4px 12px rgba(171,71,188,0.3);
+      animation: stage-pulse 2s ease-in-out infinite;
+    }
+
+    .stage-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
       font-weight: 700;
-      color: var(--page-accent-dark, #333);
-      margin-right: 0.5rem;
-    }
-
-    .pattern-tracker .stage {
-      padding: 0.35rem 0.7rem;
-      border-radius: 6px;
-      background: rgba(0, 0, 0, 0.08);
-      color: #666;
-      font-weight: 600;
-      transition: all 0.2s ease;
-    }
-
-    .pattern-tracker .stage.current {
-      background: var(--page-accent, #5c6bc0);
       color: white;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-      transform: scale(1.05);
+      margin-bottom: 0.5rem;
+      transition: transform 0.3s ease;
     }
 
-    .pattern-tracker .arrow {
-      color: #999;
+    .pattern-stage-card:hover .stage-number {
+      transform: scale(1.15) rotate(5deg);
+    }
+
+    .stage-label {
       font-size: 0.9rem;
+      font-weight: 600;
+      color: #333;
     }
 
-    /* Covenant thread indicator */
+    /* ═══════════════════════════════════════════
+       COVENANT THREAD - ENHANCED PULSE
+    ════════════════════════════════════════════ */
+
     .covenant-thread {
       position: relative;
-      padding: 1rem 1rem 1rem 3rem;
+      padding: 1rem 1rem 1rem 3.5rem;
       margin: 1.5rem 0;
       border-radius: 12px;
-      background: linear-gradient(135deg, rgba(102, 187, 106, 0.08), rgba(102, 187, 106, 0.05));
+      background: linear-gradient(135deg, rgba(102, 187, 106, 0.12), rgba(102, 187, 106, 0.05));
       border-left: 4px solid #66bb6a;
+      box-shadow: 0 2px 8px rgba(102, 187, 106, 0.15);
+      animation: gentlePulse 4s ease-in-out infinite;
+      transition: all 0.3s ease;
+    }
+
+    .covenant-thread:hover {
+      transform: translateX(4px);
+      box-shadow: 0 4px 12px rgba(102, 187, 106, 0.25);
     }
 
     .covenant-thread::before {
@@ -438,7 +499,12 @@
       left: 1rem;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 1.5rem;
+      font-size: 1.8rem;
+      transition: transform 0.3s ease;
+    }
+
+    .covenant-thread:hover::before {
+      transform: translateY(-50%) scale(1.15);
     }
 
     .covenant-thread .thread-stage {
@@ -456,12 +522,28 @@
       line-height: 1.6;
     }
 
-    /* Pattern comparison box */
+    /* ═══════════════════════════════════════════
+       PATTERN REPLAY - ENHANCED
+    ════════════════════════════════════════════ */
+
     .pattern-replay {
+      background: linear-gradient(135deg, 
+        rgba(171, 71, 188, 0.12) 0%, 
+        rgba(225, 190, 231, 0.18) 100%);
+      box-shadow: 
+        0 4px 12px rgba(171, 71, 188, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
       border: 2px solid var(--page-accent);
       border-radius: 16px;
       padding: 2rem;
       margin: 2rem 0;
+      transition: all 0.3s ease;
+    }
+
+    .pattern-replay:hover {
+      box-shadow: 
+        0 8px 20px rgba(171, 71, 188, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
     }
 
     .pattern-replay h3 {
@@ -487,6 +569,13 @@
       background: white;
       border-radius: 12px;
       padding: 1.25rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .pattern-column:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
     }
 
     .pattern-column h4 {
@@ -505,9 +594,17 @@
 
     .pattern-column li {
       margin-bottom: 0.4rem;
+      transition: all 0.2s ease;
     }
 
-    /* Interpretation cards */
+    .pattern-column:hover li {
+      transform: translateX(3px);
+    }
+
+    /* ═══════════════════════════════════════════
+       INTERPRETATION CARDS - ENHANCED
+    ════════════════════════════════════════════ */
+
     .interpretation-grid {
       display: grid;
       gap: 1rem;
@@ -519,6 +616,13 @@
       border-radius: 12px;
       padding: 1.25rem;
       border-left: 4px solid var(--page-accent);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .interpretation-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
     }
 
     .interpretation-card h4 {
@@ -530,19 +634,41 @@
     .interpretation-card.primary {
       background: linear-gradient(135deg, #fff3e0, #ffe0b2);
       border-left-color: #ff9800;
+      box-shadow: 
+        0 3px 8px rgba(255, 152, 0, 0.2),
+        0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .interpretation-card.primary:hover {
+      box-shadow: 
+        0 6px 16px rgba(255, 152, 0, 0.25),
+        0 2px 6px rgba(0, 0, 0, 0.15);
     }
 
     .interpretation-card.primary h4 {
       color: #e65100;
     }
 
-    /* Blessing/curse poem box */
+    /* ═══════════════════════════════════════════
+       POEM BOX - ENHANCED
+    ════════════════════════════════════════════ */
+
     .poem-box {
       background: linear-gradient(135deg, #e8eaf6, #c5cae9);
       border-radius: 14px;
       padding: 2rem;
       margin: 1.5rem 0;
       border: 1px solid #7986cb;
+      box-shadow: 
+        0 4px 12px rgba(63, 81, 181, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .poem-box:hover {
+      box-shadow: 
+        0 8px 20px rgba(63, 81, 181, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
     }
 
     .poem-box h3 {
@@ -559,6 +685,13 @@
       padding: 0.75rem 1rem;
       background: white;
       border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .poem-line:hover {
+      transform: translateX(4px);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
     }
 
     .poem-line .son-name {
@@ -579,13 +712,22 @@
       color: #1565c0;
     }
 
-    /* Dual meaning box */
+    /* ═══════════════════════════════════════════
+       DUAL MEANING BOX - ENHANCED
+    ════════════════════════════════════════════ */
+
     .dual-meaning {
       background: #fafafa;
       border-radius: 14px;
       padding: 1.5rem;
       margin: 1.5rem 0;
       border: 1px solid #e5e7eb;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .dual-meaning:hover {
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
     }
 
     .dual-meaning h4 {
@@ -610,6 +752,13 @@
       padding: 1rem;
       border-radius: 10px;
       text-align: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .dual-option:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
     }
 
     .dual-option.conflict {
@@ -633,12 +782,25 @@
     .dual-option.conflict .label { color: #c62828; }
     .dual-option.peace .label { color: #2e7d32; }
 
-    /* Table of Nations */
+    /* ═══════════════════════════════════════════
+       TABLE OF NATIONS - ENHANCED
+    ════════════════════════════════════════════ */
+
     .nations-table {
       background: linear-gradient(135deg, #e3f2fd, #bbdefb);
       border-radius: 14px;
       padding: 1.5rem;
       margin: 1.5rem 0;
+      box-shadow: 
+        0 4px 12px rgba(13, 71, 161, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .nations-table:hover {
+      box-shadow: 
+        0 8px 20px rgba(13, 71, 161, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
     }
 
     .nations-table h3 {
@@ -664,6 +826,13 @@
       border-radius: 10px;
       padding: 1rem;
       text-align: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .nation-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
     }
 
     .nation-card .son-header {
@@ -693,7 +862,10 @@
       margin-top: 0.5rem;
     }
 
-    /* Nimrod box */
+    /* ═══════════════════════════════════════════
+       NIMROD BOX - ENHANCED WITH SHIMMER
+    ════════════════════════════════════════════ */
+
     .nimrod-box {
       background: linear-gradient(135deg, var(--page-accent-dark), #6a1b9a);
       color: white;
@@ -701,6 +873,38 @@
       padding: 2rem;
       margin: 2rem 0;
       border: 2px solid var(--page-accent);
+      box-shadow: 
+        0 10px 30px rgba(171, 71, 188, 0.3),
+        0 4px 12px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .nimrod-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -200%;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.1), 
+        transparent);
+      transition: left 0.5s ease;
+    }
+
+    .nimrod-box:hover::before {
+      left: 100%;
+    }
+
+    .nimrod-box:hover {
+      box-shadow: 
+        0 15px 40px rgba(171, 71, 188, 0.4),
+        0 6px 16px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
     }
 
     .nimrod-box h3 {
@@ -745,6 +949,14 @@
       border-radius: 10px;
       padding: 1rem;
       border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .nimrod-link:hover {
+      background: rgba(255,255,255,0.25);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transform: translateY(-2px);
     }
 
     .nimrod-link .ref {
@@ -754,100 +966,10 @@
       font-weight: 600;
     }
 
-    /* Scattered thread visual */
-    .scattered-thread {
-      background: linear-gradient(135deg, #fff3e0, #ffe0b2);
-      border: 1px solid #ffb74d;
-      border-radius: 14px;
-      padding: 1.5rem;
-      margin: 1.5rem 0;
-    }
+    /* ═══════════════════════════════════════════
+       BABEL SCENE - ENHANCED WITH GLOW
+    ════════════════════════════════════════════ */
 
-    .scattered-thread h4 {
-      margin: 0 0 1rem 0;
-      color: #e65100;
-      text-align: center;
-    }
-
-    .thread-chain {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      font-size: 0.85rem;
-    }
-
-    .thread-item {
-      background: white;
-      padding: 0.5rem 0.75rem;
-      border-radius: 8px;
-      border: 1px solid #ffcc80;
-    }
-
-    .thread-item .ref {
-      font-weight: 700;
-      color: #e65100;
-    }
-
-    .thread-arrow {
-      color: #ff9800;
-      font-size: 1.25rem;
-    }
-
-    /* Three cities box */
-    .cities-chain {
-      background: linear-gradient(135deg, #eceff1, #cfd8dc);
-      border-radius: 14px;
-      padding: 1.5rem;
-      margin: 1.5rem 0;
-    }
-
-    .cities-chain h4 {
-      margin: 0 0 1rem 0;
-      color: #37474f;
-      text-align: center;
-    }
-
-    .cities-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-    }
-
-    @media (max-width: 600px) {
-      .cities-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .city-card {
-      background: white;
-      border-radius: 10px;
-      padding: 1rem;
-      text-align: center;
-      border-top: 4px solid #546e7a;
-    }
-
-    .city-card .city-name {
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: #37474f;
-    }
-
-    .city-card .builder {
-      font-size: 0.85rem;
-      color: #78909c;
-      margin: 0.25rem 0;
-    }
-
-    .city-card .purpose {
-      font-size: 0.85rem;
-      color: #546e7a;
-      margin-top: 0.5rem;
-    }
-
-    /* Babel tower visual */
     .babel-scene {
       background: linear-gradient(135deg, var(--page-accent-dark), #4a148c);
       color: white;
@@ -857,6 +979,11 @@
       position: relative;
       overflow: hidden;
       border: 2px solid var(--page-accent);
+      box-shadow: 
+        0 10px 30px rgba(74, 20, 140, 0.3),
+        0 4px 12px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
     }
 
     .babel-scene::before {
@@ -869,6 +996,13 @@
       height: 100%;
       background: linear-gradient(to top, rgba(171, 71, 188, 0.3), transparent);
       opacity: 0.5;
+    }
+
+    .babel-scene:hover {
+      box-shadow: 
+        0 15px 40px rgba(74, 20, 140, 0.4),
+        0 6px 16px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
     }
 
     .babel-scene h3 {
@@ -900,6 +1034,14 @@
       margin: 1rem 0;
       border-left: 3px solid #ce93d8;
       border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .babel-speech:hover {
+      background: rgba(255,255,255,0.25);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transform: translateX(3px);
     }
 
     .babel-speech.divine {
@@ -924,21 +1066,135 @@
       line-height: 1.7;
     }
 
-    /* Anti-Eden box */
-    .anti-eden {
-      background: linear-gradient(135deg, #fff8e1, #ffecb3);
-      border: 1px solid #ffc107;
+    /* ═══════════════════════════════════════════
+       CITIES CHAIN - ENHANCED
+    ════════════════════════════════════════════ */
+
+    .cities-chain {
+      background: linear-gradient(135deg, #eceff1, #cfd8dc);
       border-radius: 14px;
       padding: 1.5rem;
       margin: 1.5rem 0;
+      box-shadow: 0 3px 10px rgba(55, 71, 79, 0.15);
+      transition: all 0.3s ease;
     }
 
-    .anti-eden h4 {
-      margin: 0 0 0.75rem 0;
-      color: #f57f17;
+    .cities-chain:hover {
+      box-shadow: 0 6px 20px rgba(55, 71, 79, 0.2);
     }
 
-    /* Abraham transition */
+    .cities-chain h4 {
+      margin: 0 0 1rem 0;
+      color: #37474f;
+      text-align: center;
+    }
+
+    .cities-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .cities-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .city-card {
+      background: white;
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+      border-top: 4px solid #546e7a;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .city-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .city-card .city-name {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #37474f;
+    }
+
+    .city-card .builder {
+      font-size: 0.85rem;
+      color: #78909c;
+      margin: 0.25rem 0;
+    }
+
+    .city-card .purpose {
+      font-size: 0.85rem;
+      color: #546e7a;
+      margin-top: 0.5rem;
+    }
+
+    /* ═══════════════════════════════════════════
+       SCATTERED THREAD - ENHANCED
+    ════════════════════════════════════════════ */
+
+    .scattered-thread {
+      background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+      border: 1px solid #ffb74d;
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 3px 10px rgba(255, 152, 0, 0.15);
+      transition: all 0.3s ease;
+    }
+
+    .scattered-thread:hover {
+      box-shadow: 0 6px 20px rgba(255, 152, 0, 0.2);
+    }
+
+    .scattered-thread h4 {
+      margin: 0 0 1rem 0;
+      color: #e65100;
+      text-align: center;
+    }
+
+    .thread-chain {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+    }
+
+    .thread-item {
+      background: white;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      border: 1px solid #ffcc80;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .thread-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+    }
+
+    .thread-item .ref {
+      font-weight: 700;
+      color: #e65100;
+    }
+
+    .thread-arrow {
+      color: #ff9800;
+      font-size: 1.25rem;
+    }
+
+    /* ═══════════════════════════════════════════
+       ABRAHAM TRANSITION - ENHANCED
+    ════════════════════════════════════════════ */
+
     .abraham-transition {
       background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
       border: 2px solid #66bb6a;
@@ -946,6 +1202,16 @@
       padding: 2rem;
       margin: 2rem 0;
       text-align: center;
+      box-shadow: 
+        0 6px 20px rgba(46, 125, 50, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .abraham-transition:hover {
+      box-shadow: 
+        0 10px 30px rgba(46, 125, 50, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
     }
 
     .abraham-transition h3 {
@@ -972,7 +1238,24 @@
       margin: 0 0.25rem;
     }
 
-    /* Pentecost connection */
+    /* ═══════════════════════════════════════════
+       CALLOUT BOXES - ENHANCED
+    ════════════════════════════════════════════ */
+
+    .pentecost-box,
+    .zephaniah-box,
+    .anti-eden {
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .pentecost-box:hover,
+    .zephaniah-box:hover,
+    .anti-eden:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
     .pentecost-box {
       background: linear-gradient(135deg, #e8eaf6, #c5cae9);
       border: 1px solid #7986cb;
@@ -986,7 +1269,6 @@
       color: #303f9f;
     }
 
-    /* Zephaniah box */
     .zephaniah-box {
       background: linear-gradient(135deg, #e0f2f1, #b2dfdb);
       border: 1px solid #4db6ac;
@@ -1000,121 +1282,196 @@
       color: #00695c;
     }
 
-    /* Navigation styling */
-    .page-nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      margin: 3rem 0 2rem;
-      padding: 1.5rem;
-      background: #f5f5f5;
+    .anti-eden {
+      background: linear-gradient(135deg, #fff8e1, #ffecb3);
+      border: 1px solid #ffc107;
       border-radius: 14px;
-      flex-wrap: wrap;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
     }
 
-    .page-nav a {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1.25rem;
-      background: var(--page-accent);
-      color: white;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: transform 0.2s, box-shadow 0.2s;
+    .anti-eden h4 {
+      margin: 0 0 0.75rem 0;
+      color: #f57f17;
     }
 
-    .page-nav a:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    /* ═══════════════════════════════════════════
+       QUICK REFERENCE ENHANCED CARDS (FROM FLOOD)
+    ════════════════════════════════════════════ */
+
+    .quick-ref-enhanced {
+      display: grid;
+      gap: 1rem;
+      margin: 2rem 0;
     }
 
-    .page-indicator {
-      font-size: 0.9rem;
-      color: #666;
-      font-weight: 500;
-    }
-
-    @media (max-width: 500px) {
-      .page-nav {
-        flex-direction: column;
-        text-align: center;
-      }
-      .page-nav a {
-        width: 100%;
-        justify-content: center;
-      }
-    }
-
-    /* Section styling */
-    .section-title {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-size: 1.4rem;
-      margin: 2.5rem 0 1.25rem;
-      color: #1e293b;
-    }
-
-    .section-icon {
-      font-size: 1.3rem;
-    }
-
-    /* Animation */
-    .animate-on-scroll {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-
-    .animate-on-scroll.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Hebrew highlight */
-    .hebrew-inline {
-      font-size: 1.1em;
-      direction: rtl;
-      display: inline;
-    }
-
-    /* Enhanced Violet theme for Page 7 */
-    .key-insight {
-      background: linear-gradient(135deg, rgba(171, 71, 188, 0.12), rgba(171, 71, 188, 0.08));
-      border-left: 4px solid #ab47bc;
-    }
-
-    .section-title .section-icon {
-      background: linear-gradient(135deg, #ab47bc, #ba68c8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .theology-card {
-      border-top: 3px solid rgba(171, 71, 188, 0.3);
-    }
-
-    /* Profile header gradient */
-    .profile-header {
+    .ref-card-enhanced {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      border-top: 4px solid var(--page-accent);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
       position: relative;
+      overflow: hidden;
     }
 
-    .profile-header::after {
+    .ref-card-enhanced::before {
       content: '';
       position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, 
-        transparent 0%,
-        var(--page-accent) 50%,
-        transparent 100%);
-      opacity: 0.5;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .ref-card-enhanced:hover::before {
+      left: 100%;
+    }
+
+    .ref-card-enhanced:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .ref-card-icon {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .ref-card-enhanced h4 {
+      margin: 0 0 1rem 0;
+      color: var(--page-accent-dark);
+      font-size: 1.1rem;
+    }
+
+    .ref-content {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .ref-highlight {
+      background: var(--page-accent-light);
+      border-left: 3px solid var(--page-accent);
+      padding: 0.75rem;
+      margin: 0.75rem 0;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    /* ═══════════════════════════════════════════
+       TIMELINE GRID (FROM FLOOD)
+    ════════════════════════════════════════════ */
+
+    .timeline-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1.5rem;
+      margin: 2rem 0;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .timeline-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+
+    .timeline-phase {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .timeline-phase:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    .timeline-pivot {
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .pivot-marker {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 0.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+    }
+
+    .timeline-pivot:hover .pivot-marker {
+      transform: scale(1.1) rotate(10deg);
+    }
+
+    .small {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 0.25rem;
+    }
+
+    /* ═══════════════════════════════════════════
+       SIGNIFICANCE PANELS (FROM HUB)
+    ════════════════════════════════════════════ */
+
+    .significance-panel {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      border-top: 4px solid var(--page-accent);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .significance-panel:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    .significance-panel h4 {
+      margin: 0 0 0.75rem 0;
+      color: var(--page-accent-dark);
+      font-size: 1rem;
+    }
+
+    .significance-panel p {
+      margin: 0;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: #475569;
+    }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE ENHANCEMENTS
+    ════════════════════════════════════════════ */
+
+    @media (max-width: 768px) {
+      .pattern-stages {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .pattern-stage-card {
+        min-width: auto;
+      }
+
+      .nimrod-links,
+      .dual-options,
+      .pattern-columns {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -1127,7 +1484,7 @@
 
   <main id="main-content" class="container" role="main" aria-label="Noah babel page">
 
-    <div class="breadcrumbs">
+    <div class="breadcrumbs fade-in">
       <a href="/">Home</a> ›
       <a href="/studies/">Studies</a> ›
       <a href="/studies/characters/">Characters</a> ›
@@ -1138,7 +1495,7 @@
     <!-- ═══════════════════════════════════════════
          PAGE HEADER
     ════════════════════════════════════════════ -->
-    <header class="profile-header animate-on-scroll">
+    <header class="profile-header fade-slide-down">
       <div class="header-content">
         <div class="name-block">
           <span class="page-kicker">Page 7 of 9</span>
@@ -1151,7 +1508,7 @@
     <!-- ═══════════════════════════════════════════
          PATTERN PROGRESSION - RAINBOW VISUAL
     ════════════════════════════════════════════ -->
-    <div class="pattern-progression animate-on-scroll">
+    <div class="pattern-progression animate-on-scroll fade-slide-down animation-delay-100">
       <h4 style="color: #ab47bc; text-align: center; margin-bottom: 1.5rem;">🌈 Noah's Story Arc</h4>
       <div class="pattern-stages">
         <div class="pattern-stage-card fade-slide-left animation-delay-100">
@@ -1178,7 +1535,7 @@
           <span class="stage-number" style="background: linear-gradient(135deg, #5c6bc0, #ab47bc);">6</span>
           <div class="stage-label">Failure</div>
         </div>
-        <div class="pattern-stage-card fade-slide-left" style="border-color: var(--page-accent); box-shadow: 0 4px 12px rgba(171,71,188,0.3);">
+        <div class="pattern-stage-card fade-slide-left animation-delay-700">
           <span class="stage-number" style="background: linear-gradient(135deg, #ab47bc, #7e57c2);">7</span>
           <div class="stage-label"><strong>Babel</strong></div>
         </div>
@@ -1188,7 +1545,7 @@
     <!-- ═══════════════════════════════════════════
          THE CYCLE BEGINS AGAIN
     ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll" id="cycle">
+    <section class="theology-card animate-on-scroll animation-delay-100" id="cycle">
       <h2 class="section-title"><span class="section-icon">🔄</span> The Cycle Begins Again</h2>
 
       <p>
@@ -1201,14 +1558,14 @@
         who knows their Genesis can see the warning signs.
       </p>
 
-      <div class="pattern-replay animate-on-scroll">
+      <div class="pattern-replay animate-on-scroll animation-delay-200">
         <h3>Genesis 3 Vocabulary in Genesis 9:20–22</h3>
         <p>
           In just two verses, the author layers wordplay that echoes humanity's first 
           failure. Noakh becomes the new Adam—but not in the way we'd hoped.
         </p>
         <div class="pattern-columns">
-          <div class="pattern-column">
+          <div class="pattern-column fade-slide-left animation-delay-100">
             <h4>Genesis 3: Eden</h4>
             <ol>
               <li>Humanity "works the ground" (<span class="hebrew-inline">אֲדָמָה</span>)</li>
@@ -1220,7 +1577,7 @@
               <li>The serpent and ground are "cursed" (<span class="hebrew-inline">אָרוּר</span>)</li>
             </ol>
           </div>
-          <div class="pattern-column">
+          <div class="pattern-column fade-slide-left animation-delay-200">
             <h4>Genesis 9: After Flood</h4>
             <ol>
               <li>Noakh, "a man of the ground" (<span class="hebrew-inline">אֲדָמָה</span>)</li>
@@ -1245,7 +1602,7 @@
     <!-- ═══════════════════════════════════════════
          HAM'S CRIME
     ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll" id="ham">
+    <section class="theology-card animate-on-scroll animation-delay-200" id="ham">
       <h2 class="section-title"><span class="section-icon">⚠️</span> Ham's Crime</h2>
 
       <p>
@@ -1259,8 +1616,8 @@
         means something far more serious than it sounds to modern ears.
       </p>
 
-      <div class="interpretation-grid animate-on-scroll">
-        <div class="interpretation-card">
+      <div class="interpretation-grid animate-on-scroll animation-delay-300">
+        <div class="interpretation-card fade-slide-left animation-delay-100">
           <h4>View 1: Simple Viewing</h4>
           <p>
             Ham saw his father naked and violated honor/shame customs. 
@@ -1269,7 +1626,7 @@
           </p>
         </div>
 
-        <div class="interpretation-card">
+        <div class="interpretation-card fade-slide-left animation-delay-200">
           <h4>View 2: Paternal Abuse</h4>
           <p>
             "To see nakedness" is a biblical euphemism for sexual relations (Lev 20:17). 
@@ -1278,7 +1635,7 @@
           </p>
         </div>
 
-        <div class="interpretation-card primary">
+        <div class="interpretation-card primary fade-slide-left animation-delay-300">
           <h4>View 3: Maternal Incest ⭐</h4>
           <p>
             Leviticus 18:7-8 reveals: "the nakedness of your father" <em>is</em> your 
@@ -1289,7 +1646,7 @@
         </div>
       </div>
 
-      <blockquote class="scripture-block animate-on-scroll">
+      <blockquote class="scripture-block animate-on-scroll animation-delay-400">
         <p>
           "You shall not do as they do in the land of Egypt where you lived, nor are 
           you to do what is done in the land of Canaan where I am bringing you... 
@@ -1306,7 +1663,7 @@
       </p>
 
       <!-- TIMELINE GRID: Eden Pattern vs Noah Pattern -->
-      <div class="timeline-grid animate-on-scroll" style="margin: 2rem 0;">
+      <div class="timeline-grid animate-on-scroll animation-delay-500">
         <div class="timeline-phase fade-slide-left animation-delay-100" style="background: linear-gradient(135deg, rgba(76,175,80,.08), rgba(76,175,80,.03));">
           <h4 style="color: #388e3c; margin: 0 0 1rem 0;">🌳 Genesis 3: Eden Pattern</h4>
           <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.9rem;">
@@ -1336,7 +1693,7 @@
         </div>
       </div>
 
-      <div class="anti-eden animate-on-scroll">
+      <div class="anti-eden animate-on-scroll animation-delay-600">
         <h4>🧬 Dynamic Analogy: Ham Replays Both Genesis 3 and Genesis 4</h4>
         <p>
           Ham replays the <strong>foolish failure</strong> of Genesis 3 (seeing nakedness, 
@@ -1357,7 +1714,7 @@
     <!-- ═══════════════════════════════════════════
          NOAH'S BLESSING AND CURSE
     ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll" id="blessing-curse">
+    <section class="theology-card animate-on-scroll animation-delay-100" id="blessing-curse">
       <h2 class="section-title"><span class="section-icon">📜</span> Noakh's Blessing and Curse</h2>
 
       <p>
@@ -1366,20 +1723,20 @@
         "slots" for understanding every character who follows.
       </p>
 
-      <div class="poem-box animate-on-scroll">
+      <div class="poem-box animate-on-scroll animation-delay-200">
         <h3>Noakh's Oracle (Genesis 9:25-27)</h3>
         
-        <div class="poem-line curse">
+        <div class="poem-line curse fade-slide-left animation-delay-100">
           <span class="son-name">Canaan:</span>
           <span>"Cursed be Canaan; a servant of servants he will be to his brothers."</span>
         </div>
         
-        <div class="poem-line blessing-shem">
+        <div class="poem-line blessing-shem fade-slide-left animation-delay-200">
           <span class="son-name">Shem:</span>
           <span>"Blessed be <em>Yahweh</em>, Elohim of Shem; and let Canaan be his servant."</span>
         </div>
         
-        <div class="poem-line blessing-japheth">
+        <div class="poem-line blessing-japheth fade-slide-left animation-delay-300">
           <span class="son-name">Japheth:</span>
           <span>"May Elohim enlarge Japheth, and may he dwell in the tents of Shem."</span>
         </div>
@@ -1392,14 +1749,14 @@
         to Shem alone.
       </p>
 
-      <div class="dual-meaning animate-on-scroll">
+      <div class="dual-meaning animate-on-scroll animation-delay-300">
         <h4>"Dwell in the Tents of Shem" — Two Meanings</h4>
         <p style="text-align:center;margin-bottom:1rem;color:#666;font-size:0.9rem;">
           Hebrew authors often craft phrases with intentional double meanings. Both will unfold 
           in Scripture:
         </p>
         <div class="dual-options">
-          <div class="dual-option conflict">
+          <div class="dual-option conflict fade-slide-left animation-delay-100">
             <div class="label">Meaning 1: Conflict</div>
             <p>"To displace, to disinherit"</p>
             <p style="font-size:0.85rem;margin-top:0.5rem;color:#666;">
@@ -1407,7 +1764,7 @@
               and try to take over Shem's territory.
             </p>
           </div>
-          <div class="dual-option peace">
+          <div class="dual-option peace fade-slide-left animation-delay-200">
             <div class="label">Meaning 2: Peace</div>
             <p>"To live together with"</p>
             <p style="font-size:0.85rem;margin-top:0.5rem;color:#666;">
@@ -1429,7 +1786,7 @@
     <!-- ═══════════════════════════════════════════
          THE SCATTERED THREAD
     ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll" id="scattered">
+    <section class="theology-card animate-on-scroll animation-delay-200" id="scattered">
       <h2 class="section-title"><span class="section-icon">🔗</span> The "Scattered" Thread</h2>
 
       <p>
@@ -1438,25 +1795,25 @@
         become a unifying theme—these are the same words the prophets use for Israel's exile.
       </p>
 
-      <div class="scattered-thread animate-on-scroll">
+      <div class="scattered-thread animate-on-scroll animation-delay-300">
         <h4>The "Scattered" (פוץ) Chain Through Genesis 9-11</h4>
         <div class="thread-chain">
-          <div class="thread-item">
+          <div class="thread-item fade-in animation-delay-100">
             <span class="ref">9:19</span>
             <span>"from these all the land was <strong>scattered</strong>"</span>
           </div>
           <span class="thread-arrow">→</span>
-          <div class="thread-item">
+          <div class="thread-item fade-in animation-delay-200">
             <span class="ref">10:18</span>
             <span>"Canaanite families were <strong>scattered</strong>"</span>
           </div>
           <span class="thread-arrow">→</span>
-          <div class="thread-item">
+          <div class="thread-item fade-in animation-delay-300">
             <span class="ref">11:4</span>
             <span>"lest we be <strong>scattered</strong>"</span>
           </div>
           <span class="thread-arrow">→</span>
-          <div class="thread-item">
+          <div class="thread-item fade-in animation-delay-400">
             <span class="ref">11:8-9</span>
             <span>"Yahweh <strong>scattered</strong> them"</span>
           </div>
@@ -1475,7 +1832,7 @@
     <!-- ═══════════════════════════════════════════
          TABLE OF NATIONS
     ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll" id="nations">
+    <section class="theology-card animate-on-scroll animation-delay-300" id="nations">
       <h2 class="section-title"><span class="section-icon">🗺️</span> The Table of Nations</h2>
 
       <p>
@@ -1485,10 +1842,10 @@
         completeness on a large scale (cf. the 70 elders of Israel, the 70 who went to Egypt).
       </p>
 
-      <div class="nations-table animate-on-scroll">
+      <div class="nations-table animate-on-scroll animation-delay-400">
         <h3>The Three Families (Genesis 10)</h3>
         <div class="nations-grid">
-          <div class="nation-card japheth">
+          <div class="nation-card japheth fade-slide-left animation-delay-100">
             <div class="son-header">Japheth</div>
             <div class="region">North & West: Asia Minor, Greece, Mediterranean Islands</div>
             <span class="seven-badge">7 sons + 7 grandsons</span>
@@ -1496,7 +1853,7 @@
               Gomer, Magog, Media, Javan, Tubal, Meshech, Tiras
             </p>
           </div>
-          <div class="nation-card ham">
+          <div class="nation-card ham fade-slide-left animation-delay-200">
             <div class="son-header">Ham</div>
             <div class="region">South & East: Egypt, Cush (Ethiopia), Babylon</div>
             <span class="seven-badge">4 sons + key nations</span>
@@ -1504,7 +1861,7 @@
               Cush (→ Nimrod), Egypt, Put, Canaan (→ 12 tribes)
             </p>
           </div>
-          <div class="nation-card shem">
+          <div class="nation-card shem fade-slide-left animation-delay-300">
             <div class="son-header">Shem</div>
             <div class="region">Center: Mesopotamia, Arabia, the Promised Land</div>
             <span class="seven-badge">5 sons → Abraham</span>
@@ -1525,7 +1882,7 @@
     </section>
 
     <!-- Cross-ref box -->
-    <div class="cross-ref-box animate-on-scroll" aria-label="How Genesis 10 and 11 work together">
+    <div class="cross-ref-box animate-on-scroll fade-slide-left animation-delay-100" aria-label="How Genesis 10 and 11 work together">
       <strong>Reading Tip (Gen 10 → Gen 11):</strong>
       Genesis 10 shows the <em>result</em> (the nations spread across the land).
       Genesis 11 then "rewinds" to show the <em>cause</em> (Babel: a unified project that leads to scattered languages).
@@ -1535,7 +1892,7 @@
     <!-- ═══════════════════════════════════════════
          NIMROD: THE VIOLENT WARRIOR - ENHANCED
     ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll" id="nimrod">
+    <section class="theology-card animate-on-scroll animation-delay-100" id="nimrod">
       <h2 class="section-title"><span class="section-icon">⚔️</span> Nimrod: The Violent Warrior</h2>
 
       <p>
@@ -1544,7 +1901,7 @@
       </p>
 
       <!-- ENHANCED NIMROD SECTION -->
-      <div class="quick-ref-enhanced" style="margin: 2rem 0;">
+      <div class="quick-ref-enhanced">
         <div class="ref-card-enhanced animate-on-scroll animation-delay-100" style="border-top: 4px solid #ab47bc;">
           <span class="ref-card-icon">⚔️</span>
           <h4>Nimrod = "We Will Rebel"</h4>
@@ -1595,29 +1952,29 @@
         violence that brought the flood.
       </p>
 
-      <div class="cross-ref-box animate-on-scroll">
+      <div class="cross-ref-box animate-on-scroll fade-slide-left animation-delay-100">
         <strong>Pattern Connection:</strong> 
         <span class="page-ref">→ <a href="noah-corruption.html">Page 2: Corruption</a></span> shows how Nimrod the "mighty warrior" (גִּבּוֹר) echoes the pre-flood giants, creating a through-line from Genesis 6 to Genesis 10.
       </div>
 
-      <div class="cities-chain animate-on-scroll">
+      <div class="cities-chain animate-on-scroll animation-delay-400">
         <h4>🏙️ The Pattern of City-Building</h4>
         <div class="cities-grid">
-          <div class="city-card">
+          <div class="city-card fade-slide-left animation-delay-100">
             <div class="city-name">Cain's City</div>
             <div class="builder">Genesis 4:17</div>
             <div class="purpose">
               Cain builds (<span class="hebrew-inline">בָּנָה</span>) a city after exile; names it after his son for self-protection
             </div>
           </div>
-          <div class="city-card">
+          <div class="city-card fade-slide-left animation-delay-200">
             <div class="city-name">Nimrod's City</div>
             <div class="builder">Genesis 10:10-11</div>
             <div class="purpose">
               Nimrod builds (<span class="hebrew-inline">בָּנָה</span>) Babylon and Nineveh; "mighty warrior" seeks fame and power
             </div>
           </div>
-          <div class="city-card">
+          <div class="city-card fade-slide-left animation-delay-300">
             <div class="city-name">Babel's City</div>
             <div class="builder">Genesis 11:4</div>
             <div class="purpose">
@@ -1631,7 +1988,7 @@
     <!-- ═══════════════════════════════════════════
          THE TOWER OF BABEL
     ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll" id="babel">
+    <section class="theology-card animate-on-scroll animation-delay-200" id="babel">
       <h2 class="section-title"><span class="section-icon">🏛️</span> The Tower of Babel</h2>
 
       <p>
@@ -1641,13 +1998,13 @@
         built Babylon (Gen 10:10). Here we learn how that happened.
       </p>
 
-      <div class="babel-scene animate-on-scroll">
+      <div class="babel-scene animate-on-scroll animation-delay-300">
         <h3>
           <span class="hebrew-title">בָּבֶל / בָּלַל</span>
           Babel / Balal — "Confusion"
         </h3>
         <div class="babel-content">
-          <div class="babel-speech">
+          <div class="babel-speech fade-slide-left animation-delay-100">
             <div class="speaker">The People Said:</div>
             <p>
               "Come, let us brick bricks... let us build for ourselves a city and a tower 
@@ -1660,7 +2017,7 @@
             But Yahweh had to <em>come down</em> to see this tower whose head was in the heavens.
           </p>
           
-          <div class="babel-speech divine">
+          <div class="babel-speech divine fade-slide-left animation-delay-200">
             <div class="speaker">Yahweh Said:</div>
             <p>
               "Behold, one people with one lip... and now nothing will be inaccessible for 
@@ -1678,7 +2035,7 @@
         for the heavens, but God has to "come down" even to see it.
       </p>
 
-      <div class="anti-eden animate-on-scroll">
+      <div class="anti-eden animate-on-scroll animation-delay-400">
         <h4>🏔️ Anti-Eden: The Counterfeit Mountain</h4>
         <p>
           This is the opposite of God's cosmic mountain—a human-made ziggurat in a flat 
@@ -1700,7 +2057,7 @@
         but it prevents something worse.
       </p>
 
-      <div class="zephaniah-box animate-on-scroll">
+      <div class="zephaniah-box animate-on-scroll animation-delay-500">
         <h4>📖 Zephaniah 3:9-10: Babel Will Be Reversed</h4>
         <p>
           "For then I will transform for peoples a <strong>pure lip</strong> (<span class="hebrew-inline">שָׂפָה בְרוּרָה</span>), 
@@ -1714,7 +2071,7 @@
         </p>
       </div>
 
-      <div class="pentecost-box animate-on-scroll">
+      <div class="pentecost-box animate-on-scroll animation-delay-600">
         <h4>🔥 Acts 2: Babel Reversed</h4>
         <p>
           At Pentecost, "they were all in one place" (echoing Babel) when wind and 
@@ -1733,7 +2090,7 @@
     <!-- ═══════════════════════════════════════════
          COVENANT THREAD INDICATOR
     ════════════════════════════════════════════ -->
-    <div class="covenant-thread animate-on-scroll">
+    <div class="covenant-thread fade-slide-down animation-delay-100">
       <div class="thread-stage">Covenant Stage: Tested</div>
       <p>Noah's vineyard failure and Ham's crime test the rainbow promise immediately. The covenant holds—God doesn't send another flood—but the human heart problem persists, driving the story toward Abraham.</p>
     </div>
@@ -1741,10 +2098,10 @@
     <!-- ═══════════════════════════════════════════
          FROM SHEM TO ABRAHAM
     ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll" id="abraham">
+    <section class="theology-card animate-on-scroll animation-delay-300" id="abraham">
       <h2 class="section-title"><span class="section-icon">✨</span> From Shem to Abraham</h2>
 
-      <div class="cross-ref-box animate-on-scroll" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-left-color: #66bb6a;">
+      <div class="cross-ref-box animate-on-scroll fade-slide-left animation-delay-100" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-left-color: #66bb6a;">
         <strong>The Line of Promise:</strong> 
         Ten generations from Adam to Noah preserved the seed through judgment.
         Ten generations from Shem to Abram will carry that seed toward blessing all nations.
@@ -1757,7 +2114,7 @@
         After the confusion of languages, we immediately hear... a genealogy.
       </p>
 
-      <div class="abraham-transition animate-on-scroll">
+      <div class="abraham-transition animate-on-scroll animation-delay-400">
         <h3>Ten Generations: Shem → Abram</h3>
         <div class="generations">10</div>
         <p style="margin-bottom:1rem;">
@@ -1784,13 +2141,13 @@
         who can't produce seed?
       </p>
 
-      <blockquote class="scripture-block animate-on-scroll">
+      <blockquote class="scripture-block animate-on-scroll animation-delay-500">
         <p>
-          "Now Yahweh said to Abram, 'Leave your country, your relatives, your 
-          father's house, and go to this land I'm going to show you. There I will 
-          make you a great nation and I will bless you, and I will make your 
-          <strong>name</strong> great. And you are to <em>become a blessing</em>... 
-          and in you all the families of the land will find blessing.'"
+          "Now Yahweh said to Abram, 'Leave your country, your relatives, your father's 
+          house, and go to this land I'm going to show you. There I will make you a great 
+          nation and I will bless you, and I will make your <strong>name</strong> great. 
+          And you are to <em>become a blessing</em>... and in you all the families of the 
+          land will find blessing.'"
         </p>
         <cite>— Genesis 12:1-3 (Mackie)</cite>
       </blockquote>
@@ -1802,14 +2159,14 @@
         Through Abram, all the scattered families will be gathered again.
       </p>
 
-      <div class="pattern-replay animate-on-scroll" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-color: #66bb6a;">
+      <div class="pattern-replay animate-on-scroll animation-delay-600" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-color: #66bb6a;">
         <h3 style="color: #2e7d32;">Genesis 1-11: The Melody</h3>
         <p>
           Tim Mackie calls Genesis 1-11 the <strong>melody</strong> of Scripture—and 
           the rest of the Bible is variations on that melody. You now know what to expect:
         </p>
         <div class="pattern-columns">
-          <div class="pattern-column">
+          <div class="pattern-column fade-slide-left animation-delay-100">
             <h4 style="color: #2e7d32;">You'll See Again...</h4>
             <ol>
               <li>Garden folly (stupid decisions)</li>
@@ -1819,7 +2176,7 @@
               <li>A remnant preserved through judgment</li>
             </ol>
           </div>
-          <div class="pattern-column">
+          <div class="pattern-column fade-slide-left animation-delay-200">
             <h4 style="color: #2e7d32;">The Test Begins</h4>
             <ol>
               <li>Abram = new Adam, new Noakh</li>
@@ -1836,11 +2193,11 @@
     <!-- ═══════════════════════════════════════════
          WHY THIS MATTERS - SIGNIFICANCE PANELS
     ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll" id="why-matters">
+    <section class="theology-card animate-on-scroll animation-delay-100" id="why-matters">
       <h2 class="section-title"><span class="section-icon">💡</span> Why This Matters</h2>
       
       <div class="grid-2">
-        <div class="significance-panel animate-on-scroll animation-delay-100">
+        <div class="significance-panel animate-on-scroll fade-slide-left animation-delay-100">
           <h4>🔄 The Cycle Can't Be Broken</h4>
           <p>
             Noah's vineyard failure proves the flood didn't solve the heart problem. 
@@ -1849,7 +2206,7 @@
           </p>
         </div>
         
-        <div class="significance-panel animate-on-scroll animation-delay-200">
+        <div class="significance-panel animate-on-scroll fade-slide-left animation-delay-200">
           <h4>🌍 Nations Scattered, Promise Narrows</h4>
           <p>
             The Table of Nations (70 peoples) shows creation's fullness—but Babel's 
@@ -1858,7 +2215,7 @@
           </p>
         </div>
         
-        <div class="significance-panel animate-on-scroll animation-delay-300">
+        <div class="significance-panel animate-on-scroll fade-slide-left animation-delay-300">
           <h4>🎯 Pentecost Reverses Babel</h4>
           <p>
             Acts 2 deliberately echoes Genesis 11: people "in one place," languages 
@@ -1872,7 +2229,7 @@
     <!-- ═══════════════════════════════════════════
          KEY VERSES
     ════════════════════════════════════════════ -->
-    <section class="theology-card animate-on-scroll" id="key-verses">
+    <section class="theology-card animate-on-scroll animation-delay-200" id="key-verses">
       <h2 class="section-title"><span class="section-icon">📜</span> Key Verses</h2>
 
       <blockquote class="scripture-block animate-on-scroll animation-delay-100">
@@ -1920,7 +2277,7 @@
     <!-- ═══════════════════════════════════════════
          PAGE NAVIGATION
     ════════════════════════════════════════════ -->
-    <nav class="page-nav" aria-label="Page navigation">
+    <nav class="page-nav fade-slide-down" aria-label="Page navigation">
       <a href="noah-covenant.html">
         <span>←</span> Page 6: Covenant
       </a>
