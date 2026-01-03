@@ -713,20 +713,24 @@
 }
 
 .arrow-line {
-  width: 80px;
-  height: 2px;
-  background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+  /* Remove the horizontal line - no longer needed */
   position: relative;
+  display: flex;
+  justify-content: center;
 }
 
 .arrow-line::after {
   content: '↔';
-  position: absolute;
-  top: -10px;
-  left: 50%;
-  transform: translateX(-50%);
+  /* Remove absolute positioning */
+  position: static;
   font-size: 1.2rem;
   color: var(--accent-purple);
+}
+
+/* Different arrow for anticipates relationship */
+.connector[data-type="anticipates"] .arrow-line::after {
+  content: '→';
+  color: var(--accent-blue);
 }
 
 .connection-label {
@@ -735,6 +739,11 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+/* Update label color for anticipates too */
+.connector[data-type="anticipates"] .connection-label {
+  color: var(--accent-blue);
 }
 
 /* Descending blocks */
