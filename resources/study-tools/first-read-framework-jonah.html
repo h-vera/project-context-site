@@ -13,7 +13,7 @@
   <!-- Content Metadata -->
   <meta name="page-type" content="worked-example">
   <meta name="resource-type" content="framework-application">
-  <meta name="template-version" content="2.0">
+  <meta name="template-version" content="2.1-enhanced">
   <meta name="study-type" content="book-study">
   <meta name="page-category" content="study-tools">
   <meta name="biblical-book" content="jonah">
@@ -52,6 +52,378 @@
   <link rel="stylesheet" href="/assets/css/mobile-tabs-v5-8.css" />
   
   <style>
+    /* ============================================
+       ENHANCED FEATURES - NEW STYLES
+       ============================================ */
+    
+    /* Phase Navigator Sidebar */
+    .phase-navigator {
+      position: fixed;
+      right: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: white;
+      border-radius: 16px;
+      padding: 1rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      z-index: 100;
+      display: none;
+      max-width: 200px;
+    }
+    
+    @media (min-width: 1400px) {
+      .phase-navigator { display: block; }
+    }
+    
+    .phase-nav-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #64748b;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    .phase-nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      text-decoration: none;
+      color: #64748b;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      margin-bottom: 0.5rem;
+    }
+    
+    .phase-nav-link:hover,
+    .phase-nav-link.active {
+      background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+      color: #1e3a8a;
+    }
+    
+    .phase-nav-number {
+      width: 32px;
+      height: 32px;
+      background: #e2e8f0;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+    
+    .phase-nav-link.active .phase-nav-number {
+      background: linear-gradient(135deg, #3b82f6, #0ea5e9);
+      color: white;
+    }
+    
+    .phase-nav-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    
+    /* Framework Progress Bar */
+    .framework-progress {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      margin-bottom: 2rem;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #0ea5e9);
+      border-radius: 999px;
+      transition: width 0.5s ease;
+      width: 0%;
+    }
+    
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: #64748b;
+      font-weight: 600;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    /* Collapsible Discovery Boxes */
+    .discovery-expandable {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      border-left: 4px solid #3b82f6;
+      border-radius: 0 12px 12px 0;
+      margin: 1.5rem 0;
+      overflow: hidden;
+    }
+    
+    .discovery-summary {
+      padding: 1.5rem;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      user-select: none;
+      transition: background 0.2s ease;
+    }
+    
+    .discovery-summary::-webkit-details-marker {
+      display: none;
+    }
+    
+    .discovery-summary:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .discovery-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+    
+    .discovery-summary h4 {
+      flex: 1;
+      margin: 0;
+      color: #1e3a8a;
+      font-size: 1.1rem;
+    }
+    
+    .expand-arrow {
+      transition: transform 0.3s ease;
+      color: #3b82f6;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    
+    .discovery-expandable[open] .expand-arrow {
+      transform: rotate(180deg);
+    }
+    
+    .discovery-content {
+      padding: 0 1.5rem 1.5rem;
+      animation: slideDown 0.3s ease-out;
+    }
+    
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Word Tracker Widget */
+    .word-tracker {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      max-width: 280px;
+      transition: all 0.3s ease;
+      margin: 2rem 0;
+    }
+    
+    .word-tracker.minimized {
+      max-width: 60px;
+      max-height: 60px;
+      overflow: hidden;
+    }
+    
+    .word-tracker.minimized .word-tracker-content {
+      display: none;
+    }
+    
+    .word-tracker-header {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      padding: 1rem 1.25rem;
+      border-radius: 16px 16px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .word-tracker.minimized .word-tracker-header {
+      border-radius: 16px;
+      padding: 1rem;
+      justify-content: center;
+    }
+    
+    .word-tracker-header h5 {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #92400e;
+    }
+    
+    .word-tracker.minimized .word-tracker-header h5 {
+      display: none;
+    }
+    
+    .word-tracker-toggle {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #92400e;
+      transition: transform 0.3s ease;
+    }
+    
+    .word-tracker.minimized .word-tracker-toggle {
+      transform: rotate(180deg);
+    }
+    
+    .word-tracker-content {
+      padding: 1rem;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .tracked-word {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
+      background: #fafafa;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .tracked-word:hover {
+      background: #fef3c7;
+      transform: translateX(5px);
+    }
+    
+    .tracked-word.active {
+      background: #fde68a;
+      border-left: 3px solid #f59e0b;
+    }
+    
+    .word-label {
+      font-size: 0.9rem;
+      color: #78350f;
+      font-weight: 500;
+    }
+    
+    .word-label .hebrew {
+      font-size: 0.85rem;
+      margin-left: 0.25rem;
+      color: #92400e;
+    }
+    
+    .word-count {
+      background: #f59e0b;
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+    
+    /* Quick Actions */
+    .quick-actions {
+      position: fixed;
+      bottom: 6rem;
+      right: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      z-index: 100;
+    }
+    
+    .quick-action {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: white;
+      border: 2px solid #e2e8f0;
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .quick-action:hover {
+      transform: translateY(-3px) scale(1.1);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      background: #f0f9ff;
+      border-color: #3b82f6;
+    }
+    
+    /* Enhanced Responsive Tables */
+    @media (max-width: 768px) {
+      .repetition-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      .repetition-table thead {
+        display: none;
+      }
+      
+      .repetition-table tbody tr {
+        display: block;
+        margin-bottom: 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      
+      .repetition-table td {
+        display: block;
+        text-align: left;
+        padding: 0.75rem 1rem;
+        border: none;
+        border-bottom: 1px solid #f1f5f9;
+      }
+      
+      .repetition-table td:last-child {
+        border-bottom: none;
+      }
+      
+      .repetition-table td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #1e3a8a;
+        font-size: 0.85rem;
+      }
+      
+      .phase-navigator,
+      .quick-actions {
+        display: none;
+      }
+      
+      .progress-labels {
+        font-size: 0.75rem;
+      }
+    }
+    
+    /* ============================================
+       ORIGINAL STYLES (PRESERVED)
+       ============================================ */
+    
     /* Hero Section */
     .hero {
       min-height: 45vh;
@@ -138,13 +510,12 @@
     }
     
     .phase-number {
-      display: inline-block;
+      display: inline-flex;
       width: 50px;
       height: 50px;
       background: linear-gradient(135deg, #3b82f6, #0ea5e9);
       color: white;
       border-radius: 50%;
-      display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 900;
@@ -315,6 +686,12 @@
       background: white;
       border-radius: 8px;
       border-left: 4px solid #3b82f6;
+      transition: all 0.3s ease;
+    }
+    
+    .hyperlink-item:hover {
+      transform: translateX(5px);
+      background: #f0f9ff;
     }
     
     .hyperlink-arrow {
@@ -378,9 +755,30 @@
         font-size: 0.9rem;
       }
       
-      .repetition-table th,
-      .repetition-table td {
-        padding: 0.75rem;
+      .framework-progress {
+        padding: 1.5rem;
+      }
+      
+      .phase-section {
+        padding: 1.5rem;
+      }
+    }
+    
+    /* Print Styles */
+    @media print {
+      .phase-navigator,
+      .quick-actions,
+      .reading-progress,
+      .back-to-top,
+      nav,
+      footer {
+        display: none !important;
+      }
+      
+      .phase-section {
+        page-break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ddd;
       }
     }
   </style>
@@ -392,6 +790,48 @@
   
   <!-- NAV injected by nav-component.js -->
   
+  <!-- PHASE NAVIGATOR SIDEBAR -->
+  <nav class="phase-navigator" aria-label="Phase navigation">
+    <div class="phase-nav-title">Framework Phases</div>
+    <a href="#phase1" class="phase-nav-link" data-phase="1">
+      <span class="phase-nav-number">1</span>
+      <span class="phase-nav-label">Big Picture</span>
+    </a>
+    <a href="#phase2" class="phase-nav-link" data-phase="2">
+      <span class="phase-nav-number">2</span>
+      <span class="phase-nav-label">Structure</span>
+    </a>
+    <a href="#phase3" class="phase-nav-link" data-phase="3">
+      <span class="phase-nav-number">3</span>
+      <span class="phase-nav-label">Character</span>
+    </a>
+    <a href="#phase4" class="phase-nav-link" data-phase="4">
+      <span class="phase-nav-number">4</span>
+      <span class="phase-nav-label">Theology</span>
+    </a>
+    <a href="#phase5" class="phase-nav-link" data-phase="5">
+      <span class="phase-nav-number">5</span>
+      <span class="phase-nav-label">Connections</span>
+    </a>
+    <a href="#phase6" class="phase-nav-link" data-phase="6">
+      <span class="phase-nav-number">6</span>
+      <span class="phase-nav-label">Artistry</span>
+    </a>
+  </nav>
+  
+  <!-- QUICK ACTIONS -->
+  <div class="quick-actions">
+    <button class="quick-action" onclick="window.print()" title="Print Guide" aria-label="Print guide">
+      🖨️
+    </button>
+    <button class="quick-action" onclick="shareGuide()" title="Share" aria-label="Share guide">
+      📤
+    </button>
+    <button class="quick-action" onclick="toggleBookmark()" title="Bookmark" aria-label="Bookmark page">
+      🔖
+    </button>
+  </div>
+  
   <main id="main-content" class="content-section">
     
     <!-- HERO -->
@@ -400,7 +840,7 @@
         <h1 class="hero-title">Worked Example: Reading Jonah</h1>
         <p class="hero-subtitle">
           A comprehensive demonstration of the First-Read Framework applied to the book of Jonah—
-          discovering structure, patterns, characters, and theology through careful observation alone
+          discovering structure, patterns, characters, and theology through careful observation
         </p>
       </div>
     </section>
@@ -412,6 +852,21 @@
       <a href="/resources/study-tools/">Study Tools</a> › 
       <a href="/resources/study-tools/first-read-framework.html">First-Read Framework</a> ›
       Jonah Example
+    </div>
+    
+    <!-- PROGRESS INDICATOR -->
+    <div class="framework-progress">
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+      <div class="progress-labels">
+        <span>Phase 1</span>
+        <span>Phase 2</span>
+        <span>Phase 3</span>
+        <span>Phase 4</span>
+        <span>Phase 5</span>
+        <span>Phase 6</span>
+      </div>
     </div>
     
     <!-- INTRODUCTION -->
@@ -427,19 +882,23 @@
         Then work through each phase below, comparing your observations with what's presented here.
       </p>
       
-      <div class="discovery-box">
-        <h4>📖 Why Jonah?</h4>
-        <p>
-          Jonah is an ideal book for learning observation skills because it's:
-        </p>
-        <ul style="margin-left: 1.5rem; line-height: 1.8;">
-          <li><strong>Short:</strong> 4 chapters, ~48 verses—manageable in one sitting</li>
-          <li><strong>Narrative:</strong> Story structure is easier to follow than poetry or law</li>
-          <li><strong>Layered:</strong> Simple surface, profound depths—rewards careful reading</li>
-          <li><strong>Hyperlinked:</strong> Connects extensively to Genesis, Exodus, Kings, Prophets</li>
-          <li><strong>Surprising:</strong> Subverts expectations, making patterns more obvious</li>
-        </ul>
-      </div>
+      <details class="discovery-expandable" open>
+        <summary class="discovery-summary">
+          <span class="discovery-icon">📖</span>
+          <h4>Why Jonah?</h4>
+          <span class="expand-arrow">▼</span>
+        </summary>
+        <div class="discovery-content">
+          <p>Jonah is an ideal book for learning observation skills because it's:</p>
+          <ul style="margin-left: 1.5rem; line-height: 1.8;">
+            <li><strong>Short:</strong> 4 chapters, ~48 verses—manageable in one sitting</li>
+            <li><strong>Narrative:</strong> Story structure is easier to follow than poetry or law</li>
+            <li><strong>Layered:</strong> Simple surface, profound depths—rewards careful reading</li>
+            <li><strong>Hyperlinked:</strong> Connects extensively to Genesis, Exodus, Kings, Prophets</li>
+            <li><strong>Surprising:</strong> Subverts expectations, making patterns more obvious</li>
+          </ul>
+        </div>
+      </details>
     </div>
     
     <!-- PHASE 1: BIG PICTURE -->
@@ -466,17 +925,23 @@
         </div>
       </div>
       
-      <div class="discovery-box">
-        <h4>🔍 First Observation: The Book Starts with "And"</h4>
-        <p>
-          <strong>Hebrew:</strong> <span class="hebrew">וַיְהִי</span> (vayehi) = <strong>"And it came about..."</strong>
-        </p>
-        <p style="margin-top: 0.5rem;">
-          The first word is a conjunction! This means Jonah <em>assumes a larger context</em>. 
-          It's stitched into something that came before. Right from word one, you're being told: 
-          "This isn't a standalone story."
-        </p>
-      </div>
+      <details class="discovery-expandable" open>
+        <summary class="discovery-summary">
+          <span class="discovery-icon">🔍</span>
+          <h4>First Observation: The Book Starts with "And"</h4>
+          <span class="expand-arrow">▼</span>
+        </summary>
+        <div class="discovery-content">
+          <p>
+            <strong>Hebrew:</strong> <span class="hebrew">וַיְהִי</span> (vayehi) = <strong>"And it came about..."</strong>
+          </p>
+          <p style="margin-top: 0.5rem;">
+            The first word is a conjunction! This means Jonah <em>assumes a larger context</em>. 
+            It's stitched into something that came before. Right from word one, you're being told: 
+            "This isn't a standalone story."
+          </p>
+        </div>
+      </details>
       
       <h3>Structure & Movement</h3>
       
@@ -515,29 +980,29 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong>Yahweh</strong></td>
-            <td>Sender, pursuer, questioner</td>
-            <td>Jonah to prophesy to Nineveh; Nineveh's repentance</td>
+            <td data-label="Character/Group"><strong>Yahweh</strong></td>
+            <td data-label="Role">Sender, pursuer, questioner</td>
+            <td data-label="What They Want">Jonah to prophesy to Nineveh; Nineveh's repentance</td>
           </tr>
           <tr>
-            <td><strong>Jonah</strong></td>
-            <td>Reluctant prophet, fugitive</td>
-            <td>To flee God's presence; later, Nineveh's destruction</td>
+            <td data-label="Character/Group"><strong>Jonah</strong></td>
+            <td data-label="Role">Reluctant prophet, fugitive</td>
+            <td data-label="What They Want">To flee God's presence; later, Nineveh's destruction</td>
           </tr>
           <tr>
-            <td><strong>Sailors</strong></td>
-            <td>Innocent bystanders</td>
-            <td>To survive the storm; not to shed innocent blood</td>
+            <td data-label="Character/Group"><strong>Sailors</strong></td>
+            <td data-label="Role">Innocent bystanders</td>
+            <td data-label="What They Want">To survive the storm; not to shed innocent blood</td>
           </tr>
           <tr>
-            <td><strong>Ninevites</strong></td>
-            <td>Wicked city, repentant sinners</td>
-            <td>Initially unknown; ultimately, mercy from God</td>
+            <td data-label="Character/Group"><strong>Ninevites</strong></td>
+            <td data-label="Role">Wicked city, repentant sinners</td>
+            <td data-label="What They Want">Initially unknown; ultimately, mercy from God</td>
           </tr>
           <tr>
-            <td><strong>Fish, Plant, Worm, East Wind</strong></td>
-            <td>Divine instruments</td>
-            <td>To accomplish God's purposes</td>
+            <td data-label="Character/Group"><strong>Fish, Plant, Worm, East Wind</strong></td>
+            <td data-label="Role">Divine instruments</td>
+            <td data-label="What They Want">To accomplish God's purposes</td>
           </tr>
         </tbody>
       </table>
@@ -577,23 +1042,63 @@
       <h2 class="phase-title">Structural Analysis (Second Read)</h2>
       <p class="phase-subtitle">Now read more slowly, marking patterns and repeated elements</p>
       
+      <!-- WORD TRACKER WIDGET -->
+      <aside class="word-tracker minimized" aria-label="Repeated word tracker">
+        <div class="word-tracker-header">
+          <h5>🔄 Pattern Tracker</h5>
+          <button class="word-tracker-toggle" aria-label="Toggle tracker" onclick="toggleWordTracker()">+</button>
+        </div>
+        <div class="word-tracker-content">
+          <div class="tracked-word" data-word="great">
+            <span class="word-label">Great/Big <span class="hebrew">גָּדוֹל</span></span>
+            <span class="word-count">14×</span>
+          </div>
+          <div class="tracked-word" data-word="evil">
+            <span class="word-label">Evil/Bad <span class="hebrew">רָעָה</span></span>
+            <span class="word-count">9×</span>
+          </div>
+          <div class="tracked-word" data-word="fear">
+            <span class="word-label">Fear <span class="hebrew">יָרֵא</span></span>
+            <span class="word-count">7×</span>
+          </div>
+          <div class="tracked-word" data-word="down">
+            <span class="word-label">Down <span class="hebrew">יָרַד</span></span>
+            <span class="word-count">5×</span>
+          </div>
+          <div class="tracked-word" data-word="hurl">
+            <span class="word-label">Hurl <span class="hebrew">טוּל</span></span>
+            <span class="word-count">5×</span>
+          </div>
+        </div>
+      </aside>
+      
       <h3>Repetition & Patterns</h3>
       
-      <div class="discovery-box">
-        <h4>🔄 Major Discovery: Chapters 1 & 3 Are Parallel</h4>
-        <p><strong>Chapter 1:</strong> Jonah called → flees → sailors encounter storm → fear → repent → saved</p>
-        <p><strong>Chapter 3:</strong> Jonah called → obeys → Ninevites hear message → fear → repent → saved</p>
-        <br>
-        <p><strong>Parallel Structure:</strong> Same divine call, different response, same result (pagans fear Yahweh and are saved)</p>
-      </div>
+      <details class="discovery-expandable" open>
+        <summary class="discovery-summary">
+          <span class="discovery-icon">🔄</span>
+          <h4>Major Discovery: Chapters 1 & 3 Are Parallel</h4>
+          <span class="expand-arrow">▼</span>
+        </summary>
+        <div class="discovery-content">
+          <p><strong>Chapter 1:</strong> Jonah called → flees → sailors encounter storm → fear → repent → saved</p>
+          <p><strong>Chapter 3:</strong> Jonah called → obeys → Ninevites hear message → fear → repent → saved</p>
+          <p style="margin-top: 1rem;"><strong>Parallel Structure:</strong> Same divine call, different response, same result (pagans fear Yahweh and are saved)</p>
+        </div>
+      </details>
       
-      <div class="discovery-box">
-        <h4>🔄 Chapters 2 & 4 Also Parallel</h4>
-        <p><strong>Chapter 2:</strong> Jonah alone with Yahweh → prays from distress → thanksgiving for deliverance</p>
-        <p><strong>Chapter 4:</strong> Jonah alone with Yahweh → prays from anger → dialogue about compassion</p>
-        <br>
-        <p><strong>Connection:</strong> Both chapters feature Jonah's prayers, but completely opposite emotional tones</p>
-      </div>
+      <details class="discovery-expandable" open>
+        <summary class="discovery-summary">
+          <span class="discovery-icon">🔄</span>
+          <h4>Chapters 2 & 4 Also Parallel</h4>
+          <span class="expand-arrow">▼</span>
+        </summary>
+        <div class="discovery-content">
+          <p><strong>Chapter 2:</strong> Jonah alone with Yahweh → prays from distress → thanksgiving for deliverance</p>
+          <p><strong>Chapter 4:</strong> Jonah alone with Yahweh → prays from anger → dialogue about compassion</p>
+          <p style="margin-top: 1rem;"><strong>Connection:</strong> Both chapters feature Jonah's prayers, but completely opposite emotional tones</p>
+        </div>
+      </details>
       
       <h3>The Book's Chiastic Structure</h3>
       
@@ -624,29 +1129,29 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong>Great/Big</strong><br><span class="hebrew">גָּדוֹל</span> (gadol)</td>
-            <td>14 times (more than any other word!)</td>
-            <td>Great city, great wind, great storm, great fish, great fear, great anger — everything is <em>maximized</em>, comic book proportions</td>
+            <td data-label="Word/Root"><strong>Great/Big</strong><br><span class="hebrew">גָּדוֹל</span> (gadol)</td>
+            <td data-label="Occurrences">14 times (more than any other word!)</td>
+            <td data-label="Significance">Great city, great wind, great storm, great fish, great fear, great anger — everything is <em>maximized</em>, comic book proportions</td>
           </tr>
           <tr>
-            <td><strong>Evil/Bad</strong><br><span class="hebrew">רָעָה</span> (ra'ah)</td>
-            <td>9 times</td>
-            <td>Nineveh's evil (1:2), God relenting from evil/disaster (3:10, 4:2), Jonah's displeasure (4:1), evil seems "great" to Jonah (4:1)</td>
+            <td data-label="Word/Root"><strong>Evil/Bad</strong><br><span class="hebrew">רָעָה</span> (ra'ah)</td>
+            <td data-label="Occurrences">9 times</td>
+            <td data-label="Significance">Nineveh's evil (1:2), God relenting from evil/disaster (3:10, 4:2), Jonah's displeasure (4:1), evil seems "great" to Jonah (4:1)</td>
           </tr>
           <tr>
-            <td><strong>Fear</strong><br><span class="hebrew">יָרֵא</span> (yare')</td>
-            <td>7 times (all in Ch 1!)</td>
-            <td>Sailors fear storm → fear "a great fear" → fear Yahweh. Jonah <em>says</em> he fears Yahweh but acts otherwise</td>
+            <td data-label="Word/Root"><strong>Fear</strong><br><span class="hebrew">יָרֵא</span> (yare')</td>
+            <td data-label="Occurrences">7 times (all in Ch 1!)</td>
+            <td data-label="Significance">Sailors fear storm → fear "a great fear" → fear Yahweh. Jonah <em>says</em> he fears Yahweh but acts otherwise</td>
           </tr>
           <tr>
-            <td><strong>Down/Descend</strong><br><span class="hebrew">יָרַד</span> (yarad)</td>
-            <td>5 times in Ch 1</td>
-            <td>Down to Joppa → down into ship → down into hold → down asleep. Jonah's progressive descent into death/Sheol</td>
+            <td data-label="Word/Root"><strong>Down/Descend</strong><br><span class="hebrew">יָרַד</span> (yarad)</td>
+            <td data-label="Occurrences">5 times in Ch 1</td>
+            <td data-label="Significance">Down to Joppa → down into ship → down into hold → down asleep. Jonah's progressive descent into death/Sheol</td>
           </tr>
           <tr>
-            <td><strong>Hurl/Cast</strong><br><span class="hebrew">טוּל</span> (tul)</td>
-            <td>5 times in Ch 1</td>
-            <td>God hurls storm → sailors hurl cargo → Jonah says "hurl me" → sailors hurl Jonah into sea. Chain reaction!</td>
+            <td data-label="Word/Root"><strong>Hurl/Cast</strong><br><span class="hebrew">טוּל</span> (tul)</td>
+            <td data-label="Occurrences">5 times in Ch 1</td>
+            <td data-label="Significance">God hurls storm → sailors hurl cargo → Jonah says "hurl me" → sailors hurl Jonah into sea. Chain reaction!</td>
           </tr>
         </tbody>
       </table>
@@ -762,51 +1267,56 @@
       
       <h3>Character Observation: The Pagans</h3>
       
-      <div class="discovery-box">
-        <h4>🔄 Ironic Reversal: Pagans as Models of Faith</h4>
-        
-        <table class="repetition-table" style="margin-top: 1rem;">
-          <thead>
-            <tr>
-              <th>Sailors (Ch 1)</th>
-              <th>Ninevites (Ch 3)</th>
-              <th>Jonah</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Fear the storm, then fear Yahweh</td>
-              <td>Believe God, proclaim fast</td>
-              <td>Says he fears Yahweh but sleeps</td>
-            </tr>
-            <tr>
-              <td>Cry out to gods, then to Yahweh</td>
-              <td>"Call mightily to God"</td>
-              <td>Silent, has to be awakened</td>
-            </tr>
-            <tr>
-              <td>Try everything to save Jonah</td>
-              <td>Turn from violence, repent</td>
-              <td>Wants to die (1:12; 4:3,8)</td>
-            </tr>
-            <tr>
-              <td>Afraid to shed innocent blood</td>
-              <td>Fast, wear sackcloth, even animals</td>
-              <td>Angry that God didn't destroy them</td>
-            </tr>
-            <tr>
-              <td>Make vows, offer sacrifices</td>
-              <td>King leads national repentance</td>
-              <td>Grudgingly obeys, sits outside city hoping for destruction</td>
-            </tr>
-          </tbody>
-        </table>
-        
-        <p style="margin-top: 1.5rem;">
-          <strong>Pattern:</strong> The pagans <em>do</em> what the prophet should do. They model faith, 
-          repentance, and concern for others. Jonah is the anti-prophet, the negative example.
-        </p>
-      </div>
+      <details class="discovery-expandable" open>
+        <summary class="discovery-summary">
+          <span class="discovery-icon">🔄</span>
+          <h4>Ironic Reversal: Pagans as Models of Faith</h4>
+          <span class="expand-arrow">▼</span>
+        </summary>
+        <div class="discovery-content">
+          <table class="repetition-table" style="margin-top: 1rem;">
+            <thead>
+              <tr>
+                <th>Sailors (Ch 1)</th>
+                <th>Ninevites (Ch 3)</th>
+                <th>Jonah</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="Sailors (Ch 1)">Fear the storm, then fear Yahweh</td>
+                <td data-label="Ninevites (Ch 3)">Believe God, proclaim fast</td>
+                <td data-label="Jonah">Says he fears Yahweh but sleeps</td>
+              </tr>
+              <tr>
+                <td data-label="Sailors (Ch 1)">Cry out to gods, then to Yahweh</td>
+                <td data-label="Ninevites (Ch 3)">"Call mightily to God"</td>
+                <td data-label="Jonah">Silent, has to be awakened</td>
+              </tr>
+              <tr>
+                <td data-label="Sailors (Ch 1)">Try everything to save Jonah</td>
+                <td data-label="Ninevites (Ch 3)">Turn from violence, repent</td>
+                <td data-label="Jonah">Wants to die (1:12; 4:3,8)</td>
+              </tr>
+              <tr>
+                <td data-label="Sailors (Ch 1)">Afraid to shed innocent blood</td>
+                <td data-label="Ninevites (Ch 3)">Fast, wear sackcloth, even animals</td>
+                <td data-label="Jonah">Angry that God didn't destroy them</td>
+              </tr>
+              <tr>
+                <td data-label="Sailors (Ch 1)">Make vows, offer sacrifices</td>
+                <td data-label="Ninevites (Ch 3)">King leads national repentance</td>
+                <td data-label="Jonah">Grudgingly obeys, sits outside city hoping for destruction</td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <p style="margin-top: 1.5rem;">
+            <strong>Pattern:</strong> The pagans <em>do</em> what the prophet should do. They model faith, 
+            repentance, and concern for others. Jonah is the anti-prophet, the negative example.
+          </p>
+        </div>
+      </details>
       
       <h3>Plot Development: Conflict Types</h3>
       
@@ -895,19 +1405,23 @@
       <h3>Major Themes</h3>
       
       <h4>1. Universal Mercy vs. Tribal Religion</h4>
-      <div class="discovery-box">
-        <p>
-          <strong>Core Question:</strong> Is Yahweh only Israel's God, or God of all nations?
-        </p>
-        <p style="margin-top: 0.75rem;">
-          <strong>Jonah's View:</strong> God should judge Israel's enemies, not show them mercy<br>
-          <strong>God's View:</strong> "Should I not have compassion on Nineveh, that great city, in which there are 
-          more than 120,000 persons who do not know their right hand from their left?" (4:11)
-        </p>
-        <p style="margin-top: 0.75rem;">
-          <strong>Implication:</strong> God's mercy extends beyond Israel to all who repent—even violent oppressors
-        </p>
-      </div>
+      <details class="discovery-expandable" open>
+        <summary class="discovery-summary">
+          <span class="discovery-icon">🌍</span>
+          <h4>Core Question: Is God Only for Israel?</h4>
+          <span class="expand-arrow">▼</span>
+        </summary>
+        <div class="discovery-content">
+          <p>
+            <strong>Jonah's View:</strong> God should judge Israel's enemies, not show them mercy<br>
+            <strong>God's View:</strong> "Should I not have compassion on Nineveh, that great city, in which there are 
+            more than 120,000 persons who do not know their right hand from their left?" (4:11)
+          </p>
+          <p style="margin-top: 0.75rem;">
+            <strong>Implication:</strong> God's mercy extends beyond Israel to all who repent—even violent oppressors
+          </p>
+        </div>
+      </details>
       
       <h4>2. Prophetic Obedience & Heart Attitude</h4>
       <div class="pattern-highlight">
@@ -916,20 +1430,27 @@
       </div>
       
       <h4>3. Repentance & Divine Relenting</h4>
-      <div class="discovery-box">
-        <p>
-          <strong>Hebrew word:</strong> <span class="hebrew">נָחַם</span> (nakham) = "to relent, change course, have compassion"
-        </p>
-        <p style="margin-top: 0.75rem;">
-          <strong>3:9:</strong> "Who knows, God may turn and relent..."<br>
-          <strong>3:10:</strong> "...and God <em>relented</em> concerning the calamity"<br>
-          <strong>4:2:</strong> "[God who] relents concerning calamity"
-        </p>
-        <p style="margin-top: 0.75rem;">
-          <strong>Theological Point:</strong> God's character includes readiness to change His response based on 
-          human response. Judgment isn't fatalistic—it's conditional, designed to provoke repentance.
-        </p>
-      </div>
+      <details class="discovery-expandable" open>
+        <summary class="discovery-summary">
+          <span class="discovery-icon">🔄</span>
+          <h4>God's Character: Willing to Relent</h4>
+          <span class="expand-arrow">▼</span>
+        </summary>
+        <div class="discovery-content">
+          <p>
+            <strong>Hebrew word:</strong> <span class="hebrew">נָחַם</span> (nakham) = "to relent, change course, have compassion"
+          </p>
+          <p style="margin-top: 0.75rem;">
+            <strong>3:9:</strong> "Who knows, God may turn and relent..."<br>
+            <strong>3:10:</strong> "...and God <em>relented</em> concerning the calamity"<br>
+            <strong>4:2:</strong> "[God who] relents concerning calamity"
+          </p>
+          <p style="margin-top: 0.75rem;">
+            <strong>Theological Point:</strong> God's character includes readiness to change His response based on 
+            human response. Judgment isn't fatalistic—it's conditional, designed to provoke repentance.
+          </p>
+        </div>
+      </details>
       
       <h4>4. Creation Care vs. Human Care</h4>
       <div class="key-insight">
@@ -1005,28 +1526,33 @@
       
       <h3>The Hyperlinked Opening Sentence</h3>
       
-      <div class="discovery-box">
-        <h4>Jonah 1:1 — "The word of Yahweh came to Jonah son of Amittai"</h4>
-        
-        <p style="margin-top: 1rem;"><strong>Connection #1: 2 Kings 14:23-27</strong></p>
-        <p style="margin-left: 1rem;">
-          Jonah appears earlier! He prophesied restoration of Israel's borders under evil King Jeroboam II. 
-          God showed mercy to a wicked king through Jonah's prophecy. <em>This is Jonah's prophetic track record: 
-          announcing mercy to those who don't deserve it.</em>
-        </p>
-        
-        <p style="margin-top: 1rem;"><strong>Connection #2: Genesis 10:11-12</strong></p>
-        <p style="margin-left: 1rem;">
-          "Nineveh, <strong>that great city</strong>" appears only twice in the Hebrew Bible:<br>
-          • Genesis 10:12 (Nimrod builds Nineveh after Babylon)<br>
-          • Jonah 1:2, 3:2, 4:11
-        </p>
-        <p style="margin-left: 1rem; margin-top: 0.5rem;">
-          <strong>What this tells us:</strong> Nineveh is introduced on "page 10" of the Bible as a city founded 
-          by Nimrod (violent hunter, empire builder, first king after Noah). It's linked with Babylon—another 
-          "great city" and symbol of human rebellion against God.
-        </p>
-      </div>
+      <details class="discovery-expandable" open>
+        <summary class="discovery-summary">
+          <span class="discovery-icon">🔗</span>
+          <h4>Jonah 1:1 — Multiple Biblical Connections</h4>
+          <span class="expand-arrow">▼</span>
+        </summary>
+        <div class="discovery-content">
+          <p style="margin-top: 1rem;"><strong>Connection #1: 2 Kings 14:23-27</strong></p>
+          <p style="margin-left: 1rem;">
+            Jonah appears earlier! He prophesied restoration of Israel's borders under evil King Jeroboam II. 
+            God showed mercy to a wicked king through Jonah's prophecy. <em>This is Jonah's prophetic track record: 
+            announcing mercy to those who don't deserve it.</em>
+          </p>
+          
+          <p style="margin-top: 1rem;"><strong>Connection #2: Genesis 10:11-12</strong></p>
+          <p style="margin-left: 1rem;">
+            "Nineveh, <strong>that great city</strong>" appears only twice in the Hebrew Bible:<br>
+            • Genesis 10:12 (Nimrod builds Nineveh after Babylon)<br>
+            • Jonah 1:2, 3:2, 4:11
+          </p>
+          <p style="margin-left: 1rem; margin-top: 0.5rem;">
+            <strong>What this tells us:</strong> Nineveh is introduced on "page 10" of the Bible as a city founded 
+            by Nimrod (violent hunter, empire builder, first king after Noah). It's linked with Babylon—another 
+            "great city" and symbol of human rebellion against God.
+          </p>
+        </div>
+      </details>
       
       <h3>The "City of Blood" Pattern</h3>
       
@@ -1119,28 +1645,28 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong>Moses</strong><br>(Exod 3-4)</td>
-            <td>5 excuses: "Who am I?" / "Who are you?" / "They won't believe me" / "I'm not eloquent" / "Send someone else"</td>
-            <td>Patient, provides signs, gives Aaron as helper</td>
-            <td>Moses obeys, becomes greatest prophet</td>
+            <td data-label="Prophet"><strong>Moses</strong><br>(Exod 3-4)</td>
+            <td data-label="Resistance">5 excuses: "Who am I?" / "Who are you?" / "They won't believe me" / "I'm not eloquent" / "Send someone else"</td>
+            <td data-label="God's Response">Patient, provides signs, gives Aaron as helper</td>
+            <td data-label="Outcome">Moses obeys, becomes greatest prophet</td>
           </tr>
           <tr>
-            <td><strong>Elijah</strong><br>(1 Kings 19)</td>
-            <td>Flees to wilderness, suicidal ("I've had enough, take my life"), hides in cave</td>
-            <td>Angel feeds him, "still small voice," recommissions him</td>
-            <td>Returns to prophesy, mentors Elisha</td>
+            <td data-label="Prophet"><strong>Elijah</strong><br>(1 Kings 19)</td>
+            <td data-label="Resistance">Flees to wilderness, suicidal ("I've had enough, take my life"), hides in cave</td>
+            <td data-label="God's Response">Angel feeds him, "still small voice," recommissions him</td>
+            <td data-label="Outcome">Returns to prophesy, mentors Elisha</td>
           </tr>
           <tr>
-            <td><strong>Jeremiah</strong><br>(Jer 1, 20)</td>
-            <td>"I'm only a youth" / Later: "You deceived me... I will not mention him"</td>
-            <td>Touches his mouth, promises to be with him</td>
-            <td>Obeys despite persecution, gives word faithfully</td>
+            <td data-label="Prophet"><strong>Jeremiah</strong><br>(Jer 1, 20)</td>
+            <td data-label="Resistance">"I'm only a youth" / Later: "You deceived me... I will not mention him"</td>
+            <td data-label="God's Response">Touches his mouth, promises to be with him</td>
+            <td data-label="Outcome">Obeys despite persecution, gives word faithfully</td>
           </tr>
           <tr>
-            <td><strong>Jonah</strong><br>(Jonah 1-4)</td>
-            <td>Flees opposite direction, sleeps through storm, reluctantly obeys, angry at success, suicidal</td>
-            <td>Pursues with storm, rescues via fish, second call, object lesson with plant</td>
-            <td><strong>Unknown—book ends with God's question unanswered</strong></td>
+            <td data-label="Prophet"><strong>Jonah</strong><br>(Jonah 1-4)</td>
+            <td data-label="Resistance">Flees opposite direction, sleeps through storm, reluctantly obeys, angry at success, suicidal</td>
+            <td data-label="God's Response">Pursues with storm, rescues via fish, second call, object lesson with plant</td>
+            <td data-label="Outcome"><strong>Unknown—book ends with God's question unanswered</strong></td>
           </tr>
         </tbody>
       </table>
@@ -1159,36 +1685,41 @@
       
       <h3>Exodus 34:6-7 — The Character of God</h3>
       
-      <div class="discovery-box">
-        <h4>The Most Important Verse for Understanding Jonah</h4>
-        
-        <p><strong>Exodus 34:6-7 (God's self-revelation to Moses):</strong></p>
-        <blockquote style="margin: 1rem 0; padding-left: 1rem; border-left: 4px solid #3b82f6; font-style: italic;">
-          "Yahweh, Yahweh, a God <strong>merciful and gracious, slow to anger, and abounding in steadfast love and faithfulness...</strong> 
-          but who will by no means clear the guilty."
-        </blockquote>
-        
-        <p style="margin-top: 1rem;"><strong>Jonah 4:2 (Jonah's complaint):</strong></p>
-        <blockquote style="margin: 1rem 0; padding-left: 1rem; border-left: 4px solid #f59e0b; font-style: italic;">
-          "I knew that you are a <strong>gracious God and merciful, slow to anger and abounding in steadfast love, 
-          and relenting from disaster</strong>."
-        </blockquote>
-        
-        <p style="margin-top: 1rem;">
-          <strong>Observation:</strong> Jonah <em>quotes Exodus 34:6-7</em> back at God—almost word-for-word! 
-          This is the central biblical creed about who Yahweh is.
-        </p>
-        
-        <p style="margin-top: 0.75rem;">
-          <strong>The Problem:</strong> Jonah knows this creed. He can recite it. But he <em>hates</em> it when God applies 
-          it to Israel's enemies. His theology is orthodox; his heart is opposed to God's mission.
-        </p>
-        
-        <p style="margin-top: 0.75rem;">
-          <strong>The Question for Readers:</strong> Do <em>we</em> want God to be merciful only to people like us? 
-          Or do we embrace God's heart for all nations—even our enemies?
-        </p>
-      </div>
+      <details class="discovery-expandable" open>
+        <summary class="discovery-summary">
+          <span class="discovery-icon">📜</span>
+          <h4>The Most Important Verse for Understanding Jonah</h4>
+          <span class="expand-arrow">▼</span>
+        </summary>
+        <div class="discovery-content">
+          <p><strong>Exodus 34:6-7 (God's self-revelation to Moses):</strong></p>
+          <blockquote style="margin: 1rem 0; padding-left: 1rem; border-left: 4px solid #3b82f6; font-style: italic;">
+            "Yahweh, Yahweh, a God <strong>merciful and gracious, slow to anger, and abounding in steadfast love and faithfulness...</strong> 
+            but who will by no means clear the guilty."
+          </blockquote>
+          
+          <p style="margin-top: 1rem;"><strong>Jonah 4:2 (Jonah's complaint):</strong></p>
+          <blockquote style="margin: 1rem 0; padding-left: 1rem; border-left: 4px solid #f59e0b; font-style: italic;">
+            "I knew that you are a <strong>gracious God and merciful, slow to anger and abounding in steadfast love, 
+            and relenting from disaster</strong>."
+          </blockquote>
+          
+          <p style="margin-top: 1rem;">
+            <strong>Observation:</strong> Jonah <em>quotes Exodus 34:6-7</em> back at God—almost word-for-word! 
+            This is the central biblical creed about who Yahweh is.
+          </p>
+          
+          <p style="margin-top: 0.75rem;">
+            <strong>The Problem:</strong> Jonah knows this creed. He can recite it. But he <em>hates</em> it when God applies 
+            it to Israel's enemies. His theology is orthodox; his heart is opposed to God's mission.
+          </p>
+          
+          <p style="margin-top: 0.75rem;">
+            <strong>The Question for Readers:</strong> Do <em>we</em> want God to be merciful only to people like us? 
+            Or do we embrace God's heart for all nations—even our enemies?
+          </p>
+        </div>
+      </details>
     </section>
     
     <!-- PHASE 6: LITERARY ARTISTRY -->
@@ -1199,37 +1730,42 @@
       
       <h3>Wordplay & Sound Patterns</h3>
       
-      <div class="discovery-box">
-        <h4>Hebrew Wordplay: "Down" vs. "Vows"</h4>
-        
-        <p><strong>The "Down" Cascade (Ch 1):</strong></p>
-        <p style="margin-left: 1rem;">
-          <span class="hebrew">יָרַד</span> (yarad) = "to go down"
-        </p>
-        <ul style="margin-left: 2rem; line-height: 1.7;">
-          <li>1:3 — "went <strong>down</strong> to Joppa"</li>
-          <li>1:3 — "went <strong>down</strong> into [the ship]"</li>
-          <li>1:5 — "gone <strong>down</strong> into the inner part of the ship"</li>
-          <li>1:5 — "and lay <strong>down</strong>" = <span class="hebrew">וַיֵּרָדַם</span> (vayeradam) — wordplay on yarad!</li>
-        </ul>
-        
-        <p style="margin-top: 1rem;"><strong>The "Vows" Reversal (End of Ch 1):</strong></p>
-        <p style="margin-left: 1rem;">
-          <span class="hebrew">נָדַר</span> (nadar) = "to vow"<br>
-          <span class="hebrew">נֶדֶר</span> (neder) = "vow" (noun)
-        </p>
-        <ul style="margin-left: 2rem; line-height: 1.7;">
-          <li>1:16 — "and they <strong>vowed vows</strong>" = <span class="hebrew">וַיִּדְּרוּ נְדָרִים</span> (vayidru nedarim)</li>
-          <li>Notice: <strong>Same consonants as "yarad" but reversed!</strong> (YRD → NDR)</li>
-        </ul>
-        
-        <p style="margin-top: 1rem;"><strong>The Contrast:</strong></p>
-        <p style="margin-left: 1rem; line-height: 1.7;">
-          While Jonah <strong>descends</strong> (<em>yarad</em>) into spiritual sleep and death, 
-          the sailors <strong>make vows</strong> (<em>nadar</em>) to Yahweh, ascending into faith! 
-          Hebrew wordplay creates theological contrast you can't see in English.
-        </p>
-      </div>
+      <details class="discovery-expandable" open>
+        <summary class="discovery-summary">
+          <span class="discovery-icon">🎵</span>
+          <h4>Hebrew Wordplay: "Down" vs. "Vows"</h4>
+          <span class="expand-arrow">▼</span>
+        </summary>
+        <div class="discovery-content">
+          <p><strong>The "Down" Cascade (Ch 1):</strong></p>
+          <p style="margin-left: 1rem;">
+            <span class="hebrew">יָרַד</span> (yarad) = "to go down"
+          </p>
+          <ul style="margin-left: 2rem; line-height: 1.7;">
+            <li>1:3 — "went <strong>down</strong> to Joppa"</li>
+            <li>1:3 — "went <strong>down</strong> into [the ship]"</li>
+            <li>1:5 — "gone <strong>down</strong> into the inner part of the ship"</li>
+            <li>1:5 — "and lay <strong>down</strong>" = <span class="hebrew">וַיֵּרָדַם</span> (vayeradam) — wordplay on yarad!</li>
+          </ul>
+          
+          <p style="margin-top: 1rem;"><strong>The "Vows" Reversal (End of Ch 1):</strong></p>
+          <p style="margin-left: 1rem;">
+            <span class="hebrew">נָדַר</span> (nadar) = "to vow"<br>
+            <span class="hebrew">נֶדֶר</span> (neder) = "vow" (noun)
+          </p>
+          <ul style="margin-left: 2rem; line-height: 1.7;">
+            <li>1:16 — "and they <strong>vowed vows</strong>" = <span class="hebrew">וַיִּדְּרוּ נְדָרִים</span> (vayidru nedarim)</li>
+            <li>Notice: <strong>Same consonants as "yarad" but reversed!</strong> (YRD → NDR)</li>
+          </ul>
+          
+          <p style="margin-top: 1rem;"><strong>The Contrast:</strong></p>
+          <p style="margin-left: 1rem; line-height: 1.7;">
+            While Jonah <strong>descends</strong> (<em>yarad</em>) into spiritual sleep and death, 
+            the sailors <strong>make vows</strong> (<em>nadar</em>) to Yahweh, ascending into faith! 
+            Hebrew wordplay creates theological contrast you can't see in English.
+          </p>
+        </div>
+      </details>
       
       <h3>Repetition Techniques</h3>
       
@@ -1246,28 +1782,28 @@
         </thead>
         <tbody>
           <tr>
-            <td>1:5</td>
-            <td>Sailors</td>
-            <td>Fear [because of the storm]</td>
-            <td><span class="hebrew">וַיִּירְאוּ</span> (vayir'u)</td>
+            <td data-label="Verse">1:5</td>
+            <td data-label="Who Fears?">Sailors</td>
+            <td data-label="What They Fear">Fear [because of the storm]</td>
+            <td data-label="Hebrew"><span class="hebrew">וַיִּירְאוּ</span> (vayir'u)</td>
           </tr>
           <tr>
-            <td>1:9</td>
-            <td>Jonah</td>
-            <td>"I fear Yahweh"</td>
-            <td><span class="hebrew">אֲנִי יָרֵא</span> (ani yare')</td>
+            <td data-label="Verse">1:9</td>
+            <td data-label="Who Fears?">Jonah</td>
+            <td data-label="What They Fear">"I fear Yahweh"</td>
+            <td data-label="Hebrew"><span class="hebrew">אֲנִי יָרֵא</span> (ani yare')</td>
           </tr>
           <tr>
-            <td>1:10</td>
-            <td>Sailors</td>
-            <td>"The men feared a <strong>great fear</strong>"</td>
-            <td><span class="hebrew">וַיִּירְאוּ... יִרְאָה גְדוֹלָה</span> (vayir'u... yir'ah gedolah)</td>
+            <td data-label="Verse">1:10</td>
+            <td data-label="Who Fears?">Sailors</td>
+            <td data-label="What They Fear">"The men feared a <strong>great fear</strong>"</td>
+            <td data-label="Hebrew"><span class="hebrew">וַיִּירְאוּ... יִרְאָה גְדוֹלָה</span> (vayir'u... yir'ah gedolah)</td>
           </tr>
           <tr>
-            <td>1:16</td>
-            <td>Sailors</td>
-            <td>"The men feared Yahweh <strong>a great fear</strong>"</td>
-            <td><span class="hebrew">וַיִּירְאוּ... אֶת־יְהוָה יִרְאָה גְדוֹלָה</span></td>
+            <td data-label="Verse">1:16</td>
+            <td data-label="Who Fears?">Sailors</td>
+            <td data-label="What They Fear">"The men feared Yahweh <strong>a great fear</strong>"</td>
+            <td data-label="Hebrew"><span class="hebrew">וַיִּירְאוּ... אֶת־יְהוָה יִרְאָה גְדוֹלָה</span></td>
           </tr>
         </tbody>
       </table>
@@ -1426,19 +1962,25 @@
       <h2 class="phase-title">Tim Mackie's Literal Translation</h2>
       <p class="phase-subtitle">A word-for-word rendering showing Hebrew patterns</p>
       
-      <div class="discovery-box">
-        <h4>Why This Translation Matters</h4>
-        <p>
-          All the observations in this guide come from Tim Mackie's literal literary translation of Jonah, 
-          which prioritizes showing Hebrew word patterns over smooth English. This translation reveals:
-        </p>
-        <ul style="margin: 1rem 0 0 1.5rem; line-height: 1.8;">
-          <li><strong>Repeated words:</strong> Same Hebrew word = same English word (even if awkward)</li>
-          <li><strong>Word order:</strong> Follows Hebrew syntax to show emphasis</li>
-          <li><strong>Wordplay:</strong> Notes where Hebrew sounds/roots create connections</li>
-          <li><strong>Divine names:</strong> Distinguishes "Yahweh" from generic "Elohim" (God)</li>
-        </ul>
-      </div>
+      <details class="discovery-expandable" open>
+        <summary class="discovery-summary">
+          <span class="discovery-icon">📖</span>
+          <h4>Why This Translation Matters</h4>
+          <span class="expand-arrow">▼</span>
+        </summary>
+        <div class="discovery-content">
+          <p>
+            All the observations in this guide come from Tim Mackie's literal literary translation of Jonah, 
+            which prioritizes showing Hebrew word patterns over smooth English. This translation reveals:
+          </p>
+          <ul style="margin: 1rem 0 0 1.5rem; line-height: 1.8;">
+            <li><strong>Repeated words:</strong> Same Hebrew word = same English word (even if awkward)</li>
+            <li><strong>Word order:</strong> Follows Hebrew syntax to show emphasis</li>
+            <li><strong>Wordplay:</strong> Notes where Hebrew sounds/roots create connections</li>
+            <li><strong>Divine names:</strong> Distinguishes "Yahweh" from generic "Elohim" (God)</li>
+          </ul>
+        </div>
+      </details>
       
       <div class="key-insight">
         <h4>Example: Chapter 1, Verse 3</h4>
@@ -1520,180 +2062,6 @@
                 <span class="usage-tag">Textual Analysis</span>
                 <span class="usage-note">Word-for-word translation showing Hebrew repetition patterns, wordplay, and syntax—
                 foundational for all repeated word observations</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="source-category">
-            <h4>Key Sessions Referenced</h4>
-            
-            <div class="source-entry">
-              <div class="source-citation">
-                <strong>Session 10:</strong> "Hyperlinks in the Text" — Identifying intertextual connections (Genesis 10, 2 Kings 14)
-              </div>
-            </div>
-            
-            <div class="source-entry">
-              <div class="source-citation">
-                <strong>Session 12:</strong> "Biblical Patterns the Author Assumes We Know" — City of blood pattern, Noah/Sodom/Egypt parallels
-              </div>
-            </div>
-            
-            <div class="source-entry">
-              <div class="source-citation">
-                <strong>Session 16:</strong> "How To Read an Ancient Text" — Mosaic text concept, literary analysis methodology
-              </div>
-            </div>
-            
-            <div class="source-entry">
-              <div class="source-citation">
-                <strong>Session 17:</strong> "Repeated Words and Implications for Literary Design" — Hurl, fear, down cascades; 
-                wordplay analysis (yarad/nadar)
-              </div>
-            </div>
-            
-            <div class="source-entry">
-              <div class="source-citation">
-                <strong>Session 22:</strong> "Why Does Jonah Flee to Tarshish?" — Eden connections, Solomon parallels, 
-                ships of Tarshish significance
-              </div>
-            </div>
-            
-            <div class="source-entry">
-              <div class="source-citation">
-                <strong>Session 27:</strong> "Relationships Between Jonah and the Story of the Bible" — Sacrificial prophet theme, 
-                Isaiah 53 connections
-              </div>
-            </div>
-          </div>
-          
-          <div class="source-category">
-            <h4>Methodology & Theoretical Framework</h4>
-            
-            <div class="source-entry">
-              <div class="source-citation">
-                <strong>Alter, Robert</strong>. <em>The Art of Biblical Narrative</em>. Basic Books, 1981.
-              </div>
-              <div class="source-usage">
-                <span class="usage-note">Literary analysis methodology—"spare economy of biblical narrative" concept referenced in Session 17</span>
-              </div>
-            </div>
-            
-            <div class="source-entry">
-              <div class="source-citation">
-                <strong>Buber, Martin and Franz Rosenzweig</strong>. <em>Die Schrift und ihre Verdeutschung</em> (Scripture and Its Translation). 
-                Berlin: Schocken Verlag, 1936.
-              </div>
-              <div class="source-usage">
-                <span class="usage-note">"Leitwort" (lead-word) concept—repeated words as thematic threads, referenced in Session 16</span>
-              </div>
-            </div>
-            
-            <div class="source-entry">
-              <div class="source-citation">
-                <strong>Sternberg, Meir</strong>. <em>The Poetics of Biblical Narrative: Ideological Literature and the Drama of Reading</em>. 
-                Indiana University Press, 1985.
-              </div>
-              <div class="source-usage">
-                <span class="usage-note">Advanced narrative theory framework underlying the classroom's analytical approach</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="source-category">
-            <h4>Additional Jonah Commentaries & Literary Studies</h4>
-            <p style="margin-bottom: 1rem; font-size: 0.95rem; color: #64748b;">
-              These scholarly resources provide complementary analysis of Jonah's literary structure, 
-              theological themes, and intertextual connections:
-            </p>
-            
-            <div class="source-entry">
-              <div class="source-citation">
-                <strong>Simon, Uriel.</strong> <em>The JPS Bible Commentary: Jonah.</em> Philadelphia: Jewish Publication Society, 1999.
-              </div>
-              <div class="source-usage">
-                <span class="usage-note">Jewish commentary with Midrashic interpretation and literary structure analysis</span>
-              </div>
-            </div>
-            
-            <div class="source-entry">
-              <div class="source-citation">
-                <strong>Magonet, Jonathan.</strong> <em>Form and Meaning: Studies in Literary Techniques in the Book of Jonah.</em> Sheffield: Almond Press, 1983.
-              </div>
-              <div class="source-usage">
-                <span class="usage-note">Pioneering work on Jonah's chiastic structure and verbal repetition patterns</span>
-              </div>
-            </div>
-            
-            <div class="source-entry">
-              <div class="source-citation">
-                <strong>Wolff, Hans Walter.</strong> <em>Obadiah and Jonah: A Commentary.</em> Minneapolis: Augsburg, 1986.
-              </div>
-              <div class="source-usage">
-                <span class="usage-note">Historical-critical commentary emphasizing God's mercy as central theme</span>
-              </div>
-            </div>
-            
-            <div class="source-entry">
-              <div class="source-citation">
-                <strong>Stuart, Douglas.</strong> <em>Word Biblical Commentary Vol. 31, Hosea-Jonah.</em> Nashville: Thomas Nelson, 1987.
-              </div>
-              <div class="source-usage">
-                <span class="usage-note">Detailed Hebrew exegesis with comprehensive textual analysis</span>
-              </div>
-            </div>
-            
-            <div class="source-entry">
-              <div class="source-citation">
-                <strong>Sweeney, Marvin A.</strong> <em>The Twelve Prophets, Vol. 1: Hosea, Joel, Amos, Obadiah, Jonah.</em> Collegeville: Liturgical Press, 2000.
-              </div>
-              <div class="source-usage">
-                <span class="usage-note">Canonical approach placing Jonah within Book of the Twelve with intertextual connections</span>
-              </div>
-            </div>
-            
-            <div class="source-entry">
-              <div class="source-citation">
-                <strong>Berger, Yitzhak.</strong> <em>Jonah in the Shadows of Eden.</em> Sheffield: Sheffield Phoenix Press, 2016.
-              </div>
-              <div class="source-usage">
-                <span class="usage-note">Eden motifs and creation theology throughout Jonah narrative</span>
-              </div>
-            </div>
-            
-            <div class="source-entry">
-              <div class="source-citation">
-                <strong>Muldoon, Catherine L.</strong> <em>In Defense of Divine Justice: An Intertextual Approach to the Book of Jonah.</em> Washington: Catholic Biblical Association, 2011.
-              </div>
-              <div class="source-usage">
-                <span class="usage-note">Connections to Genesis, Exodus, and prophetic literature through intertextual analysis</span>
-              </div>
-            </div>
-            
-            <div class="source-entry">
-              <div class="source-citation">
-                <strong>Lubeck, Ray.</strong> <em>Swallowing Jonah: Strategies for Reading Biblical Narratives.</em> Eugene: Cascade Books, 2011.
-              </div>
-              <div class="source-usage">
-                <span class="usage-note">Uses Jonah as test case demonstrating narrative reading methodology</span>
-              </div>
-            </div>
-            
-            <div class="source-entry">
-              <div class="source-citation">
-                <strong>Alexander, T. Desmond.</strong> <em>Obadiah, Jonah and Micah (Tyndale Old Testament Commentaries).</em> Downers Grove: IVP Academic, 2009.
-              </div>
-              <div class="source-usage">
-                <span class="usage-note">Accessible commentary with thematic and structural introductions</span>
-              </div>
-            </div>
-            
-            <div class="source-entry">
-              <div class="source-citation">
-                <strong>Cary, Phillip.</strong> <em>Jonah (SCM Theological Commentary on the Bible).</em> London: SCM Press, 2008.
-              </div>
-              <div class="source-usage">
-                <span class="usage-note">Theological reading emphasizing Jonah's challenge to religious presumption</span>
               </div>
             </div>
           </div>
@@ -1789,12 +2157,64 @@
     });
   </script>
   
-  <!-- Page Scripts -->
+  <!-- Enhanced Interactive Features -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('First-Read Framework: Jonah Example — Page loaded');
+      console.log('Enhanced Jonah Framework — Interactive features loading...');
       
-      // Reading progress bar
+      // ============================================
+      // PHASE PROGRESS TRACKING
+      // ============================================
+      function updatePhaseProgress() {
+        const phases = document.querySelectorAll('.phase-section');
+        const progressFill = document.querySelector('.progress-fill');
+        const navLinks = document.querySelectorAll('.phase-nav-link');
+        
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const phaseId = entry.target.id;
+              const phaseNumber = phaseId.replace('phase', '');
+              const progress = (phaseNumber / phases.length) * 100;
+              
+              // Update progress bar
+              progressFill.style.width = progress + '%';
+              
+              // Update navigator
+              navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.phase === phaseNumber) {
+                  link.classList.add('active');
+                }
+              });
+            }
+          });
+        }, { threshold: 0.3 });
+        
+        phases.forEach(phase => observer.observe(phase));
+      }
+      
+      // ============================================
+      // WORD TRACKER INTERACTIONS
+      // ============================================
+      document.querySelectorAll('.tracked-word').forEach(word => {
+        word.addEventListener('click', function() {
+          // Toggle active state
+          this.classList.toggle('active');
+          
+          // Visual feedback
+          if (this.classList.contains('active')) {
+            this.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+              this.style.transform = '';
+            }, 200);
+          }
+        });
+      });
+      
+      // ============================================
+      // READING PROGRESS BAR
+      // ============================================
       window.addEventListener('scroll', () => {
         const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
         const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -1805,7 +2225,9 @@
         }
       });
       
-      // Back to top button
+      // ============================================
+      // BACK TO TOP BUTTON
+      // ============================================
       const backToTop = document.querySelector('.back-to-top');
       window.addEventListener('scroll', () => {
         if (window.scrollY > 500) {
@@ -1815,24 +2237,33 @@
         }
       });
       
-      // Smooth scroll for phase links
-      document.querySelectorAll('a[href^="#phase"]').forEach(anchor => {
+      // ============================================
+      // SMOOTH SCROLL FOR NAVIGATION
+      // ============================================
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
           e.preventDefault();
           const target = document.querySelector(this.getAttribute('href'));
           if (target) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const offset = 80; // Account for fixed nav
+            const targetPosition = target.offsetTop - offset;
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'smooth'
+            });
           }
         });
       });
       
-      // Animate on scroll - phase sections
+      // ============================================
+      // ANIMATE ON SCROLL
+      // ============================================
       const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -100px 0px'
       };
       
-      const observer = new IntersectionObserver((entries) => {
+      const animateObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry, index) => {
           if (entry.isIntersecting) {
             setTimeout(() => {
@@ -1844,27 +2275,7 @@
       
       // Observe all phase sections
       document.querySelectorAll('.phase-section').forEach(section => {
-        observer.observe(section);
-      });
-      
-      // Animate discovery boxes
-      document.querySelectorAll('.discovery-box, .key-insight, .pattern-highlight').forEach((box, index) => {
-        box.style.opacity = '0';
-        box.style.transform = 'translateX(-20px)';
-        box.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        
-        const boxObserver = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              setTimeout(() => {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateX(0)';
-              }, index * 50);
-            }
-          });
-        }, observerOptions);
-        
-        boxObserver.observe(box);
+        animateObserver.observe(section);
       });
       
       // Animate observation cards
@@ -1911,12 +2322,10 @@
       document.querySelectorAll('.hyperlink-item').forEach(item => {
         item.addEventListener('mouseenter', function() {
           this.style.transform = 'translateX(5px)';
-          this.style.background = '#f0f9ff';
         });
         
         item.addEventListener('mouseleave', function() {
           this.style.transform = 'translateX(0)';
-          this.style.background = 'white';
         });
       });
       
@@ -1931,17 +2340,65 @@
         });
       });
       
-      console.log('✓ Animations initialized');
+      // Initialize phase progress
+      updatePhaseProgress();
+      
+      console.log('✓ Enhanced interactive features initialized');
+      console.log('✓ Phase navigator active');
+      console.log('✓ Word tracker ready');
+      console.log('✓ Progress indicators working');
     });
+    
+    // ============================================
+    // GLOBAL FUNCTIONS FOR QUICK ACTIONS
+    // ============================================
+    function toggleWordTracker() {
+      const tracker = document.querySelector('.word-tracker');
+      tracker.classList.toggle('minimized');
+      const button = document.querySelector('.word-tracker-toggle');
+      button.textContent = tracker.classList.contains('minimized') ? '+' : '−';
+    }
+    
+    function shareGuide() {
+      if (navigator.share) {
+        navigator.share({
+          title: 'Worked Example: Reading Jonah',
+          text: 'A comprehensive demonstration of the First-Read Framework applied to Jonah',
+          url: window.location.href
+        }).catch(err => console.log('Share failed:', err));
+      } else {
+        // Fallback: copy to clipboard
+        navigator.clipboard.writeText(window.location.href);
+        alert('Link copied to clipboard!');
+      }
+    }
+    
+    function toggleBookmark() {
+      // Simple localStorage bookmark system
+      const bookmarks = JSON.parse(localStorage.getItem('pc-bookmarks') || '[]');
+      const currentPage = window.location.pathname;
+      const index = bookmarks.indexOf(currentPage);
+      
+      if (index > -1) {
+        bookmarks.splice(index, 1);
+        alert('Bookmark removed');
+      } else {
+        bookmarks.push(currentPage);
+        alert('Page bookmarked!');
+      }
+      
+      localStorage.setItem('pc-bookmarks', JSON.stringify(bookmarks));
+    }
   </script>
   
-  <!-- Mobile Section Tabs - Dynamic Navigation -->
+  <!-- Mobile Section Tabs -->
   <script src="/assets/js/character-page-v5-8.js" defer></script>
   
   <!-- Page Initialization -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('Jonah Framework Example initialized with mobile tabs');
+      console.log('✓ Enhanced Jonah Framework v2.1 initialized');
+      console.log('✓ Template: Enhanced with interactive features');
     });
   </script>
 </body>
