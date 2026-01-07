@@ -221,49 +221,117 @@
       margin: 2rem auto;
     }
 
+    /* Interactive Venn Circle with Flip */
     .venn-circle {
       position: absolute;
       width: 300px;
       height: 300px;
       border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      perspective: 1000px;
+    }
+
+    .venn-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+
+    .venn-circle.flipped .venn-inner {
+      transform: rotateY(180deg);
+    }
+
+    .venn-front, .venn-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
       padding: 2rem;
-      transition: all 0.3s ease;
-      cursor: pointer;
+      border-radius: 50%;
       border: 3px solid;
+    }
+
+    .venn-back {
+      transform: rotateY(180deg);
     }
 
     .venn-circle:hover {
       transform: scale(1.05);
-      z-index: 10;
     }
 
+    /* Psalm 1 - Torah (Blue) - Top */
     .venn-torah {
-      background: rgba(33, 150, 243, 0.3);
-      border-color: #1976d2;
       top: 0;
       left: 50%;
       transform: translateX(-50%);
     }
 
+    .venn-torah .venn-front {
+      background: rgba(33, 150, 243, 0.3);
+      border-color: #1976d2;
+    }
+
+    .venn-torah .venn-back {
+      background: linear-gradient(135deg, rgba(25, 118, 210, 0.95), rgba(33, 150, 243, 0.95));
+      border-color: #1976d2;
+      color: white;
+    }
+
+    .venn-torah:hover {
+      z-index: 10;
+    }
+
+    /* Psalm 2 - Throne (Red) - Bottom Left */
     .venn-throne {
-      background: rgba(198, 40, 40, 0.3);
-      border-color: #c62828;
       bottom: 20px;
       left: 0;
     }
 
+    .venn-throne .venn-front {
+      background: rgba(198, 40, 40, 0.3);
+      border-color: #c62828;
+    }
+
+    .venn-throne .venn-back {
+      background: linear-gradient(135deg, rgba(183, 28, 28, 0.95), rgba(198, 40, 40, 0.95));
+      border-color: #c62828;
+      color: white;
+    }
+
+    .venn-throne:hover {
+      z-index: 10;
+    }
+
+    /* Psalm 8 - Weakness (Purple) - Bottom Right */
     .venn-weakness {
-      background: rgba(123, 31, 162, 0.3);
-      border-color: #7b1fa2;
       bottom: 20px;
       right: 0;
     }
 
+    .venn-weakness .venn-front {
+      background: rgba(123, 31, 162, 0.3);
+      border-color: #7b1fa2;
+    }
+
+    .venn-weakness .venn-back {
+      background: linear-gradient(135deg, rgba(106, 27, 154, 0.95), rgba(123, 31, 162, 0.95));
+      border-color: #7b1fa2;
+      color: white;
+    }
+
+    .venn-weakness:hover {
+      z-index: 10;
+    }
+
+    /* Center Integration Circle */
     .venn-center {
       position: absolute;
       top: 50%;
@@ -304,6 +372,7 @@
       }
     }
 
+    /* Content styling for front */
     .venn-label {
       font-weight: 700;
       font-size: 1.15rem;
@@ -315,6 +384,57 @@
       font-size: 0.9rem;
       opacity: 0.95;
       line-height: 1.4;
+    }
+
+    /* Content styling for back */
+    .venn-back-title {
+      font-weight: 800;
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,.3);
+    }
+
+    .venn-back-content {
+      font-size: 0.85rem;
+      line-height: 1.5;
+      opacity: 0.95;
+    }
+
+    .venn-back-scripture {
+      margin-top: 0.75rem;
+      font-style: italic;
+      font-size: 0.8rem;
+      opacity: 0.9;
+    }
+
+    /* Reset button */
+    .reset-venn-btn {
+      display: block;
+      margin: 2rem auto 0;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #00838f, #00acc1);
+      color: white;
+      border: none;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(0, 131, 143, 0.3);
+    }
+
+    .reset-venn-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 131, 143, 0.5);
+    }
+
+    /* Helper text */
+    .venn-helper-text {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: #666;
+      font-style: italic;
     }
 
     /* Three Questions Grid */
@@ -628,6 +748,10 @@
         padding: 1.5rem;
       }
 
+      .venn-front, .venn-back {
+        padding: 1.5rem;
+      }
+
       .venn-torah {
         top: 0;
         left: 50%;
@@ -763,7 +887,7 @@
     </section>
 
     <!-- ═══════════════════════════════════════════
-         THREE-DIMENSIONAL VENN DIAGRAM
+         THREE-DIMENSIONAL VENN DIAGRAM (INTERACTIVE)
     ════════════════════════════════════════════ -->
     <section class="theology-card animate-on-scroll" id="three-dimensional">
       <h2 class="section-title"><span class="section-icon">🎯</span> The Three-Dimensional Portrait</h2>
@@ -779,35 +903,79 @@
         <div class="venn-container">
           
           <!-- Circle 1: Psalm 1 - Torah -->
-          <div class="venn-circle venn-torah animate-on-scroll animation-delay-100">
-            <div class="venn-label" style="color: #1976d2;">📜 Psalm 1</div>
-            <div class="venn-desc" style="color: #1976d2;">
-              <strong>Torah-Keeper</strong><br>
-              Righteous<br>
-              Meditates day & night<br>
-              Like fruitful tree
+          <div class="venn-circle venn-torah animate-on-scroll animation-delay-100" onclick="flipVennCircle(this)">
+            <div class="venn-inner">
+              <div class="venn-front">
+                <div class="venn-label" style="color: #1976d2;">📜 Psalm 1</div>
+                <div class="venn-desc" style="color: #1976d2;">
+                  <strong>Torah-Keeper</strong><br>
+                  Righteous<br>
+                  Meditates day & night<br>
+                  Like fruitful tree
+                </div>
+              </div>
+              <div class="venn-back">
+                <div class="venn-back-title">How Will He Live?</div>
+                <div class="venn-back-content">
+                  In complete Torah obedience and righteousness. The moral foundation—ensuring 
+                  the Messiah won't be a tyrant but will rule with perfect devotion to God's ways.
+                </div>
+                <div class="venn-back-scripture">
+                  "His delight is in the law of the LORD, and on his law he meditates day and night."
+                </div>
+              </div>
             </div>
           </div>
 
           <!-- Circle 2: Psalm 2 - Throne -->
-          <div class="venn-circle venn-throne animate-on-scroll animation-delay-200">
-            <div class="venn-label" style="color: #c62828;">👑 Psalm 2</div>
-            <div class="venn-desc" style="color: #c62828;">
-              <strong>Enthroned King</strong><br>
-              Divine Son<br>
-              Rules nations<br>
-              Refuge for all
+          <div class="venn-circle venn-throne animate-on-scroll animation-delay-200" onclick="flipVennCircle(this)">
+            <div class="venn-inner">
+              <div class="venn-front">
+                <div class="venn-label" style="color: #c62828;">👑 Psalm 2</div>
+                <div class="venn-desc" style="color: #c62828;">
+                  <strong>Enthroned King</strong><br>
+                  Divine Son<br>
+                  Rules nations<br>
+                  Refuge for all
+                </div>
+              </div>
+              <div class="venn-back">
+                <div class="venn-back-title">What Authority?</div>
+                <div class="venn-back-content">
+                  Divine sonship and universal dominion over all nations. The scope and source of 
+                  power—ensuring the Messiah won't just be good but will have cosmic authority to 
+                  rule every nation.
+                </div>
+                <div class="venn-back-scripture">
+                  "I will make the nations your inheritance, the ends of the earth your possession."
+                </div>
+              </div>
             </div>
           </div>
 
           <!-- Circle 3: Psalm 8 - Weakness -->
-          <div class="venn-circle venn-weakness animate-on-scroll animation-delay-300">
-            <div class="venn-label" style="color: #7b1fa2;">🕊️ Psalm 8</div>
-            <div class="venn-desc" style="color: #7b1fa2;">
-              <strong>Weak Exalted</strong><br>
-              Like babes/infants<br>
-              Crowned with glory<br>
-              Power through humility
+          <div class="venn-circle venn-weakness animate-on-scroll animation-delay-300" onclick="flipVennCircle(this)">
+            <div class="venn-inner">
+              <div class="venn-front">
+                <div class="venn-label" style="color: #7b1fa2;">🕊️ Psalm 8</div>
+                <div class="venn-desc" style="color: #7b1fa2;">
+                  <strong>Weak Exalted</strong><br>
+                  Like babes/infants<br>
+                  Crowned with glory<br>
+                  Power through humility
+                </div>
+              </div>
+              <div class="venn-back">
+                <div class="venn-back-title">How Will He Accomplish It?</div>
+                <div class="venn-back-content">
+                  Through weakness, humility, and divine exaltation. The method and path—ensuring 
+                  the Messiah won't conquer through brute force but through power perfected in 
+                  weakness.
+                </div>
+                <div class="venn-back-scripture">
+                  "From the lips of children and infants you have ordained praise... to silence the enemy."
+                </div>
+              </div>
             </div>
           </div>
 
@@ -818,6 +986,9 @@
           </div>
 
         </div>
+
+        <p class="venn-helper-text">💡 Click any circle to flip and see the question it answers</p>
+        <button class="reset-venn-btn" onclick="resetAllVennCircles()">🔄 Reset All Circles</button>
 
         <div class="panel" style="margin-top: 1.5rem;">
           <h4>🔑 Why All Three Are Necessary</h4>
@@ -838,9 +1009,10 @@
       </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════
-         THREE COMPLEMENTARY QUESTIONS
-    ════════════════════════════════════════════ -->
+    <!-- Rest of the content continues exactly as before... -->
+    <!-- I'll include the remaining sections but they're unchanged from the original -->
+
+    <!-- THREE COMPLEMENTARY QUESTIONS -->
     <section class="theology-card animate-on-scroll" id="complementary-questions">
       <h2 class="section-title"><span class="section-icon">❓</span> Three Complementary Questions</h2>
 
@@ -1495,6 +1667,17 @@
       const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
       progressBar.style.width = progress + '%';
     });
+
+    // Interactive Venn Diagram Functions
+    function flipVennCircle(element) {
+      element.classList.toggle('flipped');
+    }
+
+    function resetAllVennCircles() {
+      document.querySelectorAll('.venn-circle').forEach(circle => {
+        circle.classList.remove('flipped');
+      });
+    }
   </script>
 
 <!-- Navigation Component -->
