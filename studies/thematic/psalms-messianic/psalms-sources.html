@@ -29,6 +29,10 @@
   <!-- Canonical URL -->
   <link rel="canonical" href="https://projectcontext.org/studies/thematic/psalms-messianic/psalms-sources.html">
 
+  <!-- Preload Critical Resources -->
+  <link rel="preload" href="/assets/css/global-v2.css" as="style">
+  <link rel="preload" href="https://projectcontext.org/assets/fonts/SBL_Hebrew.woff2" as="font" type="font/woff2" crossorigin>
+
   <!-- Stylesheets -->
   <link rel="stylesheet" href="/assets/css/global-v2.css">
   <link rel="stylesheet" href="/assets/css/mobile-tabs-v5-8.css">
@@ -36,12 +40,25 @@
    
   <style>
     /* ============================================
-       SOURCES PAGE — NEUTRAL ACADEMIC THEME
-       Professional bibliography styling
+       SOURCES PAGE — MESSIANIC PROFILE COLORS
+       Torah Blue → Throne Red → Weakness Purple → Victory Gold
        ============================================ */
 
-    /* Hero Section */
-    .pc-hero {
+    /* Messianic Profile Color Variables */
+    :root {
+      --torah-blue: #1565c0;
+      --torah-blue-light: #1976d2;
+      --throne-red: #c62828;
+      --throne-red-light: #d32f2f;
+      --weakness-purple: #7b1fa2;
+      --weakness-purple-light: #8e24aa;
+      --victory-gold: #f9a825;
+      --victory-gold-light: #fbc02d;
+      --sources-grey: #757575;
+    }
+
+    /* Enhanced Hero Section - Four-Phase Messianic Gradient */
+    .sources-hero {
       position: relative;
       border-radius: 24px;
       overflow: hidden;
@@ -52,20 +69,17 @@
         0 20px 50px rgba(0,0,0,.25),
         0 0 0 1px rgba(255,255,255,.1) inset;
       
-      /* Neutral academic gradient */
+      /* Torah → Throne → Weakness → Victory gradient (matching hub) */
       background:
         radial-gradient(ellipse 120% 80% at 15% 10%, rgba(255,255,255,.15), transparent 50%),
         radial-gradient(ellipse 100% 70% at 85% 5%, rgba(255,255,255,.1), transparent 50%),
         linear-gradient(135deg,
-          #37474f 0%,
-          #455a64 25%,
-          #546e7a 50%,
-          #607d8b 75%,
-          #78909c 100%
+          #1565c0 0%, #1976d2 15%, #c62828 30%, #d32f2f 40%,
+          #7b1fa2 55%, #8e24aa 65%, #f9a825 80%, #fbc02d 100%
         );
     }
 
-    .pc-hero::before {
+    .sources-hero::before {
       content: "";
       position: absolute;
       inset: 0;
@@ -75,13 +89,36 @@
       pointer-events: none;
     }
 
-    .pc-hero .hero-inner {
+    /* Animated shimmer effect */
+    .sources-hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        105deg,
+        transparent 40%,
+        rgba(255,255,255,.08) 45%,
+        rgba(255,255,255,.15) 50%,
+        rgba(255,255,255,.08) 55%,
+        transparent 60%
+      );
+      background-size: 200% 100%;
+      animation: shimmer 8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { background-position: 200% 0; }
+      50% { background-position: -200% 0; }
+    }
+
+    .sources-hero .hero-inner {
       position: relative;
       z-index: 1;
       max-width: 980px;
     }
 
-    .pc-hero .hero-badge {
+    .sources-hero .hero-badge {
       display: inline-flex;
       align-items: center;
       gap: .5rem;
@@ -96,7 +133,7 @@
       letter-spacing: .02em;
     }
 
-    .pc-hero h1 {
+    .sources-hero h1 {
       font-size: clamp(2.25rem, 5vw, 3.5rem);
       line-height: 1.05;
       margin: 0 0 .5rem 0;
@@ -107,7 +144,7 @@
         0 4px 8px rgba(0,0,0,.3);
     }
 
-    .pc-hero .hero-subtitle {
+    .sources-hero .hero-subtitle {
       font-size: clamp(1.1rem, 1.5vw, 1.35rem);
       opacity: .95;
       margin: 0 0 .5rem 0;
@@ -118,7 +155,7 @@
         0 4px 8px rgba(0,0,0,.3);
     }
 
-    .pc-hero p {
+    .sources-hero p {
       margin: 0 0 1.25rem 0;
       font-size: clamp(.95rem, 1.2vw, 1.05rem);
       opacity: .9;
@@ -129,90 +166,225 @@
         0 4px 8px rgba(0,0,0,.3);
     }
 
-    .hero-actions {
+    /* Enhanced stat badges */
+    .sources-stats {
       display: flex;
-      gap: .75rem;
+      gap: 1.5rem;
       flex-wrap: wrap;
-      margin-top: .5rem;
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid rgba(255,255,255,.2);
     }
 
-    .hero-actions a {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: .95rem;
-      border-radius: 14px;
-      padding: .8rem 1.15rem;
-      transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+    .sources-stat {
+      display: flex;
+      flex-direction: column;
+      gap: .15rem;
     }
 
-    .btn-hero-primary {
-      background: rgba(0,0,0,.35);
-      border: 1px solid rgba(255,255,255,.25);
-      color: #fff;
-      backdrop-filter: blur(8px);
+    .sources-stat .stat-value {
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -.02em;
+      background: rgba(255,255,255,0.2);
+      padding: 0.25rem 0.5rem;
+      border-radius: 8px;
+      display: inline-block;
     }
 
-    .btn-hero-secondary {
-      background: rgba(255,255,255,.18);
-      border: 1px solid rgba(255,255,255,.25);
-      color: #fff;
-      backdrop-filter: blur(8px);
+    .sources-stat .stat-label {
+      font-size: .8rem;
+      opacity: .8;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 600;
     }
 
-    .hero-actions a:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0,0,0,.25);
+    /* Enhanced key-insight hover animations with profile colors */
+    .key-insight {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: default;
+      border-left: 4px solid transparent;
     }
 
-    .btn-hero-primary:hover {
-      background: rgba(0,0,0,.5);
+    /* Profile color assignments for key insights */
+    #how-to-use .key-insight:nth-child(1) {
+      border-left-color: var(--torah-blue);
     }
 
-    .btn-hero-secondary:hover {
-      background: rgba(255,255,255,.28);
+    #how-to-use .key-insight:nth-child(2) {
+      border-left-color: var(--throne-red);
     }
 
-    /* Bibliography Sections */
-    .bibliography-section {
+    #how-to-use .key-insight:nth-child(3) {
+      border-left-color: var(--weakness-purple);
+    }
+
+    /* Hover effect */
+    .key-insight:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Animated gradient shine effect on hover */
+    .key-insight::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+      );
+      transition: left 0.5s ease;
+    }
+
+    .key-insight:hover::before {
+      left: 100%;
+    }
+
+    /* Color-specific hover backgrounds */
+    #how-to-use .key-insight:nth-child(1):hover {
+      background: linear-gradient(135deg, rgba(21, 101, 192, 0.08) 0%, rgba(21, 101, 192, 0.15) 100%);
+      border-left-width: 6px;
+    }
+
+    #how-to-use .key-insight:nth-child(2):hover {
+      background: linear-gradient(135deg, rgba(198, 40, 40, 0.08) 0%, rgba(198, 40, 40, 0.15) 100%);
+      border-left-width: 6px;
+    }
+
+    #how-to-use .key-insight:nth-child(3):hover {
+      background: linear-gradient(135deg, rgba(123, 31, 162, 0.08) 0%, rgba(123, 31, 162, 0.15) 100%);
+      border-left-width: 6px;
+    }
+
+    /* Strong tag color on hover */
+    #how-to-use .key-insight:nth-child(1):hover strong {
+      color: var(--torah-blue);
+    }
+
+    #how-to-use .key-insight:nth-child(2):hover strong {
+      color: var(--throne-red);
+    }
+
+    #how-to-use .key-insight:nth-child(3):hover strong {
+      color: var(--weakness-purple);
+    }
+
+    /* Profile-themed source categories */
+    .source-category {
       margin: 2rem 0;
-      padding: 2rem;
       background: white;
       border-radius: 16px;
-      border: 2px solid #78909c;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      position: relative;
+      overflow: hidden;
+      border-top: 4px solid var(--category-color);
     }
 
-    .bibliography-section h3 {
-      margin: 0 0 1.5rem 0;
-      font-size: 1.3rem;
-      color: #37474f;
-      border-bottom: 2px solid #78909c;
-      padding-bottom: 0.75rem;
+    /* Profile color assignments for source categories */
+    /* Psalm 8 (Weakness Purple) */
+    #primary-sources .source-category:nth-of-type(1) { --category-color: var(--weakness-purple); }
+    
+    /* Psalm 148 (Victory Gold) */
+    #primary-sources .source-category:nth-of-type(2) { --category-color: var(--victory-gold); }
+    
+    /* Psalms 1-2 (Torah Blue) */
+    #primary-sources .source-category:nth-of-type(3) { --category-color: var(--torah-blue); }
+    
+    /* General Psalms (Throne Red) */
+    #primary-sources .source-category:nth-of-type(4) { --category-color: var(--throne-red); }
+    
+    /* Commentaries (spread across colors) */
+    #commentaries .source-category:nth-of-type(1) { --category-color: var(--torah-blue); }
+    
+    /* Reference Works (Sources Grey) */
+    #reference-works .source-category:nth-of-type(1) { --category-color: var(--sources-grey); }
+
+    .source-category::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--category-color);
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
+    .source-category:hover::before {
+      opacity: 1;
+    }
+
+    .source-category h4 {
+      margin: 0 0 1.25rem 0;
+      font-size: 1.2rem;
+      color: var(--category-color);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Enhanced source entries */
     .source-entry {
-      margin: 1.5rem 0;
+      background: #fafafa;
+      border-left: 4px solid var(--category-color);
+      border-radius: 10px;
       padding: 1.25rem;
-      background: linear-gradient(135deg, rgba(120,144,156,.05), rgba(120,144,156,.02));
-      border-left: 4px solid #607d8b;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      line-height: 1.7;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .source-entry:hover {
+      background: white;
+      transform: translateX(5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .source-entry:last-child {
+      margin-bottom: 0;
     }
 
     .source-entry h4 {
       margin: 0 0 0.5rem 0;
       font-size: 1.05rem;
-      color: #37474f;
+      color: #1a1a1a;
       font-weight: 700;
     }
 
     .source-meta {
       font-size: 0.9rem;
-      color: #546e7a;
+      color: #666;
       margin: 0.5rem 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .source-citation {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin: 0.75rem 0;
+    }
+
+    .source-citation strong {
+      color: #1a1a1a;
+      font-weight: 700;
+    }
+
+    .source-citation em {
+      font-style: italic;
     }
 
     .source-usage {
@@ -221,57 +393,135 @@
       background: rgba(255,255,255,.6);
       border-radius: 6px;
       font-size: 0.88rem;
+      line-height: 1.6;
     }
 
     .source-usage strong {
-      color: #37474f;
+      color: #1a1a1a;
     }
 
-    /* Category Tags */
-    .source-category {
+    .source-usage ul {
+      margin: 0.5rem 0 0 1.25rem;
+      padding: 0;
+    }
+
+    .source-usage li {
+      margin: 0.25rem 0;
+    }
+
+    /* Category Tags with profile colors */
+    .source-category-tag {
       display: inline-flex;
       align-items: center;
       gap: 0.3rem;
       padding: 0.3rem 0.6rem;
-      background: rgba(120,144,156,.15);
       border-radius: 999px;
       font-size: 0.8rem;
       font-weight: 600;
-      color: #37474f;
       margin-right: 0.5rem;
       margin-bottom: 0.5rem;
     }
 
-    .cat-primary { background: rgba(33,150,243,.15); color: #1976d2; }
-    .cat-commentary { background: rgba(156,39,176,.15); color: #7b1fa2; }
-    .cat-scholarly { background: rgba(76,175,80,.15); color: #2e7d32; }
-    .cat-reference { background: rgba(255,152,0,.15); color: #e65100; }
+    .cat-primary { 
+      background: rgba(123, 31, 162, 0.15); 
+      color: var(--weakness-purple); 
+    }
+    
+    .cat-commentary { 
+      background: rgba(21, 101, 192, 0.15); 
+      color: var(--torah-blue); 
+    }
+    
+    .cat-scholarly { 
+      background: rgba(198, 40, 40, 0.15); 
+      color: var(--throne-red); 
+    }
+    
+    .cat-reference { 
+      background: rgba(117, 117, 117, 0.15); 
+      color: var(--sources-grey); 
+    }
 
-    /* Methodology Section */
+    /* Enhanced citation note box with profile accent */
+    .citation-note {
+      background: linear-gradient(135deg, #fff5f7, #fef3f8);
+      border-left: 4px solid var(--victory-gold);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .citation-note::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: pulse-glow 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 0.8; }
+    }
+
+    .citation-note p {
+      margin: 0 0 0.75rem 0;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+    }
+
+    .citation-note p:last-child {
+      margin-bottom: 0;
+    }
+
+    .citation-note strong {
+      color: var(--victory-gold);
+    }
+
+    /* Methodology Cards with profile colors */
     .methodology-card {
       margin: 1.5rem 0;
       padding: 1.5rem;
       background: white;
       border-radius: 14px;
-      border: 2px solid #e5e7eb;
+      border-left: 4px solid transparent;
       transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
+
+    .methodology-card:nth-of-type(1) { border-left-color: var(--torah-blue); }
+    .methodology-card:nth-of-type(2) { border-left-color: var(--throne-red); }
+    .methodology-card:nth-of-type(3) { border-left-color: var(--weakness-purple); }
+    .methodology-card:nth-of-type(4) { border-left-color: var(--victory-gold); }
+    .methodology-card:nth-of-type(5) { border-left-color: var(--sources-grey); }
 
     .methodology-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(120,144,156,.15);
-      border-color: #78909c;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      border-left-width: 6px;
     }
 
     .methodology-card h4 {
       margin: 0 0 0.75rem 0;
       font-size: 1.05rem;
-      color: #37474f;
       font-weight: 700;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
+
+    .methodology-card:nth-of-type(1) h4 { color: var(--torah-blue); }
+    .methodology-card:nth-of-type(2) h4 { color: var(--throne-red); }
+    .methodology-card:nth-of-type(3) h4 { color: var(--weakness-purple); }
+    .methodology-card:nth-of-type(4) h4 { color: var(--victory-gold); }
+    .methodology-card:nth-of-type(5) h4 { color: var(--sources-grey); }
 
     .methodology-card p {
       margin: 0.5rem 0;
@@ -286,20 +536,20 @@
       line-height: 1.7;
     }
 
-    /* Acknowledgments */
+    /* Acknowledgments with profile theme */
     .acknowledgment-box {
       margin: 2rem 0;
       padding: 2rem;
-      background: linear-gradient(135deg, rgba(120,144,156,.08), rgba(120,144,156,.03));
+      background: linear-gradient(135deg, rgba(123, 31, 162, 0.08), rgba(123, 31, 162, 0.03));
       border-radius: 16px;
-      border: 2px solid rgba(120,144,156,.3);
-      text-align: center;
+      border: 2px solid rgba(123, 31, 162, 0.3);
     }
 
     .acknowledgment-box h3 {
       margin: 0 0 1rem 0;
       font-size: 1.3rem;
-      color: #37474f;
+      color: var(--weakness-purple);
+      text-align: center;
     }
 
     .acknowledgment-box p {
@@ -312,18 +562,110 @@
       margin-right: auto;
     }
 
+    /* Enhanced page navigation with profile gradient */
+    .page-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 0;
+      margin-top: 2rem;
+      border-top: 2px solid rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    .page-nav::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg,
+        var(--torah-blue) 0%,
+        var(--throne-red) 33%,
+        var(--weakness-purple) 66%,
+        var(--victory-gold) 100%
+      );
+      transition: width 0.6s ease;
+    }
+
+    .page-nav:hover::before {
+      width: 100%;
+    }
+
+    .page-nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .page-nav .nav-prev {
+      color: var(--victory-gold);
+      background: rgba(249, 168, 37, 0.08);
+    }
+
+    .page-nav .nav-prev:hover {
+      background: var(--victory-gold);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(249, 168, 37, 0.25);
+      border-color: var(--victory-gold);
+    }
+
+    .page-nav .nav-next {
+      color: var(--torah-blue);
+      background: rgba(21, 101, 192, 0.08);
+    }
+
+    .page-nav .nav-next:hover {
+      background: var(--torah-blue);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(21, 101, 192, 0.25);
+      border-color: var(--torah-blue);
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
-      .pc-hero {
+      .sources-hero {
         padding: 2rem 1.5rem;
         border-radius: 18px;
       }
 
-      .pc-hero h1 {
+      .sources-hero h1 {
         font-size: 2rem;
       }
-    }
 
+      .sources-stats {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .source-category {
+        padding: 1rem;
+      }
+
+      .source-meta {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .page-nav {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+      }
+
+      .page-nav a {
+        justify-content: center;
+      }
+    }
   </style>
 </head>
 
@@ -335,7 +677,7 @@
 
   <main id="main-content" class="container" role="main" aria-label="Sources and bibliography">
 
-    <div class="breadcrumbs">
+    <div class="breadcrumbs fade-in">
       <a href="/">Home</a> ›
       <a href="/studies/">Studies</a> ›
       <a href="/studies/thematic/">Thematic Studies</a> ›
@@ -344,40 +686,81 @@
     </div>
 
     <!-- ═══════════════════════════════════════════
-         HERO
+         MESSIANIC GRADIENT HERO (Torah→Throne→Weakness→Victory)
     ════════════════════════════════════════════ -->
-    <header class="pc-hero fade-in" aria-labelledby="sources-title">
+    <header class="sources-hero fade-in" aria-labelledby="sources-title">
       <div class="hero-inner">
-        <div class="hero-badge">
+        <div class="hero-badge fade-slide-down animation-delay-100">
           <span>📚</span> Page 6 of 6 · Bibliography
         </div>
         
-        <h1 id="sources-title">Sources & Bibliography</h1>
-        <p class="hero-subtitle">Complete Documentation for the Messianic Profile Study</p>
+        <h1 id="sources-title" class="fade-slide-down animation-delay-200">
+          Sources & Bibliography
+        </h1>
         
-        <p>
+        <p class="hero-subtitle fade-slide-down animation-delay-300">
+          Complete Documentation for the Messianic Profile Study
+        </p>
+        
+        <p class="fade-slide-down animation-delay-400">
           This page provides comprehensive documentation of all sources, materials, and methodologies 
           used throughout the Psalms 1, 2, 8, and 148 messianic profile study. Proper attribution 
           is given to BibleProject materials, scholarly commentaries, and reference works that 
           informed this integrated analysis.
         </p>
 
-        <div class="hero-actions">
-          <a href="#primary-sources" class="btn-hero-primary">
-            <span>📖</span> Primary Sources
-          </a>
-          <a href="psalms-messianic-hub.html" class="btn-hero-secondary">
-            <span>🏠</span> Back to Hub
-          </a>
+        <div class="sources-stats">
+          <div class="sources-stat fade-slide-left animation-delay-500">
+            <span class="stat-value">15+</span>
+            <span class="stat-label">Sources</span>
+          </div>
+          <div class="sources-stat fade-slide-left animation-delay-600">
+            <span class="stat-value">4</span>
+            <span class="stat-label">Categories</span>
+          </div>
+          <div class="sources-stat fade-slide-left animation-delay-700">
+            <span class="stat-value">Full</span>
+            <span class="stat-label">Citations</span>
+          </div>
         </div>
       </div>
     </header>
+
+    <!-- How to Use -->
+    <section class="theology-card animate-on-scroll" id="how-to-use">
+      <div class="key-insight fade-slide-down animation-delay-100">
+        <strong>How to use this page:</strong>
+        This is the master bibliography for the Psalms Messianic Profile study. Each source entry 
+        indicates which specific pages use that material and what content it supports. Citations 
+        follow academic standards with page references where applicable.
+      </div>
+
+      <div class="key-insight fade-slide-down animation-delay-200" style="margin-top: 1.5rem;">
+        <strong>Why These Sources:</strong>
+        Sources were selected based on their ability to illuminate
+        (1) canonical-literary positioning of psalms,
+        (2) Hebrew wordplay and lexical analysis,
+        (3) Old Testament intertextual connections,
+        (4) New Testament quotation and fulfillment patterns,
+        and (5) integrated messianic theology.
+      </div>
+
+      <div class="key-insight fade-slide-down animation-delay-300" style="margin-top: 1.5rem;">
+        <strong>Note on BibleProject Materials:</strong>
+        BibleProject Visual Commentary scripts and classroom materials provided the foundational 
+        framework for this study's canonical approach. They are referenced for their literary 
+        analysis, Hebrew word studies, and theological integration rather than as peer-reviewed 
+        academic monographs.
+      </div>
+    </section>
 
     <!-- ═══════════════════════════════════════════
          PRIMARY SOURCES: BIBLEPROJECT
     ════════════════════════════════════════════ -->
     <section class="theology-card animate-on-scroll" id="primary-sources">
-      <h2 class="section-title"><span class="section-icon">🎬</span> Primary Sources: BibleProject</h2>
+      <h2 class="section-title fade-slide-down">
+        <span class="section-icon">🎬</span> Primary Sources: BibleProject
+      </h2>
 
       <p>
         The BibleProject provided the foundational insights for this study, particularly regarding 
@@ -385,21 +768,19 @@
         following materials were extensively used:
       </p>
 
-      <div class="bibliography-section">
-        <h3>BibleProject Visual Commentary Scripts</h3>
+      <div class="source-category animate-on-scroll">
+        <h4 class="fade-slide-down animation-delay-100"><img src="/assets/icons/BP_icon-blu.png" alt="BibleProject" style="width: 1.2em; height: 1.2em; vertical-align: middle; margin-right: 0.25rem;"> Visual Commentary: Psalm 8</h4>
 
-        <!-- Psalm 8 -->
-        <div class="source-entry animate-on-scroll animation-delay-100">
+        <div class="source-entry">
           <h4>Visual Commentary: Psalm 8 Study Notes</h4>
           <div class="source-meta">
-            <span class="source-category cat-primary">PRIMARY SOURCE</span>
-            <span class="source-category">PDF Document</span>
-            <span class="source-category">18 pages</span>
+            <span class="source-category-tag cat-primary">PRIMARY SOURCE</span>
+            <span class="source-category-tag">PDF Document</span>
+            <span class="source-category-tag">18 pages</span>
           </div>
-          <p>
-            BibleProject. "Visual Commentary: Psalm 8 Study Notes." PDF document, 18 pages. 
-            Accessed via BibleProject materials.
-          </p>
+          <div class="source-citation">
+            <strong>BibleProject.</strong> "Visual Commentary: Psalm 8 Study Notes." PDF document, 18 pages.
+          </div>
           <div class="source-usage">
             <strong>Used extensively for:</strong>
             <ul>
@@ -412,20 +793,22 @@
             </ul>
           </div>
         </div>
+      </div>
 
-        <!-- Psalm 148 -->
-        <div class="source-entry animate-on-scroll animation-delay-200">
+      <div class="source-category animate-on-scroll">
+        <h4 class="fade-slide-down animation-delay-100"><img src="/assets/icons/BP_icon-blu.png" alt="BibleProject" style="width: 1.2em; height: 1.2em; vertical-align: middle; margin-right: 0.25rem;"> Visual Commentary: Psalm 148</h4>
+
+        <div class="source-entry">
           <h4>Visual Commentary: Psalm 148 Study Notes + Script</h4>
           <div class="source-meta">
-            <span class="source-category cat-primary">PRIMARY SOURCE</span>
-            <span class="source-category">PDF Documents</span>
-            <span class="source-category">8 pages + 5 pages</span>
+            <span class="source-category-tag cat-primary">PRIMARY SOURCE</span>
+            <span class="source-category-tag">PDF Documents</span>
+            <span class="source-category-tag">8 pages + 5 pages</span>
           </div>
-          <p>
-            BibleProject. "Visual Commentary: Psalm 148 Study Notes." PDF document, 8 pages.<br>
-            BibleProject. "Visual Commentary: Psalm 148 Script." PDF document, 5 pages.<br>
-            Accessed via BibleProject materials.
-          </p>
+          <div class="source-citation">
+            <strong>BibleProject.</strong> "Visual Commentary: Psalm 148 Study Notes." PDF document, 8 pages.<br>
+            <strong>BibleProject.</strong> "Visual Commentary: Psalm 148 Script." PDF document, 5 pages.
+          </div>
           <div class="source-usage">
             <strong>Used extensively for:</strong>
             <ul>
@@ -438,18 +821,21 @@
             </ul>
           </div>
         </div>
+      </div>
 
-        <!-- Psalms 1-2 -->
-        <div class="source-entry animate-on-scroll animation-delay-300">
+      <div class="source-category animate-on-scroll">
+        <h4 class="fade-slide-down animation-delay-100"><img src="/assets/icons/BP_icon-blu.png" alt="BibleProject" style="width: 1.2em; height: 1.2em; vertical-align: middle; margin-right: 0.25rem;"> Psalms 1-2 Materials</h4>
+
+        <div class="source-entry">
           <h4>Psalms 1-2 Analysis and Classroom Materials</h4>
           <div class="source-meta">
-            <span class="source-category cat-primary">PRIMARY SOURCE</span>
-            <span class="source-category">Multiple PDFs</span>
+            <span class="source-category-tag cat-primary">PRIMARY SOURCE</span>
+            <span class="source-category-tag">Multiple PDFs</span>
           </div>
-          <p>
-            BibleProject. Various materials on Psalms 1-2 as gateway psalms, including classroom 
-            videos and study notes. Accessed via BibleProject educational resources.
-          </p>
+          <div class="source-citation">
+            <strong>BibleProject.</strong> Various materials on Psalms 1-2 as gateway psalms, including classroom 
+            videos and study notes.
+          </div>
           <div class="source-usage">
             <strong>Used for:</strong>
             <ul>
@@ -462,18 +848,21 @@
             </ul>
           </div>
         </div>
+      </div>
 
-        <!-- General Psalms Framework -->
-        <div class="source-entry animate-on-scroll animation-delay-400">
+      <div class="source-category animate-on-scroll">
+        <h4 class="fade-slide-down animation-delay-100"><img src="/assets/icons/BP_icon-blu.png" alt="BibleProject" style="width: 1.2em; height: 1.2em; vertical-align: middle; margin-right: 0.25rem;"> General Psalms Framework</h4>
+
+        <div class="source-entry">
           <h4>BibleProject: Psalms Series and Classroom Materials</h4>
           <div class="source-meta">
-            <span class="source-category cat-primary">PRIMARY SOURCE</span>
-            <span class="source-category">Video + PDF</span>
+            <span class="source-category-tag cat-primary">PRIMARY SOURCE</span>
+            <span class="source-category-tag">Video + PDF</span>
           </div>
-          <p>
-            BibleProject. "Psalms" video series and associated classroom materials, particularly 
+          <div class="source-citation">
+            <strong>BibleProject.</strong> "Psalms" video series and associated classroom materials, particularly 
             Tim Mackie's teachings on Psalms 1-150 structure and canonical reading.
-          </p>
+          </div>
           <div class="source-usage">
             <strong>Used for:</strong>
             <ul>
@@ -484,12 +873,10 @@
             </ul>
           </div>
         </div>
-
       </div>
 
-      <div class="panel" style="margin-top: 1.5rem;">
-        <h4>📌 Note on BibleProject Usage</h4>
-        <p style="font-size: 0.92rem; line-height: 1.7;">
+      <div class="citation-note">
+        <p><strong>Note on BibleProject Usage:</strong>
           BibleProject materials provided the <strong>primary framework</strong> for this study's 
           canonical-literary approach. Their insights on literary positioning (Ps 8 at center of 
           Ps 3-14, Ps 148 at center of Final Hallel), Hebrew wordplay analysis, and NT connections 
@@ -503,22 +890,23 @@
          COMMENTARIES
     ════════════════════════════════════════════ -->
     <section class="theology-card animate-on-scroll" id="commentaries">
-      <h2 class="section-title"><span class="section-icon">📖</span> Commentaries & Academic Works</h2>
+      <h2 class="section-title fade-slide-down">
+        <span class="section-icon">📖</span> Commentaries & Academic Works
+      </h2>
 
-      <div class="bibliography-section">
-        <h3>Major Commentaries Consulted</h3>
+      <div class="source-category animate-on-scroll">
+        <h4 class="fade-slide-down animation-delay-100">📚 Major Commentaries Consulted</h4>
 
-        <!-- Derek Kidner -->
-        <div class="source-entry animate-on-scroll animation-delay-100">
+        <div class="source-entry">
           <h4>Derek Kidner: Psalms (Tyndale Old Testament Commentaries)</h4>
           <div class="source-meta">
-            <span class="source-category cat-commentary">COMMENTARY</span>
-            <span class="source-category">Standard Reference</span>
+            <span class="source-category-tag cat-commentary">COMMENTARY</span>
+            <span class="source-category-tag">Standard Reference</span>
           </div>
-          <p>
-            Kidner, Derek. <em>Psalms 1-72</em> and <em>Psalms 73-150</em>. Tyndale Old Testament 
+          <div class="source-citation">
+            <strong>Kidner, Derek.</strong> <em>Psalms 1-72</em> and <em>Psalms 73-150</em>. Tyndale Old Testament 
             Commentaries. Downers Grove, IL: InterVarsity Press, 1973, 1975.
-          </p>
+          </div>
           <div class="source-usage">
             <strong>Consulted for:</strong>
             <ul>
@@ -530,18 +918,17 @@
           </div>
         </div>
 
-        <!-- John Goldingay -->
-        <div class="source-entry animate-on-scroll animation-delay-200">
+        <div class="source-entry">
           <h4>John Goldingay: Psalms (Baker Commentary)</h4>
           <div class="source-meta">
-            <span class="source-category cat-commentary">COMMENTARY</span>
-            <span class="source-category">Scholarly</span>
+            <span class="source-category-tag cat-commentary">COMMENTARY</span>
+            <span class="source-category-tag">Scholarly</span>
           </div>
-          <p>
-            Goldingay, John. <em>Psalms, Volume 1: Psalms 1-41</em> and <em>Psalms, Volume 3: 
+          <div class="source-citation">
+            <strong>Goldingay, John.</strong> <em>Psalms, Volume 1: Psalms 1-41</em> and <em>Psalms, Volume 3: 
             Psalms 90-150</em>. Baker Commentary on the Old Testament Wisdom and Psalms. Grand Rapids, 
             MI: Baker Academic, 2006, 2008.
-          </p>
+          </div>
           <div class="source-usage">
             <strong>Consulted for:</strong>
             <ul>
@@ -553,17 +940,16 @@
           </div>
         </div>
 
-        <!-- Peter Craigie -->
-        <div class="source-entry animate-on-scroll animation-delay-300">
+        <div class="source-entry">
           <h4>Peter Craigie: Psalms 1-50 (Word Biblical Commentary)</h4>
           <div class="source-meta">
-            <span class="source-category cat-commentary">COMMENTARY</span>
-            <span class="source-category">Technical</span>
+            <span class="source-category-tag cat-commentary">COMMENTARY</span>
+            <span class="source-category-tag">Technical</span>
           </div>
-          <p>
-            Craigie, Peter C. <em>Psalms 1-50</em>. Word Biblical Commentary, vol. 19. Waco, TX: 
+          <div class="source-citation">
+            <strong>Craigie, Peter C.</strong> <em>Psalms 1-50</em>. Word Biblical Commentary, vol. 19. Waco, TX: 
             Word Books, 1983.
-          </p>
+          </div>
           <div class="source-usage">
             <strong>Consulted for:</strong>
             <ul>
@@ -575,18 +961,17 @@
           </div>
         </div>
 
-        <!-- VanGemeren -->
-        <div class="source-entry animate-on-scroll animation-delay-400">
+        <div class="source-entry">
           <h4>Willem VanGemeren: Psalms (Expositor's Bible Commentary)</h4>
           <div class="source-meta">
-            <span class="source-category cat-commentary">COMMENTARY</span>
-            <span class="source-category">Evangelical</span>
+            <span class="source-category-tag cat-commentary">COMMENTARY</span>
+            <span class="source-category-tag">Evangelical</span>
           </div>
-          <p>
-            VanGemeren, Willem A. "Psalms." In <em>The Expositor's Bible Commentary, Volume 5: 
+          <div class="source-citation">
+            <strong>VanGemeren, Willem A.</strong> "Psalms." In <em>The Expositor's Bible Commentary, Volume 5: 
             Psalms, Proverbs, Ecclesiastes, Song of Songs</em>, edited by Frank E. Gaebelein. 
             Grand Rapids, MI: Zondervan, 1991.
-          </p>
+          </div>
           <div class="source-usage">
             <strong>Consulted for:</strong>
             <ul>
@@ -597,7 +982,6 @@
             </ul>
           </div>
         </div>
-
       </div>
     </section>
 
@@ -605,64 +989,62 @@
          REFERENCE WORKS
     ════════════════════════════════════════════ -->
     <section class="theology-card animate-on-scroll" id="reference-works">
-      <h2 class="section-title"><span class="section-icon">📚</span> Reference Works & Lexicons</h2>
+      <h2 class="section-title fade-slide-down">
+        <span class="section-icon">📚</span> Reference Works & Lexicons
+      </h2>
 
-      <div class="bibliography-section">
-        <h3>Hebrew Language & Theological Dictionaries</h3>
+      <div class="source-category animate-on-scroll">
+        <h4 class="fade-slide-down animation-delay-100">🔤 Hebrew Language & Theological Dictionaries</h4>
 
-        <!-- HALOT -->
-        <div class="source-entry animate-on-scroll animation-delay-100">
+        <div class="source-entry">
           <h4>Hebrew and Aramaic Lexicon of the Old Testament (HALOT)</h4>
           <div class="source-meta">
-            <span class="source-category cat-reference">LEXICON</span>
-            <span class="source-category">Standard Reference</span>
+            <span class="source-category-tag cat-reference">LEXICON</span>
+            <span class="source-category-tag">Standard Reference</span>
           </div>
-          <p>
-            Koehler, Ludwig, Walter Baumgartner, and Johann J. Stamm. <em>The Hebrew and Aramaic 
+          <div class="source-citation">
+            <strong>Koehler, Ludwig, Walter Baumgartner, and Johann J. Stamm.</strong> <em>The Hebrew and Aramaic 
             Lexicon of the Old Testament</em>. Translated and edited by M. E. J. Richardson. 5 vols. 
             Leiden: Brill, 1994-2000.
-          </p>
+          </div>
           <div class="source-usage">
             <strong>Used for:</strong> Hebrew word studies (אַשְׁרֵי, הָגָה, מָשִׁיחַ, בֵּן, חָסָה, 
             עוֹלְלִים, עֹז, אֱנוֹשׁ, אֱלֹהִים, קֶרֶן) with etymological analysis and semantic range.
           </div>
         </div>
 
-        <!-- TDOT -->
-        <div class="source-entry animate-on-scroll animation-delay-200">
+        <div class="source-entry">
           <h4>Theological Dictionary of the Old Testament (TDOT)</h4>
           <div class="source-meta">
-            <span class="source-category cat-reference">THEOLOGICAL DICTIONARY</span>
-            <span class="source-category">Scholarly</span>
+            <span class="source-category-tag cat-reference">THEOLOGICAL DICTIONARY</span>
+            <span class="source-category-tag">Scholarly</span>
           </div>
-          <p>
-            Botterweck, G. Johannes, Helmer Ringgren, and Heinz-Josef Fabry, eds. <em>Theological 
+          <div class="source-citation">
+            <strong>Botterweck, G. Johannes, Helmer Ringgren, and Heinz-Josef Fabry, eds.</strong> <em>Theological 
             Dictionary of the Old Testament</em>. Translated by John T. Willis, et al. 15 vols. 
             Grand Rapids, MI: Eerdmans, 1974-2006.
-          </p>
+          </div>
           <div class="source-usage">
             <strong>Used for:</strong> Theological development of key terms across Old Testament 
             canon, particularly messianic terminology and royal ideology.
           </div>
         </div>
 
-        <!-- NIDOTTE -->
-        <div class="source-entry animate-on-scroll animation-delay-300">
+        <div class="source-entry">
           <h4>New International Dictionary of Old Testament Theology and Exegesis (NIDOTTE)</h4>
           <div class="source-meta">
-            <span class="source-category cat-reference">THEOLOGICAL DICTIONARY</span>
-            <span class="source-category">Evangelical</span>
+            <span class="source-category-tag cat-reference">THEOLOGICAL DICTIONARY</span>
+            <span class="source-category-tag">Evangelical</span>
           </div>
-          <p>
-            VanGemeren, Willem A., ed. <em>New International Dictionary of Old Testament Theology 
+          <div class="source-citation">
+            <strong>VanGemeren, Willem A., ed.</strong> <em>New International Dictionary of Old Testament Theology 
             and Exegesis</em>. 5 vols. Grand Rapids, MI: Zondervan, 1997.
-          </p>
+          </div>
           <div class="source-usage">
             <strong>Used for:</strong> Thematic connections, canonical theology, and NT fulfillment 
             patterns for messianic concepts.
           </div>
         </div>
-
       </div>
     </section>
 
@@ -670,7 +1052,9 @@
          METHODOLOGY
     ════════════════════════════════════════════ -->
     <section class="theology-card animate-on-scroll" id="methodology">
-      <h2 class="section-title"><span class="section-icon">🔬</span> Methodology</h2>
+      <h2 class="section-title fade-slide-down">
+        <span class="section-icon">🔬</span> Methodology
+      </h2>
 
       <p>
         This study employs a <strong>canonical-literary approach</strong> combined with 
@@ -770,7 +1154,9 @@
          ACKNOWLEDGMENTS
     ════════════════════════════════════════════ -->
     <section class="theology-card animate-on-scroll" id="acknowledgments">
-      <h2 class="section-title"><span class="section-icon">🙏</span> Acknowledgments</h2>
+      <h2 class="section-title fade-slide-down">
+        <span class="section-icon">🙏</span> Acknowledgments
+      </h2>
 
       <div class="acknowledgment-box">
         <h3>Special Thanks</h3>
@@ -795,19 +1181,19 @@
         </p>
       </div>
 
-      <div class="panel" style="margin-top: 2rem;">
-        <h4>📄 Copyright and Usage</h4>
-        <p style="font-size: 0.92rem; line-height: 1.7;">
+      <div class="citation-note" style="margin-top: 2rem;">
+        <p><strong>Copyright and Usage:</strong></p>
+        <p>
           <strong>BibleProject Materials:</strong> All BibleProject Visual Commentary materials, 
           scripts, and classroom content are used with appreciation for their educational mission. 
           Users should consult BibleProject directly (bibleproject.com) for their official materials.
         </p>
-        <p style="font-size: 0.92rem; line-height: 1.7; margin-top: 0.75rem;">
+        <p>
           <strong>This Study:</strong> The synthesis, integration, visual diagrams, HTML implementation, 
           and pedagogical design of this messianic profile study are original work by Project Context. 
           The study is provided freely for educational purposes.
         </p>
-        <p style="font-size: 0.92rem; line-height: 1.7; margin-top: 0.75rem;">
+        <p>
           <strong>Academic Integrity:</strong> All sources are cited with proper attribution. Where 
           BibleProject insights inform analysis, this is clearly noted. Original synthesis and 
           integration represent Project Context's contribution to making scholarly insights accessible.
@@ -819,7 +1205,9 @@
          STUDY COMPLETION
     ════════════════════════════════════════════ -->
     <section class="theology-card animate-on-scroll" id="completion">
-      <h2 class="section-title"><span class="section-icon">✅</span> Study Completion</h2>
+      <h2 class="section-title fade-slide-down">
+        <span class="section-icon">✅</span> Study Completion
+      </h2>
 
       <p style="text-align: center; font-size: 1.05rem; line-height: 1.7; margin: 1.5rem 0;">
         This completes the <strong>Psalms Messianic Profile</strong> study. The full journey includes:
@@ -853,8 +1241,8 @@
         </div>
       </div>
 
-      <div class="panel" style="margin-top: 2rem; background: linear-gradient(135deg, rgba(120,144,156,.08), rgba(120,144,156,.03)); border-left: 4px solid #607d8b;">
-        <h4 style="text-align: center; margin-bottom: 1rem; font-size: 1.2rem; color: #37474f;">
+      <div class="citation-note" style="margin-top: 2rem; background: linear-gradient(135deg, rgba(21, 101, 192, 0.08), rgba(21, 101, 192, 0.03)); border-left-color: var(--torah-blue);">
+        <h4 style="text-align: center; margin-bottom: 1rem; font-size: 1.2rem; color: var(--torah-blue);">
           🎯 The Complete Messianic Portrait
         </h4>
         <p style="text-align: center; font-size: 1rem; line-height: 1.8; max-width: 70ch; margin: 0 auto;">
@@ -866,28 +1254,30 @@
       </div>
     </section>
 
-    <!-- Navigation -->
-    <section class="theology-card animate-on-scroll" id="navigation">
-      <h2 class="section-title"><span class="section-icon">🧭</span> Navigation</h2>
-      
-      <div class="grid-2">
-        <div class="panel" style="text-align: center;">
-          <p style="font-size: 0.9rem; margin-bottom: 0.75rem;">← Previous Page</p>
-          <a href="psalm-148-victory-promised.html" class="btn-hero-secondary" style="display: inline-flex;">
-            <span>🎺</span> Psalm 148: Victory Promised
-          </a>
-        </div>
+    <!-- ═══════════════════════════════════════════
+         PAGE NAVIGATION
+    ════════════════════════════════════════════ -->
+    <nav class="page-nav animate-on-scroll" aria-label="Page navigation">
+      <a href="psalm-148-victory-promised.html" class="nav-prev fade-slide-left animation-delay-100">
+        <span>←</span> Page 5: Psalm 148
+      </a>
+      <span style="color:#999;font-size:0.9rem;" class="fade-in animation-delay-200">Page 6 of 6</span>
+      <a href="psalms-messianic-hub.html" class="nav-next fade-slide-left animation-delay-300">
+        Return to Hub <span>→</span>
+      </a>
+    </nav>
 
-        <div class="panel" style="text-align: center;">
-          <p style="font-size: 0.9rem; margin-bottom: 0.75rem;">Return to Start</p>
-          <a href="psalms-messianic-hub.html" class="btn-hero-primary" style="display: inline-flex;">
-            <span>🏠</span> Back to Hub
-          </a>
-        </div>
-      </div>
-    </section>
+    <!-- Back to Hub -->
+    <div style="text-align: center; margin: 2rem 0;" class="fade-in animation-delay-400">
+      <a href="psalms-messianic-hub.html" class="cosmic-button">
+        ← Return to Messianic Profile Hub
+      </a>
+    </div>
 
   </main>
+
+  <!-- Back to Top Button -->
+  <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
 
   <!-- Reading Progress Script -->
   <script>
@@ -899,21 +1289,46 @@
       const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
       progressBar.style.width = progress + '%';
     });
+
+    // Intersection Observer for animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.animate-on-scroll, .source-entry, .methodology-card').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Back to top button
+    const backToTop = document.querySelector('.back-to-top');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
   </script>
 
-<!-- Navigation Component -->
-<script type="module">
-  import NavigationComponent from '/assets/js/nav-component.js';
-  new NavigationComponent({
-    currentPage: 'thematic',
-    hubType: 'thematic'
-  });
-</script>
+  <!-- Navigation Component -->
+  <script type="module">
+    import NavigationComponent from '/assets/js/nav-component.js';
+    new NavigationComponent({
+      currentPage: 'thematic',
+      hubType: 'thematic'
+    });
+  </script>
 
-<!-- Character Page Utilities -->
-<script src="/assets/js/character-page-v5-8.js" defer></script>
-
-<!-- Back to Top Button -->
-<a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
+  <!-- Character Page Utilities -->
+  <script src="/assets/js/character-page-v5-8.js" defer></script>
 </body>
 </html>
