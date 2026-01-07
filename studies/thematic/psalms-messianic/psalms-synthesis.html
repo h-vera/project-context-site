@@ -216,16 +216,16 @@
     .venn-container {
       position: relative;
       width: 100%;
-      max-width: 600px;
-      height: 500px;
+      max-width: 700px;
+      height: 550px;
       margin: 2rem auto;
     }
 
     /* Interactive Venn Circle with Flip */
     .venn-circle {
       position: absolute;
-      width: 300px;
-      height: 300px;
+      width: 320px;
+      height: 320px;
       border-radius: 50%;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -263,15 +263,11 @@
       transform: rotateY(180deg);
     }
 
-    .venn-circle:hover {
-      transform: scale(1.05);
-    }
-
     /* Psalm 1 - Torah (Blue) - Top */
     .venn-torah {
       top: 0;
       left: 50%;
-      transform: translateX(-50%);
+      margin-left: -160px;
     }
 
     .venn-torah .venn-front {
@@ -285,13 +281,9 @@
       color: white;
     }
 
-    .venn-torah:hover {
-      z-index: 10;
-    }
-
     /* Psalm 2 - Throne (Red) - Bottom Left */
     .venn-throne {
-      bottom: 20px;
+      bottom: 0;
       left: 0;
     }
 
@@ -306,13 +298,9 @@
       color: white;
     }
 
-    .venn-throne:hover {
-      z-index: 10;
-    }
-
     /* Psalm 8 - Weakness (Purple) - Bottom Right */
     .venn-weakness {
-      bottom: 20px;
+      bottom: 0;
       right: 0;
     }
 
@@ -327,34 +315,43 @@
       color: white;
     }
 
-    .venn-weakness:hover {
-      z-index: 10;
-    }
-
     /* Center Integration Circle */
     .venn-center {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 140px;
-      height: 140px;
+      width: 160px;
+      height: 160px;
       background: linear-gradient(135deg, #00838f, #00acc1);
       border-radius: 50%;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       color: white;
       font-weight: 800;
-      font-size: 1.1rem;
+      font-size: 1rem;
       text-align: center;
-      padding: 1rem;
+      padding: 1.25rem;
       box-shadow: 
         0 8px 25px rgba(0,131,143,.4),
         0 0 0 8px rgba(0,131,143,.2);
       animation: pulse-integration 3s ease-in-out infinite;
       z-index: 5;
-      line-height: 1.3;
+      line-height: 1.2;
+    }
+
+    .venn-center div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .venn-center strong {
+      font-size: 1.3rem;
+      display: block;
     }
 
     @keyframes pulse-integration {
@@ -372,18 +369,35 @@
       }
     }
 
+    /* Z-index management for proper layering */
+    .venn-circle {
+      z-index: 1;
+    }
+
+    .venn-circle:hover,
+    .venn-circle.flipped {
+      z-index: 20 !important;
+      transform: scale(1.05);
+    }
+
+    .venn-center {
+      z-index: 5;
+    }
+
     /* Content styling for front */
     .venn-label {
       font-weight: 700;
       font-size: 1.15rem;
       margin-bottom: 0.5rem;
       color: inherit;
+      word-wrap: break-word;
     }
 
     .venn-desc {
       font-size: 0.9rem;
       opacity: 0.95;
       line-height: 1.4;
+      word-wrap: break-word;
     }
 
     /* Content styling for back */
@@ -392,12 +406,15 @@
       font-size: 1.2rem;
       margin-bottom: 0.75rem;
       text-shadow: 0 2px 4px rgba(0,0,0,.3);
+      word-wrap: break-word;
     }
 
     .venn-back-content {
       font-size: 0.85rem;
       line-height: 1.5;
       opacity: 0.95;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
 
     .venn-back-scripture {
@@ -405,6 +422,7 @@
       font-style: italic;
       font-size: 0.8rem;
       opacity: 0.9;
+      word-wrap: break-word;
     }
 
     /* Reset button */
@@ -739,37 +757,46 @@
       }
 
       .venn-container {
-        height: 700px;
+        height: 600px;
+        max-width: 500px;
       }
 
       .venn-circle {
-        width: 240px;
-        height: 240px;
+        width: 260px;
+        height: 260px;
         padding: 1.5rem;
       }
 
       .venn-front, .venn-back {
         padding: 1.5rem;
+        font-size: 0.85rem;
       }
 
       .venn-torah {
         top: 0;
         left: 50%;
-        transform: translateX(-50%);
+        margin-left: -130px;
       }
 
       .venn-throne {
-        bottom: 220px;
+        bottom: 50px;
         left: 10px;
       }
 
       .venn-weakness {
-        bottom: 220px;
+        bottom: 50px;
         right: 10px;
       }
 
       .venn-center {
-        top: 360px;
+        width: 140px;
+        height: 140px;
+        font-size: 0.9rem;
+        padding: 1rem;
+      }
+
+      .venn-center strong {
+        font-size: 1.1rem;
       }
 
       .timeline-flow {
@@ -788,6 +815,70 @@
         top: auto;
         bottom: -1.5rem;
         transform: translateX(-50%);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .venn-container {
+        height: 520px;
+        max-width: 380px;
+      }
+
+      .venn-circle {
+        width: 220px;
+        height: 220px;
+        padding: 1.25rem;
+      }
+
+      .venn-front, .venn-back {
+        padding: 1.25rem;
+        font-size: 0.75rem;
+      }
+
+      .venn-label {
+        font-size: 1rem;
+      }
+
+      .venn-desc {
+        font-size: 0.8rem;
+      }
+
+      .venn-torah {
+        top: 0;
+        margin-left: -110px;
+      }
+
+      .venn-throne {
+        bottom: 40px;
+        left: 5px;
+      }
+
+      .venn-weakness {
+        bottom: 40px;
+        right: 5px;
+      }
+
+      .venn-center {
+        width: 120px;
+        height: 120px;
+        font-size: 0.8rem;
+        padding: 0.75rem;
+      }
+
+      .venn-center strong {
+        font-size: 1rem;
+      }
+
+      .venn-back-title {
+        font-size: 1rem;
+      }
+
+      .venn-back-content {
+        font-size: 0.75rem;
+      }
+
+      .venn-back-scripture {
+        font-size: 0.7rem;
       }
     }
 
@@ -981,8 +1072,10 @@
 
           <!-- Center Integration -->
           <div class="venn-center animate-on-scroll animation-delay-400">
-            THE<br>MESSIAH<br>
-            <span style="font-size: 0.8rem; opacity: 0.9;">All Three Together</span>
+            <div>
+              THE<br><strong>MESSIAH</strong>
+              <span style="font-size: 0.75rem; opacity: 0.9; display: block; margin-top: 0.25rem;">All Three<br>Together</span>
+            </div>
           </div>
 
         </div>
