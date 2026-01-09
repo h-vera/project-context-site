@@ -38,756 +38,360 @@
 <link href="https://projectcontext.org/resources/study-tools/first-read-framework.html" rel="canonical"/>
 <!-- Preload Critical Resources -->
 <link as="style" href="/assets/css/global-v2.css" rel="preload"/>
-<!-- NEW: Study Tools Enhancements -->
-<link href="/assets/css/study-tools-enhancements.css" rel="stylesheet"/>
 <!-- Styles -->
 <link href="/assets/css/global-v2.css" rel="stylesheet"/>
 <link href="/assets/css/mobile-tabs-v5-8.css" rel="stylesheet"/>
 <style>
-
-    /* CSS Variables - Critical Definitions */
-    :root {
-    --accent-purple: #7209b7;
-    --accent-rose: #f72585;
-    --accent-blue: #3b82f6;
-    --muted: #64748b;
-    --border-light: #e5e7eb;
-    --primary-dark: #0a0a0a;
-    }
-
-    /* Missing Core Styles */
-    .reading-progress {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--accent-purple), var(--accent-rose));
-    z-index: 9999;
-    transition: width 0.3s ease;
-    }
-
-    .skip-link {
-    position: absolute;
-    top: -40px;
-    left: 0;
-    background: #000;
-    color: #fff;
-    padding: 8px;
-    text-decoration: none;
-    z-index: 100;
-    }
-
-    .skip-link:focus {
-    top: 0;
-    }
-
-    .breadcrumbs {
-    padding: 1rem 2rem;
-    font-size: 0.9rem;
-    color: var(--muted);
-    }
-
-    .breadcrumbs a {
-    color: var(--accent-purple);
-    text-decoration: none;
-    }
-
-    .breadcrumbs a:hover {
-    text-decoration: underline;
-    }
-
-    .back-to-top {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    width: 50px;
-    height: 50px;
-    background: var(--accent-purple);
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    font-size: 1.5rem;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    z-index: 1000;
-    }
-
-    .back-to-top.visible {
-    opacity: 1;
-    visibility: visible;
-    }
-
-    .mobile-menu-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 998;
-    }
-
-    .theology-card {
-    background: white;
-    border-radius: 16px;
-    padding: 2rem;
-    margin: 2rem 0;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-    border-left: 5px solid var(--accent-blue);
-    }
-
-    .key-insight {
-    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-    border-left: 4px solid #10b981;
-    padding: 1.5rem;
-    border-radius: 12px;
-    margin: 1.5rem 0;
-    }
-
-    footer {
-    text-align: center;
-    padding: 2rem;
-    background: #f8f9fa;
-    color: var(--muted);
-    margin-top: 3rem;
-    }
-    /* Hero Section */
-    .hero {
-      min-height: 50vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      margin-top: 65px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-      color: white;
-      position: relative;
-      overflow: hidden;
-      animation: fadeIn 0.8s ease-out;
-    }
-    
-    .hero::before {
-      content: '';
-      position: absolute;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.15) 0%, transparent 50%);
-      animation: drift 25s infinite ease-in-out;
-    }
-    
-    @keyframes drift {
-      0%, 100% { transform: translate(0, 0) rotate(0deg); }
-      50% { transform: translate(60px, -60px) rotate(180deg); }
-    }
-    
-    .hero-content {
-      text-align: center;
-      max-width: 900px;
-      z-index: 1;
-      position: relative;
-    }
-    
-    .hero-title {
-      font-size: clamp(2.2rem, 5vw, 3.5rem);
-      font-weight: 900;
-      margin-bottom: 1rem;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-      line-height: 1.2;
-    }
-    
-    .hero-subtitle {
-      font-size: clamp(1.1rem, 2vw, 1.3rem);
-      opacity: 0.95;
-      line-height: 1.7;
-      max-width: 750px;
-      margin: 0 auto;
-    }
-
-    /* ============================================
-   QUICK NAVIGATION
+/* ============================================
+   CSS VARIABLES - Enhanced Study Tools
    ============================================ */
-    .quick-links {
-    display: flex;
-    gap: 0.75rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin: 2rem 0 3rem;
-    }
+:root {
+  --accent-purple: #7209b7;
+  --accent-rose: #f72585;
+  --accent-blue: #3b82f6;
+  --accent-green: #10b981;
+  --muted: #64748b;
+  --border-light: #e5e7eb;
+  --primary-dark: #0a0a0a;
+  --panel: #f8fafc;
+  --surface: #ffffff;
+}
 
-    .quick-link {
-    padding: 0.6rem 1.25rem;
-    background: white;
-    border: 2px solid var(--border-light, #e5e7eb);
-    border-radius: 50px;
-    text-decoration: none;
-    color: var(--primary-dark, #0a0a0a);
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    }
-
-    .quick-link:hover {
-    background: var(--accent-purple, #7209b7);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(114, 9, 183, 0.3);
-    border-color: var(--accent-purple, #7209b7);
-    }
-
-    @media (max-width: 768px) {
-    .quick-links {
-        padding: 0 1rem;
-    }
-    }
-    
-    /* Phase Boxes */
-    .phase-box {
-      background: white;
-      border-radius: 16px;
-      padding: 2rem;
-      margin: 1.5rem 0;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-      border-left: 5px solid var(--accent-purple);
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    
-    .phase-box.animate-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    
-    .phase-box h3 {
-      color: var(--accent-purple);
-      margin-bottom: 1rem;
-      font-size: 1.5rem;
-    }
-    
-    .phase-header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    
-    .phase-number-large {
-      width: 60px;
-      height: 60px;
-      background: linear-gradient(135deg, var(--accent-purple), var(--accent-rose));
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      font-weight: 900;
-      flex-shrink: 0;
-    }
-    
-    .phase-title {
-      flex: 1;
-    }
-    
-    .phase-title h2 {
-      margin: 0 0 0.25rem 0;
-      font-size: 2rem;
-      color: #1a202c;
-    }
-    
-    .phase-subtitle {
-      color: var(--muted);
-      font-style: italic;
-      margin: 0;
-    }
-    
-    /* Question Lists */
-    .question-section {
-      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-      border-left: 4px solid #0ea5e9;
-      padding: 1.5rem;
-      border-radius: 8px;
-      margin: 1.5rem 0;
-    }
-    
-    .question-section h4 {
-      color: #0c4a6e;
-      margin-bottom: 1rem;
-      font-size: 1.2rem;
-    }
-    
-    .question-list {
-      list-style: none;
-      padding: 0;
-      counter-reset: question;
-    }
-    
-    .question-list li {
-      counter-increment: question;
-      position: relative;
-      padding-left: 2.5rem;
-      margin-bottom: 1rem;
-      line-height: 1.7;
-    }
-    
-    .question-list li::before {
-      content: "Q" counter(question);
-      position: absolute;
-      left: 0;
-      top: 0;
-      background: linear-gradient(135deg, #0ea5e9, #06b6d4);
-      color: white;
-      width: 32px;
-      height: 32px;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 0.75rem;
-    }
-
-    /* Fix question list initial state */
-    .question-list li {
-    opacity: 0;
-    transform: translateX(-20px);
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-    }
-
-    /* Remove conflicting animation */
-    .question-list li:nth-child(1),
-    .question-list li:nth-child(2),
-    .question-list li:nth-child(3),
-    .question-list li:nth-child(4),
-    .question-list li:nth-child(5),
-    .question-list li:nth-child(6) {
-    animation: none; /* Remove auto-playing animation */
-    }
-
-    /* Training and genre cards - ensure proper initial state */
-    .training-card,
-    .genre-card,
-    .example-box,
-    .tip-box,
-    .key-insight {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.6s ease;
-    }
-
-    .training-card.visible,
-    .genre-card.visible,
-    .example-box.visible,
-    .tip-box.visible,
-    .key-insight.visible {
-    opacity: 1;
-    transform: translateY(0);
-    }
-
-    /* Ensure theology cards animate */
-    .theology-card {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-
-    .theology-card.visible {
-    opacity: 1;
-    transform: translateY(0);
-    }
-    
-    /* Tip Boxes */
-    .tip-box {
-      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-      border-left: 4px solid #f59e0b;
-      padding: 1.25rem;
-      border-radius: 8px;
-      margin: 1.5rem 0;
-    }
-    
-    .tip-box strong {
-      color: #92400e;
-      display: block;
-      margin-bottom: 0.5rem;
-    }
-    
-    /* Example Box */
-    .example-box {
-      background: white;
-      border: 2px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin: 1.5rem 0;
-    }
-    
-    .example-box h4 {
-      color: #10b981;
-      margin-bottom: 0.75rem;
-    }
-    
-    /* Checklist */
-    .checklist {
-      list-style: none;
-      padding: 0;
-    }
-    
-    .checklist li {
-      padding: 0.75rem 0;
-      padding-left: 2rem;
-      position: relative;
-    }
-    
-    .checklist li::before {
-      content: '✓';
-      position: absolute;
-      left: 0;
-      color: #10b981;
-      font-weight: 900;
-      font-size: 1.2rem;
-    }
-    
-    /* Training Grid */
-    .training-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin: 2rem 0;
-    }
-    
-    .training-card {
-      background: white;
-      border: 2px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 1.5rem;
-      transition: all 0.3s ease;
-    }
-    
-    .training-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-      border-color: var(--accent-purple);
-    }
-    
-    .training-card h4 {
-      color: var(--accent-purple);
-      margin-bottom: 0.75rem;
-    }
-    
-    /* CTA Section */
-    .cta-section {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border-radius: 20px;
-      padding: 3rem 2rem;
-      text-align: center;
-      margin: 3rem 0;
-    }
-    
-    .cta-section h3 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-    
-    .cta-button {
-      display: inline-block;
-      padding: 1rem 2rem;
-      background: white;
-      color: #667eea;
-      border-radius: 50px;
-      font-weight: 700;
-      text-decoration: none;
-      margin: 0.5rem;
-      transition: all 0.3s ease;
-    }
-    
-    .cta-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-    }
-    
-    /* Genre Strategy Cards */
-    .genre-card {
-      background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
-      border: 2px solid #a855f7;
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin: 1rem 0;
-    }
-    
-    .genre-card h4 {
-      color: #7e22ce;
-      margin-bottom: 0.75rem;
-    }
-    
-    /* Quick Nav */
-    .quick-nav {
-      background: white;
-      border: 2px solid var(--accent-purple);
-      border-radius: 16px;
-      padding: 2rem;
-      margin: 2rem 0;
-    }
-    
-    .quick-nav h3 {
-      color: var(--accent-purple);
-      margin-bottom: 1.5rem;
-    }
-    
-    .quick-nav-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 1rem;
-    }
-    
-    .quick-nav-item {
-      padding: 0.75rem;
-      background: linear-gradient(135deg, #f9fafb, #f3f4f6);
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      text-align: center;
-      text-decoration: none;
-      color: #4b5563;
-      font-weight: 600;
-      transition: all 0.2s ease;
-    }
-    
-    .quick-nav-item:hover {
-      background: linear-gradient(135deg, var(--accent-purple), var(--accent-rose));
-      color: white;
-      transform: translateY(-2px);
-      border-color: transparent;
-    }
-    
-    /* Responsive */
-    @media (max-width: 768px) {
-      .phase-header {
-        flex-direction: column;
-        text-align: center;
-      }
-      
-      .training-grid,
-      .quick-nav-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* =========================================================
-     CARD / TILE BASES
-     ========================================================= */
-  .theology-card {
-    background: white;
-    border-radius: 16px;
-    padding: 2rem;
-    margin: 2rem 0;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-    border-left: 5px solid var(--accent-blue);
-  }
-
-  .key-insight {
-    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-    border-left: 4px solid #10b981;
-    padding: 1.5rem;
-    border-radius: 12px;
-    margin: 1.5rem 0;
-    position: relative;
-    overflow: hidden;
-  }
-
-  footer {
-    text-align: center;
-    padding: 2rem;
-    background: #f8f9fa;
-    color: var(--muted);
-    margin-top: 3rem;
-  }
-  
-    /* ============================================
-   MISSING ANIMATIONS & ENHANCEMENTS
+/* ============================================
+   HERO SECTION - Enhanced
    ============================================ */
-
-/* Ensure all animate-on-scroll elements start hidden */
-.animate-on-scroll {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-  will-change: transform, opacity;
+.hero {
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  margin-top: 65px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  color: white;
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.8s ease-out;
 }
 
-.animate-on-scroll.visible {
-  opacity: 1;
-  transform: translateY(0);
+.hero::before {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.15) 0%, transparent 50%);
+  animation: drift 25s infinite ease-in-out;
 }
 
-/* Phase box animation */
-.phase-box {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(60px, -60px) rotate(180deg); }
 }
 
-.phase-box.animate-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Staggered animation delays */
-.animation-delay-100 { animation-delay: 0.1s; }
-.animation-delay-200 { animation-delay: 0.2s; }
-.animation-delay-300 { animation-delay: 0.3s; }
-.animation-delay-400 { animation-delay: 0.4s; }
-.animation-delay-500 { animation-delay: 0.5s; }
-
-/* Fade animations */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes fadeSlideDown {
-  from { 
-    opacity: 0; 
-    transform: translateY(-20px); 
-  }
-  to { 
-    opacity: 1; 
-    transform: translateY(0); 
-  }
-}
-
-@keyframes fadeSlideLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.fade-in {
-  animation: fadeIn 0.6s ease-out forwards;
-}
-
-.fade-slide-down {
-  animation: fadeSlideDown 0.6s ease-out forwards;
-}
-
-.fade-slide-left {
-  animation: fadeSlideLeft 0.6s ease-out forwards;
-}
-
-/* Enhanced card hover effects */
-.training-card,
-.genre-card,
-.example-box {
-  transition: all 0.3s ease;
-}
-
-.training-card:hover,
-.genre-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-}
-
-/* Question list enhanced animation */
-.question-list li {
-  opacity: 0;
-  transform: translateX(-20px);
-  animation: fadeSlideLeft 0.5s ease-out forwards;
-}
-
-.question-list li:nth-child(1) { animation-delay: 0.1s; }
-.question-list li:nth-child(2) { animation-delay: 0.2s; }
-.question-list li:nth-child(3) { animation-delay: 0.3s; }
-.question-list li:nth-child(4) { animation-delay: 0.4s; }
-.question-list li:nth-child(5) { animation-delay: 0.5s; }
-.question-list li:nth-child(6) { animation-delay: 0.6s; }
-
-/* Tip box pulse on hover */
-.tip-box {
-  transition: all 0.3s ease;
+.hero-content {
+  text-align: center;
+  max-width: 900px;
+  z-index: 1;
   position: relative;
 }
 
-.tip-box:hover {
-  transform: translateX(4px);
-  box-shadow: 0 4px 12px rgba(245,158,11,0.2);
+.hero-title {
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  line-height: 1.2;
 }
 
-/* Key insight enhanced */
-.key-insight {
+.hero-subtitle {
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  opacity: 0.95;
+  line-height: 1.7;
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+/* ============================================
+   QUICK NAVIGATION
+   ============================================ */
+.quick-links {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 2rem 0 3rem;
+}
+
+.quick-link {
+  padding: 0.6rem 1.25rem;
+  background: white;
+  border: 2px solid var(--border-light);
+  border-radius: 50px;
+  text-decoration: none;
+  color: var(--primary-dark);
+  font-weight: 600;
+  font-size: 0.9rem;
   transition: all 0.3s ease;
+}
+
+.quick-link:hover {
+  background: var(--accent-purple);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(114, 9, 183, 0.3);
+  border-color: var(--accent-purple);
+}
+
+/* ============================================
+   PHASE TILES NAVIGATION - NEW
+   ============================================ */
+.phase-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.phase-tile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 18px;
+  background: var(--surface);
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.06);
+  text-decoration: none;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
   position: relative;
   overflow: hidden;
 }
 
-.key-insight::before {
-  content: '';
+.phase-tile::before {
+  content: "";
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-  transition: left 0.5s ease;
-}
-
-.key-insight:hover::before {
-  left: 100%;
-}
-
-/* Enhanced phase number animation */
-.phase-number-large {
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-.phase-box:hover .phase-number-large {
-  transform: scale(1.1) rotate(5deg);
-  box-shadow: 0 8px 20px rgba(114,9,183,0.3);
-}
-
-/* Smooth section reveals */
-.theology-card {
+  inset: -2px;
+  background: linear-gradient(135deg, rgba(139,92,246,.35), rgba(236,72,153,.25), rgba(14,165,233,.20));
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.2s ease;
 }
 
-.theology-card.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Quick nav item hover effect */
-.quick-nav-item {
-  transition: all 0.3s ease;
+.phase-tile > * {
   position: relative;
+  z-index: 1;
 }
 
-.quick-nav-item::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 2px;
-  background: linear-gradient(135deg, var(--accent-purple), var(--accent-rose));
-  transition: width 0.3s ease;
+.phase-tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 34px rgba(0,0,0,0.10);
+  border-color: rgba(139,92,246,.25);
 }
 
-.quick-nav-item:hover::after {
-  width: 100%;
+.phase-tile:hover::before {
+  opacity: 1;
 }
 
-/* Enhanced usage note boxes */
+.phase-tile-num {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(135deg, rgba(139,92,246,1), rgba(236,72,153,1));
+  box-shadow: 0 10px 24px rgba(139,92,246,.22);
+  flex: 0 0 auto;
+}
+
+.phase-tile-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.phase-tile-title {
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--primary-dark);
+  margin-bottom: 0.15rem;
+}
+
+.phase-tile-sub {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.phase-tile-cta {
+  margin-left: auto;
+  font-weight: 700;
+  color: var(--accent-purple);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+}
+
+.phase-tile-cta::after {
+  content: "→";
+  transition: transform 0.18s ease;
+}
+
+.phase-tile:hover .phase-tile-cta::after {
+  transform: translateX(3px);
+}
+
+/* ============================================
+   ACCORDION PHASES - NEW
+   ============================================ */
+.phase-accordion {
+  background: white;
+  border-radius: 16px;
+  padding: 0;
+  margin: 1.5rem 0;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  border-left: 5px solid var(--accent-purple);
+  transition: all 0.3s ease;
+}
+
+.phase-accordion[open] {
+  box-shadow: 0 18px 48px rgba(0,0,0,0.10);
+}
+
+.phase-accordion-summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  transition: background 0.2s ease;
+}
+
+.phase-accordion-summary::-webkit-details-marker {
+  display: none;
+}
+
+.phase-accordion-summary:hover {
+  background: rgba(114, 9, 183, 0.03);
+}
+
+.phase-accordion-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(135deg, rgba(139,92,246,1), rgba(236,72,153,1));
+  box-shadow: 0 4px 12px rgba(139,92,246,0.3);
+  flex-shrink: 0;
+  font-size: 1.3rem;
+}
+
+.phase-accordion-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.phase-accordion-title {
+  font-weight: 900;
+  font-size: 1.25rem;
+  margin: 0 0 0.25rem 0;
+  color: #1a202c;
+}
+
+.phase-accordion-sub {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin: 0;
+  font-style: italic;
+}
+
+.phase-accordion-caret {
+  margin-left: auto;
+  font-size: 1.5rem;
+  color: var(--muted);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.phase-accordion[open] .phase-accordion-caret {
+  transform: rotate(180deg);
+}
+
+.phase-accordion-body {
+  padding: 0 1.5rem 1.5rem 1.5rem;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   NESTED GRID LAYOUT - NEW
+   ============================================ */
+.nested-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.nested-card {
+  background: rgba(255,255,255,0.78);
+  border: 1px solid rgba(2,6,23,0.08);
+  border-radius: 18px;
+  padding: 1.25rem;
+  box-shadow: 0 12px 32px rgba(2,6,23,0.08);
+  backdrop-filter: blur(6px);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  overflow: hidden;
+}
+
+.nested-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 44px rgba(2,6,23,0.12);
+  border-color: rgba(99,102,241,0.25);
+}
+
+.nested-card h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--accent-purple);
+  font-size: 1.1rem;
+}
+
+.nested-card h4 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  color: var(--primary-dark);
+  font-size: 1rem;
+}
+
+.nested-card ul {
+  margin: 0.5rem 0 0 1.25rem;
+  line-height: 1.8;
+}
+
+.nested-card p {
+  margin: 0.5rem 0;
+  line-height: 1.7;
+}
+
+/* ============================================
+   USAGE BOXES - Enhanced
+   ============================================ */
 .usage-note {
   background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(59,130,246,0.04));
   border-left: 4px solid #3b82f6;
@@ -802,13 +406,12 @@
   box-shadow: 0 4px 12px rgba(59,130,246,0.15);
 }
 
-/* Phase usage boxes */
 .phase-usage {
   background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(16,185,129,0.04));
   border-left: 4px solid #10b981;
-  padding: 1.25rem;
+  padding: 1.25rem 1.5rem;
   border-radius: 12px;
-  margin: 1.5rem 0;
+  margin: 0 0 1.5rem 0;
   transition: all 0.3s ease;
 }
 
@@ -820,7 +423,7 @@
 .phase-usage strong {
   color: #059669;
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   font-size: 1.05rem;
 }
 
@@ -830,10 +433,9 @@
 }
 
 .phase-usage li {
-  margin: 0.4rem 0;
+  margin: 0.5rem 0;
 }
 
-/* Resource best-for labels */
 .resource-best-for {
   background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(139,92,246,0.04));
   border: 2px solid rgba(139,92,246,0.2);
@@ -856,7 +458,9 @@
   font-style: normal;
 }
 
-/* Methodology connection block */
+/* ============================================
+   METHODOLOGY CONNECTION - NEW
+   ============================================ */
 .methodology-connection {
   background: linear-gradient(135deg, rgba(102,187,106,0.08), rgba(102,187,106,0.04));
   border: 2px solid rgba(102,187,106,0.2);
@@ -906,1406 +510,1372 @@
   border-bottom-color: #2e7d32;
 }
 
-/* Cross-reference box enhancement */
-.cross-ref-box {
-  background: linear-gradient(135deg, rgba(244,114,182,0.08), rgba(244,114,182,0.04));
-  border-left: 4px solid #ec4899;
-  padding: 1.25rem;
+/* ============================================
+   QUESTION SECTIONS - Enhanced
+   ============================================ */
+.question-section {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-left: 4px solid #0ea5e9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.question-section h4 {
+  color: #0c4a6e;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.question-list {
+  list-style: none;
+  padding: 0;
+  counter-reset: question;
+}
+
+.question-list li {
+  counter-increment: question;
+  position: relative;
+  padding-left: 2.75rem;
+  margin-bottom: 1rem;
+  line-height: 1.7;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.question-list li.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.question-list li::before {
+  content: "Q" counter(question);
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: linear-gradient(135deg, #0ea5e9, #06b6d4);
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+/* ============================================
+   ENHANCED BIBLIOGRAPHY
+   ============================================ */
+.bibliography-section {
+  max-width: 100%;
+  margin: 3rem 0;
+  border: 2px solid var(--border-light);
   border-radius: 12px;
+  overflow: hidden;
+  background: white;
+}
+
+.bibliography-section summary {
+  cursor: pointer;
+  list-style: none;
+  outline: none;
+}
+
+.bibliography-header {
+  padding: 1.5rem;
+  background: linear-gradient(135deg, var(--accent-purple), var(--accent-rose));
+  color: white;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.bibliography-header:hover {
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+}
+
+.bibliography-inner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.bibliography-icon {
+  font-size: 2rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+.bibliography-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.bibliography-title {
+  margin: 0;
+  color: white;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.bibliography-subtitle {
+  margin: 0.25rem 0 0 0;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.95rem;
+}
+
+.expand-indicator {
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.bibliography-section[open] .expand-indicator {
+  transform: rotate(180deg);
+}
+
+.bibliography-content {
+  padding: 2rem;
+  background: #f8fafc;
+  animation: slideDown 0.3s ease-out;
+}
+
+.source-category {
+  margin-bottom: 2.5rem;
+}
+
+.source-category h4 {
+  color: var(--accent-purple);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--accent-gold);
+  font-size: 1.1rem;
+}
+
+.source-entry {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  border-left: 3px solid var(--accent-purple);
+}
+
+.source-citation {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+.source-usage {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.usage-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  background: linear-gradient(135deg, #e11d48, #7209b7);
+  color: white;
+  border-radius: 25px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  min-height: 32px;
+  transition: all 0.2s ease;
+}
+
+.usage-tag:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.25);
+}
+
+/* ============================================
+   CORE STYLES FROM GLOBAL
+   ============================================ */
+.theology-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 2rem 0;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  border-left: 5px solid var(--accent-blue);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.theology-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.key-insight {
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  border-left: 4px solid #10b981;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
+}
+
+.key-insight.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tip-box {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-left: 4px solid #f59e0b;
+  padding: 1.25rem;
+  border-radius: 8px;
   margin: 1.5rem 0;
   transition: all 0.3s ease;
 }
 
-.cross-ref-box:hover {
+.tip-box:hover {
   transform: translateX(4px);
-  box-shadow: 0 4px 12px rgba(236,72,153,0.15);
+  box-shadow: 0 4px 12px rgba(245,158,11,0.2);
 }
 
-.cross-ref-box strong {
-  color: #be185d;
+.tip-box strong {
+  color: #92400e;
   display: block;
   margin-bottom: 0.5rem;
 }
 
-/* Responsive enhancements */
+.example-box {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
+}
+
+.example-box.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.example-box h4 {
+  color: #10b981;
+  margin-bottom: 0.75rem;
+}
+
+.genre-card {
+  background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+  border: 2px solid #a855f7;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  transition: all 0.3s ease;
+}
+
+.genre-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.genre-card h4 {
+  color: #7e22ce;
+  margin-bottom: 0.75rem;
+}
+
+/* ============================================
+   CTA SECTION
+   ============================================ */
+.cta-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 20px;
+  padding: 3rem 2rem;
+  text-align: center;
+  margin: 3rem 0;
+}
+
+.cta-section h3 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background: white;
+  color: #667eea;
+  border-radius: 50px;
+  font-weight: 700;
+  text-decoration: none;
+  margin: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  will-change: transform, opacity;
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Animation delays */
+.animation-delay-100 { animation-delay: 0.1s; }
+.animation-delay-200 { animation-delay: 0.2s; }
+.animation-delay-300 { animation-delay: 0.3s; }
+.animation-delay-400 { animation-delay: 0.4s; }
+.animation-delay-500 { animation-delay: 0.5s; }
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
 @media (max-width: 768px) {
-  .animate-on-scroll {
-    transform: translateY(20px);
+  .phase-tiles {
+    grid-template-columns: 1fr;
   }
-  
-  .phase-box {
-    transform: translateY(15px);
-  }
-  
-  .question-list li {
-    transform: translateX(-15px);
-  }
-  
+
   .methodology-connection {
     grid-template-columns: 1fr;
     text-align: center;
   }
-  
+
   .methodology-connection .icon {
     font-size: 2rem;
   }
-}
-  
 
-/* --- First-Read Framework: layout tweaks when Quick Nav is present --- */
-@media (min-width: 1200px){
-  body.has-quick-nav .page-shell, 
-  body.has-quick-nav .container, 
-  body.has-quick-nav main { max-width: 1120px; }
-  body.has-quick-nav .content-grid,
-  body.has-quick-nav .card-grid { justify-content: center; }
-}
-/* Keep reading line-length comfortable inside cards */
-.theology-card p, .theology-card li, .section-card p, .section-card li { max-width: 66ch; }
+  .nested-grid {
+    grid-template-columns: 1fr;
+  }
 
+  .quick-links {
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .phase-tile {
+    padding: 0.75rem 1rem;
+  }
+
+  .phase-tile-num {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  .phase-accordion-summary {
+    padding: 1rem;
+  }
+
+  .phase-accordion-badge {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+
+  .phase-accordion-title {
+    font-size: 1.1rem;
+  }
+}
 </style>
-<style>
-/* Phase tiles */
-.phase-tiles{margin-top:1.25rem}
-.phase-tile{
-  display:flex; align-items:center; gap:1rem;
-  padding:1rem 1.1rem; border-radius:18px;
-  background: var(--surface);
-  border: 1px solid rgba(0,0,0,0.06);
-  box-shadow: 0 8px 22px rgba(0,0,0,0.06);
-  text-decoration:none;
-  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-  position:relative;
-  overflow:hidden;
-}
-.phase-tile::before{
-  content:"";
-  position:absolute; inset:-2px;
-  background: linear-gradient(135deg, rgba(139,92,246,.35), rgba(236,72,153,.25), rgba(14,165,233,.20));
-  opacity:0;
-  transition: opacity .2s ease;
-}
-.phase-tile > *{position:relative; z-index:1}
-.phase-tile:hover{transform: translateY(-4px); box-shadow: 0 14px 34px rgba(0,0,0,0.10); border-color: rgba(139,92,246,.25)}
-.phase-tile:hover::before{opacity:1}
-.phase-tile-num{
-  width:42px; height:42px; border-radius:14px;
-  display:flex; align-items:center; justify-content:center;
-  font-weight:800;
-  color: #fff;
-  background: linear-gradient(135deg, rgba(139,92,246,1), rgba(236,72,153,1));
-  box-shadow: 0 10px 24px rgba(139,92,246,.22);
-  flex:0 0 auto;
-}
-.phase-tile-title{font-weight:800}
-.phase-tile-sub{color: var(--muted); font-size:.95rem; margin-top:.1rem}
-.phase-tile-cta{
-  margin-left:auto;
-  font-weight:700;
-  color: var(--accent, #7c3aed);
-  display:flex; align-items:center; gap:.35rem;
-}
-.phase-tile-cta::after{content:"→"; transition: transform .18s ease}
-.phase-tile:hover .phase-tile-cta::after{transform: translateX(3px)}
+</head>
 
-/* Accordion */
-.phase-accordion{padding:0}
-.phase-accordion[open]{box-shadow: 0 18px 48px rgba(0,0,0,0.10)}
-.phase-accordion-summary{
-  list-style:none;
-  cursor:pointer;
-  display:flex; align-items:center; gap:1rem;
-  padding:1rem 1.1rem;
-}
-.phase-accordion-summary::-webkit-details-marker{display:none}
-.phase-accordion-badge{
-  width:40px; height:40px; border-radius:14px;
-  display:flex; align-items:center; justify-content:center;
-  font-weight:800; color:#fff;
-  background: linear-gradient(135deg, rgba(139,92,246,1), rgba(236,72,153,1));
-}
-.phase-accordion-title{font-weight:900; font-size:1.15rem}
-.phase-accordion-sub{color: var(--muted); font-size:.95rem; margin-top:.1rem}
-.phase-accordion-caret{margin-left:auto; font-size:1.15rem; color: var(--muted); transition: transform .2s ease}
-.phase-accordion[open] .phase-accordion-caret{transform: rotate(180deg)}
-.phase-accordion-body{padding: 0 1.1rem 1.1rem 1.1rem}
-
-/* Scroll reveal */
-.animate-on-scroll{opacity:0; transform: translateY(10px); transition: opacity .55s ease, transform .55s ease}
-.animate-on-scroll.in-view{opacity:1; transform:none}
-</style><style id="nested-grid-css">
-/* Nested card grids for long sections */
-.nested-grid{
-  display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 18px;
-  margin-top: 18px;
-}
-.nested-card{
-  background: rgba(255,255,255,0.78);
-  border: 1px solid rgba(2,6,23,0.08);
-  border-radius: 18px;
-  padding: 16px 16px 14px;
-  box-shadow: 0 12px 32px rgba(2,6,23,0.08);
-  backdrop-filter: blur(6px);
-  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
-  overflow:hidden;
-}
-.nested-card:hover{
-  transform: translateY(-4px);
-  box-shadow: 0 18px 44px rgba(2,6,23,0.12);
-  border-color: rgba(99,102,241,0.25);
-}
-.nested-card h3{
-  margin-top: 0;
-}
-.nested-card ul{
-  margin: 10px 0 0 18px;
-}
-@media (prefers-reduced-motion: reduce){
-  .nested-card, .nested-card:hover{ transition:none; transform:none; }
-}
-</style></head>
 <body>
-<a class="skip-link" href="#main-content">Skip to main content</a><div aria-label="Section navigation" class="quick-nav-sidebar"></div><!-- ==========================================
-       QUICK NAVIGATION SIDEBAR (Desktop Only)
-       Automatically generated by character-page-v5-8.js
-       ========================================== -->
-<div class="reading-progress"></div>
-<!-- NAV injected by nav-component.js -->
-<main class="content-section" id="main-content">
-<!-- HERO -->
-<section class="hero">
-<div class="hero-content">
-<h1 class="hero-title">First-Read Framework</h1>
-<p class="hero-subtitle">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div class="reading-progress"></div>
+  <div class="quick-nav-sidebar" aria-label="Section navigation"></div>
+
+  <main id="main-content" class="content-section">
+    
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">First-Read Framework</h1>
+        <p class="hero-subtitle">
           Essential questions for approaching any biblical book through careful observation—
           learn to see what the author is conveying through your own attentive reading
         </p>
-</div>
-</section>
-<!-- Breadcrumbs -->
-<div class="breadcrumbs">
-<a href="/">Home</a> › 
+      </div>
+    </section>
+    
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+      <a href="/">Home</a> › 
       <a href="/resources/">Resources</a> › 
       <a href="/resources/study-tools/">Study Tools</a> ›
       First-Read Framework
-    </div><section class="theology-card animate-on-scroll content-section" id="phases"><h2>Open the phases</h2><p>Use the tiles to jump to a phase. Each phase expands into a guided checklist.</p><div class="phase-tiles grid-4"><a class="phase-tile animate-on-scroll" data-phase="1" href="#phase1"><div class="phase-tile-num">1</div><div class="phase-tile-text"><div class="phase-tile-title">The Big Picture</div><div class="phase-tile-sub">First Complete Read</div></div><div class="phase-tile-cta">Open</div></a><a class="phase-tile animate-on-scroll" data-phase="2" href="#phase2"><div class="phase-tile-num">2</div><div class="phase-tile-text"><div class="phase-tile-title">Structural Analysis</div><div class="phase-tile-sub">Second Read—Mark Patterns</div></div><div class="phase-tile-cta">Open</div></a><a class="phase-tile animate-on-scroll" data-phase="3" href="#phase3"><div class="phase-tile-num">3</div><div class="phase-tile-text"><div class="phase-tile-title">Character &amp; Plot Analysis</div><div class="phase-tile-sub">Third Read—Focus on Actors</div></div><div class="phase-tile-cta">Open</div></a><a class="phase-tile animate-on-scroll" data-phase="4" href="#phase4"><div class="phase-tile-num">4</div><div class="phase-tile-text"><div class="phase-tile-title">Theological &amp; Thematic Analysis</div><div class="phase-tile-sub">What Is This Revealing About God?</div></div><div class="phase-tile-cta">Open</div></a><a class="phase-tile animate-on-scroll" data-phase="5" href="#phase5"><div class="phase-tile-num">5</div><div class="phase-tile-text"><div class="phase-tile-title">Intertextual Connections</div><div class="phase-tile-sub">Biblical Authors Wrote Expecting You to Hear Echoes</div></div><div class="phase-tile-cta">Open</div></a><a class="phase-tile animate-on-scroll" data-phase="6" href="#phase6"><div class="phase-tile-num">6</div><div class="phase-tile-text"><div class="phase-tile-title">Literary Artistry</div><div class="phase-tile-sub">Hebrew Authors Were Master Craftspeople</div></div><div class="phase-tile-cta">Open</div></a><a class="phase-tile animate-on-scroll" data-phase="7" href="#phase7"><div class="phase-tile-num">7</div><div class="phase-tile-text"><div class="phase-tile-title">Contextual Awareness</div><div class="phase-tile-sub">Even Without Tools, You Can Infer Context</div></div><div class="phase-tile-cta">Open</div></a></div></section>
-<!-- NEW: Quick-Link Navigation -->
-<!-- NEW: Tools Serve Reading Guardrail -->
-<div aria-label="Study guardrail" class="usage-note" role="note">
-<strong>Guardrail:</strong>
-  Begin with the Scriptural text itself—observe structure, note repetitions and contrasts, and read in larger units.
-  <br/>
-  Then consult tools to <em>deepen understanding</em>, not replace the reading.
-</div>
-<!-- NEW: Tempo Reminder -->
-<div aria-label="Reading tempo note" class="usage-note" role="note">
-<strong>Tempo:</strong> This framework assumes multiple readings over days or weeks, not a single sitting.
-  The goal is slow, careful reading that notices what the author repeats and highlights.
-</div>
-<!-- NEW: Sequencing Note -->
-<div aria-label="Sequencing note" class="usage-note" role="note">
-<strong>Sequence:</strong> Historical and cultural context matters—but it comes <em>after</em> literary observation, not before.
-</div>
-<!-- INTRODUCTION -->
-<div class="theology-card animate-on-scroll content-section" id="purpose-of-this-framework">
-<h2>Purpose of This Framework</h2>
-<p style="line-height: 1.7; font-size: 1.05rem;">
+    </div>
+
+    <!-- Quick Links Navigation -->
+    <nav class="quick-links" aria-label="Quick navigation">
+      <a class="quick-link" href="#phases">Phases Overview</a>
+      <a class="quick-link" href="#cultural-gap">Cultural Gap</a>
+      <a class="quick-link" href="#genre-strategies">Genre Strategies</a>
+      <a class="quick-link" href="#tools">Essential Tools</a>
+      <a class="quick-link" href="#methodology">Methodology</a>
+    </nav>
+    
+    <!-- GUARDRAILS -->
+    <div class="usage-note" role="note" aria-label="Study guardrail">
+      <strong>Guardrail:</strong>
+      Begin with the Scriptural text itself—observe structure, note repetitions and contrasts, and read in larger units.
+      <br/>
+      Then consult tools to <em>deepen understanding</em>, not replace the reading.
+    </div>
+
+    <div class="usage-note" role="note" aria-label="Reading tempo note">
+      <strong>Tempo:</strong> This framework assumes multiple readings over days or weeks, not a single sitting.
+      The goal is slow, careful reading that notices what the author repeats and highlights.
+    </div>
+
+    <div class="usage-note" role="note" aria-label="Sequencing note">
+      <strong>Sequence:</strong> Historical and cultural context matters—but it comes <em>after</em> literary observation, not before.
+    </div>
+
+    <!-- INTRODUCTION -->
+    <section class="theology-card animate-on-scroll" id="purpose">
+      <h2>Purpose of This Framework</h2>
+      <p style="line-height: 1.7; font-size: 1.05rem;">
         This guide helps you <strong>observe what the author is actually doing in the text</strong> through careful, 
         sequential reading. Use these questions on your FIRST read-through, <em>before</em> consulting commentaries 
         or study tools. The goal is to train your eye to see what's already there.
       </p>
-<div class="tip-box" style="margin-top: 1.5rem;">
-<strong>📖 Important Note:</strong>
+      
+      <div class="tip-box" style="margin-top: 1.5rem;">
+        <strong>📖 Important Note:</strong>
         This framework aligns with Project Context's four-dimension approach (Textual/Literary, Historical/Cultural, 
         Theological, Practical). You're learning to do Phase 1 observation—the foundation for all deeper study.
       </div>
-</div>
-<!-- BRIDGING THE CULTURAL GAP -->
-<div class="theology-card animate-on-scroll content-section" id="understanding-the-cultural-gap" style="background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border-left: 5px solid #0ea5e9;"><h2 style="color: #0c4a6e;">Understanding the Cultural Gap</h2><p style="line-height: 1.8; font-size: 1.05rem;">
-<strong>Essential truth:</strong> The Old Testament is an ancient text written in another language, 
-        by people from another culture, in another time. To read it well, you must learn something about 
-        their way of communicating.
-      </p><div class="nested-grid"><div class="nested-card animate-on-scroll"><h3 style="color: #0c4a6e; margin-top: 1.5rem;">The Author-Reader Gap</h3><p style="line-height: 1.8; font-size: 1.05rem;">
-        Biblical authors wrote from their cultural knowledge and assumptions. You read from yours. 
-        The gap is significant:
-      </p><div style="background: white; padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0;">
-<p style="margin: 0 0 1rem 0; font-weight: 600; color: #0c4a6e;">What They Knew:</p>
-<ul style="margin-left: 1.5rem; line-height: 1.8;">
-<li>Ancient Near Eastern culture and history</li>
-<li>Hebrew language, wordplay, and sound patterns</li>
-<li>Torah and prophetic texts memorized</li>
-<li>Agricultural and temple-based lifestyle</li>
-<li>Their literary conventions and techniques</li>
-</ul>
-<p style="margin: 1.5rem 0 1rem 0; font-weight: 600; color: #0c4a6e;">What You Know:</p>
-<ul style="margin-left: 1.5rem; line-height: 1.8;">
-<li>21st-century Western culture</li>
-<li>English language and modern literary conventions</li>
-<li>Contemporary questions and concerns</li>
-<li>Post-industrial context and worldview</li>
-</ul>
-</div></div><div class="nested-card animate-on-scroll"><h3 style="color: #0c4a6e; margin-top: 1.5rem;">Your Task: Learn Their Communication Style</h3><p style="line-height: 1.8; font-size: 1.05rem;">
-        Reading Scripture well means setting your agenda aside long enough to hear what the authors 
-        were actually saying in their context. Let them address issues their way before applying 
-        insights to your questions.
-      </p><div style="margin-top: 1.5rem; padding: 1.5rem; background: rgba(255,255,255,0.8); border-radius: 8px; border-left: 4px solid #0ea5e9;">
-<p style="margin: 0 0 0.75rem 0; font-weight: 600;">You're Already Translating:</p>
-<p style="margin: 0; line-height: 1.7;">
-          Your English Bible proves massive cultural work has been done—someone already bridged the language gap. 
-          You already recognize that ancient temple laws don't apply directly to you. This framework just makes 
-          that translation work systematic and conscious.
-        </p>
-</div></div></div></div>
-<!-- WHY BIBLICAL AUTHORS WRITE THIS WAY -->
-<div class="theology-card animate-on-scroll content-section" id="how-biblical-literature-works" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 5px solid #f59e0b;"><h2 style="color: #92400e;">How Biblical Literature Works</h2><div class="nested-grid"><div class="nested-card animate-on-scroll"><h3 style="color: #92400e; margin-top: 0;">Written for Meditation</h3><p style="line-height: 1.8; font-size: 1.05rem;">
-        The Bible is <strong>meditation literature</strong>—designed for slow, repeated reading over a lifetime. 
-        The minimal detail and intentional gaps aren't flaws; they're invitations to engage deeply:
-      </p><ul style="margin: 1.5rem 0 1.5rem 2rem; line-height: 1.9; font-size: 1.05rem;">
-<li><strong>Gaps force engagement:</strong> You must think, ponder, make connections</li>
-<li><strong>Ambiguities spark discovery:</strong> Different readings reveal new insights</li>
-<li><strong>Repetition builds understanding:</strong> You see more each time through</li>
-<li><strong>Bible interprets Bible:</strong> Puzzles in one passage are solved by another</li>
-</ul><div class="key-insight" style="margin-top: 1.5rem;">
-<h4>The Ideal Reader (Psalm 1)</h4>
-<p style="margin-bottom: 0.75rem;">
-          Psalm 1 describes the ideal Bible reader: someone who <strong>"meditates day and night."</strong> 
-          In Hebrew, "meditate" means literally to <em>mutter</em> or <em>speak quietly</em>—reading aloud slowly, 
-          talking about it with others, pondering connections over years.
-        </p>
-<p style="margin: 0;">
-          This is a <strong>lifetime commitment by design</strong>. Puzzles you don't understand today may 
-          suddenly click years later when reading a different part of Scripture.
-        </p>
-</div></div><div class="nested-card animate-on-scroll"><h3 style="color: #92400e; margin-top: 2rem;">Everything Is Intentional</h3><p style="line-height: 1.8; font-size: 1.05rem;">
-        Every single thing in the biblical text is there for a reason. Nothing is accidental. 
-        These are <strong>carefully crafted literary texts</strong>—like poetry or novels, not simple historical reports.
-      </p><ul style="margin: 1rem 0 1rem 2rem; line-height: 1.8; font-size: 1.05rem;">
-<li>Every phrase placement matters</li>
-<li>Every word choice is deliberate</li>
-<li>Every structural decision has purpose</li>
-<li>Repeated words create thematic connections</li>
-</ul><p style="line-height: 1.8; font-size: 1.05rem; margin-top: 1rem; padding: 1rem; background: rgba(255,255,255,0.7); border-radius: 8px;">
-<strong>⚠️ Warning:</strong> Over-familiarity with the Bible acts like a "sleep drug"—you stop reading carefully. 
-        Knowing plot summaries from children's media is not the same as understanding carefully crafted literature.
-      </p></div><div class="nested-card animate-on-scroll"><h3 style="color: #92400e; margin-top: 2rem;">Learn Their Literary Conventions</h3><p style="line-height: 1.8; font-size: 1.05rem;">
-        Biblical authors used specific literary techniques and conventions. To understand their texts, 
-        you need to recognize these patterns:
-      </p><ul style="margin: 1rem 0 1rem 2rem; line-height: 1.8; font-size: 1.05rem;">
-<li>Repeated key words (Leitwort) signal themes</li>
-<li>Parallel structures create meaning</li>
-<li>Narrative gaps invite interpretation</li>
-<li>Cross-references link distant texts</li>
-<li>Hebrew wordplay creates connections</li>
-</ul><div style="background: white; padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0;">
-<p style="margin: 0; line-height: 1.7; font-style: italic;">
-          "A coherent reading of any work of art requires some detailed awareness of the conventions 
-          upon which this particular work operates... One of the chief difficulties modern readers have 
-          in perceiving the artistry in biblical narrative is precisely that we have lost most of 
-          the keys to the conventions out of which these texts were shaped." 
-          <strong>—Robert Alter</strong>
-</p>
-</div></div><div class="nested-card animate-on-scroll"><h3 style="color: #92400e; margin-top: 1.5rem;">Designed for Rereading</h3><p style="line-height: 1.8; font-size: 1.05rem;">
-        These texts are so carefully crafted you won't get everything on first reading. 
-        Each reading reveals more:
-      </p><ul style="margin: 1rem 0 1rem 2rem; line-height: 1.8; font-size: 1.05rem;">
-<li><strong>First reading:</strong> Basic plot and structure</li>
-<li><strong>Second reading:</strong> Notice repeated words and patterns</li>
-<li><strong>Third reading:</strong> See character development and themes</li>
-<li><strong>Tenth reading:</strong> Discover connections to other texts</li>
-<li><strong>Beyond:</strong> Still finding new insights after hundreds of readings</li>
-</ul><p style="line-height: 1.8; font-size: 1.05rem; margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.7); border-radius: 8px;">
-<strong>🎯 What This Framework Does:</strong>
-        Teaches you to recognize biblical authors' conventions so each rereading brings you closer 
-        to understanding on their terms. Progress happens gradually over years—that's expected.
-      </p></div><div class="nested-card animate-on-scroll"><h3 style="color: #92400e; margin-top: 2rem;">Two Essential Reading Skills</h3><p style="line-height: 1.8; font-size: 1.05rem;">
-        Biblical texts consist of small literary units woven together through repeated words and themes:
-      </p><div style="background: white; padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0;">
-<p style="margin: 0 0 1rem 0;"><strong>1. Segmentation:</strong> Identifying individual literary units 
-        (where does each story/scene begin and end?)</p>
-<p style="margin: 0;"><strong>2. Coordination:</strong> Identifying repeated words and themes that 
-        link units together (how do different passages connect?)</p>
-</div><p style="line-height: 1.8; font-size: 1.05rem;">
-        Both skills are essential. Segmentation without coordination means you see individual trees but miss the forest. 
-        Coordination without segmentation means you see themes but miss the careful structural design.
-      </p><div class="tip-box" style="margin-top: 1.5rem;">
-<strong>🌍 Practical Steps to Bridge the Cultural Gap:</strong>
-<p style="margin: 0.75rem 0 0.5rem 0;">You don't need seminary or Hebrew to make significant progress:</p>
-<ul style="margin: 0.5rem 0 0 1.5rem; line-height: 1.7;">
-<li><strong>Learn their conventions</strong> → Use this framework to recognize patterns</li>
-<li><strong>Get basic context</strong> → Read study Bible introductions</li>
-<li><strong>Use tools</strong> → Concordances reveal repeated word patterns</li>
-<li><strong>Read repeatedly</strong> → Each time builds understanding</li>
-<li><strong>Set agenda aside</strong> → Let them address issues their way first</li>
-</ul>
-</div></div></div></div>
-<!-- PHASE 1 -->
-<details class="phase-accordion theology-card animate-on-scroll" id="phase1"><summary class="phase-accordion-summary"><div class="phase-accordion-badge">1</div><div class="phase-accordion-titlewrap"><div class="phase-accordion-title">The Big Picture</div><div class="phase-accordion-sub">First Complete Read</div></div><div class="phase-accordion-caret">▾</div></summary><div class="phase-accordion-body">
-<!-- NEW: How to Use Box -->
-<div class="phase-usage">
-<strong>How to Use (Phase 1):</strong>
-<ul>
-<li><strong>When:</strong> Before your first study session.</li>
-<li><strong>Goal:</strong> Experience the book as a unified narrative/argument, not isolated verses.</li>
-<li><strong>Avoid:</strong> Stopping to analyze every detail—save that for later phases.</li>
-<li><strong>Then:</strong> Move to Phase 2 only after completing this entire phase.</li>
-</ul>
-</div>
-<p style="font-size: 1.05rem; color: var(--muted); margin-bottom: 2rem;">
-        Read the entire book in one sitting if possible (or the smallest natural unit for longer books). 
-        Don't stop to analyze—just read and notice.
+    </section>
+
+    <!-- PHASE TILES OVERVIEW -->
+    <section class="theology-card animate-on-scroll" id="phases">
+      <h2>The 7 Phases of Observational Reading</h2>
+      <p style="margin-bottom: 1.5rem;">
+        Click any phase below to expand its detailed questions and guidance. Each phase builds on the previous one.
       </p>
-<div class="question-section">
-<h4>1. Genre &amp; Form</h4>
-<ul class="question-list">
-<li>What type of writing is this? (Narrative, law, prophecy, wisdom, gospel, letter, apocalyptic?)</li>
-<li>How does the author open the book? (Genealogy, vision, greeting, historical setting?)</li>
-<li>What's the tone? (Formal, intimate, urgent, celebratory, mournful?)</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>2. Structure &amp; Movement</h4>
-<ul class="question-list">
-<li>Where are the natural breaks? (New locations, time markers, topic shifts, formulas like "After this...")</li>
-<li>Does anything repeat? (Phrases, events, patterns, refrains)</li>
-<li>Can you identify a beginning, middle, and end?</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>3. Key Actors &amp; Relationships</h4>
-<ul class="question-list">
-<li>Who are the main characters/groups?</li>
-<li>What do they want? What's at stake?</li>
-<li>Who's in conflict with whom?</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>4. Central Tension</h4>
-<ul class="question-list">
-<li>What's the core problem or question the book addresses?</li>
-<li>What threatens to go wrong? What needs resolution?</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>5. Conclusion</h4>
-<ul class="question-list">
-<li>How does it end? Problem solved? Tension resolved? Open-ended?</li>
-<li>What's the last thing the author wants you thinking about?</li>
-</ul>
-</div>
-<div class="example-box">
-<h4>✅ Example: Jonah</h4>
-<p><strong>Genre:</strong> Prophetic narrative (story ABOUT a prophet, not oracle collection)</p>
-<p><strong>Structure:</strong> 4 chapters—Ch 1 &amp; 3 parallel (divine call), Ch 2 &amp; 4 parallel (prayers)</p>
-<p><strong>Central Tension:</strong> Prophet refuses to deliver God's message to enemies</p>
-<p><strong>Conclusion:</strong> Ends with God's unanswered question—reader must respond</p>
-</div>
-<!-- NEW: Best For Label -->
-<div class="resource-best-for">
-        Best for: Getting oriented to the book's tone, movement, and major themes before detailed analysis
+
+      <div class="phase-tiles">
+        <a class="phase-tile animate-on-scroll" data-phase="1" href="#phase1">
+          <div class="phase-tile-num">1</div>
+          <div class="phase-tile-text">
+            <div class="phase-tile-title">The Big Picture</div>
+            <div class="phase-tile-sub">First Complete Read</div>
+          </div>
+          <div class="phase-tile-cta">Open</div>
+        </a>
+
+        <a class="phase-tile animate-on-scroll" data-phase="2" href="#phase2">
+          <div class="phase-tile-num">2</div>
+          <div class="phase-tile-text">
+            <div class="phase-tile-title">Structural Analysis</div>
+            <div class="phase-tile-sub">Second Read—Mark Patterns</div>
+          </div>
+          <div class="phase-tile-cta">Open</div>
+        </a>
+
+        <a class="phase-tile animate-on-scroll" data-phase="3" href="#phase3">
+          <div class="phase-tile-num">3</div>
+          <div class="phase-tile-text">
+            <div class="phase-tile-title">Character & Plot Analysis</div>
+            <div class="phase-tile-sub">Third Read—Focus on Actors</div>
+          </div>
+          <div class="phase-tile-cta">Open</div>
+        </a>
+
+        <a class="phase-tile animate-on-scroll" data-phase="4" href="#phase4">
+          <div class="phase-tile-num">4</div>
+          <div class="phase-tile-text">
+            <div class="phase-tile-title">Theological & Thematic Analysis</div>
+            <div class="phase-tile-sub">What Is This Revealing About God?</div>
+          </div>
+          <div class="phase-tile-cta">Open</div>
+        </a>
+
+        <a class="phase-tile animate-on-scroll" data-phase="5" href="#phase5">
+          <div class="phase-tile-num">5</div>
+          <div class="phase-tile-text">
+            <div class="phase-tile-title">Intertextual Connections</div>
+            <div class="phase-tile-sub">Biblical Authors Expected You to Hear Echoes</div>
+          </div>
+          <div class="phase-tile-cta">Open</div>
+        </a>
+
+        <a class="phase-tile animate-on-scroll" data-phase="6" href="#phase6">
+          <div class="phase-tile-num">6</div>
+          <div class="phase-tile-text">
+            <div class="phase-tile-title">Literary Artistry</div>
+            <div class="phase-tile-sub">Hebrew Authors Were Master Craftspeople</div>
+          </div>
+          <div class="phase-tile-cta">Open</div>
+        </a>
+
+        <a class="phase-tile animate-on-scroll" data-phase="7" href="#phase7">
+          <div class="phase-tile-num">7</div>
+          <div class="phase-tile-text">
+            <div class="phase-tile-title">Contextual Awareness</div>
+            <div class="phase-tile-sub">Even Without Tools, You Can Infer Context</div>
+          </div>
+          <div class="phase-tile-cta">Open</div>
+        </a>
       </div>
-</div></details>
-<!-- PHASE 2 -->
-<details class="phase-accordion theology-card animate-on-scroll" id="phase2"><summary class="phase-accordion-summary"><div class="phase-accordion-badge">2</div><div class="phase-accordion-titlewrap"><div class="phase-accordion-title">Structural Analysis</div><div class="phase-accordion-sub">Second Read—Mark Patterns</div></div><div class="phase-accordion-caret">▾</div></summary><div class="phase-accordion-body">
-<!-- NEW: How to Use Box -->
-<div class="phase-usage">
-<strong>How to Use (Phase 2):</strong>
-<ul>
-<li><strong>When:</strong> After your first large-unit reading (Phase 1).</li>
-<li><strong>Goal:</strong> Identify what the author emphasizes through repetition—words, themes, character types, settings.</li>
-<li><strong>Avoid:</strong> Jumping to theological conclusions or application before you can clearly articulate what repeats.</li>
-<li><strong>Then:</strong> Move to Phase 3 only after completing this entire phase.</li>
-</ul>
-</div>
-<p style="font-size: 1.05rem; color: var(--muted); margin-bottom: 2rem;">
-        Now read more slowly, marking structural signals. The author is SHOUTING when they repeat things.
-      </p>
-<div class="question-section">
-<h4>1. Geographical Movement</h4>
-<ul class="question-list">
-<li>Does the action move through locations? (Exodus: Egypt → wilderness → Sinai)</li>
-<li>Are locations symbolic? (Jerusalem, Babylon, "up to Jerusalem," wilderness)</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>2. Temporal Markers</h4>
-<ul class="question-list">
-<li>Time phrases? ("In those days," "After this," "The third day")</li>
-<li>Chronological vs. topical arrangement?</li>
-<li>Flashbacks or future predictions?</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>3. Formulaic Phrases (Biblical "Chapter Headings")</h4>
-<ul class="question-list">
-<li>"These are the generations of..." (Genesis)</li>
-<li>"The word of the LORD came to..." (Prophets)</li>
-<li>"After this I saw..." (Revelation)</li>
-<li>"Concerning..." (1 Corinthians)</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>4. Verbal Repetition</h4>
-<ul class="question-list">
-<li>Key words appearing multiple times? (Count them!)</li>
-<li>Phrases that bookend sections?</li>
-<li>Catchwords linking episodes?</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>5. Structural Repetition</h4>
-<ul class="question-list">
-<li>Similar scenes? (Betrothal scenes, call narratives, commissioning)</li>
-<li>Recurring cycles? (Judges: rebellion → oppression → deliverance)</li>
-<li>Numbered sequences? ("Seven..." "Twelve...")</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>6. Symmetry &amp; Chiasm</h4>
-<p style="margin-bottom: 1rem;">Hebrew authors loved concentric structures. Look for mirroring patterns:</p>
-<div style="background: white; padding: 1.5rem; border-radius: 8px; font-family: monospace; line-height: 1.8;">
-<strong>A</strong> - Opening scene/theme<br/>
-            <strong>B</strong> - Development<br/>
-              <strong>C</strong> - Complication<br/>
-                <strong>CENTER</strong> - Theological pivot<br/>
-              <strong>C'</strong> - Complication resolved<br/>
-            <strong>B'</strong> - Development resolved<br/>
-<strong>A'</strong> - Closing scene/theme
+    </section>
+
+    <!-- CULTURAL GAP SECTION -->
+    <section class="theology-card animate-on-scroll" id="cultural-gap">
+      <h2>Understanding the Cultural Gap</h2>
+      
+      <div class="nested-grid">
+        <div class="nested-card animate-on-scroll">
+          <h3>The Author-Reader Gap</h3>
+          <p>
+            Biblical authors wrote from their cultural knowledge and assumptions. You read from yours. 
+            The gap is significant:
+          </p>
+          
+          <h4 style="margin-top: 1rem;">What They Knew:</h4>
+          <ul>
+            <li>Ancient Near Eastern culture and history</li>
+            <li>Hebrew language, wordplay, and sound patterns</li>
+            <li>Torah and prophetic texts memorized</li>
+            <li>Agricultural and temple-based lifestyle</li>
+            <li>Their literary conventions and techniques</li>
+          </ul>
+          
+          <h4 style="margin-top: 1rem;">What You Know:</h4>
+          <ul>
+            <li>21st-century Western culture</li>
+            <li>English language and modern literary conventions</li>
+            <li>Contemporary questions and concerns</li>
+            <li>Post-industrial context and worldview</li>
+          </ul>
         </div>
-<p style="margin-top: 1rem;"><strong>Clues to chiastic structure:</strong> Repeated phrases at beginning and end, parallel episodes in reverse order, climactic center with unique content</p>
-</div>
-<div class="tip-box">
-<strong>📍 Boundary Markers: How to Identify Literary Units</strong>
-<p style="margin: 0.75rem 0;">
-          Watch for these signals that indicate a new scene or episode:
-        </p>
-<ul style="margin: 0.5rem 0 0.75rem 1.5rem; line-height: 1.7;">
-<li><strong>Character shift:</strong> New person introduced or focus changes</li>
-<li><strong>Setting change:</strong> Characters move to new location ("He went to...")</li>
-<li><strong>Time advance:</strong> "After this..." "The next day..." "In those days..."</li>
-<li><strong>Action completes:</strong> Problem stated at scene start is resolved at scene end</li>
-<li><strong>Formulaic opening:</strong> "The word of LORD came..." "These are the generations..."</li>
-</ul>
-</div>
-<div class="key-insight" style="margin-top: 1.5rem;">
-<h4>Literary Unit Hierarchy</h4>
-<p style="margin-bottom: 0.75rem;">
-          Biblical narratives have nested levels—smaller units build into larger ones:
-        </p>
-<ul style="margin-left: 1.5rem; line-height: 1.8;">
-<li><strong>Scenes:</strong> Smallest unit (one setting, continuous action)</li>
-<li><strong>Episodes:</strong> Multiple scenes forming complete action (problem introduced → resolved)</li>
-<li><strong>Movements:</strong> Multiple episodes with shared themes or time periods</li>
-<li><strong>Book:</strong> Complete narrative arc from initial situation → final resolution</li>
-</ul>
-<div style="margin-top: 1rem; padding: 1.5rem; background: white; border-radius: 8px; border: 2px solid #e5e7eb;">
-<p style="margin: 0 0 0.75rem 0; font-weight: 600;">Example: Genesis 2-3 (Eden Narrative)</p>
-<p style="margin: 0.5rem 0;"><strong>Book level:</strong> Genesis (Creation → Patriarchs)</p>
-<p style="margin: 0.5rem 0;"><strong>Movement level:</strong> Primeval History (2:4–11:26)</p>
-<p style="margin: 0.5rem 0;"><strong>Episode level:</strong> Eden Narrative (2:4–3:24) = Wilderness → Exile</p>
-<p style="margin: 0.5rem 0;"><strong>Scene level:</strong></p>
-<ul style="margin-left: 1.5rem; line-height: 1.6; font-size: 0.95rem;">
-<li>God makes garden (2:4-9)</li>
-<li>Human given command (2:10-17)</li>
-<li>Woman created (2:18-25)</li>
-<li>Snake tempts couple (3:1-7)</li>
-<li>God confronts humans (3:8-13)</li>
-<li>God pronounces consequences (3:14-21)</li>
-<li>Humans exiled from Eden (3:22-24)</li>
-</ul>
-</div>
-</div>
-<div class="tip-box" style="margin-top: 1.5rem;">
-<strong>💡 Pro Tip:</strong>
-        Use a literal translation (like NASB or ESV) for this phase—they preserve repetition better than dynamic equivalents. 
-        Better yet, use an interlinear to see which English words translate the same Hebrew/Greek root.
-      </div>
-<!-- NEW: Best For Label -->
-<div class="resource-best-for">
-        Best for: Discovering the author's priorities through their word choices and recurring motifs
-      </div>
-</div></details>
-<!-- PHASE 3 -->
-<details class="phase-accordion theology-card animate-on-scroll" id="phase3"><summary class="phase-accordion-summary"><div class="phase-accordion-badge">3</div><div class="phase-accordion-titlewrap"><div class="phase-accordion-title">Character &amp; Plot Analysis</div><div class="phase-accordion-sub">Third Read—Focus on Actors</div></div><div class="phase-accordion-caret">▾</div></summary><div class="phase-accordion-body">
-<!-- NEW: How to Use Box -->
-<div class="phase-usage">
-<strong>How to Use (Phase 3):</strong>
-<ul>
-<li><strong>When:</strong> After tracking structural patterns (Phase 2).</li>
-<li><strong>Goal:</strong> Understand how characters are developed and how plot unfolds through their actions and relationships.</li>
-<li><strong>Avoid:</strong> Moralizing or allegorizing before understanding the author's characterization technique.</li>
-<li><strong>Then:</strong> Move to Phase 4 only after completing this entire phase.</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>1. Character Introduction</h4>
-<ul class="question-list">
-<li>How is each character first presented?</li>
-<li>What do we learn through dialogue vs. narrator description?</li>
-<li>Name meanings or etymologies mentioned?</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>2. Characterization Techniques</h4>
-<ul class="question-list">
-<li><strong>Direct statements:</strong> "David was a man after God's own heart"</li>
-<li><strong>Actions:</strong> What do they DO?</li>
-<li><strong>Speech:</strong> What and how do they speak?</li>
-<li><strong>Contrasts:</strong> Who are they compared/contrasted with?</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>3. Character Arc</h4>
-<ul class="question-list">
-<li>Do characters change? How?</li>
-<li>What tests do they face?</li>
-<li>What do they learn (or fail to learn)?</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>4. Relationships</h4>
-<ul class="question-list">
-<li>Who trusts whom? Who opposes whom?</li>
-<li>Family dynamics? Power dynamics?</li>
-<li>Covenant relationships?</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>5. Conflict Types</h4>
-<ul class="question-list">
-<li>Divine-human conflict?</li>
-<li>Human-human conflict?</li>
-<li>Internal conflict?</li>
-<li>Human vs. circumstance?</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>6. Narrative Gaps</h4>
-<p style="margin-bottom: 0.5rem;"><em>What the author DOESN'T tell you is often significant:</em></p>
-<ul class="question-list">
-<li>What information is withheld?</li>
-<li>What motivations are unclear?</li>
-<li>Where do you have to infer?</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>7. Irony &amp; Reversal</h4>
-<ul class="question-list">
-<li><strong>Situational irony:</strong> Outcome opposite of expectation?</li>
-<li><strong>Dramatic irony:</strong> Reader knows more than character?</li>
-<li><strong>Role reversals:</strong> Weak becoming strong, proud humbled?</li>
-</ul>
-</div>
-<div class="example-box">
-<h4>✅ Example: Jonah's Character</h4>
-<p><strong>Introduction:</strong> Name means "dove" (sacrificial animal), father is "Amittai" (faithfulness)</p>
-<p><strong>Characterization:</strong> Says he fears Yahweh but actions contradict (sleeps while pagans pray)</p>
-<p><strong>Arc:</strong> No change! Ch 2 prayer is self-focused; Ch 4 reveals he wanted Nineveh destroyed all along</p>
-<p><strong>Irony:</strong> Pagans (sailors, Ninevites) fear God and repent—prophet does neither</p>
-</div>
-<div class="tip-box">
-<strong>📚 Understanding Biblical Characterization Style</strong>
-<p style="margin: 0.75rem 0 0.5rem 0;">Biblical authors use <strong>"impressionism"</strong> not "realism":</p>
-<p style="margin: 0.75rem 0 0.5rem 0;"><strong>Minimal Detail Creates Maximum Impact:</strong></p>
-<ul style="margin-left: 1.5rem; line-height: 1.7;">
-<li><strong>Modern stories:</strong> Detailed descriptions, explained motives, psychological commentary</li>
-<li><strong>Biblical stories:</strong> Few details, unexplained motives, minimal commentary</li>
-<li><strong>Why?</strong> Your brain fills in gaps, making characters feel MORE real and memorable</li>
-</ul>
-<p style="margin: 1rem 0 0.5rem 0;"><strong>What Gets Included:</strong></p>
-<ul style="margin-left: 1.5rem; line-height: 1.7;">
-<li><strong>Physical appearance:</strong> ONLY when symbolic (Saul's height = pride; David's youth = humility)</li>
-<li><strong>Names:</strong> ALWAYS symbolic (Jacob = deceiver, Ruth = refreshment, Saul = "asked for")</li>
-<li><strong>Actions:</strong> Shown through consequences, rarely with moral commentary</li>
-<li><strong>Motives:</strong> Almost never explained directly—you infer from results</li>
-</ul>
-<p style="margin: 1rem 0 0.5rem 0;"><strong>Intentional Gaps:</strong></p>
-<p style="margin: 0 0 0.5rem 0;">Biblical authors deliberately withhold:</p>
-<ul style="margin-left: 1.5rem; line-height: 1.7;">
-<li>Why characters do things (Moses murders Egyptian—righteous anger or lost temper?)</li>
-<li>What they're thinking internally</li>
-<li>Explicit moral judgment on their actions</li>
-</ul>
-<p style="margin: 1rem 0 0;">
-          You're meant to puzzle over these gaps and judge characters by seeing consequences unfold. 
-          This mirrors real life—we're "daily surrounded by ambiguities, baffled by appearances, 
-          piecing fragments together by trial and error."
-        </p>
-</div>
-<div class="key-insight" style="margin-top: 1.5rem;">
-<h4>Reading Scenes in Plot Context</h4>
-<p style="margin-bottom: 1rem;"><strong>CRITICAL:</strong> A scene's meaning changes based on where it appears in the plot.</p>
-<div style="background: white; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
-<p style="margin: 0 0 0.75rem 0;"><strong>Example: Gideon's Fleece (Judges 6:36-40)</strong></p>
-<p style="margin: 0 0 0.5rem 0;"><strong>Isolated reading:</strong> "Test God with signs to discern His will"</p>
-<p style="margin: 0 0 0.5rem 0;"><strong>In plot context:</strong> Gideon ALREADY asked for 2 signs before this fleece test!</p>
-<p style="margin: 0 0 0.5rem 0;"><strong>Real conflict:</strong> "When will this guy stop being a coward and trust God?"</p>
-<p style="margin: 0;"><strong>Resolution:</strong> God uses him despite his fear—whittles army to 300 to prove the point</p>
-</div>
-<p style="margin-top: 1rem;"><strong>Layers of Plot to Consider:</strong></p>
-<ol style="margin-left: 1.5rem; line-height: 1.8;">
-<li><strong>Scene level:</strong> Individual episode (Gideon lays out fleece)</li>
-<li><strong>Character story level:</strong> Gideon's full narrative arc</li>
-<li><strong>Movement level:</strong> Period of the Judges—pattern of flawed leaders</li>
-<li><strong>Grand narrative level:</strong> Whole Bible story leading to Jesus</li>
-</ol>
-<p style="margin-top: 1rem; font-weight: 600;">
-          Always ask: How does this scene function in its larger plotline? Don't interpret scenes in isolation!
-        </p>
-</div>
-<!-- NEW: Best For Label -->
-<div class="resource-best-for">
-        Best for: Understanding how biblical authors develop characters through action and how plot unfolds in context
-      </div>
-</div></details>
-<!-- PHASE 4 -->
-<details class="phase-accordion theology-card animate-on-scroll" id="phase4"><summary class="phase-accordion-summary"><div class="phase-accordion-badge">4</div><div class="phase-accordion-titlewrap"><div class="phase-accordion-title">Theological &amp; Thematic Analysis</div><div class="phase-accordion-sub">What Is This Revealing About God?</div></div><div class="phase-accordion-caret">▾</div></summary><div class="phase-accordion-body">
-<!-- NEW: How to Use Box -->
-<div class="phase-usage">
-<strong>How to Use (Phase 4):</strong>
-<ul>
-<li><strong>When:</strong> After understanding character and plot (Phase 3).</li>
-<li><strong>Goal:</strong> Identify what the book reveals about God's character, purposes, and ways of working.</li>
-<li><strong>Avoid:</strong> Imposing systematic theology categories before listening to the text's own emphasis.</li>
-<li><strong>Then:</strong> Move to Phase 5 only after completing this entire phase.</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>1. Divine Activity</h4>
-<ul class="question-list">
-<li>What does God DO in this book?</li>
-<li>How does God reveal Himself? (Speech, action, through others?)</li>
-<li>What names/titles are used for God?</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>2. Divine Attributes</h4>
-<ul class="question-list">
-<li>What characteristics of God are emphasized?</li>
-<li>How does God relate to His people?</li>
-<li>What provokes God's response? (Faithfulness, rebellion, suffering?)</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>3. Divine Speech</h4>
-<ul class="question-list">
-<li>What does God say directly?</li>
-<li>Are there explicit theological statements?</li>
-<li>Promises made? Commands given?</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>4. Major Themes (Look for these clusters)</h4>
-<ul class="question-list">
-<li>Creation/New Creation</li>
-<li>Covenant (making, keeping, breaking, renewing)</li>
-<li>Kingdom/Kingship (human and divine)</li>
-<li>Temple/Presence of God</li>
-<li>Exile and Return</li>
-<li>Faith/Faithfulness</li>
-<li>Justice and Mercy</li>
-<li>Wisdom and Folly</li>
-<li>Life and Death</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>5. Theological Tension</h4>
-<ul class="question-list">
-<li>What problem about God or His ways does this book address?</li>
-<li>How does divine sovereignty interact with human agency?</li>
-<li>Justice vs. mercy tensions?</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>6. Redemptive-Historical Placement</h4>
-<ul class="question-list">
-<li>Where does this fit in the Creation → Fall → Redemption arc?</li>
-<li>What's the "salvation history" status? (Before/after exodus, exile, incarnation?)</li>
-<li>How does this advance God's redemptive plan?</li>
-</ul>
-</div>
-<div class="tip-box">
-<strong>🎯 Key Principle:</strong>
-        Every biblical book is ultimately about <em>God</em>. Even books that seem focused on human characters or events 
-        are revealing something about God's character, purposes, or ways of working in the world.
-      </div>
-<!-- NEW: Best For Label -->
-<div class="resource-best-for">
-        Best for: Identifying what the book reveals about God's character and His redemptive purposes
-      </div>
-</div></details>
-<!-- PHASE 5 -->
-<details class="phase-accordion theology-card animate-on-scroll" id="phase5"><summary class="phase-accordion-summary"><div class="phase-accordion-badge">5</div><div class="phase-accordion-titlewrap"><div class="phase-accordion-title">Intertextual Connections</div><div class="phase-accordion-sub">Biblical Authors Wrote Expecting You to Hear Echoes</div></div><div class="phase-accordion-caret">▾</div></summary><div class="phase-accordion-body">
-<!-- NEW: How to Use Box -->
-<div class="phase-usage">
-<strong>How to Use (Phase 5):</strong>
-<ul>
-<li><strong>When:</strong> After identifying theological themes (Phase 4).</li>
-<li><strong>Goal:</strong> Trace how this book engages with themes and storylines from other Scripture.</li>
-<li><strong>Avoid:</strong> Treating every similarity as intentional—look for sustained engagement, not one-off echoes.</li>
-<li><strong>Then:</strong> Move to Phase 6 only after completing this entire phase.</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>1. Within the Book</h4>
-<ul class="question-list">
-<li>Are earlier scenes referenced later?</li>
-<li>Do themes develop or transform?</li>
-<li>Call-backs to opening scenes?</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>2. Torah/Pentateuch Echoes</h4>
-<ul class="question-list">
-<li>Does language recall Genesis 1-3? (Creation, garden, exile themes)</li>
-<li>Exodus patterns? (Deliverance, wilderness, covenant)</li>
-<li>Levitical/priestly language?</li>
-<li>Deuteronomic themes? (Obedience → blessing; disobedience → curse)</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>3. Prophetic Connections</h4>
-<ul class="question-list">
-<li>Is there prophetic fulfillment language?</li>
-<li>"As it was written..." "This is what was spoken..."</li>
-<li>Modified quotations revealing new interpretation?</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>4. Typology</h4>
-<p style="margin-bottom: 0.5rem;"><em>Does this person/event point forward?</em></p>
-<ul class="question-list">
-<li>New Adam language?</li>
-<li>New Moses, David, Exodus patterns?</li>
-<li>Temple/tabernacle imagery?</li>
-</ul>
-</div>
-<div class="example-box">
-<h4>✅ Example: Jonah's Hyperlinks</h4>
-<p><strong>Genesis 10:</strong> "Nineveh, that great city"—only appears twice in entire Bible (here and Jonah)</p>
-<p><strong>Genesis 4:</strong> "Their evil has come up before me"—echoes Abel's blood, Sodom's outcry</p>
-<p><strong>Exodus 34:6-7:</strong> Jonah 4:2 quotes God's self-revelation to Moses word-for-word</p>
-<p><strong>Resistant prophets:</strong> Parallels Moses (Exod 3-4), Elijah (1 Kings 19), Jeremiah (Jer 1)</p>
-</div>
-<div class="tip-box">
-<strong>🔗 Remember:</strong>
-        Biblical authors assumed you knew the earlier Scriptures. They wrote expecting you to recognize quotations, 
-        allusions, and patterns. This is why reading the whole Bible matters—you start hearing the echoes.
-      </div>
-<div class="question-section" style="margin-top: 2rem;">
-<h4>5. Design Patterns Across Scripture</h4>
-<p style="margin-bottom: 1rem;">
-          Biblical authors create <strong>repeated patterns</strong> that weave through story after story, 
-          tying them together to emphasize key themes. When you notice these patterns, you'll see how 
-          different stories have been coordinated across the whole Bible.
-        </p>
-<div style="background: white; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
-<h5 style="color: var(--accent-rose); margin-bottom: 1rem;">Pattern 1: The Temptation Sequence (See → Desire → Take)</h5>
-<p style="margin-bottom: 0.75rem;"><strong>Core Pattern from Genesis 3:</strong></p>
-<ul style="margin-left: 1.5rem; line-height: 1.8;">
-<li><strong>Genesis 3:6:</strong> Eve <em>saw</em> the tree was good, <em>desired</em> to be wise, <em>took</em> and ate</li>
-<li><strong>Genesis 16:2-4:</strong> Abraham/Sarah <em>saw</em> their Egyptian slave, <em>took</em> her, did what was "good" in their eyes</li>
-<li><strong>Exodus 32:</strong> Aaron <em>sees</em> and <em>takes</em> gold to make golden calf</li>
-<li><strong>Joshua 7:21:</strong> Achan <em>saw</em> gold, <em>desired</em> it, <em>took</em> it for himself</li>
-<li><strong>1 Samuel 8-9:</strong> Israelites <em>see</em> Saul, <em>desire</em> him, <em>take</em> him as king</li>
-<li><strong>2 Samuel 11:</strong> David <em>sees</em> Bathsheba, <em>desires</em> her, <em>takes</em> her</li>
-</ul>
-<p style="margin-top: 1rem; padding: 1rem; background: #dcfce7; border-left: 4px solid #16a34a; border-radius: 6px;">
-<strong>Pattern Breaks:</strong> Jesus in Gethsemane says <em>"Not my desire but your desire be done"</em> (Luke 22:42). 
-            One person resisting temptation provides life for many—reversing the pattern where one person's temptation 
-            creates suffering for many.
+
+        <div class="nested-card animate-on-scroll">
+          <h3>Your Task: Learn Their Communication Style</h3>
+          <p>
+            Reading Scripture well means setting your agenda aside long enough to hear what the authors 
+            were actually saying in their context. Let them address issues their way before applying 
+            insights to your questions.
           </p>
-</div>
-<div style="background: white; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
-<h5 style="color: var(--accent-blue); margin-bottom: 1rem;">Pattern 2: Through Chaotic Waters to New Creation</h5>
-<p style="margin-bottom: 0.75rem;"><strong>God brings humanity through chaotic waters into ordered life:</strong></p>
-<ul style="margin-left: 1.5rem; line-height: 1.8;">
-<li><strong>Genesis 1:1-10:</strong> Dark chaotic waters → God separates them → dry land emerges → ordered creation</li>
-<li><strong>Genesis 7-8:</strong> Noah through flood waters → dry land → humanity 2.0</li>
-<li><strong>Exodus 14:</strong> Israel through Red Sea → dry land → God's people saved (Egypt destroyed)</li>
-<li><strong>Joshua 3-4:</strong> Israel through Jordan River → dry land → promised land</li>
-<li><strong>Isaiah 11:1-16:</strong> Prophet envisions new Exodus with new king leading through "waters" (nations)</li>
-</ul>
-<p style="margin-top: 1rem; padding: 1rem; background: #dbeafe; border-left: 4px solid #3b82f6; border-radius: 6px;">
-<strong>Pattern Fulfilled:</strong> Jesus' baptism (Mark 1:9-11)—goes into waters and back out, God announces 
-            he's the Son who will rescue world by going through death and out the other side. Christian baptism 
-            (Romans 6:1-4, 1 Peter 3:20-21) = participating in this ancient pattern.
+          
+          <div class="key-insight" style="margin-top: 1rem;">
+            <strong>You're Already Translating:</strong>
+            Your English Bible proves massive cultural work has been done—someone already bridged the language gap. 
+            You already recognize that ancient temple laws don't apply directly to you. This framework just makes 
+            that translation work systematic and conscious.
+          </div>
+        </div>
+
+        <div class="nested-card animate-on-scroll">
+          <h3>How Biblical Literature Works</h3>
+          <p><strong>Written for Meditation:</strong></p>
+          <ul>
+            <li>Gaps force engagement—you must think, ponder, make connections</li>
+            <li>Ambiguities spark discovery—different readings reveal new insights</li>
+            <li>Repetition builds understanding—you see more each time through</li>
+            <li>Bible interprets Bible—puzzles in one passage are solved by another</li>
+          </ul>
+          
+          <div class="tip-box" style="margin-top: 1rem;">
+            <strong>The Ideal Reader (Psalm 1):</strong>
+            Psalm 1 describes someone who "meditates day and night"—reading aloud slowly, 
+            talking about it with others, pondering connections over years. This is a lifetime commitment by design.
+          </div>
+        </div>
+
+        <div class="nested-card animate-on-scroll">
+          <h3>Everything Is Intentional</h3>
+          <p>
+            Every single thing in the biblical text is there for a reason. These are 
+            <strong>carefully crafted literary texts</strong>—like poetry or novels, not simple historical reports.
           </p>
-</div>
-<div style="background: white; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
-<h5 style="color: var(--accent-purple); margin-bottom: 1rem;">Pattern 3: City of Blood / Innocent Suffering</h5>
-<p style="margin-bottom: 0.75rem;"><strong>Humans build cities on violence → blood cries out → God responds:</strong></p>
-<ul style="margin-left: 1.5rem; line-height: 1.8;">
-<li><strong>Genesis 4:10:</strong> Abel's blood cries out from the ground</li>
-<li><strong>Genesis 6:13:</strong> Pre-flood violence—"the end has come before me"</li>
-<li><strong>Genesis 18:20-21:</strong> Sodom's "outcry is great, their sin is very grave"</li>
-<li><strong>Exodus 2:23:</strong> Israel's cry went up to God from slavery</li>
-<li><strong>Jonah 1:2:</strong> Nineveh's "evil has come up before me"</li>
-</ul>
-<p style="margin-top: 1rem; padding: 1rem; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 6px;">
-<strong>Common Thread:</strong> God sends a chosen one who suffers/intercedes → God shows mercy based 
-            on repentance. Jonah's twist: prophet doesn't WANT mercy shown, but God pursues it anyway.
+          <ul>
+            <li>Every phrase placement matters</li>
+            <li>Every word choice is deliberate</li>
+            <li>Every structural decision has purpose</li>
+            <li>Repeated words create thematic connections</li>
+          </ul>
+          
+          <p style="margin-top: 1rem; padding: 1rem; background: rgba(245,158,11,0.1); border-radius: 8px;">
+            <strong>⚠️ Warning:</strong> Over-familiarity acts like a "sleep drug"—you stop reading carefully. 
+            Knowing plot summaries from children's media is not the same as understanding carefully crafted literature.
           </p>
-</div>
-<p style="margin-top: 1.5rem; font-size: 1.05rem;">
-<strong>How to Find Design Patterns:</strong> Watch for repeated sequences of events, shared vocabulary, 
-          and parallel structures across different stories. The repetition builds anticipation—perhaps someone 
-          will come and break or fulfill the pattern completely.
+        </div>
+      </div>
+    </section>
+
+    <!-- PHASE ACCORDIONS -->
+    
+    <!-- PHASE 1 -->
+    <details class="phase-accordion animate-on-scroll" id="phase1">
+      <summary class="phase-accordion-summary">
+        <div class="phase-accordion-badge">1</div>
+        <div class="phase-accordion-text">
+          <div class="phase-accordion-title">The Big Picture</div>
+          <div class="phase-accordion-sub">First Complete Read</div>
+        </div>
+        <div class="phase-accordion-caret">▾</div>
+      </summary>
+      
+      <div class="phase-accordion-body">
+        <div class="phase-usage">
+          <strong>How to Use (Phase 1):</strong>
+          <ul>
+            <li><strong>When:</strong> Before your first study session.</li>
+            <li><strong>Goal:</strong> Experience the book as a unified narrative/argument, not isolated verses.</li>
+            <li><strong>Avoid:</strong> Stopping to analyze every detail—save that for later phases.</li>
+            <li><strong>Then:</strong> Move to Phase 2 only after completing this entire phase.</li>
+          </ul>
+        </div>
+        
+        <p style="font-size: 1.05rem; color: var(--muted); margin-bottom: 2rem;">
+          Read the entire book in one sitting if possible (or the smallest natural unit for longer books). 
+          Don't stop to analyze—just read and notice.
         </p>
-</div>
-<!-- NEW: Best For Label -->
-<div class="resource-best-for">
-        Best for: Understanding how this book contributes to the Bible's unified storyline and recurring patterns
+        
+        <div class="question-section">
+          <h4>1. Genre & Form</h4>
+          <ul class="question-list">
+            <li>What type of writing is this? (Narrative, law, prophecy, wisdom, gospel, letter, apocalyptic?)</li>
+            <li>How does the author open the book? (Genealogy, vision, greeting, historical setting?)</li>
+            <li>What's the tone? (Formal, intimate, urgent, celebratory, mournful?)</li>
+          </ul>
+        </div>
+        
+        <div class="question-section">
+          <h4>2. Structure & Movement</h4>
+          <ul class="question-list">
+            <li>Where are the natural breaks? (New locations, time markers, topic shifts, formulas like "After this...")</li>
+            <li>Does anything repeat? (Phrases, events, patterns, refrains)</li>
+            <li>Can you identify a beginning, middle, and end?</li>
+          </ul>
+        </div>
+        
+        <div class="question-section">
+          <h4>3. Key Actors & Relationships</h4>
+          <ul class="question-list">
+            <li>Who are the main characters/groups?</li>
+            <li>What do they want? What's at stake?</li>
+            <li>Who's in conflict with whom?</li>
+          </ul>
+        </div>
+        
+        <div class="question-section">
+          <h4>4. Central Tension</h4>
+          <ul class="question-list">
+            <li>What's the core problem or question the book addresses?</li>
+            <li>What threatens to go wrong? What needs resolution?</li>
+          </ul>
+        </div>
+        
+        <div class="question-section">
+          <h4>5. Conclusion</h4>
+          <ul class="question-list">
+            <li>How does it end? Problem solved? Tension resolved? Open-ended?</li>
+            <li>What's the last thing the author wants you thinking about?</li>
+          </ul>
+        </div>
+        
+        <div class="example-box">
+          <h4>✅ Example: Jonah</h4>
+          <p><strong>Genre:</strong> Prophetic narrative (story ABOUT a prophet, not oracle collection)</p>
+          <p><strong>Structure:</strong> 4 chapters—Ch 1 & 3 parallel (divine call), Ch 2 & 4 parallel (prayers)</p>
+          <p><strong>Central Tension:</strong> Prophet refuses to deliver God's message to enemies</p>
+          <p><strong>Conclusion:</strong> Ends with God's unanswered question—reader must respond</p>
+        </div>
+
+        <div class="resource-best-for">
+          Best for: Getting oriented to the book's tone, movement, and major themes before detailed analysis
+        </div>
       </div>
-</div></details>
-<!-- PHASE 6 -->
-<details class="phase-accordion theology-card animate-on-scroll" id="phase6"><summary class="phase-accordion-summary"><div class="phase-accordion-badge">6</div><div class="phase-accordion-titlewrap"><div class="phase-accordion-title">Literary Artistry</div><div class="phase-accordion-sub">Hebrew Authors Were Master Craftspeople</div></div><div class="phase-accordion-caret">▾</div></summary><div class="phase-accordion-body">
-<!-- NEW: How to Use Box -->
-<div class="phase-usage">
-<strong>How to Use (Phase 6):</strong>
-<ul>
-<li><strong>When:</strong> After tracing canonical connections (Phase 5).</li>
-<li><strong>Goal:</strong> Appreciate the literary techniques and artistic craft that shape meaning.</li>
-<li><strong>Avoid:</strong> Treating literary artistry as mere decoration—it's integral to the message.</li>
-<li><strong>Then:</strong> Move to Phase 7 only after completing this entire phase.</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>1. Parallelism (especially in poetry/prophecy)</h4>
-<ul class="question-list">
-<li><strong>Synonymous:</strong> Same idea, different words</li>
-<li><strong>Antithetic:</strong> Contrasting ideas</li>
-<li><strong>Synthetic:</strong> Second line completes first</li>
-<li><strong>Climactic:</strong> Building intensity</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>2. Wordplay</h4>
-<p style="margin-bottom: 0.5rem;"><em>(Even without Hebrew, translations often footnote these)</em></p>
-<ul class="question-list">
-<li>Names matching character's role</li>
-<li>Puns or double meanings</li>
-<li>Sound-alike words</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>3. Imagery &amp; Metaphor</h4>
-<ul class="question-list">
-<li>Dominant images? (Shepherd, vine, light, water)</li>
-<li>Extended metaphors?</li>
-<li>Symbol systems?</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>4. Rhetorical Questions</h4>
-<ul class="question-list">
-<li>Questions demanding reflection?</li>
-<li>Unanswerable questions revealing mystery?</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>5. Direct Address</h4>
-<ul class="question-list">
-<li>Who is being addressed?</li>
-<li>Shifts from third to second person?</li>
-</ul>
-</div>
-<div class="example-box">
-<h4>✅ Example: Jonah's Artistry</h4>
-<p><strong>Wordplay:</strong> Hebrew "yarad" (down) vs. "nadar" (vow)—same letters reversed! Jonah descends while sailors ascend in faith</p>
-<p><strong>Repetition:</strong> "Great" appears 14x—great city, great wind, great storm, great fish, great fear, great anger</p>
-<p><strong>Rhetorical climax:</strong> Book ends with God's unanswered question—"Should I not have compassion?"</p>
-</div>
-<!-- NEW: Best For Label -->
-<div class="resource-best-for">
-        Best for: Appreciating the literary craft that shapes meaning and emotional impact
+    </details>
+
+    <!-- PHASE 2 -->
+    <details class="phase-accordion animate-on-scroll" id="phase2">
+      <summary class="phase-accordion-summary">
+        <div class="phase-accordion-badge">2</div>
+        <div class="phase-accordion-text">
+          <div class="phase-accordion-title">Structural Analysis</div>
+          <div class="phase-accordion-sub">Second Read—Mark Patterns</div>
+        </div>
+        <div class="phase-accordion-caret">▾</div>
+      </summary>
+      
+      <div class="phase-accordion-body">
+        <div class="phase-usage">
+          <strong>How to Use (Phase 2):</strong>
+          <ul>
+            <li><strong>When:</strong> After your first large-unit reading (Phase 1).</li>
+            <li><strong>Goal:</strong> Identify what the author emphasizes through repetition—words, themes, character types, settings.</li>
+            <li><strong>Avoid:</strong> Jumping to theological conclusions or application before you can clearly articulate what repeats.</li>
+            <li><strong>Then:</strong> Move to Phase 3 only after completing this entire phase.</li>
+          </ul>
+        </div>
+        
+        <p style="font-size: 1.05rem; color: var(--muted); margin-bottom: 2rem;">
+          Now read more slowly, marking structural signals. The author is SHOUTING when they repeat things.
+        </p>
+        
+        <div class="question-section">
+          <h4>1. Geographical Movement</h4>
+          <ul class="question-list">
+            <li>Does the action move through locations? (Exodus: Egypt → wilderness → Sinai)</li>
+            <li>Are locations symbolic? (Jerusalem, Babylon, "up to Jerusalem," wilderness)</li>
+          </ul>
+        </div>
+        
+        <div class="question-section">
+          <h4>2. Temporal Markers</h4>
+          <ul class="question-list">
+            <li>Time phrases? ("In those days," "After this," "The third day")</li>
+            <li>Chronological vs. topical arrangement?</li>
+            <li>Flashbacks or future predictions?</li>
+          </ul>
+        </div>
+        
+        <div class="question-section">
+          <h4>3. Formulaic Phrases (Biblical "Chapter Headings")</h4>
+          <ul class="question-list">
+            <li>"These are the generations of..." (Genesis)</li>
+            <li>"The word of the LORD came to..." (Prophets)</li>
+            <li>"After this I saw..." (Revelation)</li>
+            <li>"Concerning..." (1 Corinthians)</li>
+          </ul>
+        </div>
+        
+        <div class="question-section">
+          <h4>4. Verbal Repetition</h4>
+          <ul class="question-list">
+            <li>Key words appearing multiple times? (Count them!)</li>
+            <li>Phrases that bookend sections?</li>
+            <li>Catchwords linking episodes?</li>
+          </ul>
+        </div>
+        
+        <div class="question-section">
+          <h4>5. Structural Repetition</h4>
+          <ul class="question-list">
+            <li>Similar scenes? (Betrothal scenes, call narratives, commissioning)</li>
+            <li>Recurring cycles? (Judges: rebellion → oppression → deliverance)</li>
+            <li>Numbered sequences? ("Seven..." "Twelve...")</li>
+          </ul>
+        </div>
+        
+        <div class="tip-box">
+          <strong>💡 Pro Tip:</strong>
+          Use a literal translation (like NASB or ESV) for this phase—they preserve repetition better than dynamic equivalents. 
+          Better yet, use an interlinear to see which English words translate the same Hebrew/Greek root.
+        </div>
+
+        <div class="resource-best-for">
+          Best for: Discovering the author's priorities through their word choices and recurring motifs
+        </div>
       </div>
-</div></details>
-<!-- PHASE 7 -->
-<details class="phase-accordion theology-card animate-on-scroll" id="phase7"><summary class="phase-accordion-summary"><div class="phase-accordion-badge">7</div><div class="phase-accordion-titlewrap"><div class="phase-accordion-title">Contextual Awareness</div><div class="phase-accordion-sub">Even Without Tools, You Can Infer Context</div></div><div class="phase-accordion-caret">▾</div></summary><div class="phase-accordion-body">
-<!-- NEW: How to Use Box -->
-<div class="phase-usage">
-<strong>How to Use (Phase 7):</strong>
-<ul>
-<li><strong>When:</strong> After all previous phases—especially after you can articulate the text's flow yourself.</li>
-<li><strong>Goal:</strong> Understand ancient customs, political realities, and cultural assumptions that clarify the text.</li>
-<li><strong>Avoid:</strong> Using historical background to override what the text clearly says—context clarifies, it doesn't contradict.</li>
-<li><strong>Then:</strong> Return to the text with fresh eyes and refined questions.</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>1. Explicit Historical Markers</h4>
-<ul class="question-list">
-<li>Dating formulas ("In the ___ year of King...")</li>
-<li>References to other known events</li>
-<li>Enemy nations mentioned</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>2. Social World Clues</h4>
-<ul class="question-list">
-<li>Agriculture references (hint at agrarian society)</li>
-<li>Urban vs. rural settings</li>
-<li>Governance structures (tribal, monarchic, imperial)</li>
-<li>Religious institutions (temple standing or destroyed?)</li>
-</ul>
-</div>
-<div class="question-section">
-<h4>3. Audience Assumptions</h4>
-<ul class="question-list">
-<li>What does the author assume readers know?</li>
-<li>Cultural practices mentioned without explanation?</li>
-<li>"As is the custom..." type references</li>
-</ul>
-</div>
-<div class="tip-box">
-<strong>📚 After Phase 7:</strong>
-        NOW you're ready to consult historical-cultural resources. You've done the observational work first, 
-        so you know what questions to ask and what gaps to fill.
+    </details>
+
+    <!-- PHASE 3 -->
+    <details class="phase-accordion animate-on-scroll" id="phase3">
+      <summary class="phase-accordion-summary">
+        <div class="phase-accordion-badge">3</div>
+        <div class="phase-accordion-text">
+          <div class="phase-accordion-title">Character & Plot Analysis</div>
+          <div class="phase-accordion-sub">Third Read—Focus on Actors</div>
+        </div>
+        <div class="phase-accordion-caret">▾</div>
+      </summary>
+      
+      <div class="phase-accordion-body">
+        <div class="phase-usage">
+          <strong>How to Use (Phase 3):</strong>
+          <ul>
+            <li><strong>When:</strong> After tracking structural patterns (Phase 2).</li>
+            <li><strong>Goal:</strong> Understand how characters are developed and how plot unfolds through their actions and relationships.</li>
+            <li><strong>Avoid:</strong> Moralizing or allegorizing before understanding the author's characterization technique.</li>
+            <li><strong>Then:</strong> Move to Phase 4 only after completing this entire phase.</li>
+          </ul>
+        </div>
+        
+        <div class="question-section">
+          <h4>1. Character Introduction</h4>
+          <ul class="question-list">
+            <li>How is each character first presented?</li>
+            <li>What do we learn through dialogue vs. narrator description?</li>
+            <li>Name meanings or etymologies mentioned?</li>
+          </ul>
+        </div>
+        
+        <div class="question-section">
+          <h4>2. Characterization Techniques</h4>
+          <ul class="question-list">
+            <li><strong>Direct statements:</strong> "David was a man after God's own heart"</li>
+            <li><strong>Actions:</strong> What do they DO?</li>
+            <li><strong>Speech:</strong> What and how do they speak?</li>
+            <li><strong>Contrasts:</strong> Who are they compared/contrasted with?</li>
+          </ul>
+        </div>
+        
+        <div class="question-section">
+          <h4>3. Character Arc</h4>
+          <ul class="question-list">
+            <li>Do characters change? How?</li>
+            <li>What tests do they face?</li>
+            <li>What do they learn (or fail to learn)?</li>
+          </ul>
+        </div>
+        
+        <div class="tip-box">
+          <strong>📚 Understanding Biblical Characterization Style</strong>
+          <p style="margin: 0.75rem 0 0.5rem 0;">Biblical authors use <strong>"impressionism"</strong> not "realism":</p>
+          
+          <ul style="margin-left: 1.5rem; line-height: 1.7;">
+            <li><strong>Modern stories:</strong> Detailed descriptions, explained motives, psychological commentary</li>
+            <li><strong>Biblical stories:</strong> Few details, unexplained motives, minimal commentary</li>
+            <li><strong>Why?</strong> Your brain fills in gaps, making characters feel MORE real and memorable</li>
+          </ul>
+        </div>
+
+        <div class="resource-best-for">
+          Best for: Understanding how biblical authors develop characters through action and how plot unfolds in context
+        </div>
       </div>
-<!-- NEW: Best For Label -->
-<div class="resource-best-for">
-        Best for: Filling in cultural gaps after you've understood the author's literary strategy
+    </details>
+
+    <!-- PHASE 4 -->
+    <details class="phase-accordion animate-on-scroll" id="phase4">
+      <summary class="phase-accordion-summary">
+        <div class="phase-accordion-badge">4</div>
+        <div class="phase-accordion-text">
+          <div class="phase-accordion-title">Theological & Thematic Analysis</div>
+          <div class="phase-accordion-sub">What Is This Revealing About God?</div>
+        </div>
+        <div class="phase-accordion-caret">▾</div>
+      </summary>
+      
+      <div class="phase-accordion-body">
+        <div class="phase-usage">
+          <strong>How to Use (Phase 4):</strong>
+          <ul>
+            <li><strong>When:</strong> After understanding character and plot (Phase 3).</li>
+            <li><strong>Goal:</strong> Identify what the book reveals about God's character, purposes, and ways of working.</li>
+            <li><strong>Avoid:</strong> Imposing systematic theology categories before listening to the text's own emphasis.</li>
+            <li><strong>Then:</strong> Move to Phase 5 only after completing this entire phase.</li>
+          </ul>
+        </div>
+        
+        <div class="question-section">
+          <h4>1. Divine Activity</h4>
+          <ul class="question-list">
+            <li>What does God DO in this book?</li>
+            <li>How does God reveal Himself? (Speech, action, through others?)</li>
+            <li>What names/titles are used for God?</li>
+          </ul>
+        </div>
+        
+        <div class="question-section">
+          <h4>2. Divine Attributes</h4>
+          <ul class="question-list">
+            <li>What characteristics of God are emphasized?</li>
+            <li>How does God relate to His people?</li>
+            <li>What provokes God's response? (Faithfulness, rebellion, suffering?)</li>
+          </ul>
+        </div>
+        
+        <div class="question-section">
+          <h4>3. Major Themes</h4>
+          <ul class="question-list">
+            <li>Creation/New Creation</li>
+            <li>Covenant (making, keeping, breaking, renewing)</li>
+            <li>Kingdom/Kingship (human and divine)</li>
+            <li>Temple/Presence of God</li>
+            <li>Exile and Return</li>
+            <li>Faith/Faithfulness</li>
+            <li>Justice and Mercy</li>
+          </ul>
+        </div>
+        
+        <div class="tip-box">
+          <strong>🎯 Key Principle:</strong>
+          Every biblical book is ultimately about <em>God</em>. Even books that seem focused on human characters or events 
+          are revealing something about God's character, purposes, or ways of working in the world.
+        </div>
+
+        <div class="resource-best-for">
+          Best for: Identifying what the book reveals about God's character and His redemptive purposes
+        </div>
       </div>
-</div></details>
-<!-- NEW: Methodology Connection Block -->
-<div class="methodology-connection">
-<div aria-hidden="true" class="icon">📐</div>
-<div class="content">
-<h3>How this framework fits LLTSE</h3>
-<p>
+    </details>
+
+    <!-- PHASE 5 -->
+    <details class="phase-accordion animate-on-scroll" id="phase5">
+      <summary class="phase-accordion-summary">
+        <div class="phase-accordion-badge">5</div>
+        <div class="phase-accordion-text">
+          <div class="phase-accordion-title">Intertextual Connections</div>
+          <div class="phase-accordion-sub">Biblical Authors Expected You to Hear Echoes</div>
+        </div>
+        <div class="phase-accordion-caret">▾</div>
+      </summary>
+      
+      <div class="phase-accordion-body">
+        <div class="phase-usage">
+          <strong>How to Use (Phase 5):</strong>
+          <ul>
+            <li><strong>When:</strong> After identifying theological themes (Phase 4).</li>
+            <li><strong>Goal:</strong> Trace how this book engages with themes and storylines from other Scripture.</li>
+            <li><strong>Avoid:</strong> Treating every similarity as intentional—look for sustained engagement, not one-off echoes.</li>
+            <li><strong>Then:</strong> Move to Phase 6 only after completing this entire phase.</li>
+          </ul>
+        </div>
+        
+        <div class="question-section">
+          <h4>1. Within the Book</h4>
+          <ul class="question-list">
+            <li>Are earlier scenes referenced later?</li>
+            <li>Do themes develop or transform?</li>
+            <li>Call-backs to opening scenes?</li>
+          </ul>
+        </div>
+        
+        <div class="question-section">
+          <h4>2. Torah/Pentateuch Echoes</h4>
+          <ul class="question-list">
+            <li>Does language recall Genesis 1-3? (Creation, garden, exile themes)</li>
+            <li>Exodus patterns? (Deliverance, wilderness, covenant)</li>
+            <li>Levitical/priestly language?</li>
+            <li>Deuteronomic themes? (Obedience → blessing; disobedience → curse)</li>
+          </ul>
+        </div>
+        
+        <div class="question-section">
+          <h4>3. Typology</h4>
+          <ul class="question-list">
+            <li>New Adam language?</li>
+            <li>New Moses, David, Exodus patterns?</li>
+            <li>Temple/tabernacle imagery?</li>
+          </ul>
+        </div>
+        
+        <div class="tip-box">
+          <strong>🔗 Remember:</strong>
+          Biblical authors assumed you knew the earlier Scriptures. They wrote expecting you to recognize quotations, 
+          allusions, and patterns. This is why reading the whole Bible matters—you start hearing the echoes.
+        </div>
+
+        <div class="resource-best-for">
+          Best for: Understanding how this book contributes to the Bible's unified storyline and recurring patterns
+        </div>
+      </div>
+    </details>
+
+    <!-- PHASE 6 -->
+    <details class="phase-accordion animate-on-scroll" id="phase6">
+      <summary class="phase-accordion-summary">
+        <div class="phase-accordion-badge">6</div>
+        <div class="phase-accordion-text">
+          <div class="phase-accordion-title">Literary Artistry</div>
+          <div class="phase-accordion-sub">Hebrew Authors Were Master Craftspeople</div>
+        </div>
+        <div class="phase-accordion-caret">▾</div>
+      </summary>
+      
+      <div class="phase-accordion-body">
+        <div class="phase-usage">
+          <strong>How to Use (Phase 6):</strong>
+          <ul>
+            <li><strong>When:</strong> After tracing canonical connections (Phase 5).</li>
+            <li><strong>Goal:</strong> Appreciate the literary techniques and artistic craft that shape meaning.</li>
+            <li><strong>Avoid:</strong> Treating literary artistry as mere decoration—it's integral to the message.</li>
+            <li><strong>Then:</strong> Move to Phase 7 only after completing this entire phase.</li>
+          </ul>
+        </div>
+        
+        <div class="question-section">
+          <h4>1. Parallelism (especially in poetry/prophecy)</h4>
+          <ul class="question-list">
+            <li><strong>Synonymous:</strong> Same idea, different words</li>
+            <li><strong>Antithetic:</strong> Contrasting ideas</li>
+            <li><strong>Synthetic:</strong> Second line completes first</li>
+            <li><strong>Climactic:</strong> Building intensity</li>
+          </ul>
+        </div>
+        
+        <div class="question-section">
+          <h4>2. Wordplay</h4>
+          <ul class="question-list">
+            <li>Names matching character's role</li>
+            <li>Puns or double meanings</li>
+            <li>Sound-alike words</li>
+          </ul>
+        </div>
+        
+        <div class="question-section">
+          <h4>3. Imagery & Metaphor</h4>
+          <ul class="question-list">
+            <li>Dominant images? (Shepherd, vine, light, water)</li>
+            <li>Extended metaphors?</li>
+            <li>Symbol systems?</li>
+          </ul>
+        </div>
+
+        <div class="resource-best-for">
+          Best for: Appreciating the literary craft that shapes meaning and emotional impact
+        </div>
+      </div>
+    </details>
+
+    <!-- PHASE 7 -->
+    <details class="phase-accordion animate-on-scroll" id="phase7">
+      <summary class="phase-accordion-summary">
+        <div class="phase-accordion-badge">7</div>
+        <div class="phase-accordion-text">
+          <div class="phase-accordion-title">Contextual Awareness</div>
+          <div class="phase-accordion-sub">Even Without Tools, You Can Infer Context</div>
+        </div>
+        <div class="phase-accordion-caret">▾</div>
+      </summary>
+      
+      <div class="phase-accordion-body">
+        <div class="phase-usage">
+          <strong>How to Use (Phase 7):</strong>
+          <ul>
+            <li><strong>When:</strong> After all previous phases—especially after you can articulate the text's flow yourself.</li>
+            <li><strong>Goal:</strong> Understand ancient customs, political realities, and cultural assumptions that clarify the text.</li>
+            <li><strong>Avoid:</strong> Using historical background to override what the text clearly says—context clarifies, it doesn't contradict.</li>
+            <li><strong>Then:</strong> Return to the text with fresh eyes and refined questions.</li>
+          </ul>
+        </div>
+        
+        <div class="question-section">
+          <h4>1. Explicit Historical Markers</h4>
+          <ul class="question-list">
+            <li>Dating formulas ("In the ___ year of King...")</li>
+            <li>References to other known events</li>
+            <li>Enemy nations mentioned</li>
+          </ul>
+        </div>
+        
+        <div class="question-section">
+          <h4>2. Social World Clues</h4>
+          <ul class="question-list">
+            <li>Agriculture references (hint at agrarian society)</li>
+            <li>Urban vs. rural settings</li>
+            <li>Governance structures (tribal, monarchic, imperial)</li>
+            <li>Religious institutions (temple standing or destroyed?)</li>
+          </ul>
+        </div>
+        
+        <div class="tip-box">
+          <strong>📚 After Phase 7:</strong>
+          NOW you're ready to consult historical-cultural resources. You've done the observational work first, 
+          so you know what questions to ask and what gaps to fill.
+        </div>
+
+        <div class="resource-best-for">
+          Best for: Filling in cultural gaps after you've understood the author's literary strategy
+        </div>
+      </div>
+    </details>
+
+    <!-- METHODOLOGY CONNECTION -->
+    <div class="methodology-connection animate-on-scroll">
+      <div class="icon" aria-hidden="true">📐</div>
+      <div class="content">
+        <h3>How this framework fits LLTSE</h3>
+        <p>
           The First-Read Framework is the "front door" of LLTSE: read in large units, track repetition,
           and summarize the author's flow before consulting tools. This method trains readers to hear Scripture's voice before adding interpretive layers.
         </p>
-<a href="/studies/methodology/lltse-orientation-methodology.html">Learn about LLTSE →</a>
-</div>
-</div>
-<!-- CHECKLIST -->
-<div class="theology-card animate-on-scroll content-section" id="summary-your-first-read-checklist">
-<h2>Summary: Your First-Read Checklist</h2>
-<p style="margin-bottom: 1.5rem;">After working through these phases, you should be able to answer:</p>
-<ul class="checklist">
-<li><strong>STRUCTURE:</strong> How is this book organized? What are the major sections? What structural patterns repeat?</li>
-<li><strong>PLOT:</strong> What's the central conflict/tension? How does it develop? How is it resolved (or not)?</li>
-<li><strong>CHARACTERS:</strong> Who are the main actors? How do they develop? What do their actions/words reveal?</li>
-<li><strong>THEOLOGY:</strong> What does this reveal about God? What's the major theological contribution? How does this fit in redemptive history?</li>
-<li><strong>ARTISTRY:</strong> What literary techniques stand out? Where is the craftsmanship most evident? What patterns create meaning?</li>
-<li><strong>CONNECTION:</strong> What echoes do I hear from earlier Scripture? How does this point forward? What themes connect across the canon?</li>
-</ul>
-</div>
-<!-- GENRE STRATEGIES -->
-<div class="theology-card animate-on-scroll content-section" id="reading-strategies-by-genre"><h2>Reading Strategies by Genre</h2><p style="margin-bottom: 1.5rem;">Adjust your focus based on what you're reading:</p><div class="nested-grid"><div class="nested-card animate-on-scroll"><div class="genre-card">
-<h4>📖 Narrative Books (Genesis, 1-2 Samuel, Gospels, Acts)</h4>
-<ul style="margin-left: 1.5rem; line-height: 1.8;">
-<li>Track characters through the story</li>
-<li>Note dialogue carefully (what + how it's said)</li>
-<li>Watch for narrator commentary</li>
-<li>Observe gaps and silences</li>
-</ul>
-</div></div><div class="nested-card animate-on-scroll"><div class="genre-card">
-<h4>📣 Prophetic Books (Isaiah, Jeremiah, Amos)</h4>
-<ul style="margin-left: 1.5rem; line-height: 1.8;">
-<li>Identify oracles (units of speech)</li>
-<li>Look for vision reports</li>
-<li>Note symbolic actions</li>
-<li>Watch for prose vs. poetry shifts</li>
-</ul>
-</div></div><div class="nested-card animate-on-scroll"><div class="genre-card">
-<h4>💭 Wisdom/Poetry (Psalms, Proverbs, Job)</h4>
-<ul style="margin-left: 1.5rem; line-height: 1.8;">
-<li>Read aloud (rhythm matters!)</li>
-<li>Notice parallelism types</li>
-<li>Track metaphor development</li>
-<li>Look for acrostic structures (alphabetic poems)</li>
-</ul>
-</div></div><div class="nested-card animate-on-scroll"><div class="genre-card">
-<h4>🎭 Parables of Jesus (Gospels)</h4>
-<p style="margin-bottom: 0.75rem;"><strong>Three Functions:</strong></p>
-<ul style="margin-left: 1.5rem; line-height: 1.8;">
-<li><strong>Surprise:</strong> Kingdom doesn't match expectations (mustard seed = tiny → huge; yeast = hidden → transforms everything)</li>
-<li><strong>Inversion:</strong> Upside-down values—least important people are most important to God (workers paid equally, prodigal welcomed home)</li>
-<li><strong>Decision:</strong> Forces choice about Jesus—reject, ignore, or follow? (vineyard managers, wedding feast)</li>
-</ul>
-<div style="background: rgba(255,255,255,0.7); padding: 1rem; border-radius: 6px; margin-top: 1rem;">
-<strong>🔑 Key Insight:</strong> Parables both <strong>REVEAL</strong> truth to the open-minded 
-          and <strong>CONCEAL</strong> from opponents (buying Jesus time). Jesus didn't tell parables to make 
-          everything clear—he told them to provoke imagination and invite people to see God's work from a new perspective.
+        <a href="/studies/methodology/lltse-orientation-methodology.html">Learn about LLTSE →</a>
+      </div>
+    </div>
+
+    <!-- GENRE STRATEGIES -->
+    <section class="theology-card animate-on-scroll" id="genre-strategies">
+      <h2>Reading Strategies by Genre</h2>
+      <p style="margin-bottom: 1.5rem;">Adjust your focus based on what you're reading:</p>
+
+      <div class="nested-grid">
+        <div class="nested-card animate-on-scroll">
+          <div class="genre-card">
+            <h4>📖 Narrative Books</h4>
+            <ul style="margin-left: 1.5rem; line-height: 1.8;">
+              <li>Track characters through the story</li>
+              <li>Note dialogue carefully</li>
+              <li>Watch for narrator commentary</li>
+              <li>Observe gaps and silences</li>
+            </ul>
+          </div>
         </div>
-</div></div><div class="nested-card animate-on-scroll"><div class="genre-card">
-<h4>🌌 Apocalyptic Literature (Daniel, Revelation)</h4>
-<p style="margin-bottom: 0.75rem;"><strong>"Apocalypse" = "Unveil/Reveal" (NOT "end times")</strong></p>
-<ul style="margin-left: 1.5rem; line-height: 1.8;">
-<li><strong>Purpose:</strong> Give heavenly perspective on earthly circumstances</li>
-<li><strong>Style:</strong> Poetic, imaginative, packed with symbolism from Genesis onward</li>
-<li><strong>Key symbols:</strong>
-<ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
-<li>Chaotic sea = danger, death, cosmic disorder (Gen 1:1-2)</li>
-<li>Dry land = ordered, safe place where humans rule (Gen 1:9-10)</li>
-<li>Beasts = violent kingdoms/powers (Daniel 7:17-18)</li>
-<li>Dragon = spiritual power energizing earthly empires</li>
-</ul>
-</li>
-<li><strong>Cycles of judgment:</strong> Connect flood, plagues, exile—creation reverting to chaos, then God bringing new creation</li>
-</ul>
-<div style="background: rgba(255,255,255,0.7); padding: 1rem; border-radius: 6px; margin-top: 1rem;">
-<strong>🔑 Reading Strategy:</strong> Trace images through biblical story (sea → Noah → Exodus → Jonah → Jesus → Revelation). 
-          Authors assume you know design patterns from Genesis onward. Apocalyptic is about God pulling back the curtain to show 
-          what's REALLY happening behind earthly events.
+
+        <div class="nested-card animate-on-scroll">
+          <div class="genre-card">
+            <h4>📣 Prophetic Books</h4>
+            <ul style="margin-left: 1.5rem; line-height: 1.8;">
+              <li>Identify oracles (units of speech)</li>
+              <li>Look for vision reports</li>
+              <li>Note symbolic actions</li>
+              <li>Watch for prose vs. poetry shifts</li>
+            </ul>
+          </div>
         </div>
-</div></div><div class="nested-card animate-on-scroll"><div class="genre-card">
-<h4>✉️ Letters (Romans, Philippians, James)</h4>
-<ul style="margin-left: 1.5rem; line-height: 1.8;">
-<li>Identify: sender, recipients, occasion</li>
-<li>Map the logical flow of argument</li>
-<li>Note "therefore" and "but" transitions</li>
-<li>Watch for quotations (often introduced)</li>
-</ul>
-</div></div><div class="nested-card animate-on-scroll"><div class="genre-card">
-<h4>⚖️ Law (Leviticus, Deuteronomy)</h4>
-<ul style="margin-left: 1.5rem; line-height: 1.8;">
-<li>Categorize: moral, civil, ceremonial</li>
-<li>Look for theological rationales ("for I am holy")</li>
-<li>Note case law patterns</li>
-<li>Watch for covenant structure</li>
-</ul>
-</div></div></div></div>
-<!-- TRAINING PROGRAM -->
-<div class="theology-card animate-on-scroll content-section" id="training-your-observation-muscles"><h2>Training Your Observation Muscles</h2><p style="margin-bottom: 1.5rem;">Practice makes permanent. Here's an 8-week training progression:</p><div class="nested-grid"><div class="nested-card animate-on-scroll"><div class="training-card">
-<h4>Week 1-2: Short Narratives</h4>
-<p><strong>Books:</strong> Ruth, Esther, Jonah</p>
-<ul style="margin-left: 1.25rem; line-height: 1.7; margin-top: 0.5rem;">
-<li>Complete all 7 phases</li>
-<li>Write out observations</li>
-<li>Compare with commentary after</li>
-</ul>
-</div></div><div class="nested-card animate-on-scroll"><div class="training-card">
-<h4>Week 3-4: Prophetic Books</h4>
-<p><strong>Books:</strong> Amos, Haggai, Malachi</p>
-<ul style="margin-left: 1.25rem; line-height: 1.7; margin-top: 0.5rem;">
-<li>Focus on oracle structure</li>
-<li>Track verbal repetitions</li>
-<li>Map theological themes</li>
-</ul>
-</div></div><div class="nested-card animate-on-scroll"><div class="training-card">
-<h4>Week 5-6: Wisdom Literature</h4>
-<p><strong>Books:</strong> Proverbs 1-9, Ecclesiastes</p>
-<ul style="margin-left: 1.25rem; line-height: 1.7; margin-top: 0.5rem;">
-<li>Identify parallelism types</li>
-<li>Track extended metaphors</li>
-<li>Note wisdom vs. folly contrasts</li>
-</ul>
-</div></div><div class="nested-card animate-on-scroll"><div class="training-card">
-<h4>Week 7-8: NT Letters</h4>
-<p><strong>Books:</strong> Philippians, 1 John, Philemon</p>
-<ul style="margin-left: 1.25rem; line-height: 1.7; margin-top: 0.5rem;">
-<li>Map argument flow</li>
-<li>Identify OT quotations</li>
-<li>Note theological development</li>
-</ul>
-</div></div></div></div>
-<!-- WHAT'S NEXT -->
-<div class="theology-card animate-on-scroll content-section" id="what-to-do-after-your-initial-observations"><h2>What to Do After Your Initial Observations</h2><div class="nested-grid"><div class="nested-card animate-on-scroll"><h3 style="color: var(--accent-purple); margin-top: 1.5rem;">1. Consult Resources (Now That You've Observed)</h3><p>Use your observations to guide which resources you need:</p><ul style="margin-left: 1.5rem; line-height: 1.8;">
-<li><strong>Literary questions?</strong> → Check literary commentaries</li>
-<li><strong>Historical gaps?</strong> → ANE context resources</li>
-<li><strong>Theological questions?</strong> → Biblical theology works</li>
-<li><strong>Intertextual puzzles?</strong> → Cross-reference tools</li>
-</ul></div><div class="nested-card animate-on-scroll"><h3 style="color: var(--accent-purple); margin-top: 1.5rem;">2. Compare Your Observations</h3><ul style="margin-left: 1.5rem; line-height: 1.8;">
-<li>Did scholars see what you saw?</li>
-<li>What did you miss that they caught?</li>
-<li>Are there alternative explanations?</li>
-</ul></div><div class="nested-card animate-on-scroll"><h3 style="color: var(--accent-purple); margin-top: 1.5rem;">3. Refine Your Reading</h3><ul style="margin-left: 1.5rem; line-height: 1.8;">
-<li>Read again with new insights</li>
-<li>Update your structural outline</li>
-<li>Notice what you missed the first time</li>
-</ul></div></div></div>
-<!-- PRACTICAL TOOLS -->
-<div class="theology-card animate-on-scroll content-section" id="essential-tools-for-biblical-observation"><h2>Essential Tools for Biblical Observation</h2><p style="line-height: 1.7; font-size: 1.05rem; margin-bottom: 1.5rem;">
+
+        <div class="nested-card animate-on-scroll">
+          <div class="genre-card">
+            <h4>💭 Wisdom/Poetry</h4>
+            <ul style="margin-left: 1.5rem; line-height: 1.8;">
+              <li>Read aloud (rhythm matters!)</li>
+              <li>Notice parallelism types</li>
+              <li>Track metaphor development</li>
+              <li>Look for acrostic structures</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="nested-card animate-on-scroll">
+          <div class="genre-card">
+            <h4>✉️ Letters</h4>
+            <ul style="margin-left: 1.5rem; line-height: 1.8;">
+              <li>Identify: sender, recipients, occasion</li>
+              <li>Map the logical flow of argument</li>
+              <li>Note "therefore" transitions</li>
+              <li>Watch for quotations</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ESSENTIAL TOOLS -->
+    <section class="theology-card animate-on-scroll" id="tools">
+      <h2>Essential Tools for Biblical Observation</h2>
+      <p style="line-height: 1.7; font-size: 1.05rem; margin-bottom: 1.5rem;">
         While you can do significant observation with just your Bible, a few tools will dramatically 
         enhance your ability to spot patterns and repeated words:
-      </p><div class="nested-grid"><div class="nested-card animate-on-scroll"><h3 style="color: var(--accent-purple); margin: 1.5rem 0 1rem 0;">1. Concordance (Your Best Friend)</h3><p style="line-height: 1.7;">
-        A <strong>concordance</strong> lists every occurrence of every word in your Bible translation, 
-        plus links to the underlying Hebrew/Greek words. This allows you to track repeated words and 
-        discover patterns the authors created.
-      </p><div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0; border-left: 4px solid #0ea5e9;">
-<h4 style="color: #0c4a6e; margin: 0 0 1rem 0;">Free Digital Options:</h4>
-<ul style="margin-left: 1.5rem; line-height: 1.8;">
-<li><strong>Bible Hub</strong> (<a href="https://biblehub.com" style="color: #0ea5e9;" target="_blank">biblehub.com</a>) 
-          — Free Strong's Concordance with interlinear Hebrew/Greek, click any word for instant search</li>
-<li><strong>Blue Letter Bible</strong> (<a href="https://blueletterbible.org" style="color: #0ea5e9;" target="_blank">blueletterbible.org</a>) 
-          — Comprehensive tools including concordance, lexicons, cross-references</li>
-<li><strong>Strong's Exhaustive Concordance</strong> — Public domain, searchable online, 
-          assigns number to every Hebrew/Greek word for easy tracking</li>
-</ul>
-<h4 style="color: #0c4a6e; margin: 1.5rem 0 1rem 0;">Print Options:</h4>
-<ul style="margin-left: 1.5rem; line-height: 1.8;">
-<li>Most major translations have corresponding concordances (NIV Concordance, NASB Concordance, ESV Concordance)</li>
-<li><strong>Read the introduction!</strong> Each concordance explains its tagging system and how to use it effectively</li>
-</ul>
-</div><h4 style="color: var(--accent-purple); margin: 1.5rem 0 0.75rem 0;">How to Use a Concordance:</h4><div style="background: white; padding: 1.5rem; border-radius: 8px; border: 2px solid #e5e7eb; margin: 1rem 0;">
-<p style="margin: 0 0 1rem 0;"><strong>Example: Tracking "great" in Jonah</strong></p>
-<ol style="margin-left: 1.5rem; line-height: 1.8;">
-<li>Go to biblehub.com and open Jonah 1:1</li>
-<li>Click on "Interlinear" view to see Hebrew under English</li>
-<li>Click on the word "great" (Hebrew: גָּדוֹל <em>gadol</em>)</li>
-<li>View all 527 occurrences of <em>gadol</em> in Hebrew Bible</li>
-<li>Scan specifically for occurrences in Jonah—you'll find it appears 14 times!</li>
-<li>Note the pattern: great city (5x), great wind, great storm, great fear (3x), great fish, great evil, great joy</li>
-</ol>
-<p style="margin: 1rem 0 0 0; padding: 1rem; background: #f0fdf4; border-radius: 6px;">
-<strong>💡 Discovery:</strong> "Great" is a Leitwort (lead-word) organizing the entire book. 
-          Everything becomes "great" when humans encounter the greatness of God!
-        </p>
-</div></div><div class="nested-card animate-on-scroll"><h3 style="color: var(--accent-purple); margin: 2rem 0 1rem 0;">2. Study Bible with Cross-References</h3><p style="line-height: 1.7;">
-        A good study Bible (ESV Study Bible, NET Bible, NIV Study Bible) provides cross-references 
-        in margins showing where phrases echo other passages. This helps you discover intertextual connections.
-      </p></div><div class="nested-card animate-on-scroll"><h3 style="color: var(--accent-purple); margin: 2rem 0 1rem 0;">3. Literary Translations</h3><p style="line-height: 1.7;">
-        Translations emphasizing literary features help you see structure:
-      </p><ul style="margin-left: 1.5rem; line-height: 1.8;">
-<li><strong>Robert Alter's Hebrew Bible</strong> — Captures Hebrew wordplay, repetition, and poetic structure</li>
-<li><strong>Everett Fox's The Five Books of Moses</strong> — Mimics Hebrew rhythm and sound patterns in English</li>
-<li><strong>NASB or ESV</strong> — More literal translations preserve word-for-word correspondence</li>
-</ul></div><div class="nested-card animate-on-scroll"><h3 style="color: var(--accent-purple); margin: 2rem 0 1rem 0;">4. Bible Software (Optional)</h3><p style="line-height: 1.7;">
-        Programs like Logos, Accordance, or BibleWorks offer powerful concordance features, but free online 
-        tools are sufficient for most observation work.
-      </p><div class="tip-box" style="margin-top: 2rem;">
-<strong>🎯 Bottom Line:</strong>
-        You can do an enormous amount with just an English Bible and a free online concordance. 
-        Start there, and upgrade tools as you grow. The key isn't having expensive software—
-        it's developing the <em>habit of careful observation</em>.
-      </div></div></div></div>
-<!-- REMEMBER -->
-<div class="theology-card animate-on-scroll content-section" id="remember" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 5px solid #f59e0b;">
-<h2 style="color: #92400e;">Remember</h2>
-<p style="line-height: 1.8; font-size: 1.05rem;">
-<strong>The goal isn't to become an expert immediately.</strong> The goal is to train yourself to:
       </p>
-<ol style="margin-left: 1.5rem; line-height: 1.8; font-size: 1.05rem;">
-<li><strong>Observe carefully</strong> what's actually there</li>
-<li><strong>Ask good questions</strong> about structure and meaning</li>
-<li><strong>Notice patterns</strong> the author intentionally created</li>
-<li><strong>Connect theologically</strong> to Scripture's larger story</li>
-</ol>
-<p style="line-height: 1.8; font-size: 1.05rem; margin-top: 1rem;">
-<strong>Every reading will reveal something new.</strong> The Bible is inexhaustible literature designed for lifelong meditation.
-      </p>
-</div>
-<!-- METHODOLOGY & BIBLIOGRAPHY -->
-<details class="bibliography-section enhanced animate-on-scroll" id="methodology">
-<summary>
-<div class="bibliography-header">
-<div class="bibliography-inner">
-<span class="bibliography-icon">📚</span>
-<div class="bibliography-text">
-<h3 class="bibliography-title">Methodology &amp; Scholarly Foundation</h3>
-<p class="bibliography-subtitle">Bibliography and influences behind the First‑Read Framework</p>
-</div>
-<div class="expand-indicator">
-<svg fill="none" height="24" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="24">
-<polyline points="6 9 12 15 18 9"></polyline>
-</svg>
-</div>
-</div>
-</div>
-</summary>
-<div class="bibliography-content">
-<div class="source-category">
-<h4>How this is used</h4>
-<div class="source-entry">
-<div class="source-citation">
-          These works inform the framework’s emphasis on slow rereading, repetition, structure, and author–reader communication. The goal is to translate scholarly method into practical questions for everyday readers.
+
+      <div class="nested-grid">
+        <div class="nested-card animate-on-scroll">
+          <h3>1. Concordance (Your Best Friend)</h3>
+          <p>
+            Lists every occurrence of every word in your Bible translation, plus links to the underlying Hebrew/Greek words.
+          </p>
+          
+          <h4 style="margin-top: 1rem;">Free Digital Options:</h4>
+          <ul>
+            <li><strong>Bible Hub</strong> (biblehub.com) — Free Strong's Concordance with interlinear</li>
+            <li><strong>Blue Letter Bible</strong> (blueletterbible.org) — Comprehensive tools</li>
+          </ul>
+          
+          <div class="tip-box" style="margin-top: 1rem;">
+            <strong>💡 Pro Tip:</strong>
+            Click on any word to see all occurrences. Track repeated words to discover patterns!
+          </div>
         </div>
-</div>
-</div>
-<div class="source-category">
-<h4>Literary Analysis of Biblical Narrative</h4>
-<div class="source-entry">
-<div class="source-citation">
-<strong>Alter, Robert.</strong> <em>The Art of Biblical Narrative.</em> New York: Basic Books, 2011.
+
+        <div class="nested-card animate-on-scroll">
+          <h3>2. Study Bible with Cross-References</h3>
+          <p>
+            A good study Bible (ESV Study Bible, NET Bible, NIV Study Bible) provides cross-references 
+            in margins showing where phrases echo other passages.
+          </p>
         </div>
-<div class="source-usage">
-<span class="usage-tag">Method</span>
-<span class="usage-tag">Framework</span>
-<span class="usage-note">Foundational work on characterization, repetition, and scene construction; quote on “grid of conventions” from introduction.</span>
-</div>
-</div>
-<div class="source-entry">
-<div class="source-citation">
-<strong>Sternberg, Meir.</strong> <em>The Poetics of Biblical Narrative: Ideological Literature and the Drama of Reading.</em> Bloomington: Indiana University Press, 1987.
+
+        <div class="nested-card animate-on-scroll">
+          <h3>3. Literary Translations</h3>
+          <ul>
+            <li><strong>Robert Alter's Hebrew Bible</strong> — Captures Hebrew wordplay</li>
+            <li><strong>Everett Fox's Five Books of Moses</strong> — Mimics Hebrew rhythm</li>
+            <li><strong>NASB or ESV</strong> — More literal translations</li>
+          </ul>
         </div>
-<div class="source-usage">
-<span class="usage-tag">Method</span>
-<span class="usage-tag">Framework</span>
-<span class="usage-note">Intentional gaps, ambiguity, and reader engagement.</span>
-</div>
-</div>
-<div class="source-entry">
-<div class="source-citation">
-<strong>Berlin, Adele.</strong> <em>Poetics and Interpretation of Biblical Narrative.</em> Sheffield: Sheffield Academic Press, 1994.
+
+        <div class="nested-card animate-on-scroll">
+          <h3>Bottom Line</h3>
+          <p>
+            You can do enormous work with just an English Bible and a free online concordance. 
+            Start there, and upgrade tools as you grow. The key isn't having expensive software—
+            it's developing the <em>habit of careful observation</em>.
+          </p>
         </div>
-<div class="source-usage">
-<span class="usage-tag">Method</span>
-<span class="usage-tag">Framework</span>
-<span class="usage-note">Impressionism vs. realism in character portrayal.</span>
-</div>
-</div>
-<div class="source-entry">
-<div class="source-citation">
-<strong>Bar-Efrat, Shimon.</strong> <em>Narrative Art in the Bible.</em> Sheffield: Sheffield Academic Press, 2004.
+      </div>
+    </section>
+
+    <!-- BIBLIOGRAPHY -->
+    <details class="bibliography-section animate-on-scroll" id="methodology">
+      <summary>
+        <div class="bibliography-header">
+          <div class="bibliography-inner">
+            <span class="bibliography-icon">📚</span>
+            <div class="bibliography-text">
+              <h3 class="bibliography-title">Methodology & Scholarly Foundation</h3>
+              <p class="bibliography-subtitle">Bibliography and influences behind the First‑Read Framework</p>
+            </div>
+            <div class="expand-indicator">
+              <svg fill="none" height="24" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="24">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </div>
         </div>
-<div class="source-usage">
-<span class="usage-tag">Method</span>
-<span class="usage-tag">Framework</span>
-<span class="usage-note">Comprehensive treatment of biblical narrative techniques.</span>
-</div>
-</div>
-<div class="source-entry">
-<div class="source-citation">
-<strong>Walsh, Jerome T.</strong> <em>Old Testament Narrative: A Guide to Interpretation.</em> Louisville: Westminster John Knox, 2010.
+      </summary>
+      
+      <div class="bibliography-content">
+        <div class="source-category">
+          <h4>How this is used</h4>
+          <div class="source-entry">
+            <div class="source-citation">
+              These works inform the framework's emphasis on slow rereading, repetition, structure, and author–reader communication. 
+              The goal is to translate scholarly method into practical questions for everyday readers.
+            </div>
+          </div>
         </div>
-<div class="source-usage">
-<span class="usage-tag">Method</span>
-<span class="usage-tag">Framework</span>
-<span class="usage-note">Practical guide to narrative analysis.</span>
-</div>
-</div>
-</div>
-<div class="source-category">
-<h4>Reader-Response &amp; Communication Theory</h4>
-<div class="source-entry">
-<div class="source-citation">
-<strong>Eco, Umberto.</strong> <em>The Role of the Reader: Explorations in the Semiotics of Texts.</em> Bloomington: Indiana University Press, 1984.
+
+        <div class="source-category">
+          <h4>Literary Analysis of Biblical Narrative</h4>
+          
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Alter, Robert.</strong> <em>The Art of Biblical Narrative.</em> New York: Basic Books, 2011.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Method</span>
+              <span class="usage-tag">Framework</span>
+              <span class="usage-note">Foundational work on characterization, repetition, and scene construction</span>
+            </div>
+          </div>
+
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Sternberg, Meir.</strong> <em>The Poetics of Biblical Narrative.</em> Bloomington: Indiana University Press, 1987.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Method</span>
+              <span class="usage-note">Intentional gaps, ambiguity, and reader engagement</span>
+            </div>
+          </div>
+
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Berlin, Adele.</strong> <em>Poetics and Interpretation of Biblical Narrative.</em> Sheffield: Sheffield Academic Press, 1994.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Method</span>
+              <span class="usage-note">Impressionism vs. realism in character portrayal</span>
+            </div>
+          </div>
         </div>
-<div class="source-usage">
-<span class="usage-tag">Method</span>
-<span class="usage-tag">Framework</span>
-<span class="usage-note">“Encyclopedia of production” vs. “encyclopedia of reception” framework for author–reader communication gaps.</span>
-</div>
-</div>
-</div>
-<div class="source-category">
-<h4>Repetition &amp; Verbal Patterns (Leitwort)</h4>
-<div class="source-entry">
-<div class="source-citation">
-<strong>Buber, Martin and Franz Rosenzweig.</strong> <em>Scripture and Translation.</em> Bloomington: Indiana University Press, 1994.
+
+        <div class="source-category">
+          <h4>Repetition & Verbal Patterns</h4>
+          
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Buber, Martin and Franz Rosenzweig.</strong> <em>Scripture and Translation.</em> Bloomington: Indiana University Press, 1994.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Method</span>
+              <span class="usage-note">Developed concept of Leitwort (leading word)</span>
+            </div>
+          </div>
         </div>
-<div class="source-usage">
-<span class="usage-tag">Method</span>
-<span class="usage-tag">Framework</span>
-<span class="usage-note">Developed concept of Leitwort (leading word / repeated key word).</span>
-</div>
-</div>
-<div class="source-entry">
-<div class="source-citation">
-<strong>Berlin, Adele.</strong> <em>The Dynamics of Biblical Parallelism.</em> Grand Rapids: Eerdmans, 2007.
+
+        <div class="source-category">
+          <h4>Biblical Theology & Canonical Reading</h4>
+          
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Sailhamer, John H.</strong> <em>The Pentateuch as Narrative.</em> Grand Rapids: Zondervan, 1995.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Method</span>
+              <span class="usage-note">Reading Torah as unified narrative</span>
+            </div>
+          </div>
         </div>
-<div class="source-usage">
-<span class="usage-tag">Method</span>
-<span class="usage-tag">Framework</span>
-<span class="usage-note">How repetition creates meaning in poetry and prose.</span>
-</div>
-</div>
-</div>
-<div class="source-category">
-<h4>Design Patterns &amp; Intertextuality</h4>
-<div class="source-entry">
-<div class="source-citation">
-<strong>Berman, Joshua.</strong> <em>Narrative Analogy in the Hebrew Bible: Battle Stories and Their Equivalent Non-Battle Narratives.</em> Leiden: Brill, 2004.
+
+        <div class="source-category">
+          <h4>Pedagogical Resources</h4>
+          
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>The Bible Project.</strong> <em>How to Read the Bible.</em> 
+              Available at <a href="https://bibleproject.com/explore/how-to-read-the-bible/" rel="noopener" target="_blank">bibleproject.com</a>
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Method</span>
+              <span class="usage-note">Video series teaching literary reading skills</span>
+            </div>
+          </div>
         </div>
-<div class="source-usage">
-<span class="usage-tag">Method</span>
-<span class="usage-tag">Framework</span>
-<span class="usage-note">How biblical authors create patterns across stories.</span>
-</div>
-</div>
-<div class="source-entry">
-<div class="source-citation">
-<strong>Talmon, Shemaryahu.</strong> <em>Literary Motifs and Patterns in the Hebrew Bible: Collected Essays.</em> Leiden: Brill, 2013.
-        </div>
-<div class="source-usage">
-<span class="usage-tag">Method</span>
-<span class="usage-tag">Framework</span>
-<span class="usage-note">Recurring motifs throughout Scripture.</span>
-</div>
-</div>
-<div class="source-entry">
-<div class="source-citation">
-<strong>Hamilton, James M., Jr.</strong> <em>Typology: Understanding the Bible’s Promise-Shaped Patterns.</em> Grand Rapids: Zondervan, 2022.
-        </div>
-<div class="source-usage">
-<span class="usage-tag">Method</span>
-<span class="usage-tag">Framework</span>
-<span class="usage-note">How Old Testament patterns are fulfilled in Christ.</span>
-</div>
-</div>
-</div>
-<div class="source-category">
-<h4>Biblical Theology &amp; Canonical Reading</h4>
-<div class="source-entry">
-<div class="source-citation">
-<strong>Sailhamer, John H.</strong> <em>The Pentateuch as Narrative: A Biblical-Theological Commentary.</em> Grand Rapids: Zondervan, 1995.
-        </div>
-<div class="source-usage">
-<span class="usage-tag">Method</span>
-<span class="usage-tag">Framework</span>
-<span class="usage-note">Reading Torah as unified narrative with theological purpose.</span>
-</div>
-</div>
-<div class="source-entry">
-<div class="source-citation">
-<strong>Wright, Christopher J.H.</strong> <em>The Mission of God’s People: A Biblical Theology of the Church’s Mission.</em> Downers Grove: IVP Academic, 2018.
-        </div>
-<div class="source-usage">
-<span class="usage-tag">Method</span>
-<span class="usage-tag">Framework</span>
-<span class="usage-note">Bible’s unified story from creation to new creation.</span>
-</div>
-</div>
-</div>
-<div class="source-category">
-<h4>Pedagogical Resources</h4>
-<div class="source-entry">
-<div class="source-citation">
-<strong>The Bible Project.</strong> <em>How to Read the Bible.</em> Available at <a href="https://bibleproject.com/explore/how-to-read-the-bible/" rel="noopener" target="_blank">bibleproject.com/explore/how-to-read-the-bible/</a>
-</div>
-<div class="source-usage">
-<span class="usage-tag">Method</span>
-<span class="usage-tag">Framework</span>
-<span class="usage-note">Video series teaching literary reading skills.</span>
-</div>
-</div>
-</div>
-</div>
-</details>
-<!-- CTA -->
-<section class="cta-section">
-<h3>Ready to See This Framework in Action?</h3>
-<p style="font-size: 1.1rem; margin: 1rem auto; max-width: 700px;">
+      </div>
+    </details>
+
+    <!-- CTA -->
+    <section class="cta-section animate-on-scroll">
+      <h3>Ready to See This Framework in Action?</h3>
+      <p style="font-size: 1.1rem; margin: 1rem auto; max-width: 700px;">
         Check out our comprehensive worked example showing every phase applied to the book of Jonah—
         see exactly what to observe and how to think through each step.
       </p>
-<a class="cta-button" href="/resources/study-tools/first-read-framework-jonah.html">
+      <a href="/resources/study-tools/first-read-framework-jonah.html" class="cta-button">
         📖 View Jonah Worked Example
       </a>
-<br/>
-<a class="cta-button" href="/studies/tanakh/tanakh-hub.html">
+      <br/>
+      <a href="/studies/tanakh/tanakh-hub.html" class="cta-button">
         📚 Browse Character Studies
       </a>
-<br/>
-<a class="cta-button" href="/resources/">
+      <br/>
+      <a href="/resources/" class="cta-button">
         🎓 Explore All Resources
       </a>
-</section>
-</main>
-<!-- Back to Top Button -->
-<a aria-label="Back to top" class="back-to-top" href="#main-content">↑</a>
-<!-- Mobile Menu Overlay -->
-<div class="mobile-menu-overlay"></div>
-<footer>
-<p>© Project Context — Learning Scripture in Context</p>
-</footer>
-<!-- Navigation Component -->
-<script type="module">
+    </section>
+
+  </main>
+
+  <!-- Back to Top Button -->
+  <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay"></div>
+
+  <footer>
+    <p>© Project Context — Learning Scripture in Context</p>
+  </footer>
+
+  <!-- Navigation Component -->
+  <script type="module">
     import NavigationComponent from '/assets/js/nav-component.js';
     
     new NavigationComponent({
@@ -2313,12 +1883,14 @@
       hubType: ''
     });
   </script>
-<!-- Character Page Script with Mobile Tabs -->
-<script defer="" src="/assets/js/character-page-v5-8.js"></script>
-<!-- Page Scripts -->
-<script>
+
+  <!-- Character Page Script -->
+  <script src="/assets/js/character-page-v5-8.js" defer></script>
+
+  <!-- Page Scripts -->
+  <script>
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('First-Read Framework v5.8.1 — Page loaded');
+  console.log('First-Read Framework Enhanced v5.8.1 — Page loaded');
   
   // Reading progress bar
   window.addEventListener('scroll', () => {
@@ -2344,104 +1916,72 @@ document.addEventListener('DOMContentLoaded', function() {
   // Smooth scroll for anchor links
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      if (href === '#main-content') return; // Let skip link work normally
+      
       e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
+      const target = document.querySelector(href);
       if (target) {
+        // If it's a details element, open it first
+        if (target.tagName === 'DETAILS') {
+          target.open = true;
+        }
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     });
   });
   
-  // Enhanced Animate on scroll
+  // Animate on scroll observer
   const observerOptions = {
     threshold: 0.15,
     rootMargin: '0px 0px -50px 0px'
   };
   
-  let animationCounter = 0;
-  
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
-        const delay = animationCounter * 100;
-        animationCounter++;
+        entry.target.classList.add('visible', 'animated');
         
-        setTimeout(() => {
-          entry.target.classList.add('animate-visible', 'visible', 'animated');
-          
-          // Animate question lists within this section
-          if (entry.target.classList.contains('question-section')) {
-            const questions = entry.target.querySelectorAll('.question-list li');
-            questions.forEach((q, i) => {
-              setTimeout(() => {
-                q.style.opacity = '1';
-                q.style.transform = 'translateX(0)';
-              }, i * 100);
-            });
-          }
-        }, Math.min(delay, 500)); // Cap delay at 500ms
+        // Animate question lists within this section
+        if (entry.target.classList.contains('question-section')) {
+          const questions = entry.target.querySelectorAll('.question-list li');
+          questions.forEach((q, i) => {
+            setTimeout(() => {
+              q.classList.add('visible');
+            }, i * 100);
+          });
+        }
         
-        // Stop observing after animation
         observer.unobserve(entry.target);
       }
     });
   }, observerOptions);
   
   // Observe all animated elements
-  document.querySelectorAll('.phase-box, .animate-on-scroll, .theology-card, .training-card, .genre-card, .question-section, .example-box, .tip-box, .key-insight').forEach(box => {
-    observer.observe(box);
+  document.querySelectorAll('.animate-on-scroll, .theology-card, .nested-card, .question-section, .example-box, .tip-box, .key-insight').forEach(el => {
+    observer.observe(el);
+  });
+  
+  // Phase tile click handlers
+  document.querySelectorAll('.phase-tile').forEach(tile => {
+    tile.addEventListener('click', function(e) {
+      e.preventDefault();
+      const phaseId = this.getAttribute('href');
+      const details = document.querySelector(phaseId);
+      if (details && details.tagName === 'DETAILS') {
+        details.open = true;
+        setTimeout(() => {
+          details.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
+    });
   });
   
   console.log('✓ All animations initialized');
-  console.log('✓ Enhanced visual effects active');
-  console.log('✓ Template version: 5.8.1');
+  console.log('✓ Accordion phases ready');
+  console.log('✓ Template version: 5.8.1 Enhanced');
 });
 </script>
-<script>
-(function(){
-  // Scroll reveal
-  const els = Array.from(document.querySelectorAll('.animate-on-scroll'));
-  const io = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){
-        e.target.classList.add('in-view');
-        io.unobserve(e.target);
-      }
-    });
-  }, {threshold: 0.12});
-  els.forEach(el=>io.observe(el));
 
-  // Open phase accordions on hash
-  function openFromHash(){
-    const hash = window.location.hash || '';
-    if(!hash) return;
-    const el = document.querySelector(hash);
-    if(!el) return;
-    if(el.tagName === 'DETAILS'){
-      el.open = true;
-      // slight delay so layout is stable
-      setTimeout(()=>el.scrollIntoView({behavior:'smooth', block:'start'}), 60);
-    }
-  }
-  window.addEventListener('hashchange', openFromHash);
-  openFromHash();
-
-  // Tile click: open details after jump
-  document.querySelectorAll('.phase-tile').forEach(a=>{
-    a.addEventListener('click', ()=>{
-      const id = a.getAttribute('href');
-      const d = document.querySelector(id);
-      if(d && d.tagName==='DETAILS'){ d.open = true; }
-    });
-  });
-})();
-</script><script>
-(function(){
-  try{
-    if (document.querySelector('.quick-nav-sidebar')) {
-      document.body.classList.add('has-quick-nav');
-    }
-  } catch(e){}
-})();
-</script></body>
+</body>
 </html>
