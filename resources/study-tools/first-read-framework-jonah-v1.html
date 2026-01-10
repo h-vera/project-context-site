@@ -810,7 +810,31 @@ body.worked-example .hero{
 }
 /* Ensure anchor jumps account for fixed nav */
 section[id^="phase"]{ scroll-margin-top: 6.5rem; }
-</style></head>
+</style><style id="jonah-hero-first-overrides">
+  /* Jonah hero-first spacing + anchor offsets */
+  body.worked-example #main-content.content-section{
+    padding-top: 0 !important; /* remove global top padding that creates the white band above hero */
+  }
+  body.worked-example .hero{
+    margin-top: 0 !important;
+  }
+  body.worked-example .breadcrumbs{
+    margin-top: 1.25rem;
+  }
+  /* Ensure phase navigator never consumes layout space (safety if any CSS makes it static) */
+  body.worked-example .phase-navigator{
+    position: fixed !important;
+    top: 120px !important;
+    left: 20px !important;
+    z-index: 999 !important;
+  }
+  /* Clicking quick-nav/phase links should land below the fixed header */
+  body.worked-example section[id^="phase"]{
+    scroll-margin-top: 120px;
+  }
+</style>
+
+</head>
 <body class="study-tool worked-example v5-8-1">
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="reading-progress"></div>
@@ -2367,5 +2391,38 @@ section[id^="phase"]{ scroll-margin-top: 6.5rem; }
     // no-op
   }
 })();
-</script></body>
+</script><script id="jonah-early-reveal">
+(function(){
+  // Reveal .animate-on-scroll earlier than the global observer on this long page.
+  // This only adds the existing "visible" class; it won't interfere if already visible.
+  try{
+    const els = Array.from(document.querySelectorAll('.animate-on-scroll'));
+    if(!els.length) return;
+
+    const obs = new IntersectionObserver((entries, o) => {
+      entries.forEach(e => {
+        if(e.isIntersecting){
+          e.target.classList.add('visible');
+          o.unobserve(e.target);
+        }
+      });
+    }, {
+      root: null,
+      // Trigger when the element is still below the fold by ~200px,
+      // so cards are fully on-screen when the animation begins.
+      rootMargin: '0px 0px -200px 0px',
+      threshold: 0.01
+    });
+
+    els.forEach(el => {
+      if(el.classList.contains('visible')) return;
+      obs.observe(el);
+    });
+  }catch(err){
+    // no-op
+  }
+})();
+</script>
+
+</body>
 </html>
