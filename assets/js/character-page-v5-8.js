@@ -366,6 +366,25 @@
     { id: 'closing', icon: '', label: 'Final Word', priority: 4 },
     { id: 'metaphors', icon: '', label: 'Metaphors', priority: 2 },
     { id: 'scripture', icon: '', label: 'Scripture', priority: 2 },
+
+    // ============================================
+    // WORKFLOW / PROCESS PAGES (Ultra-Compact)
+    // ============================================
+
+    { id: 'sources', label: 'Sources', priority: 1 },
+
+    { id: 'stage1', label: 'Overview',  priority: 1 },
+    { id: 'stage2', label: 'Text',      priority: 1 },
+    { id: 'stage3', label: 'Structure', priority: 1 },
+    { id: 'stage4', label: 'Context',   priority: 1 },
+    { id: 'stage5', label: 'Meaning',   priority: 1 },
+
+    // Lower priority → trimmed first on small screens
+    { id: 'stage6', label: 'Canon',     priority: 2 },
+    { id: 'stage7', label: 'Practice',  priority: 2 },
+
+    { id: 'legend',  label: 'Legend',   priority: 3 },
+    { id: 'explore', label: 'Explore',  priority: 1 }
   ];
   
   // ============================================
