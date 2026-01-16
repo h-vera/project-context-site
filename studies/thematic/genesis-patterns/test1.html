@@ -2012,11 +2012,23 @@ AWAITING THE KING OF GLORY (Ps 24:7-10)
 
 <!-- Back to Thematic Hub -->
 <div style="margin: 3rem 0; text-align: center;">
-<a href="/studies/thematic/thematic-hub.html" style="display: inline-block; padding: 0.75rem 2rem; background: linear-gradient(135deg, var(--page-accent), var(--page-accent-dark)); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: transform 0.2s ease, box-shadow 0.2s ease;">
-        ← Back to Thematic Studies
-      </a>
+  <a href="/studies/thematic/thematic-hub.html" style="display: inline-block; padding: 0.75rem 2rem; background: linear-gradient(135deg, var(--page-accent), var(--page-accent-dark)); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+    ← Back to Thematic Studies
+  </a>
 </div>
-<nav aria-label="Mobile section tabs" class="pc-mobile-tabs"><!-- Mobile tabs populated by JS (v5.8.1-compatible) --></nav></main>
+
+<!-- Mobile Section Tabs Placeholder -->
+<nav aria-label="Mobile section tabs" class="pc-mobile-tabs">
+  <!-- Mobile tabs populated by JS (v5.8.1-compatible) -->
+</nav>
+
+</main>
+
+<!-- Back to Top Button -->
+<button id="back-to-top" class="back-to-top" aria-label="Back to top">↑</button>
+
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu-overlay"></div>
 
 <!-- At bottom of page -->
 <div id="nav-placeholder"></div>
@@ -2031,36 +2043,57 @@ AWAITING THE KING OF GLORY (Ps 24:7-10)
     sectionName: 'genesis-patterns'
   });
 </script>
+
 <!-- Reading Progress Bar Script -->
 <script>
-    window.addEventListener('scroll', function() {
-      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      document.querySelector('.reading-progress').style.width = scrolled + '%';
-    });
-  </script>
+  window.addEventListener('scroll', function() {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    document.querySelector('.reading-progress').style.width = scrolled + '%';
+  });
+</script>
+
+<!-- Back to Top Button Script -->
+<script>
+  window.addEventListener('scroll', function() {
+    const backToTop = document.getElementById('back-to-top');
+    if (window.scrollY > 300) {
+      backToTop.classList.add('visible');
+    } else {
+      backToTop.classList.remove('visible');
+    }
+  });
+
+  document.getElementById('back-to-top').addEventListener('click', function(e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
 <!-- Animate on Scroll Script -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-      };
+  document.addEventListener('DOMContentLoaded', function() {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
 
-      const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      }, observerOptions);
-
-      document.querySelectorAll('.animate-on-scroll').forEach(el => {
-        observer.observe(el);
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
       });
+    }, observerOptions);
+
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+      observer.observe(el);
     });
-  </script>
+  });
+</script>
+
+<!-- v5.8.1 UX Features Script -->
 <script>
 /* ============================================
    v5.8.1 UX FEATURES (Thematic Page Implementation)
@@ -2164,8 +2197,9 @@ AWAITING THE KING OF GLORY (Ps 24:7-10)
       const label = (sec.querySelector("h2,h3")?.innerText || sec.id).trim().slice(0, 80);
       const a = document.createElement("a");
       a.href = `#${sec.id}`;
+      a.className = "quick-nav-item";
       a.setAttribute("aria-label", label);
-      a.innerHTML = `<span class="qnav-tooltip">${label}</span>`;
+      a.setAttribute("data-label", label);
       a.addEventListener("click", (e) => {
         e.preventDefault();
         sec.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -2189,7 +2223,7 @@ AWAITING THE KING OF GLORY (Ps 24:7-10)
     // qnav
     qnavLinks().forEach(a => {
       const on = a.getAttribute("href") === `#${id}`;
-      a.setAttribute("aria-current", on ? "true" : "false");
+      a.classList.toggle('active', on);
     });
   }
 
