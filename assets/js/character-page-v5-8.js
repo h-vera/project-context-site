@@ -516,7 +516,7 @@ init() {
             id,
             element,
             icon: config?.icon || '',
-            label: config?.label || getAutoSectionLabel(element),
+            label: config?.label || getSectionLabel(element),
             priority: config?.priority ?? 99
           });
         });
