@@ -388,6 +388,19 @@
   ];
   
   // ============================================
+  // AUTO-GENERATED SECTION LABELS (fallback)
+  // ============================================
+
+  function getSectionLabel(section) {
+    const heading = section.querySelector('h2, h3, h4');
+    if (heading) return heading.textContent.trim();
+
+    return section.id
+      .replace(/-/g, ' ')
+      .replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  // ============================================
   // MOBILE TABS CLASS
   // ============================================
   
@@ -451,12 +464,11 @@ init() {
 }
     
     /**
-     * Detect all sections with IDs on the page - ENHANCED VERSION
-     */
+ * Detect all sections with IDs on the page - ENHANCED VERSION
+    */
     detectSections() {
-      const configIds = sectionConfig.map(s => s.id);
       const foundSections = [];
-      
+
       // Expanded selectors to catch more section types
       const sectionSelectors = [
         '.theology-card[id]',
@@ -488,38 +500,42 @@ init() {
         'section[id]',
         'div[id]'
       ];
-      
+
       sectionSelectors.forEach(selector => {
         document.querySelectorAll(selector).forEach(element => {
           const id = element.id;
-          // Check if this ID is in our config and not already found
-          if (configIds.includes(id) && !foundSections.find(s => s.id === id)) {
-            const config = sectionConfig.find(s => s.id === id);
-            foundSections.push({
-              id: id,
-              element: element,
-              icon: config.icon,
-              label: config.label,
-              priority: config.priority
-            });
-          }
+          if (!id) return;
+
+          // Prevent duplicates across overlapping selectors
+          if (foundSections.find(s => s.id === id)) return;
+
+          // Pull from config if present; otherwise auto-generate
+          const config = sectionConfig.find(s => s.id === id);
+
+          foundSections.push({
+            id,
+            element,
+            icon: config?.icon || '',
+            label: config?.label || getAutoSectionLabel(element),
+            priority: config?.priority ?? 99
+          });
         });
       });
-      
-      // Sort by document order
+
+      // Sort by document order (your existing approach)
       foundSections.sort((a, b) => {
         const posA = a.element.getBoundingClientRect().top;
         const posB = b.element.getBoundingClientRect().top;
         return posA - posB;
       });
-      
-      // If more than 7 sections, prioritize
+
+      // If more than 7 sections, prioritize (your existing behavior)
       if (foundSections.length > 7) {
-      this.sections = this.prioritizeSections(foundSections);
+        this.sections = this.prioritizeSections(foundSections);
       } else {
-      this.sections = foundSections;
+        this.sections = foundSections;
       }
-      
+
       console.log(`MobileTabs: Found ${foundSections.length} sections, using ${this.sections.length}`);
       if (this.sections.length > 0) {
         console.log('Active sections:', this.sections.map(s => `${s.label} (#${s.id})`).join(', '));
