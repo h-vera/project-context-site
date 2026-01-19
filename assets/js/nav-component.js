@@ -48,7 +48,6 @@ class NavigationComponent {
                                 <a href="/studies/methodology/lltse-orientation-methodology.html" class="${this.getActiveClass('methodology')}">Methodology (LLTSE)</a>
                                 <a href="/resources/discussion-guides/">Discussion Guides</a>
                                 <a href="/resources/study-tools/biblical-study-resources.html">Study Tools</a>
-                                <a href="/resources/downloads/">Downloads</a>
                             </div>
                         </li>
                         <li><a href="/about/" class="${this.getActiveClass('about')}">About</a></li>
