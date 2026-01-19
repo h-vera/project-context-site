@@ -388,17 +388,59 @@
   ];
   
   // ============================================
-  // AUTO-GENERATED SECTION LABELS (fallback)
-  // ============================================
+// AUTO-GENERATED SECTION LABELS (fallback)
+// ============================================
 
-  function getSectionLabel(section) {
-    const heading = section.querySelector('h2, h3, h4');
-    if (heading) return heading.textContent.trim();
-
-    return section.id
-      .replace(/-/g, ' ')
-      .replace(/\b\w/g, c => c.toUpperCase());
+function getSectionLabel(section) {
+  const heading = section.querySelector('h2, h3, h4');
+  if (heading) {
+    let text = heading.textContent.trim();
+    
+    // Remove emojis (comprehensive Unicode ranges)
+    text = text.replace(/[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F000}-\u{1F02F}]|[\u{1F0A0}-\u{1F0FF}]|[\u{1F100}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{1F900}-\u{1F9FF}]|[\u{1FA00}-\u{1FA6F}]|[\u{1FA70}-\u{1FAFF}]/gu, '');
+    
+    // Remove special symbols commonly used in headings
+    text = text.replace(/[📚📖📜📋🎵🎨🔍⚡💡✨🌟🔥🌊🌍🍎👑🏛️🐍🚪⚖️❓💭🙏⛪]/g, '');
+    
+    // Remove common separators and punctuation
+    text = text.replace(/[:\-–—|•]/g, ' ');
+    
+    // Clean up multiple spaces
+    text = text.replace(/\s+/g, ' ').trim();
+    
+    // Smart truncation for mobile tabs
+    const words = text.split(/\s+/);
+    
+    // Strategy: Keep first meaningful words up to character limit
+    const maxChars = 12; // Mobile-friendly length
+    let result = '';
+    
+    for (let i = 0; i < words.length; i++) {
+      const testResult = result ? `${result} ${words[i]}` : words[i];
+      
+      if (testResult.length <= maxChars) {
+        result = testResult;
+      } else {
+        break;
+      }
+    }
+    
+    // If we got nothing (all words too long), take first word and truncate
+    if (!result && words.length > 0) {
+      result = words[0].substring(0, maxChars);
+    }
+    
+    return result || 'Section';
   }
+
+  // Fallback: Generate from ID
+  return section.id
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, c => c.toUpperCase())
+    .split(/\s+/)
+    .slice(0, 2) // Take first 2 words from ID
+    .join(' ');
+}
 
   // ============================================
   // MOBILE TABS CLASS
