@@ -3,16 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, shrink-to-fit=no" />
-  <title>Sermon Spine – Prophetic & Teaching Formation | Project Context</title>
-  <meta name="description" content="A repeatable sermon framework for Acts-shaped proclamation: text → context → Jesus → response." />
+  <title>Prophetic & Teaching Formation – Sermon Spine | Project Context</title>
+  <meta name="description" content="Acts-shaped sermon framework + sermon types + worked examples + collaboration workflow + technical implementation (HTML spine + JSON + schema) with toggles and copy buttons." />
 
   <!-- Page Metadata -->
   <meta name="template-version" content="5.8.1" />
   <meta name="page-category" content="resources" />
-  <meta name="study-type" content="formation-pathway" />
-  <meta name="pathway-step" content="4" />
+  <meta name="study-type" content="sermon-spine" />
   <meta name="nav-hub" content="resources" />
-  <meta name="nav-section" content="teaching-formation" />
+  <meta name="nav-section" content="training" />
 
   <!-- CSS -->
   <link rel="preload" href="/assets/css/global-v2.css" as="style" />
@@ -20,108 +19,271 @@
   <link rel="stylesheet" href="/assets/css/mobile-tabs-v5-8.css" />
 
   <style>
+    /* =========================================================
+       HERO
+    ========================================================= */
     .hero {
-      min-height: 42vh;
+      min-height: 44vh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 2.6rem 1.5rem;
       margin-top: 20px;
-      background: linear-gradient(135deg, #0a0a0a 0%, var(--accent-purple) 35%, var(--accent-blue) 70%, #0a0a0a 100%);
+      background: linear-gradient(135deg, #0a0a0a 0%, var(--accent-teal) 35%, var(--accent-blue) 70%, #0a0a0a 100%);
       color: white;
       margin-left: calc(-50vw + 50%);
       margin-right: calc(-50vw + 50%);
       width: 100vw;
+      max-width: 100vw;
+      position: relative;
+      overflow: hidden;
     }
-    .hero-content { text-align: center; max-width: 1020px; }
+    .hero::before{
+      content:'';
+      position:absolute;
+      inset:-40%;
+      background:
+        radial-gradient(circle at 20% 80%, rgba(0,184,148,.18) 0%, transparent 55%),
+        radial-gradient(circle at 80% 20%, rgba(52,152,219,.16) 0%, transparent 55%);
+      animation: heroFloat 36s linear infinite;
+    }
+    @keyframes heroFloat{
+      0%{ transform: rotate(0deg) scale(1); }
+      50%{ transform: rotate(180deg) scale(1.06); }
+      100%{ transform: rotate(360deg) scale(1); }
+    }
+    .hero-content { text-align: center; max-width: 980px; position:relative; z-index:1; }
     .hero-title {
       font-size: clamp(2.0rem, 5vw, 3.3rem);
       font-weight: 900;
+      margin-bottom: .65rem;
       line-height: 1.08;
-      margin-bottom: 0.7rem;
+      text-shadow: 2px 2px 5px rgba(0,0,0,.30);
     }
     .hero-subtitle {
-      font-size: clamp(1.05rem, 2.1vw, 1.32rem);
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
       opacity: .95;
       line-height: 1.6;
-      max-width: 920px;
       margin: 0 auto;
+      max-width: 920px;
     }
-    .spine-table {
-      background: white;
-      border: 2px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      margin-top: 1.5rem;
-    }
-    .spine-row {
-      display: grid;
-      grid-template-columns: 1.2fr 2fr;
-      border-top: 1px solid var(--border);
-    }
-    .spine-row:first-child { border-top: none; }
-    .spine-cell-left {
-      padding: 1.25rem;
-      background: rgba(0,0,0,.02);
-      border-right: 1px solid var(--border);
-    }
-    .spine-cell-right {
-      padding: 1.25rem;
-    }
-    .spine-cell-left h4 {
-      margin: 0 0 .25rem 0;
-      font-size: 1.1rem;
-      font-weight: 800;
-    }
-    .spine-cell-left .hint {
-      font-size: .92rem;
-      color: var(--muted);
-      margin: 0;
-    }
-    .spine-cell-right ul {
-      margin: 0;
-      padding-left: 1.25rem;
-      line-height: 1.75;
-    }
-    .pathway-nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 2rem;
-      padding-top: 2rem;
-      border-top: 2px solid var(--border);
-      gap: 1rem;
+    .hero-actions{
+      margin-top: 1.2rem;
+      display:flex;
+      justify-content:center;
+      gap: 10px;
       flex-wrap: wrap;
     }
-    .pathway-nav a {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 16px;
-      background: var(--accent-blue);
+    .cta {
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 14px;
+      text-decoration:none;
+      font-weight: 850;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.10);
       color: white;
-      text-decoration: none;
-      border-radius: 10px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+    }
+    .cta:hover { transform: translateY(-2px); background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.28); }
+
+    /* =========================================================
+       LLTSE-STYLE TOGGLE SWITCH (copied pattern)
+    ========================================================= */
+    .toggle-row{
+      display:flex;
+      justify-content:center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    .toggle {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
       font-weight: 750;
+      color: rgba(255,255,255,.95);
+    }
+    .toggle input[type="checkbox"] {
+      appearance: none;
+      width: 44px;
+      height: 24px;
+      background: rgba(255,255,255,.22);
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 12px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+    .toggle input[type="checkbox"]::before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      background: white;
+      transition: transform 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+    }
+    .toggle input[type="checkbox"]:checked {
+      background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+      border-color: rgba(255,255,255,.22);
+    }
+    .toggle input[type="checkbox"]:checked::before {
+      transform: translateX(20px);
+    }
+
+    /* =========================================================
+       DEMO PANES (Human ⇄ Technical)
+    ========================================================= */
+    article.demo {
+      border: 2px solid var(--border-light);
+      border-radius: 16px;
+      overflow: hidden;
+      background: white;
+      box-shadow: var(--shadow-sm);
+    }
+    article.demo header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 10px;
+      padding: 1rem 1.1rem;
+      background: linear-gradient(180deg, rgba(0,0,0,.03), rgba(0,0,0,0));
+      border-bottom: 1px solid rgba(0,0,0,.08);
+      flex-wrap: wrap;
+    }
+    .demo-title{
+      font-weight: 900;
+      font-size: 1.02rem;
+    }
+    .pane{
+      padding: 1rem 1.1rem;
+    }
+    .pane[hidden]{ display:none !important; }
+
+    /* =========================================================
+       CODEBLOCKS + COPY
+    ========================================================= */
+    .codeblock {
+      position: relative;
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,.12);
+      background: #0b1220;
+      color: #e8eefc;
+      padding: 1rem;
+      overflow: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: .9rem;
+      line-height: 1.6;
+      white-space: pre;
+    }
+    .copy-btn{
+      position:absolute;
+      top: 10px;
+      right: 10px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.08);
+      color: #e8eefc;
+      cursor: pointer;
+      font-weight: 850;
+      font-size: .82rem;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .copy-btn:hover{ background: rgba(255,255,255,.12); }
+    .copy-btn[data-state="copied"]{
+      background: rgba(0,184,148,.18);
+      border-color: rgba(0,184,148,.35);
+    }
+
+    /* =========================================================
+       TECH VISIBILITY (global)
+    ========================================================= */
+    [data-tech="true"]{ display:none; }
+    body.show-tech [data-tech="true"]{ display:block; }
+
+    /* =========================================================
+       SERMON TYPE FILTER
+    ========================================================= */
+    .filter-row{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: .6rem 0 1rem 0;
+    }
+    .filter-pill{
+      border: 1px solid rgba(0,0,0,.12);
+      background: rgba(0,0,0,.03);
+      padding: 8px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 850;
+      font-size: .9rem;
+      user-select: none;
+    }
+    .filter-pill.active{
+      border-color: rgba(0,184,148,.45);
+      background: rgba(0,184,148,.10);
+    }
+
+    /* =========================================================
+       QUICK NAV (dots)
+    ========================================================= */
+    .quick-nav-sidebar {
+      position: fixed;
+      right: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: none;
+      flex-direction: column;
+      gap: 0.5rem;
+      z-index: 500;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .quick-nav-sidebar.visible { opacity: 1; }
+    .quick-nav-item {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.18);
+      border: 2px solid rgba(0,0,0,.10);
+      cursor: pointer;
       transition: transform .2s ease, background .2s ease;
     }
-    .pathway-nav a:hover {
-      transform: translateY(-2px);
-      background: var(--accent-purple);
-    }
-    .pathway-nav .step-indicator {
-      color: var(--text-gray);
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
+    .quick-nav-item:hover { transform: scale(1.15); background: rgba(0,184,148,.35); }
+    .quick-nav-item.active { background: rgba(0,184,148,.55); border-color: rgba(0,184,148,.35); }
+    @media (min-width: 1400px) { .quick-nav-sidebar { display: flex; } }
+
+    /* Mobile tabs: keep off unless you want to enable later */
+    .pc-mobile-tabs { display: none; }
   </style>
 </head>
 
-<body class="resources-page">
+<body class="resources-page" dir="ltr">
   <a href="#main-content" class="skip-link">Skip to main content</a>
   <div class="reading-progress"></div>
 
-  <main id="main-content" class="content-section">
+  <div class="quick-nav-sidebar" aria-label="Section navigation">
+    <div class="quick-nav-item" data-label="Spine" data-target="#spine"></div>
+    <div class="quick-nav-item" data-label="Implementation" data-target="#implementation"></div>
+    <div class="quick-nav-item" data-label="Types" data-target="#sermon-types"></div>
+    <div class="quick-nav-item" data-label="Examples" data-target="#leaf-examples"></div>
+    <div class="quick-nav-item" data-label="Collab" data-target="#collaboration"></div>
+  </div>
+
+  <main id="main-content" class="content-section" role="main" aria-label="Sermon Spine">
 
     <div class="breadcrumbs">
       <a href="/">Home</a> ›
@@ -131,248 +293,658 @@
       Sermon Spine
     </div>
 
-    <!-- Hero -->
-    <section class="hero">
+    <!-- HERO -->
+    <section class="hero" aria-label="Sermon spine hero">
       <div class="hero-content">
-        <h1 class="hero-title">Sermon Spine</h1>
+        <h1 class="hero-title">Master Sermon Spine</h1>
         <p class="hero-subtitle">
-          A shared, repeatable framework based on Acts sermon patterns. 
-          Every message moves through text → context → Jesus → response.
+          A flexible Acts-shaped framework for proclamation: text-driven, Jesus-centered, edifying, and accountable.
+          Use this page to <strong>build together</strong>, not alone.
         </p>
+
+        <div class="hero-actions">
+          <a class="cta" href="./practice.html">🎙️ Practice Lab</a>
+          <a class="cta" href="./feedback.html">🫶 Feedback Method</a>
+          <a class="cta" href="./curriculum.html">🗓️ Sessions</a>
+        </div>
+
+        <!-- LLTSE-style toggle switches -->
+        <div class="toggle-row" aria-label="Display options">
+          <label class="toggle">
+            <input id="toggleTech" type="checkbox" aria-label="Show technical implementation" />
+            <span>Show technical</span>
+          </label>
+          <label class="toggle">
+            <input id="toggleSchema" type="checkbox" data-toggle="schemaDemo" aria-label="Toggle JSON view (example vs schema)" />
+            <span>Schema view</span>
+          </label>
+          <label class="toggle">
+            <input id="toggleSkeleton" type="checkbox" data-toggle="spineDemo" aria-label="Toggle spine view (human vs HTML skeleton)" />
+            <span>HTML spine view</span>
+          </label>
+        </div>
       </div>
     </section>
 
-    <!-- The Spine -->
-    <section class="theology-card">
-      <h2 class="section-title">🧩 The Master Framework</h2>
-      <p>
-        Acts sermons follow a consistent pattern, regardless of speaker or audience. 
-        This spine gives you the same reliable structure:
+    <!-- =========================================================
+         1) SPINE (Human)
+    ========================================================= -->
+    <section class="theology-card animate-on-scroll" id="spine">
+      <h2 class="section-title"><span class="section-icon">🧩</span>The Master Spine (Acts-Shaped)</h2>
+      <p class="muted">
+        This is the repeatable logic of faithful proclamation: rooted in a text unit, moving toward Jesus, calling for response,
+        and building up the church.
       </p>
 
-      <div class="spine-table">
-        <div class="spine-row">
-          <div class="spine-cell-left">
-            <h4>1. Anchor in Text</h4>
-            <p class="hint">Stay within one passage</p>
+      <!-- Demo: Human ⇄ HTML skeleton (toggle) -->
+      <article class="demo" aria-labelledby="spine-demo-label" style="margin-top:1rem;">
+        <header>
+          <span id="spine-demo-label" class="demo-title">Spine: Human view ⇄ HTML section-ID spine</span>
+          <label class="toggle" style="color: var(--text);">
+            <input type="checkbox" data-toggle="spineDemo" aria-label="Toggle HTML spine view" />
+            <span>Show HTML spine</span>
+          </label>
+        </header>
+
+        <!-- Human pane (default visible) -->
+        <div class="pane paragraph" data-target="spineDemo">
+          <div class="grid-2">
+            <div class="panel">
+              <h3>1) Text Unit (single passage)</h3>
+              <p>Choose a coherent block (same letter/book) that can be read and traced without hopping around.</p>
+            </div>
+            <div class="panel">
+              <h3>2) Context (in-book + Acts arc)</h3>
+              <p>What’s happening in the book? Who is speaking? What is at stake? Where are we in the Acts story?</p>
+            </div>
+            <div class="panel">
+              <h3>3) Big Idea (one sentence)</h3>
+              <p>One clear claim that arises from the passage and can be repeated by the congregation.</p>
+            </div>
+            <div class="panel">
+              <h3>4) Tension / Question</h3>
+              <p>Name the real issue the passage confronts (belief, repentance, fear, resistance, suffering, mission).</p>
+            </div>
+            <div class="panel">
+              <h3>5) Movement Map (beats, not dumping)</h3>
+              <p>Beat 1 → Beat 2 → Beat 3. Show progression (Acts speeches often move as a story argument).</p>
+            </div>
+            <div class="panel">
+              <h3>6) Exegesis (anchored claims)</h3>
+              <p>3–5 anchored claims: verse anchor → meaning → implication (keep it clean and explainable).</p>
+            </div>
+            <div class="panel">
+              <h3>7) Jesus Center</h3>
+              <p>Acts consistently bears witness to Jesus: death, resurrection, exaltation, reign, and mission.</p>
+            </div>
+            <div class="panel">
+              <h3>8) Edification (prophetic purpose)</h3>
+              <p>Strengthen / encourage / console. “What is the Spirit building in this church right now?”</p>
+            </div>
+            <div class="panel">
+              <h3>9) Response + Conclusion</h3>
+              <p>Concrete repentance/obedience + summary + doxology. Keep it simple and actionable.</p>
+            </div>
           </div>
-          <div class="spine-cell-right">
-            <ul>
-              <li>Choose a single passage or narrative unit</li>
-              <li>Preferably from the same biblical book</li>
-              <li>Read it aloud to the congregation</li>
-            </ul>
+
+          <div class="key-insight" style="margin-top:1rem;">
+            **Acts rule of thumb:** proclamation is not “content delivery.” It is witness that calls for response.
           </div>
         </div>
 
-        <div class="spine-row">
-          <div class="spine-cell-left">
-            <h4>2. Brief Context</h4>
-            <p class="hint">Quick but precise</p>
+        <!-- Technical pane (hidden until toggled) -->
+        <div class="pane structured" data-alt hidden>
+          <p class="muted">Copy/paste this stable ID spine into any sermon page. IDs should not change.</p>
+
+          <div class="codeblock" data-copy>
+<button class="copy-btn" type="button" aria-label="Copy HTML spine">Copy</button>
+<!-- SERMON TEMPLATE SPINE (RICH + LAYERED) -->
+
+<header id="sermon-hero">
+  <!-- Title, Text, Big Idea, One-line Aim -->
+</header>
+
+<nav id="sermon-quick-nav">
+  <!-- Jump links to sections -->
+</nav>
+
+<section id="sermon-text">
+  <!-- Read the Passage: boundaries, translation notes, repeated words -->
+</section>
+
+<section id="sermon-context">
+  <!-- In-book context + Acts arc + audience stakes -->
+</section>
+
+<section id="sermon-tension">
+  <!-- Central question + why now -->
+</section>
+
+<section id="sermon-movement-map">
+  <!-- Beat 1 → Beat 2 → Beat 3 (progression, not dumping) -->
+</section>
+
+<section id="sermon-exegesis">
+  <!-- 3–5 anchored claims: verse anchor → meaning → implication -->
+</section>
+
+<section id="sermon-jesus">
+  <!-- How this passage proclaims Jesus: death/resurrection/reign -->
+</section>
+
+<section id="sermon-gospel-in-acts">
+  <!-- OPTIONAL: Acts-pattern insert: promise → fulfillment → witness → response -->
+</section>
+
+<section id="sermon-prophetic-edification">
+  <!-- Strengthen / Encourage / Console -->
+</section>
+
+<section id="sermon-repentance-response">
+  <!-- Repent + Believe + obey (context-appropriate call) -->
+</section>
+
+<section id="sermon-testimony-window">
+  <!-- OPTIONAL: congregational victories / brief witness prompts -->
+</section>
+
+<section id="sermon-practice">
+  <!-- Concrete next steps for the week -->
+</section>
+
+<section id="sermon-conclusion">
+  <!-- Summary + return to Big Idea + doxology -->
+</section>
+
+<section id="sermon-feedback">
+  <!-- Training feedback loop: affirmation + clarity + formation -->
+</section>
           </div>
-          <div class="spine-cell-right">
-            <ul>
-              <li><strong>Where are we in the story?</strong></li>
-              <li><strong>Who is speaking—and to whom?</strong></li>
-              <li><strong>What tension or question is being addressed?</strong></li>
-            </ul>
+
+          <div class="callout" style="margin-top:1rem;">
+            <strong>Non-technical option:</strong> use the same headings in a Google Doc.
+            Your “sermon file” can be a document that mirrors the spine exactly.
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- =========================================================
+         2) IMPLEMENTATION (Technical hub)
+    ========================================================= -->
+    <section class="theology-card animate-on-scroll" id="implementation" data-tech="true">
+      <h2 class="section-title"><span class="section-icon">⚙️</span>Technical Implementation</h2>
+      <p class="muted">
+        This section exists so your system scales: repeatable IDs, sermon types, optional modules, and data-driven sermons.
+        If you're not technical, you can ignore this and still fully participate.
+      </p>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Type contract (for filtering & styling)</h3>
+          <div class="codeblock" data-copy>
+<button class="copy-btn" type="button" aria-label="Copy type contract">Copy</button>
+<article class="pc-sermon" data-sermon-type="expository" data-training="true">
+  ...
+</article>
+          </div>
+          <p class="muted" style="margin-top:.6rem;">
+            Types: <code>expository</code>, <code>narrative</code>, <code>testimony</code>, <code>prophetic</code>.
+            <code>data-training="true"</code> can reveal training-only modules.
+          </p>
+        </div>
+
+        <div class="panel">
+          <h3>Optional modules (plug-in style)</h3>
+          <ul>
+            <li><strong>Acts Pattern Insert:</strong> <code>#sermon-gospel-in-acts</code></li>
+            <li><strong>Testimony Window:</strong> <code>#sermon-testimony-window</code></li>
+            <li><strong>Feedback Module:</strong> <code>#sermon-feedback</code></li>
+          </ul>
+          <div class="key-insight" style="margin-top:.8rem;">
+            Optional modules should be present but can be collapsed or left empty.
+          </div>
+        </div>
+      </div>
+
+      <article class="demo" aria-labelledby="schema-demo-label" style="margin-top:1rem;">
+        <header>
+          <span id="schema-demo-label" class="demo-title">Sermon data: Authoring example ⇄ JSON Schema</span>
+          <label class="toggle" style="color: var(--text);">
+            <input type="checkbox" data-toggle="schemaDemo" aria-label="Toggle JSON schema view"/>
+            <span>Schema view</span>
+          </label>
+        </header>
+
+        <!-- Authoring example -->
+        <div class="pane paragraph" data-target="schemaDemo">
+          <p class="muted">One file per sermon (author-friendly). This is a simplified example.</p>
+          <div class="codeblock" data-copy>
+<button class="copy-btn" type="button" aria-label="Copy sermon JSON example">Copy</button>
+{
+  "id": "acts-7-stephen-pattern",
+  "type": "narrative",
+  "training": true,
+  "meta": {
+    "title": "The Pattern We Keep Repeating",
+    "series": "Acts: Witness by the Spirit",
+    "date": "2026-01-19",
+    "speaker": "Henry Rivera",
+    "primaryText": "Acts 7:1–60",
+    "supportTexts": ["Luke 23:34", "1 Corinthians 14:3"]
+  },
+  "hero": {
+    "bigIdea": "God advances His rescue plan even when His messengers are rejected—fulfilled in Jesus.",
+    "aim": "After hearing this, we will become teachable, repent of resistance, and follow Jesus with courage."
+  },
+  "context": {
+    "bookContext": "Stephen is on trial; the accusation is against Moses/temple; he reframes Israel’s story.",
+    "actsArc": "Jerusalem section climaxes in persecution; witness pushes outward.",
+    "audienceStakes": "Leaders defending control, identity, and temple authority."
+  }
+}
+          </div>
+          <div class="callout" style="margin-top:1rem;">
+            <strong>Non-technical equivalent:</strong> the same fields can be filled in on a worksheet or Google Doc.
           </div>
         </div>
 
-        <div class="spine-row">
-          <div class="spine-cell-left">
-            <h4>3. Big Idea</h4>
-            <p class="hint">One clear sentence</p>
-          </div>
-          <div class="spine-cell-right">
-            <ul>
-              <li>State the main point in one sentence</li>
-              <li>Make it clear enough for anyone to remember</li>
-              <li>Let it arise from the text, not your agenda</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="spine-row">
-          <div class="spine-cell-left">
-            <h4>4. Movements (2–4)</h4>
-            <p class="hint">Walk through the text</p>
-          </div>
-          <div class="spine-cell-right">
-            <ul>
-              <li>Break the passage into logical sections</li>
-              <li>Show how each movement advances the Big Idea</li>
-              <li>Keep explanations clear and connected</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="spine-row">
-          <div class="spine-cell-left">
-            <h4>5. Jesus at the Center</h4>
-            <p class="hint">Non-negotiable</p>
-          </div>
-          <div class="spine-cell-right">
-            <ul>
-              <li>Show where Jesus is clearest in this text</li>
-              <li>Connect to death, resurrection, or exaltation</li>
-              <li>Avoid moralism—point to the gospel</li>
-            </ul>
+        <!-- JSON Schema -->
+        <div class="pane structured" data-alt hidden>
+          <p class="muted">Simplified schema you can expand later (draft-07-ish).</p>
+          <div class="codeblock" data-copy>
+<button class="copy-btn" type="button" aria-label="Copy sermon JSON schema">Copy</button>
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Project Context Sermon",
+  "type": "object",
+  "required": ["id", "type", "meta", "hero", "text", "context", "jesus", "application", "response", "conclusion"],
+  "properties": {
+    "id": {"type": "string"},
+    "type": {"type": "string", "enum": ["expository", "narrative", "testimony", "prophetic"]},
+    "training": {"type": "boolean"},
+    "meta": {
+      "type": "object",
+      "required": ["title", "date", "speaker", "primaryText"],
+      "properties": {
+        "title": {"type": "string"},
+        "date": {"type": "string"},
+        "speaker": {"type": "string"},
+        "primaryText": {"type": "string"},
+        "supportTexts": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "hero": {
+      "type": "object",
+      "required": ["bigIdea", "aim"],
+      "properties": {
+        "bigIdea": {"type": "string"},
+        "aim": {"type": "string"}
+      }
+    }
+  }
+}
           </div>
         </div>
+      </article>
 
-        <div class="spine-row">
-          <div class="spine-cell-left">
-            <h4>6. Response Invitation</h4>
-            <p class="hint">Concrete & gracious</p>
-          </div>
-          <div class="spine-cell-right">
+      <div class="panel" style="margin-top:1rem;">
+        <h3>Starter assets (links you can create next)</h3>
+        <ul>
+          <li><code>/resources/prophetic-training/assets/sermon-template-blank.html</code></li>
+          <li><code>/resources/prophetic-training/assets/sermon.schema.json</code></li>
+          <li><code>/resources/prophetic-training/assets/sermon.sample.acts2.json</code></li>
+          <li><code>/resources/prophetic-training/assets/sermon.sample.acts7.json</code></li>
+        </ul>
+        <p class="muted">These are optional. The system still works if you use a document-based workflow.</p>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         3) SERMON TYPES (Filterable)
+    ========================================================= -->
+    <section class="theology-card animate-on-scroll" id="sermon-types">
+      <h2 class="section-title"><span class="section-icon">🗂️</span>Sermon Types (Acts-Based)</h2>
+      <p class="muted">
+        Types don’t replace the spine — they change how the spine is expressed.
+        Filter to see one family at a time.
+      </p>
+
+      <div class="filter-row" aria-label="Filter sermon types">
+        <div class="filter-pill active" data-filter="all">All</div>
+        <div class="filter-pill" data-filter="expository">Expository</div>
+        <div class="filter-pill" data-filter="narrative">Narrative</div>
+        <div class="filter-pill" data-filter="testimony">Testimony</div>
+        <div class="filter-pill" data-filter="prophetic">Prophetic</div>
+      </div>
+
+      <div class="stack">
+
+        <details class="block" data-type="expository" open>
+          <summary class="block-summary">
+            Expository (Text-driven walkthrough — Acts 2 vibe)
+            <span>▾</span>
+          </summary>
+          <div class="block-body">
             <ul>
-              <li>Give one clear, doable response</li>
-              <li>Make it specific, not vague</li>
-              <li>Invite with grace, not guilt</li>
+              <li><strong>When:</strong> clarity is needed; the text itself carries the message</li>
+              <li><strong>How:</strong> move through the passage in clean beats; keep anchors visible</li>
+              <li><strong>Watch for:</strong> over-explaining; losing the “so what” and response</li>
+            </ul>
+            <p class="muted">
+              Map: Text → Context → Beat progression → Jesus → Response → Edification.
+            </p>
+          </div>
+        </details>
+
+        <details class="block" data-type="narrative">
+          <summary class="block-summary">
+            Narrative-Historical (Story argument — Acts 7 / Stephen)
+            <span>▾</span>
+          </summary>
+          <div class="block-body">
+            <ul>
+              <li><strong>When:</strong> the audience needs reframing; history exposes a present pattern</li>
+              <li><strong>How:</strong> story panels → pattern → confrontation → Jesus-centered clarity</li>
+              <li><strong>Watch for:</strong> info-dumping; missing the turn where the pattern becomes “about us”</li>
+            </ul>
+            <p class="muted">
+              Stephen’s move: history is not trivia — it’s a mirror.
+            </p>
+          </div>
+        </details>
+
+        <details class="block" data-type="testimony">
+          <summary class="block-summary">
+            Testimony (Witness — Acts 22 / 26)
+            <span>▾</span>
+          </summary>
+          <div class="block-body">
+            <ul>
+              <li><strong>When:</strong> you need credibility, relatability, and a clear gospel invitation</li>
+              <li><strong>How:</strong> before → encounter → now; tether every claim to Jesus</li>
+              <li><strong>Watch for:</strong> becoming the hero; the testimony must spotlight Christ</li>
             </ul>
           </div>
+        </details>
+
+        <details class="block" data-type="prophetic">
+          <summary class="block-summary">
+            Prophetic Exhortation (Build-up — 1 Cor 14:3 guardrails)
+            <span>▾</span>
+          </summary>
+          <div class="block-body">
+            <ul>
+              <li><strong>When:</strong> the church needs strengthening, encouragement, consolation</li>
+              <li><strong>How:</strong> Scripture-grounded + specific edification + discernment-friendly posture</li>
+              <li><strong>Watch for:</strong> vagueness; manipulation; shutting down testing with “God told me”</li>
+            </ul>
+            <p class="muted">
+              Always keep order, humility, and accountability.
+            </p>
+          </div>
+        </details>
+
+      </div>
+    </section>
+
+    <!-- =========================================================
+         4) LEAF EXAMPLES
+    ========================================================= -->
+    <section class="theology-card animate-on-scroll" id="leaf-examples">
+      <h2 class="section-title"><span class="section-icon">🍃</span>Leaf Examples (Worked Mini-Samples)</h2>
+      <p class="muted">
+        These are short “what it looks like” samples—use them as patterns, not scripts.
+      </p>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Expository mini-leaf</h3>
+          <p>
+            <strong>Big Idea:</strong> Jesus is risen Lord; repentance is the doorway to life.<br/>
+            <strong>Beats:</strong> Promise → Fulfillment → Witness → Response.<br/>
+            <strong>Response:</strong> “Turn to Jesus now—receive forgiveness and the Spirit.”
+          </p>
         </div>
-
-        <div class="spine-row">
-          <div class="spine-cell-left">
-            <h4>7. Closing Prayer</h4>
-            <p class="hint">Ask the Spirit to work</p>
-          </div>
-          <div class="spine-cell-right">
-            <ul>
-              <li>Pray for hearts to receive what God has said</li>
-              <li>Ask for the Spirit's power to respond faithfully</li>
-              <li>Keep it simple and heartfelt</li>
-            </ul>
-          </div>
+        <div class="panel">
+          <h3>Narrative mini-leaf (Stephen)</h3>
+          <p>
+            <strong>Big Idea:</strong> We repeat the pattern of resisting God—and God still offers mercy in Jesus.<br/>
+            <strong>Beats:</strong> Story panels → pattern exposed → Jesus vindicated → repentance invitation.
+          </p>
+        </div>
+        <div class="panel">
+          <h3>Testimony mini-leaf</h3>
+          <p>
+            <strong>Before:</strong> “I was confident, but empty.”<br/>
+            <strong>Encounter:</strong> “Jesus confronted me through the Word and community.”<br/>
+            <strong>Now:</strong> “I obey because He’s alive—repentance became freedom.”
+          </p>
+        </div>
+        <div class="panel">
+          <h3>Prophetic encouragement mini-leaf</h3>
+          <p>
+            <strong>Text anchor:</strong> a short passage that names the moment (fear, fatigue, division).<br/>
+            <strong>Edification:</strong> “The Spirit is calling us to courage and unity.”<br/>
+            <strong>Discernment:</strong> “Let’s test this together and pray.”
+          </p>
         </div>
       </div>
     </section>
 
-    <!-- Acts Examples -->
-    <section class="theology-card">
-      <h2 class="section-title">📚 Acts Sermon Types</h2>
-      <p>Acts shows us different sermon forms, all using the same spine:</p>
+    <!-- =========================================================
+         5) COLLABORATION WORKFLOW
+    ========================================================= -->
+    <section class="theology-card animate-on-scroll" id="collaboration">
+      <h2 class="section-title"><span class="section-icon">🤝</span>Collaboration Workflow (No One Builds Alone)</h2>
+      <p class="muted">
+        The early church often spoke as a team. This training center assumes the same:
+        preparation, review, and improvement happen in community.
+      </p>
 
-      <div class="grid-2" style="margin-top: 1.5rem;">
+      <div class="grid-2">
         <div class="panel">
-          <h3>Expository / Text-Driven</h3>
-          <p><strong>Example:</strong> Peter (Acts 2), Paul (Acts 13)</p>
-          <p class="muted">Explain Scripture passage by passage, showing how it points to Jesus.</p>
-        </div>
-
-        <div class="panel">
-          <h3>Narrative-Historical</h3>
-          <p><strong>Example:</strong> Stephen (Acts 7)</p>
-          <p class="muted">Retell Israel's story as one theological argument leading to Jesus.</p>
-        </div>
-
-        <div class="panel">
-          <h3>Evangelistic / Apologetic</h3>
-          <p><strong>Example:</strong> Paul in synagogues & marketplaces</p>
-          <p class="muted">Reason from Scripture to show Jesus is the promised Messiah.</p>
-        </div>
-
-        <div class="panel">
-          <h3>Testimonial / Witness</h3>
-          <p><strong>Example:</strong> Paul's conversion accounts</p>
-          <p class="muted">Share personal encounter with Jesus as proclamation (Before → Encounter → Now).</p>
-        </div>
-
-        <div class="panel">
-          <h3>Prophetic Encouragement</h3>
-          <p><strong>Example:</strong> Philip's daughters (Acts 21:9)</p>
-          <p class="muted">Build up the church with Spirit-prompted words of strength and hope.</p>
-        </div>
-      </div>
-
-      <div class="key-insight" style="margin-top: 1.5rem;">
-        <strong>All these types use the same spine.</strong> The difference is in emphasis and style, not structure.
-      </div>
-    </section>
-
-    <!-- Workflow -->
-    <section class="theology-card">
-      <h2 class="section-title">🤝 Collaborative Workflow</h2>
-      <p>The spine works best when prepared in community:</p>
-
-      <div class="grid-3">
-        <div class="panel">
-          <h3>Before Practice</h3>
-          <ul style="margin:0; padding-left: 1.25rem; line-height:1.75;">
-            <li>Bring your passage</li>
-            <li>Share Big Idea with team</li>
-            <li>Outline 2–4 movements</li>
-            <li>Identify where Jesus is clearest</li>
-            <li>Ask team for forming feedback</li>
+          <h3>Before (pre-feedback shaping)</h3>
+          <ul>
+            <li>Bring: text unit + Big Idea + beats</li>
+            <li>Ask: “Where am I unclear?” “What’s missing?”</li>
+            <li>Confirm: Jesus center + response</li>
           </ul>
         </div>
-
         <div class="panel">
-          <h3>During Practice</h3>
-          <ul style="margin:0; padding-left: 1.25rem; line-height:1.75;">
-            <li>Deliver your message (8–10 min)</li>
-            <li>Team listens for clarity</li>
-            <li>Team notes what's working</li>
-            <li>Team observes Jesus-centeredness</li>
-          </ul>
-        </div>
-
-        <div class="panel">
-          <h3>After Practice</h3>
-          <ul style="margin:0; padding-left: 1.25rem; line-height:1.75;">
-            <li>Team affirms strengths first</li>
-            <li>One clarity question</li>
-            <li>One growth invitation</li>
-            <li>Prayer for continued formation</li>
+          <h3>After (post-feedback formation)</h3>
+          <ul>
+            <li>Affirmation (what strengthened the church)</li>
+            <li>One clarity theme (what to tighten)</li>
+            <li>One growth invitation (one next improvement)</li>
           </ul>
         </div>
       </div>
-    </section>
 
-    <!-- Next Steps -->
-    <section class="theology-card">
-      <h2 class="section-title">🚀 Ready to Practice?</h2>
-      <p>Now that you understand the framework, learn how to give and receive feedback well:</p>
+      <article class="demo" aria-labelledby="help-demo-label" style="margin-top:1rem;">
+        <header>
+          <span id="help-demo-label" class="demo-title">Copy/paste: Ask the team for help</span>
+        </header>
+        <div class="pane">
+          <div class="codeblock" data-copy>
+<button class="copy-btn" type="button" aria-label="Copy help request">Copy</button>
+PASSAGE:
+BIG IDEA:
+MOVEMENTS / BEATS (2–4):
+WHERE I’M STUCK:
+WHAT I’M ASKING THE TEAM:
+          </div>
+        </div>
+      </article>
 
-      <div class="grid-2" style="margin-top: 1.5rem;">
-        <a href="./feedback.html" class="panel" style="text-decoration: none; color: inherit;">
-          <h3>🫶 Feedback Culture</h3>
-          <p>Master the Affirm → Clarify → Form method that keeps feedback safe and formative.</p>
-        </a>
-
-        <a href="./practice.html" class="panel" style="text-decoration: none; color: inherit;">
-          <h3>🎙️ Practice Lab</h3>
-          <p>See what to prepare, how to ask for help, and practice formats (solo/duo/trio).</p>
-        </a>
+      <div class="key-insight" style="margin-top:1rem;">
+        A great sermon is often a team-built sermon—one voice delivered it, but many helped shape it.
       </div>
     </section>
 
     <!-- Pathway Navigation -->
-    <nav class="pathway-nav">
-      <a href="./curriculum.html">← Previous: Curriculum</a>
-      <div class="step-indicator">Step 4 of 7</div>
-      <a href="./feedback.html">Next: Feedback →</a>
+    <nav class="pathway-nav" style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; padding-top: 2rem; border-top: 2px solid var(--border); gap: 1rem; flex-wrap: wrap;">
+      <a href="./curriculum.html" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; background: var(--accent-blue); color: white; text-decoration: none; border-radius: 10px; font-weight: 750; transition: transform .2s ease, background .2s ease;">← Previous: Curriculum</a>
+      <div style="color: var(--text-gray); font-size: 0.9rem; font-weight: 600;">Step 4 of 7</div>
+      <a href="./feedback.html" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; background: var(--accent-blue); color: white; text-decoration: none; border-radius: 10px; font-weight: 750; transition: transform .2s ease, background .2s ease;">Next: Feedback →</a>
     </nav>
 
   </main>
 
   <script src="/assets/js/nav-component.js"></script>
   <script>
-    // Reading progress bar
-    (function() {
-      const bar = document.querySelector('.reading-progress');
+    document.addEventListener('DOMContentLoaded', function() {
+
+      // ---------------------------------------------------------
+      // Global: Show technical sections
+      // ---------------------------------------------------------
+      const techToggle = document.getElementById('toggleTech');
+      if (techToggle) {
+        techToggle.addEventListener('change', () => {
+          document.body.classList.toggle('show-tech', !!techToggle.checked);
+        });
+      }
+
+      // ---------------------------------------------------------
+      // LLTSE-style generic demo toggles (human ⇄ technical)
+      // - each demo uses: [data-target="KEY"] for human pane
+      //   and [data-alt] for technical pane
+      // ---------------------------------------------------------
+      document.querySelectorAll('input[data-toggle]').forEach(cb => {
+        cb.addEventListener('change', e => {
+          const key = e.target.getAttribute('data-toggle');
+          const demo = e.target.closest('.demo') || document; // allow global toggles
+          // Prefer scoping to nearest demo if present:
+          const scope = e.target.closest('.demo') || document;
+
+          const para = scope.querySelector(`[data-target="${key}"]`);
+          const alt  = scope.querySelector('[data-alt]');
+
+          // If the global toggle is used (hero switches), target the matching demo by key:
+          if (!para || !alt) {
+            const demoByKey = document.querySelector(`.demo [data-target="${key}"]`)?.closest('.demo');
+            if (!demoByKey) return;
+            const p2 = demoByKey.querySelector(`[data-target="${key}"]`);
+            const a2 = demoByKey.querySelector('[data-alt]');
+            if (!p2 || !a2) return;
+            p2.hidden = e.target.checked;
+            a2.hidden = !e.target.checked;
+            return;
+          }
+
+          para.hidden = e.target.checked;
+          alt.hidden  = !e.target.checked;
+        });
+      });
+
+      // ---------------------------------------------------------
+      // Copy buttons
+      // ---------------------------------------------------------
+      function copyTextFrom(el){
+        // Prefer textContent of the codeblock without the button label
+        // We'll clone and remove the button first.
+        const clone = el.cloneNode(true);
+        const btn = clone.querySelector('.copy-btn');
+        if (btn) btn.remove();
+        return clone.textContent.replace(/^\s*\n/, '');
+      }
+
+      document.querySelectorAll('.codeblock[data-copy]').forEach(block => {
+        const btn = block.querySelector('.copy-btn');
+        if (!btn) return;
+
+        btn.addEventListener('click', async () => {
+          try{
+            const text = copyTextFrom(block);
+            await navigator.clipboard.writeText(text);
+            btn.dataset.state = 'copied';
+            btn.textContent = 'Copied ✓';
+            setTimeout(() => {
+              btn.dataset.state = '';
+              btn.textContent = 'Copy';
+            }, 1200);
+          } catch(err){
+            btn.dataset.state = '';
+            btn.textContent = 'Copy';
+            alert('Copy failed. You can manually select and copy.');
+          }
+        });
+      });
+
+      // ---------------------------------------------------------
+      // Sermon type filter
+      // ---------------------------------------------------------
+      const pills = document.querySelectorAll('.filter-pill');
+      const blocks = document.querySelectorAll('details.block[data-type]');
+
+      function setFilter(value){
+        pills.forEach(p => p.classList.toggle('active', p.dataset.filter === value));
+        blocks.forEach(b => {
+          const t = b.dataset.type;
+          const show = (value === 'all') || (t === value);
+          b.style.display = show ? '' : 'none';
+        });
+      }
+
+      pills.forEach(p => {
+        p.addEventListener('click', () => setFilter(p.dataset.filter));
+      });
+
+      // default filter
+      setFilter('all');
+
+      // ---------------------------------------------------------
+      // Reading progress bar
+      // ---------------------------------------------------------
+      const progressBar = document.querySelector('.reading-progress');
       const onScroll = () => {
-        const scrollTop = window.scrollY || document.documentElement.scrollTop;
-        const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-        if (bar) bar.style.width = pct + '%';
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+        if (progressBar) progressBar.style.width = scrolled + '%';
       };
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
-    })();
+
+      // ---------------------------------------------------------
+      // Quick nav: show after hero + active dot tracking
+      // ---------------------------------------------------------
+      const quickNav = document.querySelector('.quick-nav-sidebar');
+      const hero = document.querySelector('.hero');
+      const navItems = document.querySelectorAll('.quick-nav-item');
+      const sections = [...navItems].map(i => document.querySelector(i.dataset.target)).filter(Boolean);
+
+      function setNavVisibility(){
+        if (!quickNav || !hero) return;
+        const heroBottom = hero.getBoundingClientRect().bottom;
+        quickNav.classList.toggle('visible', heroBottom < 80);
+      }
+
+      navItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const target = document.querySelector(item.dataset.target);
+          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      function setActiveDot(){
+        let activeIndex = 0;
+        sections.forEach((section, index) => {
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= 160 && rect.bottom >= 160) activeIndex = index;
+        });
+        navItems.forEach(i => i.classList.remove('active'));
+        if (navItems[activeIndex]) navItems[activeIndex].classList.add('active');
+      }
+
+      window.addEventListener('scroll', () => {
+        setNavVisibility();
+        setActiveDot();
+      }, { passive: true });
+
+      setNavVisibility();
+      setActiveDot();
+    });
   </script>
 </body>
 </html>
