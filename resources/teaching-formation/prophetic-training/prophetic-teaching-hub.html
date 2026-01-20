@@ -753,212 +753,22 @@
 
   </main>
 
-  <!-- Mobile Tabs (anchors) -->
-  <nav class="pc-mobile-tabs" aria-label="Quick navigation" role="navigation">
-    <a href="#tiles">Tiles</a>
-    <a href="#luke-acts">Luke–Acts</a>
-    <a href="#culture">Culture</a>
-    <a href="#next-step">Next</a>
-  </nav>
+ <!-- Back to top -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <!-- Back to top -->
-  <button class="back-to-top" type="button" aria-label="Back to top">↑ Top</button>
+<!-- Mobile menu overlay -->
+<div class="mobile-menu-overlay" aria-hidden="true"></div>
 
-  <!-- Optional overlay element for mobile menu patterns -->
-  <div class="mobile-menu-overlay" aria-hidden="true"></div>
+<!-- Navigation Component -->
+<script type="module">
+  import NavigationComponent from '/assets/js/nav-component.js';
+  const navigation = new NavigationComponent({
+    currentPage: 'studies/prophetic-teachings',
+    hubType: 'prophetic-teachings'
+  });
+</script>
 
-  <!-- Nav component (module init) -->
-  <script type="module">
-    import { initNav } from '/assets/js/nav-component.js';
-    initNav({ hub: 'resources', section: 'teaching-formation' });
-  </script>
-
-  <script>
-    // ==========================================
-    // READING PROGRESS
-    // ==========================================
-    (function () {
-      const bar = document.querySelector('.reading-progress');
-      if (!bar) return;
-      
-      function update() {
-        const doc = document.documentElement;
-        const scrollTop = doc.scrollTop || document.body.scrollTop;
-        const scrollHeight = (doc.scrollHeight || document.body.scrollHeight) - doc.clientHeight;
-        const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
-        bar.style.width = progress + '%';
-        bar.setAttribute('aria-valuenow', Math.round(progress));
-      }
-      
-      window.addEventListener('scroll', update, { passive: true });
-      update();
-    })();
-
-    // ==========================================
-    // ANIMATE-ON-SCROLL
-    // ==========================================
-    (function () {
-      const els = document.querySelectorAll('.animate-on-scroll');
-      if (!els.length) return;
-
-      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (reduce) {
-        els.forEach(el => el.classList.add('visible'));
-        return;
-      }
-
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            io.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
-
-      els.forEach(el => io.observe(el));
-    })();
-
-    // ==========================================
-    // DESKTOP QUICK-NAV DOTS
-    // ==========================================
-    (function () {
-      const sidebar = document.querySelector('.quick-nav-sidebar');
-      if (!sidebar) return;
-
-      const sections = Array.from(document.querySelectorAll('main .theology-card[id]'));
-      if (!sections.length) return;
-
-      sidebar.innerHTML = '';
-
-      sections.forEach((section) => {
-        const dot = document.createElement('a');
-        dot.href = '#' + section.id;
-        dot.className = 'quick-nav-dot';
-        dot.setAttribute('aria-label', 'Jump to section: ' + (section.querySelector('h2')?.textContent?.trim() || section.id));
-        dot.setAttribute('tabindex', '0');
-
-        const label = document.createElement('span');
-        label.className = 'quick-nav-label';
-        label.textContent = section.querySelector('h2')?.textContent?.trim() || section.id;
-        label.setAttribute('aria-hidden', 'true');
-
-        dot.appendChild(label);
-        sidebar.appendChild(dot);
-      });
-
-      // Show sidebar after scrolling past hero
-      const hero = document.querySelector('.hub-hero');
-      const checkVisibility = () => {
-        if (!hero) return;
-        const heroBottom = hero.getBoundingClientRect().bottom;
-        sidebar.classList.toggle('visible', heroBottom < 100);
-      };
-      
-      window.addEventListener('scroll', checkVisibility, { passive: true });
-      checkVisibility();
-
-      // Active dot tracking
-      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (reduce) return;
-
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          const id = entry.target.id;
-          const link = sidebar.querySelector('a[href="#' + id + '"]');
-          if (!link) return;
-          if (entry.isIntersecting) {
-            sidebar.querySelectorAll('.quick-nav-dot.active').forEach(x => x.classList.remove('active'));
-            link.classList.add('active');
-          }
-        });
-      }, { threshold: 0.35 });
-
-      sections.forEach(s => io.observe(s));
-    })();
-
-    // ==========================================
-    // BACK-TO-TOP BUTTON
-    // ==========================================
-    (function () {
-      const btn = document.querySelector('.back-to-top');
-      if (!btn) return;
-
-      function toggle() {
-        btn.style.display = (window.scrollY > 600) ? 'inline-flex' : 'none';
-      }
-
-      btn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-      
-      window.addEventListener('scroll', toggle, { passive: true });
-      toggle();
-    })();
-
-    // ==========================================
-    // SMOOTH SCROLL FOR IN-PAGE ANCHORS
-    // ==========================================
-    (function () {
-      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      
-      document.addEventListener('click', (e) => {
-        const a = e.target.closest('a[href^="#"]');
-        if (!a) return;
-        
-        const id = a.getAttribute('href').slice(1);
-        const el = document.getElementById(id);
-        if (!el) return;
-        
-        e.preventDefault();
-        
-        if (reduce) {
-          el.scrollIntoView({ behavior: 'auto', block: 'start' });
-        } else {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-        
-        // Focus management for accessibility
-        el.setAttribute('tabindex', '-1');
-        el.focus();
-      });
-    })();
-
-    // ==========================================
-    // KEYBOARD NAVIGATION FOR QUICK-NAV
-    // ==========================================
-    (function () {
-      const sidebar = document.querySelector('.quick-nav-sidebar');
-      if (!sidebar) return;
-
-      sidebar.addEventListener('keydown', (e) => {
-        const dots = Array.from(sidebar.querySelectorAll('.quick-nav-dot'));
-        const current = document.activeElement;
-        const index = dots.indexOf(current);
-        
-        if (index === -1) return;
-        
-        let nextIndex = index;
-        
-        if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-          e.preventDefault();
-          nextIndex = (index + 1) % dots.length;
-        } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-          e.preventDefault();
-          nextIndex = (index - 1 + dots.length) % dots.length;
-        } else if (e.key === 'Home') {
-          e.preventDefault();
-          nextIndex = 0;
-        } else if (e.key === 'End') {
-          e.preventDefault();
-          nextIndex = dots.length - 1;
-        }
-        
-        if (nextIndex !== index) {
-          dots[nextIndex].focus();
-        }
-      });
-    })();
-  </script>
+<!-- Character Page Script handles EVERYTHING else -->
+<script src="/assets/js/character-page-v5-8.js" defer></script>
 </body>
 </html>
