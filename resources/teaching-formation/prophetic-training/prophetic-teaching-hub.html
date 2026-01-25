@@ -66,7 +66,7 @@
 
   <style>
     /* ============================================
-       HUB HERO (v5.8.1 compatible)
+       HUB HERO - Enhanced with global-v2 compatibility
        ============================================ */
     .hub-hero {
       min-height: 56vh;
@@ -151,41 +151,13 @@
       margin-top: .25rem;
     }
 
-    .hub-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 16px;
-      border-radius: 14px;
-      text-decoration: none;
-      font-weight: 800;
-      color: #fff;
-      border: 1px solid rgba(255,255,255,.20);
-      background: rgba(255,255,255,.10);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      transition: transform .2s ease, background .2s ease, border-color .2s ease;
-      min-height: 44px;
-    }
-
-    .hub-cta:hover {
-      transform: translateY(-2px);
-      background: rgba(255,255,255,.14);
-      border-color: rgba(255,255,255,.30);
-    }
-
-    .hub-cta.primary {
-      background: linear-gradient(135deg, rgba(255,255,255,.22), rgba(255,255,255,.08));
-      border-color: rgba(255,255,255,.28);
-    }
-
-    /* Hero pages should not inherit content-section top padding */
+    /* Override content-section padding for hero pages */
     .resources-page .content-section {
-    padding-top: 0;
+      padding-top: 0;
     }
 
     /* ============================================
-       HUB TILE GRID
+       HUB TILE GRID - Using global-v2 animations
        ============================================ */
     .hub-tiles {
       display: grid;
@@ -202,7 +174,7 @@
       border: 1px solid var(--border-light);
       background: var(--bg);
       padding: 1.35rem 1.35rem 1.15rem;
-      box-shadow: 0 4px 6px -1px var(--shadow), 0 2px 4px -1px var(--shadow);
+      box-shadow: var(--shadow-md);
       transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
       min-height: 170px;
       display: flex;
@@ -213,8 +185,8 @@
     @media (hover: hover) {
       .hub-tile:hover {
         transform: translateY(-3px);
-        box-shadow: 0 10px 15px -3px var(--shadow-lg), 0 4px 6px -2px var(--shadow);
-        border-color: rgba(0,180,216,.35);
+        box-shadow: var(--shadow-xl);
+        border-color: var(--accent-blue);
       }
     }
 
@@ -280,81 +252,26 @@
       gap: 10px;
     }
 
-    /* ============================================
-       QUICK NAV SIDEBAR (desktop only)
-       ============================================ */
-    .quick-nav-sidebar {
-      position: fixed;
-      right: 2rem;
-      top: 50%;
-      transform: translateY(-50%);
-      display: none;
-      flex-direction: column;
-      gap: 12px;
-      z-index: 500;
-      opacity: 0;
-      transition: opacity .35s ease;
-    }
-
-    .quick-nav-sidebar.visible {
-      opacity: 1;
-    }
-
-    @media (min-width: 1400px) {
-      .quick-nav-sidebar {
-        display: flex;
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      .hub-hero {
+        min-height: 48vh;
+        padding: 2rem 1rem;
       }
-    }
 
-    .quick-nav-dot {
-      position: relative;
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      background: rgba(0,0,0,.20);
-      border: 2px solid rgba(0,0,0,.10);
-      cursor: pointer;
-      transition: transform .2s ease, background .2s ease, width .2s ease;
-      text-decoration: none;
-      display: block;
-    }
+      .hub-hero-title {
+        font-size: clamp(1.75rem, 7vw, 2.5rem);
+      }
 
-    .quick-nav-dot:hover {
-      transform: scale(1.2);
-      background: rgba(114,9,183,.40);
-    }
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
 
-    .quick-nav-dot.active {
-      width: 28px;
-      background: var(--accent-blue);
-      border-color: rgba(0,180,216,.30);
-    }
-
-    .quick-nav-dot:focus-visible {
-      outline: 2px solid var(--accent-blue);
-      outline-offset: 4px;
-    }
-
-    .quick-nav-label {
-      position: absolute;
-      right: 24px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0,0,0,.88);
-      color: white;
-      padding: 6px 10px;
-      border-radius: 6px;
-      font-size: .82rem;
-      font-weight: 600;
-      white-space: nowrap;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .2s ease;
-    }
-
-    .quick-nav-dot:hover .quick-nav-label,
-    .quick-nav-dot:focus-visible .quick-nav-label {
-      opacity: 1;
+      .hero-actions .cosmic-button {
+        width: 100%;
+        justify-content: center;
+      }
     }
 
     /* ============================================
@@ -372,6 +289,11 @@
 
       .hub-hero::before {
         animation: none;
+      }
+
+      .animate-on-scroll {
+        opacity: 1 !important;
+        transform: none !important;
       }
     }
 
@@ -445,7 +367,7 @@
     /* ============================================
        FOCUS IMPROVEMENTS
        ============================================ */
-    .hub-cta:focus-visible,
+    .cosmic-button:focus-visible,
     .hub-tile:focus-visible {
       outline: 3px solid var(--accent-blue);
       outline-offset: 4px;
@@ -464,10 +386,10 @@
 
   <!-- Navigation will be inserted here by nav-component.js -->
 
-  <!-- Quick Navigation Sidebar (Desktop Only) -->
-  <nav class="quick-nav-sidebar" aria-label="Quick section navigation" role="navigation">
+  <!-- Quick Navigation Sidebar (Desktop Only) - Auto-generated by character-page-v5-8.js -->
+  <div class="quick-nav-sidebar" aria-label="Quick section navigation" role="navigation">
     <!-- Dots will be auto-generated by script -->
-  </nav>
+  </div>
 
   <main id="main-content" class="content-section" role="main" aria-label="Prophetic & Teaching Formation Hub">
 
@@ -492,16 +414,16 @@
           and Spirit-led encouragement—<strong>always for the building up of the church</strong>.
         </p>
         <div class="hero-actions" role="group" aria-label="Primary navigation">
-          <a class="hub-cta primary" href="./Invitation.html">✉️ Read Invitation</a>
-          <a class="hub-cta" href="./charter.html">📜 View Charter</a>
-          <a class="hub-cta" href="./curriculum.html">🧭 Sessions</a>
-          <a class="hub-cta" href="./sermon-spine.html">🧩 Sermon Spine</a>
+          <a class="cosmic-button" href="./Invitation.html">✉️ Read Invitation</a>
+          <a class="cosmic-button muted" href="./charter.html">📜 View Charter</a>
+          <a class="cosmic-button muted" href="./curriculum.html">🧭 Sessions</a>
+          <a class="cosmic-button muted" href="./sermon-spine.html">🧩 Sermon Spine</a>
         </div>
       </div>
     </header>
 
     <!-- Formation Vision -->
-    <div class="key-insight" style="max-width: 800px; margin: 2rem auto 0;">
+    <div class="key-insight fade-in" style="max-width: 800px; margin: 2rem auto 0;">
       <strong>Formation Vision:</strong> We are not training preachers. We are forming a Spirit-attentive, Scripture-anchored community that helps one another speak faithfully.
     </div>
     
@@ -509,7 +431,10 @@
          ALL HUB TILES
          ========================================== -->
     <section class="theology-card animate-on-scroll" id="tiles" aria-labelledby="tiles-heading">
-      <h2 class="section-title" id="tiles-heading">📂 All Hub Resources</h2>
+      <h2 class="section-title" id="tiles-heading">
+        <span class="section-icon">📂</span>
+        All Hub Resources
+      </h2>
       <p>
         Everything you need: invitation, charter, curriculum, tools, and feedback rhythms.
         Start with the <strong>Invitation</strong> if you're new.
@@ -625,7 +550,10 @@
          LUKE–ACTS FRAMING
          ========================================== -->
     <section class="theology-card animate-on-scroll" id="luke-acts" aria-labelledby="luke-acts-heading">
-      <h2 class="section-title" id="luke-acts-heading">📖 Luke–Acts Framing</h2>
+      <h2 class="section-title" id="luke-acts-heading">
+        <span class="section-icon">📖</span>
+        Luke–Acts Framing
+      </h2>
       <p>
         Luke's two-volume work begins with Jesus, empowered by the Spirit, proclaiming good news 
         (Luke 4). It ends with ordinary believers, empowered by that same Spirit, doing the same 
@@ -650,7 +578,7 @@
         </div>
       </div>
 
-      <p class="muted" style="margin-top: 1.25rem;">
+      <p class="text-muted mt-2">
         This hub exists to train that witness—not as performance, but as Spirit-dependent overflow.
       </p>
     </section>
@@ -659,7 +587,10 @@
          CULTURE & SAFETY
          ========================================== -->
     <section class="theology-card animate-on-scroll" id="culture" aria-labelledby="culture-heading">
-      <h2 class="section-title" id="culture-heading">🛡️ Culture & Safety</h2>
+      <h2 class="section-title" id="culture-heading">
+        <span class="section-icon">🛡️</span>
+        Culture & Safety
+      </h2>
 
       <div class="grid-3" style="margin-top: 1rem;">
         <div class="panel">
@@ -676,17 +607,20 @@
         </div>
       </div>
 
-      <p class="muted" style="margin-top: 1.25rem;">
+      <div class="key-insight mt-2">
         <strong>Feedback is for formation, not grading.</strong>
         The goal is spiritual maturity and faithful witness—not performance.
-      </p>
+      </div>
     </section>
 
     <!-- ==========================================
          HOW TO USE THIS HUB
          ========================================== -->
     <section class="theology-card animate-on-scroll" id="how-to-use" aria-labelledby="how-to-use-heading">
-      <h2 class="section-title" id="how-to-use-heading">✅ How to Use This Hub</h2>
+      <h2 class="section-title" id="how-to-use-heading">
+        <span class="section-icon">✅</span>
+        How to Use This Hub
+      </h2>
 
       <div class="grid-2" style="margin-top: 1rem;">
         <div class="panel">
@@ -708,8 +642,9 @@
         </div>
       </div>
 
-      <div class="key-insight" style="margin-top: 1.25rem;">
-        <strong>Simple rule:</strong> Start with the Invitation, live inside the Charter, and practice inside the Spine.
+      <div class="significance mt-2">
+        <h4>Simple rule</h4>
+        <p>Start with the Invitation, live inside the Charter, and practice inside the Spine.</p>
       </div>
     </section>
 
@@ -717,7 +652,10 @@
          NEXT STEP
          ========================================== -->
     <section class="theology-card animate-on-scroll" id="next-step" aria-labelledby="next-step-heading">
-      <h2 class="section-title" id="next-step-heading">🚀 Ready to Begin?</h2>
+      <h2 class="section-title" id="next-step-heading">
+        <span class="section-icon">🚀</span>
+        Ready to Begin?
+      </h2>
       <p>
         If this resonates, your next step is easy: open the Invitation.
         There's no pressure to commit immediately—just an opportunity to learn more.
@@ -745,7 +683,7 @@
         </a>
       </div>
 
-      <p class="muted" style="margin-top: 1.25rem;">
+      <p class="text-muted mt-2">
         If you ever get lost, come back to this hub.
       </p>
     </section>
@@ -753,32 +691,43 @@
     <hr class="section-divider" />
 
     <section class="theology-card animate-on-scroll" id="footer-note" aria-labelledby="footer-note-heading">
-      <h2 class="section-title" id="footer-note-heading">🕯️ A Quiet Reminder</h2>
+      <h2 class="section-title" id="footer-note-heading">
+        <span class="section-icon">🕯️</span>
+        A Quiet Reminder
+      </h2>
       <p>
         This pathway is not about who gets to speak.
         It's about who is being formed—so that when we speak, we speak as witnesses.
       </p>
-      <p class="muted">"Stay… until you have been clothed with power from on high." (Luke 24:49)</p>
+      <p class="text-muted">"Stay… until you have been clothed with power from on high." (Luke 24:49)</p>
     </section>
 
   </main>
 
- <!-- Back to top -->
-<a href="#main-content" class="skip-link">Skip to main content</a>
+  <!-- Footer from global-v2 styles -->
+  <footer>
+    <p>&copy; 2025 Project Context. All rights reserved.</p>
+    <p class="text-muted" style="font-size: 0.9rem; margin-top: 0.5rem;">
+      Seminary-level biblical education for pastors, teachers, and serious students of Scripture.
+    </p>
+  </footer>
 
-<!-- Mobile menu overlay -->
-<div class="mobile-menu-overlay" aria-hidden="true"></div>
+  <!-- Back to top -->
+  <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
 
-<!-- Navigation Component -->
-<script type="module">
-  import NavigationComponent from '/assets/js/nav-component.js';
-  const navigation = new NavigationComponent({
-    currentPage: 'studies/prophetic-teachings',
-    hubType: 'prophetic-teachings'
-  });
-</script>
+  <!-- Mobile menu overlay -->
+  <div class="mobile-menu-overlay" aria-hidden="true"></div>
 
-<!-- Character Page Script handles EVERYTHING else -->
-<script src="/assets/js/character-page-v5-8.js" defer></script>
+  <!-- Navigation Component -->
+  <script type="module">
+    import NavigationComponent from '/assets/js/nav-component.js';
+    const navigation = new NavigationComponent({
+      currentPage: 'resources/teaching-formation/prophetic-training',
+      hubType: 'resources'
+    });
+  </script>
+
+  <!-- Character Page Script handles EVERYTHING else -->
+  <script src="/assets/js/character-page-v5-8.js" defer></script>
 </body>
 </html>
