@@ -418,6 +418,11 @@
         page-break-inside: avoid;
       }
     }
+    /* Already included in handouts-updated.html */
+    .handout-card:target {
+    border-color: var(--accent-purple);
+    box-shadow: 0 0 0 3px rgba(114,9,183,0.2);
+    }
   </style>
 </head>
 
@@ -1413,9 +1418,21 @@
 
   </main>
 
-  <script src="/assets/js/nav-component.js"></script>
+  <!-- ==========================================
+       JAVASCRIPT - v5.8.1 Implementation
+       ========================================== -->
+  
+  <!-- Navigation Component -->
+  <script type="module">
+    import NavigationComponent from '/assets/js/nav-component.js';
+    new NavigationComponent({
+      currentPage: 'resources',
+      hubType: 'resources'
+    });
+  </script>
+
+  <!-- Reading progress bar -->
   <script>
-    // Reading progress bar
     (function() {
       const bar = document.querySelector('.reading-progress');
       const onScroll = () => {
@@ -1427,18 +1444,24 @@
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
     })();
+  </script>
 
-    // Expand all handouts function
+  <!-- Expand all handouts function -->
+  <script>
     function expandAll() {
       const allDetails = document.querySelectorAll('.handout-card');
       allDetails.forEach(detail => {
         detail.setAttribute('open', '');
       });
     }
+  </script>
 
-    // Track which handouts are opened
+  <!-- Deep linking to handouts with auto-expand -->
+  <script>
     document.addEventListener('DOMContentLoaded', () => {
       const handouts = document.querySelectorAll('.handout-card');
+      
+      // Track which handouts are opened
       handouts.forEach((handout, index) => {
         handout.addEventListener('toggle', (e) => {
           if (e.target.open) {
@@ -1446,6 +1469,59 @@
           }
         });
       });
+
+      // Deep linking - open specific handout if URL has hash
+      if (window.location.hash) {
+        const targetId = window.location.hash.substring(1);
+        const targetHandout = document.getElementById(targetId);
+        
+        if (targetHandout && targetHandout.tagName === 'DETAILS') {
+          // Open the details element
+          targetHandout.setAttribute('open', '');
+          
+          // Scroll to it after a brief delay to ensure it's expanded
+          setTimeout(() => {
+            targetHandout.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'start' 
+            });
+          }, 300);
+        }
+      }
+
+      // Handle navigation clicks to handout sections
+      document.addEventListener('click', (e) => {
+        const link = e.target.closest('a[href*="#session-"]');
+        if (link) {
+          e.preventDefault();
+          const targetId = link.getAttribute('href').split('#')[1];
+          const targetHandout = document.getElementById(targetId);
+          
+          if (targetHandout && targetHandout.tagName === 'DETAILS') {
+            // Open the details element
+            targetHandout.setAttribute('open', '');
+            
+            // Update URL
+            history.pushState(null, null, '#' + targetId);
+            
+            // Scroll to it
+            setTimeout(() => {
+              targetHandout.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+              });
+            }, 300);
+          }
+        }
+      });
+    });
+  </script>
+
+  <!-- Page Initialization -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Handouts Page v5.8.1 initialized');
+      console.log('Deep linking enabled for session handouts');
     });
   </script>
 </body>
