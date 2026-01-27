@@ -1033,6 +1033,38 @@
       el.innerHTML = `<strong>Type Caution:</strong> ${caution}`;
     }
 
+    // ========================================
+    // TYPE BLOCK ENSURER (V2 – Narrative → Other Types)
+    // ========================================
+    function ensureTypeBlock(passage, type) {
+    if (!passage || passage[type]) return passage;
+
+    // Only scaffold from narrative material
+    const narrative = passage.narrative;
+    if (!narrative) return passage;
+
+    if (type === 'testimony') {
+        passage.testimony = {
+        before: narrative.storyPanels || '',
+        encounter: narrative.pattern || '',
+        now: '',
+        messiahLink: narrative.messiahLink || '',
+        notes: 'Generated from narrative arc'
+        };
+    }
+
+    if (type === 'prophetic') {
+        passage.prophetic = {
+        strengthen: narrative.pattern || '',
+        encourage: narrative.messiahLink || '',
+        console: '',
+        notes: 'Generated from narrative arc'
+        };
+    }
+
+    return passage;
+    }
+
     function validateRequiredFields(showMessage = false) {
       const aim = (document.getElementById('authorAim')?.value || "").trim();
       const risk = (document.getElementById('misheardRisk')?.value || "").trim();
@@ -1218,6 +1250,10 @@
           typePills.querySelectorAll('.type-pill').forEach(p => p.classList.remove('active'));
           pill.classList.add('active');
           currentType = pill.dataset.type;
+
+           // 🔑 V2 hook — create missing type blocks if needed
+          ensureTypeBlock(currentBookData.passages[currentPassageKey], currentType);
+          
           loadOrientation();
           
           // Scroll to orientation after type change so user sees it updated
