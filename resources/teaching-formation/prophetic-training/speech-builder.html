@@ -588,6 +588,10 @@
         <p style="margin: 0 0 1.5rem 0; color: var(--text-gray); font-size: 0.95rem;">
           Fill in your own work below - this is what you'll preach
         </p>
+
+         <!-- ADD THESE TWO LINES: -->
+    <div class="type-caution-work" id="typeCautionWork"></div>
+    <div class="validation-message" id="validationMessage"></div>
         
         <form id="speechForm">
 
@@ -1117,6 +1121,10 @@
       
       // Update dynamic form fields
       updateDynamicFields();
+
+      // ADD THESE TWO LINES:
+      updateCanonicalTrajectoryHelper();
+      updateTypeCautionUI();
     }
 
     function createOrientationField(label, content) {
@@ -1201,24 +1209,48 @@
     // FORM ACTIONS
     // ========================================
     function setupFormActions() {
-      document.getElementById('generateBtn').addEventListener('click', generateOutputs);
-      document.getElementById('clearBtn').addEventListener('click', clearForm);
+    // Listen for changes to required fields
+    const authorAim = document.getElementById('authorAim');
+    const misheardRisk = document.getElementById('misheardRisk');
+    
+    if (authorAim && misheardRisk) {
+        authorAim.addEventListener('input', updateGenerateButtonState);
+        misheardRisk.addEventListener('input', updateGenerateButtonState);
+    }
+    
+    // Initial state: disabled until required fields are filled
+    updateGenerateButtonState();
+
+    document.getElementById('generateBtn').addEventListener('click', () => {
+        if (!validateRequiredFields(true)) {
+        document.getElementById('yourWorkSection')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+        }
+        generateOutputs();
+    });
+
+    document.getElementById('clearBtn').addEventListener('click', clearForm);
     }
 
     function generateOutputs() {
-      const speakerNotes = generateSpeakerNotes();
-      const proPresenter = generateProPresenter();
-      
-      document.getElementById('speakerOutput').textContent = speakerNotes;
-      document.getElementById('proPresenterOutput').textContent = proPresenter;
-      
-      document.getElementById('outputSection').classList.add('visible');
-      document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    const speakerNotes = generateSpeakerNotes();
+    const proPresenter = generateProPresenter();
+    
+    document.getElementById('speakerOutput').textContent = speakerNotes;
+    document.getElementById('proPresenterOutput').textContent = proPresenter;
+    
+    document.getElementById('outputSection').classList.add('visible');
+    document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     function clearForm() {
-      if (confirm('Clear all form fields?')) {
+    if (confirm('Clear all form fields?')) {
         document.getElementById('speechForm').reset();
+        updateTypeCautionUI();
+        updateGenerateButtonState();
+        const validationMsg = document.getElementById('validationMessage');
+        if (validationMsg) validationMsg.style.display = 'none';
+        
         currentBookData = null;
         currentPassageKey = null;
         currentType = null;
