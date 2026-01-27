@@ -585,11 +585,23 @@
             <!-- Populated by JavaScript based on type -->
           </div>
 
-          <!-- Jesus Center -->
-          <div class="form-field">
-            <label for="jesusCenter">✝️ Jesus at the Center:</label>
-            <textarea id="jesusCenter" rows="3" placeholder="How does this text point to Jesus? (death, resurrection, exaltation)"></textarea>
-          </div>
+          <!-- Canonical Trajectory -->
+        <div class="form-field">
+        <label for="canonicalTrajectory">🧭 Canonical Trajectory (Messiah → Resurrection Horizon)</label>
+        <p id="trajectoryHelper" style="margin: 0.25rem 0 0.5rem; font-size: 0.9rem; color: var(--text-gray);">
+            How does this text contribute to the larger biblical story—by shaping the need for the Messiah,
+            revealing Jesus’ identity, or showing how the resurrection changes everything?
+            <em>Not every text names Jesus directly; all texts participate in the story he fulfills.</em>
+        </p>
+        <textarea
+            id="canonicalTrajectory"
+            rows="3"
+            placeholder="Name the story pressure, reveal, or resurrection shift—without forcing fulfillment."
+        ></textarea>
+        <p style="margin-top: 0.4rem; font-size: 0.85rem; color: #6c757d;">
+            <em>Aim for faithfulness to this text’s place in the story before moving to application.</em>
+        </p>
+        </div>
 
           <!-- Response -->
           <div class="form-field">
@@ -725,6 +737,36 @@
     let currentBookData = null;
     let currentPassageKey = null;
     let currentType = null;
+
+    // ========================================
+    // CANONICAL TRAJECTORY HELPER
+    // (OT → Messiah Expectation → Resurrection Horizon)
+    // ========================================
+
+    function updateCanonicalTrajectoryHelper() {
+    const helper = document.getElementById('trajectoryHelper');
+    if (!helper || !currentBookData || !currentType) return;
+
+    const testament = currentBookData.testament || currentBookData.meta?.testament || 'ot';
+
+    const baseByTestament = {
+        ot: 'For OT texts, focus on how this passage shapes covenant tension, human failure, hope, or expectation that creates need for God’s rescue.',
+        nt: 'For NT texts, focus on how Jesus’ identity, resurrection, and Spirit reshape meaning, mission, and community.'
+    };
+
+    const byType = {
+        expository: 'Let the author’s logic and structure carry the trajectory.',
+        narrative: 'Trace story pressure and movement—don’t flatten the story into points.',
+        testimony: 'Keep Jesus as the primary actor; you are bearing witness.',
+        prophetic: 'Ground strengthening, encouragement, and consolation in what the text actually promises.'
+    };
+
+    helper.innerHTML = `
+        ${baseByTestament[testament]}
+        ${byType[currentType] ? ' ' + byType[currentType] : ''}
+        <br><em>Not every text names Jesus directly; all texts participate in the story he fulfills.</em>
+    `;
+    }
 
     // ========================================
     // INITIALIZATION
@@ -1129,9 +1171,9 @@
         if (get('propheticConsole')) output += `CONSOLE:\n${get('propheticConsole')}\n\n`;
       }
 
-      output += '✝️ JESUS AT THE CENTER\n';
+      output += '🧭 CANONICAL TRAJECTORY\n';
       output += '───────────────────────────────────────────────────────\n';
-      output += `${get('jesusCenter') || '[How does this point to Jesus?]'}\n\n`;
+      output += `${get('canonicalTrajectory') || '[How this text fits in the Messiah → Resurrection story]'}\n\n`;
 
       output += '↪️ RESPONSE & APPLICATION\n';
       output += '───────────────────────────────────────────────────────\n';
@@ -1247,10 +1289,9 @@
       }
 
       output += '═══════════════════════════════════════════════════════\n';
-      output += '[JESUS]\n';
+      output += '[CANONICAL TRAJECTORY]\n';
       output += '═══════════════════════════════════════════════════════\n\n';
-      output += `✝️ JESUS\n\n${get('jesusCenter') || '[Points to Christ]'}\n\n`;
-
+      output += `🧭 CANONICAL TRAJECTORY\n\n${get('canonicalTrajectory') || '[Place this text within the Messiah → Resurrection story]'}\n\n`;
       output += '═══════════════════════════════════════════════════════\n';
       output += '[RESPONSE]\n';
       output += '═══════════════════════════════════════════════════════\n\n';
