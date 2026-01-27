@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, shrink-to-fit=no" />
+  <title>Speech Builder - Prophetic & Teaching Formation | Project Context</title>
+  <meta name="description" content="Interactive speech builder for Expository, Narrative, Testimony, and Prophetic messages. Load book presets for orientation, fill in your work, generate speaker notes and ProPresenter slides." />
+
+  <meta name="template-version" content="5.8.1" />
+  <meta name="page-category" content="resources" />
+  <meta name="study-type" content="speech-builder" />
+  <meta name="nav-hub" content="resources" />
+  <meta name="nav-section" content="teaching-formation" />
+
+  <link rel="canonical" href="https://projectcontext.org/resources/teaching-formation/prophetic-training/speech-builder.html">
+  <link rel="preload" href="/assets/css/global-v2.css" as="style" />
+  <link rel="stylesheet" href="/assets/css/global-v2.css" />
+  <link rel="stylesheet" href="/assets/css/mobile-tabs-v5-8.css" />
+
+  <style>
+    /* Hero */
+    .hero {
+      min-height: 38vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 1.5rem;
+      margin-top: 0;
+      position: relative;
+      background: linear-gradient(135deg, #001B3A 0%, #3EE4FF 15%, #57A9FF 30%, #6C4FF7 50%, #E94BFF 70%, #FA4ABA 85%, #FF9B4A 100%);
+      color: white;
+      overflow: hidden;
+      margin-left: calc(-50vw + 50%);
+      margin-right: calc(-50vw + 50%);
+      width: 100vw;
+    }
+    
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 25% 75%, rgba(62,228,255,.12) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(250,74,186,.15) 0%, transparent 50%);
+      animation: float 32s infinite linear;
+    }
+    
+    @keyframes float {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.08); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+    
+    .hero-content {
+      text-align: center;
+      max-width: 980px;
+      margin: 0 auto;
+      z-index: 1;
+      position: relative;
+    }
+    
+    .hero-title {
+      font-size: clamp(2.1rem, 5vw, 3.4rem);
+      font-weight: 900;
+      line-height: 1.08;
+      margin-bottom: 0.7rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,.35);
+    }
+    
+    .hero-subtitle {
+      font-size: clamp(1.05rem, 2.1vw, 1.35rem);
+      opacity: .95;
+      margin: 0 auto 1.25rem auto;
+      font-weight: 300;
+      max-width: 860px;
+      line-height: 1.6;
+    }
+
+    /* Collapsible book browser */
+    .book-browser {
+      background: var(--panel);
+      border: 2px solid var(--border-light);
+      border-radius: 12px;
+      margin: 1.5rem 0;
+      overflow: hidden;
+    }
+
+    .browser-header {
+      padding: 1.25rem 1.5rem;
+      background: linear-gradient(135deg, rgba(108,79,247,0.08), rgba(233,75,255,0.08));
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+
+    .browser-header:hover {
+      background: linear-gradient(135deg, rgba(108,79,247,0.12), rgba(233,75,255,0.12));
+    }
+
+    .browser-header h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--cosmic-indigo);
+    }
+
+    .browser-toggle {
+      font-size: 1.5rem;
+      transition: transform 0.3s ease;
+    }
+
+    .browser-toggle.open {
+      transform: rotate(180deg);
+    }
+
+    .browser-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .browser-content.open {
+      max-height: 1000px;
+    }
+
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      padding: 1.5rem;
+    }
+
+    .book-card {
+      padding: 1rem;
+      background: white;
+      border: 2px solid var(--border-light);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .book-card:hover {
+      border-color: var(--cosmic-indigo);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .book-card.active {
+      background: linear-gradient(135deg, var(--cosmic-indigo), var(--cosmic-magenta));
+      color: white;
+      border-color: transparent;
+    }
+
+    .testament-badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      background: var(--cosmic-indigo);
+      color: white;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Book overview */
+    .book-overview {
+      display: none;
+      background: white;
+      border-top: 2px solid var(--border-light);
+      padding: 1.5rem;
+    }
+
+    .book-overview.visible {
+      display: block;
+    }
+
+    .passage-grid {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .passage-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: var(--panel);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      gap: 1rem;
+    }
+
+    .passage-info h4 {
+      margin: 0 0 0.25rem 0;
+      color: var(--accent-purple);
+      font-size: 1rem;
+    }
+
+    .passage-info p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-gray);
+    }
+
+    .type-badges {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .type-badge {
+      padding: 0.25rem 0.75rem;
+      background: white;
+      border: 1px solid var(--cosmic-indigo);
+      color: var(--cosmic-indigo);
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .load-passage-btn {
+      padding: 0.5rem 1.25rem;
+      background: linear-gradient(135deg, var(--cosmic-indigo), var(--cosmic-magenta));
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .load-passage-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(108,79,247,0.3);
+    }
+
+    /* Type selector */
+    .type-selector {
+      display: none;
+      margin: 2rem 0;
+      padding: 2rem;
+      background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
+      border: 3px solid #ff6b6b;
+      border-radius: 12px;
+    }
+
+    .type-selector.visible {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .type-pills {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .type-pill {
+      padding: 0.75rem 1.5rem;
+      border: 2px solid var(--border-light);
+      background: white;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .type-pill:hover {
+      border-color: var(--cosmic-indigo);
+      background: rgba(108,79,247,0.05);
+    }
+
+    .type-pill.active {
+      background: linear-gradient(135deg, var(--cosmic-indigo), var(--cosmic-magenta));
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(108,79,247,0.25);
+    }
+
+    /* Orientation section (read-only, gray) */
+    .orientation-section {
+      display: none;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border: 2px solid #adb5bd;
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0;
+    }
+
+    .orientation-section.visible {
+      display: block;
+    }
+
+    .orientation-section h3 {
+      margin: 0 0 1.5rem 0;
+      color: #495057;
+      font-size: 1.3rem;
+    }
+
+    .orientation-field {
+      background: white;
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-left: 4px solid #6c757d;
+    }
+
+    .orientation-field strong {
+      display: block;
+      color: #495057;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .orientation-field p {
+      margin: 0;
+      line-height: 1.7;
+      color: #212529;
+    }
+
+    /* Your work section (editable, white) */
+    .your-work-section {
+      display: none;
+      background: white;
+      border: 2px solid var(--accent-purple);
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0;
+    }
+
+    .your-work-section.visible {
+      display: block;
+    }
+
+    .your-work-section h3 {
+      margin: 0 0 1.5rem 0;
+      color: var(--accent-purple);
+      font-size: 1.3rem;
+    }
+
+    .form-field {
+      margin: 1.25rem 0;
+    }
+
+    .form-field label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--primary-dark);
+      font-size: 0.95rem;
+    }
+
+    .form-field input,
+    .form-field textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: border-color 0.2s ease;
+    }
+
+    .form-field input:focus,
+    .form-field textarea:focus {
+      outline: none;
+      border-color: var(--accent-purple);
+      box-shadow: 0 0 0 3px rgba(114,9,183,0.1);
+    }
+
+    .form-field textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    /* Output section */
+    .output-section {
+      display: none;
+      margin: 2rem 0;
+    }
+
+    .output-section.visible {
+      display: block;
+    }
+
+    .output-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid var(--border-light);
+    }
+
+    .output-tab {
+      padding: 0.75rem 1.5rem;
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      color: var(--text-gray);
+    }
+
+    .output-tab:hover {
+      color: var(--primary-dark);
+      background: var(--panel);
+    }
+
+    .output-tab.active {
+      color: var(--accent-purple);
+      border-bottom-color: var(--accent-purple);
+    }
+
+    .output-content {
+      display: none;
+    }
+
+    .output-content.active {
+      display: block;
+    }
+
+    .codeblock {
+      position: relative;
+      border-radius: 14px;
+      border: 1px solid var(--border-light);
+      background: #f8fafc;
+      color: var(--primary-dark);
+      padding: 1.5rem;
+      overflow: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      max-height: 600px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body class="resources-page">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div class="reading-progress"></div>
+  <div class="mobile-menu-overlay"></div>
+  <div class="quick-nav-sidebar" aria-label="Section navigation"></div>
+
+  <main id="main-content" class="content-section" role="main">
+
+    <div class="breadcrumbs">
+      <a href="/">Home</a> ›
+      <a href="/resources/">Resources</a> ›
+      <a href="/resources/teaching-formation/">Teaching Formation</a> ›
+      <a href="./invitation.html">Prophetic Training</a> ›
+      Speech Builder
+    </div>
+
+    <!-- Hero -->
+    <section class="hero fade-in">
+      <div class="hero-content">
+        <h1 class="hero-title">Speech Builder</h1>
+        <p class="hero-subtitle">
+          Build Expository, Narrative, Testimony, or Prophetic messages with book-by-book orientation
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Builder -->
+    <section class="theology-card animate-on-scroll">
+      <h2 class="section-title"><span class="section-icon">✍️</span>Build Your Speech</h2>
+      
+      <!-- Step 1: Collapsible Book Browser -->
+      <div class="book-browser">
+        <div class="browser-header" id="browserToggle">
+          <div>
+            <h3>📚 Step 1: Browse Books & Load Preset (Optional)</h3>
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: var(--text-gray);">
+              Or skip to start from scratch
+            </p>
+          </div>
+          <span class="browser-toggle">▼</span>
+        </div>
+        
+        <div class="browser-content" id="browserContent">
+          <!-- Book grid -->
+          <div class="book-grid" id="bookGrid">
+            <!-- Generated by JavaScript -->
+          </div>
+
+          <!-- Book overview (appears when book selected) -->
+          <div class="book-overview" id="bookOverview">
+            <!-- Generated by JavaScript -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Type Selector (appears when passage loaded) -->
+      <div class="type-selector" id="typeSelector">
+        <h3 style="margin: 0 0 0.5rem 0; font-size: 1.4rem; color: #c92a2a;">⚡ Step 2: Choose Speech Type</h3>
+        <p style="margin: 0 0 1.25rem 0; font-size: 0.95rem; color: #862e2e;">
+          Different types have different orientations and form fields
+        </p>
+        <div class="type-pills" id="typePills">
+          <!-- Generated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Step 3: Orientation (read-only preset) -->
+      <div class="orientation-section" id="orientationSection">
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+          <h3 style="margin: 0;">📚 Orientation (Reference While Working)</h3>
+          <span id="currentTypeBadge" style="padding: 0.5rem 1rem; background: linear-gradient(135deg, var(--cosmic-indigo), var(--cosmic-magenta)); color: white; border-radius: 999px; font-size: 0.9rem; font-weight: 700; text-transform: uppercase;"></span>
+        </div>
+        <p style="margin: 0 0 1.5rem 0; color: #6c757d; font-size: 0.95rem;">
+          These are guidance notes from the preset - use them as reference
+        </p>
+        <div id="orientationContent">
+          <!-- Generated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Step 4: Your Work (editable form) -->
+      <div class="your-work-section" id="yourWorkSection">
+        <h3>✍️ Your Speech (Your Work)</h3>
+        <p style="margin: 0 0 1.5rem 0; color: var(--text-gray); font-size: 0.95rem;">
+          Fill in your own work below - this is what you'll preach
+        </p>
+        
+        <form id="speechForm">
+          <!-- Basic Info -->
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="speechTitle">Speech Title:</label>
+              <input type="text" id="speechTitle" placeholder="e.g., The Pattern We Keep Repeating">
+            </div>
+            <div class="form-field">
+              <label for="speechSpeaker">Speaker:</label>
+              <input type="text" id="speechSpeaker" placeholder="Your name">
+            </div>
+            <div class="form-field">
+              <label for="speechDate">Date:</label>
+              <input type="date" id="speechDate">
+            </div>
+            <div class="form-field">
+              <label for="speechText">Primary Text:</label>
+              <input type="text" id="speechText" placeholder="e.g., Jonah 4:1-11">
+            </div>
+          </div>
+
+          <!-- Context (Your Version) -->
+          <div class="form-field">
+            <label for="yourContext">📍 Context (Your Angle):</label>
+            <textarea id="yourContext" rows="2" placeholder="How are you contextualizing this for YOUR audience?"></textarea>
+          </div>
+
+          <!-- Big Idea -->
+          <div class="form-field">
+            <label for="bigIdea">💡 Big Idea (One Sentence):</label>
+            <textarea id="bigIdea" rows="2" placeholder="What is the one clear claim from this text?"></textarea>
+          </div>
+
+          <!-- Type-Specific Fields -->
+          <div id="dynamicFields">
+            <!-- Populated by JavaScript based on type -->
+          </div>
+
+          <!-- Jesus Center -->
+          <div class="form-field">
+            <label for="jesusCenter">✝️ Jesus at the Center:</label>
+            <textarea id="jesusCenter" rows="3" placeholder="How does this text point to Jesus? (death, resurrection, exaltation)"></textarea>
+          </div>
+
+          <!-- Response -->
+          <div class="form-field">
+            <label for="response">↪️ Response & Application:</label>
+            <textarea id="response" rows="3" placeholder="What concrete action/repentance are you calling for?"></textarea>
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="display: flex; gap: 1rem; margin-top: 2rem; justify-content: center; flex-wrap: wrap;">
+            <button type="button" id="generateBtn" class="cosmic-button">
+              ✨ Generate Speech Outline
+            </button>
+            <button type="button" id="clearBtn" class="cosmic-button muted">
+              🔄 Clear Form
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Step 5: Output -->
+      <div class="output-section" id="outputSection">
+        <h3 style="margin: 0 0 1rem 0; font-size: 1.2rem;">📄 Your Generated Speech</h3>
+        
+        <div class="panel">
+          <!-- Tabs -->
+          <div class="output-tabs">
+            <button class="output-tab active" data-tab="speaker">📝 Speaker Notes</button>
+            <button class="output-tab" data-tab="propresenter">🎥 ProPresenter</button>
+          </div>
+
+          <!-- Speaker Notes Output -->
+          <div class="output-content active" data-content="speaker">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+              <h4 style="margin: 0;">Speaker Notes (Full Outline)</h4>
+              <div style="display: flex; gap: 0.5rem;">
+                <button type="button" id="copySpeakerBtn" class="cosmic-button muted" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+                  📋 Copy
+                </button>
+                <button type="button" id="downloadSpeakerBtn" class="cosmic-button" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+                  💾 Download
+                </button>
+              </div>
+            </div>
+            <div id="speakerOutput" class="codeblock"></div>
+          </div>
+
+          <!-- ProPresenter Output -->
+          <div class="output-content" data-content="propresenter">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+              <h4 style="margin: 0;">ProPresenter Format (Slide-Ready)</h4>
+              <div style="display: flex; gap: 0.5rem;">
+                <button type="button" id="copyProBtn" class="cosmic-button muted" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+                  📋 Copy
+                </button>
+                <button type="button" id="downloadProBtn" class="cosmic-button" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+                  💾 Download
+                </button>
+              </div>
+            </div>
+            <div id="proPresenterOutput" class="codeblock"></div>
+          </div>
+        </div>
+
+        <!-- Next Steps CTAs -->
+        <div style="margin-top: 2rem;">
+          <h4>✅ Outline Complete! Next Steps:</h4>
+          <div class="grid-3">
+            <div class="panel" style="text-align: center; padding: 1.5rem;">
+              <div style="font-size: 2rem; margin-bottom: 0.5rem;">🤝</div>
+              <h4 style="margin: 0 0 0.5rem 0; font-size: 1rem;">Get Team Feedback</h4>
+              <p style="margin: 0 0 1rem 0; font-size: 0.9rem; color: var(--text-gray);">
+                Don't prepare alone
+              </p>
+              <a href="./feedback.html" class="cosmic-button muted" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+                Feedback Method
+              </a>
+            </div>
+            <div class="panel" style="text-align: center; padding: 1.5rem;">
+              <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎙️</div>
+              <h4 style="margin: 0 0 0.5rem 0; font-size: 1rem;">Practice Delivery</h4>
+              <p style="margin: 0 0 1rem 0; font-size: 0.9rem; color: var(--text-gray);">
+                Run through your message
+              </p>
+              <a href="./practice.html" class="cosmic-button muted" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+                Practice Lab
+              </a>
+            </div>
+            <div class="panel" style="text-align: center; padding: 1.5rem;">
+              <div style="font-size: 2rem; margin-bottom: 0.5rem;">📖</div>
+              <h4 style="margin: 0 0 0.5rem 0; font-size: 1rem;">Study Acts Examples</h4>
+              <p style="margin: 0 0 1rem 0; font-size: 0.9rem; color: var(--text-gray);">
+                See more patterns
+              </p>
+              <a href="./sermon-spine.html#acts-index" class="cosmic-button muted" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+                Acts Index
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
+
+  <!-- Navigation Component -->
+  <script type="module">
+    import NavigationComponent from '/assets/js/nav-component.js';
+    new NavigationComponent({
+      currentPage: 'resources',
+      hubType: 'resources'
+    });
+  </script>
+
+  <script src="/assets/js/character-page-v5-8.js" defer></script>
+
+  <!-- Speech Builder Logic -->
+  <script>
+    // ========================================
+    // MAIN STATE
+    // ========================================
+    const availableBooks = {
+      'acts': { name: 'Acts', testament: 'nt' },
+      'luke': { name: 'Luke', testament: 'nt' },
+      '1-peter': { name: '1 Peter', testament: 'nt' },
+      '2-peter': { name: '2 Peter', testament: 'nt' },
+      'genesis': { name: 'Genesis', testament: 'ot' },
+      'jonah': { name: 'Jonah', testament: 'ot' }
+    };
+
+    let currentBookData = null;
+    let currentPassageKey = null;
+    let currentType = null;
+
+    // ========================================
+    // INITIALIZATION
+    // ========================================
+    document.addEventListener('DOMContentLoaded', function() {
+      renderBookGrid();
+      setupBrowserToggle();
+      setupFormActions();
+      setupOutputTabs();
+
+      // Show "Your Work" section by default (can start from scratch)
+      document.getElementById('yourWorkSection').classList.add('visible');
+    });
+
+    // ========================================
+    // BOOK BROWSER
+    // ========================================
+    function setupBrowserToggle() {
+      const toggle = document.getElementById('browserToggle');
+      const content = document.getElementById('browserContent');
+      const icon = toggle.querySelector('.browser-toggle');
+
+      toggle.addEventListener('click', () => {
+        content.classList.toggle('open');
+        icon.classList.toggle('open');
+      });
+    }
+
+    function renderBookGrid() {
+      const grid = document.getElementById('bookGrid');
+      let html = '';
+
+      for (const [key, book] of Object.entries(availableBooks)) {
+        html += `
+          <div class="book-card" data-book="${key}">
+            <div class="testament-badge">${book.testament.toUpperCase()}</div>
+            <h4 style="margin: 0.5rem 0; font-size: 1.1rem;">${book.name}</h4>
+          </div>
+        `;
+      }
+
+      grid.innerHTML = html;
+
+      // Add click listeners
+      grid.querySelectorAll('.book-card').forEach(card => {
+        card.addEventListener('click', () => loadBook(card.dataset.book));
+      });
+    }
+
+    async function loadBook(bookKey) {
+      try {
+        const response = await fetch(`./${bookKey}.json`);
+        if (!response.ok) throw new Error('Failed to load book data');
+        
+        currentBookData = await response.json();
+        
+        // Update active state
+        document.querySelectorAll('.book-card').forEach(c => c.classList.remove('active'));
+        document.querySelector(`[data-book="${bookKey}"]`).classList.add('active');
+        
+        // Show overview
+        renderBookOverview();
+      } catch (error) {
+        console.error('Error loading book:', error);
+        alert('Failed to load book data. Please try again.');
+      }
+    }
+
+    function renderBookOverview() {
+      const overview = document.getElementById('bookOverview');
+      const data = currentBookData;
+      
+      let html = `
+        <h3 style="margin: 0 0 1rem 0; color: var(--cosmic-indigo);">📖 ${data.book}</h3>
+        
+        <div style="margin-bottom: 1.5rem;">
+          <strong style="display: block; margin-bottom: 0.5rem; color: #495057;">Book Theme:</strong>
+          <p style="margin: 0; line-height: 1.7;">${data.theme}</p>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <strong style="display: block; margin-bottom: 0.5rem; color: #495057;">Structure:</strong>
+          <ul style="margin: 0.5rem 0 0 1.5rem; line-height: 1.8;">
+            ${data.structure.map(s => `<li>${s}</li>`).join('')}
+          </ul>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <strong style="display: block; margin-bottom: 0.5rem; color: #495057;">Messiah Profile:</strong>
+          <p style="margin: 0; line-height: 1.7;">${data.messiahProfile}</p>
+        </div>
+
+        <div>
+          <strong style="display: block; margin-bottom: 1rem; color: #495057;">Key Passages:</strong>
+          <div class="passage-grid">
+            ${Object.entries(data.passages).map(([key, passage]) => `
+              <div class="passage-card">
+                <div class="passage-info">
+                  <h4>${passage.reference}</h4>
+                  <p>${passage.title}</p>
+                  <div class="type-badges">
+                    ${passage.types.map(type => `
+                      <span class="type-badge">${type}</span>
+                    `).join('')}
+                  </div>
+                </div>
+                <button class="load-passage-btn" data-passage="${key}">
+                  Load →
+                </button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      overview.innerHTML = html;
+      overview.classList.add('visible');
+
+      // Add passage load listeners
+      overview.querySelectorAll('.load-passage-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentPassageKey = btn.dataset.passage;
+          loadPassage();
+        });
+      });
+    }
+
+    function loadPassage() {
+      const passage = currentBookData.passages[currentPassageKey];
+      
+      // Show type selector with available types
+      const typeSelector = document.getElementById('typeSelector');
+      const typePills = document.getElementById('typePills');
+      
+      let pillsHtml = passage.types.map(type => `
+        <div class="type-pill" data-type="${type}">
+          ${type === 'expository' ? '📖' : type === 'narrative' ? '📚' : type === 'testimony' ? '💬' : '🔥'}
+          ${type.charAt(0).toUpperCase() + type.slice(1)}
+        </div>
+      `).join('');
+      
+      typePills.innerHTML = pillsHtml;
+      typeSelector.classList.add('visible');
+      
+      // Add type pill listeners
+      typePills.querySelectorAll('.type-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+          typePills.querySelectorAll('.type-pill').forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          currentType = pill.dataset.type;
+          loadOrientation();
+          
+          // Scroll to orientation after type change so user sees it updated
+          setTimeout(() => {
+            document.getElementById('orientationSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 100);
+        });
+      });
+      
+      // Auto-select first type
+      currentType = passage.types[0];
+      typePills.querySelector('.type-pill').classList.add('active');
+      loadOrientation();
+      
+      // Pre-fill text field
+      document.getElementById('speechText').value = passage.reference;
+      
+      // Scroll to TYPE SELECTOR so user sees the choice
+      setTimeout(() => {
+        document.getElementById('typeSelector').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 300);
+    }
+
+    function loadOrientation() {
+      const passage = currentBookData.passages[currentPassageKey];
+      const data = passage[currentType];
+      
+      if (!data) return;
+      
+      // Update type badge
+      const badge = document.getElementById('currentTypeBadge');
+      if (badge) {
+        const typeIcons = {
+          'expository': '📖',
+          'narrative': '📚',
+          'testimony': '💬',
+          'prophetic': '🔥'
+        };
+        badge.textContent = `${typeIcons[currentType] || ''} ${currentType}`;
+      }
+      
+      let html = '';
+      
+      // Different fields based on type
+      if (currentType === 'expository') {
+        if (data.context) html += createOrientationField('📍 Context', data.context);
+        if (data.tension) html += createOrientationField('⚡ Tension', data.tension);
+        if (data.structure) html += createOrientationField('🧩 Structure', data.structure);
+        if (data.messiahProfile) html += createOrientationField('👑 Messiah Profile', data.messiahProfile);
+        if (data.messiahLink) html += createOrientationField('✝️ Messiah Link', data.messiahLink);
+        if (data.notes) html += createOrientationField('📝 Notes', data.notes);
+      } else if (currentType === 'narrative') {
+        if (data.storyPanels) html += createOrientationField('📚 Story Panels', data.storyPanels);
+        if (data.pattern) html += createOrientationField('🔍 Pattern', data.pattern);
+        if (data.messiahLink) html += createOrientationField('✝️ Messiah Link', data.messiahLink);
+        if (data.notes) html += createOrientationField('📝 Notes', data.notes);
+      } else if (currentType === 'testimony') {
+        if (data.before || data.encounter || data.now) {
+          html += `
+            <div class="orientation-field">
+              <strong>💬 Testimony Structure</strong>
+              ${data.before ? `<p><strong>Before:</strong> ${data.before}</p>` : ''}
+              ${data.encounter ? `<p><strong>Encounter:</strong> ${data.encounter}</p>` : ''}
+              ${data.now ? `<p><strong>Now:</strong> ${data.now}</p>` : ''}
+            </div>
+          `;
+        }
+        if (data.messiahLink) html += createOrientationField('✝️ Keep Jesus Central', data.messiahLink);
+        if (data.notes) html += createOrientationField('📝 Notes', data.notes);
+      } else if (currentType === 'prophetic') {
+        if (data.strengthen) html += createOrientationField('💪 Strengthen', data.strengthen);
+        if (data.encourage) html += createOrientationField('🎯 Encourage', data.encourage);
+        if (data.console) html += createOrientationField('💙 Console', data.console);
+        if (data.notes) html += createOrientationField('📝 Notes', data.notes);
+      }
+      
+      document.getElementById('orientationContent').innerHTML = html;
+      document.getElementById('orientationSection').classList.add('visible');
+      
+      // Update dynamic form fields
+      updateDynamicFields();
+    }
+
+    function createOrientationField(label, content) {
+      return `
+        <div class="orientation-field">
+          <strong>${label}</strong>
+          <p>${content}</p>
+        </div>
+      `;
+    }
+
+    function updateDynamicFields() {
+      const container = document.getElementById('dynamicFields');
+      let html = '';
+      
+      if (currentType === 'expository') {
+        html = `
+          <div class="form-field">
+            <label for="movement1">Movement 1 (Your Outline):</label>
+            <textarea id="movement1" rows="2" placeholder="First section of text and your main point"></textarea>
+          </div>
+          <div class="form-field">
+            <label for="movement2">Movement 2 (Your Outline):</label>
+            <textarea id="movement2" rows="2" placeholder="Second section and your main point"></textarea>
+          </div>
+          <div class="form-field">
+            <label for="movement3">Movement 3 (Your Outline - optional):</label>
+            <textarea id="movement3" rows="2" placeholder="Third section and your main point"></textarea>
+          </div>
+        `;
+      } else if (currentType === 'narrative') {
+        html = `
+          <div class="form-field">
+            <label for="storyPanel1">Story Panel 1 (Your Selection):</label>
+            <textarea id="storyPanel1" rows="2" placeholder="First story episode you'll use"></textarea>
+          </div>
+          <div class="form-field">
+            <label for="storyPanel2">Story Panel 2 (Your Selection):</label>
+            <textarea id="storyPanel2" rows="2" placeholder="Second story episode"></textarea>
+          </div>
+          <div class="form-field">
+            <label for="narrativePattern">Pattern Exposed (Your Application):</label>
+            <textarea id="narrativePattern" rows="2" placeholder="What pattern do you see? How does it apply to your audience?"></textarea>
+          </div>
+        `;
+      } else if (currentType === 'testimony') {
+        html = `
+          <div class="form-field">
+            <label for="testimonyBefore">Before (Your Story):</label>
+            <textarea id="testimonyBefore" rows="2" placeholder="What was your life like before Jesus?"></textarea>
+          </div>
+          <div class="form-field">
+            <label for="testimonyEncounter">Encounter (Your Story):</label>
+            <textarea id="testimonyEncounter" rows="2" placeholder="How did Jesus meet you? Be specific about HIS work"></textarea>
+          </div>
+          <div class="form-field">
+            <label for="testimonyNow">Now (Your Story):</label>
+            <textarea id="testimonyNow" rows="2" placeholder="What's different now?"></textarea>
+          </div>
+        `;
+      } else if (currentType === 'prophetic') {
+        html = `
+          <div class="form-field">
+            <label for="propheticStrengthen">Strengthen (Your Word):</label>
+            <textarea id="propheticStrengthen" rows="2" placeholder="What truth builds up their faith?"></textarea>
+          </div>
+          <div class="form-field">
+            <label for="propheticEncourage">Encourage (Your Word):</label>
+            <textarea id="propheticEncourage" rows="2" placeholder="What vision moves them forward?"></textarea>
+          </div>
+          <div class="form-field">
+            <label for="propheticConsole">Console (Your Word):</label>
+            <textarea id="propheticConsole" rows="2" placeholder="What hope meets their pain?"></textarea>
+          </div>
+        `;
+      }
+      
+      container.innerHTML = html;
+    }
+
+    // ========================================
+    // FORM ACTIONS
+    // ========================================
+    function setupFormActions() {
+      document.getElementById('generateBtn').addEventListener('click', generateOutputs);
+      document.getElementById('clearBtn').addEventListener('click', clearForm);
+    }
+
+    function generateOutputs() {
+      const speakerNotes = generateSpeakerNotes();
+      const proPresenter = generateProPresenter();
+      
+      document.getElementById('speakerOutput').textContent = speakerNotes;
+      document.getElementById('proPresenterOutput').textContent = proPresenter;
+      
+      document.getElementById('outputSection').classList.add('visible');
+      document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function clearForm() {
+      if (confirm('Clear all form fields?')) {
+        document.getElementById('speechForm').reset();
+        currentBookData = null;
+        currentPassageKey = null;
+        currentType = null;
+        
+        document.querySelectorAll('.book-card').forEach(c => c.classList.remove('active'));
+        document.getElementById('bookOverview').classList.remove('visible');
+        document.getElementById('typeSelector').classList.remove('visible');
+        document.getElementById('orientationSection').classList.remove('visible');
+        document.getElementById('outputSection').classList.remove('visible');
+      }
+    }
+
+    // [CONTINUED IN NEXT PART DUE TO LENGTH...]
+
+    // ========================================
+    // OUTPUT GENERATION
+    // ========================================
+    function generateSpeakerNotes() {
+      const get = (id) => document.getElementById(id)?.value || '';
+      const typeLabel = currentType ? currentType.toUpperCase() : 'N/A';
+      
+      let output = '═══════════════════════════════════════════════════════\n';
+      output += '                 SPEECH OUTLINE\n';
+      output += '                 Speaker Notes\n';
+      output += '═══════════════════════════════════════════════════════\n\n';
+      
+      output += `TITLE: ${get('speechTitle') || '[Title]'}\n`;
+      output += `TEXT: ${get('speechText') || '[Text Reference]'}\n`;
+      output += `SPEAKER: ${get('speechSpeaker') || '[Speaker]'}\n`;
+      output += `DATE: ${get('speechDate') || '[Date]'}\n`;
+      output += `TYPE: ${typeLabel}\n\n`;
+      
+      output += '═══════════════════════════════════════════════════════\n\n';
+      
+      if (get('yourContext')) {
+        output += '📍 CONTEXT\n';
+        output += '───────────────────────────────────────────────────────\n';
+        output += `${get('yourContext')}\n\n`;
+      }
+      
+      output += '💡 BIG IDEA\n';
+      output += '───────────────────────────────────────────────────────\n';
+      output += `${get('bigIdea') || '[Your one-sentence Big Idea]'}\n\n`;
+
+      // Type-specific content
+      if (currentType === 'expository') {
+        output += '🧩 MOVEMENTS\n';
+        output += '───────────────────────────────────────────────────────\n';
+        if (get('movement1')) output += `1. ${get('movement1')}\n\n`;
+        if (get('movement2')) output += `2. ${get('movement2')}\n\n`;
+        if (get('movement3')) output += `3. ${get('movement3')}\n\n`;
+      } else if (currentType === 'narrative') {
+        output += '📚 STORY PANELS\n';
+        output += '───────────────────────────────────────────────────────\n';
+        if (get('storyPanel1')) output += `Panel 1: ${get('storyPanel1')}\n\n`;
+        if (get('storyPanel2')) output += `Panel 2: ${get('storyPanel2')}\n\n`;
+        if (get('narrativePattern')) output += `Pattern:\n${get('narrativePattern')}\n\n`;
+      } else if (currentType === 'testimony') {
+        output += '💬 TESTIMONY STRUCTURE\n';
+        output += '───────────────────────────────────────────────────────\n';
+        if (get('testimonyBefore')) output += `BEFORE:\n${get('testimonyBefore')}\n\n`;
+        if (get('testimonyEncounter')) output += `ENCOUNTER:\n${get('testimonyEncounter')}\n\n`;
+        if (get('testimonyNow')) output += `NOW:\n${get('testimonyNow')}\n\n`;
+      } else if (currentType === 'prophetic') {
+        output += '🔥 PROPHETIC EDIFICATION (1 Cor 14:3)\n';
+        output += '───────────────────────────────────────────────────────\n';
+        if (get('propheticStrengthen')) output += `STRENGTHEN:\n${get('propheticStrengthen')}\n\n`;
+        if (get('propheticEncourage')) output += `ENCOURAGE:\n${get('propheticEncourage')}\n\n`;
+        if (get('propheticConsole')) output += `CONSOLE:\n${get('propheticConsole')}\n\n`;
+      }
+
+      output += '✝️ JESUS AT THE CENTER\n';
+      output += '───────────────────────────────────────────────────────\n';
+      output += `${get('jesusCenter') || '[How does this point to Jesus?]'}\n\n`;
+
+      output += '↪️ RESPONSE & APPLICATION\n';
+      output += '───────────────────────────────────────────────────────\n';
+      output += `${get('response') || '[Concrete action/repentance]'}\n\n`;
+
+      output += '═══════════════════════════════════════════════════════\n';
+      output += 'Generated by Project Context Speech Builder\n';
+      output += 'https://projectcontext.org/resources/teaching-formation/\n';
+      output += '═══════════════════════════════════════════════════════\n';
+
+      return output;
+    }
+
+    function generateProPresenter() {
+      const get = (id) => document.getElementById(id)?.value || '';
+      const title = get('speechTitle') || '[Title]';
+      const text = get('speechText') || '[Text]';
+      const speaker = get('speechSpeaker') || '[Speaker]';
+      const date = get('speechDate') || '[Date]';
+      
+      let output = '═══════════════════════════════════════════════════════\n';
+      output += '[TITLE SLIDE]\n';
+      output += '═══════════════════════════════════════════════════════\n\n';
+      output += `${title}\n${text}\n${speaker} | ${date}\n\n`;
+
+      output += '═══════════════════════════════════════════════════════\n';
+      output += '[TEXT SLIDE]\n';
+      output += '═══════════════════════════════════════════════════════\n\n';
+      output += `📖 SCRIPTURE READING\n\n${text}\n\n[Read passage aloud]\n\n`;
+
+      output += '═══════════════════════════════════════════════════════\n';
+      output += '[BIG IDEA]\n';
+      output += '═══════════════════════════════════════════════════════\n\n';
+      output += `💡 BIG IDEA\n\n${get('bigIdea') || '[Your Big Idea]'}\n\n`;
+
+      // Type-specific slides
+      if (currentType === 'expository') {
+        if (get('movement1')) {
+          output += '═══════════════════════════════════════════════════════\n';
+          output += '[MOVEMENT 1]\n';
+          output += '═══════════════════════════════════════════════════════\n\n';
+          output += `${get('movement1')}\n\n`;
+        }
+        if (get('movement2')) {
+          output += '═══════════════════════════════════════════════════════\n';
+          output += '[MOVEMENT 2]\n';
+          output += '═══════════════════════════════════════════════════════\n\n';
+          output += `${get('movement2')}\n\n`;
+        }
+        if (get('movement3')) {
+          output += '═══════════════════════════════════════════════════════\n';
+          output += '[MOVEMENT 3]\n';
+          output += '═══════════════════════════════════════════════════════\n\n';
+          output += `${get('movement3')}\n\n`;
+        }
+      } else if (currentType === 'narrative') {
+        if (get('storyPanel1')) {
+          output += '═══════════════════════════════════════════════════════\n';
+          output += '[STORY PANEL 1]\n';
+          output += '═══════════════════════════════════════════════════════\n\n';
+          output += `${get('storyPanel1')}\n\n`;
+        }
+        if (get('storyPanel2')) {
+          output += '═══════════════════════════════════════════════════════\n';
+          output += '[STORY PANEL 2]\n';
+          output += '═══════════════════════════════════════════════════════\n\n';
+          output += `${get('storyPanel2')}\n\n`;
+        }
+        if (get('narrativePattern')) {
+          output += '═══════════════════════════════════════════════════════\n';
+          output += '[THE PATTERN]\n';
+          output += '═══════════════════════════════════════════════════════\n\n';
+          output += `${get('narrativePattern')}\n\n`;
+        }
+      } else if (currentType === 'testimony') {
+        if (get('testimonyBefore')) {
+          output += '═══════════════════════════════════════════════════════\n';
+          output += '[BEFORE]\n';
+          output += '═══════════════════════════════════════════════════════\n\n';
+          output += `${get('testimonyBefore')}\n\n`;
+        }
+        if (get('testimonyEncounter')) {
+          output += '═══════════════════════════════════════════════════════\n';
+          output += '[ENCOUNTER]\n';
+          output += '═══════════════════════════════════════════════════════\n\n';
+          output += `${get('testimonyEncounter')}\n\n`;
+        }
+        if (get('testimonyNow')) {
+          output += '═══════════════════════════════════════════════════════\n';
+          output += '[NOW]\n';
+          output += '═══════════════════════════════════════════════════════\n\n';
+          output += `${get('testimonyNow')}\n\n`;
+        }
+      } else if (currentType === 'prophetic') {
+        if (get('propheticStrengthen')) {
+          output += '═══════════════════════════════════════════════════════\n';
+          output += '[STRENGTHEN]\n';
+          output += '═══════════════════════════════════════════════════════\n\n';
+          output += `${get('propheticStrengthen')}\n\n`;
+        }
+        if (get('propheticEncourage')) {
+          output += '═══════════════════════════════════════════════════════\n';
+          output += '[ENCOURAGE]\n';
+          output += '═══════════════════════════════════════════════════════\n\n';
+          output += `${get('propheticEncourage')}\n\n`;
+        }
+        if (get('propheticConsole')) {
+          output += '═══════════════════════════════════════════════════════\n';
+          output += '[CONSOLE]\n';
+          output += '═══════════════════════════════════════════════════════\n\n';
+          output += `${get('propheticConsole')}\n\n`;
+        }
+      }
+
+      output += '═══════════════════════════════════════════════════════\n';
+      output += '[JESUS]\n';
+      output += '═══════════════════════════════════════════════════════\n\n';
+      output += `✝️ JESUS\n\n${get('jesusCenter') || '[Points to Christ]'}\n\n`;
+
+      output += '═══════════════════════════════════════════════════════\n';
+      output += '[RESPONSE]\n';
+      output += '═══════════════════════════════════════════════════════\n\n';
+      output += `↪️ RESPONSE\n\n${get('response') || '[Call to action]'}\n\n`;
+
+      output += '═══════════════════════════════════════════════════════\n';
+      output += '[CLOSING]\n';
+      output += '═══════════════════════════════════════════════════════\n\n';
+      output += "Let's pray.\n\n";
+
+      return output;
+    }
+
+    // ========================================
+    // OUTPUT TABS & COPY/DOWNLOAD
+    // ========================================
+    function setupOutputTabs() {
+      // Tab switching
+      document.querySelectorAll('.output-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          const target = tab.dataset.tab;
+          
+          document.querySelectorAll('.output-tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+
+          document.querySelectorAll('.output-content').forEach(c => c.classList.remove('active'));
+          document.querySelector(`[data-content="${target}"]`).classList.add('active');
+        });
+      });
+
+      // Copy/Download buttons
+      setupCopyButton('copySpeakerBtn', 'speakerOutput');
+      setupCopyButton('copyProBtn', 'proPresenterOutput');
+      setupDownloadButton('downloadSpeakerBtn', 'speakerOutput', 'speaker-notes.txt');
+      setupDownloadButton('downloadProBtn', 'proPresenterOutput', 'propresenter-slides.txt');
+    }
+
+    function setupCopyButton(btnId, outputId) {
+      document.getElementById(btnId).addEventListener('click', async function() {
+        const text = document.getElementById(outputId).textContent;
+        try {
+          await navigator.clipboard.writeText(text);
+          this.textContent = '✓ Copied!';
+          setTimeout(() => {
+            this.textContent = '📋 Copy';
+          }, 2000);
+        } catch (err) {
+          alert('Copy failed. Please select and copy manually.');
+        }
+      });
+    }
+
+    function setupDownloadButton(btnId, outputId, filename) {
+      document.getElementById(btnId).addEventListener('click', function() {
+        const text = document.getElementById(outputId).textContent;
+        const title = document.getElementById('speechTitle').value || 'speech';
+        const finalFilename = title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + filename;
+        
+        const blob = new Blob([text], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = finalFilename;
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+    }
+
+    // ========================================
+    // PAGE UTILITIES
+    // ========================================
+    // Reading progress
+    const progressBar = document.querySelector('.reading-progress');
+    window.addEventListener('scroll', () => {
+      const winScroll = document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+      if (progressBar) progressBar.style.width = scrolled + '%';
+    }, { passive: true });
+
+    // Back to top
+    const backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      window.addEventListener('scroll', () => {
+        backToTop.classList.toggle('visible', window.scrollY > 300);
+      });
+    }
+
+  </script>
+
+</body>
+</html>
