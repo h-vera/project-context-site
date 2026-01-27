@@ -12,6 +12,7 @@
   <meta name="study-type" content="speech-builder" />
   <meta name="nav-hub" content="resources" />
   <meta name="nav-section" content="teaching-formation" />
+  <meta name="page-type" content="tool" />
 
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image">
@@ -35,7 +36,7 @@
   <link rel="stylesheet" href="/assets/css/mobile-tabs-v5-8.css" />
 
   <style>
-    /* Hero */
+    /* Hero - matching charter.html pattern */
     .hero {
       min-height: 38vh;
       display: flex;
@@ -516,10 +517,26 @@
     .hidden {
       display: none !important;
     }
+
+    /* Mobile responsive adjustments */
+    @media (max-width: 768px) {
+      .hero {
+        min-height: 30vh;
+        padding: 2rem 1rem;
+      }
+
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+    }
   </style>
 </head>
 
-<body class="resources-page" dir="ltr">
+<body class="resources-page speech-builder-page" dir="ltr">
   <!-- Accessibility Skip Link -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
   
@@ -616,15 +633,14 @@
           Fill in your own work below - this is what you'll preach
         </p>
 
-         <!-- ADD THESE TWO LINES: -->
-    <div class="type-caution-work" id="typeCautionWork"></div>
-    <div class="validation-message" id="validationMessage"></div>
+        <div class="type-caution-work" id="typeCautionWork"></div>
+        <div class="validation-message" id="validationMessage"></div>
         
         <form id="speechForm">
 
-            <!-- Formation Guardrails (Required before generating output) -->
+          <!-- Formation Guardrails (Required before generating output) -->
           <div class="form-field" style="margin-top: 0.5rem;">
-            <label for="authorAim">Author’s Aim for the Original Audience (1 sentence)<span class="required-pill">Required</span></label>
+            <label for="authorAim">Author's Aim for the Original Audience (1 sentence)<span class="required-pill">Required</span></label>
             <textarea id="authorAim" rows="2" placeholder="What was the author trying to accomplish for them?"></textarea>
           </div>
 
@@ -671,22 +687,22 @@
           </div>
 
           <!-- Canonical Trajectory -->
-        <div class="form-field">
-        <label for="canonicalTrajectory">🧭 Canonical Trajectory (Messiah → Resurrection Horizon)</label>
-        <p id="trajectoryHelper" style="margin: 0.25rem 0 0.5rem; font-size: 0.9rem; color: var(--text-gray);">
-            How does this text contribute to the larger biblical story—by shaping the need for the Messiah,
-            revealing Jesus’ identity, or showing how the resurrection changes everything?
-            <em>Not every text names Jesus directly; all texts participate in the story he fulfills.</em>
-        </p>
-        <textarea
-            id="canonicalTrajectory"
-            rows="3"
-            placeholder="Name the story pressure, reveal, or resurrection shift—without forcing fulfillment."
-        ></textarea>
-        <p style="margin-top: 0.4rem; font-size: 0.85rem; color: #6c757d;">
-            <em>Aim for faithfulness to this text’s place in the story before moving to application.</em>
-        </p>
-        </div>
+          <div class="form-field">
+            <label for="canonicalTrajectory">🧭 Canonical Trajectory (Messiah → Resurrection Horizon)</label>
+            <p id="trajectoryHelper" style="margin: 0.25rem 0 0.5rem; font-size: 0.9rem; color: var(--text-gray);">
+              How does this text contribute to the larger biblical story—by shaping the need for the Messiah,
+              revealing Jesus' identity, or showing how the resurrection changes everything?
+              <em>Not every text names Jesus directly; all texts participate in the story he fulfills.</em>
+            </p>
+            <textarea
+              id="canonicalTrajectory"
+              rows="3"
+              placeholder="Name the story pressure, reveal, or resurrection shift—without forcing fulfillment."
+            ></textarea>
+            <p style="margin-top: 0.4rem; font-size: 0.85rem; color: #6c757d;">
+              <em>Aim for faithfulness to this text's place in the story before moving to application.</em>
+            </p>
+          </div>
 
           <!-- Response -->
           <div class="form-field">
@@ -794,7 +810,7 @@
 
   <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
 
-   <!-- Navigation Component -->
+  <!-- Navigation Component -->
   <script type="module">
     import NavigationComponent from '/assets/js/nav-component.js';
     new NavigationComponent({
@@ -802,8 +818,6 @@
       hubType: 'resources'
     });
   </script>
-
-  <script src="/assets/js/character-page-v5-8.js" defer></script>
 
   <!-- Speech Builder Logic -->
   <script>
@@ -829,34 +843,43 @@
     // ========================================
 
     function updateCanonicalTrajectoryHelper() {
-    const helper = document.getElementById('trajectoryHelper');
-    if (!helper || !currentBookData || !currentType) return;
+      const helper = document.getElementById('trajectoryHelper');
+      if (!helper) return;
 
-    const testament = currentBookData.testament || currentBookData.meta?.testament || 'ot';
+      // If no book data or type, show default helper
+      if (!currentBookData || !currentType) {
+        helper.innerHTML = `
+          How does this text contribute to the larger biblical story—by shaping the need for the Messiah,
+          revealing Jesus' identity, or showing how the resurrection changes everything?
+          <em>Not every text names Jesus directly; all texts participate in the story he fulfills.</em>
+        `;
+        return;
+      }
 
-    const baseByTestament = {
-        ot: 'For OT texts, focus on how this passage shapes covenant tension, human failure, hope, or expectation that creates need for God’s rescue.',
-        nt: 'For NT texts, focus on how Jesus’ identity, resurrection, and Spirit reshape meaning, mission, and community.'
-    };
+      const testament = currentBookData.testament || 'ot';
 
-    const byType = {
-        expository: 'Let the author’s logic and structure carry the trajectory.',
-        narrative: 'Trace story pressure and movement—don’t flatten the story into points.',
+      const baseByTestament = {
+        ot: 'For OT texts, focus on how this passage shapes covenant tension, human failure, hope, or expectation that creates need for God's rescue.',
+        nt: 'For NT texts, focus on how Jesus' identity, resurrection, and Spirit reshape meaning, mission, and community.'
+      };
+
+      const byType = {
+        expository: 'Let the author's logic and structure carry the trajectory.',
+        narrative: 'Trace story pressure and movement—don't flatten the story into points.',
         testimony: 'Keep Jesus as the primary actor; you are bearing witness.',
         prophetic: 'Ground strengthening, encouragement, and consolation in what the text actually promises.'
-    };
+      };
 
-    helper.innerHTML = `
+      helper.innerHTML = `
         ${baseByTestament[testament]}
         ${byType[currentType] ? ' ' + byType[currentType] : ''}
         <br><em>Not every text names Jesus directly; all texts participate in the story he fulfills.</em>
-    `;
+      `;
     }
 
     // Hermeneutical cautions (shown in Your Work)
-    // (JSON may optionally override these via: bookData.cautions[type] or passage[type].caution)
     const DEFAULT_TYPE_CAUTIONS = {
-      expository: "Don’t move to application until structure and tension are clear.",
+      expository: "Don't move to application until structure and tension are clear.",
       narrative: "Resist turning the story into points; trace the narrative movement.",
       testimony: "You are a witness, not the hero—keep Jesus as the primary actor.",
       prophetic: "Strengthen, encourage, and console must be grounded in the text, not emotion."
@@ -865,9 +888,6 @@
     function getTypeCaution(type) {
       try {
         const passage = currentBookData?.passages?.[currentPassageKey];
-        // Non-breaking JSON extensions (optional):
-        // 1) passage[currentType].caution
-        // 2) book-level cautions map: { cautions: { expository: "..." } }
         return (passage && passage[type] && passage[type].caution)
           || (currentBookData && currentBookData.cautions && currentBookData.cautions[type])
           || DEFAULT_TYPE_CAUTIONS[type]
@@ -899,7 +919,7 @@
       if (msg) {
         if (!ok && showMessage) {
           msg.style.display = "block";
-          msg.textContent = "Complete the two required formation fields (Author’s Aim + Misheard Risk) before generating outputs.";
+          msg.textContent = "Complete the two required formation fields (Author's Aim + Misheard Risk) before generating outputs.";
         } else {
           msg.style.display = "none";
           msg.textContent = "";
@@ -929,6 +949,11 @@
 
       // Show "Your Work" section by default (can start from scratch)
       document.getElementById('yourWorkSection').classList.add('visible');
+      
+      // Initialize helpers on page load
+      updateCanonicalTrajectoryHelper();
+      updateTypeCautionUI();
+      updateGenerateButtonState();
     });
 
     // ========================================
@@ -1149,7 +1174,7 @@
       // Update dynamic form fields
       updateDynamicFields();
 
-      // ADD THESE TWO LINES:
+      // Update helpers
       updateCanonicalTrajectoryHelper();
       updateTypeCautionUI();
     }
@@ -1236,42 +1261,42 @@
     // FORM ACTIONS
     // ========================================
     function setupFormActions() {
-    // Listen for changes to required fields
-    const authorAim = document.getElementById('authorAim');
-    const misheardRisk = document.getElementById('misheardRisk');
-    
-    if (authorAim && misheardRisk) {
+      // Listen for changes to required fields
+      const authorAim = document.getElementById('authorAim');
+      const misheardRisk = document.getElementById('misheardRisk');
+      
+      if (authorAim && misheardRisk) {
         authorAim.addEventListener('input', updateGenerateButtonState);
         misheardRisk.addEventListener('input', updateGenerateButtonState);
-    }
-    
-    // Initial state: disabled until required fields are filled
-    updateGenerateButtonState();
+      }
+      
+      // Initial state: disabled until required fields are filled
+      updateGenerateButtonState();
 
-    document.getElementById('generateBtn').addEventListener('click', () => {
+      document.getElementById('generateBtn').addEventListener('click', () => {
         if (!validateRequiredFields(true)) {
-        document.getElementById('yourWorkSection')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        return;
+          document.getElementById('yourWorkSection')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
         }
         generateOutputs();
-    });
+      });
 
-    document.getElementById('clearBtn').addEventListener('click', clearForm);
+      document.getElementById('clearBtn').addEventListener('click', clearForm);
     }
 
     function generateOutputs() {
-    const speakerNotes = generateSpeakerNotes();
-    const proPresenter = generateProPresenter();
-    
-    document.getElementById('speakerOutput').textContent = speakerNotes;
-    document.getElementById('proPresenterOutput').textContent = proPresenter;
-    
-    document.getElementById('outputSection').classList.add('visible');
-    document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      const speakerNotes = generateSpeakerNotes();
+      const proPresenter = generateProPresenter();
+      
+      document.getElementById('speakerOutput').textContent = speakerNotes;
+      document.getElementById('proPresenterOutput').textContent = proPresenter;
+      
+      document.getElementById('outputSection').classList.add('visible');
+      document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     function clearForm() {
-    if (confirm('Clear all form fields?')) {
+      if (confirm('Clear all form fields?')) {
         document.getElementById('speechForm').reset();
         updateTypeCautionUI();
         updateGenerateButtonState();
@@ -1287,10 +1312,12 @@
         document.getElementById('typeSelector').classList.remove('visible');
         document.getElementById('orientationSection').classList.remove('visible');
         document.getElementById('outputSection').classList.remove('visible');
+        
+        // Reset helpers to default
+        updateCanonicalTrajectoryHelper();
+        updateTypeCautionUI();
       }
     }
-
-    // [CONTINUED IN NEXT PART DUE TO LENGTH...]
 
     // ========================================
     // OUTPUT GENERATION
@@ -1311,6 +1338,12 @@
       output += `TYPE: ${typeLabel}\n\n`;
       
       output += '═══════════════════════════════════════════════════════\n\n';
+      
+      // Formation guardrails
+      output += '📋 FORMATION GUARDRAILS\n';
+      output += '───────────────────────────────────────────────────────\n';
+      output += `Author's Aim: ${get('authorAim')}\n\n`;
+      output += `Misheard Risk: ${get('misheardRisk')}\n\n`;
       
       if (get('yourContext')) {
         output += '📍 CONTEXT\n';
@@ -1470,6 +1503,7 @@
       output += '[CANONICAL TRAJECTORY]\n';
       output += '═══════════════════════════════════════════════════════\n\n';
       output += `🧭 CANONICAL TRAJECTORY\n\n${get('canonicalTrajectory') || '[Place this text within the Messiah → Resurrection story]'}\n\n`;
+      
       output += '═══════════════════════════════════════════════════════\n';
       output += '[RESPONSE]\n';
       output += '═══════════════════════════════════════════════════════\n\n';
