@@ -392,6 +392,48 @@
       gap: 1rem;
     }
 
+    /* Type caution callout (in Your Work) */
+    .type-caution-work{
+      display:none;
+      margin: 0 0 1.25rem 0;
+      padding: 1rem 1.25rem;
+      border-radius: 14px;
+      border: 1px solid rgba(108,79,247,0.25);
+      background: rgba(108,79,247,0.06);
+      color: #1f2937;
+      font-size: 0.98rem;
+      line-height: 1.35;
+    }
+    .required-pill{
+      display:inline-block;
+      padding: 0.15rem 0.55rem;
+      margin-left: 0.5rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      background: #111827;
+      color: #fff;
+      vertical-align: middle;
+    }
+    .validation-message{
+      display:none;
+      margin: 1rem 0 0 0;
+      padding: 0.85rem 1rem;
+      border-radius: 12px;
+      border: 1px solid rgba(220,38,38,0.25);
+      background: rgba(220,38,38,0.06);
+      color: #7f1d1d;
+      font-size: 0.95rem;
+      line-height: 1.35;
+    }
+    .disabled{
+      opacity: 0.55 !important;
+      cursor: not-allowed !important;
+      filter: grayscale(0.15);
+    }
+
     /* Output section */
     .output-section {
       display: none;
@@ -548,6 +590,18 @@
         </p>
         
         <form id="speechForm">
+
+            <!-- Formation Guardrails (Required before generating output) -->
+          <div class="form-field" style="margin-top: 0.5rem;">
+            <label for="authorAim">Author’s Aim for the Original Audience (1 sentence)<span class="required-pill">Required</span></label>
+            <textarea id="authorAim" rows="2" placeholder="What was the author trying to accomplish for them?"></textarea>
+          </div>
+
+          <div class="form-field">
+            <label for="misheardRisk">What Would Be Misheard If We Skip the Original Setting?<span class="required-pill">Required</span></label>
+            <textarea id="misheardRisk" rows="3" placeholder="What goes wrong if we rush to application?"></textarea>
+          </div>
+
           <!-- Basic Info -->
           <div class="form-grid">
             <div class="form-field">
@@ -766,6 +820,71 @@
         ${byType[currentType] ? ' ' + byType[currentType] : ''}
         <br><em>Not every text names Jesus directly; all texts participate in the story he fulfills.</em>
     `;
+    }
+
+    // Hermeneutical cautions (shown in Your Work)
+    // (JSON may optionally override these via: bookData.cautions[type] or passage[type].caution)
+    const DEFAULT_TYPE_CAUTIONS = {
+      expository: "Don’t move to application until structure and tension are clear.",
+      narrative: "Resist turning the story into points; trace the narrative movement.",
+      testimony: "You are a witness, not the hero—keep Jesus as the primary actor.",
+      prophetic: "Strengthen, encourage, and console must be grounded in the text, not emotion."
+    };
+
+    function getTypeCaution(type) {
+      try {
+        const passage = currentBookData?.passages?.[currentPassageKey];
+        // Non-breaking JSON extensions (optional):
+        // 1) passage[currentType].caution
+        // 2) book-level cautions map: { cautions: { expository: "..." } }
+        return (passage && passage[type] && passage[type].caution)
+          || (currentBookData && currentBookData.cautions && currentBookData.cautions[type])
+          || DEFAULT_TYPE_CAUTIONS[type]
+          || "";
+      } catch (e) {
+        return DEFAULT_TYPE_CAUTIONS[type] || "";
+      }
+    }
+
+    function updateTypeCautionUI() {
+      const el = document.getElementById('typeCautionWork');
+      if (!el) return;
+      const caution = currentType ? getTypeCaution(currentType) : "";
+      if (!caution) {
+        el.style.display = "none";
+        el.innerHTML = "";
+        return;
+      }
+      el.style.display = "block";
+      el.innerHTML = `<strong>Type Caution:</strong> ${caution}`;
+    }
+
+    function validateRequiredFields(showMessage = false) {
+      const aim = (document.getElementById('authorAim')?.value || "").trim();
+      const risk = (document.getElementById('misheardRisk')?.value || "").trim();
+      const ok = aim.length > 0 && risk.length > 0;
+
+      const msg = document.getElementById('validationMessage');
+      if (msg) {
+        if (!ok && showMessage) {
+          msg.style.display = "block";
+          msg.textContent = "Complete the two required formation fields (Author’s Aim + Misheard Risk) before generating outputs.";
+        } else {
+          msg.style.display = "none";
+          msg.textContent = "";
+        }
+      }
+      return ok;
+    }
+
+    function updateGenerateButtonState() {
+      const btn = document.getElementById('generateBtn');
+      if (!btn) return;
+      const ok = validateRequiredFields(false);
+      btn.disabled = !ok;
+      btn.classList.toggle('disabled', !ok);
+      btn.setAttribute('aria-disabled', String(!ok));
+      btn.title = ok ? "" : "Fill in the required formation fields first.";
     }
 
     // ========================================
