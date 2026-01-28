@@ -242,8 +242,15 @@ function setupBrowserToggle() {
   document.querySelectorAll('.testament-header').forEach(header => {
     header.addEventListener('click', () => {
       const testament = header.dataset.testament;
-      const content = document.getElementById(`${testament}Content`);
+      // Convert 'new-covenant' to 'new-covenantContent', 'tanakh' to 'tanakhContent'
+      const contentId = testament + 'Content';
+      const content = document.getElementById(contentId);
       const icon = header.querySelector('.testament-toggle');
+      
+      if (!content || !icon) {
+        console.error(`Testament content not found: ${contentId}`);
+        return;
+      }
       
       content.classList.toggle('open');
       icon.classList.toggle('open');
@@ -284,7 +291,7 @@ function renderBookGrid() {
   const newCovenantCount = booksByCategory.gospels.length + booksByCategory.pauline.length + booksByCategory.general.length + booksByCategory.apocalypse.length;
   
   document.getElementById('tanakhCount').textContent = tanakhCount;
-  document.getElementById('newCovenantCount').textContent = newCovenantCount;
+  document.getElementById('new-covenantCount').textContent = newCovenantCount;
 }
 
 function renderCategory(categoryId, books) {
