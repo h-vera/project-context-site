@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Acts JSON Diagnostic</title>
+  <style>
+    body { font-family: monospace; padding: 20px; background: #f5f5f5; }
+    .success { background: #d4edda; padding: 10px; margin: 5px 0; border-radius: 4px; }
+    .error { background: #f8d7da; padding: 10px; margin: 5px 0; border-radius: 4px; }
+    .warning { background: #fff3cd; padding: 10px; margin: 5px 0; border-radius: 4px; }
+    pre { background: white; padding: 10px; overflow: auto; }
+  </style>
+</head>
+<body>
+  <h1>Acts.json Rendering Test</h1>
+  <div id="output"></div>
+
+  <script>
+    async function testActsRendering() {
+      const output = document.getElementById('output');
+      let html = '';
+
+      try {
+        // Fetch the file
+        html += '<div class="success">✓ Fetching /assets/data/speech-presets/acts.json...</div>';
+        const response = await fetch('/assets/data/speech-presets/acts.json');
+        
+        if (!response.ok) {
+          html += `<div class="error">✗ Failed to fetch: ${response.status} ${response.statusText}</div>`;
+          output.innerHTML = html;
+          return;
+        }
+        
+        html += '<div class="success">✓ File loaded successfully</div>';
+        
+        const data = await response.json();
+        html += '<div class="success">✓ JSON parsed successfully</div>';
+        
+        // Check passages object
+        if (!data.passages) {
+          html += '<div class="error">✗ No "passages" object found in JSON!</div>';
+          output.innerHTML = html;
+          return;
+        }
+        
+        const passageKeys = Object.keys(data.passages);
+        html += `<div class="success">✓ Found ${passageKeys.length} passages in data.passages</div>`;
+        
+        // Now test rendering each one
+        html += '<h2>Testing Each Passage:</h2>';
+        
+        let successCount = 0;
+        let errorCount = 0;
+        
+        for (const [key, passage] of Object.entries(data.passages)) {
+          try {
+            // Try to render the card HTML
+            const hasTypes = passage.types && Array.isArray(passage.types) && passage.types.length > 0;
+            
+            if (!hasTypes) {
+              html += `<div class="error">✗ ${key}: Missing or empty types array</div>`;
+              errorCount++;
+              continue;
+            }
+            
+            // Try to access the properties that the template uses
+            const reference = passage.reference || 'No reference';
+            const title = passage.title || 'No title';
+            const typesList = passage.types.join(', ');
+            
+            // Try to render the actual template
+            const cardHTML = `
+              <div class="passage-card">
+                <div class="passage-info">
+                  <h4>${reference}</h4>
+                  <p>${title}</p>
+                  <div class="type-badges">
+                    ${passage.types.map(type => `<span class="type-badge">${type}</span>`).join('')}
+                  </div>
+                </div>
+                <button class="load-passage-btn" data-passage="${key}">Load →</button>
+              </div>
+            `;
+            
+            html += `<div class="success">✓ ${key}: ${reference} - Types: [${typesList}]</div>`;
+            successCount++;
+            
+          } catch (err) {
+            html += `<div class="error">✗ ${key}: ERROR - ${err.message}</div>`;
+            html += `<pre>${err.stack}</pre>`;
+            errorCount++;
+          }
+        }
+        
+        html += `<h2>Summary</h2>`;
+        html += `<div class="success">Successfully rendered: ${successCount} passages</div>`;
+        if (errorCount > 0) {
+          html += `<div class="error">Failed to render: ${errorCount} passages</div>`;
+        }
+        
+        // Now try the actual renderBookOverview logic
+        html += '<h2>Testing Actual renderBookOverview Logic:</h2>';
+        
+        try {
+          const passageCards = Object.entries(data.passages).map(([key, passage]) => {
+            return `
+              <div class="passage-card">
+                <div class="passage-info">
+                  <h4>${passage.reference}</h4>
+                  <p>${passage.title}</p>
+                  <div class="type-badges">
+                    ${passage.types.map(type => `
+                      <span class="type-badge">${type}</span>
+                    `).join('')}
+                  </div>
+                </div>
+                <button class="load-passage-btn" data-passage="${key}">
+                  Load →
+                </button>
+              </div>
+            `;
+          }).join('');
+          
+          html += `<div class="success">✓ Successfully generated HTML for all ${passageKeys.length} passages</div>`;
+          html += `<div class="warning">The speech builder should be showing all ${passageKeys.length} passages</div>`;
+          
+        } catch (err) {
+          html += `<div class="error">✗ Error in renderBookOverview logic: ${err.message}</div>`;
+          html += `<pre>${err.stack}</pre>`;
+        }
+        
+      } catch (err) {
+        html += `<div class="error">✗ Fatal error: ${err.message}</div>`;
+        html += `<pre>${err.stack}</pre>`;
+      }
+      
+      output.innerHTML = html;
+    }
+    
+    testActsRendering();
+  </script>
+</body>
+</html>
