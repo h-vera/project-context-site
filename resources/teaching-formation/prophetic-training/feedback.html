@@ -598,33 +598,127 @@
 
     <!-- Quick Feedback Form -->
     <section class="theology-card">
-      <h2 class="section-title">📝 Quick Feedback Form</h2>
-      <p>
+    <h2 class="section-title">📝 Quick Feedback Form</h2>
+    <p>
         Use this when you want to capture feedback in writing (for practice messages, devotionals, or outlines).
         It keeps everything inside the same safe pattern.
-      </p>
+    </p>
 
-      <div class="panel" style="margin-top: 1.25rem;">
-        <label for="speakerName" style="display:block; font-weight:750; margin-bottom:.35rem;">Speaker Name (optional)</label>
-        <input id="speakerName" type="text" placeholder="e.g., Miriam" style="width:100%; padding:12px 12px; border-radius:10px; border:2px solid var(--border);" />
-
-        <label for="messageTitle" style="display:block; font-weight:750; margin:1rem 0 .35rem;">Message / Passage (optional)</label>
-        <input id="messageTitle" type="text" placeholder="e.g., Acts 2:14–41" style="width:100%; padding:12px 12px; border-radius:10px; border:2px solid var(--border);" />
-
-        <label for="feedbackText" style="display:block; font-weight:750; margin:1rem 0 .35rem;">Feedback (Affirm → Clarify → Form)</label>
-        <textarea id="feedbackText" rows="10" placeholder="AFFIRM: \nCLARIFY: \nFORM:" style="width:100%; padding:12px 12px; border-radius:10px; border:2px solid var(--border); line-height:1.6;"></textarea>
-
-        <div style="display:flex; gap:.6rem; flex-wrap:wrap; margin-top:1rem;">
-          <button type="button" onclick="copyFeedback()" style="padding:10px 14px; border-radius:10px; border:none; background: var(--accent-blue); color:#fff; font-weight:750; cursor:pointer;">Copy</button>
-          <button type="button" onclick="emailFeedback()" style="padding:10px 14px; border-radius:10px; border:none; background: var(--accent-purple); color:#fff; font-weight:750; cursor:pointer;">Email</button>
-          <button type="button" onclick="whatsappFeedback()" style="padding:10px 14px; border-radius:10px; border:none; background: var(--accent-green); color:#fff; font-weight:750; cursor:pointer;">WhatsApp</button>
-          <button type="button" onclick="smsFeedback()" style="padding:10px 14px; border-radius:10px; border:none; background: #111827; color:#fff; font-weight:750; cursor:pointer;">Text (SMS)</button>
+    <div class="panel" style="margin-top: 1.25rem;">
+        <form id="feedbackFormInputs">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+            <div>
+            <label for="speakerName" style="display:block; font-weight:750; margin-bottom:.35rem;">Speaker Name</label>
+            <input id="speakerName" type="text" placeholder="e.g., Miriam" style="width:100%; padding:12px 12px; border-radius:10px; border:2px solid var(--border);" />
+            </div>
+            <div>
+            <label for="reviewerName" style="display:block; font-weight:750; margin-bottom:.35rem;">Your Name (Reviewer)</label>
+            <input id="reviewerName" type="text" placeholder="Your name" style="width:100%; padding:12px 12px; border-radius:10px; border:2px solid var(--border);" />
+            </div>
         </div>
 
-        <p id="copyStatus" style="margin-top: .75rem; color: var(--text-gray);"></p>
-      </div>
-    </section>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+            <div>
+            <label for="messageTitle" style="display:block; font-weight:750; margin-bottom:.35rem;">Message Title</label>
+            <input id="messageTitle" type="text" placeholder="e.g., The Pattern We Keep Repeating" style="width:100%; padding:12px 12px; border-radius:10px; border:2px solid var(--border);" />
+            </div>
+            <div>
+            <label for="messagePassage" style="display:block; font-weight:750; margin-bottom:.35rem;">Primary Text/Passage</label>
+            <input id="messagePassage" type="text" placeholder="e.g., Jonah 4:1-11" style="width:100%; padding:12px 12px; border-radius:10px; border:2px solid var(--border);" />
+            </div>
+        </div>
 
+        <div style="margin-bottom: 1rem;">
+            <label for="messageType" style="display:block; font-weight:750; margin-bottom:.35rem;">Sermon Type</label>
+            <select id="messageType" style="width:100%; padding:12px 12px; border-radius:10px; border:2px solid var(--border);">
+            <option value="">Select type (optional)</option>
+            <option value="Expository">Expository</option>
+            <option value="Narrative">Narrative</option>
+            <option value="Testimony">Testimony</option>
+            <option value="Prophetic">Prophetic</option>
+            </select>
+        </div>
+
+        <!-- AFFIRM Section -->
+        <div style="background: rgba(16,185,129,.08); border: 2px solid var(--accent-green); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem;">
+            <h3 style="margin: 0 0 0.75rem 0; color: var(--accent-green); display: flex; align-items: center; gap: 0.5rem;">
+            <span style="background: var(--accent-green); color: white; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 900;">1</span>
+            Affirm — "Where did God clearly work?"
+            </h3>
+            <p style="margin: 0 0 0.75rem 0; font-size: 0.9rem; color: #065f46;">
+            Name what's working. Where was Jesus clear? Where did Scripture come alive?
+            </p>
+            <label for="affirmText" style="display:block; font-weight:650; margin-bottom:.35rem; font-size: 0.95rem;">Your affirmation:</label>
+            <textarea id="affirmText" rows="4" placeholder="Examples:
+    - Where did you clearly hear or see Jesus?
+    - What part of Scripture came alive?
+    - Where did this strengthen or encourage the church?
+    - What felt faithful, even if imperfect?
+
+    Use 'I heard / I noticed / I was helped by...' language" style="width:100%; padding:12px 12px; border-radius:10px; border:2px solid var(--accent-green); line-height:1.6;"></textarea>
+        </div>
+
+        <!-- CLARIFY Section -->
+        <div style="background: rgba(59,130,246,.08); border: 2px solid var(--accent-blue); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem;">
+            <h3 style="margin: 0 0 0.75rem 0; color: var(--accent-blue); display: flex; align-items: center; gap: 0.5rem;">
+            <span style="background: var(--accent-blue); color: white; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 900;">2</span>
+            Clarify — "What could be made clearer?"
+            </h3>
+            <p style="margin: 0 0 0.75rem 0; font-size: 0.9rem; color: #1e40af;">
+            Ask ONE clarifying question to help sharpen the message. This is curiosity, not criticism.
+            </p>
+            <label for="clarifyText" style="display:block; font-weight:650; margin-bottom:.35rem; font-size: 0.95rem;">Your clarifying question:</label>
+            <textarea id="clarifyText" rows="3" placeholder="Examples:
+    - 'I wasn't sure how this section connected to the main idea.'
+    - 'The transition here could be clearer.'
+    - 'Where did you most feel clear/unsure?'
+    - 'Was the Big Idea easy to restate?'
+
+    Avoid: 'You should...' or vague 'That was confusing'" style="width:100%; padding:12px 12px; border-radius:10px; border:2px solid var(--accent-blue); line-height:1.6;"></textarea>
+        </div>
+
+        <!-- FORM Section -->
+        <div style="background: rgba(139,92,246,.08); border: 2px solid var(--accent-purple); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem;">
+            <h3 style="margin: 0 0 0.75rem 0; color: var(--accent-purple); display: flex; align-items: center; gap: 0.5rem;">
+            <span style="background: var(--accent-purple); color: white; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 900;">3</span>
+            Form — "What might God be shaping next?"
+            </h3>
+            <p style="margin: 0 0 0.75rem 0; font-size: 0.9rem; color: #6b21a8;">
+            Offer ONE specific, actionable growth invitation. Frame it as opportunity, not deficit.
+            </p>
+            <label for="formText" style="display:block; font-weight:650; margin-bottom:.35rem; font-size: 0.95rem;">Your forming suggestion:</label>
+            <textarea id="formText" rows="3" placeholder="Examples:
+    - 'Your prophetic insight is strong—more structure could help it land.'
+    - 'You have a gift for naming the moment; anchor it sooner in the text.'
+    - 'Next time, try pausing at the Jesus moment—let it breathe.'
+    - 'What if you added one concrete example of...?'
+
+    Keep it gentle, curious, non-urgent" style="width:100%; padding:12px 12px; border-radius:10px; border:2px solid var(--accent-purple); line-height:1.6;"></textarea>
+        </div>
+
+        <!-- Additional Notes (Optional) -->
+        <div style="margin-bottom: 1rem;">
+            <label for="additionalNotes" style="display:block; font-weight:750; margin-bottom:.35rem;">Additional Notes (Optional)</label>
+            <textarea id="additionalNotes" rows="2" placeholder="Any other thoughts, encouragements, or prayers..." style="width:100%; padding:12px 12px; border-radius:10px; border:2px solid var(--border); line-height:1.6;"></textarea>
+        </div>
+
+        <div style="display:flex; gap:.6rem; flex-wrap:wrap; margin-top:1rem;">
+            <button type="button" onclick="copyFeedback()" style="padding:10px 14px; border-radius:10px; border:none; background: var(--accent-blue); color:#fff; font-weight:750; cursor:pointer;">📋 Copy Feedback</button>
+            <button type="button" onclick="emailFeedback()" style="padding:10px 14px; border-radius:10px; border:none; background: var(--accent-purple); color:#fff; font-weight:750; cursor:pointer;">✉️ Email This</button>
+            <button type="button" onclick="whatsappFeedback()" style="padding:10px 14px; border-radius:10px; border:none; background: var(--accent-green); color:#fff; font-weight:750; cursor:pointer;">💬 WhatsApp</button>
+            <button type="button" onclick="smsFeedback()" style="padding:10px 14px; border-radius:10px; border:none; background: #111827; color:#fff; font-weight:750; cursor:pointer;">📱 Text (SMS)</button>
+            <button type="button" onclick="clearFeedbackForm()" style="padding:10px 14px; border-radius:10px; border:none; background: #6c757d; color:#fff; font-weight:750; cursor:pointer;">🔄 Clear Form</button>
+        </div>
+
+        <p id="copyStatus" style="margin-top: .75rem; color: var(--text-gray); font-weight: 600;"></p>
+        </form>
+
+        <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-gray); font-style: italic;">
+        💡 Tip: The "Email This" button uses your device's email app via a <span style="font-family: monospace;">mailto:</span> link.
+        If it doesn't work, click "Copy Feedback" and paste into a text or email manually.
+        </p>
+    </div>
+    </section>
     <!-- Receiving Feedback -->
     <section class="theology-card">
       <h2 class="section-title">🎁 How to Receive Feedback Well</h2>
@@ -695,34 +789,35 @@
   </main>
 
   <script src="/assets/js/nav-component.js"></script>
+
   <script>
     // =============================
     // Quick Feedback Form helpers
     // =============================
     function buildFeedbackPayload() {
-      const name = (document.getElementById('speakerName')?.value || '').trim();
-      const title = (document.getElementById('messageTitle')?.value || '').trim();
-      const body = (document.getElementById('feedbackText')?.value || '').trim();
+        const name = (document.getElementById('speakerName')?.value || '').trim();
+        const title = (document.getElementById('messageTitle')?.value || '').trim();
+        const body = (document.getElementById('feedbackText')?.value || '').trim();
 
-      const parts = [];
-      if (name) parts.push(`Speaker: ${name}`);
-      if (title) parts.push(`Message/Passage: ${title}`);
-      if (name || title) parts.push('');
-      parts.push(body || 'AFFIRM:\nCLARIFY:\nFORM:');
-      return parts.join('\n');
+        const parts = [];
+        if (name) parts.push(`Speaker: ${name}`);
+        if (title) parts.push(`Message/Passage: ${title}`);
+        if (name || title) parts.push('');
+        parts.push(body || 'AFFIRM:\nCLARIFY:\nFORM:');
+        return parts.join('\n');
     }
 
     function setStatus(msg) {
-      const el = document.getElementById('copyStatus');
-      if (el) el.textContent = msg || '';
+        const el = document.getElementById('copyStatus');
+        if (el) el.textContent = msg || '';
     }
 
     async function copyFeedback() {
-      const text = buildFeedbackPayload();
-      try {
+        const text = buildFeedbackPayload();
+        try {
         await navigator.clipboard.writeText(text);
         setStatus('Copied to clipboard ✅');
-      } catch (e) {
+        } catch (e) {
         // Fallback for older browsers
         const ta = document.createElement('textarea');
         ta.value = text;
@@ -731,38 +826,38 @@
         document.execCommand('copy');
         document.body.removeChild(ta);
         setStatus('Copied to clipboard ✅');
-      }
+        }
     }
 
     function emailFeedback() {
-      const subject = encodeURIComponent('Formation Feedback (Affirm → Clarify → Form)');
-      const body = encodeURIComponent(buildFeedbackPayload());
-      window.location.href = `mailto:?subject=${subject}&body=${body}`;
+        const subject = encodeURIComponent('Formation Feedback (Affirm → Clarify → Form)');
+        const body = encodeURIComponent(buildFeedbackPayload());
+        window.location.href = `mailto:?subject=${subject}&body=${body}`;
     }
 
     function whatsappFeedback() {
-      const text = encodeURIComponent(buildFeedbackPayload());
-      window.open(`https://wa.me/?text=${text}`, '_blank');
+        const text = encodeURIComponent(buildFeedbackPayload());
+        window.open(`https://wa.me/?text=${text}`, '_blank');
     }
 
     function smsFeedback() {
-      const text = encodeURIComponent(buildFeedbackPayload());
-      // iOS uses &body= ; some Android clients accept ?body=
-      window.location.href = `sms:?&body=${text}`;
+        const text = encodeURIComponent(buildFeedbackPayload());
+        // iOS uses &body= ; some Android clients accept ?body=
+        window.location.href = `sms:?&body=${text}`;
     }
 
     // Reading progress bar
     (function() {
-      const bar = document.querySelector('.reading-progress');
-      const onScroll = () => {
+        const bar = document.querySelector('.reading-progress');
+        const onScroll = () => {
         const scrollTop = window.scrollY || document.documentElement.scrollTop;
         const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
         const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
         if (bar) bar.style.width = pct + '%';
-      };
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
     })();
-  </script>
+    </script>
 </body>
 </html>
