@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, shrink-to-fit=no" />
+  <title>Sermon Builder - Prophetic & Teaching Formation | Project Context</title>
+  <meta name="description" content="Interactive sermon builder for Expository, Narrative, Testimony, and Prophetic messages. Load book presets, fill in your work, generate speaker notes, ProPresenter slides, and full HTML sermon pages." />
+
+  <!-- Page Metadata -->
+  <meta name="template-version" content="5.8.1" />
+  <meta name="page-category" content="resources" />
+  <meta name="study-type" content="sermon-builder" />
+  <meta name="nav-hub" content="resources" />
+  <meta name="nav-section" content="teaching-formation" />
+  <meta name="page-type" content="tool" />
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sermon Builder - Prophetic & Teaching Formation">
+  <meta name="twitter:description" content="Build Expository, Narrative, Testimony, or Prophetic messages with book-by-book orientation and multiple export formats.">
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="Sermon Builder - Prophetic & Teaching Formation">
+  <meta property="og:description" content="Build sermons with book orientation and export to HTML, ProPresenter, or speaker notes.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://projectcontext.org/resources/teaching-formation/prophetic-training/builder.html">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://projectcontext.org/resources/teaching-formation/prophetic-training/builder.html">
+
+  <!-- Preload Critical Resources -->
+  <link rel="preload" href="/assets/css/global-v2.css" as="style" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/global-v2.css" />
+  <link rel="stylesheet" href="/assets/css/mobile-tabs-v5-8.css" />
+
+  <style>
+    /* Base styles */
+    :root {
+      --primary-dark: #1a1a2e;
+      --text-gray: #666;
+      --panel: #f8f9fa;
+      --border-light: #dee2e6;
+      --accent-purple: #7209b7;
+      --cosmic-indigo: #6c4ff7;
+      --cosmic-magenta: #e94bff;
+      --cosmic-blue: #57A9FF;
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+    }
+
+    .content-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .theology-card {
+      background: white;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border-radius: 12px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+
+    .section-icon {
+      margin-right: 0.5rem;
+    }
+
+    .panel {
+      background: var(--panel);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+
+    .cosmic-button {
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, var(--cosmic-indigo), var(--cosmic-magenta));
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 1rem;
+    }
+
+    .cosmic-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(108,79,247,0.3);
+    }
+
+    .cosmic-button.muted {
+      background: #6c757d;
+    }
+
+    .cosmic-button.disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      filter: grayscale(0.15);
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .breadcrumbs {
+      padding: 1rem 1.5rem;
+      font-size: 0.9rem;
+      color: var(--text-gray);
+    }
+
+    .breadcrumbs a {
+      color: var(--cosmic-indigo);
+      text-decoration: none;
+    }
+
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: #000;
+      color: white;
+      padding: 8px;
+      z-index: 100;
+    }
+
+    .skip-link:focus {
+      top: 0;
+    }
+
+    .reading-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--cosmic-indigo), var(--cosmic-magenta));
+      z-index: 1000;
+      transition: width 0.2s ease;
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 50px;
+      height: 50px;
+      background: var(--cosmic-indigo);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      font-size: 1.5rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 38vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 1.5rem;
+      margin-top: 0;
+      position: relative;
+      background: linear-gradient(135deg, #001B3A 0%, #3EE4FF 15%, #57A9FF 30%, #6C4FF7 50%, #E94BFF 70%, #FA4ABA 85%, #FF9B4A 100%);
+      color: white;
+      overflow: hidden;
+      margin-left: calc(-50vw + 50%);
+      margin-right: calc(-50vw + 50%);
+      width: 100vw;
+    }
+    
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 25% 75%, rgba(62,228,255,.12) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(250,74,186,.15) 0%, transparent 50%);
+      animation: float 32s infinite linear;
+    }
+    
+    @keyframes float {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.08); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+    
+    .hero-content {
+      text-align: center;
+      max-width: 980px;
+      margin: 0 auto;
+      z-index: 1;
+      position: relative;
+    }
+    
+    .hero-title {
+      font-size: clamp(2.1rem, 5vw, 3.4rem);
+      font-weight: 900;
+      line-height: 1.08;
+      margin-bottom: 0.7rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,.35);
+    }
+    
+    .hero-subtitle {
+      font-size: clamp(1.05rem, 2.1vw, 1.35rem);
+      opacity: .95;
+      margin: 0 auto 1.25rem auto;
+      font-weight: 300;
+      max-width: 860px;
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      margin-top: 1.2rem;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.10);
+      color: white;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+      min-height: 44px;
+    }
+
+    .cta:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.14);
+      border-color: rgba(255,255,255,.28);
+    }
+
+    /* Book browser */
+    .book-browser {
+      background: var(--panel);
+      border: 2px solid var(--border-light);
+      border-radius: 12px;
+      margin: 1.5rem 0;
+      overflow: hidden;
+    }
+
+    .browser-header {
+      padding: 1.25rem 1.5rem;
+      background: linear-gradient(135deg, rgba(108,79,247,0.08), rgba(233,75,255,0.08));
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+
+    .browser-header:hover {
+      background: linear-gradient(135deg, rgba(108,79,247,0.12), rgba(233,75,255,0.12));
+    }
+
+    .browser-header h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--cosmic-indigo);
+    }
+
+    .browser-toggle {
+      font-size: 1.5rem;
+      transition: transform 0.3s ease;
+    }
+
+    .browser-toggle.open {
+      transform: rotate(180deg);
+    }
+
+    .browser-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .browser-content.open {
+      max-height: none;
+    }
+
+    /* Testament accordions */
+    .testament-section {
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .testament-section:last-child {
+      border-bottom: none;
+    }
+
+    .testament-header {
+      padding: 1rem 1.5rem;
+      background: white;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s ease;
+      border-left: 4px solid transparent;
+    }
+
+    .testament-header:hover {
+      background: #f8f9fa;
+    }
+
+    .testament-header.tanakh {
+      border-left-color: #d97706;
+    }
+
+    .testament-header.new-covenant {
+      border-left-color: #6c4ff7;
+    }
+
+    .testament-title {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .testament-title .icon {
+      font-size: 1.3rem;
+    }
+
+    .testament-title.tanakh {
+      color: #d97706;
+    }
+
+    .testament-title.new-covenant {
+      color: #6c4ff7;
+    }
+
+    .testament-count {
+      padding: 0.25rem 0.75rem;
+      background: var(--panel);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-gray);
+    }
+
+    .testament-toggle {
+      font-size: 1.2rem;
+      transition: transform 0.3s ease;
+      color: var(--text-gray);
+    }
+
+    .testament-toggle.open {
+      transform: rotate(180deg);
+    }
+
+    .testament-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .testament-content.open {
+      max-height: 2000px;
+    }
+
+    /* Category subsections */
+    .category-section {
+      padding: 1rem 1.5rem;
+      background: #fafbfc;
+      border-top: 1px solid #e9ecef;
+    }
+
+    .category-section:first-child {
+      border-top: none;
+    }
+
+    .category-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #495057;
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .category-count {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      background: white;
+      border: 1px solid var(--border-light);
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-gray);
+    }
+
+    .book-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .book-chip {
+      padding: 0.5rem 1rem;
+      background: white;
+      border: 2px solid var(--border-light);
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--primary-dark);
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .book-chip:hover {
+      border-color: var(--cosmic-indigo);
+      background: rgba(108,79,247,0.05);
+      transform: translateY(-1px);
+    }
+
+    .book-chip.active {
+      background: linear-gradient(135deg, var(--cosmic-indigo), var(--cosmic-magenta));
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 2px 8px rgba(108,79,247,0.3);
+    }
+
+    .coming-soon {
+      padding: 0.5rem 1rem;
+      background: #f8f9fa;
+      border: 2px dashed #dee2e6;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      color: #6c757d;
+      font-style: italic;
+    }
+
+    .book-overview {
+      display: none;
+      background: white;
+      border-top: 2px solid var(--border-light);
+      padding: 1.5rem;
+    }
+
+    .book-overview.visible {
+      display: block;
+    }
+
+    .passage-grid {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .passage-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: var(--panel);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      gap: 1rem;
+    }
+
+    .passage-info h4 {
+      margin: 0 0 0.25rem 0;
+      color: var(--accent-purple);
+      font-size: 1rem;
+    }
+
+    .passage-info p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-gray);
+    }
+
+    .type-badges {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .type-badge {
+      padding: 0.25rem 0.75rem;
+      background: white;
+      border: 1px solid var(--cosmic-indigo);
+      color: var(--cosmic-indigo);
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .load-passage-btn {
+      padding: 0.5rem 1.25rem;
+      background: linear-gradient(135deg, var(--cosmic-indigo), var(--cosmic-magenta));
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .load-passage-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(108,79,247,0.3);
+    }
+
+    /* Type selector */
+    .type-selector {
+      display: none;
+      margin: 2rem 0;
+      padding: 2rem;
+      background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
+      border: 3px solid #ff6b6b;
+      border-radius: 12px;
+    }
+
+    .type-selector.visible {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .type-pills {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .type-pill {
+      padding: 0.75rem 1.5rem;
+      border: 2px solid var(--border-light);
+      background: white;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .type-pill:hover {
+      border-color: var(--cosmic-indigo);
+      background: rgba(108,79,247,0.05);
+    }
+
+    .type-pill.active {
+      background: linear-gradient(135deg, var(--cosmic-indigo), var(--cosmic-magenta));
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(108,79,247,0.25);
+    }
+
+    /* Orientation section */
+    .orientation-section {
+      display: none;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border: 2px solid #adb5bd;
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0;
+    }
+
+    .orientation-section.visible {
+      display: block;
+    }
+
+    .orientation-section h3 {
+      margin: 0 0 1.5rem 0;
+      color: #495057;
+      font-size: 1.3rem;
+    }
+
+    .orientation-field {
+      background: white;
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-left: 4px solid #6c757d;
+    }
+
+    .orientation-field strong {
+      display: block;
+      color: #495057;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .orientation-field p {
+      margin: 0;
+      line-height: 1.7;
+      color: #212529;
+    }
+
+    /* Your work section */
+    .your-work-section {
+      display: none;
+      background: white;
+      border: 2px solid var(--accent-purple);
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0;
+    }
+
+    .your-work-section.visible {
+      display: block;
+    }
+
+    .your-work-section h3 {
+      margin: 0 0 1.5rem 0;
+      color: var(--accent-purple);
+      font-size: 1.3rem;
+    }
+
+    .form-field {
+      margin: 1.25rem 0;
+    }
+
+    .form-field label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--primary-dark);
+      font-size: 0.95rem;
+    }
+
+    .form-field input,
+    .form-field textarea,
+    .form-field select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: border-color 0.2s ease;
+    }
+
+    .form-field input:focus,
+    .form-field textarea:focus,
+    .form-field select:focus {
+      outline: none;
+      border-color: var(--accent-purple);
+      box-shadow: 0 0 0 3px rgba(114,9,183,0.1);
+    }
+
+    .form-field textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .type-caution-work {
+      display: none;
+      margin: 0 0 1.25rem 0;
+      padding: 1rem 1.25rem;
+      border-radius: 14px;
+      border: 1px solid rgba(108,79,247,0.25);
+      background: rgba(108,79,247,0.06);
+      color: #1f2937;
+      font-size: 0.98rem;
+      line-height: 1.35;
+    }
+
+    .required-pill {
+      display: inline-block;
+      padding: 0.15rem 0.55rem;
+      margin-left: 0.5rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      background: #111827;
+      color: #fff;
+      vertical-align: middle;
+    }
+
+    .validation-message {
+      display: none;
+      margin: 1rem 0 0 0;
+      padding: 0.85rem 1rem;
+      border-radius: 12px;
+      border: 1px solid rgba(220,38,38,0.25);
+      background: rgba(220,38,38,0.06);
+      color: #7f1d1d;
+      font-size: 0.95rem;
+      line-height: 1.35;
+    }
+
+    /* Output section */
+    .output-section {
+      display: none;
+      margin: 2rem 0;
+    }
+
+    .output-section.visible {
+      display: block;
+    }
+
+    .output-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid var(--border-light);
+      flex-wrap: wrap;
+    }
+
+    .output-tab {
+      padding: 0.75rem 1.5rem;
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      color: var(--text-gray);
+    }
+
+    .output-tab:hover {
+      color: var(--primary-dark);
+      background: var(--panel);
+    }
+
+    .output-tab.active {
+      color: var(--accent-purple);
+      border-bottom-color: var(--accent-purple);
+    }
+
+    .output-content {
+      display: none;
+    }
+
+    .output-content.active {
+      display: block;
+    }
+
+    .codeblock {
+      position: relative;
+      border-radius: 14px;
+      border: 1px solid var(--border-light);
+      background: #f8fafc;
+      color: var(--primary-dark);
+      padding: 1.5rem;
+      overflow: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      max-height: 600px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+      .hero {
+        min-height: 30vh;
+        padding: 2rem 1rem;
+      }
+
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+
+      .output-tabs {
+        flex-direction: column;
+      }
+
+      .output-tab {
+        border-bottom: none;
+        border-left: 3px solid transparent;
+      }
+
+      .output-tab.active {
+        border-left-color: var(--accent-purple);
+      }
+    }
+  </style>
+</head>
+
+<body class="resources-page sermon-builder-page" dir="ltr">
+  <!-- Accessibility Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress"></div>
+  
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay"></div>
+
+  <!-- Quick Navigation Sidebar (Desktop Only) -->
+  <div class="quick-nav-sidebar" aria-label="Section navigation"></div>
+
+  <!-- Navigation will be inserted here by nav-component.js -->
+
+  <main id="main-content" class="content-section" role="main" aria-label="Sermon Builder">
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+      <a href="/">Home</a> ›
+      <a href="/resources/">Resources</a> ›
+      <a href="/resources/teaching-formation/">Teaching Formation</a> ›
+      <a href="./invitation.html">Prophetic Training</a> ›
+      Sermon Builder
+    </div>
+
+    <!-- Hero -->
+    <section class="hero fade-in">
+      <div class="hero-content">
+        <h1 class="hero-title">Sermon Builder</h1>
+        <p class="hero-subtitle">
+          Build Expository, Narrative, Testimony, or Prophetic messages with book-by-book orientation
+        </p>
+        <div class="hero-actions">
+          <a class="cta" href="./framework.html">📖 Learn the Framework</a>
+          <a class="cta" href="./practice.html">🎙️ Practice Lab</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Builder -->
+    <section class="theology-card animate-on-scroll">
+      <h2 class="section-title"><span class="section-icon">✍️</span>Build Your Sermon</h2>
+      
+      <!-- Step 1: Collapsible Book Browser -->
+      <div class="book-browser">
+        <div class="browser-header" id="browserToggle">
+          <div>
+            <h3>📚 Step 1: Browse Books & Load Preset (Optional)</h3>
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: var(--text-gray);">
+              Or skip to start from scratch
+            </p>
+          </div>
+          <span class="browser-toggle">▼</span>
+        </div>
+        
+        <div class="browser-content" id="browserContent">
+          
+          <!-- TaNaKh (Old Testament) -->
+          <div class="testament-section">
+            <div class="testament-header tanakh" data-testament="tanakh">
+              <div class="testament-title tanakh">
+                <span class="icon">📜</span>
+                <span>TaNaKh (Old Testament)</span>
+                <span class="testament-count" id="tanakhCount">0</span>
+              </div>
+              <span class="testament-toggle">▼</span>
+            </div>
+            <div class="testament-content" id="tanakhContent">
+              <!-- Torah -->
+              <div class="category-section" id="torahSection" style="display: none;">
+                <div class="category-title">
+                  Torah (Law)
+                  <span class="category-count" id="torahCount">0</span>
+                </div>
+                <div class="book-chips" id="torahBooks"></div>
+              </div>
+              
+              <!-- Prophets -->
+              <div class="category-section" id="prophetsSection" style="display: none;">
+                <div class="category-title">
+                  Nevi'im (Prophets)
+                  <span class="category-count" id="prophetsCount">0</span>
+                </div>
+                <div class="book-chips" id="prophetsBooks"></div>
+              </div>
+              
+              <!-- Writings -->
+              <div class="category-section" id="writingsSection" style="display: none;">
+                <div class="category-title">
+                  Ketuvim (Writings)
+                  <span class="category-count" id="writingsCount">0</span>
+                </div>
+                <div class="book-chips" id="writingsBooks"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- New Covenant (New Testament) -->
+          <div class="testament-section">
+            <div class="testament-header new-covenant" data-testament="new-covenant">
+              <div class="testament-title new-covenant">
+                <span class="icon">✝️</span>
+                <span>New Covenant (New Testament)</span>
+                <span class="testament-count" id="newCovenantCount">0</span>
+              </div>
+              <span class="testament-toggle">▼</span>
+            </div>
+            <div class="testament-content" id="newCovenantContent">
+              <!-- Gospels & Acts -->
+              <div class="category-section" id="gospelsSection" style="display: none;">
+                <div class="category-title">
+                  Gospels & Acts
+                  <span class="category-count" id="gospelsCount">0</span>
+                </div>
+                <div class="book-chips" id="gospelsBooks"></div>
+              </div>
+              
+              <!-- Pauline Letters -->
+              <div class="category-section" id="paulineSection" style="display: none;">
+                <div class="category-title">
+                  Pauline Letters
+                  <span class="category-count" id="paulineCount">0</span>
+                </div>
+                <div class="book-chips" id="paulineBooks"></div>
+              </div>
+              
+              <!-- General Letters -->
+              <div class="category-section" id="generalSection" style="display: none;">
+                <div class="category-title">
+                  General Letters
+                  <span class="category-count" id="generalCount">0</span>
+                </div>
+                <div class="book-chips" id="generalBooks"></div>
+              </div>
+              
+              <!-- Apocalypse -->
+              <div class="category-section" id="apocalypseSection" style="display: none;">
+                <div class="category-title">
+                  Apocalypse
+                  <span class="category-count" id="apocalypseCount">0</span>
+                </div>
+                <div class="book-chips" id="apocalypseBooks"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Book overview (appears when book selected) -->
+          <div class="book-overview" id="bookOverview">
+            <!-- Generated by JavaScript -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Type Selector -->
+      <div class="type-selector" id="typeSelector">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0; font-size: 1.4rem; color: #c92a2a;">⚡ Step 2: Choose Sermon Type</h3>
+          <span id="typePreviewBadge" style="
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #6c4ff7, #e94bff);
+            color: white;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: none;
+          "></span>
+        </div>
+        <p style="margin: 0 0 1.25rem 0; font-size: 0.95rem; color: #862e2e;">
+          Different types have different orientations and form fields
+        </p>
+        <div class="type-pills" id="typePills">
+          <!-- Generated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Step 3: Orientation -->
+      <div class="orientation-section" id="orientationSection">
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;">
+          <h3 style="margin: 0;">📚 Orientation (Reference While Working)</h3>
+          <span id="currentTypeBadge" style="padding: 0.5rem 1rem; background: linear-gradient(135deg, var(--cosmic-indigo), var(--cosmic-magenta)); color: white; border-radius: 999px; font-size: 0.9rem; font-weight: 700; text-transform: uppercase;"></span>
+        </div>
+        <p style="margin: 0 0 1.5rem 0; color: #6c757d; font-size: 0.95rem;">
+          These are guidance notes from the preset - use them as reference
+        </p>
+        <div id="orientationContent">
+          <!-- Generated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Step 4: Your Work -->
+      <div class="your-work-section" id="yourWorkSection">
+        <h3>✍️ Your Sermon (Your Work)</h3>
+        <p style="margin: 0 0 1.5rem 0; color: var(--text-gray); font-size: 0.95rem;">
+          Fill in your own work below - this is what you'll preach
+        </p>
+
+        <div class="type-caution-work" id="typeCautionWork"></div>
+        <div class="validation-message" id="validationMessage"></div>
+        
+        <form id="sermonForm">
+
+          <!-- Formation Guardrails (Required) -->
+          <div class="form-field" style="margin-top: 0.5rem;">
+            <label for="authorAim">Author's Aim for the Original Audience (1 sentence)<span class="required-pill">Required</span></label>
+            <textarea id="authorAim" rows="2" placeholder="What was the author trying to accomplish for them?"></textarea>
+          </div>
+
+          <div class="form-field">
+            <label for="misheardRisk">What Would Be Misheard If We Skip the Original Setting?<span class="required-pill">Required</span></label>
+            <textarea id="misheardRisk" rows="3" placeholder="What goes wrong if we rush to application?"></textarea>
+          </div>
+
+          <!-- Basic Info -->
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="sermonTitle">Sermon Title:</label>
+              <input type="text" id="sermonTitle" placeholder="e.g., The Pattern We Keep Repeating">
+            </div>
+            <div class="form-field">
+              <label for="sermonSpeaker">Speaker:</label>
+              <input type="text" id="sermonSpeaker" placeholder="Your name">
+            </div>
+            <div class="form-field">
+              <label for="sermonDate">Date:</label>
+              <input type="date" id="sermonDate">
+            </div>
+            <div class="form-field">
+              <label for="sermonText">Primary Text:</label>
+              <input type="text" id="sermonText" placeholder="e.g., Jonah 4:1-11">
+            </div>
+          </div>
+
+          <!-- Scripture Text (NEW) -->
+          <div class="form-field">
+            <label for="scriptureTranslation">Scripture Translation:</label>
+            <select id="scriptureTranslation">
+              <option value="ESV">ESV</option>
+              <option value="NIV">NIV</option>
+              <option value="NRSV">NRSV</option>
+              <option value="NASB">NASB</option>
+              <option value="KJV">KJV</option>
+              <option value="NKJV">NKJV</option>
+              <option value="CSB">CSB</option>
+              <option value="NLT">NLT</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="scriptureText">Scripture Text (Paste from BibleGateway, BibleHub, or your preferred source):</label>
+            <textarea id="scriptureText" rows="8" placeholder="Paste the full text of your passage here...
+
+Get scripture from:
+• https://www.biblegateway.com
+• https://biblehub.com
+• https://www.esv.org"></textarea>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-gray);">
+              💡 Tip: Copy from BibleGateway or BibleHub for clean formatting
+            </p>
+          </div>
+
+          <!-- Context -->
+          <div class="form-field">
+            <label for="yourContext">📍 Context (Your Angle):</label>
+            <textarea id="yourContext" rows="2" placeholder="How are you contextualizing this for YOUR audience?"></textarea>
+          </div>
+
+          <!-- Big Idea -->
+          <div class="form-field">
+            <label for="bigIdea">💡 Big Idea (One Sentence):</label>
+            <textarea id="bigIdea" rows="2" placeholder="What is the one clear claim from this text?"></textarea>
+          </div>
+
+          <!-- Type-Specific Fields -->
+          <div id="dynamicFields">
+            <!-- Populated by JavaScript based on type -->
+          </div>
+
+          <!-- Canonical Trajectory -->
+          <div class="form-field">
+            <label for="canonicalTrajectory">🧭 Canonical Trajectory (Messiah → Resurrection Horizon)</label>
+            <p id="trajectoryHelper" style="margin: 0.25rem 0 0.5rem; font-size: 0.9rem; color: var(--text-gray);">
+              How does this text contribute to the larger biblical story—by shaping the need for the Messiah,
+              revealing Jesus' identity, or showing how the resurrection changes everything?
+              <em>Not every text names Jesus directly; all texts participate in the story he fulfills.</em>
+            </p>
+            <textarea
+              id="canonicalTrajectory"
+              rows="3"
+              placeholder="Name the story pressure, reveal, or resurrection shift—without forcing fulfillment."
+            ></textarea>
+            <p style="margin-top: 0.4rem; font-size: 0.85rem; color: #6c757d;">
+              <em>Aim for faithfulness to this text's place in the story before moving to application.</em>
+            </p>
+          </div>
+
+          <!-- Response -->
+          <div class="form-field">
+            <label for="response">↪️ Response & Application:</label>
+            <textarea id="response" rows="3" placeholder="What concrete action/repentance are you calling for?"></textarea>
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="display: flex; gap: 1rem; margin-top: 2rem; justify-content: center; flex-wrap: wrap;">
+            <button type="button" id="generateBtn" class="cosmic-button">
+              ✨ Generate Sermon Outputs
+            </button>
+            <button type="button" id="clearBtn" class="cosmic-button muted">
+              🔄 Clear Form
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Step 5: Output -->
+      <div class="output-section" id="outputSection">
+        <h3 style="margin: 0 0 1rem 0; font-size: 1.2rem;">📄 Your Generated Sermon</h3>
+        
+        <div class="panel">
+          <!-- Tabs -->
+          <div class="output-tabs">
+            <button class="output-tab active" data-tab="html">📄 Full HTML Page</button>
+            <button class="output-tab" data-tab="propresenter">🎥 ProPresenter</button>
+            <button class="output-tab" data-tab="speaker">📝 Speaker Notes</button>
+          </div>
+
+          <!-- Full HTML Output (NEW - PRIMARY) -->
+          <div class="output-content active" data-content="html">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+              <h4 style="margin: 0;">Full HTML Sermon Page (Primary Export)</h4>
+              <div style="display: flex; gap: 0.5rem;">
+                <button type="button" id="downloadHtmlBtn" class="cosmic-button" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+                  💾 Download HTML
+                </button>
+              </div>
+            </div>
+            <p style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-gray);">
+              Complete standalone HTML file using the Master Spine structure. 
+              Open in browser, upload to website, or print to PDF.
+            </p>
+            <div id="htmlOutput" class="codeblock"></div>
+          </div>
+
+          <!-- ProPresenter Output (NEW - XML FORMAT) -->
+          <div class="output-content" data-content="propresenter">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+              <h4 style="margin: 0;">ProPresenter XML (Import Ready)</h4>
+              <div style="display: flex; gap: 0.5rem;">
+                <button type="button" id="copyProBtn" class="cosmic-button muted" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+                  📋 Copy
+                </button>
+                <button type="button" id="downloadProBtn" class="cosmic-button" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+                  💾 Download XML
+                </button>
+              </div>
+            </div>
+            <p style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-gray);">
+              ProPresenter 7 compatible XML. Save as .pro7 file and import directly.
+            </p>
+            <div id="proPresenterOutput" class="codeblock"></div>
+          </div>
+
+          <!-- Speaker Notes Output -->
+          <div class="output-content" data-content="speaker">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+              <h4 style="margin: 0;">Speaker Notes (Text Format)</h4>
+              <div style="display: flex; gap: 0.5rem;">
+                <button type="button" id="copySpeakerBtn" class="cosmic-button muted" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+                  📋 Copy
+                </button>
+                <button type="button" id="downloadSpeakerBtn" class="cosmic-button" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+                  💾 Download TXT
+                </button>
+              </div>
+            </div>
+            <div id="speakerOutput" class="codeblock"></div>
+          </div>
+        </div>
+
+        <!-- Next Steps CTAs -->
+        <div style="margin-top: 2rem;">
+          <h4>✅ Sermon Complete! Next Steps:</h4>
+          <div class="grid-3">
+            <div class="panel" style="text-align: center; padding: 1.5rem;">
+              <div style="font-size: 2rem; margin-bottom: 0.5rem;">🤝</div>
+              <h4 style="margin: 0 0 0.5rem 0; font-size: 1rem;">Get Team Feedback</h4>
+              <p style="margin: 0 0 1rem 0; font-size: 0.9rem; color: var(--text-gray);">
+                Don't prepare alone
+              </p>
+              <a href="./feedback.html" class="cosmic-button muted" style="font-size: 0.9rem; padding: 0.5rem 1rem; text-decoration: none; display: inline-block;">
+                Feedback Method
+              </a>
+            </div>
+            <div class="panel" style="text-align: center; padding: 1.5rem;">
+              <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎙️</div>
+              <h4 style="margin: 0 0 0.5rem 0; font-size: 1rem;">Practice Delivery</h4>
+              <p style="margin: 0 0 1rem 0; font-size: 0.9rem; color: var(--text-gray);">
+                Run through your message
+              </p>
+              <a href="./practice.html" class="cosmic-button muted" style="font-size: 0.9rem; padding: 0.5rem 1rem; text-decoration: none; display: inline-block;">
+                Practice Lab
+              </a>
+            </div>
+            <div class="panel" style="text-align: center; padding: 1.5rem;">
+              <div style="font-size: 2rem; margin-bottom: 0.5rem;">📖</div>
+              <h4 style="margin: 0 0 0.5rem 0; font-size: 1rem;">Study the Framework</h4>
+              <p style="margin: 0 0 1rem 0; font-size: 0.9rem; color: var(--text-gray);">
+                Deepen your understanding
+              </p>
+              <a href="./framework.html" class="cosmic-button muted" style="font-size: 0.9rem; padding: 0.5rem 1rem; text-decoration: none; display: inline-block;">
+                Master Framework
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
+
+  <!-- Navigation Component -->
+  <script type="module">
+    import NavigationComponent from '/assets/js/nav-component.js';
+    new NavigationComponent({
+      currentPage: 'resources',
+      hubType: 'resources'
+    });
+  </script>
+
+  <!-- Sermon Builder Logic -->
+  <script src="/assets/js/sermon-builder.js"></script>
+
+</body>
+</html>
