@@ -20,30 +20,76 @@
   <link rel="stylesheet" href="/assets/css/mobile-tabs-v5-8.css" />
 
   <style>
+    /* Pathway-specific hero styling - Cosmic Eye Logo Colors */
     .hero {
-      min-height: 40vh;
+      min-height: 42vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 2.4rem 1.5rem;
+      padding: 2.5rem 1.5rem;
       margin-top: 0;
-      background: linear-gradient(135deg, #0a0a0a 0%, var(--accent-green) 35%, var(--accent-blue) 70%, #0a0a0a 100%);
+      position: relative;
+      /* Cosmic gradient matching logo: Cyan → Blue → Indigo → Magenta → Pink → Orange */
+      background: linear-gradient(
+        135deg,
+        #001B3A 0%,        /* Deep space blue */
+        #3EE4FF 15%,       /* Bright aqua cyan */
+        #57A9FF 30%,       /* Nebula blue */
+        #6C4FF7 50%,       /* Neon indigo */
+        #E94BFF 70%,       /* Cosmic magenta */
+        #FA4ABA 85%,       /* Neon pink */
+        #FF9B4A 100%       /* Sunset gold */
+      );
       color: white;
+      overflow: hidden;
       margin-left: calc(-50vw + 50%);
       margin-right: calc(-50vw + 50%);
       width: 100vw;
     }
-    .hero-content { text-align: center; max-width: 900px; }
-    .hero-title {
-      font-size: clamp(2.0rem, 5vw, 3.1rem);
-      font-weight: 900;
-      margin-bottom: .6rem;
+    
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background:
+        radial-gradient(circle at 25% 75%, rgba(62,228,255,.12) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(250,74,186,.15) 0%, transparent 50%);
+      animation: float 32s infinite linear;
     }
+    
+    @keyframes float {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.08); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+    
+    .hero-content { 
+      text-align: center; 
+      max-width: 980px; 
+      margin: 0 auto;
+      z-index: 1; 
+      position: relative;
+      width: 100%;
+    }
+    
+    .hero-title {
+      font-size: clamp(2.1rem, 5vw, 3.4rem);
+      font-weight: 900;
+      line-height: 1.08;
+      margin-bottom: 0.7rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,.35);
+    }
+    
     .hero-subtitle {
-      font-size: clamp(1.05rem, 2vw, 1.3rem);
+      font-size: clamp(1.05rem, 2.1vw, 1.35rem);
       opacity: .95;
+      margin: 0 auto 1.25rem auto;
+      font-weight: 300;
+      max-width: 860px;
       line-height: 1.6;
     }
+    
     .cta {
       display: inline-flex;
       align-items: center;
@@ -57,11 +103,16 @@
       color: white;
       margin-top: 1rem;
       transition: transform .2s ease, background .2s ease;
+      min-height: 44px;
+      backdrop-filter: blur(10px);
     }
+    
     .cta:hover {
       transform: translateY(-2px);
       background: rgba(255,255,255,.18);
     }
+    
+    /* Copy box for template text */
     .copy-box {
       background: #0b1220;
       color: #e8eefc;
@@ -73,36 +124,63 @@
       line-height: 1.65;
       margin-top: 1rem;
     }
+    
+    /* Pathway navigation styling */
     .pathway-nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 2rem;
+      margin-top: 3rem;
       padding-top: 2rem;
-      border-top: 2px solid var(--border);
+      border-top: 2px solid var(--border-light);
       gap: 1rem;
       flex-wrap: wrap;
     }
+    
     .pathway-nav a {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 10px 16px;
+      padding: 12px 20px;
       background: var(--accent-blue);
       color: white;
       text-decoration: none;
       border-radius: 10px;
-      font-weight: 750;
-      transition: transform .2s ease, background .2s ease;
+      font-weight: 600;
+      transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+      font-size: 1rem;
+      min-height: 44px;
     }
+    
     .pathway-nav a:hover {
       transform: translateY(-2px);
       background: var(--accent-purple);
+      box-shadow: 0 6px 15px rgba(114,9,183,.3);
     }
+    
     .pathway-nav .step-indicator {
       color: var(--text-gray);
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       font-weight: 600;
+    }
+    
+    /* Enhanced panel hover effects */
+    .panel {
+      transition: all 0.3s ease;
+    }
+    
+    .panel:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0,0,0,.1);
+    }
+    
+    /* Decorative divider */
+    .divider {
+      text-align: center;
+      margin: 2rem 0;
+      font-size: 1.5rem;
+      color: var(--cosmic-magenta);
+      opacity: 0.5;
     }
   </style>
 </head>
@@ -111,7 +189,15 @@
   <a href="#main-content" class="skip-link">Skip to main content</a>
   <div class="reading-progress"></div>
 
-  <main id="main-content" class="content-section">
+  <!-- ==========================================
+       QUICK NAVIGATION SIDEBAR (Desktop Only)
+       Automatically generated by character-page-v5-8.js
+       ========================================== -->
+  <div class="quick-nav-sidebar" aria-label="Section navigation">
+    <!-- Desktop quick nav is dynamically populated by character-page-v5-8.js -->
+  </div>
+
+  <main id="main-content" class="content-section" role="main" aria-label="Practice Lab for Prophetic & Teaching Formation">
 
     <div class="breadcrumbs">
       <a href="/">Home</a> ›
@@ -121,10 +207,10 @@
       Practice Lab
     </div>
 
-    <!-- Hero -->
-    <section class="hero">
+    <!-- Hero Section -->
+    <section class="hero fade-in" aria-labelledby="practice-title">
       <div class="hero-content">
-        <h1 class="hero-title">Practice Lab</h1>
+        <h1 id="practice-title" class="hero-title">Practice Lab</h1>
         <p class="hero-subtitle">
           This is a safe environment to practice proclamation.
           <strong>No grading. No shaming. No solo building.</strong>
@@ -135,9 +221,12 @@
     </section>
 
     <!-- Prepare -->
-    <section class="theology-card" id="prepare">
-      <h2 class="section-title">🧰 How to Prepare</h2>
-      <p class="muted">Preparation is light but intentional. You are not expected to bring a finished sermon.</p>
+    <section class="theology-card animate-on-scroll" id="prepare">
+      <h2 class="section-title">
+        <span class="section-icon">🧰</span>
+        How to Prepare
+      </h2>
+      <p class="section-subtitle">Preparation is light but intentional. You are not expected to bring a finished sermon.</p>
 
       <div class="grid-2">
         <div class="panel">
@@ -163,10 +252,15 @@
       </div>
     </section>
 
+    <div class="divider">✦</div>
+
     <!-- MVS -->
-    <section class="theology-card" id="mvs">
-      <h2 class="section-title">🎯 Minimum Viable Sermon (8–10 minutes)</h2>
-      <p class="muted">This keeps practice focused and repeatable.</p>
+    <section class="theology-card animate-on-scroll" id="mvs">
+      <h2 class="section-title">
+        <span class="section-icon">🎯</span>
+        Minimum Viable Sermon (8–10 minutes)
+      </h2>
+      <p class="section-subtitle">This keeps practice focused and repeatable.</p>
 
       <div class="grid-3">
         <div class="panel">
@@ -184,32 +278,37 @@
       </div>
 
       <div class="key-insight" style="margin-top:1rem;">
-        If you go long, cut content—not clarity.
+        <strong>Key Principle:</strong> If you go long, cut content—not clarity.
       </div>
     </section>
 
+    <div class="divider">✦</div>
+
     <!-- Formats -->
-    <section class="theology-card" id="formats">
-      <h2 class="section-title">👥 Practice Formats</h2>
+    <section class="theology-card animate-on-scroll" id="formats">
+      <h2 class="section-title">
+        <span class="section-icon">👥</span>
+        Practice Formats
+      </h2>
       <p>Acts shows us that proclamation can be solo or shared. All three formats are valid:</p>
 
       <div class="grid-3">
         <div class="panel">
           <h3>Solo</h3>
           <p><strong>Best for:</strong> First-time speakers or testing clarity on a specific passage.</p>
-          <p class="muted">One person delivers the entire message using the sermon spine.</p>
+          <p class="text-muted">One person delivers the entire message using the sermon spine.</p>
         </div>
 
         <div class="panel">
           <h3>Duo</h3>
           <p><strong>Best for:</strong> Shared proclamation (Barnabas & Paul model).</p>
-          <p class="muted">Two speakers divide the message—one handles text/context, the other Jesus/response.</p>
+          <p class="text-muted">Two speakers divide the message—one handles text/context, the other Jesus/response.</p>
         </div>
 
         <div class="panel">
           <h3>Trio</h3>
           <p><strong>Best for:</strong> Complex passages or training multiple speakers.</p>
-          <p class="muted">Three voices split: Text → Jesus → Response. Each speaker has a clear role.</p>
+          <p class="text-muted">Three voices split: Text → Jesus → Response. Each speaker has a clear role.</p>
         </div>
       </div>
 
@@ -218,10 +317,15 @@
       </div>
     </section>
 
+    <div class="divider">✦</div>
+
     <!-- Ask for Help -->
-    <section class="theology-card" id="ask-for-help">
-      <h2 class="section-title">🤝 Ask the Team for Help</h2>
-      <p class="muted">Use this before practice. Copy and paste into email, text, or WhatsApp.</p>
+    <section class="theology-card animate-on-scroll" id="ask-for-help">
+      <h2 class="section-title">
+        <span class="section-icon">🤝</span>
+        Ask the Team for Help
+      </h2>
+      <p class="section-subtitle">Use this before practice. Copy and paste into email, text, or WhatsApp.</p>
 
       <div class="copy-box">
 PASSAGE:
@@ -237,9 +341,14 @@ WHAT I'M ASKING THE TEAM:
       </p>
     </section>
 
+    <div class="divider">✦</div>
+
     <!-- Readiness -->
-    <section class="theology-card" id="readiness">
-      <h2 class="section-title">✅ Readiness Checklist</h2>
+    <section class="theology-card animate-on-scroll" id="readiness">
+      <h2 class="section-title">
+        <span class="section-icon">✅</span>
+        Readiness Checklist
+      </h2>
       <p>Before stepping into practice, confirm these basics are in place:</p>
 
       <ul style="line-height: 1.8; margin-top: 1rem;">
@@ -252,13 +361,18 @@ WHAT I'M ASKING THE TEAM:
       </ul>
 
       <div class="key-insight" style="margin-top:1rem;">
-        Faithfulness beats polish every time.
+        <strong>Core Truth:</strong> Faithfulness beats polish every time.
       </div>
     </section>
 
+    <div class="divider">✦</div>
+
     <!-- Practice Cycle Detail -->
-    <section class="theology-card">
-      <h2 class="section-title">🔄 The Complete Practice Cycle</h2>
+    <section class="theology-card animate-on-scroll" id="practice-cycle">
+      <h2 class="section-title">
+        <span class="section-icon">🔄</span>
+        The Complete Practice Cycle
+      </h2>
       <p>Practice happens in three phases, each with a specific purpose:</p>
 
       <div class="grid-3" style="margin-top: 1.5rem;">
@@ -297,9 +411,14 @@ WHAT I'M ASKING THE TEAM:
       </blockquote>
     </section>
 
+    <div class="divider">✦</div>
+
     <!-- After Practice -->
-    <section class="theology-card">
-      <h2 class="section-title">🎉 After Practice: What Happens Next</h2>
+    <section class="theology-card animate-on-scroll" id="after-practice">
+      <h2 class="section-title">
+        <span class="section-icon">🎉</span>
+        After Practice: What Happens Next
+      </h2>
       <p>Practice isn't the end—it's the beginning of formation. After delivering your message:</p>
 
       <div class="grid-3">
@@ -331,9 +450,14 @@ WHAT I'M ASKING THE TEAM:
       </blockquote>
     </section>
 
+    <div class="divider">✦</div>
+
     <!-- Cultural Guardrails -->
-    <section class="theology-card">
-      <h2 class="section-title">🛡️ Cultural Guardrails</h2>
+    <section class="theology-card animate-on-scroll" id="guardrails">
+      <h2 class="section-title">
+        <span class="section-icon">🛡️</span>
+        Cultural Guardrails
+      </h2>
       <p>These boundaries protect the formation environment and keep it safe for growth:</p>
 
       <div class="grid-2" style="margin-top: 1.5rem;">
@@ -363,9 +487,14 @@ WHAT I'M ASKING THE TEAM:
       </div>
     </section>
 
+    <div class="divider">✦</div>
+
     <!-- Summary -->
-    <section class="theology-card">
-      <h2 class="section-title">🎯 You're Ready!</h2>
+    <section class="theology-card animate-on-scroll" id="summary">
+      <h2 class="section-title">
+        <span class="section-icon">🎯</span>
+        You're Ready!
+      </h2>
       <p>
         You now have everything you need to participate in the formation pathway:
       </p>
@@ -401,7 +530,7 @@ WHAT I'M ASKING THE TEAM:
     </section>
 
     <!-- Pathway Navigation -->
-    <nav class="pathway-nav">
+    <nav class="pathway-nav" aria-label="Pathway navigation">
       <a href="./feedback.html">← Previous: Feedback</a>
       <div class="step-indicator">Step 6 of 7 · Journey Complete!</div>
       <a href="./invitation.html">↻ Back to Start</a>
@@ -409,10 +538,40 @@ WHAT I'M ASKING THE TEAM:
 
   </main>
 
-  <script src="/assets/js/nav-component.js"></script>
+  <!-- Back to Top Button -->
+  <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay"></div>
+
+  <!-- ==========================================
+       MOBILE SECTION TABS
+       Dynamically generated - NO HTML NEEDED
+       ========================================== -->
+
+  <!-- ==========================================
+       JAVASCRIPT - v5.8.1 Implementation
+       ========================================== -->
+  
+  <!-- Navigation Component -->
+  <script type="module">
+    import NavigationComponent from '/assets/js/nav-component.js';
+    const navigation = new NavigationComponent({
+      currentPage: 'resources/teaching-formation/prophetic-training/practice',
+      hubType: 'resources'
+    });
+  </script>
+
+  <!-- Character Page Script with Dynamic Mobile Tabs -->
+  <script src="/assets/js/character-page-v5-8.js" defer></script>
+
+  <!-- Page Initialization -->
   <script>
-    // Reading progress bar
-    (function() {
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Practice Lab Page v5.8.1 initialized');
+      console.log('Mobile Tabs: Auto-generated based on present sections');
+      
+      // Reading progress bar
       const bar = document.querySelector('.reading-progress');
       const onScroll = () => {
         const scrollTop = window.scrollY || document.documentElement.scrollTop;
@@ -422,7 +581,19 @@ WHAT I'M ASKING THE TEAM:
       };
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
-    })();
+
+      // Back to top button visibility
+      const backToTop = document.querySelector('.back-to-top');
+      if (backToTop) {
+        window.addEventListener('scroll', () => {
+          if (window.scrollY > 300) {
+            backToTop.classList.add('visible');
+          } else {
+            backToTop.classList.remove('visible');
+          }
+        });
+      }
+    });
   </script>
 </body>
 </html>
