@@ -726,7 +726,19 @@
 
       <!-- Step 2: Type Selector (appears when passage loaded) -->
       <div class="type-selector" id="typeSelector">
-        <h3 style="margin: 0 0 0.5rem 0; font-size: 1.4rem; color: #c92a2a;">⚡ Step 2: Choose Speech Type</h3>
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0; font-size: 1.4rem; color: #c92a2a;">⚡ Step 2: Choose Speech Type</h3>
+          <span id="typePreviewBadge" style="
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #6c4ff7, #e94bff);
+            color: white;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: none;
+          "></span>
+        </div>
         <p style="margin: 0 0 1.25rem 0; font-size: 0.95rem; color: #862e2e;">
           Different types have different orientations and form fields
         </p>
@@ -1037,32 +1049,32 @@
     // TYPE BLOCK ENSURER (V2 – Narrative → Other Types)
     // ========================================
     function ensureTypeBlock(passage, type) {
-    if (!passage || passage[type]) return passage;
+      if (!passage || passage[type]) return passage;
 
-    // Only scaffold from narrative material
-    const narrative = passage.narrative;
-    if (!narrative) return passage;
+      // Only scaffold from narrative material
+      const narrative = passage.narrative;
+      if (!narrative) return passage;
 
-    if (type === 'testimony') {
+      if (type === 'testimony') {
         passage.testimony = {
-        before: narrative.storyPanels || '',
-        encounter: narrative.pattern || '',
-        now: '',
-        messiahLink: narrative.messiahLink || '',
-        notes: 'Generated from narrative arc'
+          before: narrative.storyPanels || '',
+          encounter: narrative.pattern || '',
+          now: '',
+          messiahLink: narrative.messiahLink || '',
+          notes: 'Generated from narrative arc'
         };
-    }
+      }
 
-    if (type === 'prophetic') {
+      if (type === 'prophetic') {
         passage.prophetic = {
-        strengthen: narrative.pattern || '',
-        encourage: narrative.messiahLink || '',
-        console: '',
-        notes: 'Generated from narrative arc'
+          strengthen: narrative.pattern || '',
+          encourage: narrative.messiahLink || '',
+          console: '',
+          notes: 'Generated from narrative arc'
         };
-    }
+      }
 
-    return passage;
+      return passage;
     }
 
     function validateRequiredFields(showMessage = false) {
@@ -1091,6 +1103,52 @@
       btn.classList.toggle('disabled', !ok);
       btn.setAttribute('aria-disabled', String(!ok));
       btn.title = ok ? "" : "Fill in the required formation fields first.";
+    }
+
+    // ========================================
+    // STORY PANELS RENDERER
+    // ========================================
+    function renderStoryPanels(panelsText) {
+      if (!panelsText) return '';
+      
+      const panels = panelsText
+        .split('→')
+        .map(p => p.trim())
+        .filter(p => p.length > 0);
+      
+      let html = '<div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">';
+      
+      panels.forEach((panel, index) => {
+        html += `
+          <div style="display: flex; gap: 0.75rem; align-items: start;">
+            <div style="
+              min-width: 32px;
+              height: 32px;
+              background: linear-gradient(135deg, #6c4ff7, #e94bff);
+              color: white;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: 700;
+              font-size: 0.9rem;
+              flex-shrink: 0;
+            ">${index + 1}</div>
+            <div style="
+              flex: 1;
+              background: white;
+              padding: 0.75rem 1rem;
+              border-radius: 8px;
+              border-left: 3px solid #6c4ff7;
+              line-height: 1.6;
+              font-size: 0.95rem;
+            ">${panel}</div>
+          </div>
+        `;
+      });
+      
+      html += '</div>';
+      return html;
     }
 
     // ========================================
@@ -1251,7 +1309,20 @@
           pill.classList.add('active');
           currentType = pill.dataset.type;
 
-           // 🔑 V2 hook — create missing type blocks if needed
+          // Update preview badge in Type Selector
+          const typeIcons = {
+            'expository': '📖',
+            'narrative': '📚',
+            'testimony': '💬',
+            'prophetic': '🔥'
+          };
+          const previewBadge = document.getElementById('typePreviewBadge');
+          if (previewBadge) {
+            previewBadge.textContent = `${typeIcons[currentType] || ''} ${currentType}`;
+            previewBadge.style.display = 'inline-block';
+          }
+
+          // 🔑 V2 hook — create missing type blocks if needed
           ensureTypeBlock(currentBookData.passages[currentPassageKey], currentType);
 
           loadOrientation();
@@ -1266,6 +1337,20 @@
       // Auto-select first type
       currentType = passage.types[0];
       typePills.querySelector('.type-pill').classList.add('active');
+      
+      // Update preview badge for auto-selected type
+      const typeIcons = {
+        'expository': '📖',
+        'narrative': '📚',
+        'testimony': '💬',
+        'prophetic': '🔥'
+      };
+      const previewBadge = document.getElementById('typePreviewBadge');
+      if (previewBadge) {
+        previewBadge.textContent = `${typeIcons[currentType] || ''} ${currentType}`;
+        previewBadge.style.display = 'inline-block';
+      }
+      
       loadOrientation();
       
       // Pre-fill text field
@@ -1306,7 +1391,14 @@
         if (data.messiahLink) html += createOrientationField('✝️ Messiah Link', data.messiahLink);
         if (data.notes) html += createOrientationField('📝 Notes', data.notes);
       } else if (currentType === 'narrative') {
-        if (data.storyPanels) html += createOrientationField('📚 Story Panels', data.storyPanels);
+        if (data.storyPanels) {
+          html += `
+            <div class="orientation-field">
+              <strong>📚 STORY PANELS</strong>
+              ${renderStoryPanels(data.storyPanels)}
+            </div>
+          `;
+        }
         if (data.pattern) html += createOrientationField('🔍 Pattern', data.pattern);
         if (data.messiahLink) html += createOrientationField('✝️ Messiah Link', data.messiahLink);
         if (data.notes) html += createOrientationField('📝 Notes', data.notes);
@@ -1474,6 +1566,10 @@
         document.getElementById('typeSelector').classList.remove('visible');
         document.getElementById('orientationSection').classList.remove('visible');
         document.getElementById('outputSection').classList.remove('visible');
+        
+        // Hide type preview badge
+        const previewBadge = document.getElementById('typePreviewBadge');
+        if (previewBadge) previewBadge.style.display = 'none';
         
         // Reset helpers to default
         updateCanonicalTrajectoryHelper();
@@ -1735,9 +1831,8 @@
     }
 
     // ========================================
-    // SCROLL ANIMATIONS (Fix: content hidden below hero)
-    // global-v2.css sets .animate-on-scroll to opacity:0 until .visible is added.
-    // This page was missing the observer that adds .visible.
+    // SCROLL ANIMATIONS
+    // ========================================
     function initScrollAnimations() {
       const items = Array.from(document.querySelectorAll('.animate-on-scroll'));
       if (!items.length) return;
@@ -1760,35 +1855,6 @@
         { threshold: 0.12, rootMargin: '0px 0px -10% 0px' }
       );
 
-      items.forEach(el => observer.observe(el));
-    }
-
-    // ========================================
-    // SCROLL ANIMATIONS (Fix: content hidden below hero)
-    // ========================================
-    // global-v2.css sets .animate-on-scroll to opacity:0 until .visible is added.
-    function initScrollAnimations() {
-      const items = Array.from(document.querySelectorAll('.animate-on-scroll'));
-      if (!items.length) return;
-      
-      // Fallback: if IntersectionObserver isn't available, just show everything.
-      if (typeof IntersectionObserver === 'undefined') {
-        items.forEach(el => el.classList.add('visible'));
-        return;
-      }
-      
-      const observer = new IntersectionObserver(
-        (entries, obs) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('visible');
-              obs.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.12, rootMargin: '0px 0px -10% 0px' }
-      );
-      
       items.forEach(el => observer.observe(el));
     }
 
