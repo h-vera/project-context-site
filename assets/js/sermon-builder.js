@@ -15,9 +15,12 @@ const availableBooks = {
   'luke': { name: 'Luke', testament: 'new-covenant', category: 'gospels' },
   'acts': { name: 'Acts', testament: 'new-covenant', category: 'gospels' },
   
-  // New Covenant - General Letters
+  // New Covenant - Petrine & Jude
   '1-peter': { name: '1 Peter', testament: 'new-covenant', category: 'general' },
-  '2-peter': { name: '2 Peter', testament: 'new-covenant', category: 'general' }
+  '2-peter': { name: '2 Peter', testament: 'new-covenant', category: 'general' },
+  
+  // New Covenant - Johannine Corpus
+  'revelation': { name: 'Revelation', testament: 'new-covenant', category: 'johannine' }
 };
 
 let currentBookData = null;
