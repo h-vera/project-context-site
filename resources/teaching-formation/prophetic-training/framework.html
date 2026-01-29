@@ -36,7 +36,10 @@
   <link rel="stylesheet" href="/assets/css/mobile-tabs-v5-8.css" />
 
   <style>
-    /* Hero - Cosmic Eye Logo Colors */
+    /* ============================================
+       HERO SECTION - Cosmic Eye Logo Colors
+       Leverages global-v2.css animations
+       ============================================ */
     .hero {
       min-height: 42vh;
       display: flex;
@@ -60,6 +63,8 @@
       margin-left: calc(-50vw + 50%);
       margin-right: calc(-50vw + 50%);
       width: 100vw;
+      /* Use global fadeIn animation */
+      animation: fadeIn 0.8s ease-out;
     }
     
     .hero::before {
@@ -86,6 +91,8 @@
       z-index: 1; 
       position: relative;
       width: 100%;
+      /* Staggered fade-in for hero content */
+      animation: fadeSlideDown 0.8s ease-out;
     }
     
     .hero-title {
@@ -94,15 +101,17 @@
       line-height: 1.08;
       margin-bottom: 0.7rem;
       text-shadow: 2px 2px 4px rgba(0,0,0,.35);
+      animation: fadeSlideDown 0.6s ease-out;
     }
     
     .hero-subtitle {
       font-size: clamp(1.05rem, 2.1vw, 1.35rem);
-      opacity: .95;
+      opacity: 0;
       margin: 0 auto 1.25rem auto;
       font-weight: 300;
       max-width: 860px;
       line-height: 1.6;
+      animation: fadeSlideDown 0.8s ease-out 0.2s forwards;
     }
     
     .hero-actions {
@@ -111,6 +120,8 @@
       justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeSlideDown 0.8s ease-out 0.4s forwards;
     }
     
     .cta {
@@ -126,14 +137,15 @@
       color: white;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
       min-height: 44px;
     }
     
     .cta:hover { 
       transform: translateY(-2px); 
       background: rgba(255,255,255,.14); 
-      border-color: rgba(255,255,255,.28); 
+      border-color: rgba(255,255,255,.28);
+      box-shadow: 0 4px 12px rgba(0,0,0,.2);
     }
 
     .cta.primary {
@@ -141,9 +153,17 @@
       border: 2px solid rgba(255,255,255,.3);
       font-size: 1.1rem;
       padding: 14px 24px;
+      box-shadow: 0 4px 15px rgba(108,79,247,.3);
     }
 
-    /* Worked example cards */
+    .cta.primary:hover {
+      box-shadow: 0 6px 20px rgba(108,79,247,.5);
+    }
+
+    /* ============================================
+       WORKED EXAMPLE CARDS
+       Uses global animate-on-scroll with stagger
+       ============================================ */
     .example-card {
       background: var(--bg);
       border: 2px solid var(--border-light);
@@ -151,12 +171,19 @@
       padding: 1.5rem;
       margin-bottom: 2rem;
       box-shadow: var(--shadow-md);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .example-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
     }
 
     .example-card h3 {
       margin: 0 0 0.5rem 0;
       color: var(--cosmic-indigo);
       font-size: 1.3rem;
+      font-weight: 700;
     }
 
     .example-meta {
@@ -174,11 +201,29 @@
       border-radius: 999px;
       font-size: 0.85rem;
       font-weight: 600;
+      transition: all 0.2s ease;
+      opacity: 0;
+      animation: fadeIn 0.5s ease-out forwards;
     }
+
+    .example-meta span:nth-child(1) { animation-delay: 0.1s; }
+    .example-meta span:nth-child(2) { animation-delay: 0.2s; }
+    .example-meta span:nth-child(3) { animation-delay: 0.3s; }
 
     .example-section {
       margin: 1rem 0;
+      opacity: 0;
+      animation: fadeSlideLeft 0.6s ease-out forwards;
     }
+
+    .example-section:nth-child(1) { animation-delay: 0.1s; }
+    .example-section:nth-child(2) { animation-delay: 0.15s; }
+    .example-section:nth-child(3) { animation-delay: 0.2s; }
+    .example-section:nth-child(4) { animation-delay: 0.25s; }
+    .example-section:nth-child(5) { animation-delay: 0.3s; }
+    .example-section:nth-child(6) { animation-delay: 0.35s; }
+    .example-section:nth-child(7) { animation-delay: 0.4s; }
+    .example-section:nth-child(8) { animation-delay: 0.45s; }
 
     .example-section h4 {
       margin: 0 0 0.5rem 0;
@@ -190,11 +235,14 @@
     }
 
     .example-section p {
-      margin: 0;
+      margin: 0 0 0.5rem 0;
       line-height: 1.7;
     }
 
-    /* Collapsible blocks */
+    /* ============================================
+       COLLAPSIBLE BLOCKS
+       Uses global slideDown animation
+       ============================================ */
     details.block {
       background: var(--bg);
       border: 1px solid var(--border-light);
@@ -206,6 +254,7 @@
     
     details.block:hover {
       box-shadow: var(--shadow-md);
+      transform: translateX(3px);
     }
     
     .block-summary {
@@ -219,6 +268,11 @@
       user-select: none;
       background: linear-gradient(135deg, var(--panel) 0%, #f9fafb 100%);
       transition: background 0.2s ease;
+      list-style: none;
+    }
+    
+    .block-summary::-webkit-details-marker {
+      display: none;
     }
     
     .block-summary:hover {
@@ -231,6 +285,7 @@
     
     .block-summary span {
       transition: transform 0.3s ease;
+      color: var(--accent-purple);
     }
     
     details.block[open] .block-summary span {
@@ -239,23 +294,57 @@
     
     .block-body {
       padding: 1.25rem;
+      /* Uses global slideDown animation from global-v2.css */
       animation: slideDown 0.3s ease-out;
     }
 
-    /* Callout boxes */
+    .block-body ul {
+      margin: 0.5rem 0 0 1.5rem;
+      line-height: 1.8;
+    }
+
+    .block-body li {
+      margin-bottom: 0.5rem;
+    }
+
+    /* ============================================
+       CALLOUT BOXES
+       ============================================ */
     .callout {
       background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
       border-left: 4px solid var(--info);
       padding: 1rem 1.25rem;
       border-radius: 8px;
       margin: 1rem 0;
+      animation: fadeSlideLeft 0.5s ease-out;
     }
     
     .callout strong {
       color: #1e40af;
     }
 
-    /* Pathway navigation */
+    /* ============================================
+       TABLE ENHANCEMENTS
+       Staggered row animations
+       ============================================ */
+    .table-wrapper table tbody tr {
+      opacity: 0;
+      animation: fadeSlideLeft 0.4s ease-out forwards;
+    }
+
+    .table-wrapper table tbody tr:nth-child(1) { animation-delay: 0.1s; }
+    .table-wrapper table tbody tr:nth-child(2) { animation-delay: 0.15s; }
+    .table-wrapper table tbody tr:nth-child(3) { animation-delay: 0.2s; }
+    .table-wrapper table tbody tr:nth-child(4) { animation-delay: 0.25s; }
+    .table-wrapper table tbody tr:nth-child(5) { animation-delay: 0.3s; }
+    .table-wrapper table tbody tr:nth-child(6) { animation-delay: 0.35s; }
+    .table-wrapper table tbody tr:nth-child(7) { animation-delay: 0.4s; }
+    .table-wrapper table tbody tr:nth-child(8) { animation-delay: 0.45s; }
+    .table-wrapper table tbody tr:nth-child(9) { animation-delay: 0.5s; }
+
+    /* ============================================
+       PATHWAY NAVIGATION
+       ============================================ */
     .pathway-nav {
       display: flex;
       justify-content: space-between;
@@ -265,6 +354,12 @@
       border-top: 2px solid var(--border-light);
       gap: 1rem;
       flex-wrap: wrap;
+    }
+
+    .pathway-nav .step-indicator {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.9rem;
     }
     
     .pathway-nav a {
@@ -288,7 +383,48 @@
       filter: brightness(1.1);
     }
 
-    /* Mobile responsive */
+    /* ============================================
+       STACKED CONTENT ANIMATIONS
+       For panels and grid items
+       ============================================ */
+    .grid-2 > .panel,
+    .grid-3 > div,
+    .grid-4 > .panel {
+      opacity: 0;
+      animation: fadeSlideDown 0.5s ease-out forwards;
+    }
+
+    .grid-2 > .panel:nth-child(1),
+    .grid-3 > div:nth-child(1),
+    .grid-4 > .panel:nth-child(1) { animation-delay: 0.1s; }
+    
+    .grid-2 > .panel:nth-child(2),
+    .grid-3 > div:nth-child(2),
+    .grid-4 > .panel:nth-child(2) { animation-delay: 0.2s; }
+    
+    .grid-3 > div:nth-child(3),
+    .grid-4 > .panel:nth-child(3) { animation-delay: 0.3s; }
+    
+    .grid-4 > .panel:nth-child(4) { animation-delay: 0.4s; }
+
+    .grid-4 > .panel:nth-child(5) { animation-delay: 0.5s; }
+    
+    .grid-4 > .panel:nth-child(6) { animation-delay: 0.6s; }
+
+    .grid-4 > .panel:nth-child(7) { animation-delay: 0.7s; }
+    
+    .grid-4 > .panel:nth-child(8) { animation-delay: 0.8s; }
+
+    /* Stack sections for visual hierarchy */
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* ============================================
+       MOBILE RESPONSIVE
+       ============================================ */
     @media (max-width: 768px) {
       .hero {
         min-height: 36vh;
@@ -302,6 +438,35 @@
       .cta {
         width: 100%;
         justify-content: center;
+      }
+
+      .pathway-nav {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .pathway-nav a {
+        justify-content: center;
+      }
+
+      .pathway-nav .step-indicator {
+        text-align: center;
+      }
+    }
+
+    /* ============================================
+       REDUCE MOTION SUPPORT
+       Accessibility for users who prefer reduced motion
+       ============================================ */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      
+      .hero::before {
+        animation: none;
       }
     }
   </style>
@@ -334,7 +499,7 @@
     </nav>
 
     <!-- HERO -->
-    <section class="hero fade-in" aria-labelledby="framework-title">
+    <section class="hero" aria-labelledby="framework-title">
       <div class="hero-content">
         <h1 id="framework-title" class="hero-title">Sermon Framework</h1>
         <p class="hero-subtitle">
@@ -826,10 +991,10 @@
       if (backToTop) {
         window.addEventListener('scroll', () => {
           backToTop.classList.toggle('visible', window.scrollY > 300);
-        });
+        }, { passive: true });
       }
 
-      console.log('Sermon Framework v5.8.1 initialized');
+      console.log('Sermon Framework v5.8.1 initialized - Full animation suite active');
     });
   </script>
 </body>
