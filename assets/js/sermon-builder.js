@@ -46,6 +46,9 @@ document.addEventListener('DOMContentLoaded', function() {
   initScrollAnimations();
   loadFromLocalStorage();
 
+  // Ensure sections using .animate-on-scroll become visible
+      initScrollAnimations();
+
   // Show "Your Work" section by default
   document.getElementById('yourWorkSection').classList.add('visible');
   
