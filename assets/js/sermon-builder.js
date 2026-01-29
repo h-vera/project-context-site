@@ -1079,14 +1079,41 @@ function generateProPresenterXML() {
   return xml;
 }
 
+// Browser-safe Base64 encoder (replaces Node Buffer)
+function base64EncodeUtf8(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
 function generateSlide(text, label) {
   const uuid = generateUUID();
-  const rtfText = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  
+
+  // Escape text for RTF (this is DIFFERENT from XML escaping)
+  const rtfSafe = String(text)
+    .replace(/\\/g, '\\\\')   // backslash
+    .replace(/{/g, '\\{')     // opening brace
+    .replace(/}/g, '\\}')     // closing brace
+    .replace(/\r?\n/g, '\\line '); // line breaks
+
+  // Minimal valid RTF document
+  const rtf = `{\\rtf1\\ansi ${rtfSafe}}`;
+
   return `        <RVDisplaySlide backgroundColor="0 0 0 1" enabled="1" highlightColor="0 0 0 0" hotKey="" label="${label}" notes="" slideType="1" sort_index="0" UUID="${uuid}" drawingBackgroundColor="0" chordChartPath="" serialization-array-index="0">
           <cues containerClass="NSMutableArray"></cues>
           <displayElements containerClass="NSMutableArray">
-            <RVTextElement displayDelay="0" displayName="Text" locked="0" persistent="0" typeID="0" fromTemplate="0" bezelRadius="0" rotation="0" source="" adjustsHeightToFit="0" verticalAlignment="0" RTFData="${Buffer.from(rtfText).toString('base64')}" revealType="0" serialization-array-index="0">
+            <RVTextElement
+              displayDelay="0"
+              displayName="Text"
+              locked="0"
+              persistent="0"
+              typeID="0"
+              fromTemplate="0"
+              bezelRadius="0"
+              rotation="0"
+              source=""
+              adjustsHeightToFit="0"
+              verticalAlignment="0"
+              RTFData="${base64EncodeUtf8(rtf)}"
+              revealType="0"
+              serialization-array-index="0">
               <_-RVRect3D-_position x="0" y="0" z="0" width="1920" height="1080"></_-RVRect3D-_position>
               <_-D-_serializedShadow containerClass="NSMutableDictionary"></_-D-_serializedShadow>
               <stroke containerClass="NSMutableDictionary"></stroke>
