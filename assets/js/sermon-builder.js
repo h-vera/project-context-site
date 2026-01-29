@@ -46,9 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
   initScrollAnimations();
   loadFromLocalStorage();
 
-  // Ensure sections using .animate-on-scroll become visible
-      initScrollAnimations();
-
   // Show "Your Work" section by default
   document.getElementById('yourWorkSection').classList.add('visible');
   
@@ -272,14 +269,23 @@ function renderBookGrid() {
     writings: [],
     gospels: [],
     pauline: [],
+    johannine: [],
     general: [],
     apocalypse: []
   };
 
-  // Categorize books
-  for (const [key, book] of Object.entries(availableBooks)) {
-    booksByCategory[book.category].push({ key, ...book });
+  // Categorize books (defensive against unknown categories)
+for (const [key, book] of Object.entries(availableBooks)) {
+  if (!booksByCategory[book.category]) {
+    console.warn(
+      `Unknown category "${book.category}" for book "${key}". Defaulting to "general".`
+    );
+    booksByCategory.general.push({ key, ...book });
+    continue;
   }
+
+  booksByCategory[book.category].push({ key, ...book });
+}
 
   // Render TaNaKh sections
   renderCategory('torah', booksByCategory.torah);
