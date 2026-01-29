@@ -296,11 +296,12 @@ for (const [key, book] of Object.entries(availableBooks)) {
   renderCategory('gospels', booksByCategory.gospels);
   renderCategory('pauline', booksByCategory.pauline);
   renderCategory('general', booksByCategory.general);
+  renderCategory('johannine', booksByCategory.johannine);
   renderCategory('apocalypse', booksByCategory.apocalypse);
 
   // Update testament counts
   const tanakhCount = booksByCategory.torah.length + booksByCategory.prophets.length + booksByCategory.writings.length;
-  const newCovenantCount = booksByCategory.gospels.length + booksByCategory.pauline.length + booksByCategory.general.length + booksByCategory.apocalypse.length;
+  const newCovenantCount = booksByCategory.gospels.length + booksByCategory.pauline.length + booksByCategory.general.length + booksByCategory.johannine.length + booksByCategory.apocalypse.length;
   
   document.getElementById('tanakhCount').textContent = tanakhCount;
   document.getElementById('new-covenantCount').textContent = newCovenantCount;
