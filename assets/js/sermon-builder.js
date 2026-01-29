@@ -365,6 +365,22 @@ async function loadBook(bookKey) {
 function renderBookOverview() {
   const overview = document.getElementById('bookOverview');
   const data = currentBookData;
+
+    // Defensive render: structure can be array OR string
+  let structureHtml = '';
+  if (Array.isArray(data.structure)) {
+    structureHtml = `
+      <ul style="margin: 0.5rem 0 0 1.5rem; line-height: 1.8;">
+        ${data.structure.map(s => `<li>${s}</li>`).join('')}
+      </ul>
+    `;
+  } else if (typeof data.structure === 'string') {
+    structureHtml = `
+      <p style="margin: 0.5rem 0 0; line-height: 1.8; white-space: pre-line;">
+        ${data.structure}
+      </p>
+    `;
+  }
   
   let html = `
     <h3 style="margin: 0 0 1rem 0; color: var(--cosmic-indigo);">📖 ${data.book}</h3>
@@ -374,11 +390,9 @@ function renderBookOverview() {
       <p style="margin: 0; line-height: 1.7;">${data.theme}</p>
     </div>
 
-    <div style="margin-bottom: 1.5rem;">
+        <div style="margin-bottom: 1.5rem;">
       <strong style="display: block; margin-bottom: 0.5rem; color: #495057;">Structure:</strong>
-      <ul style="margin: 0.5rem 0 0 1.5rem; line-height: 1.8;">
-        ${data.structure.map(s => `<li>${s}</li>`).join('')}
-      </ul>
+      ${structureHtml}
     </div>
 
     <div style="margin-bottom: 1.5rem;">
