@@ -568,8 +568,11 @@ function loadOrientation() {
 }
 
 function createOrientationField(label, content) {
+  const isNotes = label.includes('Notes') || label.includes('📝');
+  const className = isNotes ? 'orientation-field notes-field' : 'orientation-field';
+  
   return `
-    <div class="orientation-field">
+    <div class="${className}">
       <strong>${label}</strong>
       <p>${content}</p>
     </div>
