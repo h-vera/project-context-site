@@ -571,10 +571,32 @@ function createOrientationField(label, content) {
   const isNotes = label.includes('Notes') || label.includes('📝');
   const className = isNotes ? 'orientation-field notes-field' : 'orientation-field';
   
+  // Enhanced content processing for notes
+  let processedContent = content;
+  if (isNotes) {
+    // Convert line breaks to paragraphs for better readability
+    processedContent = content
+      .split('\n\n')
+      .filter(para => para.trim())
+      .map(para => {
+        // Check if it's a list item pattern
+        if (para.trim().match(/^[-•*]\s/m)) {
+          const items = para.split('\n')
+            .filter(line => line.trim())
+            .map(line => line.replace(/^[-•*]\s*/, '').trim());
+          return `<ul>${items.map(item => `<li>${item}</li>`).join('')}</ul>`;
+        }
+        return `<p>${para.trim()}</p>`;
+      })
+      .join('');
+  }
+  
   return `
     <div class="${className}">
       <strong>${label}</strong>
-      <p>${content}</p>
+      <div class="notes-content">
+        ${isNotes ? processedContent : `<p>${content}</p>`}
+      </div>
     </div>
   `;
 }
