@@ -194,7 +194,7 @@
   }
 
   /* ============================================
-     THESIS CARD
+     THESIS CARD - Enhanced scroll animations
      ============================================ */
   .thesis-card {
     background: linear-gradient(135deg, #fef3f2 0%, #f0f9f8 100%);
@@ -205,18 +205,255 @@
     position: relative;
     overflow: hidden;
     border-left: 5px solid var(--page-accent);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out, box-shadow 0.3s ease, border-left-width 0.3s ease;
+  }
+
+  .thesis-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+    /* Override transition after visible for faster hover */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, border-left-width 0.3s ease;
+  }
+
+  .thesis-card.visible:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 32px rgba(42,161,152,0.25);
+    border-left-width: 8px;
   }
 
   .thesis-card h2 {
     font-size: 1.8rem;
     margin-bottom: 1.5rem;
     color: var(--primary-dark);
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  .thesis-card.visible h2 {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .thesis-card.visible:hover h2 {
+    transform: translateX(5px);
+    transition: transform 0.3s ease;
   }
 
   .thesis-card .lead {
     font-size: 1.15rem;
     line-height: 1.8;
     color: #334155;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  .thesis-card.visible .lead:nth-of-type(1) { 
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.2s; 
+  }
+
+  .thesis-card.visible .lead:nth-of-type(2) { 
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.4s; 
+  }
+
+  .thesis-card .meta {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  .thesis-card.visible .meta {
+    opacity: 1;
+    transform: scale(1);
+    transition-delay: 0.5s;
+  }
+
+  .thesis-card .key-insight {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  .thesis-card.visible .key-insight {
+    opacity: 1;
+    transform: scale(1);
+    transition-delay: 0.6s;
+    /* Override for faster hover after visible */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .thesis-card.visible .key-insight:hover {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 8px 16px rgba(42,161,152,0.2);
+  }
+
+  .thesis-card .scripture-quote {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  .thesis-card.visible .scripture-quote {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.7s;
+  }
+
+  /* Highlight key phrases on scroll into view */
+  .thesis-card.visible em {
+    background: linear-gradient(120deg, transparent 0%, rgba(42,161,152,0.2) 50%, transparent 100%);
+    background-size: 200% 100%;
+    animation: highlightSweep 2s ease-out;
+    animation-delay: 1s;
+  }
+
+  .thesis-card.visible strong {
+    background: linear-gradient(120deg, transparent 0%, rgba(212,175,55,0.15) 50%, transparent 100%);
+    background-size: 200% 100%;
+    animation: highlightSweep 2.5s ease-out;
+    animation-delay: 1.2s;
+  }
+
+  @keyframes highlightSweep {
+    0% { background-position: -100% 0; }
+    50% { background-position: 0 0; }
+    100% { background-position: 100% 0; }
+  }
+
+  /* ============================================
+     CRITICAL DISTINCTION BOX - Warning Animation
+     ============================================ */
+  .critical-distinction-box {
+    background: linear-gradient(135deg, rgba(239,68,68,0.1), rgba(245,158,11,0.1));
+    border-left: 5px solid #ef4444;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 16px rgba(239,68,68,0.15);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+  }
+
+  .critical-distinction-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #ef4444, #f59e0b, #ef4444);
+    background-size: 200% 100%;
+    animation: warningPulse 3s ease-in-out infinite;
+  }
+
+  .critical-distinction-box::after {
+    content: '⚠️';
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 2.5rem;
+    opacity: 0.15;
+    animation: warningFloat 4s ease-in-out infinite;
+  }
+
+  .critical-distinction-box.animate-on-scroll {
+    animation: criticalSlideIn 0.6s ease-out;
+  }
+
+  .critical-distinction-box:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 12px 32px rgba(239,68,68,0.25);
+    border-left-width: 8px;
+  }
+
+  .critical-distinction-box strong:first-child {
+    display: block;
+    font-size: 1.3rem;
+    color: #dc2626;
+    margin-bottom: 0.5rem;
+    animation: urgentPulse 2s ease-in-out infinite;
+  }
+
+  .critical-distinction-box ul li {
+    margin: 0.75rem 0;
+    position: relative;
+    padding-left: 0.5rem;
+  }
+
+  .critical-distinction-box ul li::marker {
+    color: #ef4444;
+  }
+
+  .critical-distinction-box ul li strong {
+    color: #dc2626;
+  }
+
+  .critical-distinction-box .scripture-ref {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-style: italic;
+    margin-top: 0.25rem;
+    padding-left: 0.5rem;
+    border-left: 2px solid #fca5a5;
+    background: linear-gradient(90deg, rgba(239,68,68,0.05), transparent);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin-left: 0.5rem;
+  }
+
+  @keyframes criticalSlideIn {
+    0% {
+      opacity: 0;
+      transform: translateX(-30px) scale(0.95);
+    }
+    60% {
+      transform: translateX(5px) scale(1.02);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+  }
+
+  @keyframes warningPulse {
+    0%, 100% {
+      background-position: 0% 50%;
+      opacity: 0.8;
+    }
+    50% {
+      background-position: 100% 50%;
+      opacity: 1;
+    }
+  }
+
+  @keyframes warningFloat {
+    0%, 100% {
+      transform: translateY(0px) rotate(-5deg);
+      opacity: 0.15;
+    }
+    50% {
+      transform: translateY(-8px) rotate(5deg);
+      opacity: 0.25;
+    }
+  }
+
+  @keyframes urgentPulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.85;
+      transform: scale(1.02);
+    }
   }
 
   /* ============================================
@@ -354,39 +591,77 @@
 
   .passage-card {
     background: white;
-    border: 1px solid var(--border-light);
+    border: 2px solid #e5e7eb;
     border-radius: 16px;
-    padding: 1.5rem;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0,0,0,.05);
+    padding: 2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .passage-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--page-accent), var(--page-accent-dark));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
   }
 
   .passage-card:hover {
     border-color: var(--page-accent);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 12px rgba(42,161,152,0.15);
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 12px 32px rgba(42,161,152,0.2);
+  }
+
+  .passage-card:hover::before {
+    transform: scaleX(1);
   }
 
   .passage-card h4 {
     margin: 0 0 .75rem 0;
-    font-size: 1.15rem;
+    font-size: 1.2rem;
+    font-weight: 800;
     color: var(--page-accent-dark);
+    transition: transform 0.3s ease;
+  }
+
+  .passage-card:hover h4 {
+    transform: translateX(5px);
   }
 
   .passage-card .meta {
-    background: var(--panel);
-    border-radius: 8px;
-    padding: .75rem;
-    margin: .75rem 0;
+    background: linear-gradient(135deg, rgba(42,161,152,0.05), rgba(156,39,176,0.03));
+    border-radius: 12px;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-left: 3px solid var(--page-accent);
+    transition: all 0.3s ease;
+  }
+
+  .passage-card:hover .meta {
+    background: linear-gradient(135deg, rgba(42,161,152,0.08), rgba(156,39,176,0.05));
+    transform: translateX(4px);
   }
 
   .passage-card .meta .kv {
-    margin: .35rem 0;
+    margin: .5rem 0;
     font-size: .9rem;
+    line-height: 1.6;
   }
 
   .passage-card .meta strong {
     color: var(--page-accent-dark);
+    font-weight: 700;
+  }
+
+  .passage-card p {
+    line-height: 1.8;
   }
 
   /* ============================================
@@ -425,6 +700,1998 @@
 
     .hero-subtitle {
       font-size: 1rem;
+    }
+  }
+
+  /* ============================================
+     LUKE-ACTS VENN DIAGRAM (THREE-DIMENSIONAL)
+     ============================================ */
+  .portrait-venn {
+    margin: 2rem 0;
+  }
+
+  .portrait-venn h3 {
+    text-align: center;
+    margin: 0 0 2rem 0;
+    font-size: 1.5rem;
+    color: var(--page-accent);
+    font-weight: 800;
+  }
+
+  .venn-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .venn-circle {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem 1.5rem;
+    border: 3px solid;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+
+  .venn-circle:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+  }
+
+  .venn-circle .icon {
+    font-size: 3rem;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .venn-circle h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.3rem;
+    font-weight: 800;
+  }
+
+  .venn-circle .psalm-ref {
+    font-size: 0.9rem;
+    opacity: 0.85;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .venn-circle ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+  }
+
+  .venn-circle li {
+    font-size: 0.9rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(0,0,0,.05);
+    line-height: 1.5;
+  }
+
+  .venn-circle li:last-child {
+    border-bottom: none;
+  }
+
+  /* Luke-Acts specific colors */
+  .venn-luke-open {
+    border-color: #7b1fa2;
+    background: linear-gradient(135deg, rgba(123,31,162,.08), white);
+  }
+
+  .venn-luke-open h4,
+  .venn-luke-open .psalm-ref {
+    color: #7b1fa2;
+  }
+
+  .venn-luke-climax {
+    border-color: #c62828;
+    background: linear-gradient(135deg, rgba(198,40,40,.08), white);
+  }
+
+  .venn-luke-climax h4,
+  .venn-luke-climax .psalm-ref {
+    color: #c62828;
+  }
+
+  .venn-acts-open {
+    border-color: #f57c00;
+    background: linear-gradient(135deg, rgba(245,124,0,.08), white);
+  }
+
+  .venn-acts-open h4,
+  .venn-acts-open .psalm-ref {
+    color: #f57c00;
+  }
+
+  .venn-acts-climax {
+    border-color: var(--page-accent);
+    background: linear-gradient(135deg, rgba(42,161,152,.08), white);
+  }
+
+  .venn-acts-climax h4,
+  .venn-acts-climax .psalm-ref {
+    color: var(--page-accent);
+  }
+
+  /* Center integration circle */
+  .venn-center {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, 
+      rgba(123,31,162,.05),
+      rgba(198,40,40,.05),
+      rgba(245,124,0,.05),
+      rgba(42,161,152,.05)
+    );
+    border: 3px solid var(--page-accent-dark);
+    padding: 2rem;
+    text-align: center;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  }
+
+  .venn-center h4 {
+    margin: 0 0 1rem 0;
+    font-size: 1.4rem;
+    color: var(--page-accent-dark);
+    font-weight: 800;
+  }
+
+  .venn-center p {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  /* Expansion Track */
+  .arc-flow-visual {
+    background: linear-gradient(135deg, rgba(42,161,152,0.03), white);
+    border-radius: 16px;
+    padding: 2rem;
+    border: 2px solid rgba(42,161,152,0.2);
+  }
+
+  .expansion-track {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin: 1.5rem 0;
+  }
+
+  .expansion-stage {
+    flex: 0 0 auto;
+    min-width: 120px;
+    background: white;
+    border-radius: 12px;
+    padding: 1.25rem 1rem;
+    border: 2px solid var(--page-accent);
+    box-shadow: 0 4px 12px rgba(42,161,152,0.15);
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+
+  .expansion-stage:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(42,161,152,0.25);
+    border-color: var(--page-accent-dark);
+  }
+
+  .stage-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--page-accent-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+
+  .stage-content {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a202c;
+    line-height: 1.4;
+  }
+
+  .stage-detail {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #64748b;
+    margin-top: 0.25rem;
+  }
+
+  .expansion-arrow {
+    flex: 0 0 auto;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--page-accent);
+    opacity: 0.6;
+  }
+
+  /* Responsive for venn and expansion */
+  @media (max-width: 968px) {
+    .venn-container {
+      grid-template-columns: 1fr;
+    }
+
+    .expansion-track {
+      flex-direction: column;
+    }
+
+    .expansion-arrow {
+      transform: rotate(90deg);
+    }
+
+    .expansion-stage {
+      min-width: 200px;
+    }
+  }
+
+  /* ============================================
+     TEMPLE HOLINESS ZONES - CONCENTRIC CIRCLES
+     ============================================ */
+  .temple-zones-container {
+    max-width: 800px;
+    margin: 2rem auto;
+  }
+
+  .temple-zones {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    margin: 2rem 0;
+  }
+
+  .holiness-zone {
+    position: absolute;
+    border-radius: 50%;
+    border: 3px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    pointer-events: auto;
+  }
+
+  .holiness-zone.zone-hover,
+  .holiness-zone:hover {
+    z-index: 1000 !important;
+  }
+
+  .holiness-zone.zone-active {
+    z-index: 1000 !important;
+    transform: scale(1.02);
+  }
+
+  .holiness-zone.zone-active .zone-label,
+  .holiness-zone.zone-hover .zone-label {
+    opacity: 0;
+  }
+
+  .holiness-zone.zone-active .zone-info,
+  .holiness-zone.zone-hover .zone-info {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .zone-label {
+    font-weight: 800;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 0.5rem;
+    line-height: 1.3;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .zone-info {
+    position: absolute;
+    opacity: 0;
+    visibility: hidden;
+    background: rgba(0, 0, 0, 0.95);
+    color: white;
+    padding: 1.25rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 2000;
+    min-width: 220px;
+    max-width: 280px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .zone-info strong {
+    color: #fbbf24;
+    display: block;
+    margin-top: 0.5rem;
+  }
+
+  .zone-info strong:first-child {
+    margin-top: 0;
+  }
+
+  /* Zone 1: Court of Gentiles (outermost) */
+  .zone-gentiles {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(156, 39, 176, 0.08);
+    border-color: rgba(156, 39, 176, 0.3);
+    z-index: 1;
+  }
+
+  /* Zone 2: Court of Women */
+  .zone-women {
+    top: 12.5%;
+    left: 12.5%;
+    width: 75%;
+    height: 75%;
+    background: rgba(156, 39, 176, 0.15);
+    border-color: rgba(156, 39, 176, 0.4);
+    z-index: 2;
+  }
+
+  /* Zone 3: Court of Israel */
+  .zone-israel {
+    top: 25%;
+    left: 25%;
+    width: 50%;
+    height: 50%;
+    background: rgba(156, 39, 176, 0.25);
+    border-color: rgba(156, 39, 176, 0.6);
+    z-index: 3;
+  }
+
+  /* Zone 4: Court of Priests */
+  .zone-priests {
+    top: 37.5%;
+    left: 37.5%;
+    width: 25%;
+    height: 25%;
+    background: rgba(156, 39, 176, 0.4);
+    border-color: rgba(156, 39, 176, 0.8);
+    color: white;
+    z-index: 4;
+  }
+
+  /* Zone 5: Holy of Holies (innermost) */
+  .zone-holiest {
+    top: 43.75%;
+    left: 43.75%;
+    width: 12.5%;
+    height: 12.5%;
+    background: rgba(156, 39, 176, 0.6);
+    border-color: #9c27b0;
+    color: white;
+    z-index: 5;
+  }
+
+  .holiness-center {
+    position: absolute;
+    top: 46.5%;
+    left: 46.5%;
+    width: 7%;
+    height: 7%;
+    background: linear-gradient(135deg, #ffd700, #ffa500);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+    z-index: 50;
+    border: 2px solid #ffd700;
+  }
+
+  .center-icon {
+    font-size: 1.2rem;
+  }
+
+  .center-text {
+    font-size: 0.5rem;
+    font-weight: 800;
+    text-align: center;
+    line-height: 1;
+    color: #1a202c;
+    margin-top: 0.1rem;
+  }
+
+  /* Zone Legend */
+  .zone-legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding: 1rem;
+    background: rgba(156, 39, 176, 0.05);
+    border-radius: 12px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .legend-color {
+    width: 40px;
+    height: 24px;
+    border-radius: 4px;
+    border: 2px solid rgba(156, 39, 176, 0.4);
+  }
+
+  .legend-arrow {
+    font-size: 1.5rem;
+    color: #9c27b0;
+    font-weight: 700;
+  }
+
+  /* Purity Intensification Grid */
+  .purity-intensification-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .intensification-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.75rem;
+    border: 2px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .intensification-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #9c27b0, var(--page-accent));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .intensification-card:hover {
+    border-color: #9c27b0;
+    box-shadow: 0 8px 24px rgba(156,39,176,0.2);
+    transform: translateY(-6px);
+  }
+
+  .intensification-card:hover::before {
+    transform: scaleX(1);
+  }
+
+  .card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #9c27b0;
+    margin: 0 0 0.75rem 0;
+  }
+
+  .card-description {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #475569;
+    margin: 0 0 1rem 0;
+  }
+
+  .card-example {
+    padding: 0.75rem;
+    background: linear-gradient(135deg, rgba(156,39,176,0.05), rgba(42,161,152,0.05));
+    border-radius: 8px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: #64748b;
+    border-left: 3px solid #9c27b0;
+  }
+
+  .card-example strong {
+    color: #9c27b0;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  /* ============================================
+     CORE COMPONENTS - ENHANCED HOVER ANIMATIONS
+     ============================================ */
+  .core-component-card {
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+
+  .core-component-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(42,161,152,0.03), rgba(156,39,176,0.03));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .core-component-card:hover::before {
+    opacity: 1;
+  }
+
+  .core-component-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 32px rgba(42,161,152,0.25);
+    border-color: #2aa198;
+  }
+
+  .core-component-card h4 {
+    transition: transform 0.3s ease;
+    font-weight: 800;
+  }
+
+  .core-component-card:hover h4 {
+    transform: translateX(5px);
+  }
+
+  /* Mobile responsive for core component cards */
+  @media (max-width: 768px) {
+    .core-component-card {
+      padding: 1.5rem;
+    }
+  }
+
+  /* ============================================
+     HEBREW VOCABULARY FRAMEWORK
+     ============================================ */
+  .hebrew-vocab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .vocab-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    border: 3px solid;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+
+  .vocab-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+  }
+
+  .holy-card {
+    border-color: #d4af37;
+    background: linear-gradient(135deg, rgba(212,175,55,0.05), white);
+  }
+
+  .common-card {
+    border-color: #64748b;
+    background: linear-gradient(135deg, rgba(100,116,139,0.05), white);
+  }
+
+  .pure-card {
+    border-color: #2aa198;
+    background: linear-gradient(135deg, rgba(42,161,152,0.05), white);
+  }
+
+  .impure-card {
+    border-color: #9c27b0;
+    background: linear-gradient(135deg, rgba(156,39,176,0.05), white);
+  }
+
+  .vocab-hebrew {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    line-height: 1;
+  }
+
+  .vocab-transliteration {
+    font-size: 1.1rem;
+    color: #64748b;
+    font-style: italic;
+    margin-bottom: 0.25rem;
+  }
+
+  .vocab-english {
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .holy-card .vocab-english {
+    color: #d4af37;
+  }
+
+  .common-card .vocab-english {
+    color: #64748b;
+  }
+
+  .pure-card .vocab-english {
+    color: #2aa198;
+  }
+
+  .impure-card .vocab-english {
+    color: #9c27b0;
+  }
+
+  .vocab-description {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #475569;
+    margin-bottom: 1rem;
+  }
+
+  .vocab-example {
+    padding: 0.75rem;
+    background: rgba(0,0,0,0.03);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: #64748b;
+  }
+
+  .vocab-example strong {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: #1e293b;
+  }
+
+  /* ============================================
+     STATUS PROGRESSION DIAGRAM
+     ============================================ */
+  .status-progression-container {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+  }
+
+  .status-stage {
+    flex: 1;
+    min-width: 200px;
+    max-width: 280px;
+    background: white;
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border: 3px solid;
+    text-align: center;
+  }
+
+  .status-stage:hover {
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+    z-index: 10;
+  }
+
+  .impure-stage {
+    border-color: #9c27b0;
+    background: linear-gradient(135deg, rgba(156,39,176,0.08), white);
+  }
+
+  .pure-stage {
+    border-color: #2aa198;
+    background: linear-gradient(135deg, rgba(42,161,152,0.08), white);
+  }
+
+  .holy-stage {
+    border-color: #d4af37;
+    background: linear-gradient(135deg, rgba(212,175,55,0.08), white);
+  }
+
+  .status-icon {
+    font-size: 3rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .status-label {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .impure-stage .status-label {
+    color: #9c27b0;
+  }
+
+  .pure-stage .status-label {
+    color: #2aa198;
+  }
+
+  .holy-stage .status-label {
+    color: #d4af37;
+  }
+
+  .status-hebrew {
+    font-size: 1.1rem;
+    color: #64748b;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .status-properties {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  .property-badge {
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    background: #e2e8f0;
+    color: #475569;
+  }
+
+  .property-badge.contagious {
+    background: #fee2e2;
+    color: #dc2626;
+  }
+
+  .property-badge.not-contagious {
+    background: #d1fae5;
+    color: #059669;
+  }
+
+  .status-description {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #64748b;
+  }
+
+  .status-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    min-width: 120px;
+    position: relative;
+  }
+
+  .arrow-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #2aa198;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .arrow-process {
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: #64748b;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .arrow-symbol {
+    font-size: 2.5rem;
+    color: #2aa198;
+    font-weight: 700;
+  }
+
+  /* ============================================
+     REPRODUCTIVE FLUIDS EXPLANATION
+     ============================================ */
+  .reproductive-fluids-explanation {
+    margin: 2rem 0;
+  }
+
+  .fluids-intro {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(42,161,152,0.05), rgba(156,39,176,0.05));
+    border-radius: 12px;
+  }
+
+  .fluids-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .fluid-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    border: 2px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+
+  .fluid-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(42,161,152,0.2);
+    border-color: #2aa198;
+  }
+
+  .childbirth-card {
+    grid-column: span 2;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .fluid-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .fluid-term-hebrew {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+
+  .fluid-term-transliteration {
+    font-size: 0.95rem;
+    color: #64748b;
+    font-style: italic;
+    margin-bottom: 0.25rem;
+  }
+
+  .fluid-term-english {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #2aa198;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .fluid-explanation {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #475569;
+    text-align: left;
+  }
+
+  /* Mobile responsive for new Hebrew/Status/Fluids sections */
+  @media (max-width: 768px) {
+    .hebrew-vocab-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .status-progression-container {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .status-stage {
+      max-width: 100%;
+      width: 100%;
+    }
+
+    .status-arrow {
+      transform: rotate(90deg);
+      margin: 1rem 0;
+    }
+
+    .arrow-symbol {
+      transform: rotate(-90deg);
+    }
+
+    .fluids-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .childbirth-card {
+      grid-column: span 1;
+    }
+  }
+
+  /* Mobile responsive for temple zones */
+  @media (max-width: 768px) {
+    .temple-zones {
+      padding-bottom: 100%;
+      max-width: 400px;
+      margin: 2rem auto;
+    }
+
+    .zone-label {
+      font-size: 0.75rem;
+    }
+
+    .center-text {
+      font-size: 0.4rem;
+    }
+
+    .center-icon {
+      font-size: 1rem;
+    }
+
+    .zone-info {
+      font-size: 0.75rem;
+      min-width: 150px;
+      padding: 0.75rem;
+    }
+
+    .purity-intensification-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ============================================
+     LEVITICUS CHECKLIST - JESUS' SYSTEMATIC RESPONSE
+     ============================================ */
+  .leviticus-checklist {
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .checklist-item {
+    background: white;
+    border-radius: 16px;
+    border-left: 6px solid;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .checklist-item:hover {
+    transform: translateX(8px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+
+  .leviticus-11 {
+    border-left-color: #10b981;
+  }
+
+  .leviticus-12 {
+    border-left-color: #f59e0b;
+  }
+
+  .leviticus-13-14 {
+    border-left-color: #ef4444;
+  }
+
+  .leviticus-15 {
+    border-left-color: #8b5cf6;
+  }
+
+  .bonus-category {
+    border-left-color: #1e293b;
+  }
+
+  .checklist-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    background: linear-gradient(135deg, rgba(42,161,152,0.05), rgba(156,39,176,0.05));
+    border-bottom: 2px solid #e5e7eb;
+  }
+
+  .checkbox-icon {
+    font-size: 2rem;
+    color: #10b981;
+    font-weight: 800;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #d1fae5;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .chapter-reference {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    min-width: 100px;
+  }
+
+  .category-name {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #1e293b;
+    flex-grow: 1;
+  }
+
+  .checklist-content {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .leviticus-context,
+  .jesus-response,
+  .luke-passage {
+    padding: 1.25rem;
+    border-radius: 12px;
+    line-height: 1.7;
+  }
+
+  .leviticus-context {
+    background: linear-gradient(135deg, rgba(156,39,176,0.08), rgba(100,116,139,0.05));
+    border-left: 4px solid #9c27b0;
+  }
+
+  .leviticus-context strong {
+    color: #9c27b0;
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .jesus-response {
+    background: linear-gradient(135deg, rgba(42,161,152,0.08), rgba(212,175,55,0.05));
+    border-left: 4px solid #2aa198;
+  }
+
+  .jesus-response strong {
+    color: #2aa198;
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .luke-passage {
+    background: linear-gradient(135deg, rgba(212,175,55,0.08), rgba(245,158,11,0.05));
+    border-left: 4px solid #d4af37;
+  }
+
+  .luke-passage strong {
+    color: #d4af37;
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  /* Mobile responsive for checklist */
+  @media (max-width: 768px) {
+    .checklist-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .chapter-reference {
+      min-width: auto;
+    }
+
+    .category-name {
+      font-size: 1.1rem;
+    }
+
+    .checklist-content {
+      padding: 1.5rem;
+    }
+
+    .checklist-item:hover {
+      transform: translateX(4px);
+    }
+  }
+
+  /* ============================================
+     ATONEMENT FLOW - ANIMATED COMPARISON
+     ============================================ */
+  .atonement-flow-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    margin: 2rem 0;
+  }
+
+  .flow-track {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    border: 2px solid;
+    transition: all 0.3s ease;
+  }
+
+  .flow-track:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+  }
+
+  .leviticus-track {
+    border-color: #7b1fa2;
+    background: linear-gradient(135deg, rgba(123,31,162,0.03), white);
+  }
+
+  .luke-track {
+    border-color: var(--page-accent);
+    background: linear-gradient(135deg, rgba(42,161,152,0.03), white);
+  }
+
+  .flow-track-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0 0 1.5rem 0;
+    font-size: 1.3rem;
+    font-weight: 800;
+  }
+
+  .leviticus-track .flow-track-title {
+    color: #7b1fa2;
+  }
+
+  .luke-track .flow-track-title {
+    color: var(--page-accent);
+  }
+
+  .flow-icon {
+    font-size: 1.8rem;
+  }
+
+  .flow-steps {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .flow-step {
+    flex: 1;
+    min-width: 140px;
+    background: white;
+    border-radius: 12px;
+    padding: 1.25rem 1rem;
+    border: 2px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .flow-step:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  }
+
+  .leviticus-track .flow-step {
+    border-color: rgba(123,31,162,0.2);
+  }
+
+  .leviticus-track .flow-step:hover {
+    border-color: #7b1fa2;
+    box-shadow: 0 8px 20px rgba(123,31,162,0.2);
+  }
+
+  .luke-track .flow-step {
+    border-color: rgba(42,161,152,0.2);
+  }
+
+  .luke-track .flow-step:hover {
+    border-color: var(--page-accent);
+    box-shadow: 0 8px 20px rgba(42,161,152,0.2);
+  }
+
+  .step-number {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+
+  .leviticus-track .step-number {
+    background: linear-gradient(135deg, #7b1fa2, #9c27b0);
+  }
+
+  .luke-track .step-number {
+    background: linear-gradient(135deg, var(--page-accent), var(--page-accent-dark));
+  }
+
+  .step-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+
+  .step-content strong {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1a202c;
+    display: block;
+  }
+
+  .step-detail {
+    font-size: 0.8rem;
+    color: #64748b;
+    font-style: italic;
+    line-height: 1.4;
+  }
+
+  .flow-connector {
+    flex: 0 0 auto;
+    font-size: 1.8rem;
+    font-weight: 700;
+    opacity: 0.4;
+    padding: 0 0.25rem;
+  }
+
+  .leviticus-track .flow-connector {
+    color: #7b1fa2;
+  }
+
+  .luke-track .flow-connector {
+    color: var(--page-accent);
+  }
+
+  /* Luke Examples Grid */
+  .luke-examples-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin: 2rem 0;
+  }
+
+  .example-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 2px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .example-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--page-accent), var(--page-accent-dark));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .example-card:hover {
+    border-color: var(--page-accent);
+    box-shadow: 0 8px 24px rgba(42,161,152,0.15);
+    transform: translateY(-4px);
+  }
+
+  .example-card:hover::before {
+    transform: scaleX(1);
+  }
+
+  .example-ref {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--page-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+  }
+
+  .example-content strong {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+  }
+
+  .example-content p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #64748b;
+  }
+
+  /* Responsive for flow */
+  @media (max-width: 968px) {
+    .flow-steps {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .flow-connector {
+      transform: rotate(90deg);
+      margin: 0.5rem 0;
+    }
+
+    .flow-step {
+      min-width: auto;
+    }
+  }
+
+  /* ============================================
+     CORE LOGIC QUOTE - Subtle breathe animation
+     ============================================ */
+  .core-logic-quote {
+    background: linear-gradient(135deg, rgba(42,161,152,0.1), rgba(212,175,55,0.1));
+    border-left: 4px solid #2aa198;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-top: 1.5rem;
+    box-shadow: 0 4px 12px rgba(42,161,152,0.1);
+    position: relative;
+    transition: all 0.4s ease;
+  }
+
+  .core-logic-quote::before {
+    content: '💭';
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 2rem;
+    opacity: 0.2;
+    animation: thoughtFloat 6s ease-in-out infinite;
+  }
+
+  .core-logic-quote.animate-on-scroll {
+    animation: gentleFadeIn 0.8s ease-out;
+  }
+
+  .core-logic-quote:hover {
+    box-shadow: 0 8px 24px rgba(42,161,152,0.2);
+    transform: translateY(-2px);
+    border-left-width: 6px;
+  }
+
+  /* Subtle breathing glow effect */
+  .core-logic-quote::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, 
+      rgba(42,161,152,0.15), 
+      rgba(212,175,55,0.15)
+    );
+    border-radius: 16px;
+    z-index: -1;
+    opacity: 0;
+    animation: gentleBreathe 4s ease-in-out infinite;
+  }
+
+  .core-logic-quote strong:first-child {
+    display: block;
+    font-size: 1.2rem;
+    color: #0f766e;
+    margin-bottom: 0.75rem;
+  }
+
+  .core-logic-quote p:first-of-type {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #1e293b;
+    font-style: italic;
+  }
+
+  /* Highlight key phrase on scroll */
+  .core-logic-quote.animate-on-scroll strong {
+    background: linear-gradient(120deg, 
+      transparent 0%, 
+      rgba(42,161,152,0.2) 50%, 
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: highlightSweep 2s ease-out;
+    animation-delay: 0.5s;
+    padding: 0 0.25rem;
+  }
+
+  @keyframes gentleFadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes gentleBreathe {
+    0%, 100% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 0.3;
+    }
+  }
+
+  @keyframes thoughtFloat {
+    0%, 100% {
+      transform: translateY(0px) rotate(-5deg);
+      opacity: 0.2;
+    }
+    50% {
+      transform: translateY(-6px) rotate(5deg);
+      opacity: 0.3;
+    }
+  }
+
+  /* ============================================
+     REVOLUTIONARY INVERSION BOX - Directional flow animation
+     ============================================ */
+  .revolutionary-inversion-box {
+    background: linear-gradient(135deg, rgba(156,39,176,0.08), rgba(42,161,152,0.08));
+    border-left: 4px solid #9c27b0;
+    border-radius: 16px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 4px 12px rgba(156,39,176,0.1);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+  }
+
+  .revolutionary-inversion-box::before {
+    content: '⟲';
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 2.5rem;
+    opacity: 0.15;
+    animation: reverseRotate 8s linear infinite;
+  }
+
+  .revolutionary-inversion-box::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #9c27b0, #2aa198);
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: flowRight 3s ease-in-out infinite;
+  }
+
+  .revolutionary-inversion-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(156,39,176,0.2);
+    border-left-width: 6px;
+  }
+
+  .revolutionary-inversion-box strong {
+    display: block;
+    font-size: 1.25rem;
+    color: #7c3aed;
+    margin-bottom: 0.75rem;
+  }
+
+  @keyframes reverseRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(-360deg); }
+  }
+
+  @keyframes flowRight {
+    0%, 100% { transform: scaleX(0); }
+    50% { transform: scaleX(1); }
+  }
+
+  /* ============================================
+     PATTERN SUMMARY BOX - Completion glow
+     ============================================ */
+  .pattern-summary-box {
+    background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(42,161,152,0.1));
+    border-left: 4px solid #d4af37;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-top: 2.5rem;
+    box-shadow: 0 4px 12px rgba(212,175,55,0.15);
+    position: relative;
+    transition: all 0.4s ease;
+  }
+
+  .pattern-summary-box::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, 
+      rgba(212,175,55,0.2), 
+      rgba(42,161,152,0.2)
+    );
+    border-radius: 16px;
+    z-index: -1;
+    opacity: 0;
+    animation: completionGlow 5s ease-in-out infinite;
+  }
+
+  .pattern-summary-box:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 12px 28px rgba(212,175,55,0.25);
+    border-left-width: 6px;
+  }
+
+  .pattern-summary-box strong {
+    display: block;
+    font-size: 1.3rem;
+    color: #b8860b;
+    margin-bottom: 0.5rem;
+  }
+
+  @keyframes completionGlow {
+    0%, 100% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 0.4;
+    }
+  }
+
+  /* ============================================
+     JESUS REVOLUTIONARY BOX - Transformation pulse
+     ============================================ */
+  .jesus-revolutionary-box {
+    background: linear-gradient(135deg, rgba(42,161,152,0.1), rgba(212,175,55,0.1));
+    border-left: 4px solid #d4af37;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-top: 2rem;
+    box-shadow: 0 4px 12px rgba(42,161,152,0.12);
+    position: relative;
+    transition: all 0.4s ease;
+  }
+
+  .jesus-revolutionary-box::before {
+    content: '↻';
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 2.5rem;
+    color: #d4af37;
+    opacity: 0.2;
+    animation: transformPulse 3s ease-in-out infinite;
+  }
+
+  .jesus-revolutionary-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(42,161,152,0.25);
+    border-left-width: 6px;
+  }
+
+  .jesus-revolutionary-box strong {
+    display: block;
+    font-size: 1.25rem;
+    color: #0f766e;
+    margin-bottom: 0.5rem;
+  }
+
+  @keyframes transformPulse {
+    0%, 100% {
+      transform: scale(1) rotate(0deg);
+      opacity: 0.2;
+    }
+    50% {
+      transform: scale(1.1) rotate(180deg);
+      opacity: 0.35;
+    }
+  }
+
+  /* ============================================
+     ONE-LINE TAKEAWAY BOX - Emphasis pulse
+     ============================================ */
+  .one-line-takeaway-box {
+    background: linear-gradient(135deg, rgba(42,161,152,0.1), rgba(156,39,176,0.1));
+    border-left: 4px solid #2aa198;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-top: 2rem;
+    box-shadow: 0 4px 12px rgba(42,161,152,0.15);
+    position: relative;
+    transition: all 0.4s ease;
+  }
+
+  .one-line-takeaway-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #2aa198, #9c27b0, #2aa198);
+    background-size: 200% 100%;
+    animation: emphasisSweep 4s ease-in-out infinite;
+  }
+
+  .one-line-takeaway-box:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 12px 28px rgba(42,161,152,0.25);
+    border-left-width: 6px;
+  }
+
+  .one-line-takeaway-box strong {
+    display: block;
+    font-size: 1.3rem;
+    color: #0f766e;
+    margin-bottom: 0.5rem;
+    animation: emphasizePulse 2.5s ease-in-out infinite;
+  }
+
+  .one-line-takeaway-box p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    font-weight: 500;
+  }
+
+  @keyframes emphasisSweep {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @keyframes emphasizePulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.85;
+    }
+  }
+
+  /* ============================================
+     EDEN PATTERN - INTERACTIVE STAGES
+     ============================================ */
+  .eden-pattern-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+    min-height: 280px;
+  }
+
+  .pattern-stage {
+    flex: 0 0 auto;
+    width: 200px;
+    height: 240px;
+    perspective: 1000px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    z-index: 5;
+  }
+
+  .pattern-stage:hover {
+    transform: scale(1.05);
+  }
+
+  .pattern-stage-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+
+  .pattern-stage.flipped .pattern-stage-inner {
+    transform: rotateY(180deg);
+  }
+
+  .pattern-stage-front,
+  .pattern-stage-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    border: 2px solid;
+  }
+
+  .pattern-stage-front {
+    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+    border-color: var(--page-accent);
+  }
+
+  .pattern-stage-back {
+    background: linear-gradient(135deg, var(--page-accent) 0%, var(--page-accent-dark) 100%);
+    border-color: var(--page-accent-dark);
+    color: white;
+    transform: rotateY(180deg);
+  }
+
+  .stage-icon {
+    font-size: 3.5rem;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .stage-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+    color: var(--page-accent);
+  }
+
+  .pattern-stage-back .stage-title {
+    color: white;
+  }
+
+  .stage-subtitle {
+    font-size: 0.9rem;
+    opacity: 0.75;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .stage-detail-content {
+    text-align: left;
+  }
+
+  .stage-detail-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+    opacity: 0.9;
+  }
+
+  .stage-detail-text {
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  .stage-detail-text strong {
+    display: block;
+    margin-top: 0.5rem;
+    font-weight: 700;
+  }
+
+  .stage-detail-text strong:first-child {
+    margin-top: 0;
+  }
+
+  /* Special styling for Jesus stage */
+  .pattern-stage-jesus .pattern-stage-front {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), #fff 100%);
+    border-color: #d4af37;
+  }
+
+  .pattern-stage-jesus .stage-title {
+    color: #d4af37;
+  }
+
+  .pattern-stage-jesus .pattern-stage-back {
+    background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
+    border-color: #b8860b;
+  }
+
+  /* Pattern arrows */
+  .pattern-arrow {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 10;
+    position: relative;
+    padding: 0.5rem;
+  }
+
+  .arrow-line {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--page-accent), var(--page-accent-dark));
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+
+  .arrow-line::after {
+    content: '→';
+    position: absolute;
+    right: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    color: var(--page-accent);
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+  }
+
+  .arrow-label {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--page-accent);
+    text-align: center;
+    line-height: 1.3;
+    background: rgba(255,255,255,0.95);
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border: 2px solid var(--page-accent);
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Unclean Categories Grid */
+  .unclean-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.25rem;
+    margin: 2rem 0;
+  }
+
+  .unclean-category {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 2px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+  }
+
+  .unclean-category:hover {
+    border-color: var(--page-accent);
+    box-shadow: 0 8px 24px rgba(42,161,152,0.15);
+    transform: translateY(-4px);
+  }
+
+  .category-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .category-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--page-accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .category-description {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #64748b;
+  }
+
+  .category-examples {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #e5e7eb;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: #94a3b8;
+  }
+
+  /* Reset button styling */
+  .reset-diagram-button {
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, var(--page-accent), var(--page-accent-dark));
+    color: white;
+    border: none;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(42,161,152,0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .reset-diagram-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(42,161,152,0.4);
+  }
+
+  .reset-diagram-button:active {
+    transform: translateY(0);
+  }
+
+  /* ============================================
+     MOBILE RESPONSIVENESS FOR PATTERN STAGES
+     ============================================ */
+  @media (max-width: 768px) {
+    .eden-pattern-container {
+      flex-direction: column;
+    }
+
+    .pattern-stage {
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .pattern-arrow {
+      transform: rotate(90deg);
+      margin: 0.5rem 0;
+    }
+
+    .arrow-line {
+      width: 40px;
     }
   }
 
@@ -471,6 +2738,10 @@
       content: " (" attr(href) ")";
       font-size: 8pt;
       color: #666;
+    }
+
+    .pattern-stage, .pattern-arrow, .reset-diagram-button {
+      display: none;
     }
   }
 </style>
@@ -553,69 +2824,129 @@
       </div>
     </div>
 
-    <!-- ARC MAP SECTION -->
+    <!-- ARC MAP SECTION - THREE-DIMENSIONAL PORTRAIT FORMAT -->
     <div class="arc-section animate-on-scroll" id="arc-map">
       <h2 class="section-title">
-        <span class="section-icon">📊</span>
+        <span class="section-icon">🔄</span>
         Luke–Acts as a Single Levitical Arc
       </h2>
-      <p>
-        Leviticus imagines life with God as a movement of <strong>approach</strong>—from the camp to the sanctuary, from the common to the holy, with cleansing and atonement as the means of safe proximity (Lev 1–7; 10:10; 11–15; 16; 17–26). Luke begins and ends his Gospel in the Temple (Luke 1:5–23; 24:52–53), and Acts begins and ends with a Spirit-formed people who remain Temple-attentive even as their mission pushes outward (Acts 1–2; 3; 21; 28).
+      <p style="font-size: 1.05rem; line-height: 1.8; text-align: center; max-width: 900px; margin: 0 auto 2rem;">
+        Leviticus imagines life with God as a movement of <strong>approach</strong>—from the camp to the sanctuary, from the common to the holy, with cleansing and atonement as the means of safe proximity. Luke–Acts traces this same journey through four interconnected movements.
       </p>
 
-      <div class="arc-grid">
-        <div class="arc-row">
-          <div class="arc-node">
-            <span class="label">Luke Opening</span>
-            <div class="title">Temple & Priesthood</div>
+      <div class="portrait-venn">
+        <h3>How Luke's Gospel and Acts Create the Complete Levitical Arc</h3>
+
+        <div class="venn-container">
+          <!-- Luke Opening Circle -->
+          <div class="venn-circle venn-luke-open animate-on-scroll animation-delay-100">
+            <span class="icon">🏛️</span>
+            <h4>Luke Opening</h4>
+            <span class="psalm-ref">Temple & Priesthood</span>
             <ul>
-              <li><strong>Zechariah</strong> serving "in the order of his division" (Luke 1:5–23) → cultic setting is programmatic</li>
-              <li>Purification language: Mary's purification (Luke 2:22–24) evokes Levitical categories</li>
+              <li>Zechariah serving in Temple (1:5-23)</li>
+              <li>Mary's purification (2:22-24)</li>
+              <li>Levitical categories established</li>
+              <li>Sacred space is central</li>
             </ul>
           </div>
-          <div class="arc-arrow">
-            <span>Jesus brings</span>
-            <span class="arrow">→</span>
-            <span>cleansing + re-entry</span>
-          </div>
-          <div class="arc-node">
-            <span class="label">Luke Climax</span>
-            <div class="title">Atonement & Access</div>
+
+          <!-- Luke Climax Circle -->
+          <div class="venn-circle venn-luke-climax animate-on-scroll animation-delay-200">
+            <span class="icon">✝️</span>
+            <h4>Luke Climax</h4>
+            <span class="psalm-ref">Atonement & Access</span>
             <ul>
-              <li>Jesus frames his death as "forgiveness of sins" within scriptural necessity (Luke 24:44–47)</li>
-              <li>Ends with worship "in the Temple" (Luke 24:52–53)</li>
+              <li>Death as "forgiveness of sins"</li>
+              <li>Scriptural necessity (24:44-47)</li>
+              <li>Ends in Temple worship (24:52-53)</li>
+              <li>Access restored through Jesus</li>
+            </ul>
+          </div>
+
+          <!-- Acts Opening Circle -->
+          <div class="venn-circle venn-acts-open animate-on-scroll animation-delay-300">
+            <span class="icon">🔥</span>
+            <h4>Acts Opening</h4>
+            <span class="psalm-ref">Spirit as Consecration</span>
+            <ul>
+              <li>"All filled with Holy Spirit" (2:1-4)</li>
+              <li>Corporate sanctification event</li>
+              <li>Prayers, table, signs (2:42-47)</li>
+              <li>Embodied holiness</li>
+            </ul>
+          </div>
+
+          <!-- Acts Climax Circle -->
+          <div class="venn-circle venn-acts-climax animate-on-scroll animation-delay-400">
+            <span class="icon">🌍</span>
+            <h4>Acts Climax</h4>
+            <span class="psalm-ref">Clean/Unclean Reframed</span>
+            <ul>
+              <li>Gentiles incorporated (10-11; 15)</li>
+              <li>No "impure outsiders"</li>
+              <li>"Unhindered" proclamation (28:31)</li>
+              <li>Holy spread to nations</li>
             </ul>
           </div>
         </div>
 
-        <div class="arc-row">
-          <div class="arc-node">
-            <span class="label">Acts Opening</span>
-            <div class="title">Spirit as Consecration</div>
-            <ul>
-              <li>"All filled with the Holy Spirit" (Acts 2:1–4): a corporate sanctification event</li>
-              <li>Community life: prayers, table, and signs (Acts 2:42–47) as embodied holiness</li>
-            </ul>
-          </div>
-          <div class="arc-arrow">
-            <span>Holiness expands</span>
-            <span class="arrow">→</span>
-            <span>Jerusalem → Judea → Samaria → Nations</span>
-          </div>
-          <div class="arc-node">
-            <span class="label">Acts Climax</span>
-            <div class="title">Clean/Unclean Reframed</div>
-            <ul>
-              <li>Gentiles are incorporated without becoming "impure outsiders" (Acts 10–11; 15)</li>
-              <li>Ends with "unhindered" proclamation (Acts 28:31): mission as a kind of "holy spread"</li>
-            </ul>
-          </div>
+        <!-- Center Circle - The Complete Arc -->
+        <div class="venn-center animate-on-scroll">
+          <h4>🎯 The Complete Levitical Arc</h4>
+          <p>
+            <strong>Temple → Atonement → Spirit → Nations</strong><br>
+            Leviticus protects holy space from death/impurity. Luke–Acts shows Jesus and the Spirit <strong>reversing the flow</strong>: holiness becomes the contagious reality. Life outcompetes death. The sacred expands rather than contracts.
+          </p>
         </div>
       </div>
 
-      <p style="margin-top: 1.5rem; opacity: .9; font-size: .95rem;">
-        <strong>Frame:</strong> Leviticus protects holy space from death/impurity; Luke-Acts shows Jesus and the Spirit reversing the flow: holiness becomes the contagious reality (life outcompetes death).
-      </p>
+      <!-- Arc Flow Visualization -->
+      <div class="arc-flow-visual" style="margin-top: 3rem;">
+        <h4 style="text-align: center; margin-bottom: 1.5rem; font-size: 1.4rem;">The Expansion Pattern</h4>
+        <div class="expansion-track">
+          <div class="expansion-stage animate-on-scroll animation-delay-100">
+            <div class="stage-label">Luke 1-2</div>
+            <div class="stage-content">📍 Temple<br><span class="stage-detail">Jerusalem</span></div>
+          </div>
+          
+          <div class="expansion-arrow">→</div>
+          
+          <div class="expansion-stage animate-on-scroll animation-delay-200">
+            <div class="stage-label">Luke 24</div>
+            <div class="stage-content">✝️ Cross<br><span class="stage-detail">Atonement</span></div>
+          </div>
+          
+          <div class="expansion-arrow">→</div>
+          
+          <div class="expansion-stage animate-on-scroll animation-delay-300">
+            <div class="stage-label">Acts 2</div>
+            <div class="stage-content">🔥 Spirit<br><span class="stage-detail">Pentecost</span></div>
+          </div>
+          
+          <div class="expansion-arrow">→</div>
+          
+          <div class="expansion-stage animate-on-scroll animation-delay-400">
+            <div class="stage-label">Acts 10-15</div>
+            <div class="stage-content">🌐 Gentiles<br><span class="stage-detail">Inclusion</span></div>
+          </div>
+          
+          <div class="expansion-arrow">→</div>
+          
+          <div class="expansion-stage animate-on-scroll animation-delay-500">
+            <div class="stage-label">Acts 28</div>
+            <div class="stage-content">🌍 Nations<br><span class="stage-detail">Unhindered</span></div>
+          </div>
+        </div>
+        
+        <p style="text-align: center; margin-top: 1.5rem; font-style: italic; color: #64748b;">
+          The movement: <strong>Jerusalem → Judea → Samaria → Ends of the Earth</strong> (Acts 1:8)
+        </p>
+      </div>
+
+      <div class="key-insight" style="margin-top: 2rem;">
+        <strong>The Pattern Complete:</strong> Luke begins in the Temple and ends in the Temple. Acts begins in Jerusalem and ends with "unhindered" gospel proclamation to the nations. The Levitical categories aren't abolished—they're fulfilled and expanded. Jesus becomes the means of approach, the Spirit consecrates the people, and holiness spreads outward like wildfire.
+      </div>
     </div>
 
     <!-- LUKE'S USE SECTION -->
@@ -632,7 +2963,7 @@
       <div class="passage-cards-container">
 
         <!-- Luke 1:5-23 -->
-        <div class="passage-card">
+        <div class="passage-card animate-on-scroll animation-delay-100">
           <h4>Luke 1:5–23</h4>
           <p><strong>Tags:</strong>
             <span class="tag">Temple</span>
@@ -648,7 +2979,7 @@
         </div>
 
         <!-- Luke 2:22-24 -->
-        <div class="passage-card">
+        <div class="passage-card animate-on-scroll animation-delay-200">
           <h4>Luke 2:22–24</h4>
           <p><strong>Tags:</strong>
             <span class="tag">Purification</span>
@@ -663,7 +2994,7 @@
         </div>
 
         <!-- Luke 5:12-16 -->
-        <div class="passage-card">
+        <div class="passage-card animate-on-scroll animation-delay-300">
           <h4>Luke 5:12–16</h4>
           <p><strong>Tags:</strong>
             <span class="tag">Skin disease</span>
@@ -680,7 +3011,7 @@
         </div>
 
         <!-- Luke 8:40-56 -->
-        <div class="passage-card">
+        <div class="passage-card animate-on-scroll animation-delay-100">
           <h4>Luke 8:40–56</h4>
           <p><strong>Tags:</strong>
             <span class="tag">Flow of blood</span>
@@ -697,7 +3028,7 @@
         </div>
 
         <!-- Luke 22:14-23 -->
-        <div class="passage-card">
+        <div class="passage-card animate-on-scroll animation-delay-200">
           <h4>Luke 22:14–23</h4>
           <p><strong>Tags:</strong>
             <span class="tag">Meal as covenant</span>
@@ -722,71 +3053,699 @@
     <!-- LEVITICUS 4-5 ATONEMENT SECTION -->
     <div class="theology-card animate-on-scroll" id="atonement-logic">
       <h3>Leviticus 4–5 as the Narrative Grammar of Forgiveness in Luke</h3>
-      <p>
+      <p style="font-size: 1.05rem; line-height: 1.8;">
         In <strong>Leviticus 4–5</strong>, sin and guilt offerings culminate in a clear outcome: <em>atonement is made, and forgiveness follows</em> (e.g., Lev 4:20, 26, 31, 35; 5:10, 13, 16, 18). Luke repeatedly narrates those same <strong>outcomes</strong>—forgiveness, restoration, and peace—<strong>without staging the ritual itself</strong>.
       </p>
 
-      <div class="key-insight" style="margin-top: 1rem;">
+      <div class="key-insight" style="margin: 2rem 0;">
         <strong>Key observation:</strong> In Luke's Gospel, Jesus occupies the narrative center where Levitical atonement previously functioned. What the priestly rites accomplished symbolically, Luke depicts Jesus accomplishing personally and relationally.
       </div>
 
-      <h4 style="margin-top: 1.5rem;">Anchor examples (for teaching and synthesis)</h4>
-      <ul>
-        <li><strong>Luke 5:17–26</strong> — forgiveness is declared <em>before</em> physical restoration</li>
-        <li><strong>Luke 7:36–50</strong> — forgiveness results in peace and restored standing</li>
-        <li><strong>Luke 15:11–32</strong> — the forgiven son is restored to household and table</li>
-        <li><strong>Luke 18:9–14</strong> — the tax collector goes home <em>justified before God</em></li>
-        <li><strong>Luke 23:39–43</strong> — immediate access to life with Jesus ("today…with me")</li>
-      </ul>
+      <!-- ANIMATED ATONEMENT FLOW COMPARISON -->
+      <h4 style="margin-top: 3rem; margin-bottom: 1.5rem; font-size: 1.6rem; text-align: center;">The Atonement Pattern: Leviticus → Luke</h4>
+      
+      <div class="atonement-flow-container">
+        <!-- Leviticus Flow -->
+        <div class="flow-track leviticus-track">
+          <h5 class="flow-track-title">
+            <span class="flow-icon">📜</span>
+            Leviticus 4–5 Pattern
+          </h5>
+          
+          <div class="flow-steps">
+            <div class="flow-step animate-on-scroll animation-delay-100">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <strong>Offering Brought</strong>
+                <span class="step-detail">Sin/guilt offering presented</span>
+              </div>
+            </div>
 
-      <div class="scripture-quote" style="margin-top: 1.5rem;">
-        <strong>Leviticus 4–5:</strong> offering → atonement → forgiveness → restored access<br/>
-        <strong>Luke:</strong> encounter with Jesus → forgiveness → restoration → peace
+            <div class="flow-connector">→</div>
+
+            <div class="flow-step animate-on-scroll animation-delay-200">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <strong>Atonement Made</strong>
+                <span class="step-detail">Priest performs ritual</span>
+              </div>
+            </div>
+
+            <div class="flow-connector">→</div>
+
+            <div class="flow-step animate-on-scroll animation-delay-300">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <strong>Forgiveness Declared</strong>
+                <span class="step-detail">"וְנִסְלַח לוֹ" (it shall be forgiven)</span>
+              </div>
+            </div>
+
+            <div class="flow-connector">→</div>
+
+            <div class="flow-step animate-on-scroll animation-delay-400">
+              <div class="step-number">4</div>
+              <div class="step-content">
+                <strong>Access Restored</strong>
+                <span class="step-detail">Return to community/worship</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Luke Flow -->
+        <div class="flow-track luke-track">
+          <h5 class="flow-track-title">
+            <span class="flow-icon">✝️</span>
+            Luke's Gospel Pattern
+          </h5>
+          
+          <div class="flow-steps">
+            <div class="flow-step animate-on-scroll animation-delay-100">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <strong>Encounter with Jesus</strong>
+                <span class="step-detail">Person meets Jesus</span>
+              </div>
+            </div>
+
+            <div class="flow-connector">→</div>
+
+            <div class="flow-step animate-on-scroll animation-delay-200">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <strong>Jesus Acts/Speaks</strong>
+                <span class="step-detail">Personal intervention</span>
+              </div>
+            </div>
+
+            <div class="flow-connector">→</div>
+
+            <div class="flow-step animate-on-scroll animation-delay-300">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <strong>Forgiveness Given</strong>
+                <span class="step-detail">"Your sins are forgiven"</span>
+              </div>
+            </div>
+
+            <div class="flow-connector">→</div>
+
+            <div class="flow-step animate-on-scroll animation-delay-400">
+              <div class="step-number">4</div>
+              <div class="step-content">
+                <strong>Peace & Restoration</strong>
+                <span class="step-detail">Wholeness, community return</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="key-insight" style="margin-top: 1rem;">
+      <!-- Luke Examples Grid -->
+      <h4 style="margin-top: 3rem; margin-bottom: 1.5rem; text-align: center;">Luke's Atonement Narratives</h4>
+      
+      <div class="luke-examples-grid">
+        <div class="example-card animate-on-scroll animation-delay-100">
+          <div class="example-ref">Luke 5:17–26</div>
+          <div class="example-content">
+            <strong>Paralytic Healed</strong>
+            <p>Forgiveness declared <em>before</em> physical restoration. Jesus has authority on earth to forgive sins.</p>
+          </div>
+        </div>
+
+        <div class="example-card animate-on-scroll animation-delay-200">
+          <div class="example-ref">Luke 7:36–50</div>
+          <div class="example-content">
+            <strong>Sinful Woman</strong>
+            <p>Forgiveness results in peace and restored standing. "Your faith has saved you; go in peace."</p>
+          </div>
+        </div>
+
+        <div class="example-card animate-on-scroll animation-delay-300">
+          <div class="example-ref">Luke 15:11–32</div>
+          <div class="example-content">
+            <strong>Prodigal Son</strong>
+            <p>The forgiven son is restored to household and table. Full sonship reinstated.</p>
+          </div>
+        </div>
+
+        <div class="example-card animate-on-scroll animation-delay-400">
+          <div class="example-ref">Luke 18:9–14</div>
+          <div class="example-content">
+            <strong>Tax Collector</strong>
+            <p>Goes home <em>justified before God</em>. Humility and confession lead to justification.</p>
+          </div>
+        </div>
+
+        <div class="example-card animate-on-scroll animation-delay-500">
+          <div class="example-ref">Luke 23:39–43</div>
+          <div class="example-content">
+            <strong>Criminal on Cross</strong>
+            <p>Immediate access to life with Jesus: "Today you will be with me in paradise."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="key-insight" style="margin-top: 2rem;">
         <strong>One-line synthesis:</strong><br/>
-        <em>Luke does not discard Leviticus' atonement logic; he narrates its <strong>telos</strong> through Jesus.</em>
+        <em>Luke does not discard Leviticus' atonement logic; he narrates its <strong>telos</strong> (goal/completion) through Jesus. The pattern remains; the mediator changes.</em>
       </div>
     </div>
 
     <!-- CLEAN/UNCLEAN + EDEN SECTION -->
     <div class="theology-card animate-on-scroll" id="clean-unclean">
-      <h3>Clean / Unclean as Symbolic Theology — and the Eden/East/Exile Pattern</h3>
-      <p>
+      <h3>Clean / Unclean as Symbolic Theology</h3>
+      <p style="font-size: 1.05rem; line-height: 1.8;">
         Levitical "clean/unclean" is primarily about <strong>ritual-symbolic states</strong>, not moral blame. "Unclean" marks proximity to death, decay, or boundary-disruptions that make access to holy space unsafe. This symbolic world is deeply connected to Genesis' "life with God" imagery—especially Eden's guarded access and eastward exile.
       </p>
 
-      <div class="grid-2" style="margin-top: 1.5rem;">
-        <div class="panel">
-          <h4>🌳 Eden → Exile → Sanctuary (concept map)</h4>
-          <ul>
-            <li><strong>Eden:</strong> Life with God. Tree of life; God's presence (Gen 2–3). Boundary: "not this tree" (Gen 2:16–17) → knowledge of good/evil as a boundary-crossing act</li>
-            <li><strong>East exile:</strong> Expelled "east" (Gen 3:24). Cherubim guard re-entry; "life with God" becomes restricted</li>
-            <li><strong>Tabernacle/Temple:</strong> Eden-like sacred space. Entrance from the <strong>east</strong> (tabernacle/temple orientation). Priests guard holiness: distinguish clean/unclean (Lev 10:10–11)</li>
-            <li><strong>Jesus & Spirit:</strong> Jesus cleanses, touches, restores (Luke 5; 8; 17). Spirit forms a holy people (Acts 2) whose mission extends presence outward</li>
-          </ul>
+      <div style="margin: 1.5rem 0; padding: 1rem 1.5rem; background: linear-gradient(135deg, rgba(42,161,152,0.05), rgba(212,175,55,0.05)); border-left: 4px solid #2aa198; border-radius: 8px; font-size: 0.9rem; color: #64748b;">
+        <strong style="color: #2aa198;">📻 Content Note:</strong> The Hebrew vocabulary framework, three-status system, reproductive fluids explanation, and ritual impurity distinctions in this section draw heavily from Tim Mackie and Jon Collins' excellent <a href="https://bibleproject.com/podcasts/purity-and-impurity-leviticus/" target="_blank" style="color: #2aa198; text-decoration: none; border-bottom: 1px dotted #2aa198;">"Purity and Impurity (Leviticus)" episode</a> of The Bible Project Podcast (June 27, 2022). Their accessible explanations of kadosh/chol/tahor/tameh and the "living at the border of life and death" framework have been integrated into this study.
+      </div>
+
+      <!-- HEBREW VOCABULARY FRAMEWORK -->
+      <h4 style="margin-top: 2.5rem; margin-bottom: 1.5rem; font-size: 1.6rem; text-align: center;">The Hebrew Categories: Understanding the System</h4>
+      
+      <div class="hebrew-vocab-grid">
+        <div class="vocab-card holy-card">
+          <div class="vocab-hebrew">קָדֹשׁ</div>
+          <div class="vocab-transliteration">kadosh</div>
+          <div class="vocab-english">HOLY</div>
+          <div class="vocab-description">
+            Set apart, dedicated to God's presence and service. The unique status of the Holy One (Yahweh) shared with those brought near.
+          </div>
+          <div class="vocab-example">
+            <strong>Example:</strong> The priests, altar, sabbath
+          </div>
         </div>
 
-        <div class="panel">
-          <h4>🔍 What "unclean" signifies (symbolic taxonomy)</h4>
-          <p style="margin-bottom: .75rem;"><small>Not exhaustive; designed for reading Luke's scenes.</small></p>
-          <p>
-            <span class="tag">death proximity</span>
-            <span class="tag">blood/flows</span>
-            <span class="tag">skin disease</span>
-            <span class="tag">food boundaries</span>
-            <span class="tag">idolatry/exile</span>
-            <span class="tag">social stigma</span>
-          </p>
-          <div class="key-insight" style="margin-top: 1rem;">
-            <strong>Luke's inversion:</strong> In Leviticus, impurity can "spread" by contact; in Luke, holiness/life spreads from Jesus by contact. This is the narrative-theological claim behind Luke's repeated "touch → cleansed" sequences.
+        <div class="vocab-card common-card">
+          <div class="vocab-hebrew">חֹל</div>
+          <div class="vocab-transliteration">chol</div>
+          <div class="vocab-english">COMMON</div>
+          <div class="vocab-description">
+            Ordinary, everyday, not dedicated to God. <strong>Not bad</strong>—just a starting place. All creation begins as common.
+          </div>
+          <div class="vocab-example">
+            <strong>Example:</strong> Trees, tables, humans (before consecration)
+          </div>
+        </div>
+
+        <div class="vocab-card pure-card">
+          <div class="vocab-hebrew">טָהֹר</div>
+          <div class="vocab-transliteration">tahor</div>
+          <div class="vocab-english">PURE / CLEAN</div>
+          <div class="vocab-description">
+            Ideal state of health and wholeness. Eligible to approach holiness. Not contagious—a stable, healthy condition.
+          </div>
+          <div class="vocab-example">
+            <strong>Example:</strong> Healthy person, 8th day after purification
+          </div>
+        </div>
+
+        <div class="vocab-card impure-card">
+          <div class="vocab-hebrew">טָמֵא</div>
+          <div class="vocab-transliteration">tameh</div>
+          <div class="vocab-english">IMPURE / UNCLEAN</div>
+          <div class="vocab-description">
+            Contact with death-markers: corpses, bodily fluids, disease. <strong>Not sin</strong>—a temporary, contagious state requiring purification.
+          </div>
+          <div class="vocab-example">
+            <strong>Example:</strong> After childbirth, touching a corpse, skin disease
           </div>
         </div>
       </div>
 
-      <div class="teaching-tip" style="margin-top: 1.5rem;">
-        <strong>📚 Teaching Tip:</strong> Use the Eden → East → Temple diagram to show students that "clean/unclean" is about <em>access to life with God</em>, not moral categories. This prevents modern moralizing of ritual impurity. Emphasize that Jesus doesn't abolish distinctions—he becomes the one through whom approach to God is possible, transforming the direction of contagion from exclusion to restoration.
+      <!-- STATUS PROGRESSION DIAGRAM -->
+      <h4 style="margin-top: 3rem; margin-bottom: 1.5rem; font-size: 1.6rem; text-align: center;">The Three-Status System</h4>
+      <p style="text-align: center; color: var(--text-gray); margin-bottom: 2rem; font-size: 0.95rem;">
+        Movement from death-linked impurity through purification to God's holy presence
+      </p>
+
+      <div class="status-progression-container">
+        <div class="status-stage impure-stage">
+          <div class="status-icon">☠️</div>
+          <div class="status-label">IMPURE</div>
+          <div class="status-hebrew">טָמֵא (tameh)</div>
+          <div class="status-properties">
+            <div class="property-badge contagious">Contagious</div>
+            <div class="property-badge">Death-linked</div>
+            <div class="property-badge">Temporary</div>
+          </div>
+          <div class="status-description">
+            Contact with mortality markers: corpses, bodily fluids, decay, disease. Must be separated from holy space.
+          </div>
+        </div>
+
+        <div class="status-arrow">
+          <div class="arrow-label">Purification</div>
+          <div class="arrow-process">
+            1. Washing<br>
+            2. Waiting (7 days)<br>
+            3. Sacrifice (חַטָּאת)
+          </div>
+          <span class="arrow-symbol">→</span>
+        </div>
+
+        <div class="status-stage pure-stage">
+          <div class="status-icon">✨</div>
+          <div class="status-label">PURE</div>
+          <div class="status-hebrew">טָהֹר (tahor)</div>
+          <div class="status-properties">
+            <div class="property-badge not-contagious">Not Contagious</div>
+            <div class="property-badge">Healthy</div>
+            <div class="property-badge">Eligible</div>
+          </div>
+          <div class="status-description">
+            Restored wholeness, ready to approach holy space. Common but clean—the ideal baseline.
+          </div>
+        </div>
+
+        <div class="status-arrow">
+          <div class="arrow-label">Consecration</div>
+          <div class="arrow-process">
+            Setting apart<br>
+            Dedication<br>
+            Sanctification (קִדֵּשׁ)
+          </div>
+          <span class="arrow-symbol">→</span>
+        </div>
+
+        <div class="status-stage holy-stage">
+          <div class="status-icon">🔥</div>
+          <div class="status-label">HOLY</div>
+          <div class="status-hebrew">קָדֹשׁ (kadosh)</div>
+          <div class="status-properties">
+            <div class="property-badge contagious">Contagious</div>
+            <div class="property-badge">God-linked</div>
+            <div class="property-badge">Transformative</div>
+          </div>
+          <div class="status-description">
+            In God's presence, participating in divine life. Heaven and earth united—the human destiny.
+          </div>
+        </div>
+      </div>
+
+      <!-- CRITICAL DISTINCTION: RITUAL ≠ SIN -->
+      <div class="critical-distinction-box animate-on-scroll" style="margin-top: 2.5rem;">
+        <strong>⚠️ Critical Distinction: Ritual Impurity ≠ Sin</strong>
+        <p style="margin-top: 0.75rem; line-height: 1.8;">
+          Becoming impure is <strong>not a moral failure</strong>. The following all render someone ritually impure—yet are good, necessary, or blessed:
+        </p>
+        <ul style="margin-top: 0.75rem; margin-bottom: 0; padding-left: 1.5rem; line-height: 1.8;">
+          <li>
+            <strong>Burying your uncle</strong> → Impure (but you SHOULD do it—family duty)
+            <div class="scripture-ref">Numbers 19:11-16; Leviticus 21:1-3</div>
+          </li>
+          <li>
+            <strong>Marital sexual intercourse</strong> → Impure (but BLESSED in Gen 1:28, Song of Songs)
+            <div class="scripture-ref">Leviticus 15:18 + Genesis 1:28; Proverbs 5:18-19</div>
+          </li>
+          <li>
+            <strong>Childbirth</strong> → Impure (but MIRACULOUS gift of new life)
+            <div class="scripture-ref">Leviticus 12:1-8 + Psalm 127:3; Luke 2:22-24</div>
+          </li>
+          <li>
+            <strong>Touching a newborn</strong> → Impure (but BEAUTIFUL act of care)
+            <div class="scripture-ref">Related to Leviticus 12 (birth fluids)</div>
+          </li>
+        </ul>
+        <p style="margin-top: 1rem; font-style: italic; color: #64748b;">
+          Impurity is a <strong>state</strong>, not a sin. It's a temporary condition marking our mortality, our "life outside Eden" reality. The issue isn't becoming impure—it's entering holy space while impure.
+        </p>
+      </div>
+
+      <!-- WHY REPRODUCTIVE FLUIDS? -->
+      <h4 style="margin-top: 3rem; margin-bottom: 1.5rem; font-size: 1.6rem; text-align: center;">Why Reproductive Fluids Render Impure</h4>
+      <p style="text-align: center; color: var(--text-gray); margin-bottom: 2rem; font-size: 0.95rem;">
+        Not about shame or disgust—these are symbols of life at the boundary of death
+      </p>
+
+      <div class="reproductive-fluids-explanation">
+        <div class="fluids-intro">
+          <p style="font-size: 1.05rem; line-height: 1.8; color: #475569;">
+            In ancient Hebrew thought, reproductive fluids were understood as <strong>life substances</strong>—the very essence of potential life. When these fluids are "out of place" (leaked, expelled, flowing), it signals mortality and the reality of living outside Eden.
+          </p>
+        </div>
+
+        <div class="fluids-grid">
+          <div class="fluid-card">
+            <div class="fluid-icon">🌱</div>
+            <div class="fluid-term-hebrew">זֶרַע</div>
+            <div class="fluid-term-transliteration">zera</div>
+            <div class="fluid-term-english">Male Seed</div>
+            <div class="fluid-explanation">
+              Agricultural imagery: "seed" that brings forth life. When leaked outside procreation (nocturnal emission, etc.), it symbolizes <strong>life-force being wasted</strong>—a marker of mortality and disorder.
+            </div>
+          </div>
+
+          <div class="fluid-card">
+            <div class="fluid-icon">🥚</div>
+            <div class="fluid-term-hebrew">—</div>
+            <div class="fluid-term-transliteration">—</div>
+            <div class="fluid-term-english">Female Ovum/Egg</div>
+            <div class="fluid-explanation">
+              The "egg" (ovum) imagery—source of new life. During menstruation, the monthly period represents <strong>potential life unrealized</strong>, flowing away as a reminder of mortality and the absence of pregnancy.
+            </div>
+          </div>
+
+          <div class="fluid-card childbirth-card">
+            <div class="fluid-icon">👶</div>
+            <div class="fluid-term-english">Childbirth Fluids</div>
+            <div class="fluid-explanation">
+              Labor brings both mother and child to <strong>death's doorstep</strong>. Blood, amniotic fluid, and all birth-related fluids mark this threshold moment where life emerges from potential death. A successful birth is a <em>deliverance from death</em>.
+            </div>
+          </div>
+
+          <div class="fluid-card">
+            <div class="fluid-icon">🩸</div>
+            <div class="fluid-term-english">Blood & Flows</div>
+            <div class="fluid-explanation">
+              <strong>"Life is in the blood"</strong> (Lev 17:11). When blood flows out, life drains away. Bodily discharges—menstruation, emissions, flows—all symbolize the <strong>leaking of life substance</strong>, marking impurity.
+            </div>
+          </div>
+        </div>
+
+        <div class="core-logic-quote animate-on-scroll">
+          <strong>🔑 The Core Logic:</strong>
+          <p style="margin-top: 0.5rem;">
+            "I am constantly living at the border of life and death. I'm a mortal creature. Becoming impure is not morally wrong, but what it reminds me is that <strong>I live outside of Eden</strong> and that I live in a world that is not the way it's supposed to be or that it could be."
+          </p>
+          <p style="margin-top: 0.75rem; font-size: 0.9rem; color: #64748b; font-style: italic;">
+            —Tim Mackie, <a href="https://bibleproject.com/podcasts/purity-and-impurity-leviticus/" target="_blank" style="color: #2aa198; text-decoration: none; border-bottom: 1px solid #2aa198;">The Bible Project Podcast: "Purity and Impurity (Leviticus)"</a><br>
+            Leviticus Scroll • Episode 5 • June 27, 2022
+          </p>
+        </div>
+      </div>
+
+      <div class="revolutionary-inversion-box animate-on-scroll">
+        <strong>Luke's Revolutionary Inversion:</strong>
+        <p>In Leviticus, impurity can "spread" by contact—touching the unclean makes you unclean. In Luke, <strong>holiness spreads from Jesus by contact.</strong> When Jesus touches the leper, the leper becomes clean. When the bleeding woman touches Jesus, she is healed. This is Luke's narrative-theological claim: Jesus reverses the direction of contagion from exclusion to restoration.</p>
+      </div>
+
+      <!-- ENHANCED EDEN → EXILE → SANCTUARY VISUAL -->
+      <h4 style="margin-top: 3rem; margin-bottom: 1.5rem; font-size: 1.8rem; text-align: center;">The Eden → Exile → Sanctuary Pattern</h4>
+      <p style="text-align: center; color: var(--text-gray); margin-bottom: 2rem;">Click each stage to explore how sacred space evolved from Eden to Temple to Jesus</p>
+
+      <div class="eden-pattern-container">
+        <!-- Eden Stage -->
+        <div class="pattern-stage" onclick="togglePatternStage(this)">
+          <div class="pattern-stage-inner">
+            <div class="pattern-stage-front">
+              <div class="stage-icon">🌳</div>
+              <div class="stage-title">Eden</div>
+              <div class="stage-subtitle">Life with God</div>
+            </div>
+            <div class="pattern-stage-back">
+              <div class="stage-detail-content">
+                <div class="stage-detail-label">Original Sacred Space</div>
+                <div class="stage-detail-text">
+                  <strong>Tree of Life:</strong> Access to eternal life<br>
+                  <strong>God's Presence:</strong> Walking with humanity<br>
+                  <strong>Boundary:</strong> One tree forbidden (Gen 2:16-17)<br>
+                  <strong>Result:</strong> Life in unbroken fellowship
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Arrow -->
+        <div class="pattern-arrow">
+          <div class="arrow-line"></div>
+          <div class="arrow-label">East Exile<br>(Gen 3:24)</div>
+        </div>
+
+        <!-- Exile Stage -->
+        <div class="pattern-stage" onclick="togglePatternStage(this)">
+          <div class="pattern-stage-inner">
+            <div class="pattern-stage-front">
+              <div class="stage-icon">⚔️</div>
+              <div class="stage-title">Exile</div>
+              <div class="stage-subtitle">Access Restricted</div>
+            </div>
+            <div class="pattern-stage-back">
+              <div class="stage-detail-content">
+                <div class="stage-detail-label">Expelled Eastward</div>
+                <div class="stage-detail-text">
+                  <strong>Direction:</strong> Driven "east" of Eden<br>
+                  <strong>Cherubim:</strong> Guard re-entry with flaming sword<br>
+                  <strong>Loss:</strong> Access to life restricted<br>
+                  <strong>Status:</strong> "Unclean"—separated from God
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Arrow -->
+        <div class="pattern-arrow">
+          <div class="arrow-line"></div>
+          <div class="arrow-label">Temple Built<br>(Exod 25-40)</div>
+        </div>
+
+        <!-- Sanctuary Stage -->
+        <div class="pattern-stage" onclick="togglePatternStage(this)">
+          <div class="pattern-stage-inner">
+            <div class="pattern-stage-front">
+              <div class="stage-icon">🏛️</div>
+              <div class="stage-title">Sanctuary</div>
+              <div class="stage-subtitle">Eden Restored?</div>
+            </div>
+            <div class="pattern-stage-back">
+              <div class="stage-detail-content">
+                <div class="stage-detail-label">Tabernacle/Temple</div>
+                <div class="stage-detail-text">
+                  <strong>Entrance:</strong> From the east (like Eden)<br>
+                  <strong>Priests:</strong> Distinguish clean/unclean (Lev 10:10-11)<br>
+                  <strong>Cherubim:</strong> Guard Holy of Holies<br>
+                  <strong>Access:</strong> Still restricted, still guarded
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Arrow -->
+        <div class="pattern-arrow">
+          <div class="arrow-line"></div>
+          <div class="arrow-label">Jesus Comes<br>(Luke 1-2)</div>
+        </div>
+
+        <!-- Jesus Stage -->
+        <div class="pattern-stage pattern-stage-jesus" onclick="togglePatternStage(this)">
+          <div class="pattern-stage-inner">
+            <div class="pattern-stage-front">
+              <div class="stage-icon">✝️</div>
+              <div class="stage-title">Jesus</div>
+              <div class="stage-subtitle">True Temple</div>
+            </div>
+            <div class="pattern-stage-back">
+              <div class="stage-detail-content">
+                <div class="stage-detail-label">Access Restored</div>
+                <div class="stage-detail-text">
+                  <strong>Jesus:</strong> Touches and cleanses (Luke 5; 8; 17)<br>
+                  <strong>Spirit:</strong> Forms holy people (Acts 2)<br>
+                  <strong>Mission:</strong> Extends presence outward<br>
+                  <strong>Result:</strong> Return to "life with God"
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 2rem;">
+        <button class="reset-diagram-button" onclick="resetPatternStages()">🔄 Reset Pattern</button>
+      </div>
+
+      <!-- UNCLEAN TAXONOMY GRID -->
+      <h4 style="margin-top: 3rem; margin-bottom: 1rem; font-size: 1.6rem; text-align: center;">What "Unclean" Signifies: Symbolic Categories</h4>
+      <p style="text-align: center; color: var(--text-gray); margin-bottom: 2rem; font-size: 0.95rem;">
+        Not exhaustive—designed for reading Luke's boundary-crossing scenes
+      </p>
+
+      <div class="unclean-grid">
+        <div class="unclean-category animate-on-scroll animation-delay-100">
+          <span class="category-icon">💀</span>
+          <h5 class="category-title">Death Proximity</h5>
+          <p class="category-description">
+            Contact with corpses, graves, or anything associated with death makes one ritually unclean. Death is the ultimate separation from the God of life.
+          </p>
+          <div class="category-examples">
+            Examples: Touching corpse (Lev 21:1-4), burial sites, bones
+          </div>
+        </div>
+
+        <div class="unclean-category animate-on-scroll animation-delay-200">
+          <span class="category-icon">🩸</span>
+          <h5 class="category-title">Blood & Bodily Flows</h5>
+          <p class="category-description">
+            Menstruation, childbirth, bodily discharges—natural processes that involve loss of "life-fluid" require purification before approaching sacred space.
+          </p>
+          <div class="category-examples">
+            Examples: Menstrual flow (Lev 15:19-30), childbirth (Lev 12), discharge (Lev 15:1-15)
+          </div>
+        </div>
+
+        <div class="unclean-category animate-on-scroll animation-delay-300">
+          <span class="category-icon">🦠</span>
+          <h5 class="category-title">Skin Conditions</h5>
+          <p class="category-description">
+            Tzara'at (often translated "leprosy") and other skin conditions symbolized decay and death-like deterioration, requiring priestly examination and isolation.
+          </p>
+          <div class="category-examples">
+            Examples: Tzara'at (Lev 13-14), scaly conditions, mildew on fabric/buildings
+          </div>
+        </div>
+
+        <div class="unclean-category animate-on-scroll animation-delay-400">
+          <span class="category-icon">🍖</span>
+          <h5 class="category-title">Food Boundaries</h5>
+          <p class="category-description">
+            Clean vs. unclean animals establish Israel's distinctiveness. Eating unclean animals (scavengers, bottom-feeders, predators) violates covenant boundaries.
+          </p>
+          <div class="category-examples">
+            Examples: Pork, shellfish, birds of prey (Lev 11), mixing categories
+          </div>
+        </div>
+
+        <div class="unclean-category animate-on-scroll animation-delay-500">
+          <span class="category-icon">🗿</span>
+          <h5 class="category-title">Idolatry & Exile</h5>
+          <p class="category-description">
+            Contact with foreign gods, idolatrous practices, or peoples who worship idols renders one spiritually and ritually compromised.
+          </p>
+          <div class="category-examples">
+            Examples: Foreign altars, idol worship sites, syncretistic practices
+          </div>
+        </div>
+
+        <div class="unclean-category animate-on-scroll animation-delay-600">
+          <span class="category-icon">👥</span>
+          <h5 class="category-title">Social Exclusion</h5>
+          <p class="category-description">
+            Certain groups (Gentiles, Samaritans, tax collectors, "sinners") are treated as permanently "unclean" in Second Temple Jewish social practice.
+          </p>
+          <div class="category-examples">
+            Examples: Gentile nations, those excluded from temple, marginalized groups
+          </div>
+        </div>
+      </div>
+
+      <div class="teaching-tip" style="margin-top: 2rem;">
+        <strong>📚 Teaching Tip:</strong> Use the Eden → East → Temple pattern to show students that "clean/unclean" is about <em>access to life with God</em>, not moral categories. This prevents modern moralizing of ritual impurity. Emphasize that Jesus doesn't abolish distinctions—he becomes the one through whom approach to God is possible, transforming the direction of contagion from exclusion to restoration.
+      </div>
+
+      <!-- JESUS SYSTEMATICALLY ADDRESSING LEVITICUS 11-15 -->
+      <h4 style="margin-top: 3.5rem; margin-bottom: 1.5rem; font-size: 1.8rem; text-align: center;">Jesus' Systematic Response to Leviticus 11–15</h4>
+      <p style="text-align: center; color: var(--text-gray); margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto; font-size: 1.05rem;">
+        Luke intentionally places Jesus in contact with <strong>every category from Leviticus 11–15</strong>, showing him as the Holy One of God whose contagious holiness transforms rather than being defiled.
+      </p>
+
+      <div class="leviticus-checklist">
+        <div class="checklist-item leviticus-11">
+          <div class="checklist-header">
+            <div class="checkbox-icon">✓</div>
+            <div class="chapter-reference">Leviticus 11</div>
+            <div class="category-name">Food Laws & Clean/Unclean Animals</div>
+          </div>
+          <div class="checklist-content">
+            <div class="leviticus-context">
+              <strong>Levitical Rule:</strong> Certain animals are inherently unclean; eating them or touching their carcasses renders one impure. Kosher diet separates Israel from nations.
+            </div>
+            <div class="jesus-response">
+              <strong>Jesus' Response:</strong> Declares all foods clean (Mark 7:19). Eats with "sinners and tax collectors" (Luke 5:29-32; 15:1-2), entering homes where food laws would be violated. Accepts hospitality from those outside kosher boundaries.
+            </div>
+            <div class="luke-passage">
+              <strong>Key Luke Passages:</strong> Luke 5:27-32 (Levi's banquet); 7:36-50 (Pharisee's home); 11:37-41 (unwashed hands); 15:1-2 (eating with sinners)
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist-item leviticus-12">
+          <div class="checklist-header">
+            <div class="checkbox-icon">✓</div>
+            <div class="chapter-reference">Leviticus 12</div>
+            <div class="category-name">Childbirth & Female Reproductive Fluids</div>
+          </div>
+          <div class="checklist-content">
+            <div class="leviticus-context">
+              <strong>Levitical Rule:</strong> Woman who gives birth is unclean for 7 days (male child) or 14 days (female child), requiring 33/66 additional days of purification before approaching the sanctuary.
+            </div>
+            <div class="jesus-response">
+              <strong>Jesus' Response:</strong> Born of Mary, who undergoes purification (Luke 2:22-24). Later touches and heals women (Luke 8:43-48; 13:10-17), showing no concern for ritual contamination from female bodies.
+            </div>
+            <div class="luke-passage">
+              <strong>Key Luke Passages:</strong> Luke 2:22-24 (Mary's purification); 8:43-48 (woman with bleeding); 13:10-17 (bent woman healed on Sabbath)
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist-item leviticus-13-14">
+          <div class="checklist-header">
+            <div class="checkbox-icon">✓</div>
+            <div class="chapter-reference">Leviticus 13–14</div>
+            <div class="category-name">Skin Diseases (צָרַעַת / Leprosy)</div>
+          </div>
+          <div class="checklist-content">
+            <div class="leviticus-context">
+              <strong>Levitical Rule:</strong> Those with skin diseases (צָרַעַת tsara'at) must live outside the camp, cry "Unclean! Unclean!" and avoid all contact. Healing requires priestly examination and elaborate purification ritual.
+            </div>
+            <div class="jesus-response">
+              <strong>Jesus' Response:</strong> <strong>TOUCHES lepers</strong>—the most shocking violation (Luke 5:12-16; 17:11-19). Instead of becoming unclean, Jesus' holiness flows outward, cleansing them. Sends them to priests for Levitical certification.
+            </div>
+            <div class="luke-passage">
+              <strong>Key Luke Passages:</strong> Luke 5:12-16 (leper cleansed—"he stretched out his hand and TOUCHED him"); 17:11-19 (ten lepers cleansed, Samaritan returns)
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist-item leviticus-15">
+          <div class="checklist-header">
+            <div class="checkbox-icon">✓</div>
+            <div class="chapter-reference">Leviticus 15</div>
+            <div class="category-name">Bodily Discharges & Reproductive Fluids</div>
+          </div>
+          <div class="checklist-content">
+            <div class="leviticus-context">
+              <strong>Levitical Rule:</strong> Any bodily discharge (male emissions, female menstruation, etc.) renders a person unclean. Contact with such a person spreads impurity. Requires washing, waiting 7 days, and sacrifice.
+            </div>
+            <div class="jesus-response">
+              <strong>Jesus' Response:</strong> The woman with 12-year hemorrhage <strong>touches Jesus</strong> (Luke 8:43-48)—a double violation (menstrual impurity + intentional contact). Jesus is not defiled; instead, "power went out from him" and she is healed. He calls her "daughter," restoring her to community.
+            </div>
+            <div class="luke-passage">
+              <strong>Key Luke Passages:</strong> Luke 8:43-48 (woman with bleeding touches Jesus' garment—"Who touched me? I felt power go out from me")
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist-item bonus-category">
+          <div class="checklist-header">
+            <div class="checkbox-icon">✓</div>
+            <div class="chapter-reference">Bonus</div>
+            <div class="category-name">Death Itself (Ultimate Impurity)</div>
+          </div>
+          <div class="checklist-content">
+            <div class="leviticus-context">
+              <strong>Levitical Rule:</strong> Contact with corpses is the most severe form of impurity (Num 19). Even priests avoid the dead except for close family. Seven-day purification required.
+            </div>
+            <div class="jesus-response">
+              <strong>Jesus' Response:</strong> <strong>TOUCHES dead bodies</strong> multiple times (Luke 7:11-17 widow's son; 8:49-56 Jairus's daughter). Instead of becoming defiled, Jesus' life-giving power raises the dead. Life conquers death.
+            </div>
+            <div class="luke-passage">
+              <strong>Key Luke Passages:</strong> Luke 7:14 (touches the bier—"Young man, I say to you, arise!"); 8:54 (takes dead girl's hand—"Child, arise!")
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pattern-summary-box animate-on-scroll">
+        <strong>✨ The Pattern:</strong>
+        <p style="margin-top: 0.75rem;">
+          Luke has <strong>systematically shown Jesus addressing every impurity category from Leviticus 11–15</strong>, plus death itself. This is not accidental. Luke is demonstrating that Jesus is the <em>Holy One of God</em> (Luke 4:34) whose holiness is <strong>contagious in the opposite direction</strong>. Where Leviticus teaches that impurity spreads by contact, Jesus teaches that <strong>holiness spreads by contact</strong>. This is the theological revolution at the heart of Luke-Acts: access to God is no longer about avoiding impurity, but about encountering the Holy One who transforms it.
+        </p>
       </div>
     </div>
 
@@ -800,7 +3759,7 @@
       <div class="passage-cards-container">
 
         <!-- Acts 2:42-47 -->
-        <div class="passage-card">
+        <div class="passage-card animate-on-scroll animation-delay-300">
           <h4>Acts 2:42–47</h4>
           <p><strong>Tags:</strong>
             <span class="tag">Table</span>
@@ -815,7 +3774,7 @@
         </div>
 
         <!-- Acts 10-11 -->
-        <div class="passage-card">
+        <div class="passage-card animate-on-scroll animation-delay-400">
           <h4>Acts 10–11</h4>
           <p><strong>Tags:</strong>
             <span class="tag">Clean/unclean</span>
@@ -830,7 +3789,7 @@
         </div>
 
         <!-- Acts 15 -->
-        <div class="passage-card">
+        <div class="passage-card animate-on-scroll animation-delay-500">
           <h4>Acts 15</h4>
           <p><strong>Tags:</strong>
             <span class="tag">Jerusalem Council</span>
@@ -845,7 +3804,7 @@
         </div>
 
         <!-- Acts 28:31 -->
-        <div class="passage-card">
+        <div class="passage-card animate-on-scroll animation-delay-100">
           <h4>Acts 28:31</h4>
           <p><strong>Tags:</strong>
             <span class="tag">Unhindered</span>
@@ -865,61 +3824,223 @@
     <!-- SECOND TEMPLE CONTEXT -->
     <div class="theology-card animate-on-scroll" id="second-temple">
       <h3>Second Temple Purity Context (Why Luke's Scenes Land)</h3>
-      <p>
+      <p style="font-size: 1.05rem; line-height: 1.8; text-align: center; max-width: 900px; margin: 0 auto 2rem;">
         Luke assumes a Second Temple world where purity is not theoretical; it shapes social life: <strong>meals, touch, bodily states, illness, and Gentile contact</strong>. This context helps explain why Luke's repeated "touch" scenes are narratively explosive.
       </p>
 
-      <div class="grid-2">
-        <div class="panel">
-          <h4>🏛️ Temple (center): graded holiness</h4>
-          <ul>
-            <li>Increasing sanctity toward the inner courts</li>
-            <li>Purity practices protect approach</li>
-          </ul>
+      <!-- TEMPLE HOLINESS ZONES VISUAL -->
+      <h4 style="margin-top: 3rem; margin-bottom: 1.5rem; font-size: 1.6rem; text-align: center;">Temple Holiness: Graded Zones of Sacred Space</h4>
+      <p style="text-align: center; color: var(--text-gray); margin-bottom: 2rem; font-size: 0.95rem;">
+        Hover over each zone to see who could enter and what restrictions applied
+      </p>
+
+      <div class="temple-zones-container">
+        <div class="temple-zones">
+          <!-- Outermost Zone: Court of Gentiles -->
+          <div class="holiness-zone zone-gentiles" data-zone="gentiles">
+            <div class="zone-label">Court of Gentiles</div>
+            <div class="zone-info">
+              <strong>Who:</strong> Anyone (including non-Jews)<br>
+              <strong>Access:</strong> Unrestricted<br>
+              <strong>Function:</strong> Commerce, teaching
+            </div>
+          </div>
+
+          <!-- Second Zone: Court of Women -->
+          <div class="holiness-zone zone-women" data-zone="women">
+            <div class="zone-label">Court of Women</div>
+            <div class="zone-info">
+              <strong>Who:</strong> Ritually pure Jews<br>
+              <strong>Access:</strong> Requires purity<br>
+              <strong>Function:</strong> Prayer, offerings
+            </div>
+          </div>
+
+          <!-- Third Zone: Court of Israel -->
+          <div class="holiness-zone zone-israel" data-zone="israel">
+            <div class="zone-label">Court of Israel</div>
+            <div class="zone-info">
+              <strong>Who:</strong> Jewish men<br>
+              <strong>Access:</strong> Higher purity required<br>
+              <strong>Function:</strong> Witness sacrifices
+            </div>
+          </div>
+
+          <!-- Fourth Zone: Court of Priests -->
+          <div class="holiness-zone zone-priests" data-zone="priests">
+            <div class="zone-label">Court of Priests</div>
+            <div class="zone-info">
+              <strong>Who:</strong> Priests only<br>
+              <strong>Access:</strong> Strict purity<br>
+              <strong>Function:</strong> Perform sacrifices
+            </div>
+          </div>
+
+          <!-- Innermost Zone: Holy of Holies -->
+          <div class="holiness-zone zone-holiest" data-zone="holiest">
+            <div class="zone-label">Holy of Holies</div>
+            <div class="zone-info">
+              <strong>Who:</strong> High Priest alone<br>
+              <strong>Access:</strong> Once yearly (Yom Kippur)<br>
+              <strong>Function:</strong> Atonement ritual
+            </div>
+          </div>
+
+          <!-- Center - God's Presence -->
+          <div class="holiness-center">
+            <span class="center-icon">✨</span>
+            <div class="center-text">God's<br>Presence</div>
+          </div>
         </div>
-        <div class="panel">
-          <h4>🍽️ Table (portable): meal fellowship</h4>
-          <ul>
-            <li>"Who may eat with whom?" becomes a holiness question</li>
-            <li>Luke's table scenes are therefore boundary battlegrounds</li>
-          </ul>
+
+        <div class="zone-legend">
+          <div class="legend-item">
+            <span class="legend-color" style="background: rgba(156, 39, 176, 0.2);"></span>
+            <span>Least restricted</span>
+          </div>
+          <div class="legend-arrow">→</div>
+          <div class="legend-item">
+            <span class="legend-color" style="background: rgba(156, 39, 176, 0.9);"></span>
+            <span>Most restricted</span>
+          </div>
         </div>
       </div>
 
-      <h4 style="margin-top: 1.5rem;">Second Temple "Purity Intensification" (brief notes)</h4>
-      <ul>
-        <li><strong>Purity extends beyond the Temple:</strong> practices like washing before meals signal a worldview where holiness can (and should) shape ordinary space</li>
-        <li><strong>Multiple purity "schools" exist:</strong> Luke's world includes diverse Jewish perspectives (Pharisaic traditions; priestly concerns; sectarian rigor at Qumran)</li>
-        <li><strong>Gentile contact raises "boundary" questions:</strong> Acts 10–15 makes explicit what Luke's Gospel dramatizes in miniature (touching, eating, welcoming outsiders)</li>
-      </ul>
+      <!-- PURITY INTENSIFICATION GRID -->
+      <h4 style="margin-top: 3rem; margin-bottom: 1.5rem; font-size: 1.6rem; text-align: center;">Second Temple Purity Intensification</h4>
+      <p style="text-align: center; color: var(--text-gray); margin-bottom: 2rem; font-size: 0.95rem;">
+        How holiness expanded beyond the Temple into everyday life
+      </p>
+
+      <div class="purity-intensification-grid">
+        <div class="intensification-card animate-on-scroll animation-delay-100">
+          <div class="card-icon">🏛️→🏠</div>
+          <h5 class="card-title">Temple → Home</h5>
+          <p class="card-description">
+            Purity practices extend beyond the Temple. Hand-washing before meals, food laws, and bodily purity become markers of covenant faithfulness in daily life.
+          </p>
+          <div class="card-example">
+            <strong>Example:</strong> Pharisaic traditions of ritual washing (Mark 7:3-4)
+          </div>
+        </div>
+
+        <div class="intensification-card animate-on-scroll animation-delay-200">
+          <div class="card-icon">🍽️</div>
+          <h5 class="card-title">Table Fellowship</h5>
+          <p class="card-description">
+            "Who may eat with whom?" becomes a holiness question. Meals aren't just social—they're theological. Sharing table = sharing fellowship = shared status before God.
+          </p>
+          <div class="card-example">
+            <strong>Example:</strong> Luke's table scenes are boundary battlegrounds (5:29-32; 7:36-50; 14:1-24)
+          </div>
+        </div>
+
+        <div class="intensification-card animate-on-scroll animation-delay-300">
+          <div class="card-icon">🤝→❌</div>
+          <h5 class="card-title">Touch & Contact</h5>
+          <p class="card-description">
+            Physical contact with the "unclean" defiles. Skin conditions, bodily flows, corpses, Gentiles—all create contagion through touch. Isolation protects holiness.
+          </p>
+          <div class="card-example">
+            <strong>Example:</strong> Jesus touching lepers (Luke 5:12-16) breaks this logic
+          </div>
+        </div>
+
+        <div class="intensification-card animate-on-scroll animation-delay-400">
+          <div class="card-icon">🌍</div>
+          <h5 class="card-title">Gentile Boundaries</h5>
+          <p class="card-description">
+            Non-Jews are perpetually "unclean" in Second Temple thinking. Entering Gentile spaces, eating Gentile food, or close association threatens Jewish purity.
+          </p>
+          <div class="card-example">
+            <strong>Example:</strong> Peter's vision and Cornelius (Acts 10-11) addresses this directly
+          </div>
+        </div>
+
+        <div class="intensification-card animate-on-scroll animation-delay-500">
+          <div class="card-icon">📜</div>
+          <h5 class="card-title">Multiple Schools</h5>
+          <p class="card-description">
+            Diverse Jewish perspectives exist: Pharisaic oral traditions, priestly concerns about temple service, sectarian rigor at Qumran. Luke navigates this complex landscape.
+          </p>
+          <div class="card-example">
+            <strong>Example:</strong> Debates about Sabbath observance and purity definitions
+          </div>
+        </div>
+
+        <div class="intensification-card animate-on-scroll animation-delay-600">
+          <div class="card-icon">💫</div>
+          <h5 class="card-title">Holiness = Separation</h5>
+          <p class="card-description">
+            The core logic: holiness means being "set apart." Pure separates from impure, clean from unclean, Jew from Gentile, insider from outsider. Boundaries define identity.
+          </p>
+          <div class="card-example">
+            <strong>Example:</strong> Jesus inverts this—holiness becomes contagious outward (Luke 8:43-48)
+          </div>
+        </div>
+      </div>
+
+      <!-- JESUS' REVOLUTIONARY APPROACH -->
+      <div class="jesus-revolutionary-box animate-on-scroll">
+        <strong>🔄 Jesus' Revolutionary Approach:</strong>
+        <p style="margin-top: 0.75rem;">
+          In this Second Temple context, Jesus doesn't abolish purity—he <strong>reverses its direction</strong>. 
+          Instead of uncleanness spreading by contact (leper → Jesus = both unclean), 
+          <strong>holiness spreads</strong> by contact (Jesus → leper = both clean). 
+          Luke narratively demonstrates what Acts 10-15 makes explicit: God is redefining the boundaries of 
+          his people, and holiness is no longer about separation but about restoration and inclusion.
+        </p>
+      </div>
     </div>
 
     <!-- TEACHING SUMMARY -->
     <div class="theology-card animate-on-scroll" id="teaching-summary">
       <h3>Teaching Summary: What This Reading Clarifies</h3>
-      <div class="grid-3">
-        <div class="panel">
-          <h4>🧭 Narrative Coherence</h4>
-          <p>
+      
+      <!-- ENHANCED VISUAL GRID WITH HOVER -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+        <div class="core-component-card" style="border-top: 4px solid #2aa198;">
+          <h4 style="color: #2aa198; margin-bottom: 1rem; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem;">
+            🧭 Narrative Coherence
+          </h4>
+          <p style="margin: 0; color: #475569; font-size: 0.95rem; line-height: 1.8;">
             Luke's healings and meals become legible as one coherent pattern: <strong>uncleanness/exclusion → cleansing → restored access → worship/mission</strong>.
           </p>
+          <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0; font-size: 0.85rem; color: #64748b;">
+            <strong style="color: #2aa198;">Result:</strong> Every touch, meal, and healing fits the Levitical logic.
+          </div>
         </div>
-        <div class="panel">
-          <h4>🕊️ Holiness Re-centered</h4>
-          <p>
+
+        <div class="core-component-card" style="border-top: 4px solid #9c27b0;">
+          <h4 style="color: #9c27b0; margin-bottom: 1rem; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem;">
+            🕊️ Holiness Re-centered
+          </h4>
+          <p style="margin: 0; color: #475569; font-size: 0.95rem; line-height: 1.8;">
             Holiness is not minimized; it is <strong>re-centered on Jesus</strong> and enacted by the Spirit as a community ethic (justice, mercy, unity, truth).
           </p>
+          <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0; font-size: 0.85rem; color: #64748b;">
+            <strong style="color: #9c27b0;">Result:</strong> Holiness becomes relational, not merely ritualistic.
+          </div>
         </div>
-        <div class="panel">
-          <h4>🌍 Mission as Sacred Space</h4>
-          <p>
+
+        <div class="core-component-card" style="border-top: 4px solid #d4af37;">
+          <h4 style="color: #d4af37; margin-bottom: 1rem; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem;">
+            🌍 Mission as Sacred Space
+          </h4>
+          <p style="margin: 0; color: #475569; font-size: 0.95rem; line-height: 1.8;">
             Acts portrays mission as the outward movement of God's presence: holiness is no longer confined to a building but travels as a people.
           </p>
+          <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0; font-size: 0.85rem; color: #64748b;">
+            <strong style="color: #d4af37;">Result:</strong> God's presence is mobile, not stationary.
+          </div>
         </div>
       </div>
 
-      <div class="key-insight" style="margin-top: 1.5rem;">
-        <strong>One-line takeaway:</strong> Leviticus teaches Israel how to live near God; Luke-Acts claims Jesus and the Spirit make that nearness possible—and then send it outward.
+      <div class="one-line-takeaway-box animate-on-scroll">
+        <strong>One-line takeaway:</strong> 
+        <p style="margin-top: 0.5rem; font-size: 1.05rem;">
+          Leviticus teaches Israel how to live near God; Luke-Acts claims Jesus and the Spirit make that nearness possible—and then send it outward.
+        </p>
       </div>
     </div>
 
@@ -971,6 +4092,15 @@
             <div class="source-usage">
               <span class="usage-tag">Symbolic Theology</span>
               <span class="usage-note">Foundational anthropological framework for purity as symbolic system</span>
+            </div>
+          </div>
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Mackie, Tim and Jon Collins.</strong> "Purity and Impurity (Leviticus)." <em>The Bible Project Podcast.</em> Leviticus Scroll, Episode 5. June 27, 2022. <a href="https://bibleproject.com/podcasts/purity-and-impurity-leviticus/" target="_blank" style="color: #2aa198; text-decoration: none; border-bottom: 1px dotted #2aa198;">https://bibleproject.com/podcasts/purity-and-impurity-leviticus/</a>
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Accessible Overview</span>
+              <span class="usage-note">Excellent introduction to Levitical purity categories, Hebrew vocabulary (kadosh/chol/tahor/tameh), and the Eden-exile-sanctuary pattern. Source for reproductive fluids symbolism and ritual impurity ≠ sin framework used in this study.</span>
             </div>
           </div>
         </div>
@@ -1050,6 +4180,126 @@
 
 <!-- Character Page Script with Dynamic Mobile Tabs + Quick Nav -->
 <script src="/assets/js/character-page-v5-8.js" defer></script>
+
+<!-- Pattern Stage Interaction Scripts -->
+<script>
+  // Toggle pattern stage cards
+  function togglePatternStage(element) {
+    element.classList.toggle('flipped');
+  }
+
+  // Reset all pattern stages
+  function resetPatternStages() {
+    document.querySelectorAll('.pattern-stage').forEach(stage => {
+      stage.classList.remove('flipped');
+    });
+  }
+
+  // Add animation on scroll for pattern stages
+  document.addEventListener('DOMContentLoaded', function() {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-on-scroll');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.pattern-stage, .unclean-category').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Thesis card animation observer
+    const thesisObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    const thesisCard = document.querySelector('.thesis-card');
+    if (thesisCard) {
+      thesisObserver.observe(thesisCard);
+    }
+
+    // Temple zones hover detection - handle concentric circles properly
+    const templeZones = document.querySelectorAll('.holiness-zone');
+    const templeContainer = document.querySelector('.temple-zones');
+    
+    if (templeContainer) {
+      templeContainer.addEventListener('mousemove', function(e) {
+        const rect = templeContainer.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        
+        // Calculate distance from center
+        const dx = mouseX - centerX;
+        const dy = mouseY - centerY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const maxDistance = rect.width / 2;
+        const relativeDistance = distance / maxDistance;
+        
+        // Determine which zone based on distance (0 = center, 1 = edge)
+        let activeZone = null;
+        
+        if (relativeDistance < 0.07) {
+          // Center (not a zone, just the icon)
+          activeZone = null;
+        } else if (relativeDistance < 0.125) {
+          activeZone = document.querySelector('.zone-holiest');
+        } else if (relativeDistance < 0.25) {
+          activeZone = document.querySelector('.zone-priests');
+        } else if (relativeDistance < 0.50) {
+          activeZone = document.querySelector('.zone-israel');
+        } else if (relativeDistance < 0.75) {
+          activeZone = document.querySelector('.zone-women');
+        } else if (relativeDistance < 1.0) {
+          activeZone = document.querySelector('.zone-gentiles');
+        }
+        
+        // Remove active class from all zones
+        templeZones.forEach(z => z.classList.remove('zone-hover'));
+        
+        // Add active class to the detected zone
+        if (activeZone) {
+          activeZone.classList.add('zone-hover');
+        }
+      });
+      
+      templeContainer.addEventListener('mouseleave', function() {
+        templeZones.forEach(z => z.classList.remove('zone-hover'));
+      });
+    }
+
+    // Temple zones click functionality
+    templeZones.forEach(zone => {
+      zone.addEventListener('click', function(e) {
+        e.stopPropagation();
+        
+        // Remove active class from all zones
+        templeZones.forEach(z => z.classList.remove('zone-active'));
+        
+        // Add active class to clicked zone
+        this.classList.add('zone-active');
+      });
+    });
+
+    // Click outside to close all zones
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.holiness-zone')) {
+        templeZones.forEach(z => z.classList.remove('zone-active'));
+      }
+    });
+  });
+</script>
 
 </body>
 </html>
