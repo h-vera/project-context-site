@@ -4884,42 +4884,43 @@
 
 <!-- Pattern Stage Interaction Scripts -->
 <script>
-  // Toggle pattern stage cards
+  // Toggle pattern stage cards (can be called immediately)
   function togglePatternStage(element) {
     element.classList.toggle('flipped');
   }
 
-  // Reset all pattern stages
+  // Reset all pattern stages (can be called immediately)
   function resetPatternStages() {
     document.querySelectorAll('.pattern-stage').forEach(stage => {
       stage.classList.remove('flipped');
     });
   }
 
-  // Q&A Pill interactions
+  // SINGLE DOMContentLoaded listener for all page-specific functionality
   document.addEventListener('DOMContentLoaded', function() {
+    
+    // ============================================
+    // Q&A PILL INTERACTIONS
+    // ============================================
     const qaPills = document.querySelectorAll('.qa-pill');
     
     qaPills.forEach(pill => {
       const question = pill.querySelector('.qa-pill-question');
       
-      question.addEventListener('click', function() {
-        // Check if this pill is already active
-        const isActive = pill.classList.contains('active');
-        
-        // Close all pills
-        qaPills.forEach(p => p.classList.remove('active'));
-        
-        // If it wasn't active, open it
-        if (!isActive) {
-          pill.classList.add('active');
-        }
-      });
+      if (question) {
+        question.addEventListener('click', function() {
+          const isActive = pill.classList.contains('active');
+          qaPills.forEach(p => p.classList.remove('active'));
+          if (!isActive) {
+            pill.classList.add('active');
+          }
+        });
+      }
     });
-  });
 
-  // Add animation on scroll for pattern stages
-  document.addEventListener('DOMContentLoaded', function() {
+    // ============================================
+    // PATTERN STAGES ANIMATION
+    // ============================================
     const observerOptions = {
       threshold: 0.1,
       rootMargin: '0px 0px -50px 0px'
@@ -4937,7 +4938,9 @@
       observer.observe(el);
     });
 
-    // Thesis card animation observer
+    // ============================================
+    // THESIS CARD ANIMATION
+    // ============================================
     const thesisObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -4951,18 +4954,18 @@
       thesisObserver.observe(thesisCard);
     }
 
-    // Temple zones hover detection - handle concentric circles properly
+    // ============================================
+    // TEMPLE ZONES INTERACTION
+    // ============================================
     const templeZones = document.querySelectorAll('.holiness-zone');
     const templeContainer = document.querySelector('.temple-zones');
     const zoneInfoContents = document.querySelectorAll('.zone-info-content');
     
     function showZoneInfo(zoneName) {
-      // Hide all info boxes
       zoneInfoContents.forEach(content => {
         content.classList.remove('active');
       });
       
-      // Show the selected zone's info
       if (zoneName) {
         const selectedInfo = document.querySelector(`.zone-info-content[data-zone="${zoneName}"]`);
         if (selectedInfo) {
@@ -4972,6 +4975,7 @@
     }
     
     if (templeContainer) {
+      // Mouse hover detection
       templeContainer.addEventListener('mousemove', function(e) {
         const rect = templeContainer.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
@@ -4979,19 +4983,16 @@
         const mouseX = e.clientX;
         const mouseY = e.clientY;
         
-        // Calculate distance from center
         const dx = mouseX - centerX;
         const dy = mouseY - centerY;
         const distance = Math.sqrt(dx * dx + dy * dy);
         const maxDistance = rect.width / 2;
         const relativeDistance = distance / maxDistance;
         
-        // Determine which zone based on distance (0 = center, 1 = edge)
         let activeZone = null;
         let zoneName = null;
         
         if (relativeDistance < 0.07) {
-          // Center (not a zone, just the icon)
           activeZone = null;
           zoneName = null;
         } else if (relativeDistance < 0.125) {
@@ -5011,10 +5012,8 @@
           zoneName = 'gentiles';
         }
         
-        // Remove hover class from all zones
         templeZones.forEach(z => z.classList.remove('zone-hover'));
         
-        // Add hover class to the detected zone
         if (activeZone) {
           activeZone.classList.add('zone-hover');
           showZoneInfo(zoneName);
@@ -5023,37 +5022,30 @@
       
       templeContainer.addEventListener('mouseleave', function() {
         templeZones.forEach(z => z.classList.remove('zone-hover'));
-        // Optionally hide info when mouse leaves
-        // zoneInfoContents.forEach(content => content.classList.remove('active'));
       });
     }
 
-    // Temple zones click functionality
+    // Click functionality
     templeZones.forEach(zone => {
       zone.addEventListener('click', function(e) {
         e.stopPropagation();
         
         const zoneName = this.getAttribute('data-zone');
-        
-        // Remove active class from all zones
         templeZones.forEach(z => z.classList.remove('zone-active'));
-        
-        // Add active class to clicked zone
         this.classList.add('zone-active');
-        
-        // Show info for clicked zone
         showZoneInfo(zoneName);
       });
     });
 
-    // Click outside to close all zones
+    // Click outside to close
     document.addEventListener('click', function(e) {
       if (!e.target.closest('.holiness-zone') && !e.target.closest('.zone-info-display')) {
         templeZones.forEach(z => z.classList.remove('zone-active'));
         zoneInfoContents.forEach(content => content.classList.remove('active'));
       }
     });
-  });
+    
+  }); // End of single DOMContentLoaded
 </script>
 
 </body>
