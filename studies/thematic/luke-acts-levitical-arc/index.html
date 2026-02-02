@@ -987,10 +987,9 @@
     pointer-events: auto;
   }
 
-  .holiness-zone.zone-hover,
-  .holiness-zone:hover {
-    z-index: 1000 !important;
-  }
+  .holiness-zone.zone-hover {
+  z-index: 1000 !important;
+}
 
   .holiness-zone.zone-active {
     z-index: 1000 !important;
@@ -1149,6 +1148,50 @@
     white-space: nowrap;
   }
 
+  /* Sacred center: subtle breathing presence */
+.holiness-center {
+  z-index: 2000;
+  pointer-events: none;
+  animation: sacredBreath 5.5s ease-in-out infinite;
+  will-change: transform, box-shadow;
+}
+
+@keyframes sacredBreath {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 0 16px rgba(255, 215, 0, 0.35),
+      0 0 32px rgba(255, 165, 0, 0.20);
+  }
+  50% {
+    transform: scale(1.025); /* very slight */
+    box-shadow:
+      0 0 26px rgba(255, 215, 0, 0.55),
+      0 0 56px rgba(255, 165, 0, 0.35);
+  }
+}
+
+.holiness-center::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 215, 0, 0.18),
+    transparent 65%
+  );
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Accessibility: no motion if user prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .holiness-center {
+    animation: none;
+  }
+}
+
   /* Zone Legend */
   .zone-legend {
     display: flex;
@@ -1181,6 +1224,335 @@
     color: #9c27b0;
     font-weight: 700;
   }
+
+  /* ============================================
+   TEMPLE HOLINESS ZONES — CONCENTRIC CIRCLES
+   Clean, stable, single-source version
+   ============================================ */
+
+/* ----------------------------
+   Container
+   ---------------------------- */
+.temple-zones-container {
+  max-width: 800px;
+  margin: 2rem auto;
+}
+
+.temple-zones {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  margin: 2rem 0;
+}
+
+/* ----------------------------
+   Base zone styling
+   ---------------------------- */
+.holiness-zone {
+  position: absolute;
+  border-radius: 50%;
+  border: 3px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  pointer-events: auto;
+
+  /* Explicit transitions only (avoid transition: all) */
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+/* Never use :hover for z-index (mobile hover stickiness) */
+.holiness-zone:hover {
+  z-index: auto !important;
+}
+
+/* Hover highlight — JS-driven only, desktop only */
+@media (hover: hover) and (pointer: fine) {
+  .holiness-zone.zone-hover {
+    z-index: 1200 !important;
+  }
+}
+
+/* Selected (click / tap) — works everywhere */
+.holiness-zone.zone-active {
+  z-index: 1500 !important; /* always below center */
+  transform: scale(1.02);
+  filter: saturate(1.06);
+
+  outline: 3px solid rgba(255, 215, 0, 0.55);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(255, 215, 0, 0.12);
+}
+
+/* Labels fade on hover or selection */
+.zone-label {
+  font-weight: 800;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 0.5rem;
+  line-height: 1.3;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.holiness-zone.zone-hover .zone-label,
+.holiness-zone.zone-active .zone-label {
+  opacity: 0;
+}
+
+/* ----------------------------
+   Zones (outer → inner)
+   ---------------------------- */
+.zone-gentiles {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(156, 39, 176, 0.08);
+  border-color: rgba(156, 39, 176, 0.3);
+  z-index: 1;
+}
+
+.zone-women {
+  top: 12.5%;
+  left: 12.5%;
+  width: 75%;
+  height: 75%;
+  background: rgba(156, 39, 176, 0.15);
+  border-color: rgba(156, 39, 176, 0.4);
+  z-index: 2;
+}
+
+.zone-israel {
+  top: 25%;
+  left: 25%;
+  width: 50%;
+  height: 50%;
+  background: rgba(156, 39, 176, 0.25);
+  border-color: rgba(156, 39, 176, 0.6);
+  z-index: 3;
+}
+
+.zone-priests {
+  top: 37.5%;
+  left: 37.5%;
+  width: 25%;
+  height: 25%;
+  background: rgba(156, 39, 176, 0.4);
+  border-color: rgba(156, 39, 176, 0.8);
+  color: white;
+  z-index: 4;
+}
+
+.zone-holiest {
+  top: 43.75%;
+  left: 43.75%;
+  width: 12.5%;
+  height: 12.5%;
+  background: rgba(156, 39, 176, 0.6);
+  border-color: #9c27b0;
+  color: white;
+  z-index: 5;
+}
+
+/* ----------------------------
+   Sacred center (God’s Presence)
+   - Constant
+   - Always on top
+   - Never interactive
+   ---------------------------- */
+.holiness-center {
+  position: absolute;
+  top: 45%;
+  left: 45%;
+  width: 10%;
+  height: 10%;
+
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffd700, #ffa500);
+  border: 2px solid #ffd700;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 2000;
+  pointer-events: none;
+
+  animation: sacredBreath 5.5s ease-in-out infinite;
+  will-change: transform, box-shadow;
+  isolation: isolate;
+}
+
+.holiness-center::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 215, 0, 0.18),
+    transparent 65%
+  );
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.center-icon {
+  font-size: 1.5rem;
+}
+
+.center-text {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.1;
+  color: #1a202c;
+  margin-top: 0.15rem;
+  white-space: nowrap;
+}
+
+/* Subtle breathing (presence, not pulse) */
+@keyframes sacredBreath {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 0 16px rgba(255, 215, 0, 0.35),
+      0 0 32px rgba(255, 165, 0, 0.20);
+  }
+  50% {
+    transform: scale(1.025);
+    box-shadow:
+      0 0 26px rgba(255, 215, 0, 0.55),
+      0 0 56px rgba(255, 165, 0, 0.35);
+  }
+}
+
+/* Accessibility: respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .holiness-center { animation: none; }
+  .zone-info-content.active { animation: none; }
+}
+
+/* ----------------------------
+   Zone info display
+   ---------------------------- */
+.zone-info-display {
+  margin-top: 2rem;
+  min-height: 180px;
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 2px solid #e5e7eb;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+
+  position: relative;
+  overflow: hidden;
+}
+
+/* Optional: JS can toggle this when a zone is selected */
+.zone-info-display::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 5px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(156,39,176,0.35),
+    rgba(255,215,0,0.35)
+  );
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.zone-info-display.has-selection::before {
+  opacity: 1;
+}
+
+.zone-info-content {
+  display: none;
+}
+
+.zone-info-content.active {
+  display: block;
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.zone-info-content h5 {
+  font-size: 1.3rem;
+  color: #9c27b0;
+  margin-bottom: 1rem;
+  font-weight: 800;
+}
+
+.zone-info-content p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.zone-info-content strong {
+  color: #d4af37;
+  font-weight: 700;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ----------------------------
+   Legend
+   ---------------------------- */
+.zone-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1rem;
+  background: rgba(156, 39, 176, 0.05);
+  border-radius: 12px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.legend-color {
+  width: 40px;
+  height: 24px;
+  border-radius: 4px;
+  border: 2px solid rgba(156, 39, 176, 0.4);
+}
+
+.legend-arrow {
+  font-size: 1.5rem;
+  color: #9c27b0;
+  font-weight: 700;
+}
+
+/* ----------------------------
+   Mobile adjustments
+   ---------------------------- */
+@media (max-width: 768px) {
+  .temple-zones {
+    max-width: 400px;
+    margin: 2rem auto;
+  }
+
+  .zone-label { font-size: 0.75rem; }
+  .center-text { font-size: 0.4rem; }
+  .center-icon { font-size: 1rem; }
+}
 
   /* Purity Intensification Grid */
   .purity-intensification-grid {
@@ -5086,98 +5458,160 @@ setTimeout(function() {
       thesisObserver.observe(thesisCard);
     }
 
-    // ============================================
-    // TEMPLE ZONES INTERACTION
-    // ============================================
-    const templeZones = document.querySelectorAll('.holiness-zone');
-    const templeContainer = document.querySelector('.temple-zones');
-    const zoneInfoContents = document.querySelectorAll('.zone-info-content');
-    
-    function showZoneInfo(zoneName) {
-      zoneInfoContents.forEach(content => {
-        content.classList.remove('active');
-      });
-      
+// ============================================
+// TEMPLE ZONES INTERACTION
+// - Desktop: hover highlights + updates info (unless locked)
+// - Mobile: tap selects (locks); tap again clears
+// - Click outside clears selection
+// - Adds .has-selection to .zone-info-display for polish bar
+// ============================================
+(function initTempleZones() {
+  const templeZones = Array.from(document.querySelectorAll('.holiness-zone'));
+  const templeContainer = document.querySelector('.temple-zones');
+  const zoneInfoContents = Array.from(document.querySelectorAll('.zone-info-content'));
+  const zoneInfoDisplay = document.querySelector('.zone-info-display');
+
+  // If this page doesn't have the widget, do nothing
+  if (!templeZones.length || !templeContainer || !zoneInfoContents.length) return;
+
+  const supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  let lockedZoneName = null;
+
+  function clearHover() {
+    templeZones.forEach(z => z.classList.remove('zone-hover'));
+  }
+
+  function clearInfo() {
+    zoneInfoContents.forEach(c => c.classList.remove('active'));
+    if (zoneInfoDisplay) zoneInfoDisplay.classList.remove('has-selection');
+  }
+
+  function clearActive() {
+    templeZones.forEach(z => z.classList.remove('zone-active'));
+    lockedZoneName = null;
+    clearInfo();
+  }
+
+  function showZoneInfo(zoneName) {
+    zoneInfoContents.forEach(c => c.classList.remove('active'));
+    if (!zoneName) return;
+
+    const selected = document.querySelector(`.zone-info-content[data-zone="${zoneName}"]`);
+    if (selected) selected.classList.add('active');
+  }
+
+  function setActive(zoneName) {
+    templeZones.forEach(z => z.classList.remove('zone-active'));
+    lockedZoneName = zoneName || null;
+
+    if (!zoneName) {
+      clearInfo();
+      return;
+    }
+
+    const zoneEl = document.querySelector(`.holiness-zone[data-zone="${zoneName}"]`);
+    if (zoneEl) zoneEl.classList.add('zone-active');
+
+    showZoneInfo(zoneName);
+    if (zoneInfoDisplay) zoneInfoDisplay.classList.add('has-selection');
+  }
+
+  // ----------------------------
+  // Hover detection (desktop only)
+  // ----------------------------
+  if (supportsHover) {
+    let rafPending = false;
+    let lastEvent = null;
+
+    function computeZoneFromPointer(e) {
+      const rect = templeContainer.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      const dx = e.clientX - centerX;
+      const dy = e.clientY - centerY;
+
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const maxDistance = rect.width / 2;
+      const relativeDistance = distance / maxDistance;
+
+      // Dead zone for sacred center (prevents “center text” flicker)
+      if (relativeDistance < 0.10) return null;
+
+      if (relativeDistance < 0.125) return 'holiest';
+      if (relativeDistance < 0.25)  return 'priests';
+      if (relativeDistance < 0.50)  return 'israel';
+      if (relativeDistance < 0.75)  return 'women';
+      if (relativeDistance < 1.0)   return 'gentiles';
+
+      return null;
+    }
+
+    function handleMove(e) {
+      const zoneName = computeZoneFromPointer(e);
+
+      clearHover();
       if (zoneName) {
-        const selectedInfo = document.querySelector(`.zone-info-content[data-zone="${zoneName}"]`);
-        if (selectedInfo) {
-          selectedInfo.classList.add('active');
-        }
+        const hoverEl = document.querySelector(`.holiness-zone[data-zone="${zoneName}"]`);
+        if (hoverEl) hoverEl.classList.add('zone-hover');
       }
-    }
-    
-    if (templeContainer) {
-      // Mouse hover detection
-      templeContainer.addEventListener('mousemove', function(e) {
-        const rect = templeContainer.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        const mouseX = e.clientX;
-        const mouseY = e.clientY;
-        
-        const dx = mouseX - centerX;
-        const dy = mouseY - centerY;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        const maxDistance = rect.width / 2;
-        const relativeDistance = distance / maxDistance;
-        
-        let activeZone = null;
-        let zoneName = null;
-        
-        if (relativeDistance < 0.07) {
-          activeZone = null;
-          zoneName = null;
-        } else if (relativeDistance < 0.125) {
-          activeZone = document.querySelector('.zone-holiest');
-          zoneName = 'holiest';
-        } else if (relativeDistance < 0.25) {
-          activeZone = document.querySelector('.zone-priests');
-          zoneName = 'priests';
-        } else if (relativeDistance < 0.50) {
-          activeZone = document.querySelector('.zone-israel');
-          zoneName = 'israel';
-        } else if (relativeDistance < 0.75) {
-          activeZone = document.querySelector('.zone-women');
-          zoneName = 'women';
-        } else if (relativeDistance < 1.0) {
-          activeZone = document.querySelector('.zone-gentiles');
-          zoneName = 'gentiles';
-        }
-        
-        templeZones.forEach(z => z.classList.remove('zone-hover'));
-        
-        if (activeZone) {
-          activeZone.classList.add('zone-hover');
-          showZoneInfo(zoneName);
-        }
-      });
-      
-      templeContainer.addEventListener('mouseleave', function() {
-        templeZones.forEach(z => z.classList.remove('zone-hover'));
-      });
+
+      // Hover updates info ONLY if nothing is locked
+      if (!lockedZoneName) showZoneInfo(zoneName);
     }
 
-    // Click functionality
-    templeZones.forEach(zone => {
-      zone.addEventListener('click', function(e) {
-        e.stopPropagation();
-        
-        const zoneName = this.getAttribute('data-zone');
-        templeZones.forEach(z => z.classList.remove('zone-active'));
-        this.classList.add('zone-active');
-        showZoneInfo(zoneName);
+    templeContainer.addEventListener('mousemove', (e) => {
+      lastEvent = e;
+      if (rafPending) return;
+      rafPending = true;
+
+      requestAnimationFrame(() => {
+        rafPending = false;
+        handleMove(lastEvent);
       });
     });
 
-    // Click outside to close
-    document.addEventListener('click', function(e) {
-      if (!e.target.closest('.holiness-zone') && !e.target.closest('.zone-info-display')) {
-        templeZones.forEach(z => z.classList.remove('zone-active'));
-        zoneInfoContents.forEach(content => content.classList.remove('active'));
-      }
+    templeContainer.addEventListener('mouseleave', () => {
+      clearHover();
+      if (!lockedZoneName) showZoneInfo(null);
     });
-    
-  }); // End of single DOMContentLoaded
+  }
+
+  // ----------------------------
+  // Click / tap selection
+  // ----------------------------
+  templeZones.forEach(zone => {
+    zone.addEventListener('click', (e) => {
+      e.stopPropagation();
+
+      const zoneName = zone.getAttribute('data-zone');
+
+      // Toggle off if clicking same zone
+      if (lockedZoneName === zoneName) {
+        clearActive();
+        clearHover();
+        return;
+      }
+
+      setActive(zoneName);
+    });
+  });
+
+  // ----------------------------
+  // Click outside clears selection
+  // ----------------------------
+  document.addEventListener('click', (event) => {
+    if (!lockedZoneName) return; // only if something is selected
+
+    const clickedInsideZone = event.target.closest('.holiness-zone') !== null;
+    const clickedInsideInfo = event.target.closest('.zone-info-display') !== null;
+
+    if (!clickedInsideZone && !clickedInsideInfo) {
+      clearActive();
+      clearHover();
+    }
+  });
+})();
 </script>
 
 </body>
