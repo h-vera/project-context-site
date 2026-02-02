@@ -5048,5 +5048,39 @@
   }); // End of single DOMContentLoaded
 </script>
 
+<!-- ADD THIS TEMPORARILY FOR DEBUGGING -->
+<script>
+window.addEventListener('load', function() {
+  console.log('=== PROGRESS BAR DEBUG ===');
+  const progressBar = document.querySelector('.reading-progress');
+  console.log('Progress bar element:', progressBar);
+  
+  if (progressBar) {
+    const styles = window.getComputedStyle(progressBar);
+    console.log('Position:', styles.position);
+    console.log('Top:', styles.top);
+    console.log('Height:', styles.height);
+    console.log('Width:', styles.width);
+    console.log('Background:', styles.background);
+    console.log('Z-index:', styles.zIndex);
+    console.log('Display:', styles.display);
+    console.log('Visibility:', styles.visibility);
+  }
+  
+  // Test manual scroll
+  window.addEventListener('scroll', function() {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    
+    console.log('Scroll position:', winScroll, 'Height:', height, 'Scrolled %:', scrolled);
+    
+    if (progressBar) {
+      progressBar.style.width = scrolled + '%';
+      console.log('Set width to:', progressBar.style.width);
+    }
+  });
+});
+</script>
 </body>
 </html>
