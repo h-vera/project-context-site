@@ -4899,100 +4899,118 @@
   // SINGLE DOMContentLoaded listener for ALL page-specific functionality
   document.addEventListener('DOMContentLoaded', function() {
     
-    // ============================================
-    // ENHANCED QUICK NAV (runs after delay)
-    // ============================================
-    setTimeout(function() {
-      const quickNavSidebar = document.querySelector('.quick-nav-sidebar');
+    // Replace the quick nav enhancement section with this improved version:
+
+// ============================================
+// ENHANCED QUICK NAV (runs after delay)
+// ============================================
+setTimeout(function() {
+  const quickNavSidebar = document.querySelector('.quick-nav-sidebar');
+  
+  if (!quickNavSidebar || window.innerWidth <= 1400) {
+    console.log('Quick nav not applicable for this screen size');
+  } else {
+    console.log('Enhancing quick nav for Luke-Acts page...');
+    
+    // Find ALL sections with specific classes OR IDs from quick links
+    const quickLinkIds = Array.from(document.querySelectorAll('.quick-links a'))
+      .map(a => a.getAttribute('href'))
+      .filter(href => href && href.startsWith('#'))
+      .map(href => href.substring(1));
+    
+    console.log('Quick link IDs found:', quickLinkIds);
+    
+    // Get sections that match quick link IDs
+    const majorSections = quickLinkIds
+      .map(id => document.getElementById(id))
+      .filter(section => section !== null);
+    
+    console.log('Found', majorSections.length, 'major sections:', 
+      majorSections.map(s => s.id).join(', '));
+    
+    if (majorSections.length > 0) {
+      // Clear and rebuild quick nav
+      quickNavSidebar.innerHTML = '';
       
-      if (!quickNavSidebar || window.innerWidth <= 1400) {
-        console.log('Quick nav not applicable for this screen size');
-      } else {
-        console.log('Enhancing quick nav for Luke-Acts page...');
+      majorSections.forEach(section => {
+        const id = section.id;
+        const heading = section.querySelector('h2, h3, h4, .section-title, summary');
+        let label = id.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
         
-        // Find ALL sections on this page with IDs
-        const sections = Array.from(document.querySelectorAll(`
-          .thesis-card[id],
-          .arc-section[id],
-          .theology-card[id],
-          .portrait-venn[id],
-          section[id],
-          div[id]
-        `.trim().split('\n').map(s => s.trim()).join(', ')));
+        if (heading) {
+          label = heading.textContent.trim()
+            .replace(/[📚📖📜🎯🔄🌍💡✨🏛️💭🩸❓📝]/g, '')
+            .trim();
+        }
         
-        // Filter to only major sections (have h2 or h3 headings)
-        const majorSections = sections.filter(section => {
-          return section.querySelector('h2, h3');
+        const navItem = document.createElement('div');
+        navItem.className = 'quick-nav-item';
+        navItem.setAttribute('data-label', label);
+        navItem.setAttribute('data-target', '#' + id);
+        
+        navItem.addEventListener('click', function() {
+          const targetPosition = section.getBoundingClientRect().top + window.pageYOffset - 120;
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
         });
         
-        console.log('Found', majorSections.length, 'major sections:', 
-          majorSections.map(s => s.id).join(', '));
+        quickNavSidebar.appendChild(navItem);
+      });
+      
+      console.log('Created', quickNavSidebar.children.length, 'quick nav items');
+      
+      // Enhanced scroll tracking
+      let scrollTimeout;
+      function updateActiveSection() {
+        const scrollPos = window.pageYOffset + 300; // Look ahead more
+        let activeSection = null;
+        let closestDistance = Infinity;
         
-        if (majorSections.length > 0) {
-          // Clear and rebuild quick nav
-          quickNavSidebar.innerHTML = '';
+        majorSections.forEach(section => {
+          const rect = section.getBoundingClientRect();
+          const sectionTop = rect.top + window.pageYOffset;
+          const sectionBottom = sectionTop + rect.height;
           
-          majorSections.forEach(section => {
-            const id = section.id;
-            const heading = section.querySelector('h2, h3');
-            const label = heading ? heading.textContent.trim().replace(/[📚📖📜🎯🔄🌍💡✨]/g, '').trim() : id;
-            
-            const navItem = document.createElement('div');
-            navItem.className = 'quick-nav-item';
-            navItem.setAttribute('data-label', label);
-            navItem.setAttribute('data-target', '#' + id);
-            
-            navItem.addEventListener('click', function() {
-              const targetPosition = section.getBoundingClientRect().top + window.pageYOffset - 120;
-              window.scrollTo({
-                top: targetPosition,
-                behavior: 'smooth'
-              });
-            });
-            
-            quickNavSidebar.appendChild(navItem);
-          });
-          
-          console.log('Created', quickNavSidebar.children.length, 'quick nav items');
-          
-          // Enhanced scroll tracking
-          let scrollTimeout;
-          function updateActiveSection() {
-            const scrollPos = window.pageYOffset + 250;
-            let activeSection = null;
-            
-            majorSections.forEach(section => {
-              const rect = section.getBoundingClientRect();
-              const sectionTop = rect.top + window.pageYOffset;
-              const sectionBottom = sectionTop + rect.height;
-              
-              if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
+          // Check if scroll position is within section
+          if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
+            activeSection = section;
+          } else {
+            // Find closest section if none contains scroll position
+            const distanceToTop = Math.abs(scrollPos - sectionTop);
+            if (distanceToTop < closestDistance) {
+              closestDistance = distanceToTop;
+              if (!activeSection) {
                 activeSection = section;
               }
-            });
-            
-            // Update active state
-            const navItems = quickNavSidebar.querySelectorAll('.quick-nav-item');
-            navItems.forEach(item => {
-              item.classList.remove('active');
-              if (activeSection && item.getAttribute('data-target') === '#' + activeSection.id) {
-                item.classList.add('active');
-                console.log('Active section:', activeSection.id);
-              }
-            });
+            }
           }
-          
-          // Listen to scroll with debouncing
-          window.addEventListener('scroll', function() {
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(updateActiveSection, 50);
-          }, { passive: true });
-          
-          // Initial update
-          updateActiveSection();
-        }
+        });
+        
+        // Update active state
+        const navItems = quickNavSidebar.querySelectorAll('.quick-nav-item');
+        navItems.forEach(item => {
+          item.classList.remove('active');
+          if (activeSection && item.getAttribute('data-target') === '#' + activeSection.id) {
+            item.classList.add('active');
+          }
+        });
       }
-    }, 500); // Wait 500ms for main script to initialize
+      
+      // Listen to scroll with debouncing
+      window.addEventListener('scroll', function() {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(updateActiveSection, 50);
+      }, { passive: true });
+      
+      // Initial update
+      updateActiveSection();
+    } else {
+      console.warn('No major sections found!');
+    }
+  }
+}, 500); // Wait 500ms for main script to initialize
     
     // ============================================
     // Q&A PILL INTERACTIONS
