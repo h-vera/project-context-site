@@ -4961,51 +4961,54 @@ setTimeout(function() {
       
       console.log('Created', quickNavSidebar.children.length, 'quick nav items');
       
-      // Enhanced scroll tracking
-      let scrollTimeout;
-      function updateActiveSection() {
-        const scrollPos = window.pageYOffset + 300; // Look ahead more
-        let activeSection = null;
-        let closestDistance = Infinity;
-        
-        majorSections.forEach(section => {
-          const rect = section.getBoundingClientRect();
-          const sectionTop = rect.top + window.pageYOffset;
-          const sectionBottom = sectionTop + rect.height;
-          
-          // Check if scroll position is within section
-          if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
-            activeSection = section;
-          } else {
-            // Find closest section if none contains scroll position
-            const distanceToTop = Math.abs(scrollPos - sectionTop);
-            if (distanceToTop < closestDistance) {
-              closestDistance = distanceToTop;
-              if (!activeSection) {
-                activeSection = section;
-              }
-            }
-          }
-        });
-        
-        // Update active state
-        const navItems = quickNavSidebar.querySelectorAll('.quick-nav-item');
-        navItems.forEach(item => {
-          item.classList.remove('active');
-          if (activeSection && item.getAttribute('data-target') === '#' + activeSection.id) {
-            item.classList.add('active');
-          }
-        });
-      }
-      
-      // Listen to scroll with debouncing
-      window.addEventListener('scroll', function() {
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(updateActiveSection, 50);
-      }, { passive: true });
-      
-      // Initial update
-      updateActiveSection();
+      console.log('Created', quickNavSidebar.children.length, 'quick nav items');
+
+// Enhanced scroll tracking - FIXED VERSION
+let scrollTimeout;
+function updateActiveSection() {
+  const viewportTop = window.pageYOffset + 200; // Look at a point 200px from top
+  let activeSection = null;
+  let smallestDistance = Infinity;
+  
+  // Find the section closest to our viewport reference point
+  majorSections.forEach(section => {
+    const rect = section.getBoundingClientRect();
+    const sectionTop = rect.top + window.pageYOffset;
+    const distanceFromViewport = Math.abs(sectionTop - viewportTop);
+    
+    // If this section is closer to our viewport reference point, it's the active one
+    if (distanceFromViewport < smallestDistance) {
+      smallestDistance = distanceFromViewport;
+      activeSection = section;
+    }
+  });
+  
+  // Special case: if we're near the bottom of the page, activate the last section
+  const scrollBottom = window.pageYOffset + window.innerHeight;
+  const pageHeight = document.documentElement.scrollHeight;
+  if (pageHeight - scrollBottom < 300) {
+    activeSection = majorSections[majorSections.length - 1];
+  }
+  
+  // Update active state
+  const navItems = quickNavSidebar.querySelectorAll('.quick-nav-item');
+  navItems.forEach(item => {
+    item.classList.remove('active');
+    if (activeSection && item.getAttribute('data-target') === '#' + activeSection.id) {
+      item.classList.add('active');
+    }
+  });
+}
+
+// Listen to scroll with better debouncing
+window.addEventListener('scroll', function() {
+  clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(updateActiveSection, 30); // Faster response
+}, { passive: true });
+
+// Initial update
+updateActiveSection();
+
     } else {
       console.warn('No major sections found!');
     }
