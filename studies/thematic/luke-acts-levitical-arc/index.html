@@ -4961,53 +4961,66 @@ setTimeout(function() {
       
       console.log('Created', quickNavSidebar.children.length, 'quick nav items');
       
-      console.log('Created', quickNavSidebar.children.length, 'quick nav items');
+      // Enhanced scroll tracking - FIXED VERSION with proper initialization
+      let scrollTimeout;
+      let isInitialized = false;
 
-// Enhanced scroll tracking - FIXED VERSION
-let scrollTimeout;
-function updateActiveSection() {
-  const viewportTop = window.pageYOffset + 200; // Look at a point 200px from top
-  let activeSection = null;
-  let smallestDistance = Infinity;
-  
-  // Find the section closest to our viewport reference point
-  majorSections.forEach(section => {
-    const rect = section.getBoundingClientRect();
-    const sectionTop = rect.top + window.pageYOffset;
-    const distanceFromViewport = Math.abs(sectionTop - viewportTop);
-    
-    // If this section is closer to our viewport reference point, it's the active one
-    if (distanceFromViewport < smallestDistance) {
-      smallestDistance = distanceFromViewport;
-      activeSection = section;
-    }
-  });
-  
-  // Special case: if we're near the bottom of the page, activate the last section
-  const scrollBottom = window.pageYOffset + window.innerHeight;
-  const pageHeight = document.documentElement.scrollHeight;
-  if (pageHeight - scrollBottom < 300) {
-    activeSection = majorSections[majorSections.length - 1];
-  }
-  
-  // Update active state
-  const navItems = quickNavSidebar.querySelectorAll('.quick-nav-item');
-  navItems.forEach(item => {
-    item.classList.remove('active');
-    if (activeSection && item.getAttribute('data-target') === '#' + activeSection.id) {
-      item.classList.add('active');
-    }
-  });
-}
+      function updateActiveSection() {
+        const viewportTop = window.pageYOffset + 200; // Look at a point 200px from top
+        let activeSection = null;
+        let smallestDistance = Infinity;
+        
+        // Find the section closest to our viewport reference point
+        majorSections.forEach(section => {
+          const rect = section.getBoundingClientRect();
+          const sectionTop = rect.top + window.pageYOffset;
+          const distanceFromViewport = Math.abs(sectionTop - viewportTop);
+          
+          // If this section is closer to our viewport reference point, it's the active one
+          if (distanceFromViewport < smallestDistance) {
+            smallestDistance = distanceFromViewport;
+            activeSection = section;
+          }
+        });
+        
+        // Special case: if we're near the bottom of the page, activate the last section
+        const scrollBottom = window.pageYOffset + window.innerHeight;
+        const pageHeight = document.documentElement.scrollHeight;
+        if (pageHeight - scrollBottom < 300) {
+          activeSection = majorSections[majorSections.length - 1];
+        }
+        
+        // Update active state
+        const navItems = quickNavSidebar.querySelectorAll('.quick-nav-item');
+        navItems.forEach(item => {
+          item.classList.remove('active');
+          if (activeSection && item.getAttribute('data-target') === '#' + activeSection.id) {
+            item.classList.add('active');
+          }
+        });
+        
+        isInitialized = true;
+      }
 
-// Listen to scroll with better debouncing
-window.addEventListener('scroll', function() {
-  clearTimeout(scrollTimeout);
-  scrollTimeout = setTimeout(updateActiveSection, 30); // Faster response
-}, { passive: true });
+      // Listen to scroll with better debouncing
+      window.addEventListener('scroll', function() {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(updateActiveSection, 30); // Faster response
+      }, { passive: true });
 
-// Initial update
-updateActiveSection();
+      // Wait for images and layout to settle before initial update
+      setTimeout(function() {
+        updateActiveSection();
+        console.log('Quick nav initialized with active section');
+      }, 100); // Small delay to let page layout settle
+
+      // Also update on window load (for images)
+      window.addEventListener('load', function() {
+        if (isInitialized) {
+          updateActiveSection();
+          console.log('Quick nav re-synced after page load');
+        }
+      });
 
     } else {
       console.warn('No major sections found!');
