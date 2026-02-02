@@ -4960,67 +4960,72 @@ setTimeout(function() {
       });
       
       console.log('Created', quickNavSidebar.children.length, 'quick nav items');
-      
-      // Enhanced scroll tracking - FIXED VERSION with proper initialization
-      let scrollTimeout;
-      let isInitialized = false;
 
-      function updateActiveSection() {
-        const viewportTop = window.pageYOffset + 200; // Look at a point 200px from top
-        let activeSection = null;
-        let smallestDistance = Infinity;
-        
-        // Find the section closest to our viewport reference point
-        majorSections.forEach(section => {
-          const rect = section.getBoundingClientRect();
-          const sectionTop = rect.top + window.pageYOffset;
-          const distanceFromViewport = Math.abs(sectionTop - viewportTop);
-          
-          // If this section is closer to our viewport reference point, it's the active one
-          if (distanceFromViewport < smallestDistance) {
-            smallestDistance = distanceFromViewport;
-            activeSection = section;
-          }
-        });
-        
-        // Special case: if we're near the bottom of the page, activate the last section
-        const scrollBottom = window.pageYOffset + window.innerHeight;
-        const pageHeight = document.documentElement.scrollHeight;
-        if (pageHeight - scrollBottom < 300) {
-          activeSection = majorSections[majorSections.length - 1];
-        }
-        
-        // Update active state
-        const navItems = quickNavSidebar.querySelectorAll('.quick-nav-item');
-        navItems.forEach(item => {
-          item.classList.remove('active');
-          if (activeSection && item.getAttribute('data-target') === '#' + activeSection.id) {
-            item.classList.add('active');
-          }
-        });
-        
-        isInitialized = true;
-      }
+// Enhanced scroll tracking - IMPROVED LOGIC
+let scrollTimeout;
+let isInitialized = false;
 
-      // Listen to scroll with better debouncing
-      window.addEventListener('scroll', function() {
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(updateActiveSection, 30); // Faster response
-      }, { passive: true });
+function updateActiveSection() {
+  // Use the top of viewport plus a small offset (where user is "looking")
+  const scrollPosition = window.pageYOffset + 150;
+  let activeSection = majorSections[0]; // Default to first section
+  
+  // Go through sections in order and find the last one we've scrolled past
+  majorSections.forEach(section => {
+    const sectionTop = section.offsetTop;
+    
+    // If we've scrolled past this section's top, it becomes the active one
+    if (scrollPosition >= sectionTop) {
+      activeSection = section;
+    }
+  });
+  
+  // Special case: if we're very close to the top (first 100px), always use first section
+  if (window.pageYOffset < 100) {
+    activeSection = majorSections[0];
+  }
+  
+  // Special case: if we're near the bottom of the page, use last section
+  const scrollBottom = window.pageYOffset + window.innerHeight;
+  const pageHeight = document.documentElement.scrollHeight;
+  if (pageHeight - scrollBottom < 200) {
+    activeSection = majorSections[majorSections.length - 1];
+  }
+  
+  // Update active state
+  const navItems = quickNavSidebar.querySelectorAll('.quick-nav-item');
+  navItems.forEach(item => {
+    item.classList.remove('active');
+    if (activeSection && item.getAttribute('data-target') === '#' + activeSection.id) {
+      item.classList.add('active');
+    }
+  });
+  
+  isInitialized = true;
+}
 
-      // Wait for images and layout to settle before initial update
-      setTimeout(function() {
-        updateActiveSection();
-        console.log('Quick nav initialized with active section');
-      }, 100); // Small delay to let page layout settle
+// Listen to scroll with better debouncing
+window.addEventListener('scroll', function() {
+  clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(updateActiveSection, 50); // Slightly slower for stability
+}, { passive: true });
 
-      // Also update on window load (for images)
-      window.addEventListener('load', function() {
-        if (isInitialized) {
-          updateActiveSection();
-          console.log('Quick nav re-synced after page load');
-        }
-      });
+// Wait for layout to fully settle before initial update
+setTimeout(function() {
+  updateActiveSection();
+  console.log('Quick nav initialized');
+}, 200); // Longer delay - 200ms
+
+// Also update on window load and resize (for images and layout changes)
+window.addEventListener('load', function() {
+  setTimeout(updateActiveSection, 100);
+  console.log('Quick nav re-synced after page load');
+});
+
+window.addEventListener('resize', function() {
+  clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(updateActiveSection, 100);
+});
 
     } else {
       console.warn('No major sections found!');
