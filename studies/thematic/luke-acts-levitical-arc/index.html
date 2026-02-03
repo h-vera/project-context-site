@@ -5143,6 +5143,7 @@ setTimeout(function() {
   const triggerPoint = scrollPosition + (viewportHeight / 3);
   
   let activeSection = null;
+  let inViewSection = null; // NEW: Track which section is actually in view
   
   console.log('=== Scroll Update ===');
   console.log('Scroll position:', scrollPosition);
@@ -5160,11 +5161,23 @@ setTimeout(function() {
     
     console.log(`  ${sectionId}: top=${sectionTop}, bottom=${sectionBottom}, inView=${isInView}`);
     
-    // If we're past this section's start, it's a candidate
+    // If trigger point is actually inside this section, mark it
+    if (isInView) {
+      inViewSection = section;
+      console.log(`  ✓ Section in view: ${sectionId}`);
+    }
+    
+    // Fallback: track which section we've most recently passed
     if (triggerPoint >= sectionTop) {
       activeSection = section;
     }
   });
+  
+  // PRIORITY: Use the section that's actually in view
+  if (inViewSection) {
+    activeSection = inViewSection;
+    console.log('  Using in-view section:', activeSection.id);
+  }
   
   // DEFAULT: If no section is active (user at very top), activate first section
   if (!activeSection && majorSections.length > 0) {
@@ -5180,7 +5193,7 @@ setTimeout(function() {
     console.log('  Near bottom - forcing last section');
   }
   
-  console.log('Active section:', activeSection ? activeSection.id : 'none');
+  console.log('Final active section:', activeSection ? activeSection.id : 'none');
   
   // Update active state
   const navItems = quickNavSidebar.querySelectorAll('.quick-nav-item');
