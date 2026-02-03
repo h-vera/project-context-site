@@ -5138,19 +5138,15 @@ setTimeout(function() {
       let isInitialized = false;
 
       function updateActiveSection() {
-        const viewportTop = window.pageYOffset + 200; // Look at a point 200px from top
+        const scrollPosition = window.pageYOffset + 250; // Trigger point when section enters upper viewport
         let activeSection = null;
-        let smallestDistance = Infinity;
         
-        // Find the section closest to our viewport reference point
+        // Find the section that we've most recently scrolled past
         majorSections.forEach(section => {
-          const rect = section.getBoundingClientRect();
-          const sectionTop = rect.top + window.pageYOffset;
-          const distanceFromViewport = Math.abs(sectionTop - viewportTop);
+          const sectionTop = section.offsetTop;
           
-          // If this section is closer to our viewport reference point, it's the active one
-          if (distanceFromViewport < smallestDistance) {
-            smallestDistance = distanceFromViewport;
+          // If we've scrolled past this section's start, it becomes the candidate
+          if (scrollPosition >= sectionTop) {
             activeSection = section;
           }
         });
