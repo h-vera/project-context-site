@@ -5140,49 +5140,55 @@ setTimeout(function() {
      function updateActiveSection() {
   const scrollPosition = window.pageYOffset;
   const viewportHeight = window.innerHeight;
-  const triggerPoint = scrollPosition + (viewportHeight / 3);
+  const viewportMiddle = scrollPosition + (viewportHeight / 2); // Use middle of viewport
   
   let activeSection = null;
-  let inViewSection = null; // NEW: Track which section is actually in view
+  let closestSection = null;
+  let closestDistance = Infinity;
   
   console.log('=== Scroll Update ===');
   console.log('Scroll position:', scrollPosition);
-  console.log('Trigger point:', triggerPoint);
+  console.log('Viewport middle:', viewportMiddle);
   console.log('Checking', majorSections.length, 'sections');
   
-  // Find the section closest to our trigger point
+  // Find which section is closest to viewport middle
   majorSections.forEach(section => {
     const sectionTop = section.offsetTop;
     const sectionBottom = sectionTop + section.offsetHeight;
+    const sectionMiddle = sectionTop + (section.offsetHeight / 2);
     const sectionId = section.id;
     
-    // Check if trigger point is within this section
-    const isInView = triggerPoint >= sectionTop && triggerPoint < sectionBottom;
+    // Check if viewport middle is within this section
+    const isInView = viewportMiddle >= sectionTop && viewportMiddle < sectionBottom;
     
-    console.log(`  ${sectionId}: top=${sectionTop}, bottom=${sectionBottom}, inView=${isInView}`);
+    // Calculate distance from viewport middle to section middle
+    const distance = Math.abs(viewportMiddle - sectionMiddle);
     
-    // If trigger point is actually inside this section, mark it
-    if (isInView) {
-      inViewSection = section;
-      console.log(`  ✓ Section in view: ${sectionId}`);
+    console.log(`  ${sectionId}: top=${sectionTop}, bottom=${sectionBottom}, inView=${isInView}, distance=${Math.round(distance)}`);
+    
+    // Track the closest section
+    if (distance < closestDistance) {
+      closestDistance = distance;
+      closestSection = section;
     }
     
-    // Fallback: track which section we've most recently passed
-    if (triggerPoint >= sectionTop) {
+    // If viewport middle is actually inside this section, use it immediately
+    if (isInView) {
       activeSection = section;
+      console.log(`  ✓ Section in view: ${sectionId}`);
     }
   });
   
-  // PRIORITY: Use the section that's actually in view
-  if (inViewSection) {
-    activeSection = inViewSection;
-    console.log('  Using in-view section:', activeSection.id);
+  // If no section contains the viewport middle, use the closest one
+  if (!activeSection && closestSection) {
+    activeSection = closestSection;
+    console.log('  Using closest section:', activeSection.id, '(distance:', Math.round(closestDistance), ')');
   }
   
-  // DEFAULT: If no section is active (user at very top), activate first section
+  // DEFAULT: If still no section (shouldn't happen), use first section
   if (!activeSection && majorSections.length > 0) {
     activeSection = majorSections[0];
-    console.log('  At top of page - defaulting to first section:', activeSection.id);
+    console.log('  Defaulting to first section:', activeSection.id);
   }
   
   // Special case: if we're near the bottom of the page, activate the last section
@@ -5197,7 +5203,6 @@ setTimeout(function() {
   
   // Update active state
   const navItems = quickNavSidebar.querySelectorAll('.quick-nav-item');
-  console.log('Updating', navItems.length, 'nav items');
   
   navItems.forEach(item => {
     item.classList.remove('active');
