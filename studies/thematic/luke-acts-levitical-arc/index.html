@@ -1147,53 +1147,68 @@
 }
 
   /* ----------------------------
-     Sacred center (God's Presence)
-     - Always on top
-     - Never interactive
-     ---------------------------- */
-  .holiness-center {
-    position: absolute;
-    top: 45%;
-    left: 45%;
-    width: 10%;
-    height: 10%;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #ffd700, #ffa500);
-    border: 2px solid #ffd700;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 2000;
-    pointer-events: none;
-    animation: sacredBreath 5.5s ease-in-out infinite;
-    will-change: transform, box-shadow;
-    isolation: isolate;
-  }
+   Sacred center (God's Presence)
+   - Always on top
+   - NOW INTERACTIVE (clickable)
+   ---------------------------- */
+.holiness-center {
+  position: absolute;
+  top: 45%;
+  left: 45%;
+  width: 10%;
+  height: 10%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffd700, #ffa500);
+  border: 2px solid #ffd700;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  pointer-events: auto; /* CHANGED: now clickable */
+  cursor: pointer; /* ADDED: show it's clickable */
+  animation: sacredBreath 5.5s ease-in-out infinite;
+  will-change: transform, box-shadow;
+  isolation: isolate;
+  transition: transform 0.3s ease; /* ADDED: smooth hover */
+}
 
-  .holiness-center::after {
-    content: "";
-    position: absolute;
-    inset: -8px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 215, 0, 0.18), transparent 65%);
-    opacity: 0.6;
-    pointer-events: none;
-  }
+/* ADDED: Hover effect */
+.holiness-center:hover {
+  transform: scale(1.05);
+}
 
-  .center-icon {
-    font-size: 1.5rem;
-  }
+/* ADDED: Active/selected state */
+.holiness-center.center-active {
+  transform: scale(1.08);
+  box-shadow:
+    0 0 32px rgba(255, 215, 0, 0.7),
+    0 0 64px rgba(255, 165, 0, 0.5);
+}
 
-  .center-text {
-    font-size: 0.65rem;
-    font-weight: 800;
-    text-align: center;
-    line-height: 1.1;
-    color: #1a202c;
-    margin-top: 0.15rem;
-    white-space: nowrap;
-  }
+.holiness-center::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.18), transparent 65%);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.center-icon {
+  font-size: 1.5rem;
+}
+
+.center-text {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.1;
+  color: #1a202c;
+  margin-top: 0.15rem;
+  white-space: nowrap;
+}
 
   /* Subtle breathing (presence, not pulse) */
   @keyframes sacredBreath {
@@ -3713,7 +3728,14 @@
             <p><strong>Access:</strong> Once yearly (Yom Kippur)</p>
             <p><strong>Function:</strong> Atonement ritual</p>
           </div>
-        </div>
+          <!-- Add this with your other zone-info-content blocks -->
+            <div class="zone-info-content" data-zone="center">
+            <h5>God's Presence — The Goal</h5>
+            <p><strong>Eden Restored:</strong> The center represents humanity's telos—living in God's unmediated presence</p>
+            <p><strong>Access:</strong> Once barred by cherubim (Gen 3:24), now opened through Christ's atonement</p>
+            <p><strong>Symbolism:</strong> Tree of Life, full abundance, unhindered communion, eternal dwelling</p>
+            </div>
+          </div>
 
         <div class="zone-legend">
           <div class="legend-item">
@@ -5243,12 +5265,14 @@ setTimeout(function() {
   const templeContainer = document.querySelector('.temple-zones');
   const zoneInfoContents = Array.from(document.querySelectorAll('.zone-info-content'));
   const zoneInfoDisplay = document.querySelector('.zone-info-display');
+  const holinessCenter = document.querySelector('.holiness-center'); // ADDED
 
   console.log('[Temple Zones] Found:', {
     zones: templeZones.length,
     container: !!templeContainer,
     infoContents: zoneInfoContents.length,
-    infoDisplay: !!zoneInfoDisplay
+    infoDisplay: !!zoneInfoDisplay,
+    center: !!holinessCenter // ADDED
   });
 
   // If this page doesn't have the widget, do nothing
@@ -5264,6 +5288,7 @@ setTimeout(function() {
 
   function clearHover() {
     templeZones.forEach(z => z.classList.remove('zone-hover'));
+    if (holinessCenter) holinessCenter.classList.remove('center-hover'); // ADDED
   }
 
   function clearInfo() {
@@ -5273,6 +5298,7 @@ setTimeout(function() {
 
   function clearActive() {
     templeZones.forEach(z => z.classList.remove('zone-active'));
+    if (holinessCenter) holinessCenter.classList.remove('center-active'); // ADDED
     lockedZoneName = null;
     clearInfo();
     console.log('[Temple Zones] Cleared selection');
@@ -5291,6 +5317,7 @@ setTimeout(function() {
 
   function setActive(zoneName) {
     templeZones.forEach(z => z.classList.remove('zone-active'));
+    if (holinessCenter) holinessCenter.classList.remove('center-active'); // ADDED
     lockedZoneName = zoneName || null;
 
     if (!zoneName) {
@@ -5298,10 +5325,16 @@ setTimeout(function() {
       return;
     }
 
-    const zoneEl = document.querySelector(`.holiness-zone[data-zone="${zoneName}"]`);
-    if (zoneEl) {
-      zoneEl.classList.add('zone-active');
-      console.log('[Temple Zones] Activated:', zoneName);
+    // Handle center zone specially
+    if (zoneName === 'center') {
+      if (holinessCenter) holinessCenter.classList.add('center-active');
+      console.log('[Temple Zones] Activated: center (God\'s Presence)');
+    } else {
+      const zoneEl = document.querySelector(`.holiness-zone[data-zone="${zoneName}"]`);
+      if (zoneEl) {
+        zoneEl.classList.add('zone-active');
+        console.log('[Temple Zones] Activated:', zoneName);
+      }
     }
 
     showZoneInfo(zoneName);
@@ -5328,16 +5361,16 @@ setTimeout(function() {
       const relativeDistance = distance / maxDistance;
 
       // Dead zone for sacred center
-    if (relativeDistance < 0.10) return null;
+      if (relativeDistance < 0.10) return null;
 
-    // Each zone's OUTER edge (where it ends):
-    if (relativeDistance < 0.28) return 'holiest';   // 56.25% width / 2 = 28.125% radius
-    if (relativeDistance < 0.3125) return 'priests'; // 62.5% width / 2 = 31.25% radius  
-    if (relativeDistance < 0.375) return 'israel';   // 75% width / 2 = 37.5% radius
-    if (relativeDistance < 0.4375) return 'women';   // 87.5% width / 2 = 43.75% radius
-    if (relativeDistance < 0.50) return 'gentiles';  // 100% width / 2 = 50% radius
+      // Each zone's OUTER edge (where it ends):
+      if (relativeDistance < 0.28) return 'holiest';   // 56.25% width / 2 = 28.125% radius
+      if (relativeDistance < 0.3125) return 'priests'; // 62.5% width / 2 = 31.25% radius  
+      if (relativeDistance < 0.375) return 'israel';   // 75% width / 2 = 37.5% radius
+      if (relativeDistance < 0.4375) return 'women';   // 87.5% width / 2 = 43.75% radius
+      if (relativeDistance < 0.50) return 'gentiles';  // 100% width / 2 = 50% radius
 
-    return null;
+      return null;
     }
 
     function handleMove(e) {
@@ -5373,7 +5406,7 @@ setTimeout(function() {
   }
 
   // ----------------------------
-  // Click / tap selection
+  // Click / tap selection (zones)
   // ----------------------------
   templeZones.forEach(zone => {
     zone.addEventListener('click', (e) => {
@@ -5395,21 +5428,42 @@ setTimeout(function() {
   console.log('[Temple Zones] Click listeners attached');
 
   // ----------------------------
+  // ADDED: Center (God's Presence) click handler
+  // ----------------------------
+  if (holinessCenter) {
+    holinessCenter.addEventListener('click', (e) => {
+      e.stopPropagation();
+
+      // Toggle off if clicking center again
+      if (lockedZoneName === 'center') {
+        clearActive();
+        clearHover();
+        return;
+      }
+
+      setActive('center');
+    });
+    
+    console.log('[Temple Zones] Center click listener attached');
+  }
+
+  // ----------------------------
   // Click outside clears selection
   // ----------------------------
   document.addEventListener('click', (event) => {
     if (!lockedZoneName) return; // only if something is selected
 
     const clickedInsideZone = event.target.closest('.holiness-zone') !== null;
+    const clickedInsideCenter = event.target.closest('.holiness-center') !== null; // ADDED
     const clickedInsideInfo = event.target.closest('.zone-info-display') !== null;
 
-    if (!clickedInsideZone && !clickedInsideInfo) {
+    if (!clickedInsideZone && !clickedInsideCenter && !clickedInsideInfo) {
       clearActive();
       clearHover();
     }
   });
   
-console.log('[Temple Zones] ✓ Initialization complete');
+  console.log('[Temple Zones] ✓ Initialization complete');
 })(); // Closes temple zones IIFE
 
 }); // Closes DOMContentLoaded
