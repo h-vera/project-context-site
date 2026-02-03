@@ -5137,51 +5137,59 @@ setTimeout(function() {
       let scrollTimeout;
       let isInitialized = false;
 
-      function updateActiveSection() {
-        const scrollPosition = window.pageYOffset + 250;
-        let activeSection = null;
-        
-        console.log('=== Scroll Update ===');
-        console.log('Scroll position:', scrollPosition);
-        console.log('Checking', majorSections.length, 'sections');
-        
-        // Find the section that we've most recently scrolled past
-        majorSections.forEach(section => {
-          const sectionTop = section.offsetTop;
-          const sectionId = section.id;
-          const hasPassed = scrollPosition >= sectionTop;
-          
-          console.log(`  ${sectionId}: top=${sectionTop}, passed=${hasPassed}`);
-          
-          if (hasPassed) {
-            activeSection = section;
-          }
-        });
-        
-        // Special case: if we're near the bottom of the page, activate the last section
-        const scrollBottom = window.pageYOffset + window.innerHeight;
-        const pageHeight = document.documentElement.scrollHeight;
-        if (pageHeight - scrollBottom < 300) {
-          activeSection = majorSections[majorSections.length - 1];
-          console.log('  Near bottom - forcing last section');
-        }
-        
-        console.log('Active section:', activeSection ? activeSection.id : 'none');
-        
-        // Update active state
-        const navItems = quickNavSidebar.querySelectorAll('.quick-nav-item');
-        console.log('Updating', navItems.length, 'nav items');
-        
-        navItems.forEach(item => {
-          item.classList.remove('active');
-          if (activeSection && item.getAttribute('data-target') === '#' + activeSection.id) {
-            item.classList.add('active');
-            console.log('  Activated:', activeSection.id);
-          }
-        });
-        
-        isInitialized = true;
-      }
+     function updateActiveSection() {
+  const scrollPosition = window.pageYOffset;
+  const viewportHeight = window.innerHeight;
+  const triggerPoint = scrollPosition + (viewportHeight / 3); // Activate when section is 1/3 down viewport
+  
+  let activeSection = null;
+  
+  console.log('=== Scroll Update ===');
+  console.log('Scroll position:', scrollPosition);
+  console.log('Trigger point:', triggerPoint);
+  console.log('Checking', majorSections.length, 'sections');
+  
+  // Find the section closest to our trigger point
+  majorSections.forEach(section => {
+    const sectionTop = section.offsetTop;
+    const sectionBottom = sectionTop + section.offsetHeight;
+    const sectionId = section.id;
+    
+    // Check if trigger point is within this section
+    const isInView = triggerPoint >= sectionTop && triggerPoint < sectionBottom;
+    
+    console.log(`  ${sectionId}: top=${sectionTop}, bottom=${sectionBottom}, inView=${isInView}`);
+    
+    // If we're past this section's start, it's a candidate
+    if (triggerPoint >= sectionTop) {
+      activeSection = section;
+    }
+  });
+  
+  // Special case: if we're near the bottom of the page, activate the last section
+  const scrollBottom = window.pageYOffset + window.innerHeight;
+  const pageHeight = document.documentElement.scrollHeight;
+  if (pageHeight - scrollBottom < 300) {
+    activeSection = majorSections[majorSections.length - 1];
+    console.log('  Near bottom - forcing last section');
+  }
+  
+  console.log('Active section:', activeSection ? activeSection.id : 'none');
+  
+  // Update active state
+  const navItems = quickNavSidebar.querySelectorAll('.quick-nav-item');
+  console.log('Updating', navItems.length, 'nav items');
+  
+  navItems.forEach(item => {
+    item.classList.remove('active');
+    if (activeSection && item.getAttribute('data-target') === '#' + activeSection.id) {
+      item.classList.add('active');
+      console.log('  Activated:', activeSection.id);
+    }
+  });
+  
+  isInitialized = true;
+}
 
       // Attach scroll listener - WITH DEBUG
       console.log('Attaching scroll listener...');
