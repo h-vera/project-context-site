@@ -1057,59 +1057,96 @@
 }
 
   /* ----------------------------
-     Zones (outer → inner)
-     ---------------------------- */
-  .zone-gentiles {
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(156, 39, 176, 0.08);
-    border-color: rgba(156, 39, 176, 0.3);
-    z-index: 1;
-  }
+   Zones (outer → inner) with positioned labels
+   ---------------------------- */
+.zone-gentiles {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(156, 39, 176, 0.08);
+  border-color: rgba(156, 39, 176, 0.3);
+  z-index: 1;
+}
 
-  .zone-women {
-    top: 12.5%;
-    left: 12.5%;
-    width: 75%;
-    height: 75%;
-    background: rgba(156, 39, 176, 0.15);
-    border-color: rgba(156, 39, 176, 0.4);
-    z-index: 2;
-  }
+.zone-gentiles .zone-label {
+  position: absolute;
+  bottom: 10%; /* Near bottom edge of outermost circle */
+  left: 50%;
+  transform: translateX(-50%);
+}
 
-  .zone-israel {
-    top: 25%;
-    left: 25%;
-    width: 50%;
-    height: 50%;
-    background: rgba(156, 39, 176, 0.25);
-    border-color: rgba(156, 39, 176, 0.6);
-    z-index: 3;
-  }
+.zone-women {
+  top: 12.5%;
+  left: 12.5%;
+  width: 75%;
+  height: 75%;
+  background: rgba(156, 39, 176, 0.15);
+  border-color: rgba(156, 39, 176, 0.4);
+  z-index: 2;
+}
 
-  .zone-priests {
-    top: 37.5%;
-    left: 37.5%;
-    width: 25%;
-    height: 25%;
-    background: rgba(156, 39, 176, 0.4);
-    border-color: rgba(156, 39, 176, 0.8);
-    color: white;
-    z-index: 4;
-  }
+.zone-women .zone-label {
+  position: absolute;
+  bottom: 15%; /* Slightly higher than gentiles */
+  left: 50%;
+  transform: translateX(-50%);
+}
 
-  .zone-holiest {
-    top: 43.75%;
-    left: 43.75%;
-    width: 12.5%;
-    height: 12.5%;
-    background: rgba(156, 39, 176, 0.6);
-    border-color: #9c27b0;
-    color: white;
-    z-index: 5;
-  }
+.zone-israel {
+  top: 25%;
+  left: 25%;
+  width: 50%;
+  height: 50%;
+  background: rgba(156, 39, 176, 0.25);
+  border-color: rgba(156, 39, 176, 0.6);
+  z-index: 3;
+}
+
+.zone-israel .zone-label {
+  position: absolute;
+  bottom: 20%; /* Middle zones use bottom positioning */
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.zone-priests {
+  top: 37.5%;
+  left: 37.5%;
+  width: 25%;
+  height: 25%;
+  background: rgba(156, 39, 176, 0.4);
+  border-color: rgba(156, 39, 176, 0.8);
+  color: white;
+  z-index: 4;
+}
+
+.zone-priests .zone-label {
+  position: absolute;
+  top: 15%; /* Inner circles use top positioning to avoid center */
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.zone-holiest {
+  top: 43.75%;
+  left: 43.75%;
+  width: 12.5%;
+  height: 12.5%;
+  background: rgba(156, 39, 176, 0.6);
+  border-color: #9c27b0;
+  color: white;
+  z-index: 5;
+}
+
+.zone-holiest .zone-label {
+  position: absolute;
+  top: 10%; /* Very top of innermost circle */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem; /* Slightly smaller for tight space */
+  white-space: nowrap; /* Keep text on one line */
+}
 
   /* ----------------------------
      Sacred center (God's Presence)
@@ -5293,15 +5330,15 @@ setTimeout(function() {
       const relativeDistance = distance / maxDistance;
 
       // Dead zone for sacred center (prevents "center text" flicker)
-      if (relativeDistance < 0.10) return null;
+    if (relativeDistance < 0.10) return null;
 
-      if (relativeDistance < 0.125) return 'holiest';
-      if (relativeDistance < 0.25)  return 'priests';
-      if (relativeDistance < 0.50)  return 'israel';
-      if (relativeDistance < 0.75)  return 'women';
-      if (relativeDistance < 1.0)   return 'gentiles';
+    if (relativeDistance < 0.20) return 'holiest';   // Doubled from 0.125 to 0.20
+    if (relativeDistance < 0.40) return 'priests';   // Increased from 0.25 to 0.40
+    if (relativeDistance < 0.60) return 'israel';    // Increased from 0.50 to 0.60
+    if (relativeDistance < 0.80) return 'women';     // Increased from 0.75 to 0.80
+    if (relativeDistance < 1.0)  return 'gentiles';  // Stays at outermost
 
-      return null;
+    return null;
     }
 
     function handleMove(e) {
