@@ -961,244 +961,100 @@
   }
 
     /* ============================================
-     TEMPLE HOLINESS ZONES — CONCENTRIC RINGS (FIXED v2)
-     ============================================ */
+    TEMPLE HOLINESS ZONES — INTERACTIVE RINGS
+    ============================================ */
 
-  /* ----------------------------
-     Container
-     ---------------------------- */
-  .temple-zones-container {
+    /* Container */
+    .temple-zones-container {
     max-width: 800px;
     margin: 2rem auto;
     background: white;
     padding: 2rem;
     border-radius: 16px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  }
+    }
 
-  .temple-zones {
+    .temple-zones {
     position: relative;
     width: 100%;
-    padding-bottom: 100%; /* 1:1 aspect ratio */
+    padding-bottom: 100%;
     margin: 2rem 0;
     background: #fafafa;
     border-radius: 50%;
-  }
+    }
 
-  /* ----------------------------
-     Base zone styling - RING ONLY
-     ---------------------------- */
-  .holiness-zone {
+    /* Base zone styling */
+    .holiness-zone {
     position: absolute;
     border-radius: 50%;
-    border: 3px solid;
+    border-style: solid;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     pointer-events: auto;
-    transition: transform 0.25s ease, filter 0.25s ease, background 0.25s ease;
-    background: transparent; /* Transparent by default */
-  }
-
-  /* Hover highlight — desktop only */
-  @media (hover: hover) and (pointer: fine) {
-    .holiness-zone.zone-hover {
-      filter: brightness(1.1);
+    transition: all 0.25s ease;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
     }
-  }
 
-  /* Selected (click / tap) — works everywhere */
-  .holiness-zone.zone-active {
-    transform: scale(1.02);
-    filter: saturate(1.06);
-    outline: 3px solid rgba(255, 215, 0, 0.55);
-    outline-offset: 3px;
-    box-shadow: 0 0 0 6px rgba(255, 215, 0, 0.12);
-  }
-
-  /* Labels - default visible */
-  .zone-label {
-    font-weight: 800;
-    font-size: 0.9rem;
-    text-align: center;
-    padding: 0.5rem;
-    line-height: 1.3;
-    pointer-events: none;
-    transition: opacity 0.25s ease, visibility 0.25s ease;
-    opacity: 1;
-    visibility: visible;
-    color: #1a202c; /* Dark text for visibility */
-  }
-
-  /* Hide labels on hover */
-  .holiness-zone.zone-hover .zone-label {
-    opacity: 0 !important;
-    visibility: hidden !important;
-  }
-
-  /* Hide labels when selected */
-  .holiness-zone.zone-active .zone-label {
-    opacity: 0 !important;
-    visibility: hidden !important;
-  }
-
-  /* NEVER hide the center text */
-  .holiness-center .center-text,
-  .holiness-center .center-icon {
-    opacity: 1 !important;
-    pointer-events: none;
-  }
-
-  /* ----------------------------
-     Individual Zones - Ring-based with thick borders
-     ---------------------------- */
-  
-  /* Court of Gentiles - Outermost */
-  .zone-gentiles {
+    /* Individual zones */
+    .zone-gentiles {
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    border-color: rgba(156, 39, 176, 0.5);
+    border-color: rgba(156, 39, 176, 0.8);
     border-width: 20px;
-    background: transparent;
     z-index: 1;
-  }
+    }
 
-  .zone-gentiles.zone-hover,
-  .zone-gentiles.zone-active {
-    background: rgba(156, 39, 176, 0.08);
-  }
-
-  .zone-gentiles .zone-label {
-    position: absolute;
-    bottom: 2%; /* Moved higher to be in visible ring */
-    left: 50%;
-    transform: translateX(-50%);
-    color: #6b21a8; /* Purple for better contrast */
-    font-weight: 900;
-  }
-
-  /* Court of Women */
-  .zone-women {
+    .zone-women {
     top: 12.5%;
     left: 12.5%;
     width: 75%;
     height: 75%;
-    border-color: rgba(156, 39, 176, 0.55);
+    border-color: rgba(156, 39, 176, 0.85);
     border-width: 18px;
-    background: transparent;
     z-index: 2;
-  }
+    }
 
-  .zone-women.zone-hover,
-  .zone-women.zone-active {
-    background: rgba(156, 39, 176, 0.12);
-  }
-
-  .zone-women .zone-label {
-    position: absolute;
-    bottom: 5%; /* Positioned in visible ring */
-    left: 50%;
-    transform: translateX(-50%);
-    color: #6b21a8;
-    font-weight: 900;
-  }
-
-  /* Court of Israel */
-  .zone-israel {
+    .zone-israel {
     top: 25%;
     left: 25%;
     width: 50%;
     height: 50%;
-    border-color: rgba(156, 39, 176, 0.65);
+    border-color: rgba(156, 39, 176, 0.9);
     border-width: 16px;
-    background: transparent;
     z-index: 3;
-  }
+    }
 
-  .zone-israel.zone-hover,
-  .zone-israel.zone-active {
-    background: rgba(156, 39, 176, 0.18);
-  }
-
-  .zone-israel .zone-label {
-    position: absolute;
-    bottom: 8%; /* Positioned in visible ring */
-    left: 50%;
-    transform: translateX(-50%);
-    color: #6b21a8;
-    font-weight: 900;
-  }
-
-  /* Court of Priests */
-  .zone-priests {
+    .zone-priests {
     top: 37.5%;
     left: 37.5%;
     width: 25%;
     height: 25%;
-    border-color: rgba(156, 39, 176, 0.8);
+    border-color: rgba(156, 39, 176, 0.95);
     border-width: 12px;
-    background: transparent;
     z-index: 4;
-  }
+    }
 
-  .zone-priests.zone-hover,
-  .zone-priests.zone-active {
-    background: rgba(156, 39, 176, 0.25);
-  }
-
-  .zone-priests .zone-label {
-    position: absolute;
-    top: 50%; /* Centered vertically in ring */
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 0.75rem;
-    white-space: nowrap;
-    line-height: 1.2;
-    color: #6b21a8; /* Changed from white to purple */
-    font-weight: 900;
-    text-shadow: 0 1px 3px rgba(255,255,255,0.8); /* White shadow for readability */
-  }
-
-  /* Holy of Holies */
-  .zone-holiest {
+    .zone-holiest {
     top: 43.75%;
     left: 43.75%;
     width: 12.5%;
     height: 12.5%;
-    background: rgba(156, 39, 176, 0.6); /* Stays filled */
+    background: rgba(156, 39, 176, 0.8);
     border-color: #9c27b0;
     border-width: 3px;
     color: white;
     z-index: 5;
-  }
+    }
 
-  .zone-holiest.zone-hover,
-  .zone-holiest.zone-active {
-    background: rgba(156, 39, 176, 0.75);
-  }
-
-  .zone-holiest .zone-label {
-    position: absolute;
-    top: -28px; /* ABOVE the circle */
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.7rem;
-    white-space: nowrap;
-    color: #6b21a8;
-    font-weight: 900;
-    background: white;
-    padding: 0.25rem 0.5rem;
-    border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  }
-
-  /* ----------------------------
-     Sacred center (God's Presence)
-     ---------------------------- */
-  .holiness-center {
+    /* Center - God's Presence */
+    .holiness-center {
     position: absolute;
     top: 45%;
     left: 45%;
@@ -1214,38 +1070,13 @@
     z-index: 2000;
     pointer-events: auto;
     cursor: pointer;
-    animation: sacredBreath 5.5s ease-in-out infinite;
-    will-change: transform, box-shadow;
-    isolation: isolate;
-    transition: transform 0.3s ease;
-  }
+    }
 
-  .holiness-center:hover {
-    transform: scale(1.05);
-  }
-
-  .holiness-center.center-active {
-    transform: scale(1.08);
-    box-shadow:
-      0 0 32px rgba(255, 215, 0, 0.7),
-      0 0 64px rgba(255, 165, 0, 0.5);
-  }
-
-  .holiness-center::after {
-    content: "";
-    position: absolute;
-    inset: -8px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 215, 0, 0.18), transparent 65%);
-    opacity: 0.6;
-    pointer-events: none;
-  }
-
-  .center-icon {
+    .center-icon {
     font-size: 1.5rem;
-  }
+    }
 
-  .center-text {
+    .center-text {
     font-size: 0.65rem;
     font-weight: 800;
     text-align: center;
@@ -1253,32 +1084,113 @@
     color: #1a202c;
     margin-top: 0.15rem;
     white-space: nowrap;
-  }
-
-  @keyframes sacredBreath {
-    0%, 100% {
-      transform: scale(1);
-      box-shadow:
-        0 0 16px rgba(255, 215, 0, 0.35),
-        0 0 32px rgba(255, 165, 0, 0.20);
     }
-    50% {
-      transform: scale(1.025);
-      box-shadow:
-        0 0 26px rgba(255, 215, 0, 0.55),
-        0 0 56px rgba(255, 165, 0, 0.35);
+
+    /* Hover effects - desktop only */
+    @media (hover: hover) and (pointer: fine) {
+    .zone-gentiles.zone-hover {
+        background: rgba(156, 39, 176, 0.2);
+        border-color: #9c27b0;
     }
-  }
 
-  @media (prefers-reduced-motion: reduce) {
-    .holiness-center { animation: none; }
-    .zone-info-content.active { animation: none; }
-  }
+    .zone-women.zone-hover {
+        background: rgba(156, 39, 176, 0.25);
+        border-color: #9c27b0;
+    }
 
-  /* ----------------------------
-     Zone info display
-     ---------------------------- */
-  .zone-info-display {
+    .zone-israel.zone-hover {
+        background: rgba(156, 39, 176, 0.3);
+        border-color: #9c27b0;
+    }
+
+    .zone-priests.zone-hover {
+        background: rgba(156, 39, 176, 0.35);
+        border-color: #9c27b0;
+    }
+
+    .zone-holiest.zone-hover {
+        background: rgba(156, 39, 176, 0.9);
+        transform: scale(1.05);
+    }
+    }
+
+    /* Active (clicked) states */
+    .zone-gentiles.zone-active {
+    background: rgba(156, 39, 176, 0.2);
+    border-color: #9c27b0;
+    }
+
+    .zone-women.zone-active {
+    background: rgba(156, 39, 176, 0.25);
+    border-color: #9c27b0;
+    }
+
+    .zone-israel.zone-active {
+    background: rgba(156, 39, 176, 0.3);
+    border-color: #9c27b0;
+    }
+
+    .zone-priests.zone-active {
+    background: rgba(156, 39, 176, 0.35);
+    border-color: #9c27b0;
+    }
+
+    .zone-holiest.zone-active {
+    background: rgba(156, 39, 176, 0.9);
+    }
+
+    /* Labels - hidden by default */
+    .zone-label {
+    font-weight: 800;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 0.5rem;
+    line-height: 1.3;
+    pointer-events: none;
+    color: #6b21a8;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+
+    /* Show labels on hover or active */
+    .holiness-zone.zone-hover .zone-label {
+    opacity: 1;
+    visibility: visible;
+    }
+
+    .holiness-zone.zone-active .zone-label {
+    opacity: 1;
+    visibility: visible;
+    }
+
+    /* Court of Priests - smaller font */
+    .zone-priests .zone-label {
+    font-size: 0.7rem;
+    white-space: nowrap;
+    }
+
+    /* Holy of Holies - positioned above */
+    .zone-holiest .zone-label {
+    bottom: auto;
+    top: -28px;
+    font-size: 0.75rem;
+    background: transparent;
+    color: #6b21a8;
+    }
+
+    .zone-holiest.zone-hover .zone-label,
+    .zone-holiest.zone-active .zone-label {
+    opacity: 1;
+    visibility: visible;
+    }
+
+    /* Zone info display */
+    .zone-info-display {
     margin-top: 2rem;
     min-height: 180px;
     background: white;
@@ -1288,9 +1200,9 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     position: relative;
     overflow: hidden;
-  }
+    }
 
-  .zone-info-display::before {
+    .zone-info-display::before {
     content: "";
     position: absolute;
     top: 0;
@@ -1300,43 +1212,80 @@
     background: linear-gradient(90deg, rgba(156,39,176,0.35), rgba(255,215,0,0.35));
     opacity: 0;
     transition: opacity 0.25s ease;
-  }
+    }
 
-  .zone-info-display.has-selection::before {
+    .zone-info-display.has-selection::before {
     opacity: 1;
-  }
+    }
 
-  .zone-info-content {
+    .zone-info-content {
     display: none;
-  }
+    }
 
-  .zone-info-content.active {
+    .zone-info-content.active {
     display: block;
     animation: fadeInUp 0.3s ease-out;
-  }
+    }
 
-  .zone-info-content h5 {
+    .zone-info-content h5 {
     font-size: 1.3rem;
     color: #9c27b0;
     margin-bottom: 1rem;
     font-weight: 800;
-  }
+    }
 
-  .zone-info-content p {
+    .zone-info-content p {
     margin: 0.5rem 0;
     font-size: 1rem;
     line-height: 1.6;
-  }
+    }
 
-  .zone-info-content strong {
+    .zone-info-content strong {
     color: #d4af37;
     font-weight: 700;
-  }
+    }
 
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+    @keyframes fadeInUp {
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+    }
+
+    /* Zone legend */
+    .zone-legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+    }
+
+    .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #6b7280;
+    }
+
+    .legend-color {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: 1px solid #d1d5db;
+    }
+
+    .legend-arrow {
+    font-size: 1.2rem;
+    color: #9ca3af;
+    }
 
   /* ----------------------------
      Legend
@@ -3588,231 +3537,7 @@
       </p>
 
       <!-- TEMPLE HOLINESS ZONES VISUAL -->
-<style>
-/* TEMPLE ZONES - INLINE OVERRIDE */
-.temple-zones-container {
-  max-width: 800px;
-  margin: 2rem auto;
-  background: white;
-  padding: 2rem;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.temple-zones {
-  position: relative;
-  width: 100%;
-  padding-bottom: 100%;
-  margin: 2rem 0;
-  background: #fafafa;
-  border-radius: 50%;
-}
-
-.holiness-zone {
-  position: absolute;
-  border-radius: 50%;
-  border-style: solid;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  pointer-events: auto;
-  transition: all 0.25s ease;
-  background: transparent;
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-.zone-gentiles {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-color: rgba(156, 39, 176, 0.8);
-  border-width: 20px;
-  z-index: 1;
-}
-
-.zone-women {
-  top: 12.5%;
-  left: 12.5%;
-  width: 75%;
-  height: 75%;
-  border-color: rgba(156, 39, 176, 0.85);
-  border-width: 18px;
-  z-index: 2;
-}
-
-.zone-israel {
-  top: 25%;
-  left: 25%;
-  width: 50%;
-  height: 50%;
-  border-color: rgba(156, 39, 176, 0.9);
-  border-width: 16px;
-  z-index: 3;
-}
-
-.zone-priests {
-  top: 37.5%;
-  left: 37.5%;
-  width: 25%;
-  height: 25%;
-  border-color: rgba(156, 39, 176, 0.95);
-  border-width: 12px;
-  z-index: 4;
-}
-
-.zone-holiest {
-  top: 43.75%;
-  left: 43.75%;
-  width: 12.5%;
-  height: 12.5%;
-  background: rgba(156, 39, 176, 0.8);
-  border-color: #9c27b0;
-  border-width: 3px;
-  color: white;
-  z-index: 5;
-}
-
-.holiness-center {
-  position: absolute;
-  top: 45%;
-  left: 45%;
-  width: 10%;
-  height: 10%;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #ffd700, #ffa500);
-  border: 2px solid #ffd700;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-  pointer-events: auto;
-  cursor: pointer;
-}
-
-/* HOVER EFFECTS */
-@media (hover: hover) and (pointer: fine) {
-  .zone-gentiles.zone-hover {
-    background: rgba(156, 39, 176, 0.2);
-    border-color: #9c27b0;
-  }
-
-  .zone-women.zone-hover {
-    background: rgba(156, 39, 176, 0.25);
-    border-color: #9c27b0;
-  }
-
-  .zone-israel.zone-hover {
-    background: rgba(156, 39, 176, 0.3);
-    border-color: #9c27b0;
-  }
-
-  .zone-priests.zone-hover {
-    background: rgba(156, 39, 176, 0.35);
-    border-color: #9c27b0;
-  }
-
-  .zone-holiest.zone-hover {
-    background: rgba(156, 39, 176, 0.9);
-    transform: scale(1.05);
-  }
-}
-
-/* ACTIVE (clicked) states */
-.zone-gentiles.zone-active {
-  background: rgba(156, 39, 176, 0.2);
-  border-color: #9c27b0;
-}
-
-.zone-women.zone-active {
-  background: rgba(156, 39, 176, 0.25);
-  border-color: #9c27b0;
-}
-
-.zone-israel.zone-active {
-  background: rgba(156, 39, 176, 0.3);
-  border-color: #9c27b0;
-}
-
-.zone-priests.zone-active {
-  background: rgba(156, 39, 176, 0.35);
-  border-color: #9c27b0;
-}
-
-.zone-holiest.zone-active {
-  background: rgba(156, 39, 176, 0.9);
-}
-
-/* LABELS - Hidden by default */
-.zone-label {
-  font-weight: 800;
-  font-size: 0.9rem;
-  text-align: center;
-  padding: 0.5rem;
-  line-height: 1.3;
-  pointer-events: none;
-  color: #6b21a8;
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.25s ease, visibility 0.25s ease;
-}
-
-/* Show labels on hover or active */
-.holiness-zone.zone-hover .zone-label {
-  opacity: 1;
-  visibility: visible;
-}
-
-.holiness-zone.zone-active .zone-label {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Court of Priests - smaller font, stays at bottom */
-.zone-priests .zone-label {
-  font-size: 0.7rem;
-  white-space: nowrap;
-}
-
-/* Holy of Holies - positioned above ring, no background */
-.zone-holiest .zone-label {
-  bottom: auto;
-  top: -28px;
-  font-size: 0.75rem;
-  background: transparent;
-  color: #6b21a8;
-}
-
-.zone-holiest.zone-hover .zone-label,
-.zone-holiest.zone-active .zone-label {
-  opacity: 1;
-  visibility: visible;
-}
-
-.center-icon {
-  font-size: 1.5rem;
-}
-
-.center-text {
-  font-size: 0.65rem;
-  font-weight: 800;
-  text-align: center;
-  line-height: 1.1;
-  color: #1a202c;
-  margin-top: 0.15rem;
-  white-space: nowrap;
-}
-</style>
-
-<h4 style="margin-top: 3rem; margin-bottom: 1.5rem; font-size: 1.6rem; text-align: center;">Temple Holiness: Graded Zones of Sacred Space</h4>
+    <h4 style="margin-top: 3rem; margin-bottom: 1.5rem; font-size: 1.6rem; text-align: center;">Temple Holiness: Graded Zones of Sacred Space</h4>
 
       <!-- TEMPLE HOLINESS ZONES VISUAL -->
       <h4 style="margin-top: 3rem; margin-bottom: 1.5rem; font-size: 1.6rem; text-align: center;">Temple Holiness: Graded Zones of Sacred Space</h4>
