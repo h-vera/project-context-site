@@ -5300,11 +5300,11 @@ setTimeout(function() {
     }
 
 // ============================================
-// TEMPLE ZONES INTERACTION (WITH DEBUGGING)
+// TEMPLE ZONES INTERACTION (HYBRID APPROACH)
 // ============================================
 (function initTempleZones() {
   console.log('[Temple Zones] Starting initialization...');
-
+  
   const templeZones = Array.from(document.querySelectorAll('.holiness-zone'));
   const templeContainer = document.querySelector('.temple-zones');
   const zoneInfoContents = Array.from(document.querySelectorAll('.zone-info-content'));
@@ -5319,15 +5319,15 @@ setTimeout(function() {
     center: !!holinessCenter
   });
 
-  // Bail if widget not present
   if (!templeZones.length || !templeContainer || !zoneInfoContents.length) {
-    console.log('[Temple Zones] Not found on this page — skipping');
+    console.log('[Temple Zones] Not found on this page - skipping');
     return;
   }
 
   const supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  console.log('[Temple Zones] Hover support:', supportsHover);
-
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  console.log('[Temple Zones] Device:', { supportsHover, isTouchDevice });
+  
   let lockedZoneName = null;
 
   function clearHover() {
@@ -5352,9 +5352,7 @@ setTimeout(function() {
     zoneInfoContents.forEach(c => c.classList.remove('active'));
     if (!zoneName) return;
 
-    const selected = document.querySelector(
-      `.zone-info-content[data-zone="${zoneName}"]`
-    );
+    const selected = document.querySelector(`.zone-info-content[data-zone="${zoneName}"]`);
     if (selected) {
       selected.classList.add('active');
       console.log('[Temple Zones] Showing info:', zoneName);
@@ -5373,13 +5371,13 @@ setTimeout(function() {
 
     if (zoneName === 'center') {
       if (holinessCenter) holinessCenter.classList.add('center-active');
-      console.log('[Temple Zones] Activated: center');
+      console.log('[Temple Zones] Activated: center (God\'s Presence)');
     } else {
-      const zoneEl = document.querySelector(
-        `.holiness-zone[data-zone="${zoneName}"]`
-      );
-      if (zoneEl) zoneEl.classList.add('zone-active');
-      console.log('[Temple Zones] Activated:', zoneName);
+      const zoneEl = document.querySelector(`.holiness-zone[data-zone="${zoneName}"]`);
+      if (zoneEl) {
+        zoneEl.classList.add('zone-active');
+        console.log('[Temple Zones] Activated:', zoneName);
+      }
     }
 
     showZoneInfo(zoneName);
@@ -5387,43 +5385,48 @@ setTimeout(function() {
   }
 
   // ----------------------------
-  // Hover detection (desktop)
+  // Zone detection from coordinates
+  // ----------------------------
+  function computeZoneFromPointer(clientX, clientY) {
+    const rect = templeContainer.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    const dx = clientX - centerX;
+    const dy = clientY - centerY;
+
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    const maxDistance = rect.width / 2;
+    const relativeDistance = distance / maxDistance;
+
+    console.log('[Temple Zones] relativeDistance:', relativeDistance.toFixed(3));
+
+    // Center (God's Presence)
+    if (relativeDistance < 0.10) return 'center';
+
+    // Zone boundaries (from innermost to outermost)
+    if (relativeDistance < 0.28) return 'holiest';
+    if (relativeDistance < 0.3125) return 'priests';
+    if (relativeDistance < 0.375) return 'israel';
+    if (relativeDistance < 0.4375) return 'women';
+    if (relativeDistance < 0.50) return 'gentiles';
+
+    return null;
+  }
+
+  // ----------------------------
+  // Hover detection (desktop only)
   // ----------------------------
   if (supportsHover) {
     let rafPending = false;
     let lastEvent = null;
 
-    function computeZoneFromPointer(e) {
-      const rect = templeContainer.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-
-      const dx = e.clientX - centerX;
-      const dy = e.clientY - centerY;
-
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      const relativeDistance = distance / (rect.width / 2);
-
-      // Sacred dead zone
-      if (relativeDistance < 0.10) return null;
-
-      if (relativeDistance < 0.28) return 'holiest';
-      if (relativeDistance < 0.3125) return 'priests';
-      if (relativeDistance < 0.375) return 'israel';
-      if (relativeDistance < 0.4375) return 'women';
-      if (relativeDistance < 0.50) return 'gentiles';
-
-      return null;
-    }
-
     function handleMove(e) {
-      const zoneName = computeZoneFromPointer(e);
-      clearHover();
+      const zoneName = computeZoneFromPointer(e.clientX, e.clientY);
 
-      if (zoneName) {
-        const hoverEl = document.querySelector(
-          `.holiness-zone[data-zone="${zoneName}"]`
-        );
+      clearHover();
+      if (zoneName && zoneName !== 'center') {
+        const hoverEl = document.querySelector(`.holiness-zone[data-zone="${zoneName}"]`);
         if (hoverEl) hoverEl.classList.add('zone-hover');
       }
 
@@ -5445,43 +5448,84 @@ setTimeout(function() {
       clearHover();
       if (!lockedZoneName) showZoneInfo(null);
     });
-
+    
     console.log('[Temple Zones] Hover listeners attached');
   }
 
   // ----------------------------
-  // Click selection (zones)
+  // DESKTOP: Click on zones (original approach)
   // ----------------------------
-  templeZones.forEach(zone => {
-    zone.addEventListener('click', (e) => {
+  if (!isTouchDevice) {
+    templeZones.forEach(zone => {
+      zone.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const zoneName = zone.getAttribute('data-zone');
+
+        if (lockedZoneName === zoneName) {
+          clearActive();
+          clearHover();
+          return;
+        }
+
+        setActive(zoneName);
+      });
+    });
+
+    if (holinessCenter) {
+      holinessCenter.addEventListener('click', (e) => {
+        e.stopPropagation();
+
+        if (lockedZoneName === 'center') {
+          clearActive();
+          clearHover();
+          return;
+        }
+
+        setActive('center');
+      });
+    }
+    
+    console.log('[Temple Zones] Desktop click listeners attached');
+  }
+
+  // ----------------------------
+  // TOUCH DEVICES: Use coordinate-based detection
+  // Disable pointer-events on zones, handle at container level
+  // ----------------------------
+  if (isTouchDevice) {
+    // Disable pointer-events on individual zones for touch devices only
+    templeZones.forEach(zone => {
+      zone.style.pointerEvents = 'none';
+    });
+    if (holinessCenter) {
+      holinessCenter.style.pointerEvents = 'none';
+    }
+
+    // Container handles touch events
+    templeContainer.addEventListener('touchend', (e) => {
+      e.preventDefault();
       e.stopPropagation();
-      const zoneName = zone.getAttribute('data-zone');
+      
+      const touch = e.changedTouches[0];
+      console.log('[Temple Zones] Touch at:', touch.clientX, touch.clientY);
+      
+      const zoneName = computeZoneFromPointer(touch.clientX, touch.clientY);
+      console.log('[Temple Zones] Detected zone:', zoneName);
+      
+      if (!zoneName) {
+        clearActive();
+        return;
+      }
 
       if (lockedZoneName === zoneName) {
         clearActive();
-        clearHover();
         return;
       }
 
       setActive(zoneName);
     });
-  });
-
-  // ----------------------------
-  // Center click handler
-  // ----------------------------
-  if (holinessCenter) {
-    holinessCenter.addEventListener('click', (e) => {
-      e.stopPropagation();
-
-      if (lockedZoneName === 'center') {
-        clearActive();
-        clearHover();
-        return;
-      }
-
-      setActive('center');
-    });
+    
+    console.log('[Temple Zones] Touch listeners attached');
   }
 
   // ----------------------------
@@ -5490,16 +5534,14 @@ setTimeout(function() {
   document.addEventListener('click', (event) => {
     if (!lockedZoneName) return;
 
-    const insideZone = event.target.closest('.holiness-zone');
-    const insideCenter = event.target.closest('.holiness-center');
-    const insideInfo = event.target.closest('.zone-info-display');
+    const clickedInsideContainer = event.target.closest('.temple-zones-container') !== null;
 
-    if (!insideZone && !insideCenter && !insideInfo) {
+    if (!clickedInsideContainer) {
       clearActive();
       clearHover();
     }
   });
-
+  
   console.log('[Temple Zones] ✓ Initialization complete');
 })();
 
