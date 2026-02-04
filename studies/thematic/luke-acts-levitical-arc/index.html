@@ -961,8 +961,8 @@
   }
 
     /* ============================================
-     TEMPLE HOLINESS ZONES — CONCENTRIC CIRCLES
-     Clean, stable, single-source version
+     TEMPLE HOLINESS ZONES — CONCENTRIC RINGS (FIXED)
+     Clean, stable, ring-based version
      ============================================ */
 
   /* ----------------------------
@@ -987,7 +987,7 @@
   }
 
   /* ----------------------------
-     Base zone styling
+     Base zone styling - RING ONLY
      ---------------------------- */
   .holiness-zone {
     position: absolute;
@@ -998,25 +998,20 @@
     justify-content: center;
     cursor: pointer;
     pointer-events: auto;
-    transition: transform 0.25s ease, filter 0.25s ease;
+    transition: transform 0.25s ease, filter 0.25s ease, background 0.25s ease;
+    background: transparent; /* KEY CHANGE: transparent by default */
   }
 
-  /* Never use :hover for z-index (mobile hover stickiness) */
-  .holiness-zone:hover {
-    z-index: auto !important;
-  }
-
-  /* Hover highlight — JS-driven only, desktop only */
+  /* Hover highlight — desktop only */
   @media (hover: hover) and (pointer: fine) {
     .holiness-zone.zone-hover {
-      z-index: 1200 !important;
       filter: brightness(1.1);
+      /* Show background on hover */
     }
   }
 
   /* Selected (click / tap) — works everywhere */
   .holiness-zone.zone-active {
-    z-index: 1500 !important;
     transform: scale(1.02);
     filter: saturate(1.06);
     outline: 3px solid rgba(255, 215, 0, 0.55);
@@ -1025,192 +1020,218 @@
   }
 
   /* Labels fade on hover or selection */
-.zone-label {
-  font-weight: 800;
-  font-size: 0.9rem;
-  text-align: center;
-  padding: 0.5rem;
-  line-height: 1.3;
-  pointer-events: none;
-  transition: opacity 0.25s ease, visibility 0.25s ease;
-  opacity: 1;
-  visibility: visible;
-}
+  .zone-label {
+    font-weight: 800;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 0.5rem;
+    line-height: 1.3;
+    pointer-events: none;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+    opacity: 1;
+    visibility: visible;
+  }
 
-/* Hide labels completely on hover - use both opacity AND visibility */
-.holiness-zone.zone-hover .zone-label {
-  opacity: 0 !important;
-  visibility: hidden !important;
-}
+  /* Hide labels on hover */
+  .holiness-zone.zone-hover .zone-label {
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
 
-/* Hide labels completely when selected */
-.holiness-zone.zone-active .zone-label {
-  opacity: 0 !important;
-  visibility: hidden !important;
-}
+  /* Hide labels when selected */
+  .holiness-zone.zone-active .zone-label {
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
 
-/* NEVER hide the center text */
-.holiness-center .center-text,
-.holiness-center .center-icon {
-  opacity: 1 !important;
-  pointer-events: none;
-}
-
-  /* ----------------------------
-   Zones with properly positioned labels
-   ---------------------------- */
-.zone-gentiles {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(156, 39, 176, 0.08);
-  border-color: rgba(156, 39, 176, 0.3);
-  z-index: 1;
-}
-
-.zone-gentiles .zone-label {
-  position: absolute;
-  bottom: 5%; /* In the outermost visible ring */
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.zone-women {
-  top: 12.5%;
-  left: 12.5%;
-  width: 75%;
-  height: 75%;
-  background: rgba(156, 39, 176, 0.15);
-  border-color: rgba(156, 39, 176, 0.4);
-  z-index: 2;
-}
-
-.zone-women .zone-label {
-  position: absolute;
-  bottom: 8%; /* In the visible ring between Gentiles and Israel */
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.zone-israel {
-  top: 25%;
-  left: 25%;
-  width: 50%;
-  height: 50%;
-  background: rgba(156, 39, 176, 0.25);
-  border-color: rgba(156, 39, 176, 0.6);
-  z-index: 3;
-}
-
-.zone-israel .zone-label {
-  position: absolute;
-  bottom: 12%; /* In the visible ring between Women and Priests */
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.zone-priests {
-  top: 37.5%;
-  left: 37.5%;
-  width: 25%;
-  height: 25%;
-  background: rgba(156, 39, 176, 0.4);
-  border-color: rgba(156, 39, 176, 0.8);
-  color: white;
-  z-index: 4;
-}
-
-.zone-priests .zone-label {
-  position: absolute;
-  bottom: 10%; /* Lower position - in the visible ring */
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.75rem; /* Smaller to fit full text on one line */
-  white-space: nowrap; /* Force single line - no wrapping */
-  line-height: 1.2;
-}
-
-.zone-holiest {
-  top: 43.75%;
-  left: 43.75%;
-  width: 12.5%;
-  height: 12.5%;
-  background: rgba(156, 39, 176, 0.6);
-  border-color: #9c27b0;
-  color: white;
-  z-index: 5;
-}
-
-.zone-holiest .zone-label {
-  display: none; /* Too small - hide the label, info box will show on hover */
-}
+  /* NEVER hide the center text */
+  .holiness-center .center-text,
+  .holiness-center .center-icon {
+    opacity: 1 !important;
+    pointer-events: none;
+  }
 
   /* ----------------------------
-   Sacred center (God's Presence)
-   - Always on top
-   - NOW INTERACTIVE (clickable)
-   ---------------------------- */
-.holiness-center {
-  position: absolute;
-  top: 45%;
-  left: 45%;
-  width: 10%;
-  height: 10%;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #ffd700, #ffa500);
-  border: 2px solid #ffd700;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-  pointer-events: auto; /* CHANGED: now clickable */
-  cursor: pointer; /* ADDED: show it's clickable */
-  animation: sacredBreath 5.5s ease-in-out infinite;
-  will-change: transform, box-shadow;
-  isolation: isolate;
-  transition: transform 0.3s ease; /* ADDED: smooth hover */
-}
+     Zones as RINGS using box-shadow technique
+     Each zone shows ONLY its ring, not a filled circle
+     ---------------------------- */
+  .zone-gentiles {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-color: rgba(156, 39, 176, 0.5);
+    border-width: 20px; /* Thick border creates visible ring */
+    background: transparent;
+    z-index: 1;
+  }
 
-/* ADDED: Hover effect */
-.holiness-center:hover {
-  transform: scale(1.05);
-}
+  .zone-gentiles.zone-hover,
+  .zone-gentiles.zone-active {
+    background: rgba(156, 39, 176, 0.08);
+  }
 
-/* ADDED: Active/selected state */
-.holiness-center.center-active {
-  transform: scale(1.08);
-  box-shadow:
-    0 0 32px rgba(255, 215, 0, 0.7),
-    0 0 64px rgba(255, 165, 0, 0.5);
-}
+  .zone-gentiles .zone-label {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 
-.holiness-center::after {
-  content: "";
-  position: absolute;
-  inset: -8px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 215, 0, 0.18), transparent 65%);
-  opacity: 0.6;
-  pointer-events: none;
-}
+  .zone-women {
+    top: 12.5%;
+    left: 12.5%;
+    width: 75%;
+    height: 75%;
+    border-color: rgba(156, 39, 176, 0.55);
+    border-width: 18px;
+    background: transparent;
+    z-index: 2;
+  }
 
-.center-icon {
-  font-size: 1.5rem;
-}
+  .zone-women.zone-hover,
+  .zone-women.zone-active {
+    background: rgba(156, 39, 176, 0.12);
+  }
 
-.center-text {
-  font-size: 0.65rem;
-  font-weight: 800;
-  text-align: center;
-  line-height: 1.1;
-  color: #1a202c;
-  margin-top: 0.15rem;
-  white-space: nowrap;
-}
+  .zone-women .zone-label {
+    position: absolute;
+    bottom: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 
-  /* Subtle breathing (presence, not pulse) */
+  .zone-israel {
+    top: 25%;
+    left: 25%;
+    width: 50%;
+    height: 50%;
+    border-color: rgba(156, 39, 176, 0.65);
+    border-width: 16px;
+    background: transparent;
+    z-index: 3;
+  }
+
+  .zone-israel.zone-hover,
+  .zone-israel.zone-active {
+    background: rgba(156, 39, 176, 0.18);
+  }
+
+  .zone-israel .zone-label {
+    position: absolute;
+    bottom: 12%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .zone-priests {
+    top: 37.5%;
+    left: 37.5%;
+    width: 25%;
+    height: 25%;
+    border-color: rgba(156, 39, 176, 0.8);
+    border-width: 12px;
+    color: white;
+    background: transparent;
+    z-index: 4;
+  }
+
+  .zone-priests.zone-hover,
+  .zone-priests.zone-active {
+    background: rgba(156, 39, 176, 0.25);
+  }
+
+  .zone-priests .zone-label {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    white-space: nowrap;
+    line-height: 1.2;
+  }
+
+  .zone-holiest {
+    top: 43.75%;
+    left: 43.75%;
+    width: 12.5%;
+    height: 12.5%;
+    background: rgba(156, 39, 176, 0.6); /* This one stays filled */
+    border-color: #9c27b0;
+    border-width: 3px;
+    color: white;
+    z-index: 5;
+  }
+
+  .zone-holiest.zone-hover,
+  .zone-holiest.zone-active {
+    background: rgba(156, 39, 176, 0.75);
+  }
+
+  .zone-holiest .zone-label {
+    display: none;
+  }
+
+  /* ----------------------------
+     Sacred center (God's Presence)
+     ---------------------------- */
+  .holiness-center {
+    position: absolute;
+    top: 45%;
+    left: 45%;
+    width: 10%;
+    height: 10%;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffd700, #ffa500);
+    border: 2px solid #ffd700;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    pointer-events: auto;
+    cursor: pointer;
+    animation: sacredBreath 5.5s ease-in-out infinite;
+    will-change: transform, box-shadow;
+    isolation: isolate;
+    transition: transform 0.3s ease;
+  }
+
+  .holiness-center:hover {
+    transform: scale(1.05);
+  }
+
+  .holiness-center.center-active {
+    transform: scale(1.08);
+    box-shadow:
+      0 0 32px rgba(255, 215, 0, 0.7),
+      0 0 64px rgba(255, 165, 0, 0.5);
+  }
+
+  .holiness-center::after {
+    content: "";
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.18), transparent 65%);
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .center-icon {
+    font-size: 1.5rem;
+  }
+
+  .center-text {
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.1;
+    color: #1a202c;
+    margin-top: 0.15rem;
+    white-space: nowrap;
+  }
+
   @keyframes sacredBreath {
     0%, 100% {
       transform: scale(1);
@@ -1226,7 +1247,6 @@
     }
   }
 
-  /* Accessibility */
   @media (prefers-reduced-motion: reduce) {
     .holiness-center { animation: none; }
     .zone-info-content.active { animation: none; }
@@ -1330,150 +1350,31 @@
     font-weight: 700;
   }
 
-  /* Debug indicator */
-  .debug-info {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    background: rgba(0,0,0,0.8);
-    color: #0f0;
-    padding: 0.5rem;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-family: monospace;
-    z-index: 10000;
-  }
-
-  /* Purity Intensification Grid */
-  .purity-intensification-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin: 2rem 0;
-  }
-
-  .intensification-card {
-    background: white;
-    border-radius: 16px;
-    padding: 1.75rem;
-    border: 2px solid #e5e7eb;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .intensification-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #9c27b0, var(--page-accent));
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s ease;
-  }
-
-  .intensification-card:hover {
-    border-color: #9c27b0;
-    box-shadow: 0 8px 24px rgba(156,39,176,0.2);
-    transform: translateY(-6px);
-  }
-
-  .intensification-card:hover::before {
-    transform: scaleX(1);
-  }
-
-  .card-icon {
-    font-size: 2.5rem;
-    margin-bottom: 0.75rem;
-    display: block;
-  }
-
-  .card-title {
-    font-size: 1.2rem;
-    font-weight: 800;
-    color: #9c27b0;
-    margin: 0 0 0.75rem 0;
-  }
-
-  .card-description {
-    font-size: 0.95rem;
-    line-height: 1.7;
-    color: #475569;
-    margin: 0 0 1rem 0;
-  }
-
-  .card-example {
-    padding: 0.75rem;
-    background: linear-gradient(135deg, rgba(156,39,176,0.05), rgba(42,161,152,0.05));
-    border-radius: 8px;
-    font-size: 0.85rem;
-    line-height: 1.5;
-    color: #64748b;
-    border-left: 3px solid #9c27b0;
-  }
-
-  .card-example strong {
-    color: #9c27b0;
-    display: block;
-    margin-bottom: 0.25rem;
-  }
-  
-
-  /* ============================================
-     CORE COMPONENTS - ENHANCED HOVER ANIMATIONS
-     ============================================ */
-  .core-component-card {
-    background: white;
-    border: 2px solid #e5e7eb;
-    border-radius: 16px;
-    padding: 2rem;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  }
-
-  .core-component-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(42,161,152,0.03), rgba(156,39,176,0.03));
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-  }
-
-  .core-component-card:hover::before {
-    opacity: 1;
-  }
-
-  .core-component-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 12px 32px rgba(42,161,152,0.25);
-    border-color: #2aa198;
-  }
-
-  .core-component-card h4 {
-    transition: transform 0.3s ease;
-    font-weight: 800;
-  }
-
-  .core-component-card:hover h4 {
-    transform: translateX(5px);
-  }
-
-  /* Mobile responsive for core component cards */
+  /* Mobile responsive for temple zones */
   @media (max-width: 768px) {
-    .core-component-card {
-      padding: 1.5rem;
+    .temple-zones {
+      padding-bottom: 100%;
+      max-width: 400px;
+      margin: 2rem auto;
     }
+
+    .zone-label {
+      font-size: 0.75rem;
+    }
+
+    .center-text {
+      font-size: 0.4rem;
+    }
+
+    .center-icon {
+      font-size: 1rem;
+    }
+
+    /* Thinner borders on mobile */
+    .zone-gentiles { border-width: 15px; }
+    .zone-women { border-width: 13px; }
+    .zone-israel { border-width: 11px; }
+    .zone-priests { border-width: 9px; }
   }
 
   /* ============================================
@@ -5300,7 +5201,7 @@ setTimeout(function() {
     }
 
 // ============================================
-// TEMPLE ZONES INTERACTION (HYBRID APPROACH)
+// TEMPLE ZONES INTERACTION (RING-BASED)
 // ============================================
 (function initTempleZones() {
   console.log('[Temple Zones] Starting initialization...');
@@ -5325,14 +5226,12 @@ setTimeout(function() {
   }
 
   const supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-  console.log('[Temple Zones] Device:', { supportsHover, isTouchDevice });
+  console.log('[Temple Zones] Hover support:', supportsHover);
   
   let lockedZoneName = null;
 
   function clearHover() {
     templeZones.forEach(z => z.classList.remove('zone-hover'));
-    if (holinessCenter) holinessCenter.classList.remove('center-hover');
   }
 
   function clearInfo() {
@@ -5416,6 +5315,7 @@ setTimeout(function() {
 
   // ----------------------------
   // Hover detection (desktop only)
+  // Now works perfectly with ring-based CSS
   // ----------------------------
   if (supportsHover) {
     let rafPending = false;
@@ -5453,80 +5353,51 @@ setTimeout(function() {
   }
 
   // ----------------------------
-  // DESKTOP: Click on zones (original approach)
+  // Click/Touch handlers - UNIFIED APPROACH
+  // Now that zones are rings, direct click works for both!
   // ----------------------------
-  if (!isTouchDevice) {
-    templeZones.forEach(zone => {
-      zone.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const zoneName = zone.getAttribute('data-zone');
-
-        if (lockedZoneName === zoneName) {
-          clearActive();
-          clearHover();
-          return;
-        }
-
-        setActive(zoneName);
-      });
-    });
-
-    if (holinessCenter) {
-      holinessCenter.addEventListener('click', (e) => {
-        e.stopPropagation();
-
-        if (lockedZoneName === 'center') {
-          clearActive();
-          clearHover();
-          return;
-        }
-
-        setActive('center');
-      });
-    }
-    
-    console.log('[Temple Zones] Desktop click listeners attached');
-  }
-
-  // ----------------------------
-  // TOUCH DEVICES: Use coordinate-based detection
-  // Disable pointer-events on zones, handle at container level
-  // ----------------------------
-  if (isTouchDevice) {
-    // Disable pointer-events on individual zones for touch devices only
-    templeZones.forEach(zone => {
-      zone.style.pointerEvents = 'none';
-    });
-    if (holinessCenter) {
-      holinessCenter.style.pointerEvents = 'none';
-    }
-
-    // Container handles touch events
-    templeContainer.addEventListener('touchend', (e) => {
-      e.preventDefault();
+  
+  // Zone clicks (work for both desktop and touch now)
+  templeZones.forEach(zone => {
+    zone.addEventListener('click', (e) => {
       e.stopPropagation();
-      
-      const touch = e.changedTouches[0];
-      console.log('[Temple Zones] Touch at:', touch.clientX, touch.clientY);
-      
-      const zoneName = computeZoneFromPointer(touch.clientX, touch.clientY);
-      console.log('[Temple Zones] Detected zone:', zoneName);
-      
-      if (!zoneName) {
-        clearActive();
-        return;
-      }
+      const zoneName = zone.getAttribute('data-zone');
 
       if (lockedZoneName === zoneName) {
         clearActive();
+        clearHover();
         return;
       }
 
       setActive(zoneName);
     });
-    
-    console.log('[Temple Zones] Touch listeners attached');
+  });
+
+  // Center click
+  if (holinessCenter) {
+    holinessCenter.addEventListener('click', (e) => {
+      e.stopPropagation();
+
+      if (lockedZoneName === 'center') {
+        clearActive();
+        clearHover();
+        return;
+      }
+
+      setActive('center');
+    });
   }
+  
+  console.log('[Temple Zones] Click/touch listeners attached');
+
+  // ----------------------------
+  // Additional touch optimization
+  // Prevent touch delays and ensure immediate response
+  // ----------------------------
+  templeContainer.addEventListener('touchstart', (e) => {
+    // Allow touch to work immediately without 300ms delay
+    e.stopPropagation();
+  }, { passive: true });
 
   // ----------------------------
   // Click outside clears selection
