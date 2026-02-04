@@ -5304,35 +5304,35 @@ setTimeout(function() {
 // ============================================
 (function initTempleZones() {
   console.log('[Temple Zones] Starting initialization...');
-  
+
   const templeZones = Array.from(document.querySelectorAll('.holiness-zone'));
   const templeContainer = document.querySelector('.temple-zones');
   const zoneInfoContents = Array.from(document.querySelectorAll('.zone-info-content'));
   const zoneInfoDisplay = document.querySelector('.zone-info-display');
-  const holinessCenter = document.querySelector('.holiness-center'); // ADDED
+  const holinessCenter = document.querySelector('.holiness-center');
 
   console.log('[Temple Zones] Found:', {
     zones: templeZones.length,
     container: !!templeContainer,
     infoContents: zoneInfoContents.length,
     infoDisplay: !!zoneInfoDisplay,
-    center: !!holinessCenter // ADDED
+    center: !!holinessCenter
   });
 
-  // If this page doesn't have the widget, do nothing
+  // Bail if widget not present
   if (!templeZones.length || !templeContainer || !zoneInfoContents.length) {
-    console.log('[Temple Zones] Not found on this page - skipping');
+    console.log('[Temple Zones] Not found on this page — skipping');
     return;
   }
 
   const supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   console.log('[Temple Zones] Hover support:', supportsHover);
-  
+
   let lockedZoneName = null;
 
   function clearHover() {
     templeZones.forEach(z => z.classList.remove('zone-hover'));
-    if (holinessCenter) holinessCenter.classList.remove('center-hover'); // ADDED
+    if (holinessCenter) holinessCenter.classList.remove('center-hover');
   }
 
   function clearInfo() {
@@ -5342,7 +5342,7 @@ setTimeout(function() {
 
   function clearActive() {
     templeZones.forEach(z => z.classList.remove('zone-active'));
-    if (holinessCenter) holinessCenter.classList.remove('center-active'); // ADDED
+    if (holinessCenter) holinessCenter.classList.remove('center-active');
     lockedZoneName = null;
     clearInfo();
     console.log('[Temple Zones] Cleared selection');
@@ -5352,7 +5352,9 @@ setTimeout(function() {
     zoneInfoContents.forEach(c => c.classList.remove('active'));
     if (!zoneName) return;
 
-    const selected = document.querySelector(`.zone-info-content[data-zone="${zoneName}"]`);
+    const selected = document.querySelector(
+      `.zone-info-content[data-zone="${zoneName}"]`
+    );
     if (selected) {
       selected.classList.add('active');
       console.log('[Temple Zones] Showing info:', zoneName);
@@ -5361,7 +5363,7 @@ setTimeout(function() {
 
   function setActive(zoneName) {
     templeZones.forEach(z => z.classList.remove('zone-active'));
-    if (holinessCenter) holinessCenter.classList.remove('center-active'); // ADDED
+    if (holinessCenter) holinessCenter.classList.remove('center-active');
     lockedZoneName = zoneName || null;
 
     if (!zoneName) {
@@ -5369,16 +5371,15 @@ setTimeout(function() {
       return;
     }
 
-    // Handle center zone specially
     if (zoneName === 'center') {
       if (holinessCenter) holinessCenter.classList.add('center-active');
-      console.log('[Temple Zones] Activated: center (God\'s Presence)');
+      console.log('[Temple Zones] Activated: center');
     } else {
-      const zoneEl = document.querySelector(`.holiness-zone[data-zone="${zoneName}"]`);
-      if (zoneEl) {
-        zoneEl.classList.add('zone-active');
-        console.log('[Temple Zones] Activated:', zoneName);
-      }
+      const zoneEl = document.querySelector(
+        `.holiness-zone[data-zone="${zoneName}"]`
+      );
+      if (zoneEl) zoneEl.classList.add('zone-active');
+      console.log('[Temple Zones] Activated:', zoneName);
     }
 
     showZoneInfo(zoneName);
@@ -5386,7 +5387,7 @@ setTimeout(function() {
   }
 
   // ----------------------------
-  // Hover detection (desktop only)
+  // Hover detection (desktop)
   // ----------------------------
   if (supportsHover) {
     let rafPending = false;
@@ -5401,32 +5402,31 @@ setTimeout(function() {
       const dy = e.clientY - centerY;
 
       const distance = Math.sqrt(dx * dx + dy * dy);
-      const maxDistance = rect.width / 2;
-      const relativeDistance = distance / maxDistance;
+      const relativeDistance = distance / (rect.width / 2);
 
-      // Dead zone for sacred center
+      // Sacred dead zone
       if (relativeDistance < 0.10) return null;
 
-      // Each zone's OUTER edge (where it ends):
-      if (relativeDistance < 0.28) return 'holiest';   // 56.25% width / 2 = 28.125% radius
-      if (relativeDistance < 0.3125) return 'priests'; // 62.5% width / 2 = 31.25% radius  
-      if (relativeDistance < 0.375) return 'israel';   // 75% width / 2 = 37.5% radius
-      if (relativeDistance < 0.4375) return 'women';   // 87.5% width / 2 = 43.75% radius
-      if (relativeDistance < 0.50) return 'gentiles';  // 100% width / 2 = 50% radius
+      if (relativeDistance < 0.28) return 'holiest';
+      if (relativeDistance < 0.3125) return 'priests';
+      if (relativeDistance < 0.375) return 'israel';
+      if (relativeDistance < 0.4375) return 'women';
+      if (relativeDistance < 0.50) return 'gentiles';
 
       return null;
     }
 
     function handleMove(e) {
       const zoneName = computeZoneFromPointer(e);
-
       clearHover();
+
       if (zoneName) {
-        const hoverEl = document.querySelector(`.holiness-zone[data-zone="${zoneName}"]`);
+        const hoverEl = document.querySelector(
+          `.holiness-zone[data-zone="${zoneName}"]`
+        );
         if (hoverEl) hoverEl.classList.add('zone-hover');
       }
 
-      // Hover updates info ONLY if nothing is locked
       if (!lockedZoneName) showZoneInfo(zoneName);
     }
 
@@ -5445,20 +5445,18 @@ setTimeout(function() {
       clearHover();
       if (!lockedZoneName) showZoneInfo(null);
     });
-    
+
     console.log('[Temple Zones] Hover listeners attached');
   }
 
   // ----------------------------
-  // Click / tap selection (zones)
+  // Click selection (zones)
   // ----------------------------
   templeZones.forEach(zone => {
     zone.addEventListener('click', (e) => {
       e.stopPropagation();
-
       const zoneName = zone.getAttribute('data-zone');
 
-      // Toggle off if clicking same zone
       if (lockedZoneName === zoneName) {
         clearActive();
         clearHover();
@@ -5468,17 +5466,14 @@ setTimeout(function() {
       setActive(zoneName);
     });
   });
-  
-  console.log('[Temple Zones] Click listeners attached');
 
   // ----------------------------
-  // ADDED: Center (God's Presence) click handler
+  // Center click handler
   // ----------------------------
   if (holinessCenter) {
     holinessCenter.addEventListener('click', (e) => {
       e.stopPropagation();
 
-      // Toggle off if clicking center again
       if (lockedZoneName === 'center') {
         clearActive();
         clearHover();
@@ -5487,28 +5482,26 @@ setTimeout(function() {
 
       setActive('center');
     });
-    
-    console.log('[Temple Zones] Center click listener attached');
   }
 
   // ----------------------------
   // Click outside clears selection
   // ----------------------------
   document.addEventListener('click', (event) => {
-    if (!lockedZoneName) return; // only if something is selected
+    if (!lockedZoneName) return;
 
-    const clickedInsideZone = event.target.closest('.holiness-zone') !== null;
-    const clickedInsideCenter = event.target.closest('.holiness-center') !== null; // ADDED
-    const clickedInsideInfo = event.target.closest('.zone-info-display') !== null;
+    const insideZone = event.target.closest('.holiness-zone');
+    const insideCenter = event.target.closest('.holiness-center');
+    const insideInfo = event.target.closest('.zone-info-display');
 
-    if (!clickedInsideZone && !clickedInsideCenter && !clickedInsideInfo) {
+    if (!insideZone && !insideCenter && !insideInfo) {
       clearActive();
       clearHover();
     }
   });
-  
+
   console.log('[Temple Zones] ✓ Initialization complete');
-})(); // Closes temple zones IIFE
+})();
 
 }); // Closes DOMContentLoaded
 </script>
