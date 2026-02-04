@@ -961,8 +961,7 @@
   }
 
     /* ============================================
-     TEMPLE HOLINESS ZONES — CONCENTRIC RINGS (FIXED)
-     Clean, stable, ring-based version
+     TEMPLE HOLINESS ZONES — CONCENTRIC RINGS (FIXED v2)
      ============================================ */
 
   /* ----------------------------
@@ -999,14 +998,13 @@
     cursor: pointer;
     pointer-events: auto;
     transition: transform 0.25s ease, filter 0.25s ease, background 0.25s ease;
-    background: transparent; /* KEY CHANGE: transparent by default */
+    background: transparent; /* Transparent by default */
   }
 
   /* Hover highlight — desktop only */
   @media (hover: hover) and (pointer: fine) {
     .holiness-zone.zone-hover {
       filter: brightness(1.1);
-      /* Show background on hover */
     }
   }
 
@@ -1019,7 +1017,7 @@
     box-shadow: 0 0 0 6px rgba(255, 215, 0, 0.12);
   }
 
-  /* Labels fade on hover or selection */
+  /* Labels - default visible */
   .zone-label {
     font-weight: 800;
     font-size: 0.9rem;
@@ -1030,6 +1028,7 @@
     transition: opacity 0.25s ease, visibility 0.25s ease;
     opacity: 1;
     visibility: visible;
+    color: #1a202c; /* Dark text for visibility */
   }
 
   /* Hide labels on hover */
@@ -1052,16 +1051,17 @@
   }
 
   /* ----------------------------
-     Zones as RINGS using box-shadow technique
-     Each zone shows ONLY its ring, not a filled circle
+     Individual Zones - Ring-based with thick borders
      ---------------------------- */
+  
+  /* Court of Gentiles - Outermost */
   .zone-gentiles {
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     border-color: rgba(156, 39, 176, 0.5);
-    border-width: 20px; /* Thick border creates visible ring */
+    border-width: 20px;
     background: transparent;
     z-index: 1;
   }
@@ -1073,11 +1073,14 @@
 
   .zone-gentiles .zone-label {
     position: absolute;
-    bottom: 5%;
+    bottom: 2%; /* Moved higher to be in visible ring */
     left: 50%;
     transform: translateX(-50%);
+    color: #6b21a8; /* Purple for better contrast */
+    font-weight: 900;
   }
 
+  /* Court of Women */
   .zone-women {
     top: 12.5%;
     left: 12.5%;
@@ -1096,11 +1099,14 @@
 
   .zone-women .zone-label {
     position: absolute;
-    bottom: 8%;
+    bottom: 5%; /* Positioned in visible ring */
     left: 50%;
     transform: translateX(-50%);
+    color: #6b21a8;
+    font-weight: 900;
   }
 
+  /* Court of Israel */
   .zone-israel {
     top: 25%;
     left: 25%;
@@ -1119,11 +1125,14 @@
 
   .zone-israel .zone-label {
     position: absolute;
-    bottom: 12%;
+    bottom: 8%; /* Positioned in visible ring */
     left: 50%;
     transform: translateX(-50%);
+    color: #6b21a8;
+    font-weight: 900;
   }
 
+  /* Court of Priests */
   .zone-priests {
     top: 37.5%;
     left: 37.5%;
@@ -1131,7 +1140,6 @@
     height: 25%;
     border-color: rgba(156, 39, 176, 0.8);
     border-width: 12px;
-    color: white;
     background: transparent;
     z-index: 4;
   }
@@ -1143,20 +1151,24 @@
 
   .zone-priests .zone-label {
     position: absolute;
-    bottom: 10%;
+    top: 50%; /* Centered vertically in ring */
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     font-size: 0.75rem;
     white-space: nowrap;
     line-height: 1.2;
+    color: #6b21a8; /* Changed from white to purple */
+    font-weight: 900;
+    text-shadow: 0 1px 3px rgba(255,255,255,0.8); /* White shadow for readability */
   }
 
+  /* Holy of Holies */
   .zone-holiest {
     top: 43.75%;
     left: 43.75%;
     width: 12.5%;
     height: 12.5%;
-    background: rgba(156, 39, 176, 0.6); /* This one stays filled */
+    background: rgba(156, 39, 176, 0.6); /* Stays filled */
     border-color: #9c27b0;
     border-width: 3px;
     color: white;
@@ -1169,7 +1181,18 @@
   }
 
   .zone-holiest .zone-label {
-    display: none;
+    position: absolute;
+    top: -28px; /* ABOVE the circle */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.7rem;
+    white-space: nowrap;
+    color: #6b21a8;
+    font-weight: 900;
+    background: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   }
 
   /* ----------------------------
@@ -1375,6 +1398,13 @@
     .zone-women { border-width: 13px; }
     .zone-israel { border-width: 11px; }
     .zone-priests { border-width: 9px; }
+
+    /* Adjust Holy of Holies label for mobile */
+    .zone-holiest .zone-label {
+      top: -24px;
+      font-size: 0.65rem;
+      padding: 0.2rem 0.4rem;
+    }
   }
 
   /* ============================================
