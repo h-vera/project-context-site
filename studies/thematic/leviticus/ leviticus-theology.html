@@ -1701,71 +1701,92 @@
       const sections = document.querySelectorAll('section[id], div[id]');
       console.log(`✓ ${sections.length} navigable sections detected`);
     });
-    // =========================================
-    // Q&A PILLS TOGGLE
-    // =========================================
-    document.querySelectorAll('.qa-pill-question').forEach(question => {
-      question.addEventListener('click', function() {
-        const pill = this.closest('.qa-pill');
-        const wasActive = pill.classList.contains('active');
-        
-        // Close all other pills
-        document.querySelectorAll('.qa-pill').forEach(p => p.classList.remove('active'));
-        
-        // Toggle this pill
-        if (!wasActive) {
-          pill.classList.add('active');
-        }
-      });
-    });
-
-  </script>
-<script>
-/* ================================
-   Q&A PILL ACCORDION (Leviticus)
-   ================================ */
-document.addEventListener('DOMContentLoaded', () => {
-  const pills = Array.from(document.querySelectorAll('.qa-pill'));
-  if (!pills.length) return;
-
-  function setToggleSymbol(pill, isOpen){
-    const t = pill.querySelector('.qa-pill-toggle');
-    if (t) t.textContent = isOpen ? '−' : '+';
-  }
-
-  // Initialize symbols
-  pills.forEach(p => setToggleSymbol(p, p.classList.contains('active')));
-
-  pills.forEach(pill => {
-    const q = pill.querySelector('.qa-pill-question');
-    if (!q) return;
-
-    // Make accessible
-    q.setAttribute('role','button');
-    q.setAttribute('tabindex','0');
-
-    const activate = () => {
-      const isOpen = pill.classList.contains('active');
-      // close others (accordion)
-      pills.forEach(other => {
-        if (other !== pill) {
-          other.classList.remove('active');
-          setToggleSymbol(other, false);
-        }
-      });
-      // toggle current
-      pill.classList.toggle('active', !isOpen);
-      setToggleSymbol(pill, !isOpen);
-    };
-
-    q.addEventListener('click', activate);
-    q.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        activate();
+    </script>
+    <script>
+    /* ============================================
+       Q&A PILLS TOGGLE - CORRECTED VERSION
+       ============================================ */
+    document.addEventListener('DOMContentLoaded', () => {
+      const pills = Array.from(document.querySelectorAll('.qa-pill'));
+      
+      if (!pills.length) {
+        console.log('⚠️ No Q&A pills found');
+        return;
       }
+
+      console.log(`✓ Found ${pills.length} Q&A pills - initializing`);
+
+      function setToggleSymbol(pill, isOpen) {
+        const toggle = pill.querySelector('.qa-pill-toggle');
+        if (toggle) {
+          toggle.textContent = isOpen ? '−' : '+';
+        }
+      }
+
+      // Initialize all pills as closed
+      pills.forEach(pill => {
+        pill.classList.remove('active');
+        setToggleSymbol(pill, false);
+      });
+
+      // Add click handlers
+      pills.forEach((pill, index) => {
+        const question = pill.querySelector('.qa-pill-question');
+        if (!question) {
+          console.log(`⚠️ Pill ${index} has no question element`);
+          return;
+        }
+
+        // Make accessible
+        question.setAttribute('role', 'button');
+        question.setAttribute('tabindex', '0');
+        question.setAttribute('aria-expanded', 'false');
+        question.style.cursor = 'pointer';
+
+        const activate = () => {
+          const isCurrentlyOpen = pill.classList.contains('active');
+          
+          console.log(`Pill ${index} clicked. Currently open: ${isCurrentlyOpen}`);
+          
+          // Close all other pills (accordion behavior)
+          pills.forEach(otherPill => {
+            if (otherPill !== pill) {
+              otherPill.classList.remove('active');
+              const otherQuestion = otherPill.querySelector('.qa-pill-question');
+              if (otherQuestion) {
+                otherQuestion.setAttribute('aria-expanded', 'false');
+              }
+              setToggleSymbol(otherPill, false);
+            }
+          });
+          
+          // Toggle current pill
+          const shouldOpen = !isCurrentlyOpen;
+          pill.classList.toggle('active', shouldOpen);
+          question.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+          setToggleSymbol(pill, shouldOpen);
+          
+          console.log(`Pill ${index} is now ${shouldOpen ? 'open' : 'closed'}`);
+        };
+
+        // Click event
+        question.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          activate();
+        });
+
+        // Keyboard accessibility
+        question.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            activate();
+          }
+        });
+      });
+
+      console.log('✓ Q&A pills initialized successfully');
     });
-  });
-});
-</script></body>
+  </script>
+</body>
 </html>
