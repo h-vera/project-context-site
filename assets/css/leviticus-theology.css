@@ -265,42 +265,116 @@
       }
     }
 
-    .mini-card {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.10);
-      border-radius: 16px;
-      padding: 1.25rem 1.35rem;
-      transition: all 0.3s ease;
-    }
+    /* ============================================
+   MINI CARDS - Enhanced with gradients & glow
+   ============================================ */
 
-    .mini-card:hover {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(120, 160, 255, 0.3);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    }
+.mini-card {
+  background: linear-gradient(135deg, rgba(42,161,152,0.05), rgba(156,39,176,0.03));
+  border: 2px solid rgba(42,161,152,0.2);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
 
-    .mini-card h4 { 
-      margin: 0 0 0.75rem; 
-      font-size: 1.1rem;
-      color: rgba(232, 238, 252, 0.95);
-      font-weight: 600;
-    }
+/* Animated top border bar */
+.mini-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #2aa198, #9c27b0, #2aa198);
+  background-size: 200% 100%;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
 
-    .mini-card ul { 
-      margin: 0.5rem 0 0 1.2rem; 
-      padding: 0;
-    }
+.mini-card:hover::before {
+  transform: scaleX(1);
+  animation: gradientFlow 3s ease-in-out infinite;
+}
 
-    .mini-card li { 
-      margin: 0.5rem 0; 
-      color: rgba(255, 255, 255, 0.78);
-      line-height: 1.6;
-    }
+@keyframes gradientFlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
 
-    .mini-card li strong {
-      color: rgba(232, 238, 252, 0.95);
-    }
+/* Subtle glow effect */
+.mini-card::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, 
+    rgba(42,161,152,0.15), 
+    rgba(156,39,176,0.15)
+  );
+  border-radius: 16px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mini-card:hover::after {
+  opacity: 0.3;
+  animation: gentlePulse 2s ease-in-out infinite;
+}
+
+@keyframes gentlePulse {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.4; }
+}
+
+.mini-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 32px rgba(42,161,152,0.2);
+  border-color: #2aa198;
+  background: linear-gradient(135deg, rgba(42,161,152,0.08), rgba(156,39,176,0.05));
+}
+
+.mini-card h4 {
+  color: #1a202c !important;
+  font-weight: 700 !important;
+  font-size: 1.15rem;
+  margin-bottom: 0.75rem;
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.mini-card:hover h4 {
+  transform: translateX(5px);
+  color: #0f766e !important;
+}
+
+.mini-card p {
+  color: #4a5568 !important;
+  line-height: 1.7 !important;
+  margin: 0.75rem 0;
+}
+
+.mini-card li {
+  color: #4a5568 !important;
+  line-height: 1.6 !important;
+  margin: 0.5rem 0;
+  position: relative;
+  padding-left: 0.5rem;
+}
+
+.mini-card li::marker {
+  color: #2aa198;
+  font-weight: 700;
+}
+
+.mini-card li strong,
+.mini-card p strong {
+  color: #1a202c !important;
+  font-weight: 700 !important;
+}
 
     /* ============================================
        PILL NOTES
@@ -1372,14 +1446,121 @@
   font-weight: 700 !important;
 }
 
-/* Key insights (semi-dark backgrounds) */
+/* ============================================
+   KEY INSIGHTS - Dramatic enhancement
+   ============================================ */
+
 .key-insight {
-  color: rgba(240, 245, 255, 0.92) !important;
+  background: linear-gradient(135deg, 
+    rgba(212,175,55,0.1), 
+    rgba(42,161,152,0.1)
+  );
+  border-left: 4px solid #d4af37;
+  border-radius: 16px;
+  padding: 1.75rem;
+  margin: 2rem 0;
+  box-shadow: 0 4px 12px rgba(212,175,55,0.15);
+  position: relative;
+  transition: all 0.4s ease;
+  overflow: hidden;
+}
+
+/* Glowing border effect */
+.key-insight::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, 
+    rgba(212,175,55,0.3), 
+    rgba(42,161,152,0.3)
+  );
+  border-radius: 16px;
+  z-index: -1;
+  opacity: 0;
+  animation: insightGlow 4s ease-in-out infinite;
+}
+
+@keyframes insightGlow {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 0.4; }
+}
+
+/* Icon or decorative element */
+.key-insight::after {
+  content: '💡';
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  font-size: 2rem;
+  opacity: 0.15;
+  animation: lightbulbFloat 6s ease-in-out infinite;
+}
+
+@keyframes lightbulbFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(-5deg);
+    opacity: 0.15;
+  }
+  50% {
+    transform: translateY(-8px) rotate(5deg);
+    opacity: 0.25;
+  }
+}
+
+.key-insight:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 12px 28px rgba(212,175,55,0.25);
+  border-left-width: 6px;
+  background: linear-gradient(135deg, 
+    rgba(212,175,55,0.15), 
+    rgba(42,161,152,0.15)
+  );
+}
+
+.key-insight:hover::before {
+  animation: insightGlowHover 2s ease-in-out infinite;
+}
+
+@keyframes insightGlowHover {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
 }
 
 .key-insight strong {
-  color: rgba(255, 255, 255, 1) !important;
+  color: #1e293b !important;
   font-weight: 700 !important;
+  font-size: 1.05rem;
+}
+
+.key-insight p {
+  color: #334155 !important;
+  line-height: 1.8;
+  margin: 0.5rem 0;
+}
+
+/* First strong element gets special treatment */
+.key-insight strong:first-child {
+  display: block;
+  font-size: 1.2rem;
+  color: #b8860b !important;
+  margin-bottom: 0.75rem;
+  background: linear-gradient(120deg, 
+    transparent 0%, 
+    rgba(212,175,55,0.2) 50%, 
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  padding: 0 0.25rem;
+}
+
+.key-insight:hover strong:first-child {
+  animation: highlightSweep 2s ease-out;
+}
+
+@keyframes highlightSweep {
+  0% { background-position: -100% 0; }
+  50% { background-position: 0 0; }
+  100% { background-position: 100% 0; }
 }
 
 /* Convictions list (on dark sections) */
@@ -1435,16 +1616,6 @@
 .mini-card li strong,
 .mini-card p strong {
   color: #1a202c !important; /* Dark for emphasis */
-  font-weight: 700 !important;
-}
-
-/* Key insights - light backgrounds */
-.key-insight {
-  color: #334155 !important; /* Dark text on light bg */
-}
-
-.key-insight strong {
-  color: #1e293b !important; /* Darker for emphasis */
   font-weight: 700 !important;
 }
 
