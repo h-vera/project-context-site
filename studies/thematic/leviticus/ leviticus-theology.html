@@ -66,14 +66,115 @@
 
   <style>
     /* ============================================
-       HERO SECTION STYLING
+       COSMIC HERO (OG-style)
+       - deep space + halo ring + "skin" bloom + grain
        ============================================ */
     
     .hero {
-      background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
-      padding: 4rem 2rem 3rem;
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px;
+      padding: 5.5rem 1.75rem 4.25rem;
       margin-bottom: 2rem;
-      border-bottom: 2px solid rgba(120, 160, 255, 0.2);
+      color: rgba(255,255,255,0.92);
+      background:
+        radial-gradient(1200px 700px at 50% -10%, rgba(87,169,255,0.28), transparent 55%),
+        radial-gradient(900px 600px at 25% 15%, rgba(233,75,255,0.18), transparent 55%),
+        radial-gradient(900px 650px at 75% 20%, rgba(255,155,74,0.12), transparent 60%),
+        radial-gradient(900px 800px at 50% 70%, rgba(62,228,255,0.10), transparent 60%),
+        linear-gradient(180deg, #070b14 0%, #050711 40%, #04040c 100%);
+      box-shadow:
+        0 30px 80px rgba(0,0,0,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .hero::before {
+      /* "Skin" bloom (pearly living light) */
+      content: "";
+      position: absolute;
+      inset: -30%;
+      background:
+        radial-gradient(380px 300px at 50% 28%,
+          rgba(255,255,255,0.22),
+          rgba(210,245,255,0.14) 30%,
+          rgba(87,169,255,0.10) 55%,
+          transparent 72%),
+        radial-gradient(540px 420px at 50% 32%,
+          rgba(255,255,255,0.10),
+          rgba(233,75,255,0.06) 55%,
+          transparent 75%);
+      filter: blur(10px);
+      opacity: 0.95;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    .hero::after {
+      /* Halo ring + grain + stars */
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        /* halo ring */
+        radial-gradient(circle at 50% 30%,
+          transparent 0 190px,
+          rgba(212,175,55,0.22) 196px,
+          rgba(212,175,55,0.05) 215px,
+          transparent 235px),
+        /* star specks */
+        radial-gradient(1px 1px at 12% 22%, rgba(255,255,255,0.35) 0 1px, transparent 2px),
+        radial-gradient(1px 1px at 38% 18%, rgba(255,255,255,0.28) 0 1px, transparent 2px),
+        radial-gradient(1px 1px at 68% 16%, rgba(255,255,255,0.30) 0 1px, transparent 2px),
+        radial-gradient(1px 1px at 84% 26%, rgba(255,255,255,0.26) 0 1px, transparent 2px),
+        radial-gradient(1px 1px at 22% 46%, rgba(255,255,255,0.20) 0 1px, transparent 2px),
+        radial-gradient(1px 1px at 74% 54%, rgba(255,255,255,0.18) 0 1px, transparent 2px),
+        /* grain-ish dither */
+        repeating-linear-gradient(0deg,
+          rgba(255,255,255,0.015) 0px,
+          rgba(255,255,255,0.015) 1px,
+          rgba(0,0,0,0.015) 2px,
+          rgba(0,0,0,0.015) 3px);
+      opacity: 0.85;
+      pointer-events: none;
+      mix-blend-mode: overlay;
+    }
+
+    /* Optional subtle motion (keeps it alive, not distracting) */
+    @media (prefers-reduced-motion: no-preference) {
+      .hero::before {
+        animation: heroBloom 10s ease-in-out infinite;
+      }
+      .hero::after {
+        animation: heroDrift 18s ease-in-out infinite;
+      }
+    }
+
+    @keyframes heroBloom {
+      0%, 100% { transform: translate3d(0,0,0) scale(1); opacity: 0.95; }
+      50% { transform: translate3d(0,-8px,0) scale(1.02); opacity: 0.88; }
+    }
+
+    @keyframes heroDrift {
+      0%, 100% { transform: translate3d(0,0,0); opacity: 0.85; }
+      50% { transform: translate3d(6px,-4px,0); opacity: 0.78; }
+    }
+
+    /* Make hero headings pop like your Project Context aesthetic */
+    .hero h1, .hero .hero-title {
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(62,228,255,0.92), rgba(233,75,255,0.85));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 10px 40px rgba(0,0,0,0.35);
+    }
+
+    .hero .hero-subtitle {
+      color: rgba(255,255,255,0.78);
+      max-width: 900px;
     }
 
     .hero-content {
@@ -84,10 +185,11 @@
 
     .hero-greek {
       font-size: 1.2rem;
-      color: rgba(120, 160, 255, 0.8);
+      color: rgba(212,175,55,0.85); /* Gold instead of blue */
       margin-bottom: 1rem;
       font-weight: 600;
       letter-spacing: 0.1em;
+      text-shadow: 0 2px 12px rgba(212,175,55,0.3);
     }
 
     .hero-title {
@@ -121,8 +223,9 @@
     .stat-number {
       font-size: 2.5rem;
       font-weight: 800;
-      color: rgba(120, 160, 255, 0.9);
+      color: rgba(212,175,55,0.95); /* Gold to match halo */
       line-height: 1;
+      text-shadow: 0 4px 16px rgba(212,175,55,0.4); /* Glow effect */
     }
 
     .stat-label {
@@ -258,17 +361,6 @@
 
     .mini-card li strong {
       color: #1a202c;
-    }
-
-    /* Related Studies Button Styles */
-    .mini-card a[href^="../"] {
-      transition: all 0.3s ease;
-    }
-
-    .mini-card a[href^="../"]:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-      filter: brightness(1.1);
     }
 
     /* ============================================
@@ -673,202 +765,160 @@
     }
 
     /* ============================================
-       OFFERINGS TABLE
+       THREE-STATUS PROGRESSION
        ============================================ */
-    
-    .offerings-table-container {
-      margin: 2rem 0;
-      overflow-x: auto;
-    }
 
-    .offerings-table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
+    .status-progression-container {
+      margin: 3rem 0;
       background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      border: 3px solid rgba(42,161,152,0.15);
     }
 
-    .offerings-table thead tr {
-      background: linear-gradient(135deg, #0f766e, #2aa198);
-    }
-
-    .offerings-table th {
-      padding: 1.25rem;
-      text-align: left;
-      color: white;
-      font-weight: 700;
-      font-size: 1rem;
-    }
-
-    .offerings-table tbody tr {
-      border-bottom: 2px solid #e5e7eb;
-      transition: all 0.3s ease;
-    }
-
-    .offerings-table tbody tr:last-child {
-      border-bottom: none;
-    }
-
-    .offerings-table tbody tr:hover {
-      background: linear-gradient(90deg, rgba(42,161,152,0.08), transparent);
-      transform: translateX(4px);
-      box-shadow: -4px 0 0 0 #2aa198;
-    }
-
-    .offerings-table td {
-      padding: 1.25rem;
-    }
-
-    @media (max-width: 768px) {
-      .offerings-table {
-        font-size: 0.9rem;
-      }
-      
-      .offerings-table th,
-      .offerings-table td {
-        padding: 0.875rem;
-      }
-    }
-
-    /* ============================================
-       TRAJECTORY FLOWCHART
-       ============================================ */
-    
-    .trajectory-flowchart {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 2rem;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-    }
-
-    .flow-box {
-      background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-      border: 2px solid #cbd5e1;
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin: 1rem 0;
-      transition: all 0.3s ease;
-    }
-
-    .flow-box:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    }
-
-    .flow-intent { border-color: #3b82f6; background: linear-gradient(135deg, #dbeafe, #bfdbfe); }
-    .flow-creation { border-color: #10b981; background: linear-gradient(135deg, #d1fae5, #a7f3d0); }
-    .flow-loss { border-color: #f59e0b; background: linear-gradient(135deg, #fed7aa, #fde68a); }
-    .flow-sanctuary { border-color: #2aa198; background: linear-gradient(135deg, #ccfbf1, #99f6e4); }
-    .flow-problem { border-color: #ef4444; background: linear-gradient(135deg, #fecaca, #fca5a5); }
-    .flow-maintenance { border-color: #8b5cf6; background: linear-gradient(135deg, #ddd6fe, #c4b5fd); }
-    .flow-atonement { border-color: #d4af37; background: linear-gradient(135deg, #fef3c7, #fde68a); }
-    .flow-question { border-color: #64748b; background: linear-gradient(135deg, #e2e8f0, #cbd5e1); }
-
-    .flow-header {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: #1e293b;
-      text-align: center;
-      margin-bottom: 0.5rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .flow-subtitle {
-      font-size: 0.9rem;
-      color: #64748b;
-      text-align: center;
-      font-style: italic;
-      margin-bottom: 1rem;
-    }
-
-    .flow-content {
-      font-size: 0.95rem;
-      line-height: 1.7;
-      color: #334155;
-    }
-
-    .flow-ref {
-      font-size: 0.8rem;
-      color: #64748b;
-      font-style: italic;
-    }
-
-    .flow-arrow {
-      text-align: center;
-      font-size: 2rem;
-      color: #64748b;
-      margin: 0.5rem 0;
-    }
-
-    .flow-transition {
-      text-align: center;
-      font-size: 0.9rem;
-      color: #64748b;
-      font-style: italic;
-      margin: 0.5rem 0;
-      padding: 0.5rem;
-    }
-
-    /* ============================================
-       PROSE WALKTHROUGH
-       ============================================ */
-    
-    .prose-walkthrough {
+    .progression-stages {
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
       gap: 1.5rem;
     }
 
-    .prose-block {
-      background: white;
-      border-left: 4px solid #2aa198;
-      border-radius: 8px;
-      padding: 1.25rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    .progression-stage {
+      flex: 1;
+      min-width: 180px;
+      border-radius: 16px;
+      padding: 1.5rem;
+      text-align: center;
       transition: all 0.3s ease;
     }
 
-    .prose-block:hover {
-      border-left-width: 6px;
-      box-shadow: 0 4px 12px rgba(42,161,152,0.15);
-      transform: translateX(4px);
+    .progression-stage:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
     }
 
-    .prose-title {
+    .progression-arrow {
+      flex-shrink: 0;
+      font-size: 2rem;
+      font-weight: 900;
+    }
+
+    .progression-process {
+      flex: 1;
+      min-width: 200px;
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    @media (max-width: 1024px) {
+      .progression-arrow {
+        transform: rotate(90deg);
+        font-size: 1.5rem;
+      }
+
+      .progression-stages {
+        flex-direction: column;
+      }
+
+      .progression-stage,
+      .progression-process {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+
+    /* ============================================
+       HEBREW VOCABULARY CARDS
+       ============================================ */
+
+    .hebrew-vocab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0 3rem;
+    }
+
+    .hebrew-vocab-card {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hebrew-vocab-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+    }
+
+    .hebrew-vocab-card .hebrew-text {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+      direction: rtl;
+      font-family: 'Times New Roman', serif;
+    }
+
+    .hebrew-vocab-card .transliteration {
       font-size: 1.1rem;
       font-weight: 700;
-      color: #0f766e;
-      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.10em;
+      margin-bottom: 0.5rem;
     }
 
-    .prose-content {
+    .hebrew-vocab-card .english {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: #1a202c;
+      margin-bottom: 1rem;
+    }
+
+    .hebrew-vocab-card p {
       font-size: 0.95rem;
-      line-height: 1.8;
+      line-height: 1.7;
       color: #475569;
+      margin-bottom: 1rem;
     }
 
-    .prose-content strong {
-      color: #0f766e;
-      font-weight: 700;
+    .status-property {
+      display: inline-block;
+      border-radius: 8px;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+    }
+
+    .two-axis-explanation {
+      background: linear-gradient(135deg, rgba(42,161,152,0.08), rgba(212,175,55,0.08));
+      border-radius: 16px;
+      padding: 2rem;
+      margin: 2rem 0;
+      border: 2px solid rgba(42,161,152,0.2);
+    }
+
+    .two-axis-explanation h5 {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--page-accent-dark);
+      margin: 0 0 1rem;
+      text-align: center;
     }
 
     @media (max-width: 768px) {
-      .trajectory-flowchart {
-        padding: 1rem;
+      .hebrew-vocab-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
       }
-      
-      .flow-box {
-        padding: 1rem;
-      }
-      
-      .flow-header {
-        font-size: 1rem;
+
+      .hebrew-vocab-card .hebrew-text {
+        font-size: 2.5rem;
       }
     }
 
@@ -964,41 +1014,396 @@
       font-style: italic;
     }
 
-    .teaching-tip-box {
-      margin-top: 3rem;
-      background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(42,161,152,0.1));
-      border-left: 5px solid #d4af37;
-      border-radius: 12px;
-      padding: 1.5rem;
-      display: flex;
-      gap: 1rem;
-      align-items: flex-start;
-    }
-
-    .tip-icon {
-      font-size: 2rem;
-      flex-shrink: 0;
-    }
-
-    .tip-content {
-      flex: 1;
-      font-size: 1rem;
-      line-height: 1.8;
-      color: #475569;
-    }
-
-    .tip-content strong {
-      color: #b8860b;
-      font-weight: 800;
-    }
-
     /* ============================================
        RESPONSIVE
        ============================================ */
 
+    /* ============================================
+       TORAH SYMMETRY DIAGRAM
+       ============================================ */
+    .torah-symmetry-wrap {
+      margin: 2rem auto 2.25rem;
+      padding: 2rem;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(42,161,152,0.05), rgba(0,0,0,0));
+      border: 2px solid rgba(42,161,152,0.18);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      max-width: 1100px;
+    }
+
+    .torah-symmetry-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .ts-frame {
+      fill: white;
+      stroke: rgba(42,161,152,0.25);
+      stroke-width: 3;
+    }
+
+    .ts-box {
+      fill: rgba(42,161,152,0.06);
+      stroke: rgba(42,161,152,0.30);
+      stroke-width: 2;
+    }
+
+    .ts-node-book .ts-box {
+      fill: rgba(0,0,0,0.02);
+    }
+
+    .ts-title {
+      font-weight: 900;
+      font-size: 18px;
+      fill: #1a202c;
+    }
+
+    .ts-sub {
+      font-weight: 700;
+      font-size: 13px;
+      fill: #475569;
+    }
+
+    .ts-mirror {
+      stroke: rgba(42,161,152,0.55);
+      stroke-width: 3;
+      stroke-dasharray: 8 8;
+    }
+
+    .ts-mirror-label {
+      font-weight: 900;
+      font-size: 12px;
+      fill: rgba(15,118,110,0.95);
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+    }
+
+    .ts-hinge {
+      font-weight: 900;
+      font-size: 14px;
+      fill: rgba(15,118,110,0.95);
+    }
+
+    .ts-center {
+      fill: rgba(42,161,152,0.14);
+      stroke: #0f766e;
+      stroke-width: 4;
+    }
+
+    .ts-center-title {
+      font-weight: 900;
+      font-size: 16px;
+      fill: #0f766e;
+    }
+
+    .ts-center-sub {
+      font-weight: 900;
+      font-size: 12px;
+      fill: #475569;
+      letter-spacing: 0.04em;
+    }
+
+    .ts-arrow {
+      fill: none;
+      stroke: rgba(42,161,152,0.75);
+      stroke-width: 4;
+      stroke-linecap: round;
+    }
+
+    .ts-arrowhead {
+      fill: rgba(42,161,152,0.85);
+    }
+
+    .ts-caption {
+      font-weight: 800;
+      font-size: 12px;
+      fill: #475569;
+      opacity: 0.95;
+    }
+
+    .ts-lev15 {
+      fill: rgba(156,39,176,0.05);
+      stroke: rgba(156,39,176,0.25);
+    }
+
+    .ts-lev17 {
+      fill: rgba(212,175,55,0.08);
+      stroke: rgba(212,175,55,0.30);
+    }
+
     @media (max-width: 768px) {
       .diagram-wrap {
         padding: 1rem;
+      }
+
+      .torah-symmetry-wrap {
+        padding: 1.25rem;
+      }
+      
+      .ts-title {
+        font-size: 16px;
+      }
+      
+      .ts-sub {
+        font-size: 12px;
+      }
+
+      .qa-pill-question {
+        padding: 0.875rem 1rem;
+        gap: 0.75rem;
+      }
+
+      .qa-pill-icon {
+        font-size: 1.25rem;
+      }
+
+      .qa-pill-text {
+        font-size: 0.9rem;
+      }
+
+      .qa-pill-toggle {
+        font-size: 1.25rem;
+      }
+
+      .qa-pill-answer {
+        font-size: 0.95rem;
+      }
+
+      .qa-pill.active .qa-pill-answer {
+        padding: 1rem;
+        max-height: 800px;
+      }
+    }
+
+    /* ============================================
+       Q&A EXPANDABLE PILLS
+       ============================================ */
+    .qa-pills-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+
+    .qa-pill {
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .qa-pill-question {
+      background: linear-gradient(135deg, #2aa198, #0f766e);
+      color: white;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-radius: 12px;
+    }
+
+    .qa-pill:hover .qa-pill-question {
+      background: linear-gradient(135deg, #0f766e, #0d5f58);
+      transform: translateX(4px);
+    }
+
+    .qa-pill.active .qa-pill-question {
+      background: linear-gradient(135deg, #d4af37, #b8860b);
+      border-radius: 12px 12px 0 0;
+    }
+
+    .qa-pill-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .qa-pill-text {
+      flex: 1;
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.5;
+      font-style: italic;
+    }
+
+    .qa-pill-toggle {
+      font-size: 1.5rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+
+    .qa-pill.active .qa-pill-toggle {
+      transform: rotate(45deg);
+    }
+
+    .qa-pill-answer {
+      max-height: 0;
+      overflow: hidden;
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-top: none;
+      border-radius: 0 0 12px 12px;
+      transition: max-height 0.4s ease, padding 0.4s ease;
+      padding: 0 1.5rem;
+      font-size: 1rem;
+      line-height: 1.8;
+      color: #334155;
+    }
+
+    .qa-pill.active .qa-pill-answer {
+      max-height: 600px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .qa-pill-answer strong {
+      color: #0f766e;
+      font-weight: 700;
+    }
+
+    .qa-pill-answer em {
+      color: #2aa198;
+      font-style: italic;
+    }
+
+    /* ============================================
+       TRAJECTORY FLOWCHART STYLES
+       ============================================ */
+    
+    .trajectory-flowchart {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    .flow-box {
+      background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+      border: 2px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      transition: all 0.3s ease;
+    }
+
+    .flow-box:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .flow-intent { border-color: #3b82f6; background: linear-gradient(135deg, #dbeafe, #bfdbfe); }
+    .flow-creation { border-color: #10b981; background: linear-gradient(135deg, #d1fae5, #a7f3d0); }
+    .flow-loss { border-color: #f59e0b; background: linear-gradient(135deg, #fed7aa, #fde68a); }
+    .flow-sanctuary { border-color: #2aa198; background: linear-gradient(135deg, #ccfbf1, #99f6e4); }
+    .flow-problem { border-color: #ef4444; background: linear-gradient(135deg, #fecaca, #fca5a5); }
+    .flow-maintenance { border-color: #8b5cf6; background: linear-gradient(135deg, #ddd6fe, #c4b5fd); }
+    .flow-atonement { border-color: #d4af37; background: linear-gradient(135deg, #fef3c7, #fde68a); }
+    .flow-question { border-color: #64748b; background: linear-gradient(135deg, #e2e8f0, #cbd5e1); }
+
+    .flow-header {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #1e293b;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .flow-subtitle {
+      font-size: 0.9rem;
+      color: #64748b;
+      text-align: center;
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+
+    .flow-content {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #334155;
+    }
+
+    .flow-ref {
+      font-size: 0.8rem;
+      color: #64748b;
+      font-style: italic;
+    }
+
+    .flow-arrow {
+      text-align: center;
+      font-size: 2rem;
+      color: #64748b;
+      margin: 0.5rem 0;
+    }
+
+    .flow-transition {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #64748b;
+      font-style: italic;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+    }
+
+    /* ============================================
+       PROSE WALKTHROUGH
+       ============================================ */
+
+    .prose-walkthrough {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .prose-block {
+      background: white;
+      border-left: 4px solid #2aa198;
+      border-radius: 8px;
+      padding: 1.25rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: all 0.3s ease;
+    }
+
+    .prose-block:hover {
+      border-left-width: 6px;
+      box-shadow: 0 4px 12px rgba(42,161,152,0.15);
+      transform: translateX(4px);
+    }
+
+    .prose-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #0f766e;
+      margin-bottom: 0.75rem;
+    }
+
+    .prose-content {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: #475569;
+    }
+
+    .prose-content strong {
+      color: #0f766e;
+      font-weight: 700;
+    }
+
+    @media (max-width: 768px) {
+      .trajectory-flowchart {
+        padding: 1rem;
+      }
+
+      .flow-box {
+        padding: 1rem;
+      }
+
+      .flow-header {
+        font-size: 1rem;
       }
     }
   </style>
@@ -1022,9 +1427,9 @@
         <div class="hero-greek">וַיִּקְרָא • קֹדֶשׁ</div>
         <h1 class="hero-title">Leviticus Theology</h1>
         <p class="hero-subtitle">
-          <strong>The central question:</strong> How can a holy God remain present among a mortal people?<br>
-          Leviticus presents a divinely-ordered system where human actions generate impurity threatening sacred space, 
-          requiring regulated rituals, ethical repentance, and periodic atonement so God may continue to dwell among Israel.
+          A companion page that explains Leviticus (especially chapters 1–16) <strong>on its own terms</strong>:
+          a holy God dwelling among Israel, sacred space that can be polluted, and a ritual system designed to maintain
+          God's presence in the camp.
         </p>
 
         <div class="hero-stats">
@@ -1069,9 +1474,9 @@
         <a href="#atonement" class="quick-link">🕊 Day of Atonement</a>
         <a href="#clean-unclean" class="quick-link">🌳 Clean/Unclean</a>
         <a href="#significance" class="quick-link">⭐ Why It Matters</a>
+        <a href="#trajectory" class="quick-link">🔄 Trajectory</a>
         <a href="#anticipated-questions" class="quick-link">❓ Common Questions</a>
         <a href="#convictions" class="quick-link">✅ Convictions</a>
-        <a href="#trajectory" class="quick-link">📈 Trajectory</a>
         <a href="#bibliography" class="quick-link">📚 Bibliography</a>
       </div>
 
@@ -1101,6 +1506,108 @@
           (wilderness → Sinai → wilderness). And Leviticus? Right at the heart.
         </p>
 
+        <!-- TORAH SYMMETRY SVG DIAGRAM -->
+        <div class="torah-symmetry-wrap animate-on-scroll" style="margin: 2rem auto 2.5rem; padding: 2rem; border-radius: 20px; background: linear-gradient(135deg, rgba(42,161,152,0.05), rgba(0,0,0,0)); border: 2px solid rgba(42,161,152,0.18); box-shadow: 0 4px 16px rgba(0,0,0,0.08); max-width: 1100px;">
+          <h4 style="text-align: center; margin: 0 0 0.5rem; font-size: 1.4rem; font-weight: 900; color: var(--page-accent-dark);">Torah Symmetry: Mirrors + Center</h4>
+          <p style="text-align: center; margin: 0 auto 1.5rem; max-width: 900px; line-height: 1.75; color: #334155; font-size: 1rem;">
+            Genesis mirrors Deuteronomy. Exodus mirrors Numbers. Leviticus is the hinge—<strong>with Leviticus 16 at its center</strong>, framed by Leviticus 15 and 17.
+          </p>
+
+          <svg viewBox="0 0 900 400" style="width: 100%; height: auto; display: block;" role="img" aria-label="Torah symmetry diagram with inner Leviticus 15, 16, 17 frame">
+            <defs>
+              <style>
+                .ts-frame { fill: white; stroke: rgba(42,161,152,0.25); stroke-width: 3; }
+                .ts-box { fill: rgba(42,161,152,0.06); stroke: rgba(42,161,152,0.30); stroke-width: 2; }
+                .ts-node-book .ts-box { fill: rgba(0,0,0,0.02); }
+                .ts-title { font-weight: 900; font-size: 18px; fill: #1a202c; }
+                .ts-sub { font-weight: 700; font-size: 13px; fill: #475569; }
+                .ts-mirror { stroke: rgba(42,161,152,0.55); stroke-width: 3; stroke-dasharray: 8 8; }
+                .ts-mirror-label { font-weight: 900; font-size: 12px; fill: rgba(15,118,110,0.95); letter-spacing: 0.10em; text-transform: uppercase; }
+                .ts-hinge { font-weight: 900; font-size: 14px; fill: rgba(15,118,110,0.95); }
+                .ts-center { fill: rgba(42,161,152,0.14); stroke: #0f766e; stroke-width: 4; }
+                .ts-center-title { font-weight: 900; font-size: 16px; fill: #0f766e; }
+                .ts-center-sub { font-weight: 900; font-size: 12px; fill: #475569; letter-spacing: 0.04em; }
+                .ts-arrow { fill: none; stroke: rgba(42,161,152,0.75); stroke-width: 4; stroke-linecap: round; }
+                .ts-arrowhead { fill: rgba(42,161,152,0.85); }
+                .ts-caption { font-weight: 800; font-size: 12px; fill: #475569; opacity: 0.95; }
+                .ts-lev15 { fill: rgba(156,39,176,0.05); stroke: rgba(156,39,176,0.25); }
+                .ts-lev17 { fill: rgba(212,175,55,0.08); stroke: rgba(212,175,55,0.30); }
+              </style>
+            </defs>
+
+            <!-- Frame -->
+            <rect x="14" y="14" width="872" height="372" rx="22" class="ts-frame"/>
+
+            <!-- Book mirror nodes -->
+            <g class="ts-node ts-node-book">
+              <rect x="55" y="52" width="260" height="62" rx="16" class="ts-box"/>
+              <text x="185" y="89" text-anchor="middle" class="ts-title">Genesis</text>
+              <text x="185" y="109" text-anchor="middle" class="ts-sub">Origins • Promise • Blessing</text>
+            </g>
+
+            <g class="ts-node ts-node-book">
+              <rect x="585" y="52" width="260" height="62" rx="16" class="ts-box"/>
+              <text x="715" y="89" text-anchor="middle" class="ts-title">Deuteronomy</text>
+              <text x="715" y="109" text-anchor="middle" class="ts-sub">Renewal • Re-articulation • Future</text>
+            </g>
+
+            <g class="ts-node ts-node-book">
+              <rect x="55" y="136" width="260" height="62" rx="16" class="ts-box"/>
+              <text x="185" y="173" text-anchor="middle" class="ts-title">Exodus</text>
+              <text x="185" y="193" text-anchor="middle" class="ts-sub">Redemption • Dwelling • Presence</text>
+            </g>
+
+            <g class="ts-node ts-node-book">
+              <rect x="585" y="136" width="260" height="62" rx="16" class="ts-box"/>
+              <text x="715" y="173" text-anchor="middle" class="ts-title">Numbers</text>
+              <text x="715" y="193" text-anchor="middle" class="ts-sub">Testing • Failure • Threat to Dwelling</text>
+            </g>
+
+            <!-- Mirror connectors -->
+            <line x1="325" y1="83" x2="575" y2="83" class="ts-mirror"/>
+            <text x="450" y="74" text-anchor="middle" class="ts-mirror-label">mirror</text>
+
+            <line x1="325" y1="167" x2="575" y2="167" class="ts-mirror"/>
+            <text x="450" y="158" text-anchor="middle" class="ts-mirror-label">mirror</text>
+
+            <!-- Inner Leviticus frame -->
+            <g>
+              <!-- Lev 15 -->
+              <rect x="85" y="244" width="240" height="86" rx="18" class="ts-box ts-lev15"/>
+              <text x="205" y="274" text-anchor="middle" class="ts-title">Leviticus 15</text>
+              <text x="205" y="296" text-anchor="middle" class="ts-sub">Impurity spreads toward</text>
+              <text x="205" y="316" text-anchor="middle" class="ts-sub">the sanctuary (bodies)</text>
+
+              <!-- Lev 17 -->
+              <rect x="575" y="244" width="240" height="86" rx="18" class="ts-box ts-lev17"/>
+              <text x="695" y="274" text-anchor="middle" class="ts-title">Leviticus 17</text>
+              <text x="695" y="296" text-anchor="middle" class="ts-sub">Life is guarded:</text>
+              <text x="695" y="316" text-anchor="middle" class="ts-sub">blood belongs to God</text>
+
+              <!-- Lev 16 center -->
+              <circle cx="450" cy="287" r="52" class="ts-center"/>
+              <text x="450" y="281" text-anchor="middle" class="ts-center-title">Leviticus 16</text>
+              <text x="450" y="305" text-anchor="middle" class="ts-center-sub">Day of Atonement</text>
+
+              <!-- Inward arrows -->
+              <path d="M 330 287 C 365 287, 385 287, 397 287" class="ts-arrow"/>
+              <path d="M 570 287 C 535 287, 515 287, 503 287" class="ts-arrow"/>
+
+              <!-- Arrow heads -->
+              <polygon points="397,287 409,281 409,293" class="ts-arrowhead"/>
+              <polygon points="503,287 491,281 491,293" class="ts-arrowhead"/>
+
+              <!-- Bottom caption -->
+              <text x="450" y="370" text-anchor="middle" class="ts-caption">
+                Lev 15 describes the impurity problem • Lev 16 resolves it at the center • Lev 17 safeguards life so dwelling can continue
+              </text>
+            </g>
+
+            <!-- Center label between mirrors and inner frame -->
+            <text x="450" y="224" text-anchor="middle" class="ts-hinge">Leviticus is the hinge — the center of the Torah's logic of dwelling</text>
+          </svg>
+        </div>
+
         <div class="callout-row">
           <div class="mini-card">
             <h4>🏛️ Eden Restored (Symbolically)</h4>
@@ -1129,6 +1636,7 @@
         </div>
       </section>
 
+
       <!-- CORE LOGIC -->
       <section class="theology-card animate-on-scroll" id="core-logic">
         <h3>Core Logic: Presence → Space → Pollution → Cleansing</h3>
@@ -1138,7 +1646,7 @@
         </p>
 
         <div class="diagram-wrap">
-          <object data="leviticus-core-logic-NEW.svg" type="image/svg+xml" aria-label="Core logic diagram: Holy God dwells in Sacred Space, which is polluted by ritual and moral impurity, cleansed through blood rites, confession, and repentance, resulting in God remaining with Israel through the Day of Atonement system"></object>
+          <object data="leviticus-core-logic-NEW.svg" type="image/svg+xml" aria-label="Core logic diagram showing: Holy God → Sacred Space → Polluted By (ritual and moral impurity) → Cleansed By (blood, confession, repentance) → Day of Atonement → God Remains with Israel"></object>
           <div class="diagram-caption">
             The flow: <strong>pollution threatens presence</strong>; <strong>cleansing protects presence</strong>. 
             The Day of Atonement serves as the annual comprehensive reset that addresses accumulated pollution from both ritual and moral sources.
@@ -1173,12 +1681,45 @@
         </p>
 
         <div class="diagram-wrap">
-          <object data="leviticus-sacred-space-NEW.svg" type="image/svg+xml" aria-label="Sacred space diagram showing concentric zones of holiness: Israel/Camp/Land (outermost), Court, Holy Place, and Holy of Holies at center where God's presence dwells. Pollution moves inward, blood purification works outward"></object>
+          <object data="leviticus-sacred-space-NEW.svg" type="image/svg+xml" aria-label="Sacred space diagram showing concentric zones from outer (Israel/Camp/Land) through Sacred Space and Holy Place to the innermost Holy of Holies containing God's presence"></object>
           <div class="diagram-caption">
             The sanctuary can be affected by Israel's moral failures <strong>even when they occur "far away"</strong> from the physical temple.
             This is one reason Leviticus ties ethics to the health of sacred space. Moral impurity pollutes the sanctuary from a distance,
             while ritual impurity requires contact or proximity.
           </div>
+        </div>
+
+        <!-- CRITICAL DISTINCTION BOX -->
+        <div class="critical-distinction-box animate-on-scroll" style="background: linear-gradient(135deg, rgba(239,68,68,0.1), rgba(245,158,11,0.1)); border-left: 5px solid #ef4444; border-radius: 16px; padding: 2rem; box-shadow: 0 4px 16px rgba(239,68,68,0.15); position: relative; overflow: hidden; margin: 2rem 0;">
+          <strong style="display: block; font-size: 1.3rem; color: #dc2626; margin-bottom: 0.75rem;">⚠️ CRITICAL DISTINCTION: Ritual Impurity ≠ Sin</strong>
+          
+          <p style="margin-top: 0.75rem; line-height: 1.8; color: #475569;">
+            Becoming ritually impure is <strong>not a moral failure</strong>. The following all render someone ritually impure—yet are good, necessary, or blessed:
+          </p>
+          
+          <ul style="margin: 1rem 0 0 1.5rem; padding: 0; line-height: 1.8; color: #475569;">
+            <li style="margin: 0.75rem 0; position: relative; padding-left: 0.5rem;">
+              <strong style="color: #dc2626;">Burying your uncle</strong> → Impure (but you SHOULD do it—family duty)
+              <div style="font-size: 0.85rem; color: #64748b; font-style: italic; margin-top: 0.25rem; padding-left: 0.5rem; border-left: 2px solid #fca5a5; background: linear-gradient(90deg, rgba(239,68,68,0.05), transparent); padding: 0.25rem 0.5rem; border-radius: 4px; display: inline-block; margin-left: 0.5rem;">Numbers 19:11-16; Leviticus 21:1-3</div>
+            </li>
+            <li style="margin: 0.75rem 0; position: relative; padding-left: 0.5rem;">
+              <strong style="color: #dc2626;">Marital sexual intercourse</strong> → Impure (but BLESSED in Genesis 1:28)
+              <div style="font-size: 0.85rem; color: #64748b; font-style: italic; margin-top: 0.25rem; padding-left: 0.5rem; border-left: 2px solid #fca5a5; background: linear-gradient(90deg, rgba(239,68,68,0.05), transparent); padding: 0.25rem 0.5rem; border-radius: 4px; display: inline-block; margin-left: 0.5rem;">Leviticus 15:18 + Genesis 1:28; Proverbs 5:18-19</div>
+            </li>
+            <li style="margin: 0.75rem 0; position: relative; padding-left: 0.5rem;">
+              <strong style="color: #dc2626;">Childbirth</strong> → Impure (but MIRACULOUS gift of new life)
+              <div style="font-size: 0.85rem; color: #64748b; font-style: italic; margin-top: 0.25rem; padding-left: 0.5rem; border-left: 2px solid #fca5a5; background: linear-gradient(90deg, rgba(239,68,68,0.05), transparent); padding: 0.25rem 0.5rem; border-radius: 4px; display: inline-block; margin-left: 0.5rem;">Leviticus 12:1-8 + Psalm 127:3</div>
+            </li>
+            <li style="margin: 0.75rem 0; position: relative; padding-left: 0.5rem;">
+              <strong style="color: #dc2626;">Touching a newborn</strong> → Impure (but BEAUTIFUL act of care)
+              <div style="font-size: 0.85rem; color: #64748b; font-style: italic; margin-top: 0.25rem; padding-left: 0.5rem; border-left: 2px solid #fca5a5; background: linear-gradient(90deg, rgba(239,68,68,0.05), transparent); padding: 0.25rem 0.5rem; border-radius: 4px; display: inline-block; margin-left: 0.5rem;">Related to Leviticus 12 (birth fluids)</div>
+            </li>
+          </ul>
+          
+          <p style="margin-top: 1rem; font-style: italic; color: #64748b; line-height: 1.8;">
+            Impurity is a <strong>state</strong>, not a sin. It's a temporary condition marking our mortality, our "life outside Eden" reality. 
+            The issue isn't <em>becoming</em> impure—it's <em>entering holy space while impure</em>.
+          </p>
         </div>
 
         <div class="key-insight">
@@ -1197,50 +1738,8 @@
           Each offering has a specific function within the larger system.
         </p>
 
-        <div class="offerings-table-container" style="margin: 2rem 0; overflow-x: auto;">
-          <table class="offerings-table" style="width: 100%; border-collapse: separate; border-spacing: 0; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
-            <thead>
-              <tr style="background: linear-gradient(135deg, #0f766e, #2aa198);">
-                <th style="padding: 1.25rem; text-align: left; color: white; font-weight: 700; font-size: 1rem;">Offering</th>
-                <th style="padding: 1.25rem; text-align: left; color: white; font-weight: 700; font-size: 1rem;">Hebrew</th>
-                <th style="padding: 1.25rem; text-align: left; color: white; font-weight: 700; font-size: 1rem;">Function</th>
-                <th style="padding: 1.25rem; text-align: left; color: white; font-weight: 700; font-size: 1rem;">Key Verses</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr style="border-bottom: 2px solid #e5e7eb; transition: all 0.2s ease;">
-                <td style="padding: 1.25rem; font-weight: 600; color: #1a202c; border-left: 4px solid #d4af37;">🔥 Burnt Offering</td>
-                <td style="padding: 1.25rem;"><span style="font-size: 1.3rem; color: #0f766e; font-weight: 700;">עֹלָה</span><br><span style="font-size: 0.85rem; color: #64748b; font-style: italic;">ʿōlāh</span></td>
-                <td style="padding: 1.25rem; color: #475569;">Total surrender to God — entire animal consumed</td>
-                <td style="padding: 1.25rem; font-size: 0.9rem; color: #64748b;">Lev 1:3-17; 6:8-13</td>
-              </tr>
-              <tr style="border-bottom: 2px solid #e5e7eb; transition: all 0.2s ease;">
-                <td style="padding: 1.25rem; font-weight: 600; color: #1a202c; border-left: 4px solid #8b5cf6;">🌾 Grain Offering</td>
-                <td style="padding: 1.25rem;"><span style="font-size: 1.3rem; color: #0f766e; font-weight: 700;">מִנְחָה</span><br><span style="font-size: 0.85rem; color: #64748b; font-style: italic;">minḥāh</span></td>
-                <td style="padding: 1.25rem; color: #475569;">Tribute and gratitude — gift to God</td>
-                <td style="padding: 1.25rem; font-size: 0.9rem; color: #64748b;">Lev 2:1-16; 6:14-23</td>
-              </tr>
-              <tr style="border-bottom: 2px solid #e5e7eb; transition: all 0.2s ease;">
-                <td style="padding: 1.25rem; font-weight: 600; color: #1a202c; border-left: 4px solid #22c55e;">🍖 Well-being Offering</td>
-                <td style="padding: 1.25rem;"><span style="font-size: 1.3rem; color: #0f766e; font-weight: 700;">שְׁלָמִים</span><br><span style="font-size: 0.85rem; color: #64748b; font-style: italic;">šĕlāmîm</span></td>
-                <td style="padding: 1.25rem; color: #475569;">Shared fellowship — communal meal with God, priest, and family</td>
-                <td style="padding: 1.25rem; font-size: 0.9rem; color: #64748b;">Lev 3:1-17; 7:11-36</td>
-              </tr>
-              <tr style="border-bottom: 2px solid #e5e7eb; transition: all 0.2s ease;">
-                <td style="padding: 1.25rem; font-weight: 600; color: #1a202c; border-left: 4px solid #ef4444;">🩸 Purification Offering</td>
-                <td style="padding: 1.25rem;"><span style="font-size: 1.3rem; color: #0f766e; font-weight: 700;">חַטָּאת</span><br><span style="font-size: 0.85rem; color: #64748b; font-style: italic;">ḥaṭṭāʾt</span></td>
-                <td style="padding: 1.25rem; color: #475569;">Cleanses sanctuary from ritual impurity — <strong>not</strong> "sin offering"</td>
-                <td style="padding: 1.25rem; font-size: 0.9rem; color: #64748b;">Lev 4:1-5:13; 6:24-30</td>
-              </tr>
-              <tr style="transition: all 0.2s ease;">
-                <td style="padding: 1.25rem; font-weight: 600; color: #1a202c; border-left: 4px solid #f59e0b;">⚖️ Reparation Offering</td>
-                <td style="padding: 1.25rem;"><span style="font-size: 1.3rem; color: #0f766e; font-weight: 700;">אָשָׁם</span><br><span style="font-size: 0.85rem; color: #64748b; font-style: italic;">ʾāšām</span></td>
-                <td style="padding: 1.25rem; color: #475569;">Repairs breach of trust — restores violated relationship</td>
-                <td style="padding: 1.25rem; font-size: 0.9rem; color: #64748b;">Lev 5:14-6:7; 7:1-10</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <div class="diagram-wrap">
+          <object data="leviticus-offerings-map.svg" type="image/svg+xml" aria-label="Offerings map showing five types: burnt offering (total surrender), grain offering (tribute/gratitude), well-being offering (fellowship), purification offering (cleanses sanctuary), and reparation offering (repairs breach of trust)"></object>
           <div class="diagram-caption">
             <strong>Translation note:</strong> Calling <em>ḥaṭṭāʾt</em> a "sin offering" can mislead; its primary function is often
             <strong>purification / decontamination of sacred space</strong> rather than personal guilt removal. Similarly, <em>ʾāšām</em>
@@ -1330,7 +1829,7 @@
         </div>
 
         <div class="diagram-wrap">
-          <object data="leviticus-directional-logic-NEW.svg" type="image/svg+xml" aria-label="Two-direction logic diagram: Moral impurity and ethics move from outside inward through repentance and confession, while blood purification works from inside outward, cleansing sacred space but never touching people"></object>
+          <object data="leviticus-directional-logic-NEW.svg" type="image/svg+xml" aria-label="Directional cleansing diagram showing moral impurity moving inward toward the sanctuary, and blood purification working outward from the center"></object>
           <div class="diagram-caption">
             <strong>Critical detail:</strong> Blood is applied to <em>altars, veils, sancta</em>—<strong>not to people</strong>.
             The worshiper is never sprinkled with blood in purification rites. Ethics/repentance works outside → in (from the people toward God);
@@ -1376,7 +1875,7 @@
         </p>
 
         <div class="diagram-wrap">
-          <object data="leviticus-day-of-atonement-NEW.svg" type="image/svg+xml" aria-label="Day of Atonement ritual flow: Year-long accumulation of impurity is addressed through three coordinated actions - blood rites purify the inner sanctum, confession names guilt publicly, and the scapegoat physically removes sins to the wilderness, resulting in system reset and God remaining with Israel"></object>
+          <object data="leviticus-day-of-atonement-NEW.svg" type="image/svg+xml" aria-label="Day of Atonement timeline showing year-long accumulation leading to three coordinated actions: blood purifies inner sanctum, confession names guilt, and scapegoat removes sins to wilderness, resulting in system reset and God remaining with Israel"></object>
           <div class="diagram-caption">
             Three coordinated actions work together: <strong>Blood purifies</strong> the inner sanctum (spatial cleansing),
             <strong>confession names</strong> the community's guilt (verbal acknowledgment), and the <strong>scapegoat removes</strong>
@@ -1464,219 +1963,48 @@
 
       <!-- WHY THIS MATTERS -->
       <section class="theology-card animate-on-scroll" id="significance">
-        <h3>Why This System Matters</h3>
-        <p style="font-size: 1.05rem; line-height: 1.8; color: #475569;">
+        <h3>Why This System Matters (Biblical Storyline)</h3>
+        <p>
           Leviticus isn't just ancient ritual minutiae. It's a crucial bridge in the biblical story, addressing a fundamental problem:
           <strong>How can the source of all life dwell among mortals without consuming them?</strong>
         </p>
 
-        <!-- CREATION → SANCTUARY → TEXT DIAGRAM -->
-        <div class="diagram-wrap" style="margin: 2.5rem 0;">
-          <object data="leviticus-creation-sanctuary-text-NEW.svg" type="image/svg+xml" aria-label="Creation to Sanctuary to Text diagram showing the priestly pattern: Genesis 1 creation mirrors the sanctuary construction, which mirrors Leviticus' literary structure, all teaching movement toward God's presence"></object>
-        </div>
-
-        <h4 style="font-size: 1.4rem; color: var(--page-accent-dark); margin: 2.5rem 0 1rem;">Why Sacrifice Exists: Creation as Sacred Space</h4>
-        
-        <p style="font-size: 1rem; line-height: 1.8; color: #334155;">
-          Jacob Milgrom explains <em>how</em> Levitical sacrifice works: impurity pollutes sacred space, and regulated 
-          rites cleanse it so divine presence can remain. Jon D. Levenson explains <em>why</em> a system like this exists at all.
-        </p>
-
-        <p style="font-size: 1rem; line-height: 1.8; color: #334155;">
-          In priestly theology, creation is not merely "nature"—it is <strong>ordered space designed for God's dwelling</strong> 
-          (Gen 1; Exod 25:8). The seven-day creation pattern mirrors the tabernacle construction: both move toward a climactic 
-          seventh day/space where God's presence rests. Boundaries, separations, and graded zones are not decorative; 
-          they protect life in the presence of holiness.
-        </p>
-
         <div class="callout-row">
           <div class="mini-card">
-            <h4>🌊 Human Life Introduces Instability</h4>
-            <ul style="line-height: 1.7;">
-              <li><strong>Mortality:</strong> Corpses, bodily fluids (ritual impurity)</li>
-              <li><strong>Disorder:</strong> Boundary violations, mixing categories</li>
-              <li><strong>Moral rupture:</strong> Idolatry, bloodshed, injustice</li>
+            <h4>📖 The Story So Far</h4>
+            <ul>
+              <li><strong>Genesis 1-2:</strong> God partners with humans in Eden</li>
+              <li><strong>Genesis 3:</strong> Humans forfeit that partnership through folly</li>
+              <li><strong>Genesis 4-11:</strong> Violence and death spread globally</li>
+              <li><strong>Exodus:</strong> God chooses one family (Israel) to restart the project</li>
+              <li><strong>Problem:</strong> They keep failing too (golden calf, Aaron's sons)</li>
             </ul>
           </div>
           <div class="mini-card">
-            <h4>🔧 Sacrifice as Maintenance</h4>
-            <ul style="line-height: 1.7;">
-              <li>Not manipulation of God</li>
-              <li>Not appeasement or bribery</li>
-              <li>Ritual preservation of sacred order</li>
-              <li>Maintains cosmos where God dwells with mortals</li>
+            <h4>🎯 What Leviticus Provides</h4>
+            <ul>
+              <li>A <strong>system</strong> for maintaining proximity to God despite failure</li>
+              <li>Symbolic teaching: death precedes transformation</li>
+              <li>Down payment on a greater solution yet to come</li>
+              <li>Training wheels for understanding holiness, atonement, priesthood</li>
             </ul>
-          </div>
-        </div>
-
-        <div class="scripture-quote" style="margin: 2rem 0;">
-          <div class="scroll-text">
-            <div class="block">
-              <strong>💡 Key Insight:</strong> Levitical sacrifice is the ritual preservation of an ordered world 
-              in which a holy God can dwell among a mortal people. It's ongoing maintenance, not manipulation.
-              <div style="margin-top: 1rem; font-size: 0.9rem; color: #64748b; font-style: italic;">
-                Jon D. Levenson, <em>Creation and the Persistence of Evil: The Jewish Drama of Divine Omnipotence</em> 
-                (San Francisco: HarperCollins, 1988), 78-99, 127-137.
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <h4 style="font-size: 1.4rem; color: var(--page-accent-dark); margin: 2.5rem 0 1rem;">Tabernacle as New Eden</h4>
-
-        <p style="font-size: 1rem; line-height: 1.8; color: #334155;">
-          L. Michael Morales demonstrates that the tabernacle is explicitly designed as a <strong>miniature Eden</strong>—a 
-          return to sacred space where God and humanity dwell together:
-        </p>
-
-        <div class="eden-tabernacle-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
-          <div style="background: linear-gradient(135deg, rgba(42,161,152,0.08), rgba(42,161,152,0.02)); border-left: 4px solid #2aa198; border-radius: 12px; padding: 1.5rem;">
-            <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">🌳 → 🏛️</div>
-            <strong style="color: #0f766e; font-size: 1.05rem;">Entrance Direction</strong>
-            <p style="font-size: 0.95rem; line-height: 1.7; color: #475569; margin-top: 0.5rem;">
-              Garden entrance faced <strong>EAST</strong> → Tabernacle entrance faces <strong>EAST</strong>
-            </p>
-          </div>
-          
-          <div style="background: linear-gradient(135deg, rgba(212,175,55,0.08), rgba(212,175,55,0.02)); border-left: 4px solid #d4af37; border-radius: 12px; padding: 1.5rem;">
-            <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">👼 → 🎨</div>
-            <strong style="color: #b8860b; font-size: 1.05rem;">Guardians</strong>
-            <p style="font-size: 0.95rem; line-height: 1.7; color: #475569; margin-top: 0.5rem;">
-              Cherubim guard Eden's entrance → Cherubim woven on tabernacle veil (Exod 26:31)
-            </p>
-          </div>
-          
-          <div style="background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(139,92,246,0.02)); border-left: 4px solid #8b5cf6; border-radius: 12px; padding: 1.5rem;">
-            <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">🌲 → 🕎</div>
-            <strong style="color: #6d28d9; font-size: 1.05rem;">Tree of Life</strong>
-            <p style="font-size: 0.95rem; line-height: 1.7; color: #475569; margin-top: 0.5rem;">
-              Tree of Life at Eden's center → Menorah (stylized tree) in Holy Place (Exod 25:31-40)
-            </p>
-          </div>
-          
-          <div style="background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(59,130,246,0.02)); border-left: 4px solid #3b82f6; border-radius: 12px; padding: 1.5rem;">
-            <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">🌊 → 🚰</div>
-            <strong style="color: #1e40af; font-size: 1.05rem;">Water Source</strong>
-            <p style="font-size: 0.95rem; line-height: 1.7; color: #475569; margin-top: 0.5rem;">
-              River flows from Eden → Bronze basin (water) at tabernacle entrance (Exod 30:18)
-            </p>
-          </div>
-          
-          <div style="background: linear-gradient(135deg, rgba(34,197,94,0.08), rgba(34,197,94,0.02)); border-left: 4px solid #22c55e; border-radius: 12px; padding: 1.5rem;">
-            <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">👨 → 👨‍⚖️</div>
-            <strong style="color: #15803d; font-size: 1.05rem;">Priestly Service</strong>
-            <p style="font-size: 0.95rem; line-height: 1.7; color: #475569; margin-top: 0.5rem;">
-              Adam <strong>serves (עָבַד)</strong> and <strong>keeps (שָׁמַר)</strong> the garden → Same Hebrew verbs describe priestly service (Num 3:7-8; 18:7)
-            </p>
           </div>
         </div>
 
         <div class="key-insight">
-          <strong>The priest is the new Adam,</strong> serving in God's presence. But unlike Adam, the priest operates 
-          within a regulated system that acknowledges human failure and provides maintenance rituals.
-          <div style="margin-top: 1rem; font-size: 0.9rem; color: #64748b; font-style: italic;">
-            L. Michael Morales, <em>The Tabernacle Pre-Figured: Cosmic Mountain Ideology in Genesis and Exodus</em> 
-            (Leuven: Peeters, 2012), 167-203; <em>Who Shall Ascend the Mountain of the Lord?</em> NSBT 37 
-            (Downers Grove: IVP, 2015), 27-51.
-          </div>
+          <strong>Forward-looking design:</strong> This system was never meant to be permanent. The repetition (year after year, 
+          day after day) signals incompleteness. The whole structure points beyond itself to a future where a blameless <em>human</em>
+          (not just animals) would stand in the holy place and offer their life once for all. This is Torah as instruction—
+          it teaches categories (priest, sacrifice, blood, sanctuary) that the rest of Scripture will fill with deeper meaning.
         </div>
-
-        <h4 style="font-size: 1.4rem; color: var(--page-accent-dark); margin: 2.5rem 0 1rem;">Why Leviticus Is Structured This Way</h4>
-
-        <p style="font-size: 1rem; line-height: 1.8; color: #334155;">
-          Leviticus is not a random rulebook but a carefully <strong>architected literary work</strong> whose form mirrors 
-          its theology. The book is structured like sacred space itself: it moves toward a protected center and returns outward.
-        </p>
-
-        <div style="background: linear-gradient(135deg, rgba(42,161,152,0.08), rgba(212,175,55,0.08)); border-radius: 16px; padding: 2rem; margin: 2rem 0; border: 2px solid rgba(42,161,152,0.2);">
-          <h5 style="text-align: center; font-size: 1.2rem; font-weight: 700; color: #0f766e; margin-bottom: 1.5rem;">
-            📜 Structural Mirror: Leviticus' Concentric Design
-          </h5>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-            <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
-              <strong style="color: #64748b;">Lev 1-7</strong><br>
-              <span style="font-size: 0.9rem; color: #475569;">Offerings</span>
-            </div>
-            <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
-              <strong style="color: #64748b;">Lev 8-10</strong><br>
-              <span style="font-size: 0.9rem; color: #475569;">Priesthood</span>
-            </div>
-            <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
-              <strong style="color: #64748b;">Lev 11-15</strong><br>
-              <span style="font-size: 0.9rem; color: #475569;">Impurity</span>
-            </div>
-            <div style="text-align: center; padding: 1.5rem; background: linear-gradient(135deg, #d4af37, #b8860b); border-radius: 8px; box-shadow: 0 4px 16px rgba(212,175,55,0.3);">
-              <strong style="color: #fef3c7; font-size: 1.1rem;">LEV 16</strong><br>
-              <span style="font-size: 0.95rem; color: #fef3c7; font-weight: 600;">CENTER</span>
-            </div>
-            <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
-              <strong style="color: #64748b;">Lev 17-20</strong><br>
-              <span style="font-size: 0.9rem; color: #475569;">Holiness</span>
-            </div>
-            <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
-              <strong style="color: #64748b;">Lev 21-22</strong><br>
-              <span style="font-size: 0.9rem; color: #475569;">Priests</span>
-            </div>
-            <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
-              <strong style="color: #64748b;">Lev 23-27</strong><br>
-              <span style="font-size: 0.9rem; color: #475569;">Sacred Times</span>
-            </div>
-          </div>
-        </div>
-
-        <p style="font-size: 1rem; line-height: 1.8; color: #334155;">
-          Repetition is not redundancy—<strong>it is pedagogy</strong>. Leviticus 16 (Day of Atonement) functions as the 
-          book's theological and literary pivot: the annual "system reset" that addresses accumulated pollution and preserves 
-          God's dwelling.
-        </p>
 
         <div class="scripture-quote">
           <div class="scroll-text">
             <div class="block">
-              <strong>🧭 Reading Tip:</strong> Leviticus teaches sacred order not only through commands but through 
-              <em>structure</em>. The text performs what it describes.
-              <div style="margin-top: 1rem; font-size: 0.9rem; color: #64748b; font-style: italic;">
-                Jacob Milgrom, <em>Leviticus 1-16</em>, Anchor Yale Bible (New York: Doubleday, 1998), 29-63 
-                (Introduction on structure).
-              </div>
+              <strong>The pattern repeats:</strong> God chooses representatives (Adam/Eve → Noah → Abraham → Israel → Priests)
+              to be his partners. They fail. God provides a way to repair and continue. Each failure teaches us something about 
+              what's needed: not just better humans, but a fundamentally different kind of representative—one who won't fail.
             </div>
-          </div>
-        </div>
-
-        <h4 style="font-size: 1.4rem; color: var(--page-accent-dark); margin: 2.5rem 0 1rem;">Training Wheels for Later Scripture</h4>
-
-        <p style="font-size: 1rem; line-height: 1.8; color: #334155;">
-          The Levitical system is designed to <strong>teach categories</strong> that the rest of Scripture assumes:
-        </p>
-
-        <div class="callout-row">
-          <div class="mini-card">
-            <h4>📚 Categories Taught</h4>
-            <ul style="line-height: 1.7;">
-              <li><strong>PRIEST:</strong> Mediator between God and people</li>
-              <li><strong>SACRIFICE:</strong> Costly substitution for approach</li>
-              <li><strong>BLOOD:</strong> Life-substance that purifies</li>
-              <li><strong>SANCTUARY:</strong> Heaven and earth overlap</li>
-              <li><strong>HOLINESS:</strong> Set-apart consecration</li>
-            </ul>
-          </div>
-          <div class="mini-card">
-            <h4>🎯 Forward-Looking Design</h4>
-            <ul style="line-height: 1.7;">
-              <li>System's <strong>incompleteness is pedagogical</strong></li>
-              <li>Repetition (year after year) signals need for more</li>
-              <li>Points beyond itself to future fulfillment</li>
-              <li>Stirs expectation for blameless human substitute</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="key-insight">
-          Later biblical writers don't discard these categories—they expand and transform them. The system teaches 
-          Israel what to look for: a blameless human who can enter God's presence permanently.
-          <div style="margin-top: 1rem; font-size: 0.9rem; color: #64748b; font-style: italic;">
-            Jay Sklar, <em>Sin, Impurity, Sacrifice, Atonement: The Priestly Conceptions</em> 
-            (Sheffield: Sheffield Phoenix, 2015), 175-198.
           </div>
         </div>
       </section>
@@ -1697,6 +2025,218 @@
           <a href="https://bibleproject.com/podcasts/purity-and-impurity-leviticus/" target="_blank">"Purity and Impurity (Leviticus)" episode</a> 
           of The Bible Project Podcast (June 27, 2022). Their accessible explanations of kadosh/chol/tahor/tameh and the 
           "living at the border of life and death" framework have been integrated into this study.
+        </div>
+
+        <!-- CRITICAL DISTINCTION: RITUAL ≠ SIN -->
+        <div class="critical-distinction-box animate-on-scroll" style="margin-top: 2.5rem;">
+          <strong>⚠️ CRITICAL DISTINCTION: Ritual Impurity ≠ Sin</strong>
+          <p style="margin-top: 0.75rem; line-height: 1.8;">
+            Becoming impure is <strong>not a moral failure</strong>. The following all render someone ritually impure—yet are good, necessary, or blessed:
+          </p>
+          <ul style="margin-top: 0.75rem; margin-bottom: 0; padding-left: 1.5rem; line-height: 1.8;">
+            <li>
+              <strong>Burying a close relative</strong> → Impure (but you MUST do it—family duty)
+              <div class="scripture-ref">Numbers 19:11-16; Leviticus 21:1-3</div>
+            </li>
+            <li>
+              <strong>Marital sexual intimacy</strong> → Impure (but BLESSED and commanded in Genesis 1:28)
+              <div class="scripture-ref">Leviticus 15:18 + Genesis 1:28; Proverbs 5:18-19</div>
+            </li>
+            <li>
+              <strong>Giving birth</strong> → Impure (but a MIRACULOUS gift of new life from Yahweh)
+              <div class="scripture-ref">Leviticus 12:1-8 + Psalm 127:3; Genesis 1:28</div>
+            </li>
+            <li>
+              <strong>Caring for a newborn</strong> → Impure (but a BEAUTIFUL act of compassion and love)
+              <div class="scripture-ref">Related to Leviticus 12 context</div>
+            </li>
+          </ul>
+          <p style="margin-top: 1rem; font-style: italic; color: #64748b;">
+            Impurity is a <strong>temporary state</strong> marking our mortality—"life outside Eden"—not a sin. 
+            The issue isn't <em>becoming</em> impure; it's <em>entering sacred space while impure</em>. Purification 
+            rituals restore access, not forgiveness (which addresses sin, not state).
+          </p>
+        </div>
+
+        <!-- HEBREW VOCABULARY FRAMEWORK -->
+        <h4 style="margin-top: 3rem; margin-bottom: 1.5rem; font-size: 1.6rem; text-align: center; font-weight: 900; color: var(--page-accent-dark);">
+          Four Hebrew Statuses: The Sacred ↔ Common Spectrum
+        </h4>
+        <p style="text-align: center; color: #64748b; margin-bottom: 2rem; font-size: 1rem; line-height: 1.8; max-width: 900px; margin-left: auto; margin-right: auto;">
+          Leviticus operates with <strong>four key statuses</strong> arranged on two intersecting axes: 
+          sacred vs. common AND pure vs. impure. Understanding these Hebrew terms unlocks the entire purity system.
+        </p>
+
+        <div class="hebrew-vocab-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin: 2rem 0 3rem;">
+          <!-- KADOSH (Holy) -->
+          <div class="hebrew-vocab-card animate-on-scroll" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 6px 20px rgba(0,0,0,0.12); border-left: 6px solid #d4af37; transition: all 0.3s ease; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: linear-gradient(135deg, rgba(212,175,55,0.1), transparent); border-radius: 0 16px 0 100%;"></div>
+            <div class="hebrew-text" style="font-size: 3rem; font-weight: 900; color: #d4af37; margin-bottom: 0.5rem; direction: rtl; font-family: 'Times New Roman', serif;">קָדֹשׁ</div>
+            <div class="transliteration" style="font-size: 1.1rem; font-weight: 700; color: #b8860b; text-transform: uppercase; letter-spacing: 0.10em; margin-bottom: 0.5rem;">qādōsh</div>
+            <div class="english" style="font-size: 1.3rem; font-weight: 900; color: #1a202c; margin-bottom: 1rem;">HOLY / SACRED</div>
+            <p style="font-size: 0.95rem; line-height: 1.7; color: #475569; margin-bottom: 1rem;">
+              Set apart for God's exclusive use. Dedicated, consecrated, "other" than ordinary life. 
+              The sanctuary, priests, sacrifices, and Sabbath are <em>kadosh</em>.
+            </p>
+            <div class="status-property" style="display: inline-block; background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05)); border: 2px solid rgba(212,175,55,0.35); border-radius: 8px; padding: 0.4rem 0.9rem; font-size: 0.85rem; font-weight: 800; color: #b8860b; letter-spacing: 0.05em;">
+              CONTAGIOUS → Spreads holiness to what it touches
+            </div>
+          </div>
+
+          <!-- CHOL (Common) -->
+          <div class="hebrew-vocab-card animate-on-scroll animation-delay-100" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 6px 20px rgba(0,0,0,0.12); border-left: 6px solid #94a3b8; transition: all 0.3s ease; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: linear-gradient(135deg, rgba(148,163,184,0.1), transparent); border-radius: 0 16px 0 100%;"></div>
+            <div class="hebrew-text" style="font-size: 3rem; font-weight: 900; color: #64748b; margin-bottom: 0.5rem; direction: rtl; font-family: 'Times New Roman', serif;">חֹל</div>
+            <div class="transliteration" style="font-size: 1.1rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.10em; margin-bottom: 0.5rem;">ḥōl</div>
+            <div class="english" style="font-size: 1.3rem; font-weight: 900; color: #1a202c; margin-bottom: 1rem;">COMMON / PROFANE</div>
+            <p style="font-size: 0.95rem; line-height: 1.7; color: #475569; margin-bottom: 1rem;">
+              Ordinary, everyday, not dedicated to God. <strong>Not evil</strong>—just non-sacred. 
+              Regular food, weekdays, and most of daily life are <em>chol</em>.
+            </p>
+            <div class="status-property" style="display: inline-block; background: linear-gradient(135deg, rgba(148,163,184,0.15), rgba(148,163,184,0.05)); border: 2px solid rgba(148,163,184,0.35); border-radius: 8px; padding: 0.4rem 0.9rem; font-size: 0.85rem; font-weight: 800; color: #475569; letter-spacing: 0.05em;">
+              NOT CONTAGIOUS → Neutral status
+            </div>
+          </div>
+
+          <!-- TAHOR (Pure) -->
+          <div class="hebrew-vocab-card animate-on-scroll animation-delay-200" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 6px 20px rgba(0,0,0,0.12); border-left: 6px solid #2aa198; transition: all 0.3s ease; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: linear-gradient(135deg, rgba(42,161,152,0.1), transparent); border-radius: 0 16px 0 100%;"></div>
+            <div class="hebrew-text" style="font-size: 3rem; font-weight: 900; color: #2aa198; margin-bottom: 0.5rem; direction: rtl; font-family: 'Times New Roman', serif;">טָהֹר</div>
+            <div class="transliteration" style="font-size: 1.1rem; font-weight: 700; color: #0f766e; text-transform: uppercase; letter-spacing: 0.10em; margin-bottom: 0.5rem;">ṭāhōr</div>
+            <div class="english" style="font-size: 1.3rem; font-weight: 900; color: #1a202c; margin-bottom: 1rem;">CLEAN / PURE</div>
+            <p style="font-size: 0.95rem; line-height: 1.7; color: #475569; margin-bottom: 1rem;">
+              Ritually acceptable, fit for sacred service or space. Can move between common and holy contexts. 
+              Required state for worship, eating sacrifices, or entering sanctuary.
+            </p>
+            <div class="status-property" style="display: inline-block; background: linear-gradient(135deg, rgba(42,161,152,0.15), rgba(42,161,152,0.05)); border: 2px solid rgba(42,161,152,0.35); border-radius: 8px; padding: 0.4rem 0.9rem; font-size: 0.85rem; font-weight: 800; color: #0f766e; letter-spacing: 0.05em;">
+              NOT CONTAGIOUS → Normal baseline
+            </div>
+          </div>
+
+          <!-- TAMEH (Impure) -->
+          <div class="hebrew-vocab-card animate-on-scroll animation-delay-300" style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 6px 20px rgba(0,0,0,0.12); border-left: 6px solid #ef4444; transition: all 0.3s ease; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: linear-gradient(135deg, rgba(239,68,68,0.1), transparent); border-radius: 0 16px 0 100%;"></div>
+            <div class="hebrew-text" style="font-size: 3rem; font-weight: 900; color: #ef4444; margin-bottom: 0.5rem; direction: rtl; font-family: 'Times New Roman', serif;">טָמֵא</div>
+            <div class="transliteration" style="font-size: 1.1rem; font-weight: 700; color: #dc2626; text-transform: uppercase; letter-spacing: 0.10em; margin-bottom: 0.5rem;">ṭāmē'</div>
+            <div class="english" style="font-size: 1.3rem; font-weight: 900; color: #1a202c; margin-bottom: 1rem;">UNCLEAN / IMPURE</div>
+            <p style="font-size: 0.95rem; line-height: 1.7; color: #475569; margin-bottom: 1rem;">
+              Ritually contaminated by contact with death-markers (corpses, bodily fluids, decay). 
+              Requires purification before worship. <strong>Not sin</strong>—temporary state.
+            </p>
+            <div class="status-property" style="display: inline-block; background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(239,68,68,0.05)); border: 2px solid rgba(239,68,68,0.35); border-radius: 8px; padding: 0.4rem 0.9rem; font-size: 0.85rem; font-weight: 800; color: #dc2626; letter-spacing: 0.05em;">
+              CONTAGIOUS → Spreads by contact
+            </div>
+          </div>
+        </div>
+
+        <!-- TWO-AXIS SYSTEM EXPLANATION -->
+        <div class="two-axis-explanation" style="background: linear-gradient(135deg, rgba(42,161,152,0.08), rgba(212,175,55,0.08)); border-radius: 16px; padding: 2rem; margin: 2rem 0; border: 2px solid rgba(42,161,152,0.2);">
+          <h5 style="font-size: 1.3rem; font-weight: 900; color: var(--page-accent-dark); margin: 0 0 1rem; text-align: center;">
+            How They Combine: Two Independent Axes
+          </h5>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
+            <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+              <strong style="color: #d4af37; font-size: 1.1rem; display: block; margin-bottom: 0.5rem;">✓ Holy + Pure</strong>
+              <p style="font-size: 0.9rem; line-height: 1.6; color: #475569; margin: 0;">
+                The sanctuary, consecrated priests, properly prepared sacrifices
+              </p>
+            </div>
+            <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+              <strong style="color: #2aa198; font-size: 1.1rem; display: block; margin-bottom: 0.5rem;">✓ Common + Pure</strong>
+              <p style="font-size: 0.9rem; line-height: 1.6; color: #475569; margin: 0;">
+                Everyday Israelites in normal life, regular food
+              </p>
+            </div>
+            <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+              <strong style="color: #ef4444; font-size: 1.1rem; display: block; margin-bottom: 0.5rem;">⚠️ Common + Impure</strong>
+              <p style="font-size: 0.9rem; line-height: 1.6; color: #475569; margin: 0;">
+                Person after touching corpse, during menstruation—needs washing/time
+              </p>
+            </div>
+            <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+              <strong style="color: #dc2626; font-size: 1.1rem; display: block; margin-bottom: 0.5rem;">🚫 Holy + Impure</strong>
+              <p style="font-size: 0.9rem; line-height: 1.6; color: #475569; margin: 0;">
+                <strong>FORBIDDEN:</strong> Impure person entering sanctuary = death (Lev 15:31)
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- THREE-STATUS PROGRESSION: Journey of Approach -->
+        <div class="status-progression-container" style="margin: 3rem 0; background: white; border-radius: 20px; padding: 2.5rem; box-shadow: 0 8px 24px rgba(0,0,0,0.1); border: 3px solid rgba(42,161,152,0.15);">
+          <h5 style="font-size: 1.4rem; font-weight: 900; color: var(--page-accent-dark); margin: 0 0 1.5rem; text-align: center;">
+            The Journey of Approach to God
+          </h5>
+          <p style="text-align: center; color: #64748b; font-size: 0.95rem; margin-bottom: 2rem; line-height: 1.7;">
+            Leviticus maps a pathway from mortality (unclean) → accessibility (clean) → dedication (holy)
+          </p>
+
+          <div class="progression-stages" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;">
+            <!-- Stage 1: IMPURE -->
+            <div class="progression-stage" style="flex: 1; min-width: 180px; background: linear-gradient(135deg, rgba(239,68,68,0.1), rgba(239,68,68,0.05)); border-radius: 16px; padding: 1.5rem; text-align: center; border: 3px solid #fca5a5; box-shadow: 0 4px 12px rgba(239,68,68,0.2); transition: all 0.3s ease;">
+              <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">💀</div>
+              <div style="font-size: 1.2rem; font-weight: 900; color: #dc2626; margin-bottom: 0.5rem;">IMPURE</div>
+              <div style="font-size: 0.85rem; color: #64748b; line-height: 1.5;">
+                Contact with death-markers (corpse, fluids, decay)
+              </div>
+            </div>
+
+            <!-- Arrow 1 -->
+            <div class="progression-arrow" style="flex-shrink: 0; font-size: 2rem; color: #2aa198; font-weight: 900;">→</div>
+
+            <!-- Process 1 -->
+            <div class="progression-process" style="flex: 1; min-width: 200px; background: linear-gradient(135deg, rgba(42,161,152,0.08), transparent); border-radius: 12px; padding: 1rem; border: 2px dashed rgba(42,161,152,0.3); text-align: center;">
+              <div style="font-size: 0.9rem; font-weight: 700; color: #0f766e; margin-bottom: 0.5rem;">PURIFICATION RITES</div>
+              <div style="font-size: 0.85rem; color: #475569; line-height: 1.5;">
+                Washing • Waiting (7 days) • Sacrifice on 8th day
+              </div>
+            </div>
+
+            <!-- Arrow 2 -->
+            <div class="progression-arrow" style="flex-shrink: 0; font-size: 2rem; color: #2aa198; font-weight: 900;">→</div>
+
+            <!-- Stage 2: PURE -->
+            <div class="progression-stage" style="flex: 1; min-width: 180px; background: linear-gradient(135deg, rgba(42,161,152,0.15), rgba(42,161,152,0.05)); border-radius: 16px; padding: 1.5rem; text-align: center; border: 3px solid #7dd3c0; box-shadow: 0 4px 12px rgba(42,161,152,0.2); transition: all 0.3s ease;">
+              <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">✨</div>
+              <div style="font-size: 1.2rem; font-weight: 900; color: #0f766e; margin-bottom: 0.5rem;">PURE</div>
+              <div style="font-size: 0.85rem; color: #64748b; line-height: 1.5;">
+                Clean, fit for worship, can approach sanctuary
+              </div>
+            </div>
+
+            <!-- Arrow 3 -->
+            <div class="progression-arrow" style="flex-shrink: 0; font-size: 2rem; color: #d4af37; font-weight: 900;">→</div>
+
+            <!-- Process 2 -->
+            <div class="progression-process" style="flex: 1; min-width: 200px; background: linear-gradient(135deg, rgba(212,175,55,0.1), transparent); border-radius: 12px; padding: 1rem; border: 2px dashed rgba(212,175,55,0.4); text-align: center;">
+              <div style="font-size: 0.9rem; font-weight: 700; color: #b8860b; margin-bottom: 0.5rem;">CONSECRATION</div>
+              <div style="font-size: 0.85rem; color: #475569; line-height: 1.5;">
+                Anointing • Ordination • Set apart for God
+              </div>
+            </div>
+
+            <!-- Arrow 4 -->
+            <div class="progression-arrow" style="flex-shrink: 0; font-size: 2rem; color: #d4af37; font-weight: 900;">→</div>
+
+            <!-- Stage 3: HOLY -->
+            <div class="progression-stage" style="flex: 1; min-width: 180px; background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05)); border-radius: 16px; padding: 1.5rem; text-align: center; border: 3px solid #f4d03f; box-shadow: 0 4px 12px rgba(212,175,55,0.25); transition: all 0.3s ease;">
+              <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🏛️</div>
+              <div style="font-size: 1.2rem; font-weight: 900; color: #b8860b; margin-bottom: 0.5rem;">HOLY</div>
+              <div style="font-size: 0.85rem; color: #64748b; line-height: 1.5;">
+                Dedicated to God, priestly service, sacred objects
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 2rem; padding: 1.5rem; background: linear-gradient(135deg, rgba(42,161,152,0.05), rgba(212,175,55,0.05)); border-radius: 12px; border-left: 4px solid #2aa198;">
+            <strong style="color: #0f766e; font-size: 1.05rem;">Key Insight:</strong>
+            <p style="margin: 0.5rem 0 0; color: #475569; line-height: 1.8; font-size: 0.95rem;">
+              Most Israelites lived as "common + pure" (normal life). Becoming impure was <strong>temporary and expected</strong> 
+              (burying relatives, childbirth, normal bodily functions). Purification rituals restored access to worship. 
+              Becoming holy (priests, Nazirites) required special consecration and carried extra responsibilities. 
+              The system creates a <em>gradient of access</em>, not a hierarchy of worth.
+            </p>
+          </div>
         </div>
 
         <!-- EDEN PATTERN INTERACTIVE CARDS -->
@@ -1877,138 +2417,12 @@
         </div>
       </section>
 
-      <!-- ANTICIPATED QUESTIONS -->
-      <section class="theology-card animate-on-scroll" id="anticipated-questions">
-        <h3>Common Questions About Leviticus</h3>
-        <p style="font-size: 1.05rem; color: #64748b; margin-bottom: 2rem; line-height: 1.8;">
-          Reading Leviticus on its own terms raises natural questions. Here are common concerns that arise when exploring this material. Click any question to see the response.
-        </p>
-
-        <div class="qa-pills-container">
-          <!-- Question 1 -->
-          <div class="qa-pill">
-            <div class="qa-pill-question">
-              <span class="qa-pill-icon">❓</span>
-              <span class="qa-pill-text">"Why does God care about food laws and bodily fluids?"</span>
-              <span class="qa-pill-toggle">+</span>
-            </div>
-            <div class="qa-pill-answer">
-              <strong>Response:</strong> These laws aren't arbitrary hygiene rules. They're <em>symbolic theology</em>—teaching Israel to distinguish between life and death, order and chaos, wholeness and decay. Clean animals chew cud and have split hooves (double signs of healthy processing). Unclean animals (scavengers, predators) represent death-eating-death. Bodily fluids mark the boundary between life (inside the body) and mortality (leaked outside). The system trains Israel to see reality through categories that honor the God of life.
-            </div>
-          </div>
-
-          <!-- Question 2 -->
-          <div class="qa-pill">
-            <div class="qa-pill-question">
-              <span class="qa-pill-icon">❓</span>
-              <span class="qa-pill-text">"Isn't animal sacrifice barbaric and wasteful?"</span>
-              <span class="qa-pill-toggle">+</span>
-            </div>
-            <div class="qa-pill-answer">
-              <strong>Response:</strong> To ancient Israel, sacrifice wasn't wasteful—it was <em>costly worship</em>. The burnt offering (עֹלָה) consumed the entire animal, representing complete surrender to God. The well-being offering (שְׁלָמִים) was shared as a meal with God, priest, and family—communion, not waste. Blood rites weren't about violence but about <strong>life purifying death-touched space</strong>. "The life is in the blood" (Lev 17:11)—pouring it out at the altar acknowledged that life belongs to God. The system taught that approach to God is costly, precious, and requires substitution.
-            </div>
-          </div>
-
-          <!-- Question 3 -->
-          <div class="qa-pill">
-            <div class="qa-pill-question">
-              <span class="qa-pill-icon">❓</span>
-              <span class="qa-pill-text">"Why is childbirth 'unclean' if it's a blessing?"</span>
-              <span class="qa-pill-toggle">+</span>
-            </div>
-            <div class="qa-pill-answer">
-              <strong>Response:</strong> Childbirth brings mother and child to <em>death's doorstep</em>. Blood, amniotic fluid, and all birth-related fluids mark this threshold where life emerges from potential death. A successful birth is a <strong>deliverance from death</strong>. The 7-day (male child) or 14-day (female child) impurity period + 33/66 days of purification isn't punishment—it's acknowledgment that mortality and life-creation are intertwined. The mother is blessed, the child is celebrated, AND the ritual recognizes she's crossed through a death-adjacent experience that requires purification before re-entering sacred space.
-            </div>
-          </div>
-
-          <!-- Question 4 -->
-          <div class="qa-pill">
-            <div class="qa-pill-question">
-              <span class="qa-pill-icon">❓</span>
-              <span class="qa-pill-text">"What's the point if God forgives people anyway?"</span>
-              <span class="qa-pill-toggle">+</span>
-            </div>
-            <div class="qa-pill-answer">
-              <strong>Response:</strong> Leviticus' central question isn't "How are individuals forgiven?" but "<strong>How can a holy God remain present among a mortal people?</strong>" The sacrificial system addresses <em>corporate pollution of sacred space</em>, not just personal guilt. Even if God forgave every individual perfectly, the accumulation of death-markers (corpses touched, fluids leaked, sins committed) would still contaminate the sanctuary. The Day of Atonement (Lev 16) isn't about emotions—it's <strong>preventative maintenance</strong> of the space where God dwells. Without it, God's presence would depart and Israel would lose access to life.
-            </div>
-          </div>
-
-          <!-- Question 5 -->
-          <div class="qa-pill">
-            <div class="qa-pill-question">
-              <span class="qa-pill-icon">❓</span>
-              <span class="qa-pill-text">"Does blood 'absorb' or 'transfer' sin?"</span>
-              <span class="qa-pill-toggle">+</span>
-            </div>
-            <div class="qa-pill-answer">
-              <strong>Response:</strong> <strong>No.</strong> Blood never touches people in Leviticus—it's applied to <em>objects</em> (altar, veil, ark cover). "The life is in the blood" (Lev 17:11) means blood represents <strong>blameless life conquering death</strong>. When the priest sprinkles blood on the altar, he's applying life-force to neutralize death-pollution. The blood doesn't suck up sin like a sponge—it <em>purifies the space</em> where sin/death has left its mark. Think of it as life-bearing detergent, not a guilt-absorbing towel. The scapegoat (Lev 16) carries sins away <em>physically</em>, but that's a different ritual mechanism—exile, not purification.
-            </div>
-          </div>
-
-          <!-- Question 6 -->
-          <div class="qa-pill">
-            <div class="qa-pill-question">
-              <span class="qa-pill-icon">❓</span>
-              <span class="qa-pill-text">"Why are women and menstruation treated differently?"</span>
-              <span class="qa-pill-toggle">+</span>
-            </div>
-            <div class="qa-pill-answer">
-              <strong>Response:</strong> Menstruation (Lev 15:19-30) renders a woman impure not because of shame but because <strong>potential life is flowing away unrealized</strong>—a monthly reminder of mortality. It's parallel to male emissions (Lev 15:16-18): life-substances "out of place" mark the boundary between life and death. The purification process (washing, 7 days, sacrifice on day 8) isn't about moral failure—it's about acknowledging we live outside Eden, where even reproductive systems bear mortality's mark. Women aren't inferior; <em>everyone</em> becomes impure through bodily processes. The system treats all humans as mortal beings needing purification to approach holy space.
-            </div>
-          </div>
-        </div>
-
-        <!-- Teaching Tip -->
-        <div class="teaching-tip-box">
-          <div class="tip-icon">💡</div>
-          <div class="tip-content">
-            <strong>Teaching Tip:</strong>
-            <p style="margin: 0.5rem 0 0;">
-              These questions represent common modern reactions to Leviticus. The goal isn't to make the system comfortable, 
-              but to understand it on <em>its own terms</em>—as ancient Israel's divinely-given framework for living near a holy God. 
-              Reading Leviticus well requires patient attention to its internal logic before asking "What does this mean for me?"
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- CONVICTIONS -->
-      <section class="theology-card animate-on-scroll" id="convictions">
-        <h3>Governing Convictions (A Levitical Outlook)</h3>
-        <p style="font-size: 1.05rem; line-height: 1.8; color: #475569;">
-          These principles emerge from reading Leviticus as a coherent theological system in its own right—one that 
-          explains how a holy God remains present among a mortal people and, in doing so, establishes patterns that 
-          later biblical theology develops rather than invents. They represent the internal logic of the priestly vision:
-        </p>
-
-        <ul class="convictions-list">
-          <li><strong>Ritual law and ethical law are inseparable.</strong> Moral failure affects sacred space just as surely as ritual impurity does—sometimes more dangerously because it pollutes from a distance.</li>
-          
-          <li><strong>Impurity is not sin.</strong> Ritual impurity is a status affecting access to sacred space, not a moral failing. Natural life processes (birth, death, sex) generate impurity, but these are not evil.</li>
-          
-          <li><strong>Sacrifice is not appeasement.</strong> It is ordered approach and maintenance. God is not bribed or manipulated by offerings; the system provides safe access to divine presence.</li>
-          
-          <li><strong>Blood is life-bearing purification, not violent magic.</strong> (Lev 17:11) Blood cleanses space because it represents life confronting death, not because of magical properties or violent substitution.</li>
-          
-          <li><strong>The center must be protected continuously.</strong> Holiness is spatially graded, and the innermost sanctuary is most vulnerable to pollution. The whole system aims to protect God's dwelling place.</li>
-          
-          <li><strong>Access requires preparation.</strong> Approaching God isn't casual or automatic. The graded zones, purification rites, and priestly mediation all ensure that human mortality doesn't extinguish divine presence.</li>
-          
-          <li><strong>Community health depends on sanctuary health.</strong> If the sanctuary becomes too polluted, God withdraws, and Israel loses its identity and protection. Maintaining sacred space is existential, not merely ceremonial.</li>
-        </ul>
-
-        <div class="key-insight" style="margin-top: 1.75rem;">
-          <strong>One-line system summary:</strong><br>
-          Human behavior → impurity → sanctuary pollution → risk of divine withdrawal → cleansing rites → presence maintained.
-        </div>
-      </section>
-
       <!-- TRAJECTORY NOTE -->
       <section class="theology-card animate-on-scroll" id="trajectory" style="background: linear-gradient(135deg, rgba(42,161,152,0.05), rgba(212,175,55,0.05)); border-left: 5px solid #2aa198;">
         <h3>Trajectory Note: Sacred Presence from Creation to Cult</h3>
-        
+
         <p style="font-size: 1.05rem; line-height: 1.8; color: #334155;">
-          Genesis and Leviticus participate in a <strong>single priestly vision</strong> centered on God's desire to dwell 
+          Genesis and Leviticus participate in a <strong>single priestly vision</strong> centered on God's desire to dwell
           with humanity, and on the problem that such dwelling creates in a world marked by mortality, disorder, and moral failure.
         </p>
 
@@ -2143,7 +2557,7 @@
             <div class="prose-block">
               <div class="prose-title">Creation as Ordered Space</div>
               <div class="prose-content">
-                Genesis 1 presents creation as space intentionally <strong>structured to host divine presence</strong>. 
+                Genesis 1 presents creation as space intentionally <strong>structured to host divine presence</strong>.
                 Separation, naming, and ordering are not aesthetic choices but survival mechanisms. Life with God requires boundaries.
               </div>
             </div>
@@ -2152,8 +2566,8 @@
             <div class="prose-block">
               <div class="prose-title">Loss of Unmediated Access</div>
               <div class="prose-content">
-                Genesis 2–3 introduces the tension that governs the rest of Scripture: <strong>God remains present, 
-                but access to the sacred center is restricted</strong>. Eden's expulsion does not erase presence; 
+                Genesis 2–3 introduces the tension that governs the rest of Scripture: <strong>God remains present,
+                but access to the sacred center is restricted</strong>. Eden's expulsion does not erase presence;
                 it makes approach dangerous.
               </div>
             </div>
@@ -2162,7 +2576,7 @@
             <div class="prose-block">
               <div class="prose-title">Sanctuary as Protected Creation</div>
               <div class="prose-content">
-                The tabernacle does not replace Eden—it <strong>recreates it in guarded form</strong>. Graded space, 
+                The tabernacle does not replace Eden—it <strong>recreates it in guarded form</strong>. Graded space,
                 priestly guardianship, and regulated access institutionalize the problem of presence rather than ignoring it.
               </div>
             </div>
@@ -2171,7 +2585,7 @@
             <div class="prose-block">
               <div class="prose-title">Problem of Pollution</div>
               <div class="prose-content">
-                Leviticus identifies pollution—not sin alone, but <strong>mortality and moral failure</strong>—as the threat 
+                Leviticus identifies pollution—not sin alone, but <strong>mortality and moral failure</strong>—as the threat
                 to sacred space. Pollution accumulates whether or not rebellion is intended.
               </div>
             </div>
@@ -2180,7 +2594,7 @@
             <div class="prose-block">
               <div class="prose-title">Maintenance Through Ritual</div>
               <div class="prose-content">
-                Sacrifice functions as <strong>ordered approach</strong>. Blood is applied to sacred objects, not people, 
+                Sacrifice functions as <strong>ordered approach</strong>. Blood is applied to sacred objects, not people,
                 because the problem is spatial. Ethics repair community; ritual cleanses space.
               </div>
             </div>
@@ -2189,7 +2603,7 @@
             <div class="prose-block">
               <div class="prose-title">Day of Atonement</div>
               <div class="prose-content">
-                Leviticus 16 gathers all unresolved pollution and neutralizes it at the center. <strong>The ritual works—but 
+                Leviticus 16 gathers all unresolved pollution and neutralizes it at the center. <strong>The ritual works—but
                 only provisionally</strong>. It must be repeated.
               </div>
             </div>
@@ -2198,8 +2612,8 @@
             <div class="prose-block">
               <div class="prose-title">Open Question</div>
               <div class="prose-content">
-                Leviticus does not close the system. It preserves presence while leaving unresolved whether access can 
-                ever be fully stabilized. <strong>The priestly system defines the problem space within which later biblical 
+                Leviticus does not close the system. It preserves presence while leaving unresolved whether access can
+                ever be fully stabilized. <strong>The priestly system defines the problem space within which later biblical
                 theology operates</strong>.
               </div>
             </div>
@@ -2207,15 +2621,140 @@
         </div>
 
         <div class="key-insight" style="margin-top: 2rem;">
-          <strong>The Inherited Question:</strong> Later biblical writers do not discard this priestly logic; 
-          they <em>inherit its question</em>: whether what Genesis longs for and Leviticus maintains might one 
+          <strong>The Inherited Question:</strong> Later biblical writers do not discard this priestly logic;
+          they <em>inherit its question</em>: whether what Genesis longs for and Leviticus maintains might one
           day be secured decisively rather than continually managed.
         </div>
       </section>
 
-      <hr class="section-divider" />
+      <!-- ANTICIPATED QUESTIONS -->
+      <section class="theology-card animate-on-scroll" id="anticipated-questions">
+        <h3>Common Questions About Leviticus</h3>
+        <p style="font-size: 1.05rem; color: #64748b; margin-bottom: 2rem; line-height: 1.8;">
+          Reading Leviticus on its own terms raises natural questions. Here are common concerns that arise when exploring this material. Click any question to see the response.
+        </p>
 
-      <!-- BIBLIOGRAPHY -->
+        <div class="qa-pills-container" style="display: flex; flex-direction: column; gap: 1rem;">
+          <!-- Question 1 -->
+          <div class="qa-pill" style="border-radius: 12px; overflow: hidden;">
+            <div class="qa-pill-question" style="background: linear-gradient(135deg, #2aa198, #0f766e); color: white; padding: 1rem 1.5rem; display: flex; align-items: center; gap: 1rem; cursor: pointer; transition: all 0.3s ease;">
+              <span class="qa-pill-icon" style="font-size: 1.5rem; flex-shrink: 0;">❓</span>
+              <span class="qa-pill-text" style="flex: 1; font-size: 1rem; font-weight: 700; line-height: 1.5; font-style: italic;">"Why does God care about food laws and bodily fluids?"</span>
+              <span class="qa-pill-toggle" style="font-size: 1.5rem; font-weight: 700; flex-shrink: 0;">+</span>
+            </div>
+            <div class="qa-pill-answer" style="max-height: 0; overflow: hidden; background: white; border: 2px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px; transition: max-height 0.4s ease, padding 0.4s ease; padding: 0 1.5rem; font-size: 1rem; line-height: 1.8; color: #334155;">
+              <strong style="color: #0f766e;">Response:</strong> These laws aren't arbitrary hygiene rules. They're <em>symbolic theology</em>—teaching Israel to distinguish between life and death, order and chaos, wholeness and decay. Clean animals chew cud and have split hooves (double signs of healthy processing). Unclean animals (scavengers, predators) represent death-eating-death. Bodily fluids mark the boundary between life (inside the body) and mortality (leaked outside). The system trains Israel to see reality through categories that honor the God of life.
+            </div>
+          </div>
+
+          <!-- Question 2 -->
+          <div class="qa-pill" style="border-radius: 12px; overflow: hidden;">
+            <div class="qa-pill-question" style="background: linear-gradient(135deg, #2aa198, #0f766e); color: white; padding: 1rem 1.5rem; display: flex; align-items: center; gap: 1rem; cursor: pointer; transition: all 0.3s ease;">
+              <span class="qa-pill-icon" style="font-size: 1.5rem; flex-shrink: 0;">❓</span>
+              <span class="qa-pill-text" style="flex: 1; font-size: 1rem; font-weight: 700; line-height: 1.5; font-style: italic;">"Isn't animal sacrifice barbaric and wasteful?"</span>
+              <span class="qa-pill-toggle" style="font-size: 1.5rem; font-weight: 700; flex-shrink: 0;">+</span>
+            </div>
+            <div class="qa-pill-answer" style="max-height: 0; overflow: hidden; background: white; border: 2px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px; transition: max-height 0.4s ease, padding 0.4s ease; padding: 0 1.5rem; font-size: 1rem; line-height: 1.8; color: #334155;">
+              <strong style="color: #0f766e;">Response:</strong> To ancient Israel, sacrifice wasn't wasteful—it was <em>costly worship</em>. The burnt offering (עֹלָה) consumed the entire animal, representing complete surrender to God. The well-being offering (שְׁלָמִים) was shared as a meal with God, priest, and family—communion, not waste. Blood rites weren't about violence but about <strong>life purifying death-touched space</strong>. "The life is in the blood" (Lev 17:11)—pouring it out at the altar acknowledged that life belongs to God. The system taught that approach to God is costly, precious, and requires substitution.
+            </div>
+          </div>
+
+          <!-- Question 3 -->
+          <div class="qa-pill" style="border-radius: 12px; overflow: hidden;">
+            <div class="qa-pill-question" style="background: linear-gradient(135deg, #2aa198, #0f766e); color: white; padding: 1rem 1.5rem; display: flex; align-items: center; gap: 1rem; cursor: pointer; transition: all 0.3s ease;">
+              <span class="qa-pill-icon" style="font-size: 1.5rem; flex-shrink: 0;">❓</span>
+              <span class="qa-pill-text" style="flex: 1; font-size: 1rem; font-weight: 700; line-height: 1.5; font-style: italic;">"Why is childbirth 'unclean' if it's a blessing?"</span>
+              <span class="qa-pill-toggle" style="font-size: 1.5rem; font-weight: 700; flex-shrink: 0;">+</span>
+            </div>
+            <div class="qa-pill-answer" style="max-height: 0; overflow: hidden; background: white; border: 2px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px; transition: max-height 0.4s ease, padding 0.4s ease; padding: 0 1.5rem; font-size: 1rem; line-height: 1.8; color: #334155;">
+              <strong style="color: #0f766e;">Response:</strong> Childbirth brings mother and child to <em>death's doorstep</em>. Blood, amniotic fluid, and all birth-related fluids mark this threshold where life emerges from potential death. A successful birth is a <strong>deliverance from death</strong>. The 7-day (male child) or 14-day (female child) impurity period + 33/66 days of purification isn't punishment—it's acknowledgment that mortality and life-creation are intertwined. The mother is blessed, the child is celebrated, AND the ritual recognizes she's crossed through a death-adjacent experience that requires purification before re-entering sacred space.
+            </div>
+          </div>
+
+          <!-- Question 4 -->
+          <div class="qa-pill" style="border-radius: 12px; overflow: hidden;">
+            <div class="qa-pill-question" style="background: linear-gradient(135deg, #2aa198, #0f766e); color: white; padding: 1rem 1.5rem; display: flex; align-items: center; gap: 1rem; cursor: pointer; transition: all 0.3s ease;">
+              <span class="qa-pill-icon" style="font-size: 1.5rem; flex-shrink: 0;">❓</span>
+              <span class="qa-pill-text" style="flex: 1; font-size: 1rem; font-weight: 700; line-height: 1.5; font-style: italic;">"What's the point if God forgives people anyway?"</span>
+              <span class="qa-pill-toggle" style="font-size: 1.5rem; font-weight: 700; flex-shrink: 0;">+</span>
+            </div>
+            <div class="qa-pill-answer" style="max-height: 0; overflow: hidden; background: white; border: 2px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px; transition: max-height 0.4s ease, padding 0.4s ease; padding: 0 1.5rem; font-size: 1rem; line-height: 1.8; color: #334155;">
+              <strong style="color: #0f766e;">Response:</strong> Leviticus' central question isn't "How are individuals forgiven?" but "<strong>How can a holy God remain present among a mortal people?</strong>" The sacrificial system addresses <em>corporate pollution of sacred space</em>, not just personal guilt. Even if God forgave every individual perfectly, the accumulation of death-markers (corpses touched, fluids leaked, sins committed) would still contaminate the sanctuary. The Day of Atonement (Lev 16) isn't about emotions—it's <strong>preventative maintenance</strong> of the space where God dwells. Without it, God's presence would depart and Israel would lose access to life.
+            </div>
+          </div>
+
+          <!-- Question 5 -->
+          <div class="qa-pill" style="border-radius: 12px; overflow: hidden;">
+            <div class="qa-pill-question" style="background: linear-gradient(135deg, #2aa198, #0f766e); color: white; padding: 1rem 1.5rem; display: flex; align-items: center; gap: 1rem; cursor: pointer; transition: all 0.3s ease;">
+              <span class="qa-pill-icon" style="font-size: 1.5rem; flex-shrink: 0;">❓</span>
+              <span class="qa-pill-text" style="flex: 1; font-size: 1rem; font-weight: 700; line-height: 1.5; font-style: italic;">"Does blood 'absorb' or 'transfer' sin?"</span>
+              <span class="qa-pill-toggle" style="font-size: 1.5rem; font-weight: 700; flex-shrink: 0;">+</span>
+            </div>
+            <div class="qa-pill-answer" style="max-height: 0; overflow: hidden; background: white; border: 2px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px; transition: max-height 0.4s ease, padding 0.4s ease; padding: 0 1.5rem; font-size: 1rem; line-height: 1.8; color: #334155;">
+              <strong style="color: #0f766e;">Response:</strong> <strong>No.</strong> Blood never touches people in Leviticus—it's applied to <em>objects</em> (altar, veil, ark cover). "The life is in the blood" (Lev 17:11) means blood represents <strong>blameless life conquering death</strong>. When the priest sprinkles blood on the altar, he's applying life-force to neutralize death-pollution. The blood doesn't suck up sin like a sponge—it <em>purifies the space</em> where sin/death has left its mark. Think of it as life-bearing detergent, not a guilt-absorbing towel. The scapegoat (Lev 16) carries sins away <em>physically</em>, but that's a different ritual mechanism—exile, not purification.
+            </div>
+          </div>
+
+          <!-- Question 6 -->
+          <div class="qa-pill" style="border-radius: 12px; overflow: hidden;">
+            <div class="qa-pill-question" style="background: linear-gradient(135deg, #2aa198, #0f766e); color: white; padding: 1rem 1.5rem; display: flex; align-items: center; gap: 1rem; cursor: pointer; transition: all 0.3s ease;">
+              <span class="qa-pill-icon" style="font-size: 1.5rem; flex-shrink: 0;">❓</span>
+              <span class="qa-pill-text" style="flex: 1; font-size: 1rem; font-weight: 700; line-height: 1.5; font-style: italic;">"Why are women and menstruation treated differently?"</span>
+              <span class="qa-pill-toggle" style="font-size: 1.5rem; font-weight: 700; flex-shrink: 0;">+</span>
+            </div>
+            <div class="qa-pill-answer" style="max-height: 0; overflow: hidden; background: white; border: 2px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px; transition: max-height 0.4s ease, padding 0.4s ease; padding: 0 1.5rem; font-size: 1rem; line-height: 1.8; color: #334155;">
+              <strong style="color: #0f766e;">Response:</strong> Menstruation (Lev 15:19-30) renders a woman impure not because of shame but because <strong>potential life is flowing away unrealized</strong>—a monthly reminder of mortality. It's parallel to male emissions (Lev 15:16-18): life-substances "out of place" mark the boundary between life and death. The purification process (washing, 7 days, sacrifice on day 8) isn't about moral failure—it's about acknowledging we live outside Eden, where even reproductive systems bear mortality's mark. Women aren't inferior; <em>everyone</em> becomes impure through bodily processes. The system treats all humans as mortal beings needing purification to approach holy space.
+            </div>
+          </div>
+        </div>
+
+        <!-- Teaching Tip -->
+        <div style="margin-top: 3rem; background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(42,161,152,0.1)); border-left: 5px solid #d4af37; border-radius: 12px; padding: 1.5rem; display: flex; gap: 1rem; align-items: flex-start;">
+          <div style="font-size: 2rem; flex-shrink: 0;">💡</div>
+          <div style="flex: 1;">
+            <strong style="color: #b8860b; font-weight: 800;">Teaching Tip:</strong>
+            <p style="font-size: 1rem; line-height: 1.8; color: #475569; margin: 0.5rem 0 0;">
+              These questions represent common modern reactions to Leviticus. The goal isn't to make the system comfortable, 
+              but to understand it on <em>its own terms</em>—as ancient Israel's divinely-given framework for living near a holy God. 
+              Reading Leviticus well requires patient attention to its internal logic before asking "What does this mean for me?"
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONVICTIONS -->
+      <section class="theology-card animate-on-scroll" id="convictions">
+        <h3>Governing Convictions (A Levitical Outlook)</h3>
+        <p>
+          These principles emerge from reading Leviticus on its own terms, before applying Christian theological frameworks.
+          They represent the internal logic of the priestly system:
+        </p>
+
+        <ul class="convictions-list">
+          <li><strong>Ritual law and ethical law are inseparable.</strong> Moral failure affects sacred space just as surely as ritual impurity does—sometimes more dangerously because it pollutes from a distance.</li>
+          
+          <li><strong>Impurity is not sin.</strong> Ritual impurity is a status affecting access to sacred space, not a moral failing. Natural life processes (birth, death, sex) generate impurity, but these are not evil.</li>
+          
+          <li><strong>Sacrifice is not appeasement.</strong> It is ordered approach and maintenance. God is not bribed or manipulated by offerings; the system provides safe access to divine presence.</li>
+          
+          <li><strong>Blood is life-bearing purification, not violent magic.</strong> (Lev 17:11) Blood cleanses space because it represents life confronting death, not because of magical properties or violent substitution.</li>
+          
+          <li><strong>The center must be protected continuously.</strong> Holiness is spatially graded, and the innermost sanctuary is most vulnerable to pollution. The whole system aims to protect God's dwelling place.</li>
+          
+          <li><strong>Access requires preparation.</strong> Approaching God isn't casual or automatic. The graded zones, purification rites, and priestly mediation all ensure that human mortality doesn't extinguish divine presence.</li>
+          
+          <li><strong>Community health depends on sanctuary health.</strong> If the sanctuary becomes too polluted, God withdraws, and Israel loses its identity and protection. Maintaining sacred space is existential, not merely ceremonial.</li>
+        </ul>
+
+        <div class="key-insight" style="margin-top: 1.75rem;">
+          <strong>One-line system summary:</strong><br>
+          Human behavior → impurity → sanctuary pollution → risk of divine withdrawal → cleansing rites → presence maintained.
+        </div>
+      </section>
+
+      <!-- ANTICIPATED QUESTIONS -->
+
+      <hr class="section-divider" />
       <details class="bibliography-section enhanced" id="bibliography">
         <summary>
           <div class="bibliography-header">
@@ -2234,7 +2773,7 @@
           </div>
         </summary>
         <div class="bibliography-content">
-          
+
           <!-- Primary Sources -->
           <div class="source-category">
             <h4>Primary Sources</h4>
@@ -2263,7 +2802,7 @@
                 <span class="usage-note">Definitive technical commentary; primary source for sacrificial system, spatial theology, purification logic, and distinction between ritual and moral impurity</span>
               </div>
             </div>
-            
+
             <div class="source-entry">
               <div class="source-citation">
                 <strong>Milgrom, Jacob.</strong> <em>Leviticus.</em> Continental Commentary. Minneapolis: Fortress, 2004.
@@ -2274,7 +2813,7 @@
                 <span class="usage-note">Condensed version of the Anchor Yale commentary for general readers</span>
               </div>
             </div>
-            
+
             <div class="source-entry">
               <div class="source-citation">
                 <strong>Wenham, Gordon J.</strong> <em>The Book of Leviticus.</em> New International Commentary on the Old Testament. Grand Rapids: Eerdmans, 1979.
@@ -2285,7 +2824,7 @@
                 <span class="usage-note">Accessible evangelical commentary with strong theological synthesis and holiness emphasis</span>
               </div>
             </div>
-            
+
             <div class="source-entry">
               <div class="source-citation">
                 <strong>Sklar, Jay.</strong> <em>Leviticus.</em> Tyndale Old Testament Commentaries. Downers Grove: IVP, 2014.
@@ -2296,7 +2835,7 @@
                 <span class="usage-note">Clear, readable commentary for pastors and students with theological depth</span>
               </div>
             </div>
-            
+
             <div class="source-entry">
               <div class="source-citation">
                 <strong>Ross, Allen P.</strong> <em>Holiness to the Lord: A Guide to the Exposition of the Book of Leviticus.</em> Grand Rapids: Baker, 2006.
@@ -2307,7 +2846,7 @@
                 <span class="usage-note">Homiletical guide with strong theological exposition and practical application</span>
               </div>
             </div>
-            
+
             <div class="source-entry">
               <div class="source-citation">
                 <strong>Kamionkowski, S. Tamar.</strong> <em>Leviticus.</em> Wisdom Commentary Series, Volume 3. Collegeville: Liturgical Press, 2018.
@@ -2323,7 +2862,7 @@
           <!-- Specialized Studies -->
           <div class="source-category">
             <h4>Specialized Studies on Sacrifice, Purity, and Atonement</h4>
-            
+
             <div class="source-entry">
               <div class="source-citation">
                 <strong>Sklar, Jay.</strong> <em>Sin, Impurity, Sacrifice, Atonement: The Priestly Conceptions.</em> Sheffield: Sheffield Phoenix, 2015.
@@ -2335,7 +2874,7 @@
                 <span class="usage-note">Comprehensive study of how Leviticus teaches foundational theological categories for later Scripture</span>
               </div>
             </div>
-            
+
             <div class="source-entry">
               <div class="source-citation">
                 <strong>Gane, Roy.</strong> <em>Cult and Character: Purification Offerings, Day of Atonement, and Theodicy.</em> Winona Lake: Eisenbrauns, 2005.
@@ -2346,7 +2885,7 @@
                 <span class="usage-note">Technical analysis of purification rituals and Leviticus 16 structure</span>
               </div>
             </div>
-            
+
             <div class="source-entry">
               <div class="source-citation">
                 <strong>Klawans, Jonathan.</strong> <em>Purity, Sacrifice, and the Temple: Symbolism and Supersessionism in the Study of Ancient Judaism.</em> Oxford: Oxford University Press, 2009.
@@ -2357,7 +2896,7 @@
                 <span class="usage-note">Ritual vs. moral impurity distinction and how purity laws functioned in practice</span>
               </div>
             </div>
-            
+
             <div class="source-entry">
               <div class="source-citation">
                 <strong>Klawans, Jonathan.</strong> <em>Impurity and Sin in Ancient Judaism.</em> Oxford: Oxford University Press, 2004.
@@ -2373,7 +2912,7 @@
           <!-- Temple & Sanctuary Theology -->
           <div class="source-category">
             <h4>Temple & Sanctuary Theology</h4>
-            
+
             <div class="source-entry">
               <div class="source-citation">
                 <strong>Morales, L. Michael.</strong> <em>Who Shall Ascend the Mountain of the Lord? A Biblical Theology of the Book of Leviticus.</em> New Studies in Biblical Theology 37. Downers Grove: IVP, 2015.
@@ -2385,7 +2924,7 @@
                 <span class="usage-note">Comprehensive biblical theology showing Leviticus as center of Torah's dwelling-place theme</span>
               </div>
             </div>
-            
+
             <div class="source-entry">
               <div class="source-citation">
                 <strong>Morales, L. Michael.</strong> <em>The Tabernacle Pre-Figured: Cosmic Mountain Ideology in Genesis and Exodus.</em> Leuven: Peeters, 2012.
@@ -2396,7 +2935,7 @@
                 <span class="usage-note">Demonstrates tabernacle as miniature Eden with priests as new Adam (עָבַד and שָׁמַר parallels)</span>
               </div>
             </div>
-            
+
             <div class="source-entry">
               <div class="source-citation">
                 <strong>Anderson, Gary A.</strong> <em>That I May Dwell among Them: Incarnation and Atonement in the Tabernacle Narrative.</em> Grand Rapids: Eerdmans, 2023.
@@ -2407,7 +2946,7 @@
                 <span class="usage-note">Recent study on the theology of God's dwelling in the tabernacle</span>
               </div>
             </div>
-            
+
             <div class="source-entry">
               <div class="source-citation">
                 <strong>Hays, J. Daniel.</strong> <em>The Temple and the Tabernacle: A Study of God's Dwelling Places from Genesis to Revelation.</em> Grand Rapids: Baker, 2016.
@@ -2418,7 +2957,7 @@
                 <span class="usage-note">Traces tabernacle/temple theme through entire biblical canon</span>
               </div>
             </div>
-            
+
             <div class="source-entry">
               <div class="source-citation">
                 <strong>Beale, G. K.</strong> <em>The Temple and the Church's Mission: A Biblical Theology of the Dwelling Place of God.</em> New Studies in Biblical Theology. Downers Grove: IVP, 2004.
@@ -2434,7 +2973,7 @@
           <!-- Theological Context -->
           <div class="source-category">
             <h4>Theological & Historical Context</h4>
-            
+
             <div class="source-entry">
               <div class="source-citation">
                 <strong>Levenson, Jon D.</strong> <em>Creation and the Persistence of Evil: The Jewish Drama of Divine Omnipotence.</em> San Francisco: HarperCollins, 1988.
@@ -2461,7 +3000,7 @@
                 <span class="usage-note">Literary structure with Leviticus 16 as structural and theological center; demonstrates concentric architecture matching spatial theology</span>
               </div>
             </div>
-            
+
             <div class="source-entry">
               <div class="source-citation">
                 <strong>Douglas, Mary.</strong> <em>Purity and Danger: An Analysis of Concepts of Pollution and Taboo.</em> London: Routledge, 1966.
@@ -2472,7 +3011,7 @@
                 <span class="usage-note">Anthropological framework for understanding impurity as order/boundaries/life rather than moral failing</span>
               </div>
             </div>
-            
+
             <div class="source-entry">
               <div class="source-citation">
                 <strong>Levenson, Jon D.</strong> <em>Creation and the Persistence of Evil: The Jewish Drama of Divine Omnipotence.</em> Princeton: Princeton University Press, 1988.
@@ -2483,7 +3022,7 @@
                 <span class="usage-note">Creation as temple-shaped in priestly thought; grounds Eden → Sanctuary logic and explains why holiness and life/death polarity are cosmic</span>
               </div>
             </div>
-            
+
             <div class="source-entry">
               <div class="source-citation">
                 <strong>Sklar, Jay.</strong> <em>Sin, Impurity, Sacrifice, Atonement: The Priestly Conceptions.</em> Hebrew Bible Monographs 2. Sheffield: Sheffield Phoenix Press, 2005.
@@ -2508,7 +3047,7 @@
                 <span class="usage-note">Strong on Eden–Temple continuity and spatial holiness logic (OT foundations used; NT applications not primary for this study)</span>
               </div>
             </div>
-            
+
             <div class="source-entry">
               <div class="source-citation">
                 <strong>Young, Frances M.</strong> <em>God's Presence: A Contemporary Recapitulation of Early Christianity.</em> Cambridge: Cambridge University Press, 2013.
@@ -2533,7 +3072,7 @@
                 <span class="usage-note">Cultural background on life/death polarity, land theology, and covenant violation</span>
               </div>
             </div>
-            
+
             <div class="source-entry">
               <div class="source-citation">
                 <strong>Knoppers, Gary N.</strong> <em>Ancient Israel's Faith and History: An Introduction to the Bible in Context.</em> New Haven: Yale University Press, 2022.
@@ -2558,7 +3097,7 @@
                 <span class="usage-note">Hebrew root analysis and semantic range for technical terms (ḥaṭṭāʾt, ʾāšām, qōdeš, ṭāmēʾ)</span>
               </div>
             </div>
-            
+
             <div class="source-entry">
               <div class="source-citation">
                 <strong>Harris, R. Laird, Gleason L. Archer Jr., and Bruce K. Waltke, eds.</strong> <em>Theological Wordbook of the Old Testament.</em> 2 vols. Chicago: Moody Press, 1980.
@@ -2578,49 +3117,6 @@
           </div>
         </div>
       </details>
-
-      <!-- RELATED STUDIES -->
-      <section class="theology-card animate-on-scroll" id="related-studies" style="margin-top: 3rem; background: linear-gradient(135deg, rgba(139,92,246,0.05), rgba(59,130,246,0.05)); border-left: 5px solid #8b5cf6;">
-        <h3 style="color: #6d28d9;">Related Studies</h3>
-        
-        <div class="callout-row" style="margin-top: 2rem;">
-          <div class="mini-card" style="background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(139,92,246,0.02)); border: 2px solid #c4b5fd;">
-            <h4 style="color: #6d28d9; display: flex; align-items: center; gap: 0.5rem;">
-              <span style="font-size: 1.8rem;">🎯</span>
-              Thematic Studies Hub
-            </h4>
-            <p style="margin: 1rem 0; line-height: 1.7; color: #475569;">
-              Explore other thematic studies examining biblical theology across multiple books, authors, and testaments.
-            </p>
-            <a href="../../../thematic/" style="display: inline-block; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.3s ease;">
-              Browse All Thematic Studies →
-            </a>
-          </div>
-
-          <div class="mini-card" style="background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(59,130,246,0.02)); border: 2px solid #93c5fd;">
-            <h4 style="color: #1e40af; display: flex; align-items: center; gap: 0.5rem;">
-              <span style="font-size: 1.8rem;">📖</span>
-              Luke-Acts Levitical Arc
-            </h4>
-            <p style="margin: 1rem 0; line-height: 1.7; color: #475569;">
-              See how Luke-Acts develops and transforms Levitical categories (priest, sacrifice, sanctuary, blood) in light of Jesus and the early church.
-            </p>
-            <a href="../../luke-acts-levitical-arc/" style="display: inline-block; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #3b82f6, #1e40af); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.3s ease;">
-              Explore Luke-Acts Connection →
-            </a>
-          </div>
-        </div>
-
-        <div style="margin-top: 2rem; padding: 1.5rem; background: white; border-radius: 12px; border-left: 4px solid #2aa198;">
-          <p style="margin: 0; line-height: 1.8; color: #475569;">
-            <strong style="color: #0f766e;">💡 Study Tip:</strong> Understanding Leviticus on its own terms 
-            (as explored in this page) provides the essential foundation for recognizing how New Testament 
-            writers creatively develop—rather than simply repeat—priestly theology. The Luke-Acts study shows 
-            this trajectory in action.
-          </p>
-        </div>
-      </section>
-
       <!-- Mobile Section Tabs Placeholder (v5.8.1) -->
       <nav aria-label="Mobile section tabs" class="pc-mobile-tabs"></nav>
 
@@ -2654,27 +3150,25 @@
       // Log sections for quick nav
       const sections = document.querySelectorAll('section[id], div[id]');
       console.log(`✓ ${sections.length} navigable sections detected`);
-
-      // =========================================
-      // Q&A PILLS TOGGLE
-      // =========================================
-      document.querySelectorAll('.qa-pill-question').forEach(question => {
-        question.addEventListener('click', function() {
-          const pill = this.closest('.qa-pill');
-          const wasActive = pill.classList.contains('active');
-          
-          // Close all other pills
-          document.querySelectorAll('.qa-pill').forEach(p => p.classList.remove('active'));
-          
-          // Toggle this pill
-          if (!wasActive) {
-            pill.classList.add('active');
-          }
-        });
-      });
-
-      console.log('✓ Q&A Pills initialized');
     });
+    // =========================================
+    // Q&A PILLS TOGGLE
+    // =========================================
+    document.querySelectorAll('.qa-pill-question').forEach(question => {
+      question.addEventListener('click', function() {
+        const pill = this.closest('.qa-pill');
+        const wasActive = pill.classList.contains('active');
+        
+        // Close all other pills
+        document.querySelectorAll('.qa-pill').forEach(p => p.classList.remove('active'));
+        
+        // Toggle this pill
+        if (!wasActive) {
+          pill.classList.add('active');
+        }
+      });
+    });
+
   </script>
 </body>
 </html>
