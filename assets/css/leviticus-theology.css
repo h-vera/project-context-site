@@ -1609,85 +1609,249 @@ Copy
 }
 
 /* ============================================
-   TRAJECTORY FLOWCHART STYLES
+   TRAJECTORY FLOWCHART STYLES — Revised
+   Teal → Gold gradient palette with timeline spine
+   Replaces previous rainbow-color version
    ============================================ */
 
 .trajectory-flowchart {
   max-width: 800px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2.5rem 2.5rem 2.5rem 3.5rem;
   background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  border-radius: 20px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+  position: relative;
 }
 
+/* ── Timeline Spine ── */
+.trajectory-flowchart::before {
+  content: '';
+  position: absolute;
+  left: 2.25rem;
+  top: 3.5rem;
+  bottom: 3.5rem;
+  width: 3px;
+  background: linear-gradient(
+    to bottom,
+    #0f766e 0%,
+    #2aa198 25%,
+    #d4af37 75%,
+    #b8860b 100%
+  );
+  border-radius: 2px;
+}
+
+/* ── Flow Boxes (shared) ── */
 .flow-box {
-  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-  border: 2px solid #cbd5e1;
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin: 1rem 0;
-  transition: all 0.3s ease;
+  border-radius: 14px;
+  padding: 1.5rem 1.75rem;
+  margin: 1.25rem 0;
+  position: relative;
+  border: 2px solid;
+  transition: box-shadow 0.3s ease;
 }
 
 .flow-box:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
 }
 
-.flow-intent { border-color: #3b82f6; background: linear-gradient(135deg, #dbeafe, #bfdbfe); }
-.flow-creation { border-color: #10b981; background: linear-gradient(135deg, #d1fae5, #a7f3d0); }
-.flow-loss { border-color: #f59e0b; background: linear-gradient(135deg, #fed7aa, #fde68a); }
-.flow-sanctuary { border-color: #2aa198; background: linear-gradient(135deg, #ccfbf1, #99f6e4); }
-.flow-problem { border-color: #ef4444; background: linear-gradient(135deg, #fecaca, #fca5a5); }
-.flow-maintenance { border-color: #8b5cf6; background: linear-gradient(135deg, #ddd6fe, #c4b5fd); }
-.flow-atonement { border-color: #d4af37; background: linear-gradient(135deg, #fef3c7, #fde68a); }
-.flow-question { border-color: #64748b; background: linear-gradient(135deg, #e2e8f0, #cbd5e1); }
+/* Spine dot on each box */
+.flow-box::before {
+  content: '';
+  position: absolute;
+  left: -1.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 0 0 2px currentColor;
+  z-index: 2;
+}
 
+/* ── Teal → Gold Palette (7 stages) ── */
+
+/* Stage 1: God's Intent — deep teal */
+.flow-intent {
+  border-color: #0f766e;
+  background: linear-gradient(135deg, rgba(15,118,110,0.10), rgba(15,118,110,0.04));
+  color: #0f766e;
+}
+.flow-intent::before { background: #0f766e; }
+
+/* Stage 2: Creation — teal */
+.flow-creation {
+  border-color: #14b8a6;
+  background: linear-gradient(135deg, rgba(20,184,166,0.10), rgba(20,184,166,0.04));
+  color: #14b8a6;
+}
+.flow-creation::before { background: #14b8a6; }
+
+/* Stage 3: Loss — teal/amber transition */
+.flow-loss {
+  border-color: #0d9488;
+  background: linear-gradient(135deg, rgba(13,148,136,0.08), rgba(212,175,55,0.06));
+  color: #0d9488;
+}
+.flow-loss::before { background: #0d9488; }
+
+/* Stage 4: Sanctuary — balanced teal-gold */
+.flow-sanctuary {
+  border-color: #2aa198;
+  background: linear-gradient(135deg, rgba(42,161,152,0.08), rgba(212,175,55,0.05));
+  color: #2aa198;
+}
+.flow-sanctuary::before { background: #2aa198; }
+
+/* Stage 5: Pollution — warm amber */
+.flow-problem {
+  border-color: #d97706;
+  background: linear-gradient(135deg, rgba(217,119,6,0.08), rgba(217,119,6,0.03));
+  color: #d97706;
+}
+.flow-problem::before { background: #d97706; }
+
+/* Stage 6: Maintenance — muted gold */
+.flow-maintenance {
+  border-color: #b8860b;
+  background: linear-gradient(135deg, rgba(184,134,11,0.08), rgba(184,134,11,0.03));
+  color: #b8860b;
+}
+.flow-maintenance::before { background: #b8860b; }
+
+/* Stage 7: Day of Atonement — EMPHASIZED gold */
+.flow-atonement {
+  border-color: #d4af37;
+  border-width: 3px;
+  background: linear-gradient(135deg, rgba(212,175,55,0.14), rgba(212,175,55,0.06));
+  padding: 2rem 2rem;
+  box-shadow: 0 4px 16px rgba(212,175,55,0.18);
+  color: #d4af37;
+}
+.flow-atonement::before {
+  background: #d4af37;
+  width: 15px;
+  height: 15px;
+  left: -2rem;
+  box-shadow: 0 0 0 3px white, 0 0 0 5px #d4af37;
+}
+
+/* Stage 8: Open Question — cool grey (unresolved) */
+.flow-question {
+  border-color: #94a3b8;
+  border-style: dashed;
+  background: linear-gradient(135deg, rgba(148,163,184,0.10), rgba(148,163,184,0.04));
+  color: #94a3b8;
+}
+.flow-question::before {
+  background: #94a3b8;
+  border-radius: 3px;
+  width: 9px;
+  height: 9px;
+}
+
+/* ── Typography ── */
 .flow-header {
   font-size: 1.1rem;
-  font-weight: 800;
-  color: #1e293b;
+  font-weight: 900;
+  color: #1a202c;
   text-align: center;
   margin-bottom: 0.5rem;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.06em;
 }
 
 .flow-subtitle {
-  font-size: 0.9rem;
-  color: #64748b;
+  font-size: 0.95rem;
+  color: #475569;
   text-align: center;
   font-style: italic;
   margin-bottom: 1rem;
 }
 
 .flow-content {
-  font-size: 0.95rem;
-  line-height: 1.7;
-  color: #334155;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #1e293b;
 }
 
 .flow-ref {
-  font-size: 0.8rem;
-  color: #64748b;
+  font-size: 0.88rem;
+  color: #475569;
   font-style: italic;
 }
 
+/* ── Arrows & Transitions ── */
 .flow-arrow {
   text-align: center;
-  font-size: 2rem;
-  color: #64748b;
-  margin: 0.5rem 0;
+  font-size: 1.5rem;
+  color: #94a3b8;
+  margin: 0.25rem 0;
+  line-height: 1;
 }
 
 .flow-transition {
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   color: #64748b;
   font-style: italic;
-  margin: 0.5rem 0;
-  padding: 0.5rem;
+  margin: 0.25rem 0;
+  padding: 0.35rem 1rem;
+  position: relative;
+}
+
+/* Transition dot on spine */
+.flow-transition::before {
+  content: '';
+  position: absolute;
+  left: -0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #94a3b8;
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .trajectory-flowchart {
+    padding: 1.5rem 1.5rem 1.5rem 2.5rem;
+  }
+
+  .trajectory-flowchart::before {
+    left: 1.25rem;
+  }
+
+  .flow-box::before {
+    left: -1.85rem;
+  }
+
+  .flow-atonement::before {
+    left: -2rem;
+  }
+
+  .flow-transition::before {
+    left: -0.6rem;
+  }
+
+  .flow-box {
+    padding: 1.25rem;
+  }
+
+  .flow-atonement {
+    padding: 1.5rem;
+  }
+
+  .flow-header {
+    font-size: 1rem;
+  }
+
+  .flow-content {
+    font-size: 0.95rem;
+  }
 }
 
 /* ============================================
