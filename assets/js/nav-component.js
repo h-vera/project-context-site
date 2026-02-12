@@ -2,8 +2,10 @@
  * Centralized Navigation Component
  * Path: /assets/js/nav-component.js
  * Purpose: Single source of truth for navigation across all pages
- * Version: 1.3.0 - Added Teaching Formation & Community & Family to Resources dropdown
+ * Version: 1.4.0 - Added centralized analytics initialization (GA4)
  */
+
+import { initAnalytics } from '/assets/js/analytics.js';
 
 class NavigationComponent {
     constructor(options = {}) {
@@ -15,6 +17,9 @@ class NavigationComponent {
         
         this.navHTML = this.getNavigationHTML();
         this.init();
+
+        // Initialize analytics on every page load
+        initAnalytics();
     }
 
     /**
