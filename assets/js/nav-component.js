@@ -2,7 +2,7 @@
  * Centralized Navigation Component
  * Path: /assets/js/nav-component.js
  * Purpose: Single source of truth for navigation across all pages
- * Version: 1.2.1 - Fixed placeholder and initialization issues
+ * Version: 1.3.0 - Added Teaching Formation & Community & Family to Resources dropdown
  */
 
 class NavigationComponent {
@@ -48,6 +48,8 @@ class NavigationComponent {
                                 <a href="/studies/methodology/lltse-orientation-methodology.html" class="${this.getActiveClass('methodology')}">Methodology (LLTSE)</a>
                                 <a href="/resources/discussion-guides/">Discussion Guides</a>
                                 <a href="/resources/study-tools/biblical-study-resources.html">Study Tools</a>
+                                <a href="/resources/teaching-formation/" class="${this.getActiveClass('teaching-formation')}">Teaching Formation</a>
+                                <a href="/resources/community-family/" class="${this.getActiveClass('community-family')}">Community & Family</a>
                             </div>
                         </li>
                         <li><a href="/about/" class="${this.getActiveClass('about')}">About</a></li>
@@ -104,9 +106,21 @@ class NavigationComponent {
             return 'active';
         }
         
-        if (section === 'resources' && currentPage.includes('resources')) {
+        if (section === 'resources' && (
+            currentPage.includes('resources') ||
+            currentPage.includes('teaching-formation') ||
+            currentPage.includes('community-family')
+        )) {
             return 'active';
         }
+
+        if (section === 'teaching-formation' && (hubType === 'teaching-formation' || currentPage.includes('teaching-formation'))) {
+            return 'active';
+        }
+        if (section === 'community-family' && (hubType === 'community-family' || currentPage.includes('community-family'))) {
+            return 'active';
+        }
+
         if (section === 'about' && currentPage.includes('about')) {
             return 'active';
         }
