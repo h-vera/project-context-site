@@ -61,12 +61,12 @@
         .header .heart {
             font-size: 3rem;
             margin: 1rem 0;
-            animation: pulse 2s infinite;
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
 
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.15); }
         }
 
         .content {
@@ -81,6 +81,15 @@
             text-align: center;
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
             border-left: 5px solid #ff6b6b;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeUp 0.6s ease-out 0.3s forwards;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .scripture-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(255, 107, 107, 0.25);
         }
 
         .scripture-card h2 {
@@ -173,6 +182,7 @@
             padding: 0;
         }
 
+        /* Avoid items — staggered fade-slide entry */
         .avoid-item {
             display: flex;
             align-items: center;
@@ -182,12 +192,33 @@
             border-radius: 10px;
             font-size: 1.1rem;
             color: #2c3e50;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideInLeft 0.5s ease-out forwards;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .avoid-item:nth-child(1) { animation-delay: 0.15s; }
+        .avoid-item:nth-child(2) { animation-delay: 0.3s; }
+        .avoid-item:nth-child(3) { animation-delay: 0.45s; }
+
+        .avoid-item:hover {
+            background: rgba(255,255,255,0.55);
+            transform: translateX(4px);
         }
 
         .avoid-item::before {
             content: '❌';
             margin-right: 1rem;
             font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        @keyframes slideInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .questions-section {
@@ -198,6 +229,7 @@
             border-left: 5px solid #9b59b6;
         }
 
+        /* Question items — staggered fade-up entry */
         .question {
             display: flex;
             align-items: flex-start;
@@ -207,6 +239,19 @@
             border-radius: 10px;
             font-size: 1.1rem;
             color: #2c3e50;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: fadeUp 0.5s ease-out forwards;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .question:nth-child(1) { animation-delay: 0.2s; }
+        .question:nth-child(2) { animation-delay: 0.4s; }
+        .question:nth-child(3) { animation-delay: 0.6s; }
+
+        .question:hover {
+            background: rgba(255,255,255,0.65);
+            box-shadow: 0 4px 12px rgba(155, 89, 182, 0.15);
         }
 
         .question::before {
@@ -217,6 +262,13 @@
             margin-top: 0.2rem;
         }
 
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .encouragement {
             background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
             border-radius: 15px;
@@ -224,6 +276,15 @@
             text-align: center;
             margin-top: 2rem;
             border-left: 5px solid #f39c12;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeUp 0.6s ease-out 0.8s forwards;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .encouragement:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(243, 156, 18, 0.2);
         }
 
         .encouragement h3 {
@@ -336,6 +397,12 @@
             .value-card:hover {
                 transform: none;
             }
+
+            .avoid-item, .question, .scripture-card, .encouragement {
+                opacity: 1;
+                transform: none;
+                animation: none;
+            }
         }
     </style>
 </head>
@@ -394,7 +461,7 @@
                         </div>
                         <div class="value-description">
                             Ask questions about each other's feelings and listen
-                            <span class="verse-reference">(James 1:19)</span>
+                            <span class="verse-reference">(Philippians 2:4)</span>
                         </div>
                     </div>
 
@@ -405,7 +472,7 @@
                         </div>
                         <div class="value-description">
                             Share when our feelings are hurt so we can heal and grow
-                            <span class="verse-reference">(Ephesians 4:25)</span>
+                            <span class="verse-reference">(Ephesians 4:15)</span>
                         </div>
                     </div>
 
@@ -439,7 +506,7 @@
                         </li>
                         <li class="avoid-item">
                             Holding back love or kindness
-                            <span class="verse-reference">(1 John 4:7)</span>
+                            <span class="verse-reference">(1 John 3:18)</span>
                         </li>
                     </ul>
                 </div>
