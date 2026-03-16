@@ -54,6 +54,89 @@
     }
 
     /* ========================================
+       STUDY NAV PILLS (matches Hosea pattern)
+       ======================================== */
+    .study-nav-tabs {
+      display: flex;
+      gap: 0.5rem;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      background: white;
+      border-radius: 10px;
+      border: 1px solid var(--page-accent-border);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .study-link {
+      color: #607590;
+      text-decoration: none;
+      padding: 0.5rem 1.1rem;
+      border-radius: 999px;
+      font-weight: 500;
+      font-size: 0.88rem;
+      transition: all 0.25s ease;
+      border: 2px solid transparent;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      min-height: 38px;
+    }
+    .study-link:hover {
+      background: var(--page-accent-bg);
+      color: var(--page-accent-dark);
+      border-color: var(--page-accent-border);
+    }
+    .study-link.active {
+      background: linear-gradient(135deg, var(--page-accent) 0%, var(--page-accent-dark) 100%);
+      color: white;
+      font-weight: 600;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(43, 94, 167, 0.3);
+    }
+
+    /* ========================================
+       SCROLL SPINE INTERACTIVITY
+       ======================================== */
+    .spine-segment {
+      cursor: pointer;
+      transition: filter 0.2s, transform 0.15s;
+      position: relative;
+    }
+    .spine-segment:hover {
+      filter: brightness(1.15);
+    }
+    .spine-segment.active-spine {
+      transform: scaleY(1.15);
+      filter: brightness(1.2);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      z-index: 2;
+    }
+    .spine-segment.active-spine::after {
+      content: '▼';
+      position: absolute;
+      bottom: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.65rem;
+      color: var(--page-accent);
+    }
+    .chapter-card {
+      transition: all 0.35s ease;
+    }
+    .chapter-card.highlighted {
+      border-color: var(--page-accent) !important;
+      box-shadow: 0 0 0 2px var(--page-accent), 0 4px 14px var(--page-accent-glow);
+      transform: translateY(-2px);
+      background: var(--page-accent-bg) !important;
+    }
+    .chapter-card.dimmed {
+      opacity: 0.35;
+      transform: scale(0.97);
+    }
+
+    /* ========================================
        HOOK / HERO SECTION
        ======================================== */
     .book-hero {
@@ -61,7 +144,7 @@
       color: #EEF2F7;
       padding: 3rem 2rem;
       border-radius: 12px;
-      margin-bottom: 2rem;
+      margin-bottom: 0;
       position: relative;
       overflow: hidden;
     }
@@ -425,6 +508,8 @@
       .bookend-connector span { writing-mode: horizontal-tb; }
       .sandwich-label { display: none; }
       .structure-visual { padding: 1.25rem; }
+      .study-nav-tabs { padding: 0.75rem; gap: 0.35rem; }
+      .study-link { padding: 0.4rem 0.85rem; font-size: 0.82rem; }
     }
   </style>
 </head>
@@ -452,19 +537,6 @@
       Deuteronomy
     </div>
 
-    <!-- Page Navigation -->
-    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem; padding: 1rem; background: #F7F9FC; border: 1px solid var(--page-accent-border); border-radius: 10px;">
-      <a href="deut-overview.html" style="padding: 0.5rem 1rem; font-size: 0.85rem; text-decoration: none; border-radius: 6px; background: var(--page-accent); color: white; font-weight: 600;">📖 Overview</a>
-      <a href="deut-literary.html" style="padding: 0.5rem 1rem; font-size: 0.85rem; color: #607590; text-decoration: none; border-radius: 6px;">✍️ Literary Design</a>
-      <a href="deut-hebrew.html" style="padding: 0.5rem 1rem; font-size: 0.85rem; color: #607590; text-decoration: none; border-radius: 6px;">📜 Hebrew</a>
-      <a href="deut-structure.html" style="padding: 0.5rem 1rem; font-size: 0.85rem; color: #607590; text-decoration: none; border-radius: 6px;">🏛️ Structure</a>
-      <a href="deut-law.html" style="padding: 0.5rem 1rem; font-size: 0.85rem; color: #607590; text-decoration: none; border-radius: 6px;">⚖️ Laws</a>
-      <a href="deut-theology.html" style="padding: 0.5rem 1rem; font-size: 0.85rem; color: #607590; text-decoration: none; border-radius: 6px;">🔥 Theology</a>
-      <a href="deut-intertext.html" style="padding: 0.5rem 1rem; font-size: 0.85rem; color: #607590; text-decoration: none; border-radius: 6px;">🔗 Connections</a>
-      <a href="deut-poems.html" style="padding: 0.5rem 1rem; font-size: 0.85rem; color: #607590; text-decoration: none; border-radius: 6px;">🎵 Poems</a>
-      <a href="deut-study-kit.html" style="padding: 0.5rem 1rem; font-size: 0.85rem; color: #607590; text-decoration: none; border-radius: 6px;">📚 Study Kit</a>
-    </div>
-
     <!-- ==========================================
          HERO / HOOK SECTION
          ========================================== -->
@@ -481,6 +553,19 @@
         <span><strong>Position:</strong> 5th scroll of the Torah</span>
       </div>
     </div>
+
+    <!-- Study Navigation Pills (below hero) -->
+    <nav class="study-nav-tabs" aria-label="Study pages">
+      <a href="deut-overview.html" class="study-link active">📖 Overview</a>
+      <a href="deut-literary.html" class="study-link">✍️ Literary Design</a>
+      <a href="deut-hebrew.html" class="study-link">📜 Hebrew</a>
+      <a href="deut-structure.html" class="study-link">🏛️ Structure</a>
+      <a href="deut-law.html" class="study-link">⚖️ Laws</a>
+      <a href="deut-theology.html" class="study-link">🔥 Theology</a>
+      <a href="deut-intertext.html" class="study-link">🔗 Connections</a>
+      <a href="deut-poems.html" class="study-link">🎵 Poems</a>
+      <a href="deut-study-kit.html" class="study-link">📚 Study Kit</a>
+    </nav>
 
     <!-- ==========================================
          OPENING HOOK — WHY THIS BOOK MATTERS
@@ -913,7 +998,7 @@
     </div>
 
     <!-- ==========================================
-         CHAPTER SCROLL SPINE
+         CHAPTER SCROLL SPINE (INTERACTIVE)
          ========================================== -->
     <div class="theology-card animate-on-scroll" id="chapter-map">
       <h3>
@@ -922,76 +1007,76 @@
       </h3>
 
       <p style="font-size: 0.95rem; line-height: 1.7; color: #4A5E78; margin-bottom: 1.5rem;">
-        A compact guide to the scroll's flow — hover or tap each section for its core movement.
+        Tap a section on the scroll bar to highlight its matching chapter cards below. Tap again to clear.
       </p>
 
       <!-- Scroll Spine Bar -->
-      <div style="display: flex; gap: 2px; margin-bottom: 2rem; border-radius: 8px; overflow: hidden;">
-        <div style="flex: 4; background: var(--page-accent-dark); color: white; padding: 0.5rem 0.75rem; font-size: 0.75rem; text-align: center;" title="Historical Prologue — wilderness memory and warning">1–4<br><span style="opacity: 0.7;">History</span></div>
-        <div style="flex: 7; background: var(--page-accent); color: white; padding: 0.5rem 0.75rem; font-size: 0.75rem; text-align: center;" title="Covenant loyalty — Ten Words, Shema, love and remembrance">5–11<br><span style="opacity: 0.7;">Loyalty</span></div>
-        <div style="flex: 15; background: var(--page-accent-light); color: #1A3D6E; padding: 0.5rem 0.75rem; font-size: 0.75rem; text-align: center; font-weight: 600;" title="Law core — worship, leadership, justice, community life">12–26<br><span style="opacity: 0.7;">Laws</span></div>
-        <div style="flex: 4; background: var(--page-accent); color: white; padding: 0.5rem 0.75rem; font-size: 0.75rem; text-align: center;" title="Covenant choice — blessing, curse, exile, return">27–30<br><span style="opacity: 0.7;">Choice</span></div>
-        <div style="flex: 4; background: var(--page-accent-dark); color: white; padding: 0.5rem 0.75rem; font-size: 0.75rem; text-align: center;" title="Final transition — Joshua, Song, blessing, death of Moses">31–34<br><span style="opacity: 0.7;">Farewell</span></div>
+      <div id="scroll-spine" style="display: flex; gap: 2px; margin-bottom: 2rem; border-radius: 8px; overflow: hidden;">
+        <div class="spine-segment" data-group="history" style="flex: 4; background: var(--page-accent-dark); color: white; padding: 0.5rem 0.75rem; font-size: 0.75rem; text-align: center;" title="Historical Prologue — wilderness memory and warning">1–4<br><span style="opacity: 0.7;">History</span></div>
+        <div class="spine-segment" data-group="loyalty" style="flex: 7; background: var(--page-accent); color: white; padding: 0.5rem 0.75rem; font-size: 0.75rem; text-align: center;" title="Covenant loyalty — Ten Words, Shema, love and remembrance">5–11<br><span style="opacity: 0.7;">Loyalty</span></div>
+        <div class="spine-segment" data-group="laws" style="flex: 15; background: var(--page-accent-light); color: #1A3D6E; padding: 0.5rem 0.75rem; font-size: 0.75rem; text-align: center; font-weight: 600;" title="Law core — worship, leadership, justice, community life">12–26<br><span style="opacity: 0.7;">Laws</span></div>
+        <div class="spine-segment" data-group="choice" style="flex: 4; background: var(--page-accent); color: white; padding: 0.5rem 0.75rem; font-size: 0.75rem; text-align: center;" title="Covenant choice — blessing, curse, exile, return">27–30<br><span style="opacity: 0.7;">Choice</span></div>
+        <div class="spine-segment" data-group="farewell" style="flex: 4; background: var(--page-accent-dark); color: white; padding: 0.5rem 0.75rem; font-size: 0.75rem; text-align: center;" title="Final transition — Joshua, Song, blessing, death of Moses">31–34<br><span style="opacity: 0.7;">Farewell</span></div>
       </div>
 
       <!-- Chapter Section Cards -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem;">
-        <div style="background: #F7F9FC; border: 1px solid #D8E1EC; border-left: 3px solid var(--page-accent-dark); border-radius: 6px; padding: 1rem;">
+      <div id="chapter-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem;">
+        <div class="chapter-card" data-group="history" style="background: #F7F9FC; border: 1px solid #D8E1EC; border-left: 3px solid var(--page-accent-dark); border-radius: 6px; padding: 1rem;">
           <div style="font-weight: 700; color: var(--page-accent-dark); font-size: 0.85rem;">Deut 1–4</div>
           <div style="font-size: 0.8rem; color: var(--page-accent); margin-bottom: 0.35rem;">Past Failure → Present Warning</div>
           <div style="font-size: 0.82rem; color: #4A5E78; line-height: 1.5;">Kadesh rebellion, wilderness judgment, east-of-Jordan victories. "Remember and do not forget."</div>
         </div>
-        <div style="background: #F7F9FC; border: 1px solid #D8E1EC; border-left: 3px solid var(--page-accent); border-radius: 6px; padding: 1rem;">
+        <div class="chapter-card" data-group="loyalty" style="background: #F7F9FC; border: 1px solid #D8E1EC; border-left: 3px solid var(--page-accent); border-radius: 6px; padding: 1rem;">
           <div style="font-weight: 700; color: var(--page-accent-dark); font-size: 0.85rem;">Deut 5</div>
           <div style="font-size: 0.8rem; color: var(--page-accent); margin-bottom: 0.35rem;">Sinai Remembered</div>
           <div style="font-size: 0.82rem; color: #4A5E78; line-height: 1.5;">Ten Words repeated. Same covenant God, new generation addressed.</div>
         </div>
-        <div style="background: #F7F9FC; border: 1px solid #D8E1EC; border-left: 3px solid var(--page-accent); border-radius: 6px; padding: 1rem;">
+        <div class="chapter-card" data-group="loyalty" style="background: #F7F9FC; border: 1px solid #D8E1EC; border-left: 3px solid var(--page-accent); border-radius: 6px; padding: 1rem;">
           <div style="font-weight: 700; color: var(--page-accent-dark); font-size: 0.85rem;">Deut 6</div>
           <div style="font-size: 0.8rem; color: var(--page-accent); margin-bottom: 0.35rem;">The Shema</div>
           <div style="font-size: 0.82rem; color: #4A5E78; line-height: 1.5;"><span style="font-family: 'SBL Hebrew', serif; direction: rtl;">שְׁמַע</span> → <span style="font-family: 'SBL Hebrew', serif; direction: rtl;">אָהַב</span> → remember → teach children.</div>
         </div>
-        <div style="background: #F7F9FC; border: 1px solid #D8E1EC; border-left: 3px solid var(--page-accent); border-radius: 6px; padding: 1rem;">
+        <div class="chapter-card" data-group="loyalty" style="background: #F7F9FC; border: 1px solid #D8E1EC; border-left: 3px solid var(--page-accent); border-radius: 6px; padding: 1rem;">
           <div style="font-weight: 700; color: var(--page-accent-dark); font-size: 0.85rem;">Deut 7–11</div>
           <div style="font-size: 0.8rem; color: var(--page-accent); margin-bottom: 0.35rem;">Exclusive Loyalty</div>
           <div style="font-size: 0.82rem; color: #4A5E78; line-height: 1.5;">Do not fear nations. Do not forget Yahweh. Do not follow other gods. Love and obey.</div>
         </div>
-        <div style="background: #F7F9FC; border: 1px solid #D8E1EC; border-left: 3px solid var(--page-accent-light); border-radius: 6px; padding: 1rem;">
+        <div class="chapter-card" data-group="laws" style="background: #F7F9FC; border: 1px solid #D8E1EC; border-left: 3px solid var(--page-accent-light); border-radius: 6px; padding: 1rem;">
           <div style="font-weight: 700; color: var(--page-accent-dark); font-size: 0.85rem;">Deut 12–16</div>
           <div style="font-size: 0.8rem; color: var(--page-accent); margin-bottom: 0.35rem;">Worship Order</div>
           <div style="font-size: 0.82rem; color: #4A5E78; line-height: 1.5;">One God → one people → one chosen place → shared worship rhythms.</div>
         </div>
-        <div style="background: var(--page-accent-bg); border: 1px solid var(--page-accent-border); border-left: 3px solid var(--page-accent-light); border-radius: 6px; padding: 1rem;">
+        <div class="chapter-card" data-group="laws" style="background: var(--page-accent-bg); border: 1px solid var(--page-accent-border); border-left: 3px solid var(--page-accent-light); border-radius: 6px; padding: 1rem;">
           <div style="font-weight: 700; color: var(--page-accent-dark); font-size: 0.85rem;">Deut 17–18</div>
           <div style="font-size: 0.8rem; color: var(--page-accent); margin-bottom: 0.35rem;">Leadership Under Torah</div>
           <div style="font-size: 0.82rem; color: #4A5E78; line-height: 1.5;">Judge, priest, king, prophet — all under Torah. The structural center of the scroll.</div>
         </div>
-        <div style="background: #F7F9FC; border: 1px solid #D8E1EC; border-left: 3px solid var(--page-accent-light); border-radius: 6px; padding: 1rem;">
+        <div class="chapter-card" data-group="laws" style="background: #F7F9FC; border: 1px solid #D8E1EC; border-left: 3px solid var(--page-accent-light); border-radius: 6px; padding: 1rem;">
           <div style="font-weight: 700; color: var(--page-accent-dark); font-size: 0.85rem;">Deut 19–25</div>
           <div style="font-size: 0.8rem; color: var(--page-accent); margin-bottom: 0.35rem;">Justice & Community</div>
           <div style="font-size: 0.82rem; color: #4A5E78; line-height: 1.5;">Truthful witness, just judgment, protection of life, wages, weights, loans, dignity.</div>
         </div>
-        <div style="background: #F7F9FC; border: 1px solid #D8E1EC; border-left: 3px solid var(--page-accent-light); border-radius: 6px; padding: 1rem;">
+        <div class="chapter-card" data-group="laws" style="background: #F7F9FC; border: 1px solid #D8E1EC; border-left: 3px solid var(--page-accent-light); border-radius: 6px; padding: 1rem;">
           <div style="font-weight: 700; color: var(--page-accent-dark); font-size: 0.85rem;">Deut 26</div>
           <div style="font-size: 0.8rem; color: var(--page-accent); margin-bottom: 0.35rem;">Covenant Confession</div>
           <div style="font-size: 0.82rem; color: #4A5E78; line-height: 1.5;">Firstfruits → remember the story → "we were slaves" → Yahweh gave the land.</div>
         </div>
-        <div style="background: #F7F9FC; border: 1px solid #D8E1EC; border-left: 3px solid var(--page-accent); border-radius: 6px; padding: 1rem;">
+        <div class="chapter-card" data-group="choice" style="background: #F7F9FC; border: 1px solid #D8E1EC; border-left: 3px solid var(--page-accent); border-radius: 6px; padding: 1rem;">
           <div style="font-weight: 700; color: var(--page-accent-dark); font-size: 0.85rem;">Deut 27–28</div>
           <div style="font-size: 0.8rem; color: var(--page-accent); margin-bottom: 0.35rem;">Blessing & Curse</div>
           <div style="font-size: 0.82rem; color: #4A5E78; line-height: 1.5;">Obedience → blessing. Disobedience → curse. The covenant fork in the road.</div>
         </div>
-        <div style="background: #F7F9FC; border: 1px solid #D8E1EC; border-left: 3px solid var(--page-accent); border-radius: 6px; padding: 1rem;">
+        <div class="chapter-card" data-group="choice" style="background: #F7F9FC; border: 1px solid #D8E1EC; border-left: 3px solid var(--page-accent); border-radius: 6px; padding: 1rem;">
           <div style="font-weight: 700; color: var(--page-accent-dark); font-size: 0.85rem;">Deut 29–30</div>
           <div style="font-size: 0.8rem; color: var(--page-accent); margin-bottom: 0.35rem;">Heart Renewal Promise</div>
           <div style="font-size: 0.82rem; color: #4A5E78; line-height: 1.5;">Command → diagnosis → exile → return → God will circumcise the heart. "Choose life."</div>
         </div>
-        <div style="background: #F7F9FC; border: 1px solid #D8E1EC; border-left: 3px solid var(--page-accent-dark); border-radius: 6px; padding: 1rem;">
+        <div class="chapter-card" data-group="farewell" style="background: #F7F9FC; border: 1px solid #D8E1EC; border-left: 3px solid var(--page-accent-dark); border-radius: 6px; padding: 1rem;">
           <div style="font-weight: 700; color: var(--page-accent-dark); font-size: 0.85rem;">Deut 31–32</div>
           <div style="font-size: 0.8rem; color: var(--page-accent); margin-bottom: 0.35rem;">Transition & Song</div>
           <div style="font-size: 0.82rem; color: #4A5E78; line-height: 1.5;">Moses fades → Joshua rises → the Song becomes a witness against future rebellion.</div>
         </div>
-        <div style="background: #F7F9FC; border: 1px solid #D8E1EC; border-left: 3px solid var(--page-accent-dark); border-radius: 6px; padding: 1rem;">
+        <div class="chapter-card" data-group="farewell" style="background: #F7F9FC; border: 1px solid #D8E1EC; border-left: 3px solid var(--page-accent-dark); border-radius: 6px; padding: 1rem;">
           <div style="font-weight: 700; color: var(--page-accent-dark); font-size: 0.85rem;">Deut 33–34</div>
           <div style="font-size: 0.8rem; color: var(--page-accent); margin-bottom: 0.35rem;">Blessing & Death</div>
           <div style="font-size: 0.82rem; color: #4A5E78; line-height: 1.5;">Tribal blessings → view of the land → death of Moses → await the next leader.</div>
@@ -1155,9 +1240,6 @@
       <p>
         <a href="/studies/tanakh/neviim/minor-prophets/hosea/hosea.html" class="cross-ref">→ Book of Hosea (Covenant Unfaithfulness)</a>
         <a href="/studies/tanakh/neviim/minor-prophets/amos/amos-overview.html" class="cross-ref">→ Book of Amos (Covenant Justice)</a>
-        <!-- Future links -->
-        <!-- <a href="/studies/characters/exodus/moses/moses.html" class="cross-ref">→ Moses Character Profile</a> -->
-        <!-- <a href="/studies/characters/deuteronomy/joshua.html" class="cross-ref">→ Joshua Character Profile</a> -->
       </p>
     </div>
 
@@ -1202,12 +1284,69 @@
   <!-- Character Page Script with Dynamic Mobile Tabs -->
   <script src="/assets/js/character-page-v5-8.js" defer></script>
 
-  <!-- Page Initialization -->
+  <!-- Scroll Spine Interactivity -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      console.log('Deuteronomy Overview v5.8.1 initialized');
-      console.log('Mobile Tabs: Auto-generated based on present sections');
+  document.addEventListener('DOMContentLoaded', function() {
+    const spineSegments = document.querySelectorAll('.spine-segment');
+    const chapterCards = document.querySelectorAll('.chapter-card');
+    let activeGroup = null;
+
+    spineSegments.forEach(function(segment) {
+      segment.addEventListener('click', function() {
+        const group = this.getAttribute('data-group');
+
+        // Toggle off if clicking the same group
+        if (activeGroup === group) {
+          clearHighlights();
+          activeGroup = null;
+          return;
+        }
+
+        activeGroup = group;
+
+        // Clear previous state
+        spineSegments.forEach(function(s) { s.classList.remove('active-spine'); });
+        chapterCards.forEach(function(c) {
+          c.classList.remove('highlighted', 'dimmed');
+        });
+
+        // Activate spine segment
+        this.classList.add('active-spine');
+
+        // Highlight matching cards, dim others
+        chapterCards.forEach(function(card) {
+          if (card.getAttribute('data-group') === group) {
+            card.classList.add('highlighted');
+          } else {
+            card.classList.add('dimmed');
+          }
+        });
+
+        // Smooth scroll to first highlighted card
+        var firstMatch = document.querySelector('.chapter-card.highlighted');
+        if (firstMatch) {
+          firstMatch.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
     });
+
+    // Click outside to clear
+    document.getElementById('chapter-cards').addEventListener('click', function(e) {
+      if (!e.target.closest('.chapter-card')) {
+        clearHighlights();
+        activeGroup = null;
+      }
+    });
+
+    function clearHighlights() {
+      spineSegments.forEach(function(s) { s.classList.remove('active-spine'); });
+      chapterCards.forEach(function(c) { c.classList.remove('highlighted', 'dimmed'); });
+    }
+
+    console.log('Deuteronomy Overview v5.8.1 initialized');
+    console.log('Scroll spine interactivity: active');
+    console.log('Mobile Tabs: Auto-generated based on present sections');
+  });
   </script>
 </body>
 </html>
