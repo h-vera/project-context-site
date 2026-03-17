@@ -28,39 +28,123 @@
   <link rel="stylesheet" href="/assets/css/mobile-tabs-v5-8.css">
 
   <style>
-    :root{--page-accent:#2B5EA7;--page-accent-light:#D4A940;--page-accent-dark:#1A3D6E;--page-accent-bg:#F5F8FC;--page-accent-border:#C8D6E8}
+    :root{--page-accent:#2B5EA7;--page-accent-light:#D4A940;--page-accent-dark:#1A3D6E;--page-accent-bg:#F5F8FC;--page-accent-border:#C8D6E8;--page-accent-glow:rgba(43,94,167,.12)}
+
+    /* ── Page nav bar ── */
     .page-nav-bar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem;padding:1rem;background:#F7F9FC;border:1px solid var(--page-accent-border);border-radius:10px}
-    .page-nav-bar a{padding:.5rem 1rem;font-size:.85rem;color:#607590;text-decoration:none;border-radius:6px;transition:all .2s}
-    .page-nav-bar a:hover{background:var(--page-accent-bg);color:var(--page-accent-dark)}
-    .page-nav-bar a.current{background:var(--page-accent);color:white;font-weight:600}
-    .page-header-banner{background:linear-gradient(135deg,#0C1929 0%,#1A3D6E 40%,#122B4D 100%);color:#EEF2F7;padding:2.75rem 2rem;border-radius:16px;margin-bottom:2rem;position:relative;overflow:hidden}
+    .page-nav-bar a{padding:.5rem 1rem;font-size:.85rem;color:#607590;text-decoration:none;border-radius:6px;transition:all .25s ease}
+    .page-nav-bar a:hover{background:var(--page-accent-bg);color:var(--page-accent-dark);transform:translateY(-1px)}
+    .page-nav-bar a.current{background:var(--page-accent);color:white;font-weight:600;box-shadow:0 4px 12px rgba(43,94,167,.3)}
+
+    /* ── Hero banner ── */
+    .page-header-banner{background:linear-gradient(135deg,#0C1929 0%,#1A3D6E 40%,#122B4D 100%);color:#EEF2F7;padding:2.75rem 2rem;border-radius:16px;margin-bottom:0;position:relative;overflow:hidden}
     .page-header-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 0% 0%,rgba(255,255,255,.08) 0%,transparent 52%),radial-gradient(circle at 100% 100%,rgba(212,169,64,.12) 0%,transparent 55%);pointer-events:none}
+    .page-header-banner::after{content:'';position:absolute;inset:0;background:radial-gradient(600px 400px at 50% 30%,rgba(255,255,255,.04),transparent 60%);pointer-events:none;animation:heroBreathe 8s ease-in-out infinite}
     .page-header-banner>*{position:relative;z-index:1}
     .page-header-kicker{text-transform:uppercase;letter-spacing:.16em;font-size:.78rem;font-weight:600;opacity:.9;margin-bottom:.65rem}
     .page-header-banner h1{margin:0 0 .5rem;font-size:2rem;line-height:1.25}
     .page-header-subtitle{max-width:42rem;font-size:1rem;opacity:.94;margin-bottom:1.5rem}
     .page-header-meta{display:flex;flex-wrap:wrap;gap:.5rem;font-size:.82rem}
-    .meta-pill{padding:.4rem .8rem;border-radius:999px;background:rgba(15,23,42,.35);border:1px solid rgba(200,214,232,.5);white-space:nowrap}
+    .meta-pill{padding:.4rem .8rem;border-radius:999px;background:rgba(15,23,42,.35);border:1px solid rgba(200,214,232,.5);white-space:nowrap;transition:all .2s}
+    .meta-pill:hover{background:rgba(15,23,42,.55);border-color:rgba(200,214,232,.7)}
+
+    /* ── Quick nav pills ── */
+    .quick-nav-pills{margin:0 0 2rem;padding:1rem 1.25rem;background:linear-gradient(135deg,rgba(43,94,167,.04),rgba(212,169,64,.03));border:1.5px solid rgba(43,94,167,.12);border-radius:14px;display:flex;align-items:center;gap:.75rem;position:relative;overflow:hidden}
+    .quick-nav-pills::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--page-accent),var(--page-accent-light),var(--page-accent));border-radius:14px 14px 0 0;opacity:.4}
+    .quick-nav-label{flex-shrink:0;font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--page-accent-dark);opacity:.6;padding-right:.5rem;border-right:2px solid rgba(43,94,167,.15)}
+    .quick-nav-scroll{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+    .nav-pill{display:inline-flex;align-items:center;gap:.25rem;padding:.35rem .75rem;border-radius:999px;font-size:.82rem;font-weight:600;text-decoration:none;white-space:nowrap;color:#4A5E78;background:white;border:1.5px solid rgba(43,94,167,.18);box-shadow:0 1px 4px rgba(0,0,0,.04);transition:all .25s ease;cursor:pointer}
+    .nav-pill:hover{color:var(--page-accent-dark);background:linear-gradient(135deg,rgba(43,94,167,.08),rgba(212,169,64,.05));border-color:var(--page-accent);box-shadow:0 3px 10px var(--page-accent-glow);transform:translateY(-2px)}
+
+    /* ── Connection cards (enhanced) ── */
     .conn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem;margin:1.25rem 0}
-    .conn-card{background:white;border:1px solid var(--page-accent-border);border-radius:12px;padding:1.35rem;border-top:4px solid var(--page-accent);transition:all .25s}
-    .conn-card:hover{border-color:var(--page-accent);box-shadow:0 4px 14px rgba(43,94,167,.12);transform:translateY(-2px)}
+    .conn-card{background:white;border:1px solid var(--page-accent-border);border-radius:12px;padding:1.35rem;border-top:4px solid var(--page-accent);transition:all .3s ease;position:relative;overflow:hidden}
+    .conn-card::after{content:'';position:absolute;inset:-2px;background:linear-gradient(135deg,rgba(43,94,167,.1),rgba(212,169,64,.08));border-radius:12px;z-index:-1;opacity:0;transition:opacity .3s ease}
+    .conn-card:hover{border-color:var(--page-accent);box-shadow:0 8px 24px var(--page-accent-glow);transform:translateY(-6px) scale(1.02)}
+    .conn-card:hover::after{opacity:.35}
+    .conn-card:hover h4{transform:translateX(4px);transition:transform .3s ease}
     .conn-card h4{margin:0 0 .25rem;color:var(--page-accent-dark);font-size:.95rem}
     .conn-card .conn-ref{font-size:.78rem;color:#607590;font-weight:600;margin-bottom:.4rem}
     .conn-card p{margin:0;color:#4A5E78;font-size:.88rem;line-height:1.55}
-    .dark-feature{background:linear-gradient(135deg,#0C1929 0%,#1A3D6E 40%,#122B4D 100%);border-radius:16px;padding:2rem;color:#EEF2F7;position:relative;overflow:hidden;margin:1.5rem 0}
+
+    /* ── Dark feature (enhanced) ── */
+    .dark-feature{background:linear-gradient(135deg,#0C1929 0%,#1A3D6E 40%,#122B4D 100%);border-radius:16px;padding:2rem;color:#EEF2F7;position:relative;overflow:hidden;margin:1.5rem 0;transition:all .3s ease}
     .dark-feature::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 15% 0%,rgba(255,255,255,.06) 0%,transparent 55%),radial-gradient(circle at 100% 100%,rgba(212,169,64,.12) 0%,transparent 65%);pointer-events:none}
     .dark-feature>*{position:relative;z-index:1}
     .dark-feature h4{color:var(--page-accent-light);margin:0 0 .5rem;font-size:1.05rem}
     .dark-feature p{color:#D8E1EC;font-size:.92rem;line-height:1.65;margin:.35rem 0}
-    @media(max-width:768px){.page-header-banner h1{font-size:1.6rem}}
+    .dark-feature:hover{box-shadow:0 8px 28px rgba(26,61,110,.25);transform:translateY(-2px)}
+
+    /* ── Key insight hover ── */
+    .key-insight{transition:all .3s ease}
+    .key-insight:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(59,130,246,.12);border-left-width:6px}
+
+    /* ── Panel hover ── */
+    .panel{transition:all .3s ease;border:1px solid transparent}
+    .panel:hover{transform:translateY(-4px);box-shadow:0 6px 18px var(--page-accent-glow);border-color:var(--page-accent-border)}
+    .panel:hover h4{transform:translateX(3px);transition:transform .3s ease}
+
+    /* ── Story engine steps hover ── */
+    .engine-step{transition:all .3s ease}
+    .engine-step:hover{transform:translateX(6px);box-shadow:0 4px 14px var(--page-accent-glow)}
+
+    /* ── Navigation cards hover ── */
+    #navigation a{transition:all .3s ease}
+    #navigation a:hover{transform:translateY(-4px);box-shadow:0 6px 18px var(--page-accent-glow);border-color:var(--page-accent)}
+    #navigation a:hover strong{color:var(--page-accent)}
+
+    /* ── Influence web ── */
     .iweb-node{position:absolute;transform:translate(-50%,-50%);z-index:2;min-width:110px;max-width:140px;padding:.7rem .75rem;border-radius:14px;border:1px solid #c8d6e8;background:#fff;color:#1a3d6e;text-align:center;box-shadow:0 6px 18px rgba(20,38,64,.08);cursor:pointer;transition:transform .2s,box-shadow .2s,border-color .2s,background .2s;font-family:inherit;font-size:inherit}
-    .iweb-node:hover{transform:translate(-50%,-50%) scale(1.04);box-shadow:0 10px 24px rgba(20,38,64,.14);border-color:#2b5ea7}
+    .iweb-node:hover{transform:translate(-50%,-50%) scale(1.06);box-shadow:0 12px 28px rgba(20,38,64,.16);border-color:#2b5ea7}
     .iweb-active{background:linear-gradient(135deg,#2b5ea7 0%,#1a3d6e 100%)!important;color:#eef2f7!important;border-color:#1a3d6e!important;box-shadow:0 14px 30px rgba(26,61,110,.28)!important}
     .iweb-center{min-width:150px;max-width:170px;padding:.85rem;border:2px solid #1a3d6e}
     .iweb-title{display:block;font-weight:700;line-height:1.2;font-size:.88rem}
     .iweb-sub{display:block;margin-top:.15rem;font-size:.72rem;opacity:.85}
+
+    /* ══════════════════════════════════════
+       SCROLL-TRIGGERED ANIMATIONS
+       ══════════════════════════════════════ */
+    .anim-section{opacity:0;transform:translateY(24px);transition:opacity .7s ease-out,transform .7s ease-out}
+    .anim-section.anim-visible{opacity:1;transform:translateY(0);transition:transform .3s ease,box-shadow .3s ease}
+    .anim-section h3{opacity:0;transform:translateX(-24px);transition:opacity .5s ease-out,transform .5s ease-out}
+    .anim-section.anim-visible h3{opacity:1;transform:translateX(0)}
+    .anim-section>p{opacity:0;transform:translateX(-14px);transition:opacity .5s ease-out,transform .5s ease-out}
+    .anim-section.anim-visible>p:nth-of-type(1){opacity:1;transform:translateX(0);transition-delay:.1s}
+    .anim-section.anim-visible>p:nth-of-type(2){opacity:1;transform:translateX(0);transition-delay:.2s}
+    .anim-section .key-insight,.anim-section .wisdom-callout{opacity:0;transform:translateX(-20px);transition:opacity .5s ease-out,transform .5s ease-out}
+    .anim-section.anim-visible .key-insight,.anim-section.anim-visible .wisdom-callout{opacity:1;transform:translateX(0);transition-delay:.4s}
+    .anim-section .dark-feature{opacity:0;transform:translateY(16px) scale(.98);transition:opacity .6s ease-out,transform .6s ease-out}
+    .anim-section.anim-visible .dark-feature{opacity:1;transform:translateY(0) scale(1);transition-delay:.5s}
+    .anim-section .panel{opacity:0;transform:translateY(14px);transition:opacity .5s ease-out,transform .5s ease-out}
+    .anim-section.anim-visible .panel:nth-child(1){opacity:1;transform:translateY(0);transition-delay:.15s}
+    .anim-section.anim-visible .panel:nth-child(2){opacity:1;transform:translateY(0);transition-delay:.3s}
+    .anim-card{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease}
+    .anim-card.anim-visible{opacity:1;transform:translateY(0)}
+    .anim-flow{opacity:0;transform:translateX(-12px);transition:opacity .4s ease,transform .4s ease}
+    .anim-flow.anim-visible{opacity:1;transform:translateX(0)}
+    .anim-row{opacity:0;transform:translateY(8px);transition:opacity .45s ease,transform .45s ease}
+    .anim-row.anim-visible{opacity:1;transform:translateY(0)}
+    .anim-section.anim-visible .key-insight strong:first-child{background:linear-gradient(120deg,transparent 0%,rgba(212,169,64,.2) 50%,transparent 100%);background-size:200% 100%;animation:highlightSweep 2s ease-out .6s 1;padding:0 .2rem}
+
+    @keyframes heroBreathe{0%,100%{opacity:.04}50%{opacity:.08}}
+    @keyframes highlightSweep{0%{background-position:-100% 0}50%{background-position:0 0}100%{background-position:100% 0}}
+
     @media(max-width:980px){#influence-web-grid{grid-template-columns:1fr!important}}
+    @media(max-width:768px){
+      .page-header-banner h1{font-size:1.6rem}
+      .quick-nav-pills{flex-direction:column;align-items:flex-start;gap:.5rem}
+      .quick-nav-label{border-right:none;border-bottom:2px solid rgba(43,94,167,.12);width:100%;padding-bottom:.25rem}
+      .quick-nav-scroll{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:.25rem;width:100%}
+      .quick-nav-scroll::-webkit-scrollbar{display:none}
+    }
     @media(max-width:760px){.iweb-node{min-width:95px;max-width:115px;padding:.55rem .5rem}.iweb-center{min-width:130px;max-width:150px}}
+
+    @media(prefers-reduced-motion:reduce){
+      .anim-section,.anim-card,.anim-flow,.anim-row{opacity:1!important;transform:none!important;transition:none!important}
+      .anim-section h3,.anim-section>p,.anim-section .key-insight,.anim-section .dark-feature,.anim-section .panel{opacity:1!important;transform:none!important;transition:none!important;animation:none!important}
+      .page-header-banner::after{animation:none!important}
+      .conn-card:hover,.engine-step:hover,.dark-feature:hover,#navigation a:hover{transform:none!important}
+    }
   </style>
 </head>
 <body class="character-profile" dir="ltr">
@@ -74,18 +158,7 @@
       <a href="/">Home</a> › <a href="/studies/">Studies</a> › <a href="/studies/tanakh/">Tanakh</a> › <a href="/studies/tanakh/torah/">Torah</a> › <a href="/studies/tanakh/torah/deuteronomy/">Deuteronomy</a> › Biblical Connections
     </div>
 
-    <nav class="page-nav-bar">
-      <a href="deut-overview.html">📖 Overview</a>
-      <a href="deut-literary.html">✍️ Literary</a>
-      <a href="deut-hebrew.html">🔤 Hebrew</a>
-      <a href="deut-structure.html">🏛️ Structure</a>
-      <a href="deut-law.html">⚖️ Law</a>
-      <a href="deut-theology.html">🕊️ Theology</a>
-      <a href="deut-intertext.html" class="current">🔗 Connections</a>
-      <a href="deut-poems.html">🎵 Poems</a>
-      <a href="deut-study-kit.html">📚 Study Kit</a>
-    </nav>
-
+    <!-- HERO -->
     <section class="page-header-banner" id="overview">
       <div class="page-header-kicker">Book of Deuteronomy · Biblical Connections</div>
       <h1>Deuteronomy Across the Canon</h1>
@@ -99,7 +172,38 @@
       </div>
     </section>
 
-    <!-- GENESIS BOOKENDS -->
+    <!-- NAV (below hero) -->
+    <nav class="page-nav-bar">
+      <a href="deut-overview.html">📖 Overview</a>
+      <a href="deut-literary.html">✍️ Literary</a>
+      <a href="deut-hebrew.html">🔤 Hebrew</a>
+      <a href="deut-structure.html">🏛️ Structure</a>
+      <a href="deut-law.html">⚖️ Law</a>
+      <a href="deut-theology.html">🕊️ Theology</a>
+      <a href="deut-intertext.html" class="current">🔗 Connections</a>
+      <a href="deut-poems.html">🎵 Poems</a>
+      <a href="deut-study-kit.html">📚 Study Kit</a>
+    </nav>
+
+    <!-- Quick Nav Pills -->
+    <div class="quick-nav-pills">
+      <span class="quick-nav-label">Jump to</span>
+      <div class="quick-nav-scroll">
+        <a href="#genesis" class="nav-pill">📗 Genesis</a>
+        <a href="#story-engine" class="nav-pill">🔄 Story Engine</a>
+        <a href="#seams" class="nav-pill">📜 TaNaK Seams</a>
+        <a href="#deuteronomic-history" class="nav-pill">📚 Joshua–Kings</a>
+        <a href="#prophets" class="nav-pill">📢 Prophets</a>
+        <a href="#psalms" class="nav-pill">🎵 Psalms</a>
+        <a href="#jesus" class="nav-pill">✝️ Jesus</a>
+        <a href="#paul" class="nav-pill">✉️ Paul</a>
+        <a href="#influence-web" class="nav-pill">🕸️ Influence Web</a>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════
+         GENESIS BOOKENDS
+         ═══════════════════════════════════════ -->
     <div class="theology-card animate-on-scroll" id="genesis">
       <h3>Genesis ↔ Deuteronomy: Torah Bookends</h3>
       <p style="font-size:.92rem;line-height:1.7;color:#4A5E78;">The first and last scrolls of the Torah mirror each other intentionally. The language of Genesis 1–11 — blessing, curse, fruitfulness, exile, rebellion — returns with full force in Deuteronomy 27–34. They are the bookends of one unified story.</p>
@@ -121,37 +225,46 @@
           </tbody>
         </table>
       </div>
+
+      <!-- ENHANCED: Cross-reference to Eden-in-laws -->
+      <div class="key-insight">
+        <strong>The connection goes deeper than macro structure.</strong> Individual law clusters within Deuteronomy 12–26 contain specific Genesis echoes: the central sanctuary as new Eden temple (Deut 12 ← Gen 2), open-handed generosity vs. grasping (Deut 15 ← Gen 3), cities of refuge expanding Cain's protective mark (Deut 19 ← Gen 4), fruit trees in war preserving creation order (Deut 20 ← Gen 2:9). See the <a href="deut-law.html#eden-in-laws" style="color:#1e40af;">Law page's Eden in the Law Core</a> for the full 8-row table.
+      </div>
     </div>
 
-    <!-- STORY ENGINE -->
+    <!-- ═══════════════════════════════════════
+         STORY ENGINE
+         ═══════════════════════════════════════ -->
     <div class="theology-card animate-on-scroll" id="story-engine">
       <h3>The Deuteronomic Story Engine</h3>
       <p style="font-size:.92rem;line-height:1.7;color:#4A5E78;">Deuteronomy outlines a covenant pattern that explains Israel's entire future history. This nine-step cycle — from covenant to exile to restoration — becomes the evaluative engine for Joshua through Kings and the grammar of every writing prophet.</p>
 
       <div style="display:flex;flex-direction:column;align-items:center;gap:0;margin:1.25rem auto;max-width:400px;">
-        <div style="width:100%;padding:.65rem 1rem;background:linear-gradient(135deg,#F0F5FB,#F7F9FC);border:2px solid var(--page-accent);border-radius:8px;text-align:center;"><strong style="color:var(--page-accent-dark);">Covenant</strong><span style="font-size:.82rem;color:#607590;display:block;">Deut 5–6 · Yahweh and Israel pledge loyalty</span></div>
+        <div class="engine-step" style="width:100%;padding:.65rem 1rem;background:linear-gradient(135deg,#F0F5FB,#F7F9FC);border:2px solid var(--page-accent);border-radius:8px;text-align:center;"><strong style="color:var(--page-accent-dark);">Covenant</strong><span style="font-size:.82rem;color:#607590;display:block;">Deut 5–6 · Yahweh and Israel pledge loyalty</span></div>
         <div style="color:var(--page-accent-light);font-size:1rem;">↓</div>
-        <div style="width:100%;padding:.65rem 1rem;background:white;border:1px solid var(--page-accent-border);border-radius:8px;text-align:center;"><strong style="color:var(--page-accent-dark);">Obedience</strong><span style="font-size:.82rem;color:#607590;display:block;">Deut 6:4–9; 10:12 · Listening to God · Walking in his ways</span></div>
+        <div class="engine-step" style="width:100%;padding:.65rem 1rem;background:white;border:1px solid var(--page-accent-border);border-radius:8px;text-align:center;"><strong style="color:var(--page-accent-dark);">Obedience</strong><span style="font-size:.82rem;color:#607590;display:block;">Deut 6:4–9; 10:12 · Listening to God · Walking in his ways</span></div>
         <div style="color:var(--page-accent-light);font-size:1rem;">↓</div>
-        <div style="width:100%;padding:.65rem 1rem;background:white;border:1px solid var(--page-accent-border);border-radius:8px;text-align:center;"><strong style="color:var(--page-accent-dark);">Blessing</strong><span style="font-size:.82rem;color:#607590;display:block;">Deut 28:1–14 · Life and prosperity in the land</span></div>
+        <div class="engine-step" style="width:100%;padding:.65rem 1rem;background:white;border:1px solid var(--page-accent-border);border-radius:8px;text-align:center;"><strong style="color:var(--page-accent-dark);">Blessing</strong><span style="font-size:.82rem;color:#607590;display:block;">Deut 28:1–14 · Life and prosperity in the land</span></div>
         <div style="color:var(--page-accent-light);font-size:1rem;">↓</div>
-        <div style="width:100%;padding:.65rem 1rem;background:#FFFBF0;border:2px solid var(--page-accent-light);border-radius:8px;text-align:center;"><strong style="color:#8B6914;">Prosperity → Complacency</strong><span style="font-size:.82rem;color:#6B4F00;display:block;">Deut 8:7–14 · Success breeds forgetting</span></div>
+        <div class="engine-step" style="width:100%;padding:.65rem 1rem;background:#FFFBF0;border:2px solid var(--page-accent-light);border-radius:8px;text-align:center;"><strong style="color:#8B6914;">Prosperity → Complacency</strong><span style="font-size:.82rem;color:#6B4F00;display:block;">Deut 8:7–14 · Success breeds forgetting</span></div>
         <div style="color:#B44;font-size:1rem;">↓</div>
-        <div style="width:100%;padding:.65rem 1rem;background:#FDF5F5;border:2px solid #C87070;border-radius:8px;text-align:center;"><strong style="color:#933;">Idolatry</strong><span style="font-size:.82rem;color:#744;display:block;">Deut 31:16; 8:19 · Israel forgets God · Serves other gods</span></div>
+        <div class="engine-step" style="width:100%;padding:.65rem 1rem;background:#FDF5F5;border:2px solid #C87070;border-radius:8px;text-align:center;"><strong style="color:#933;">Idolatry</strong><span style="font-size:.82rem;color:#744;display:block;">Deut 31:16; 8:19 · Israel forgets God · Serves other gods</span></div>
         <div style="color:#B44;font-size:1rem;">↓</div>
-        <div style="width:100%;padding:.65rem 1rem;background:#FDF5F5;border:1px solid #C87070;border-radius:8px;text-align:center;"><strong style="color:#933;">Covenant Curse</strong><span style="font-size:.82rem;color:#744;display:block;">Deut 28:15–68 · Disaster follows rebellion</span></div>
+        <div class="engine-step" style="width:100%;padding:.65rem 1rem;background:#FDF5F5;border:1px solid #C87070;border-radius:8px;text-align:center;"><strong style="color:#933;">Covenant Curse</strong><span style="font-size:.82rem;color:#744;display:block;">Deut 28:15–68 · Disaster follows rebellion</span></div>
         <div style="color:#B44;font-size:1rem;">↓</div>
-        <div style="width:100%;padding:.65rem 1rem;background:#FDF5F5;border:1px solid #C87070;border-radius:8px;text-align:center;"><strong style="color:#933;">Exile</strong><span style="font-size:.82rem;color:#744;display:block;">Deut 28:63–68 · Scattered among nations</span></div>
+        <div class="engine-step" style="width:100%;padding:.65rem 1rem;background:#FDF5F5;border:1px solid #C87070;border-radius:8px;text-align:center;"><strong style="color:#933;">Exile</strong><span style="font-size:.82rem;color:#744;display:block;">Deut 28:63–68 · Scattered among nations</span></div>
         <div style="color:var(--page-accent-light);font-size:1rem;">↓</div>
-        <div style="width:100%;padding:.65rem 1rem;background:#FFFBF0;border:2px solid var(--page-accent-light);border-radius:8px;text-align:center;"><strong style="color:#8B6914;">Repentance</strong><span style="font-size:.82rem;color:#6B4F00;display:block;">Deut 30:1–3 · Return to the LORD</span></div>
+        <div class="engine-step" style="width:100%;padding:.65rem 1rem;background:#FFFBF0;border:2px solid var(--page-accent-light);border-radius:8px;text-align:center;"><strong style="color:#8B6914;">Repentance</strong><span style="font-size:.82rem;color:#6B4F00;display:block;">Deut 30:1–3 · Return to the LORD</span></div>
         <div style="color:var(--page-accent-light);font-size:1rem;">↓</div>
-        <div style="width:100%;padding:.65rem 1rem;background:linear-gradient(135deg,#F0F5FB,#F7F9FC);border:2px solid var(--page-accent);border-radius:8px;text-align:center;"><strong style="color:var(--page-accent-dark);">Restoration</strong><span style="font-size:.82rem;color:#607590;display:block;">Deut 30:4–10 · God renews · Circumcises hearts</span></div>
+        <div class="engine-step" style="width:100%;padding:.65rem 1rem;background:linear-gradient(135deg,#F0F5FB,#F7F9FC);border:2px solid var(--page-accent);border-radius:8px;text-align:center;"><strong style="color:var(--page-accent-dark);">Restoration</strong><span style="font-size:.82rem;color:#607590;display:block;">Deut 30:4–10 · God renews · Circumcises hearts</span></div>
       </div>
 
       <div class="key-insight" style="margin-top:1rem;"><strong>This cycle is the operating system of the biblical narrative.</strong> Judges runs through it repeatedly. Samuel–Kings traces one long macro-cycle ending in exile. The prophets diagnose where Israel is in the cycle and call for repentance. The New Testament claims that Jesus inaugurates the final restoration.</div>
     </div>
 
-    <!-- SEAMS OF THE TANAK -->
+    <!-- ═══════════════════════════════════════
+         SEAMS OF THE TANAK
+         ═══════════════════════════════════════ -->
     <div class="theology-card animate-on-scroll" id="seams">
       <h3>The "Seams" of the TaNaK</h3>
       <p style="font-size:.92rem;line-height:1.7;color:#4A5E78;">With ancient scroll technology, if you want to create links between sections, you do it at the beginnings and endings — the seams. Deuteronomy sits at the most important seam in the Hebrew Bible: the hinge between Torah and Prophets.</p>
@@ -169,10 +282,12 @@
       </div>
     </div>
 
-    <!-- JOSHUA-KINGS -->
+    <!-- ═══════════════════════════════════════
+         JOSHUA-KINGS
+         ═══════════════════════════════════════ -->
     <div class="theology-card animate-on-scroll" id="deuteronomic-history">
       <h3>Joshua–Kings: The Deuteronomic History</h3>
-      <p style="font-size:.92rem;line-height:1.7;color:#4A5E78;">The books from Joshua through 2 Kings read like an extended test of Deuteronomy's claims. The narrator evaluates every king, every generation, and every national decision against the standard Deuteronomy sets. These books are sometimes called the "Deuteronomic History" because they share Deuteronomy's vocabulary, theology, and evaluative framework.</p>
+      <p style="font-size:.92rem;line-height:1.7;color:#4A5E78;">The books from Joshua through 2 Kings read like an extended test of Deuteronomy's claims. The narrator evaluates every king, every generation, and every national decision against the standard Deuteronomy sets.</p>
 
       <div class="conn-grid">
         <div class="conn-card"><h4>Joshua</h4><div class="conn-ref">Josh 1:7–8 ← Deut 17:18–20</div><p>Joshua is told to meditate on Torah day and night — the same instruction given to the king. He enters the land, fulfilling what Deuteronomy promised.</p></div>
@@ -184,7 +299,9 @@
       <div class="key-insight"><strong>The Song of Moses (Deut 32) as program:</strong> This poem predicts rebellion, judgment, and eventual vindication. Every book from Joshua through Kings reads like the fulfillment of that poem. The prophets then pick up where the song leaves off.</div>
     </div>
 
-    <!-- PROPHETS -->
+    <!-- ═══════════════════════════════════════
+         PROPHETS (ENHANCED — added Micah 6)
+         ═══════════════════════════════════════ -->
     <div class="theology-card animate-on-scroll" id="prophets">
       <h3>The Prophets: Deuteronomy's Vocabulary in Action</h3>
       <p style="font-size:.92rem;line-height:1.7;color:#4A5E78;">The writing prophets assume Deuteronomy's covenant framework. Their lawsuits, calls to repentance, judgment oracles, and restoration promises all speak Deuteronomy's language.</p>
@@ -193,14 +310,18 @@
         <div class="conn-card"><h4>Jeremiah 31:31–34</h4><div class="conn-ref">← Deut 30:6</div><p>The "new covenant" promise: God will write Torah on the heart. This picks up exactly where Deuteronomy's heart-circumcision promise left off.</p></div>
         <div class="conn-card"><h4>Ezekiel 36:26–27</h4><div class="conn-ref">← Deut 30:6</div><p>"I will give you a new heart and put a new spirit in you." Ezekiel gives the mechanism for what Deuteronomy promised: the Spirit transforms desire.</p></div>
         <div class="conn-card"><h4>Hosea</h4><div class="conn-ref">← Deut 4–11</div><p>Hosea's marriage metaphor, covenant lawsuit, and love/knowledge vocabulary are deeply Deuteronomic. "I desire steadfast love, not sacrifice" echoes Deuteronomy's relational priority.</p></div>
-        <div class="conn-card"><h4>Amos</h4><div class="conn-ref">← Deut 15, 24–25</div><p>Amos's social justice demands — care for the poor, honest courts, fair wages — are Deuteronomy's law collection applied as prophetic accusation.</p></div>
-        <div class="conn-card"><h4>Isaiah 40–55</h4><div class="conn-ref">← Deut 30:1–10</div><p>The restoration from exile, the new exodus, and the servant who bears the curse — all draw on Deuteronomy's exile-return-renewal sequence.</p></div>
+        <div class="conn-card"><h4>Amos</h4><div class="conn-ref">← Deut 7–8; 15; 24–25</div><p>Amos's social justice demands — care for the poor, honest courts, fair wages — apply Deuteronomy's law collection as prophetic accusation. "You only have I known" (3:2) echoes Deuteronomy's election-as-accountability logic.</p></div>
+        <div class="conn-card"><h4>Isaiah 1:2 &amp; 40–55</h4><div class="conn-ref">← Deut 32:1; 30:1–10</div><p>"Hear, O heavens, and give ear, O earth" — Isaiah 1:2 directly quotes the Song of Moses' cosmic witness call (Deut 32:1). Isaiah 40–55 draws on Deuteronomy's exile-return-renewal sequence for the new exodus.</p></div>
+        <!-- ENHANCED: Added Micah 6 -->
+        <div class="conn-card"><h4>Micah 6:1–8</h4><div class="conn-ref">← Deut 32 (rîb form)</div><p>Micah's covenant lawsuit uses the same <em>rîb</em> structure as Deuteronomy 32: God summons cosmic witnesses, recounts his faithfulness, and indicts Israel. "He has told you, O man, what is good" — the answer is Deuteronomy's vocabulary: justice, mercy, walking humbly.</p></div>
         <div class="conn-card"><h4>Malachi</h4><div class="conn-ref">← Deut 18:15</div><p>The final prophetic book calls Israel to "remember the Torah of Moses" and anticipates Elijah — a prophet-like-Moses who will prepare for God's coming.</p></div>
-        <div class="conn-card"><h4>Daniel 9</h4><div class="conn-ref">← Deut 28–30</div><p>Daniel's prayer explicitly confesses that Israel's exile is because "the curse written in the Torah of Moses has been poured out on us" (9:11). He reads Deuteronomy's covenant curses as a diagnosis of his own generation — and pleads for the restoration Deuteronomy promised.</p></div>
+        <div class="conn-card"><h4>Daniel 9</h4><div class="conn-ref">← Deut 28–30</div><p>Daniel's prayer explicitly confesses that Israel's exile is because "the curse written in the Torah of Moses has been poured out on us" (9:11). He reads Deuteronomy's covenant curses as a diagnosis of his own generation.</p></div>
       </div>
     </div>
 
-    <!-- PSALMS & WISDOM -->
+    <!-- ═══════════════════════════════════════
+         PSALMS & WISDOM (ENHANCED — added Ps 78, 106)
+         ═══════════════════════════════════════ -->
     <div class="theology-card animate-on-scroll" id="psalms">
       <h3>Psalms & Wisdom: Torah Meditation</h3>
       <p style="font-size:.92rem;line-height:1.7;color:#4A5E78;">Deuteronomy's command to meditate on Torah day and night (6:6–9) generates the entire tradition of Torah psalms and wisdom reflection on God's instruction.</p>
@@ -208,11 +329,17 @@
       <div class="conn-grid">
         <div class="conn-card"><h4>Psalm 1</h4><div class="conn-ref">← Deut 6:6–9; Josh 1:8</div><p>The blessed person meditates on Torah day and night — a tree planted by streams. The two-way imagery (blessed path vs. perishing path) mirrors Deuteronomy's blessing/curse choice.</p></div>
         <div class="conn-card"><h4>Psalm 119</h4><div class="conn-ref">← Deut 4:6; 6:4–9</div><p>The longest psalm is an extended meditation on the delight and wisdom of Torah. Every section echoes Deuteronomy's vision of instruction that forms the whole person.</p></div>
+        <!-- ENHANCED: Added Psalm 78 -->
+        <div class="conn-card"><h4>Psalm 78</h4><div class="conn-ref">← Deut 6:7, 20–25; 32</div><p>A poetic retelling of the Deuteronomic history cycle — God's faithfulness, Israel's rebellion, judgment, and gracious restoration. It models exactly what Deuteronomy 6 commands: telling the covenant story to the next generation.</p></div>
+        <!-- ENHANCED: Added Psalm 106 -->
+        <div class="conn-card"><h4>Psalm 106</h4><div class="conn-ref">← Deut 9; 28–32</div><p>A confession psalm using Deuteronomy's covenant-breach vocabulary: "we sinned like our fathers," "they forgot God," "they served idols." It ends with a plea for the restoration Deuteronomy promised (30:1–10).</p></div>
         <div class="conn-card"><h4>Proverbs</h4><div class="conn-ref">← Deut 4:6; 30:15–20</div><p>The two-path framework (wisdom/folly, life/death) is structurally identical to Deuteronomy's blessing/curse decision. Torah-as-wisdom becomes Proverbs' operating principle.</p></div>
       </div>
     </div>
 
-    <!-- JESUS -->
+    <!-- ═══════════════════════════════════════
+         JESUS (ENHANCED — added Sermon on Mount)
+         ═══════════════════════════════════════ -->
     <div class="theology-card animate-on-scroll" id="jesus">
       <h3>Jesus and Deuteronomy</h3>
       <p style="font-size:.92rem;line-height:1.7;color:#4A5E78;">Deuteronomy is the book Jesus quotes most often. His temptation, his teaching, and his identity are all shaped by this scroll.</p>
@@ -231,6 +358,8 @@
       <div class="conn-grid" style="margin-top:1.25rem;">
         <div class="conn-card"><h4>Greatest Commandment</h4><div class="conn-ref">Matt 22:37 ← Deut 6:5</div><p>Jesus quotes the Shema as the greatest commandment. Deuteronomy's heartbeat becomes the heartbeat of the gospel.</p></div>
         <div class="conn-card"><h4>Prophet Like Moses</h4><div class="conn-ref">Acts 3:22; 7:37 ← Deut 18:15</div><p>Peter and Stephen identify Jesus as the prophet Moses promised. The promissory gap at the end of the Torah is filled.</p></div>
+        <!-- ENHANCED: Added Sermon on the Mount -->
+        <div class="conn-card"><h4>Sermon on the Mount</h4><div class="conn-ref">Matt 5–7 ← Deut 18:15; 5–6</div><p>Jesus ascends a mountain and delivers Torah — a new Moses giving covenant instruction. His six "you have heard... but I say" case studies take Deuteronomic laws and intensify them to their deepest wisdom. He fulfills the prophet-like-Moses pattern by doing what Moses did: expounding Torah for a new generation.</p></div>
         <div class="conn-card"><h4>New Covenant</h4><div class="conn-ref">Luke 22:20 ← Deut 30:6 → Jer 31</div><p>At the Last Supper, Jesus declares a "new covenant" — the chain that runs from Deut 30's heart promise through Jeremiah 31 to the cross.</p></div>
         <div class="conn-card"><h4>Concession to Hardness</h4><div class="conn-ref">Matt 19:3–8 ← Deut 24:1–4</div><p>When asked about divorce, Jesus says Moses' law was "a concession to your hardness of heart." He goes behind Deuteronomy to Genesis for God's original design — modeling how to read Torah law at its deepest level.</p></div>
       </div>
@@ -241,7 +370,9 @@
       </div>
     </div>
 
-    <!-- PAUL -->
+    <!-- ═══════════════════════════════════════
+         PAUL (ENHANCED — added Rom 9:4)
+         ═══════════════════════════════════════ -->
     <div class="theology-card animate-on-scroll" id="paul">
       <h3>Paul and Deuteronomy</h3>
       <p style="font-size:.92rem;line-height:1.7;color:#4A5E78;">Paul reads Deuteronomy as a Christian theologian. He sees Christ as the one who bears the covenant curse, the Spirit as the heart-circumciser, and Torah-as-wisdom as the ongoing guide for the community.</p>
@@ -250,14 +381,18 @@
         <div class="conn-card"><h4>Romans 10:6–8</h4><div class="conn-ref">← Deut 30:11–14</div><p>Paul quotes "the word is near you, in your mouth and heart" and applies it to the word of faith in Christ. Deuteronomy's Torah-nearness becomes gospel-nearness.</p></div>
         <div class="conn-card"><h4>Galatians 3:10–14</h4><div class="conn-ref">← Deut 27:26; 21:23</div><p>Paul argues that Christ became a curse for us — quoting Deuteronomy's covenant curse on the one who hangs on a tree. The curse is absorbed so blessing can flow to the nations.</p></div>
         <div class="conn-card"><h4>1 Corinthians 9:9</h4><div class="conn-ref">← Deut 25:4</div><p>"Do not muzzle an ox while it treads grain." Paul extracts the underlying principle — workers deserve to share in the fruit of their labor — and applies it to apostolic support. This is Torah-as-wisdom in action.</p></div>
-        <div class="conn-card"><h4>2 Corinthians 8–10</h4><div class="conn-ref">← Deut 15:1–11</div><p>Paul raises funds from Gentile churches for impoverished Jewish believers in Jerusalem — applying Deuteronomy 15's "open your hand" generosity across ethnic lines. He quotes Exodus 16's manna principle: "the one who gathered much didn't have too much." The Sabbath-cycle economics of Deuteronomy become the practice of the messianic community.</p></div>
+        <div class="conn-card"><h4>2 Corinthians 8–10</h4><div class="conn-ref">← Deut 15:1–11</div><p>Paul raises funds from Gentile churches for impoverished Jewish believers in Jerusalem — applying Deuteronomy 15's "open your hand" generosity across ethnic lines. The Sabbath-cycle economics of Deuteronomy become the practice of the messianic community.</p></div>
         <div class="conn-card"><h4>Romans 2:28–29</h4><div class="conn-ref">← Deut 10:16; 30:6</div><p>"Circumcision is of the heart, by the Spirit." Paul sees the Spirit as the fulfillment of Deuteronomy's promise that God would circumcise the heart.</p></div>
+        <!-- ENHANCED: Added Romans 9:4 -->
+        <div class="conn-card"><h4>Romans 9:4</h4><div class="conn-ref">← Deut 4:7–8; 7:6</div><p>Paul lists Israel's privileges: "the covenants, the giving of the law, the worship." Every item in his list is a Deuteronomic category. He reads Israel's election through Deuteronomy's lens — chosen not for merit but for mission.</p></div>
       </div>
 
       <div class="key-insight" style="margin-top:1rem;"><strong>Paul's messianic reading of Deuteronomy:</strong> The land of Canaan was to become a new Eden — the place where heaven and earth overlap. Jesus says "I am what that was pointing to" and calls his followers "my body." So when Paul applies Deuteronomy's community economics to the church, he's not ignoring the land-theology — he's extending it through Jesus into a new community that is itself the temple of God.</div>
     </div>
 
-    <!-- INTERACTIVE INFLUENCE WEB -->
+    <!-- ═══════════════════════════════════════
+         INTERACTIVE INFLUENCE WEB
+         ═══════════════════════════════════════ -->
     <div class="theology-card animate-on-scroll" id="influence-web">
       <h3>Interactive Influence Web</h3>
       <p style="font-size:.92rem;line-height:1.7;color:#4A5E78;">Click any node to explore how that book or figure reuses Deuteronomy's covenant language, themes, and theological vocabulary.</p>
@@ -281,9 +416,9 @@
           <button class="iweb-node" data-node="kings" style="left:75%;top:23%;"><span class="iweb-title">Kings</span><span class="iweb-sub">Exile explained</span></button>
           <button class="iweb-node" data-node="jeremiah" style="left:85%;top:50%;"><span class="iweb-title">Jeremiah</span><span class="iweb-sub">Heart + covenant</span></button>
           <button class="iweb-node" data-node="hosea" style="left:75%;top:77%;"><span class="iweb-title">Hosea</span><span class="iweb-sub">Love + return</span></button>
-          <button class="iweb-node" data-node="jesus" style="left:50%;top:90%;"><span class="iweb-title">Jesus</span><span class="iweb-sub">Wilderness quotations</span></button>
+          <button class="iweb-node" data-node="jesus" style="left:50%;top:90%;"><span class="iweb-title">Jesus</span><span class="iweb-sub">Wilderness + Shema</span></button>
           <button class="iweb-node" data-node="paul" style="left:25%;top:77%;"><span class="iweb-title">Paul</span><span class="iweb-sub">Word near you</span></button>
-          <button class="iweb-node" data-node="isaiah" style="left:15%;top:50%;"><span class="iweb-title">Isaiah</span><span class="iweb-sub">Witness + rebellion</span></button>
+          <button class="iweb-node" data-node="isaiah" style="left:15%;top:50%;"><span class="iweb-title">Isaiah</span><span class="iweb-sub">Witness + new exodus</span></button>
         </div>
 
         <aside style="background:white;border:1px solid #c8d6e8;border-radius:18px;padding:1.25rem;box-shadow:0 6px 18px rgba(20,38,64,.06);position:sticky;top:1rem;" aria-live="polite">
@@ -299,7 +434,9 @@
       </div>
     </div>
 
-    <!-- SUMMARY -->
+    <!-- ═══════════════════════════════════════
+         SUMMARY
+         ═══════════════════════════════════════ -->
     <div class="theology-card animate-on-scroll" id="summary">
       <h3>The Canonical Reach of Deuteronomy</h3>
       <div class="key-insight">
@@ -308,7 +445,9 @@
       </div>
     </div>
 
-    <!-- NAVIGATION -->
+    <!-- ═══════════════════════════════════════
+         NAVIGATION
+         ═══════════════════════════════════════ -->
     <div class="theology-card animate-on-scroll" id="navigation">
       <h3 style="text-align:center;margin-bottom:1rem;">Continue the Deuteronomy Study</h3>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;">
@@ -319,6 +458,9 @@
       </div>
     </div>
 
+    <!-- ═══════════════════════════════════════
+         BIBLIOGRAPHY
+         ═══════════════════════════════════════ -->
     <details class="bibliography-section enhanced" id="bibliography">
       <summary><div class="bibliography-header"><div class="bibliography-inner"><span class="bibliography-icon">📚</span><div class="bibliography-text"><h3 class="bibliography-title">Bibliography & Sources</h3><p class="bibliography-subtitle">Academic references for Deuteronomy's canonical connections</p></div><div class="expand-indicator"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div></div></div></summary>
       <div class="bibliography-content">
@@ -346,8 +488,70 @@
   <script type="module">import NavigationComponent from '/assets/js/nav-component.js';const navigation = new NavigationComponent({currentPage:'studies/tanakh/torah/deuteronomy/deut-intertext',hubType:'tanakh'});</script>
   <script src="/assets/js/character-page-v5-8.js" defer></script>
   <script>
+  // ══════════════════════════════════════════
+  // ANIMATION ENGINE — Intertext Page
+  // ══════════════════════════════════════════
+  document.addEventListener('DOMContentLoaded', function() {
+    var stagger = 120;
+
+    // 1. Every theology-card gets section-level entrance
+    document.querySelectorAll('.theology-card').forEach(function(card) {
+      card.classList.add('anim-section');
+    });
+
+    // 2. Connection cards — staggered per grid
+    document.querySelectorAll('.conn-card').forEach(function(card, i) {
+      card.classList.add('anim-card');
+      card.style.transitionDelay = (i % 9) * stagger + 'ms';
+    });
+
+    // 3. Story engine steps — sequential flow
+    document.querySelectorAll('.engine-step').forEach(function(el, i) {
+      el.classList.add('anim-flow');
+      el.style.transitionDelay = i * 100 + 'ms';
+    });
+
+    // 4. Table rows
+    document.querySelectorAll('table tbody tr').forEach(function(row, i) {
+      row.classList.add('anim-row');
+      row.style.transitionDelay = i * stagger + 'ms';
+    });
+
+    // 5. Navigation cards
+    document.querySelectorAll('#navigation a[style]').forEach(function(card, i) {
+      card.classList.add('anim-card');
+      card.style.transitionDelay = i * stagger + 'ms';
+    });
+
+    // 6. Influence web nodes — staggered radial
+    document.querySelectorAll('.iweb-node:not(.iweb-center)').forEach(function(node, i) {
+      node.classList.add('anim-card');
+      node.style.transitionDelay = 300 + (i * 80) + 'ms';
+    });
+
+    // IntersectionObserver
+    var selector = '.anim-card,.anim-section,.anim-flow,.anim-row';
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('anim-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll(selector).forEach(function(el) {
+      observer.observe(el);
+    });
+
+    console.log('Intertext page animation engine: active (' + document.querySelectorAll(selector).length + ' elements)');
+  });
+
+  // ══════════════════════════════════════════
+  // INFLUENCE WEB INTERACTIVE
+  // ══════════════════════════════════════════
   (function(){
-    const D={deuteronomy:{title:"Deuteronomy",ref:"Deut 5–30",summary:"Deuteronomy supplies the covenant grammar for Israel's future: love, obedience, blessing, curse, exile, repentance, and restoration.",threads:["Covenant loyalty","Blessing and curse","Life and death choice","Heart obedience"],texts:["Deut 6:4–5","Deut 8","Deut 28","Deut 30:11–20"]},joshua:{title:"Joshua",ref:"Josh 1; 8; 23–24",summary:"Joshua presents entry into the land as the first major test of Deuteronomy's covenant instructions. Torah is read, remembered, and renewed at Shechem.",threads:["Meditation on Torah","Covenant renewal at Shechem","Land gift tied to obedience","Success framed by Torah fidelity"],texts:["Josh 1:7–8","Josh 8:30–35","Josh 23:6–16","Josh 24"]},judges:{title:"Judges",ref:"Judg 2",summary:"Judges displays the breakdown of Deuteronomic faithfulness. Israel forgets, turns to other gods, suffers oppression, and spirals into covenant disorder.",threads:["Forgetting Yahweh","Idolatry and curse pattern","Failed covenant loyalty","Cycle of rebellion and distress"],texts:["Judg 2:10–19","Judg 3:7","Judg 6:10","Judg 21:25"]},kings:{title:"Kings",ref:"2 Kgs 17; 21–23",summary:"Kings explains exile through Deuteronomy's categories. The fall of Israel and Judah is not random politics but covenant judgment.",threads:["Exile as covenant curse","Idolatry condemned","Centralized worship issues","Reform measured by Torah"],texts:["2 Kgs 17:7–23","2 Kgs 21:10–15","2 Kgs 22–23","2 Kgs 23:25–27"]},jeremiah:{title:"Jeremiah",ref:"Jer 4; 11; 31",summary:"Jeremiah reuses Deuteronomy's covenant language while pressing the need for inward transformation — law written on the heart, not just heard.",threads:["Circumcision of the heart","Broken covenant","Return and restoration","New covenant internalization"],texts:["Jer 4:4","Jer 11:1–8","Jer 17:5–8","Jer 31:31–34"]},hosea:{title:"Hosea",ref:"Hos 4; 6; 14",summary:"Hosea echoes Deuteronomy's themes of love, knowledge of God, apostasy, curse, and promised return. The covenant relationship is relationally intensified.",threads:["Love and loyalty","Knowledge of God","Return after judgment","Covenant breach as adultery"],texts:["Hos 4:1–6","Hos 6:1–6","Hos 8:1","Hos 14:1–4"]},isaiah:{title:"Isaiah",ref:"Isa 1; 5; 40–55",summary:"Isaiah draws on Deuteronomy's witness language, rebellion themes, and covenant lawsuit structure, while expanding the vision of restoration through the servant.",threads:["Heaven and earth as witnesses","Rebellion and ingratitude","Judgment for covenant breach","New exodus restoration"],texts:["Isa 1:2","Isa 5:1–7","Isa 40:1–11","Isa 65:17–25"]},jesus:{title:"Jesus",ref:"Matt 4; 19; 22",summary:"Jesus quotes Deuteronomy more than any other Torah book. He embodies faithful Israel in the wilderness, identifies the Shema as the greatest commandment, and reads Torah law at its deepest level.",threads:["Wilderness testing","Love of God as greatest command","Concession to hardness of heart","Faithful sonship"],texts:["Matt 4:1–11","Matt 19:3–8","Matt 22:37","Mark 12:28–34"]},paul:{title:"Paul",ref:"Rom 10; 1 Cor 9; 2 Cor 8–10; Gal 3",summary:"Paul reuses Deuteronomy for the nearness of the word, labor justice, the curse motif, and Sabbath-cycle generosity — showing how covenant language continues into the messianic community.",threads:["The word is near you","Labor and justice","Curse absorbed by Christ","Generosity across ethnic lines"],texts:["Rom 10:6–8","1 Cor 9:8–10","2 Cor 8:13–15","Gal 3:10–14"]}};
+    const D={deuteronomy:{title:"Deuteronomy",ref:"Deut 5–30",summary:"Deuteronomy supplies the covenant grammar for Israel's future: love, obedience, blessing, curse, exile, repentance, and restoration.",threads:["Covenant loyalty","Blessing and curse","Life and death choice","Heart obedience"],texts:["Deut 6:4–5","Deut 8","Deut 28","Deut 30:11–20"]},joshua:{title:"Joshua",ref:"Josh 1; 8; 23–24",summary:"Joshua presents entry into the land as the first major test of Deuteronomy's covenant instructions. Torah is read, remembered, and renewed at Shechem.",threads:["Meditation on Torah","Covenant renewal at Shechem","Land gift tied to obedience","Success framed by Torah fidelity"],texts:["Josh 1:7–8","Josh 8:30–35","Josh 23:6–16","Josh 24"]},judges:{title:"Judges",ref:"Judg 2",summary:"Judges displays the breakdown of Deuteronomic faithfulness. Israel forgets, turns to other gods, suffers oppression, and spirals into covenant disorder.",threads:["Forgetting Yahweh","Idolatry and curse pattern","Failed covenant loyalty","Cycle of rebellion and distress"],texts:["Judg 2:10–19","Judg 3:7","Judg 6:10","Judg 21:25"]},kings:{title:"Kings",ref:"2 Kgs 17; 21–23",summary:"Kings explains exile through Deuteronomy's categories. The fall of Israel and Judah is not random politics but covenant judgment.",threads:["Exile as covenant curse","Idolatry condemned","Centralized worship issues","Reform measured by Torah"],texts:["2 Kgs 17:7–23","2 Kgs 21:10–15","2 Kgs 22–23","2 Kgs 23:25–27"]},jeremiah:{title:"Jeremiah",ref:"Jer 4; 11; 31",summary:"Jeremiah reuses Deuteronomy's covenant language while pressing the need for inward transformation — law written on the heart, not just heard.",threads:["Circumcision of the heart","Broken covenant","Return and restoration","New covenant internalization"],texts:["Jer 4:4","Jer 11:1–8","Jer 17:5–8","Jer 31:31–34"]},hosea:{title:"Hosea",ref:"Hos 4; 6; 14",summary:"Hosea echoes Deuteronomy's themes of love, knowledge of God, apostasy, curse, and promised return. The covenant relationship is relationally intensified.",threads:["Love and loyalty","Knowledge of God","Return after judgment","Covenant breach as adultery"],texts:["Hos 4:1–6","Hos 6:1–6","Hos 8:1","Hos 14:1–4"]},isaiah:{title:"Isaiah",ref:"Isa 1:2; 5; 40–55",summary:"Isaiah opens by quoting the Song of Moses' cosmic witness call (Deut 32:1 → Isa 1:2: 'Hear, O heavens... give ear, O earth'). Isaiah 40–55 draws on Deuteronomy's exile-return-renewal sequence for the new exodus and the servant who bears the curse.",threads:["Heaven and earth as witnesses (Deut 32:1)","Rebellion and ingratitude","Judgment for covenant breach","New exodus restoration"],texts:["Isa 1:2 ← Deut 32:1","Isa 5:1–7","Isa 40:1–11","Isa 53; 65:17–25"]},jesus:{title:"Jesus",ref:"Matt 4–5; 19; 22",summary:"Jesus quotes Deuteronomy more than any other Torah book. He embodies faithful Israel in the wilderness, delivers Torah from a mountain as a new Moses, identifies the Shema as the greatest commandment, and reads Torah law at its deepest level.",threads:["Wilderness testing","Sermon on the Mount as new Torah","Love of God as greatest command","Faithful sonship"],texts:["Matt 4:1–11","Matt 5:17–48","Matt 19:3–8","Mark 12:28–34"]},paul:{title:"Paul",ref:"Rom 2; 9–10; 1 Cor 9; 2 Cor 8–10; Gal 3",summary:"Paul reuses Deuteronomy for the nearness of the word, labor justice, the curse motif, Sabbath-cycle generosity, heart circumcision by the Spirit, and Israel's covenantal privileges.",threads:["The word is near you","Labor and justice","Curse absorbed by Christ","Heart circumcision by Spirit"],texts:["Rom 2:28–29","Rom 9:4","Rom 10:6–8","Gal 3:10–14"]}};
     const nodes=document.querySelectorAll(".iweb-node");
     function activate(k){const d=D[k];if(!d)return;nodes.forEach(n=>{n.classList.toggle("iweb-active",n.dataset.node===k)});document.getElementById("iw-title").textContent=d.title;document.getElementById("iw-ref").textContent=d.ref;document.getElementById("iw-summary").textContent=d.summary;const r=i=>i.map(x=>"<li>"+x+"</li>").join("");document.getElementById("iw-threads").innerHTML=r(d.threads);document.getElementById("iw-texts").innerHTML=r(d.texts)}
     nodes.forEach(n=>n.addEventListener("click",()=>activate(n.dataset.node)));
