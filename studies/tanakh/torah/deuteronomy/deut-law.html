@@ -35,38 +35,58 @@
       --page-accent-dark: #1A3D6E;
       --page-accent-bg: #F5F8FC;
       --page-accent-border: #C8D6E8;
+      --page-accent-glow: rgba(43,94,167,.12);
     }
 
+    /* ── Page nav bar ── */
     .page-nav-bar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem;padding:1rem;background:#F7F9FC;border:1px solid var(--page-accent-border);border-radius:10px}
-    .page-nav-bar a{padding:.5rem 1rem;font-size:.85rem;color:#607590;text-decoration:none;border-radius:6px;transition:all .2s}
-    .page-nav-bar a:hover{background:var(--page-accent-bg);color:var(--page-accent-dark)}
-    .page-nav-bar a.current{background:var(--page-accent);color:white;font-weight:600}
+    .page-nav-bar a{padding:.5rem 1rem;font-size:.85rem;color:#607590;text-decoration:none;border-radius:6px;transition:all .25s ease}
+    .page-nav-bar a:hover{background:var(--page-accent-bg);color:var(--page-accent-dark);transform:translateY(-1px)}
+    .page-nav-bar a.current{background:var(--page-accent);color:white;font-weight:600;box-shadow:0 4px 12px rgba(43,94,167,.3)}
 
+    /* ── Hero banner ── */
     .page-header-banner{background:linear-gradient(135deg,#0C1929 0%,#1A3D6E 40%,#122B4D 100%);color:#EEF2F7;padding:2.75rem 2rem;border-radius:16px;margin-bottom:0;position:relative;overflow:hidden}
     .page-header-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 0% 0%,rgba(255,255,255,.08) 0%,transparent 52%),radial-gradient(circle at 100% 100%,rgba(212,169,64,.12) 0%,transparent 55%);pointer-events:none}
+    .page-header-banner::after{content:'';position:absolute;inset:0;background:radial-gradient(600px 400px at 50% 30%,rgba(255,255,255,.04),transparent 60%);pointer-events:none;animation:heroBreathe 8s ease-in-out infinite}
     .page-header-banner>*{position:relative;z-index:1}
     .page-header-kicker{text-transform:uppercase;letter-spacing:.16em;font-size:.78rem;font-weight:600;opacity:.9;margin-bottom:.65rem}
     .page-header-banner h1{margin:0 0 .5rem;font-size:2rem;line-height:1.25;display:flex;flex-wrap:wrap;gap:.75rem;align-items:baseline}
     .page-header-subtitle{max-width:42rem;font-size:1rem;opacity:.94;margin-bottom:1.5rem}
     .page-header-meta{display:flex;flex-wrap:wrap;gap:.5rem;font-size:.82rem}
-    .meta-pill{padding:.4rem .8rem;border-radius:999px;background:rgba(15,23,42,.35);border:1px solid rgba(200,214,232,.5);backdrop-filter:blur(12px);white-space:nowrap}
+    .meta-pill{padding:.4rem .8rem;border-radius:999px;background:rgba(15,23,42,.35);border:1px solid rgba(200,214,232,.5);backdrop-filter:blur(12px);white-space:nowrap;transition:all .2s}
+    .meta-pill:hover{background:rgba(15,23,42,.55);border-color:rgba(200,214,232,.7)}
     .hebrew-large{font-family:'SBL Hebrew','Ezra SIL',serif;font-size:1.7rem;letter-spacing:.03em}
 
-    /* Two-half cards */
-    .half-card{border-radius:14px;padding:1.75rem;border:2px solid;transition:all .25s ease}
-    .half-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,.1)}
-    .half-card h4{margin:0 0 .5rem;font-size:1.1rem}
+    /* ── Quick nav pills ── */
+    .quick-nav-pills{margin:0 0 2rem;padding:1rem 1.25rem;background:linear-gradient(135deg,rgba(43,94,167,.04),rgba(212,169,64,.03));border:1.5px solid rgba(43,94,167,.12);border-radius:14px;display:flex;align-items:center;gap:.75rem;position:relative;overflow:hidden;flex-wrap:wrap}
+    .quick-nav-pills::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--page-accent),var(--page-accent-light),var(--page-accent));border-radius:14px 14px 0 0;opacity:.4}
+    .quick-nav-label{flex-shrink:0;font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--page-accent-dark);opacity:.6;padding-right:.5rem;border-right:2px solid rgba(43,94,167,.15)}
+    .nav-pill{display:inline-flex;align-items:center;gap:.25rem;padding:.35rem .75rem;border-radius:999px;font-size:.82rem;font-weight:600;text-decoration:none;white-space:nowrap;color:#4A5E78;background:white;border:1.5px solid rgba(43,94,167,.18);box-shadow:0 1px 4px rgba(0,0,0,.04);transition:all .25s ease;cursor:pointer}
+    .nav-pill:hover{color:var(--page-accent-dark);background:linear-gradient(135deg,rgba(43,94,167,.08),rgba(212,169,64,.05));border-color:var(--page-accent);box-shadow:0 3px 10px var(--page-accent-glow);transform:translateY(-2px)}
+
+    /* ── Two-half cards ── */
+    .half-card{border-radius:14px;padding:1.75rem;border:2px solid;transition:all .3s ease;position:relative;overflow:hidden}
+    .half-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
+    .half-card:hover::before{transform:scaleX(1)}
+    .half-card:hover{transform:translateY(-6px) scale(1.01);box-shadow:0 12px 28px rgba(0,0,0,.12)}
+    .half-card h4{margin:0 0 .5rem;font-size:1.1rem;transition:transform .3s ease}
+    .half-card:hover h4{transform:translateX(4px)}
     .half-card p{margin:.35rem 0;font-size:.9rem;line-height:1.6}
     .half-god{border-color:var(--page-accent);background:linear-gradient(135deg,#F0F5FB,#F7F9FC)}
+    .half-god::before{background:linear-gradient(90deg,#2B5EA7,#1A3D6E)}
     .half-god h4{color:var(--page-accent-dark)}
     .half-neighbor{border-color:var(--page-accent-light);background:linear-gradient(135deg,#FFFBF0,#FFF8E7)}
+    .half-neighbor::before{background:linear-gradient(90deg,#D4A940,#8B6914)}
     .half-neighbor h4{color:#8B6914}
 
-    /* Law cluster cards */
+    /* ── Law cluster cards (enhanced hovers) ── */
     .cluster-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem;margin:1.25rem 0}
-    .cluster-card{background:white;border:1px solid var(--page-accent-border);border-radius:12px;padding:1.25rem;transition:all .25s ease;border-top:4px solid var(--page-accent)}
-    .cluster-card:hover{border-color:var(--page-accent);box-shadow:0 4px 14px rgba(43,94,167,.12);transform:translateY(-2px)}
-    .cluster-card h4{margin:0 0 .4rem;color:var(--page-accent-dark);font-size:.95rem}
+    .cluster-card{background:white;border:1px solid var(--page-accent-border);border-radius:12px;padding:1.25rem;transition:all .3s ease;border-top:4px solid var(--page-accent);position:relative;overflow:hidden}
+    .cluster-card::after{content:'';position:absolute;inset:-2px;background:linear-gradient(135deg,rgba(43,94,167,.12),rgba(212,169,64,.08));border-radius:12px;z-index:-1;opacity:0;transition:opacity .3s ease}
+    .cluster-card:hover{border-color:var(--page-accent);box-shadow:0 8px 24px var(--page-accent-glow);transform:translateY(-6px) scale(1.02)}
+    .cluster-card:hover::after{opacity:.4}
+    .cluster-card:hover h4{transform:translateX(4px)}
+    .cluster-card h4{margin:0 0 .4rem;color:var(--page-accent-dark);font-size:.95rem;transition:transform .3s ease}
     .cluster-card .cluster-ref{font-size:.78rem;color:#607590;font-weight:600;margin-bottom:.5rem}
     .cluster-card p{margin:0;color:#4A5E78;font-size:.88rem;line-height:1.55}
     .cluster-card.worship{border-top-color:#2B5EA7}
@@ -74,9 +94,10 @@
     .cluster-card.justice{border-top-color:#D4A940}
     .cluster-card.liturgy{border-top-color:#8B6914}
 
-    /* Comparison table */
+    /* ── Comparison panels ── */
     .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin:1.25rem 0}
-    .compare-panel{border-radius:12px;padding:1.5rem;border:2px solid}
+    .compare-panel{border-radius:12px;padding:1.5rem;border:2px solid;transition:all .3s ease}
+    .compare-panel:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(0,0,0,.08)}
     .compare-panel h4{margin:0 0 .75rem;font-size:1rem}
     .compare-panel ul{margin:.5rem 0 0 1.1rem;padding:0}
     .compare-panel li{margin:.35rem 0;font-size:.88rem;line-height:1.5}
@@ -85,52 +106,83 @@
     .compare-deut{border-color:var(--page-accent);background:linear-gradient(135deg,#EFF5FB,#F7F9FC)}
     .compare-deut h4{color:var(--page-accent-dark)}
 
-    /* Wisdom callout */
-    .wisdom-callout{background:linear-gradient(135deg,rgba(212,169,64,.1),rgba(43,94,167,.08));border-left:4px solid var(--page-accent-light);border-radius:0 12px 12px 0;padding:1.5rem;margin:1.5rem 0}
+    /* ── Wisdom callout (enhanced) ── */
+    .wisdom-callout{background:linear-gradient(135deg,rgba(212,169,64,.1),rgba(43,94,167,.08));border-left:4px solid var(--page-accent-light);border-radius:0 12px 12px 0;padding:1.5rem;margin:1.5rem 0;transition:all .3s ease}
+    .wisdom-callout:hover{border-left-width:6px;box-shadow:0 4px 16px rgba(212,169,64,.15);transform:translateX(3px)}
     .wisdom-callout strong:first-child{display:block;font-size:1.05rem;color:#8B6914;margin-bottom:.5rem}
     .wisdom-callout p{margin:.35rem 0;color:#4A5E78;font-size:.92rem;line-height:1.65}
 
-    /* Reading tip cards */
+    /* ── Reading tip cards (enhanced) ── */
     .tip-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1.25rem 0}
-    .tip-card{background:white;border:1px solid var(--page-accent-border);border-radius:10px;padding:1.25rem;transition:all .2s}
-    .tip-card:hover{border-color:var(--page-accent);box-shadow:0 4px 12px rgba(43,94,167,.1)}
-    .tip-card h4{margin:0 0 .4rem;font-size:.92rem;color:var(--page-accent-dark)}
+    .tip-card{background:white;border:1px solid var(--page-accent-border);border-radius:10px;padding:1.25rem;transition:all .3s ease;position:relative;overflow:hidden}
+    .tip-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--page-accent),var(--page-accent-light));transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
+    .tip-card:hover{border-color:var(--page-accent);box-shadow:0 6px 18px var(--page-accent-glow);transform:translateY(-4px)}
+    .tip-card:hover::before{transform:scaleX(1)}
+    .tip-card h4{margin:0 0 .4rem;font-size:.92rem;color:var(--page-accent-dark);transition:transform .3s ease}
+    .tip-card:hover h4{transform:translateX(3px)}
     .tip-card p{margin:0;font-size:.85rem;color:#4A5E78;line-height:1.5}
 
-    /* ── NEW: Treaty exemplar cards ── */
+    /* ── Treaty exemplar cards (enhanced) ── */
     .exemplar-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem;margin:1.5rem 0}
-    .exemplar-card{background:white;border:1px solid var(--page-accent-border);border-radius:12px;padding:1.35rem;border-top:4px solid var(--page-accent);transition:all .25s ease}
-    .exemplar-card:hover{border-color:var(--page-accent);box-shadow:0 4px 14px rgba(43,94,167,.12);transform:translateY(-2px)}
+    .exemplar-card{background:white;border:1px solid var(--page-accent-border);border-radius:12px;padding:1.35rem;border-top:4px solid var(--page-accent);transition:all .3s ease;position:relative;overflow:hidden}
+    .exemplar-card::after{content:'';position:absolute;inset:-2px;background:linear-gradient(135deg,rgba(43,94,167,.1),rgba(212,169,64,.08));border-radius:12px;z-index:-1;opacity:0;transition:opacity .3s ease}
+    .exemplar-card:hover{border-color:var(--page-accent);box-shadow:0 10px 28px var(--page-accent-glow);transform:translateY(-6px) scale(1.01)}
+    .exemplar-card:hover::after{opacity:.35}
     .exemplar-card.hittite{border-top-color:#2B5EA7}
     .exemplar-card.assyrian{border-top-color:#1A3D6E}
     .exemplar-card.aramaic{border-top-color:#D4A940}
     .exemplar-card.egyptian{border-top-color:#8B6914}
     .exemplar-card.amarna{border-top-color:#607590}
-    .exemplar-card h4{margin:0 0 .15rem;color:var(--page-accent-dark);font-size:.95rem}
+    .exemplar-card h4{margin:0 0 .15rem;color:var(--page-accent-dark);font-size:.95rem;transition:transform .3s ease}
+    .exemplar-card:hover h4{transform:translateX(4px)}
     .exemplar-card .ex-date{font-size:.78rem;color:#607590;font-weight:600;margin-bottom:.6rem}
-    .exemplar-card .ex-quote{font-style:italic;font-size:.88rem;color:#4A5E78;border-left:3px solid var(--page-accent-border);padding-left:.75rem;margin:.6rem 0;line-height:1.55}
+    .exemplar-card .ex-quote{font-style:italic;font-size:.88rem;color:#4A5E78;border-left:3px solid var(--page-accent-border);padding-left:.75rem;margin:.6rem 0;line-height:1.55;transition:border-color .3s ease}
+    .exemplar-card:hover .ex-quote{border-left-color:var(--page-accent)}
     .exemplar-card .ex-contrast{font-size:.85rem;color:#1A3D6E;font-weight:600;margin-top:.6rem}
     .exemplar-card .ex-contrast span{font-weight:400;color:#4A5E78}
 
-    /* ── NEW: Heart-diagnosis cards ── */
+    /* ── Heart-diagnosis cards (enhanced) ── */
     .diagnosis-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem;margin:1.25rem 0}
-    .diagnosis-card{background:white;border:1px solid var(--page-accent-border);border-radius:12px;padding:1.25rem;border-left:4px solid var(--page-accent);transition:all .25s ease}
-    .diagnosis-card:hover{border-color:var(--page-accent);box-shadow:0 4px 12px rgba(43,94,167,.1);transform:translateY(-2px)}
-    .diagnosis-card h4{margin:0 0 .3rem;color:var(--page-accent-dark);font-size:.95rem}
+    .diagnosis-card{background:white;border:1px solid var(--page-accent-border);border-radius:12px;padding:1.25rem;border-left:4px solid var(--page-accent);transition:all .3s ease;position:relative}
+    .diagnosis-card:hover{border-color:var(--page-accent);box-shadow:0 8px 24px var(--page-accent-glow);transform:translateY(-6px) scale(1.01);border-left-width:6px}
+    .diagnosis-card h4{margin:0 0 .3rem;color:var(--page-accent-dark);font-size:.95rem;transition:transform .3s ease}
+    .diagnosis-card:hover h4{transform:translateX(4px)}
     .diagnosis-card .diag-ref{font-size:.78rem;color:var(--page-accent);font-weight:600;margin-bottom:.5rem}
     .diagnosis-card p{margin:0;font-size:.88rem;color:#4A5E78;line-height:1.55}
 
-    /* ── NEW: Genesis echo table ── */
+    /* ── Genesis echo table (enhanced) ── */
     .echo-table{width:100%;border-collapse:collapse;font-size:.88rem;margin:1.25rem 0}
     .echo-table thead tr{background:linear-gradient(135deg,#1A3D6E,#2B5EA7);color:white}
     .echo-table th{padding:.75rem 1rem;text-align:left;font-weight:600}
-    .echo-table td{padding:.65rem 1rem;border-bottom:1px solid #D8E1EC;color:#1E3350;vertical-align:top}
+    .echo-table td{padding:.65rem 1rem;border-bottom:1px solid #D8E1EC;color:#1E3350;vertical-align:top;transition:all .25s ease}
     .echo-table tr:nth-child(even) td{background:#F7F9FC}
+    .echo-table tbody tr:hover td{background:rgba(43,94,167,.06);transform:translateX(3px)}
     .echo-table td:first-child{font-weight:600;color:var(--page-accent-dark)}
 
+    /* ── Scroll-triggered animations ── */
+    .anim-card{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease}
+    .anim-card.anim-visible{opacity:1;transform:translateY(0)}
+    .anim-row{opacity:0;transform:translateY(8px);transition:opacity .45s ease,transform .45s ease}
+    .anim-row.anim-visible{opacity:1;transform:translateY(0)}
+    .anim-banner{opacity:0;transform:translateY(20px) scale(.98);transition:opacity .6s ease,transform .6s ease}
+    .anim-banner.anim-visible{opacity:1;transform:translateY(0) scale(1)}
+
+    /* ── Keyframes ── */
+    @keyframes heroBreathe{0%,100%{opacity:.04}50%{opacity:.08}}
+    @keyframes goldPulse{0%{box-shadow:0 0 0 0 rgba(212,169,64,.4)}50%{box-shadow:0 0 20px 4px rgba(212,169,64,.2)}100%{box-shadow:0 0 0 0 rgba(212,169,64,0)}}
+
+    /* ── Responsive ── */
     @media(max-width:768px){
       .compare-grid{grid-template-columns:1fr}
       .page-header-banner h1{font-size:1.6rem}
+      .quick-nav-pills{flex-direction:column;align-items:flex-start;gap:.5rem}
+      .quick-nav-label{border-right:none;border-bottom:2px solid rgba(43,94,167,.12);width:100%;padding-bottom:.25rem}
+    }
+
+    @media(prefers-reduced-motion:reduce){
+      .anim-card,.anim-row,.anim-banner{opacity:1!important;transform:none!important;transition:none!important}
+      .page-header-banner::after{animation:none!important}
+      .cluster-card:hover,.exemplar-card:hover,.diagnosis-card:hover,.tip-card:hover,.half-card:hover{transform:none!important}
     }
   </style>
 </head>
@@ -177,6 +229,18 @@
       <a href="deut-poems.html">🎵 Poems</a>
       <a href="deut-study-kit.html">📚 Study Kit</a>
     </nav>
+
+    <!-- Quick Nav Pills -->
+    <div class="quick-nav-pills">
+      <span class="quick-nav-label">Jump to</span>
+      <a href="#law-wisdom" class="nav-pill">📖 Law as Wisdom</a>
+      <a href="#clusters" class="nav-pill">📜 Law Clusters</a>
+      <a href="#ane-compare" class="nav-pill">🏛️ ANE Comparison</a>
+      <a href="#heart-diagnosis" class="nav-pill">💔 Heart Diagnosis</a>
+      <a href="#eden-in-laws" class="nav-pill">🌿 Eden Echoes</a>
+      <a href="#jesus-law" class="nav-pill">✝️ Jesus & Law</a>
+      <a href="#wisdom-engine" class="nav-pill">⚡ Wisdom Engine</a>
+    </div>
 
     <!-- ═══════════════════════════════════════
          LAW AS WISDOM
@@ -754,6 +818,82 @@
   </script>
   <script src="/assets/js/character-page-v5-8.js" defer></script>
   <script>
+  // ── Animation Engine ──
+  document.addEventListener('DOMContentLoaded', function() {
+    var stagger = 120;
+
+    // Stagger cluster cards
+    document.querySelectorAll('.cluster-card').forEach(function(card, i) {
+      card.classList.add('anim-card');
+      card.style.transitionDelay = (i % 7) * stagger + 'ms';
+    });
+
+    // Stagger exemplar cards
+    document.querySelectorAll('.exemplar-card').forEach(function(card, i) {
+      card.classList.add('anim-card');
+      card.style.transitionDelay = i * stagger + 'ms';
+    });
+
+    // Stagger diagnosis cards
+    document.querySelectorAll('.diagnosis-card').forEach(function(card, i) {
+      card.classList.add('anim-card');
+      card.style.transitionDelay = i * stagger + 'ms';
+    });
+
+    // Stagger tip cards
+    document.querySelectorAll('.tip-card').forEach(function(card, i) {
+      card.classList.add('anim-card');
+      card.style.transitionDelay = (i % 8) * stagger + 'ms';
+    });
+
+    // Stagger theology-summary cards
+    document.querySelectorAll('#theology-summary .cluster-card').forEach(function(card, i) {
+      card.classList.add('anim-card');
+      card.style.transitionDelay = i * stagger + 'ms';
+    });
+
+    // Table rows — staggered fade-in
+    document.querySelectorAll('.echo-table tbody tr, table tbody tr').forEach(function(row, i) {
+      row.classList.add('anim-row');
+      row.style.transitionDelay = (i % 8) * stagger + 'ms';
+    });
+
+    // Dark feature boxes
+    document.querySelectorAll('#heart-diagnosis [style*="linear-gradient(135deg,#0C1929"]').forEach(function(el) {
+      el.classList.add('anim-banner');
+    });
+
+    // Half cards
+    document.querySelectorAll('.half-card').forEach(function(card, i) {
+      card.classList.add('anim-card');
+      card.style.transitionDelay = i * 200 + 'ms';
+    });
+
+    // Jesus law cards
+    document.querySelectorAll('#jesus-law-grid .conn-card').forEach(function(card, i) {
+      card.classList.add('anim-card');
+      card.style.transitionDelay = i * stagger + 'ms';
+    });
+
+    // IntersectionObserver
+    var selector = '.anim-card,.anim-row,.anim-banner';
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('anim-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+
+    document.querySelectorAll(selector).forEach(function(el) {
+      observer.observe(el);
+    });
+
+    console.log('Law page animation engine: active (' + document.querySelectorAll(selector).length + ' elements)');
+  });
+
+  // ── Interactive Functions ──
   function showJesusLaw(btn,key){
     document.querySelectorAll('#jesus-law-grid .conn-card').forEach(c=>{
       c.querySelector('.jl-detail').style.display='none';
