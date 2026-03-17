@@ -46,6 +46,49 @@
     }
 
     /* ========================================
+       STUDY NAV PILLS (matches overview)
+       ======================================== */
+    .study-nav-tabs {
+      display: flex;
+      gap: 0.5rem;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      background: white;
+      border-radius: 10px;
+      border: 1px solid var(--page-accent-border);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .study-link {
+      color: #607590;
+      text-decoration: none;
+      padding: 0.5rem 1.1rem;
+      border-radius: 999px;
+      font-weight: 500;
+      font-size: 0.88rem;
+      transition: all 0.25s ease;
+      border: 2px solid transparent;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      min-height: 38px;
+    }
+    .study-link:hover {
+      background: var(--page-accent-bg);
+      color: var(--page-accent-dark);
+      border-color: var(--page-accent-border);
+    }
+    .study-link.active {
+      background: linear-gradient(135deg, var(--page-accent) 0%, var(--page-accent-dark) 100%);
+      color: white;
+      font-weight: 600;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(43, 94, 167, 0.3);
+    }
+
+    /* ========================================
        CHIASM DISPLAY
        ======================================== */
     .chiasm-display {
@@ -128,6 +171,11 @@
       border-radius: 10px;
       padding: 1.25rem;
       border-left: 4px solid var(--page-accent);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .commandment-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px var(--page-accent-glow);
     }
     .commandment-card .cmd-num {
       font-size: 0.75rem;
@@ -194,6 +242,12 @@
       border: 1px solid #D8E1EC;
       border-radius: 10px;
       padding: 1.25rem;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+    .technique-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--page-accent-light);
+      box-shadow: 0 4px 12px var(--page-accent-glow);
     }
     .technique-card h4 {
       margin: 0 0 0.5rem 0;
@@ -229,6 +283,11 @@
       padding: 0.75rem 1.25rem;
       text-align: center;
       min-width: 100px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .flow-step:hover {
+      transform: translateY(-2px);
+      border-color: var(--page-accent);
     }
     .flow-step .step-hebrew {
       font-family: 'SBL Hebrew', 'Ezra SIL', serif;
@@ -244,31 +303,76 @@
     .flow-arrow { font-size: 1.3rem; color: var(--page-accent-light); }
 
     /* ========================================
-       PAGE NAV BAR
+       DEEP-DIVE CTA BANNER
        ======================================== */
-    .page-nav-bar {
+    .deep-dive-banner {
+      background: linear-gradient(135deg, #0C1929 0%, #1A3D6E 50%, #2B5EA7 100%);
+      border-radius: 16px;
+      padding: 2rem 2.5rem;
+      margin: 2.5rem 0;
       display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-bottom: 2rem;
-      padding: 1rem;
-      background: #F7F9FC;
-      border: 1px solid var(--page-accent-border);
-      border-radius: 10px;
-    }
-    .page-nav-bar a {
-      padding: 0.5rem 1rem;
-      font-size: 0.85rem;
-      color: #607590;
+      align-items: center;
+      gap: 2rem;
+      color: #EEF2F7;
       text-decoration: none;
-      border-radius: 6px;
-      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s;
     }
-    .page-nav-bar a:hover { background: var(--page-accent-bg); color: var(--page-accent-dark); }
-    .page-nav-bar a.current {
-      background: var(--page-accent);
-      color: white;
-      font-weight: 600;
+    .deep-dive-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 100% 50%, rgba(212,169,64,0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .deep-dive-banner:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(26,61,110,0.35);
+    }
+    .deep-dive-banner > * { position: relative; z-index: 1; }
+    .deep-dive-icon { font-size: 2.5rem; flex-shrink: 0; }
+    .deep-dive-text h4 { margin: 0 0 0.35rem; font-size: 1.15rem; color: var(--page-accent-light); }
+    .deep-dive-text p { margin: 0; font-size: 0.92rem; color: #B0C4D8; line-height: 1.5; }
+    .deep-dive-arrow { font-size: 1.5rem; color: var(--page-accent-light); margin-left: auto; flex-shrink: 0; transition: transform 0.2s; }
+    .deep-dive-banner:hover .deep-dive-arrow { transform: translateX(5px); }
+    .deep-dive-pills { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.5rem; }
+    .deep-dive-pills span { padding: 0.25rem 0.6rem; border-radius: 999px; background: rgba(255,255,255,0.1); border: 1px solid rgba(200,214,232,0.3); font-size: 0.72rem; color: #8A9BB5; }
+
+    /* ========================================
+       SCROLL-TRIGGERED ANIMATIONS
+       ======================================== */
+    .anim-row { opacity: 0; transform: translateY(8px); transition: opacity 0.45s ease, transform 0.45s ease; }
+    .anim-row.anim-visible { opacity: 1; transform: translateY(0); }
+    .anim-chiasm { opacity: 0; transform: translateX(-15px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .anim-chiasm.anim-visible { opacity: 1; transform: translateX(0); }
+    .chiasm-center.anim-chiasm { transform: scale(0.95); }
+    .chiasm-center.anim-chiasm.anim-visible { transform: scale(1); }
+    .anim-flow { opacity: 0; transform: translateX(-10px); transition: opacity 0.4s ease, transform 0.4s ease; }
+    .anim-flow.anim-visible { opacity: 1; transform: translateX(0); }
+    .anim-card { opacity: 0; transform: translateY(15px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .anim-card.anim-visible { opacity: 1; transform: translateY(0); }
+    .anim-cascade { opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease, transform 0.4s ease; }
+    .anim-cascade.anim-visible { opacity: 1; transform: translateY(0); }
+    .anim-banner { opacity: 0; transform: translateY(20px) scale(0.98); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .anim-banner.anim-visible { opacity: 1; transform: translateY(0) scale(1); }
+    .anim-heart-climax.anim-visible {
+      animation: goldPulse 0.8s ease 0.3s 1;
+    }
+    @keyframes goldPulse {
+      0% { box-shadow: 0 0 0 0 rgba(212, 169, 64, 0.4); }
+      50% { box-shadow: 0 0 20px 4px rgba(212, 169, 64, 0.25); }
+      100% { box-shadow: 0 0 0 0 rgba(212, 169, 64, 0); }
+    }
+
+    /* Reduced motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      .anim-row, .anim-chiasm, .anim-flow, .anim-card, .anim-cascade, .anim-banner {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+        animation: none !important;
+      }
     }
 
     /* ========================================
@@ -278,12 +382,19 @@
       .indent-1, .indent-2, .indent-3 { padding-left: 1rem; }
       .chiasm-ref { min-width: 80px; font-size: 0.75rem; }
       .chiasm-row { font-size: 0.85rem; }
+      .study-nav-tabs { padding: 0.75rem; gap: 0.35rem; }
+      .study-link { padding: 0.4rem 0.85rem; font-size: 0.82rem; }
+      .deep-dive-banner { flex-direction: column; padding: 1.5rem; gap: 1rem; text-align: center; }
+      .deep-dive-arrow { margin-left: 0; }
     }
   </style>
 </head>
 
 <body class="character-profile" dir="ltr">
+  <!-- Accessibility Skip Link -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Reading Progress Bar -->
   <div class="reading-progress"></div>
 
   <!-- Quick Navigation Sidebar (auto-populated by character-page-v5-8.js) -->
@@ -291,6 +402,7 @@
 
   <main id="main-content" class="content-section" role="main" aria-label="Deuteronomy Literary Design">
 
+    <!-- Breadcrumbs -->
     <div class="breadcrumbs">
       <a href="/">Home</a> ›
       <a href="/studies/studies-overview.html">Studies</a> ›
@@ -300,23 +412,39 @@
       Literary Design
     </div>
 
-    <!-- Page Navigation -->
-    <div class="page-nav-bar">
-      <a href="deut-overview.html">📖 Overview</a>
-      <a href="deut-literary.html" class="current">✍️ Literary Design</a>
-      <a href="deut-hebrew.html">📜 Hebrew</a>
-      <a href="deut-structure.html">🏛️ Structure</a>
-      <a href="deut-law.html">⚖️ Laws</a>
-      <a href="deut-theology.html">🔥 Theology</a>
-      <a href="deut-intertext.html">🔗 Connections</a>
-      <a href="deut-poems.html">🎵 Poems</a>
-      <a href="deut-study-kit.html">📚 Study Kit</a>
-    </div>
+    <!-- ==========================================
+         HERO SECTION
+         ========================================== -->
+    <section class="page-header-banner" style="background: linear-gradient(135deg, #0C1929 0%, #1A3D6E 40%, #122B4D 100%); color: #EEF2F7; padding: 2.75rem 2rem; border-radius: 16px; margin-bottom: 0; position: relative; overflow: hidden;">
+      <div style="position: absolute; inset: 0; background: radial-gradient(circle at 0% 0%, rgba(255,255,255,0.08) 0%, transparent 52%), radial-gradient(circle at 100% 100%, rgba(212,169,64,0.12) 0%, transparent 55%); pointer-events: none;"></div>
+      <div style="position: relative; z-index: 1;">
+        <div style="text-transform: uppercase; letter-spacing: 0.16em; font-size: 0.78rem; font-weight: 600; opacity: 0.9; margin-bottom: 0.65rem;">Book of Deuteronomy · Literary Design</div>
+        <h1 style="margin: 0 0 0.5rem; font-size: 2rem; line-height: 1.25; display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: baseline;">
+          ✍️ Literary Design
+          <span style="font-family: 'SBL Hebrew', 'Ezra SIL', serif; font-size: 1.7rem; letter-spacing: 0.03em;">דְּבָרִים</span>
+        </h1>
+        <p style="max-width: 42rem; font-size: 1rem; opacity: 0.94; margin-bottom: 1.5rem;">Chiastic mirrors, ancient treaty parallels, sermon rhetoric, the Shema's literary centrality, and the meditation design that turns Deuteronomy into the Torah's most structurally sophisticated scroll.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; font-size: 0.82rem;">
+          <span style="padding: 0.4rem 0.8rem; border-radius: 999px; background: rgba(15,23,42,0.35); border: 1px solid rgba(200,214,232,0.5); white-space: nowrap;">5-part chiasm</span>
+          <span style="padding: 0.4rem 0.8rem; border-radius: 999px; background: rgba(15,23,42,0.35); border: 1px solid rgba(200,214,232,0.5); white-space: nowrap;">ANE treaty pattern</span>
+          <span style="padding: 0.4rem 0.8rem; border-radius: 999px; background: rgba(15,23,42,0.35); border: 1px solid rgba(200,214,232,0.5); white-space: nowrap;">Narrative techniques</span>
+          <span style="padding: 0.4rem 0.8rem; border-radius: 999px; background: rgba(15,23,42,0.35); border: 1px solid rgba(200,214,232,0.5); white-space: nowrap;">Prophetic bridge</span>
+        </div>
+      </div>
+    </section>
 
-    <h2 class="section-title" style="color: var(--page-accent-dark);">
-      <span class="section-icon">✍️</span>
-      Literary Design of Deuteronomy
-    </h2>
+    <!-- Study Navigation Pills -->
+    <nav class="study-nav-tabs" aria-label="Study pages">
+      <a href="deut-overview.html" class="study-link">📖 Overview</a>
+      <a href="deut-literary.html" class="study-link active">✍️ Literary Design</a>
+      <a href="deut-hebrew.html" class="study-link">📜 Hebrew</a>
+      <a href="deut-structure.html" class="study-link">🏛️ Structure</a>
+      <a href="deut-law.html" class="study-link">⚖️ Laws</a>
+      <a href="deut-theology.html" class="study-link">🔥 Theology</a>
+      <a href="deut-intertext.html" class="study-link">🔗 Connections</a>
+      <a href="deut-poems.html" class="study-link">🎵 Poems</a>
+      <a href="deut-study-kit.html" class="study-link">📚 Study Kit</a>
+    </nav>
 
     <!-- ==========================================
          OPENING CONTEXT
@@ -439,13 +567,23 @@
       </div>
     </div>
 
-    <!-- Go Deeper Link -->
-    <div style="text-align:center;margin:1.5rem 0 2rem;">
-      <a href="deut-structure.html" style="display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.5rem;background:linear-gradient(135deg,#2B5EA7,#1A3D6E);color:white;text-decoration:none;border-radius:12px;font-weight:700;font-size:.95rem;box-shadow:0 4px 14px rgba(43,94,167,.25);transition:all .25s ease;">
-        🏛️ Explore All 8 Structural Patterns →
-      </a>
-      <p style="font-size:.82rem;color:#607590;margin-top:.5rem;">Confidence ratings · sub-movement analysis · 5-layer overlay map</p>
-    </div>
+    <!-- ==========================================
+         DEEP-DIVE CTA BANNER (replaces Go Deeper link)
+         ========================================== -->
+    <a href="deut-structure.html" class="deep-dive-banner">
+      <span class="deep-dive-icon">🏛️</span>
+      <div class="deep-dive-text">
+        <h4>Explore All 8 Structural Patterns →</h4>
+        <p>The companion Structure page maps every major layer of Deuteronomy's architecture — with confidence ratings for each scholarly proposal, sub-movement analysis, and a 5-layer overlay map.</p>
+        <div class="deep-dive-pills">
+          <span>8 patterns</span>
+          <span>Confidence-rated</span>
+          <span>Sub-movements</span>
+          <span>Interactive treaty map</span>
+        </div>
+      </div>
+      <span class="deep-dive-arrow">→</span>
+    </a>
 
     <!-- ==========================================
          ANE TREATY PATTERN
@@ -1056,11 +1194,96 @@
       </p>
     </div>
 
+    <!-- ==========================================
+         ENHANCED BIBLIOGRAPHY (collapsible detail)
+         ========================================== -->
+    <details class="bibliography-section enhanced" id="bibliography">
+      <summary>
+        <div class="bibliography-header">
+          <div class="bibliography-inner">
+            <span class="bibliography-icon">📚</span>
+            <div class="bibliography-text">
+              <h3 class="bibliography-title">Bibliography & Sources</h3>
+              <p class="bibliography-subtitle">Academic references for Deuteronomy literary analysis</p>
+            </div>
+            <div class="expand-indicator">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </summary>
+      <div class="bibliography-content">
+        <div class="source-category">
+          <h4>Major Commentaries</h4>
+          <div class="source-entry">
+            <div class="source-citation"><strong>Craigie, Peter C.</strong> <em>The Book of Deuteronomy.</em> NICOT. Grand Rapids: Eerdmans.</div>
+            <div class="source-usage"><span class="usage-tag">Treaty</span><span class="usage-note">ANE treaty structure analysis</span></div>
+          </div>
+          <div class="source-entry">
+            <div class="source-citation"><strong>Block, Daniel I.</strong> <em>Deuteronomy.</em> NIVAC. Grand Rapids: Zondervan, 2012.</div>
+            <div class="source-usage"><span class="usage-tag">Structure</span><span class="usage-note">Internal organization and covenant architecture</span></div>
+          </div>
+          <div class="source-entry">
+            <div class="source-citation"><strong>Tigay, Jeffrey H.</strong> <em>Deuteronomy.</em> JPS Torah Commentary. Philadelphia: JPS, 1996.</div>
+            <div class="source-usage"><span class="usage-tag">Law Core</span><span class="usage-note">Ten Commandments mapping</span></div>
+          </div>
+          <div class="source-entry">
+            <div class="source-citation"><strong>McConville, J. Gordon.</strong> <em>Deuteronomy.</em> Apollos OTC. Leicester: IVP, 2002.</div>
+            <div class="source-usage"><span class="usage-tag">Theology</span><span class="usage-note">Heart-circumcision arc and theological progression</span></div>
+          </div>
+          <div class="source-entry">
+            <div class="source-citation"><strong>Wright, Christopher.</strong> <em>Deuteronomy.</em> NIBC. Peabody: Hendrickson.</div>
+            <div class="source-usage"><span class="usage-tag">Application</span><span class="usage-note">Ethics and contemporary relevance</span></div>
+          </div>
+        </div>
+        <div class="source-category">
+          <h4>Specialized Studies</h4>
+          <div class="source-entry">
+            <div class="source-citation"><strong>Weinfeld, Moshe.</strong> <em>Deuteronomy and the Deuteronomic School.</em> Oxford: Clarendon, 1972.</div>
+            <div class="source-usage"><span class="usage-tag">Treaty</span><span class="usage-note">Foundational ANE treaty parallels study</span></div>
+          </div>
+          <div class="source-entry">
+            <div class="source-citation"><strong>Kline, Meredith G.</strong> <em>Treaty of the Great King.</em> Grand Rapids: Eerdmans, 1963.</div>
+            <div class="source-usage"><span class="usage-tag">Treaty</span><span class="usage-note">Deuteronomy as suzerain treaty</span></div>
+          </div>
+          <div class="source-entry">
+            <div class="source-citation"><strong>Alter, Robert.</strong> <em>The Hebrew Bible: A Translation with Commentary.</em> New York: Norton.</div>
+            <div class="source-usage"><span class="usage-tag">Literary</span><span class="usage-note">Narrative technique and translation</span></div>
+          </div>
+          <div class="source-entry">
+            <div class="source-citation"><strong>Kitchen, K. A.</strong> <em>On the Reliability of the Old Testament.</em> Grand Rapids: Eerdmans, 2003.</div>
+            <div class="source-usage"><span class="usage-tag">Treaty Dating</span><span class="usage-note">Second-millennium treaty parallels</span></div>
+          </div>
+          <div class="source-entry">
+            <div class="source-citation"><strong>Hallo, William.</strong> <em>The Context of Scripture.</em> Leiden: Brill.</div>
+            <div class="source-usage"><span class="usage-tag">ANE</span><span class="usage-note">Primary ANE treaty texts</span></div>
+          </div>
+        </div>
+        <div class="source-category">
+          <h4>Podcast & Media</h4>
+          <div class="source-entry">
+            <div class="source-citation"><strong>The Bible Project.</strong> Deuteronomy Scroll podcast series, 2020–2022.</div>
+            <div class="source-usage"><span class="usage-tag">Overview</span><span class="usage-note">Three-movement design and be'er concept</span></div>
+          </div>
+        </div>
+        <div class="citation-note">
+          <p><strong>Full bibliography:</strong> See the <a href="deut-study-kit.html#bibliography">Study Kit master bibliography</a> for the complete source list.</p>
+          <p><strong>Citation Format:</strong> Chicago Manual of Style, 17th edition</p>
+        </div>
+      </div>
+    </details>
+
   </main>
 
+  <!-- Back to Top Button -->
   <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
+
+  <!-- Mobile Menu Overlay -->
   <div class="mobile-menu-overlay"></div>
 
+  <!-- Navigation Component -->
   <script type="module">
     import NavigationComponent from '/assets/js/nav-component.js';
     const navigation = new NavigationComponent({
@@ -1068,10 +1291,123 @@
       hubType: 'tanakh'
     });
   </script>
+
+  <!-- Character Page Script with Dynamic Mobile Tabs -->
   <script src="/assets/js/character-page-v5-8.js" defer></script>
+
+  <!-- Page Initialization + Animation Engine -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       console.log('Deuteronomy Literary Design v5.8.1 initialized');
+
+      // ── Animation Engine ──
+      var stagger = 120; // ms between items in a group
+
+      // 1. Table rows — staggered fade-in
+      document.querySelectorAll('.treaty-table tbody tr, .bookend-table tbody tr').forEach(function(row, i) {
+        row.classList.add('anim-row');
+        row.style.transitionDelay = (i % 8) * stagger + 'ms';
+      });
+
+      // 2. Chiasm rows — outer to center reveal
+      document.querySelectorAll('.chiasm-display').forEach(function(display) {
+        var rows = display.querySelectorAll('.chiasm-row, .chiasm-center');
+        rows.forEach(function(row, i) {
+          row.classList.add('anim-chiasm');
+          var distFromEdge = Math.min(i, rows.length - 1 - i);
+          row.style.transitionDelay = distFromEdge * stagger + 'ms';
+        });
+      });
+
+      // 3. Flow chain (Shema) — sequential left to right
+      document.querySelectorAll('.flow-chain').forEach(function(chain) {
+        chain.querySelectorAll('.flow-step, .flow-arrow').forEach(function(el, i) {
+          el.classList.add('anim-flow');
+          el.style.transitionDelay = i * 100 + 'ms';
+        });
+      });
+
+      // 4. Heart progression — sequential + gold pulse on last
+      document.querySelectorAll('#centerpoint').forEach(function(section) {
+        var steps = section.querySelectorAll('[style*="min-width: 140px"]');
+        var arrows = section.querySelectorAll('[style*="color: #D4A940"]');
+        var allItems = [];
+        steps.forEach(function(s, i) {
+          allItems.push(s);
+          if (arrows[i]) allItems.push(arrows[i]);
+        });
+        allItems.forEach(function(el, i) {
+          el.classList.add('anim-flow');
+          el.style.transitionDelay = i * 140 + 'ms';
+        });
+        // Gold pulse on the Promise box (last step)
+        if (steps.length > 0) {
+          steps[steps.length - 1].classList.add('anim-heart-climax');
+        }
+      });
+
+      // 5. Commandment cards — staggered rise
+      document.querySelectorAll('.commandment-card').forEach(function(card, i) {
+        card.classList.add('anim-card');
+        card.style.transitionDelay = i * stagger + 'ms';
+      });
+
+      // 6. Technique cards — staggered rise
+      document.querySelectorAll('.technique-card').forEach(function(card, i) {
+        card.classList.add('anim-card');
+        card.style.transitionDelay = i * stagger + 'ms';
+      });
+
+      // 7. Sermon pattern flow steps
+      document.querySelectorAll('#sermon-literature [style*="min-width: 120px"]').forEach(function(el, i) {
+        el.classList.add('anim-flow');
+        el.style.transitionDelay = i * 130 + 'ms';
+      });
+
+      // 8. Covenant lawsuit — top-down cascade
+      document.querySelectorAll('#covenant-lawsuit [style*="0.75rem 1.25rem"]').forEach(function(step, i) {
+        step.classList.add('anim-cascade');
+        step.style.transitionDelay = i * 130 + 'ms';
+      });
+
+      // 9. Torah scroll stack — build down
+      document.querySelectorAll('#torah-macro [style*="0.75rem 1.25rem"]').forEach(function(layer, i) {
+        layer.classList.add('anim-cascade');
+        layer.style.transitionDelay = i * 150 + 'ms';
+      });
+
+      // 10. Prophets bridge flow
+      document.querySelectorAll('#prophets-bridge [style*="min-width: 180px"]').forEach(function(el, i) {
+        el.classList.add('anim-flow');
+        el.style.transitionDelay = i * 200 + 'ms';
+      });
+
+      // 11. Deep-dive banner
+      document.querySelectorAll('.deep-dive-banner').forEach(function(el) {
+        el.classList.add('anim-banner');
+      });
+
+      // ── IntersectionObserver ──
+      var selector = '.anim-row,.anim-chiasm,.anim-flow,.anim-card,.anim-cascade,.anim-banner';
+
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('anim-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -40px 0px'
+      });
+
+      document.querySelectorAll(selector).forEach(function(el) {
+        observer.observe(el);
+      });
+
+      console.log('Animation engine: active (' + document.querySelectorAll(selector).length + ' elements)');
+      console.log('Mobile Tabs: Auto-generated based on present sections');
     });
   </script>
 </body>
