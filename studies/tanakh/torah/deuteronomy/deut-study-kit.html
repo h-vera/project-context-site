@@ -27,39 +27,105 @@
   <link rel="stylesheet" href="/assets/css/mobile-tabs-v5-8.css">
 
   <style>
-    :root{--page-accent:#2B5EA7;--page-accent-light:#D4A940;--page-accent-dark:#1A3D6E;--page-accent-bg:#F5F8FC;--page-accent-border:#C8D6E8}
+    :root{--page-accent:#2B5EA7;--page-accent-light:#D4A940;--page-accent-dark:#1A3D6E;--page-accent-bg:#F5F8FC;--page-accent-border:#C8D6E8;--page-accent-glow:rgba(43,94,167,.12)}
+
+    /* ── Page nav bar ── */
     .page-nav-bar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem;padding:1rem;background:#F7F9FC;border:1px solid var(--page-accent-border);border-radius:10px}
-    .page-nav-bar a{padding:.5rem 1rem;font-size:.85rem;color:#607590;text-decoration:none;border-radius:6px;transition:all .2s}
-    .page-nav-bar a:hover{background:var(--page-accent-bg);color:var(--page-accent-dark)}
-    .page-nav-bar a.current{background:var(--page-accent);color:white;font-weight:600}
-    .page-header-banner{background:linear-gradient(135deg,#0C1929 0%,#1A3D6E 40%,#122B4D 100%);color:#EEF2F7;padding:2.75rem 2rem;border-radius:16px;margin-bottom:2rem;position:relative;overflow:hidden}
+    .page-nav-bar a{padding:.5rem 1rem;font-size:.85rem;color:#607590;text-decoration:none;border-radius:6px;transition:all .25s ease}
+    .page-nav-bar a:hover{background:var(--page-accent-bg);color:var(--page-accent-dark);transform:translateY(-1px)}
+    .page-nav-bar a.current{background:var(--page-accent);color:white;font-weight:600;box-shadow:0 4px 12px rgba(43,94,167,.3)}
+
+    /* ── Hero banner ── */
+    .page-header-banner{background:linear-gradient(135deg,#0C1929 0%,#1A3D6E 40%,#122B4D 100%);color:#EEF2F7;padding:2.75rem 2rem;border-radius:16px;margin-bottom:0;position:relative;overflow:hidden}
     .page-header-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 0% 0%,rgba(255,255,255,.08) 0%,transparent 52%),radial-gradient(circle at 100% 100%,rgba(212,169,64,.12) 0%,transparent 55%);pointer-events:none}
+    .page-header-banner::after{content:'';position:absolute;inset:0;background:radial-gradient(600px 400px at 50% 30%,rgba(255,255,255,.04),transparent 60%);pointer-events:none;animation:heroBreathe 8s ease-in-out infinite}
     .page-header-banner>*{position:relative;z-index:1}
     .page-header-kicker{text-transform:uppercase;letter-spacing:.16em;font-size:.78rem;font-weight:600;opacity:.9;margin-bottom:.65rem}
     .page-header-banner h1{margin:0 0 .5rem;font-size:2rem;line-height:1.25}
     .page-header-subtitle{max-width:42rem;font-size:1rem;opacity:.94;margin-bottom:1rem}
-    .meta-pill{padding:.4rem .8rem;border-radius:999px;background:rgba(15,23,42,.35);border:1px solid rgba(200,214,232,.5);white-space:nowrap;font-size:.82rem}
+    .meta-pill{padding:.4rem .8rem;border-radius:999px;background:rgba(15,23,42,.35);border:1px solid rgba(200,214,232,.5);white-space:nowrap;font-size:.82rem;transition:all .2s}
+    .meta-pill:hover{background:rgba(15,23,42,.55);border-color:rgba(200,214,232,.7)}
+
+    /* ── Quick nav pills ── */
+    .quick-nav-pills{margin:0 0 2rem;padding:1rem 1.25rem;background:linear-gradient(135deg,rgba(43,94,167,.04),rgba(212,169,64,.03));border:1.5px solid rgba(43,94,167,.12);border-radius:14px;display:flex;align-items:center;gap:.75rem;position:relative;overflow:hidden}
+    .quick-nav-pills::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--page-accent),var(--page-accent-light),var(--page-accent));border-radius:14px 14px 0 0;opacity:.4}
+    .quick-nav-label{flex-shrink:0;font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--page-accent-dark);opacity:.6;padding-right:.5rem;border-right:2px solid rgba(43,94,167,.15)}
+    .quick-nav-scroll{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+    .nav-pill{display:inline-flex;align-items:center;gap:.25rem;padding:.35rem .75rem;border-radius:999px;font-size:.82rem;font-weight:600;text-decoration:none;white-space:nowrap;color:#4A5E78;background:white;border:1.5px solid rgba(43,94,167,.18);box-shadow:0 1px 4px rgba(0,0,0,.04);transition:all .25s ease;cursor:pointer}
+    .nav-pill:hover{color:var(--page-accent-dark);background:linear-gradient(135deg,rgba(43,94,167,.08),rgba(212,169,64,.05));border-color:var(--page-accent);box-shadow:0 3px 10px var(--page-accent-glow);transform:translateY(-2px)}
+
+    /* ── Question list (enhanced) ── */
     .q-list{counter-reset:q;list-style:none;padding:0;margin:1rem 0}
-    .q-list li{counter-increment:q;padding:.75rem 1rem .75rem 3rem;border-bottom:1px solid var(--page-accent-border);font-size:.92rem;color:#4A5E78;line-height:1.6;position:relative}
+    .q-list li{counter-increment:q;padding:.75rem 1rem .75rem 3rem;border-bottom:1px solid var(--page-accent-border);font-size:.92rem;color:#4A5E78;line-height:1.6;position:relative;transition:all .25s ease}
+    .q-list li:hover{background:rgba(43,94,167,.03);transform:translateX(4px)}
     .q-list li::before{content:counter(q);position:absolute;left:.75rem;top:.75rem;width:1.5rem;height:1.5rem;background:var(--page-accent);color:white;border-radius:50%;font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center}
     .q-list li strong{color:var(--page-accent-dark)}
+
+    /* ── Verse cards (enhanced) ── */
     .verse-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin:1.25rem 0}
-    .verse-card{background:white;border:1px solid var(--page-accent-border);border-left:4px solid var(--page-accent);border-radius:10px;padding:1.25rem;transition:all .2s}
-    .verse-card:hover{border-color:var(--page-accent);box-shadow:0 4px 12px rgba(43,94,167,.1);transform:translateY(-2px)}
+    .verse-card{background:white;border:1px solid var(--page-accent-border);border-left:4px solid var(--page-accent);border-radius:10px;padding:1.25rem;transition:all .3s ease;position:relative;overflow:hidden}
+    .verse-card::after{content:'';position:absolute;inset:-2px;background:linear-gradient(135deg,rgba(43,94,167,.08),rgba(212,169,64,.06));border-radius:10px;z-index:-1;opacity:0;transition:opacity .3s ease}
+    .verse-card:hover{border-color:var(--page-accent);box-shadow:0 6px 18px var(--page-accent-glow);transform:translateY(-4px)}
+    .verse-card:hover::after{opacity:.3}
     .verse-card .verse-ref{font-size:.78rem;font-weight:700;color:var(--page-accent);margin-bottom:.35rem}
     .verse-card p{margin:0;font-size:.88rem;color:#4A5E78;line-height:1.5;font-style:italic}
     .verse-card .verse-theme{margin-top:.35rem;font-size:.78rem;color:#607590;font-style:normal;font-weight:600}
+
+    /* ── Plan cards (enhanced) ── */
     .plan-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;margin:1rem 0}
-    .plan-card{background:white;border:1px solid var(--page-accent-border);border-radius:10px;padding:1rem;text-align:center;transition:all .2s}
-    .plan-card:hover{border-color:var(--page-accent);box-shadow:0 3px 10px rgba(43,94,167,.1)}
+    .plan-card{background:white;border:1px solid var(--page-accent-border);border-radius:10px;padding:1rem;text-align:center;transition:all .3s ease;position:relative;overflow:hidden}
+    .plan-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--page-accent),var(--page-accent-light));transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
+    .plan-card:hover{border-color:var(--page-accent);box-shadow:0 6px 16px var(--page-accent-glow);transform:translateY(-4px)}
+    .plan-card:hover::before{transform:scaleX(1)}
     .plan-card h4{margin:0 0 .25rem;color:var(--page-accent-dark);font-size:.92rem}
     .plan-card p{margin:0;font-size:.82rem;color:#607590;line-height:1.4}
+
+    /* ── Index cards (enhanced) ── */
     .index-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;margin:1rem 0}
-    .index-card{display:block;padding:1rem;background:#F7F9FC;border:1px solid var(--page-accent-border);border-radius:10px;text-decoration:none;text-align:center;transition:all .2s}
-    .index-card:hover{border-color:var(--page-accent);background:white;box-shadow:0 4px 12px rgba(43,94,167,.1);transform:translateY(-2px)}
-    .index-card strong{display:block;color:var(--page-accent-dark);margin-bottom:.15rem}
+    .index-card{display:block;padding:1rem;background:#F7F9FC;border:1px solid var(--page-accent-border);border-radius:10px;text-decoration:none;text-align:center;transition:all .3s ease;position:relative;overflow:hidden}
+    .index-card::after{content:'';position:absolute;inset:-2px;background:linear-gradient(135deg,rgba(43,94,167,.08),rgba(212,169,64,.06));border-radius:10px;z-index:-1;opacity:0;transition:opacity .3s ease}
+    .index-card:hover{border-color:var(--page-accent);background:white;box-shadow:0 6px 18px var(--page-accent-glow);transform:translateY(-4px)}
+    .index-card:hover::after{opacity:.3}
+    .index-card:hover strong{color:var(--page-accent)}
+    .index-card strong{display:block;color:var(--page-accent-dark);margin-bottom:.15rem;transition:color .3s ease}
     .index-card span{font-size:.82rem;color:#607590}
-    @media(max-width:768px){.page-header-banner h1{font-size:1.6rem}}
+
+    /* ── Key insight hover ── */
+    .key-insight{transition:all .3s ease}
+    .key-insight:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(59,130,246,.12);border-left-width:6px}
+
+    /* ══════════════════════════════════════
+       SCROLL-TRIGGERED ANIMATIONS
+       ══════════════════════════════════════ */
+    .anim-section{opacity:0;transform:translateY(24px);transition:opacity .7s ease-out,transform .7s ease-out}
+    .anim-section.anim-visible{opacity:1;transform:translateY(0);transition:transform .3s ease,box-shadow .3s ease}
+    .anim-section h3{opacity:0;transform:translateX(-24px);transition:opacity .5s ease-out,transform .5s ease-out}
+    .anim-section.anim-visible h3{opacity:1;transform:translateX(0)}
+    .anim-section>p{opacity:0;transform:translateX(-14px);transition:opacity .5s ease-out,transform .5s ease-out}
+    .anim-section.anim-visible>p:nth-of-type(1){opacity:1;transform:translateX(0);transition-delay:.1s}
+    .anim-section .key-insight{opacity:0;transform:translateX(-20px);transition:opacity .5s ease-out,transform .5s ease-out}
+    .anim-section.anim-visible .key-insight{opacity:1;transform:translateX(0);transition-delay:.4s}
+    .anim-card{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease}
+    .anim-card.anim-visible{opacity:1;transform:translateY(0)}
+    .anim-row{opacity:0;transform:translateY(8px);transition:opacity .45s ease,transform .45s ease}
+    .anim-row.anim-visible{opacity:1;transform:translateY(0)}
+
+    @keyframes heroBreathe{0%,100%{opacity:.04}50%{opacity:.08}}
+
+    @media(max-width:768px){
+      .page-header-banner h1{font-size:1.6rem}
+      .quick-nav-pills{flex-direction:column;align-items:flex-start;gap:.5rem}
+      .quick-nav-label{border-right:none;border-bottom:2px solid rgba(43,94,167,.12);width:100%;padding-bottom:.25rem}
+      .quick-nav-scroll{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:.25rem;width:100%}
+      .quick-nav-scroll::-webkit-scrollbar{display:none}
+    }
+
+    @media(prefers-reduced-motion:reduce){
+      .anim-section,.anim-card,.anim-row{opacity:1!important;transform:none!important;transition:none!important}
+      .anim-section h3,.anim-section>p,.anim-section .key-insight{opacity:1!important;transform:none!important;transition:none!important}
+      .page-header-banner::after{animation:none!important}
+      .verse-card:hover,.plan-card:hover,.index-card:hover,.q-list li:hover{transform:none!important}
+    }
   </style>
 </head>
 <body class="character-profile" dir="ltr">
@@ -73,47 +139,120 @@
       <a href="/">Home</a> › <a href="/studies/">Studies</a> › <a href="/studies/tanakh/">Tanakh</a> › <a href="/studies/tanakh/torah/">Torah</a> › <a href="/studies/tanakh/torah/deuteronomy/">Deuteronomy</a> › Study Kit
     </div>
 
-    <nav class="page-nav-bar">
-      <a href="deut-overview.html">📖 Overview</a><a href="deut-literary.html">✍️ Literary</a><a href="deut-hebrew.html">🔤 Hebrew</a><a href="deut-structure.html">🏛️ Structure</a><a href="deut-law.html">⚖️ Law</a><a href="deut-theology.html">🕊️ Theology</a><a href="deut-intertext.html">🔗 Connections</a><a href="deut-poems.html">🎵 Poems</a><a href="deut-study-kit.html" class="current">📚 Study Kit</a>
-    </nav>
-
+    <!-- HERO -->
     <section class="page-header-banner" id="overview">
       <div class="page-header-kicker">Book of Deuteronomy · Complete Study Kit</div>
       <h1>Study Kit</h1>
       <p class="page-header-subtitle">Discussion questions, a reading plan, key verses for memorization, and the complete page index for the Deuteronomy study guide.</p>
       <div style="display:flex;flex-wrap:wrap;gap:.5rem;">
-        <span class="meta-pill">15 study questions</span>
+        <span class="meta-pill">20 questions · 5 clusters</span>
         <span class="meta-pill">7-session plan</span>
         <span class="meta-pill">8 key verses</span>
         <span class="meta-pill">9-page index</span>
       </div>
     </section>
 
-    <!-- STUDY QUESTIONS -->
+    <!-- NAV (below hero) -->
+    <nav class="page-nav-bar">
+      <a href="deut-overview.html">📖 Overview</a>
+      <a href="deut-literary.html">✍️ Literary</a>
+      <a href="deut-hebrew.html">🔤 Hebrew</a>
+      <a href="deut-structure.html">🏛️ Structure</a>
+      <a href="deut-law.html">⚖️ Law</a>
+      <a href="deut-theology.html">🕊️ Theology</a>
+      <a href="deut-intertext.html">🔗 Connections</a>
+      <a href="deut-poems.html">🎵 Poems</a>
+      <a href="deut-study-kit.html" class="current">📚 Study Kit</a>
+    </nav>
+
+    <!-- Quick Nav Pills -->
+    <div class="quick-nav-pills">
+      <span class="quick-nav-label">Jump to</span>
+      <div class="quick-nav-scroll">
+        <a href="#questions" class="nav-pill">❓ Questions</a>
+        <a href="#reading-plan" class="nav-pill">📅 Reading Plan</a>
+        <a href="#key-verses" class="nav-pill">📌 Key Verses</a>
+        <a href="#page-index" class="nav-pill">📑 Page Index</a>
+        <a href="#bibliography" class="nav-pill">📚 Bibliography</a>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════
+         STUDY QUESTIONS (ENHANCED — 19 total)
+         ═══════════════════════════════════════ -->
     <div class="theology-card animate-on-scroll" id="questions">
       <h3>Study & Discussion Questions</h3>
-      <p style="font-size:.92rem;color:#4A5E78;margin-bottom:.75rem;">These questions work for personal study, small groups, or seminary-level classroom discussion. Each is tied to a specific page in the study guide.</p>
+      <p style="font-size:.92rem;color:#4A5E78;margin-bottom:.75rem;">20 questions organized into 5 thematic clusters. Each cluster maps to a study session or small-group discussion. Sub-questions help groups go deeper without requiring separate preparation.</p>
 
+      <!-- ── CLUSTER A: Structure & Design ── -->
+      <h4 style="color:var(--page-accent-dark);font-size:1rem;margin:1.5rem 0 .5rem;padding-bottom:.35rem;border-bottom:2px solid var(--page-accent-border);">📐 Cluster A — Structure & Design</h4>
       <ol class="q-list">
-        <li><strong>Structure:</strong> How does the five-part chiastic structure of Deuteronomy (A–B–C–B′–A′) shape the way we read the law collection at the center? Why does Torah sit inside story and exhortation rather than standing alone? <em>(→ Structure page)</em></li>
-        <li><strong>Be'er:</strong> Moses "makes legible" (be'er) the Torah for a new generation (1:5). What does this tell us about how Scripture should be taught and applied across cultural contexts? <em>(→ Hebrew page)</em></li>
-        <li><strong>Shema:</strong> The Shema (6:4–5) joins hearing with loving. Why is it significant that "listen" in Hebrew already includes the idea of obedient response? <em>(→ Hebrew / Theology pages)</em></li>
-        <li><strong>Heart Arc:</strong> Trace the progression from 6:5 → 10:16 → 29:4 → 30:6. How does Deuteronomy move from command to diagnosis to promise? What does this reveal about the Torah's view of human nature? <em>(→ Theology page)</em></li>
-        <li><strong>Law as Wisdom:</strong> Moses says following the laws will be Israel's "wisdom in the eyes of the peoples" (4:6). How does this change the way we read the law collection — not as compliance but as formative wisdom? <em>(→ Law page)</em></li>
-        <li><strong>Blessing & Curse:</strong> How are blessing and curse connected to creation/decreation theology rather than arbitrary reward and punishment? How does Deuteronomy 28 echo Genesis 1–3? <em>(→ Theology page)</em></li>
-        <li><strong>Land as Danger:</strong> Why does Deuteronomy warn that prosperity in the land is the greatest spiritual threat (chs. 6–8)? How does "forgetting" function theologically? <em>(→ Theology / Hebrew pages)</em></li>
-        <li><strong>King Under Torah:</strong> How does the law of the king (17:14–20) subvert ancient Near Eastern royal ideology? Why must the king write and read Torah daily? <em>(→ Law / Structure pages)</em></li>
-        <li><strong>Song of Moses:</strong> How does the Song (ch. 32) function as a covenant lawsuit and a prophetic program for all of Israel's future history? <em>(→ Poems page)</em></li>
-        <li><strong>Death of Moses:</strong> Why does the Torah end with Moses seeing the land but not entering it? What theological point does the narrator make with "no prophet like Moses has arisen … yet"? <em>(→ Poems page)</em></li>
-        <li><strong>Every Generation:</strong> How does Deuteronomy's "audience blurring" technique make the reader part of the covenant audience? How does the repeated word "today" (הַיּוֹם) compress time? <em>(→ Theology page)</em></li>
-        <li><strong>Canon:</strong> Choose one NT passage that quotes Deuteronomy (e.g., Jesus' temptation, Romans 10, Galatians 3). How does the NT author interpret and apply the Deuteronomy text? <em>(→ Connections page)</em></li>
-        <li><strong>Messianic Lens:</strong> Jesus calls some Deuteronomy laws "concessions to hardness of heart" (Matt 19:8) and goes behind them to Genesis for God's original design. How does this change the way we read difficult or troubling laws? What's the difference between rejecting Torah and reading it at a deeper level? <em>(→ Law + Connections pages)</em></li>
-        <li><strong>Law & Wisdom:</strong> The Torah laws were given specifically to Israel under the Sinai covenant but contain enduring ethical wisdom. How does the "wisdom literature embedded in narrative" framework help us engage laws that seem culturally distant? What's the difference between a reference-book approach and a wisdom approach? <em>(→ Law page)</em></li>
-        <li><strong>Taxonomy:</strong> The moral/civil/ceremonial division of the law has a long history in Christian theology. What are its strengths as an organizational tool, and where does it need to be complemented by a wisdom approach? <em>(→ Law page)</em></li>
+        <li><strong>Chiastic Mirror:</strong> How does the five-part chiastic structure (A–B–C–B′–A′) shape the way we read the law collection at the center? What happens when you compare Sermon 1 (past failure, 1–4) with Sermon 3 (future failure, 27–30) across the law core?
+          <br><span style="font-size:.82rem;color:#607590;">Sub: Why does Torah sit inside story and exhortation rather than standing alone?</span> <em>(→ Structure page)</em></li>
+        <li><strong>Be'er & Every Generation:</strong> Moses "makes legible" (<em>be'er</em>) the Torah for a new generation (1:5), and the word "today" (<span style="font-family:'SBL Hebrew',serif;direction:rtl;">הַיּוֹם</span>) appears 60+ times, collapsing past and future into one moment. How does Deuteronomy turn every reader into a covenant participant?
+          <br><span style="font-size:.82rem;color:#607590;">Sub: What does the be'er principle mean for how Scripture should be taught across cultural contexts?</span> <em>(→ Hebrew + Theology pages)</em></li>
+        <li><strong>Deuteronomy 4 as Hinge:</strong> "You heard the sound of words but saw no form" (4:12). How does the anti-idol theology of chapter 4 connect to Genesis 1:26–27 (humanity as God's image)? Why is the prohibition against images not arbitrary but grounded in creation?
+          <br><span style="font-size:.82rem;color:#607590;">Sub: How does this shape Deuteronomy's view of what worship should and shouldn't look like?</span> <em>(→ Theology + Structure pages)</em></li>
+        <li><strong>Treaty Form & Transformation:</strong> Compare the Esarhaddon Succession Oath ("Aššur is your god! Aššurbanipal is your lord!") with the Shema ("Yahweh is your God, Yahweh alone"). Both demand exclusive loyalty. What changes when the suzerain is a redeemer rather than a conqueror, and when the loyalty formula uses love language rather than prostration?
+          <br><span style="font-size:.82rem;color:#607590;">Sub: ANE treaties assume success. Deuteronomy predicts failure. Why does this matter theologically?</span> <em>(→ Law page, Treaty Exemplars; Structure page, Treaty Pattern)</em></li>
+      </ol>
+
+      <!-- ── CLUSTER B: Heart, Covenant & the Human Condition ── -->
+      <h4 style="color:var(--page-accent-dark);font-size:1rem;margin:1.5rem 0 .5rem;padding-bottom:.35rem;border-bottom:2px solid var(--page-accent-border);">💔 Cluster B — Heart, Covenant & the Human Condition</h4>
+      <ol class="q-list" start="5">
+        <li><strong>The Heart Arc:</strong> Trace the progression from 6:5 → 10:16 → 29:4 → 30:6. How does Deuteronomy move from command to diagnosis to promise? What does this reveal about the Torah's view of human nature — and about the limits of law?
+          <br><span style="font-size:.82rem;color:#607590;">Sub: How does 30:11–14 ("the word is very near you") complicate the diagnosis — if the law is accessible, why can't Israel keep it?</span> <em>(→ Theology page, Heart section)</em></li>
+        <li><strong>The Shema:</strong> "Hear" (<em>shema</em>) in Hebrew already includes the idea of obedient response. "Love" (<em>ahav</em>) is not emotion but whole-self allegiance. How do these two words together define what covenant life looks like?
+          <br><span style="font-size:.82rem;color:#607590;">Sub: Compare the Shema with the Amarna vassal formula ("I fall at the feet of the king, 7 times and 7 times"). Same loyalty demand — completely different register. What's the theological significance?</span> <em>(→ Hebrew + Theology pages)</em></li>
+        <li><strong>Memory vs. Forgetting:</strong> "Remember" (<em>zakhar</em>) and "do not forget" (<em>shakhach</em>) are urgent refrains. Why does Deuteronomy warn that prosperity — not suffering — is the greatest spiritual threat (chs. 6–8)?
+          <br><span style="font-size:.82rem;color:#607590;">Sub: How do the "because" clauses in the laws ("because you were slaves in Egypt," 15:15; 24:18, 22) make memory the foundation of obedience rather than mere duty?</span> <em>(→ Theology, Land section; Hebrew page)</em></li>
+        <li><strong>Blessing & Curse as Creation Theology:</strong> How are blessing and curse connected to creation/decreation rather than arbitrary reward and punishment? How does Deuteronomy 28 echo Genesis 1–3?
+          <br><span style="font-size:.82rem;color:#607590;">Sub: The curse section is far longer than the blessings. Why — and how does the ANE treaty convention help explain this?</span> <em>(→ Theology page, Blessing/Curse section)</em></li>
+      </ol>
+
+      <!-- ── CLUSTER C: Law as Covenant Wisdom ── -->
+      <h4 style="color:var(--page-accent-dark);font-size:1rem;margin:1.5rem 0 .5rem;padding-bottom:.35rem;border-bottom:2px solid var(--page-accent-border);">⚖️ Cluster C — Law as Covenant Wisdom</h4>
+      <ol class="q-list" start="9">
+        <li><strong>Law as Wisdom, Not Legal Code:</strong> Moses says following the laws will be Israel's "wisdom in the eyes of the peoples" (4:6). How does framing the laws as formative wisdom rather than a comprehensive statute book change the way you read them? What's the difference between a reference-book approach and a wisdom approach?
+          <br><span style="font-size:.82rem;color:#607590;">Sub: The moral/civil/ceremonial triad has a long history. What are its strengths, and where does a wisdom approach complement it?</span> <em>(→ Law page, Law as Wisdom + Taxonomy sections)</em></li>
+        <li><strong>The Vulnerable as Moral Center:</strong> Widows, orphans, immigrants, and the poor are named repeatedly as priority recipients of justice (14:29; 24:17–22; 26:12–13). Why is protection of the powerless the moral center of the law collection — and what do the motivational clauses ("because you were slaves in Egypt") add?
+          <br><span style="font-size:.82rem;color:#607590;">Sub: How does gleaning law (24:19–22) enact the Abrahamic mission at ground level?</span> <em>(→ Law page, Clusters + Reading Tips)</em></li>
+        <li><strong>Heart Diagnosis in the Laws:</strong> Deut 15:4 states the ideal ("there should be no poor"), while 15:11 concedes it won't be reached. Deut 15:9 names the internal calculation to avoid generosity. Cities of refuge (19) assume violence will happen. How do the laws themselves expose the heart problem before Moses names it at 29:4?
+          <br><span style="font-size:.82rem;color:#607590;">Sub: How does law ending in liturgy (ch. 26 firstfruits confession) rather than more legislation reveal Torah's formative purpose?</span> <em>(→ Law page, Heart Diagnosis section)</em></li>
+        <li><strong>Eden Echoes in the Laws:</strong> Individual law clusters contain specific Genesis echoes — the central sanctuary as new Eden temple (Deut 12 ← Gen 2), open-handed generosity vs. grasping (Deut 15 ← Gen 3), fruit trees in war (Deut 20 ← Gen 2:9). Pick one example and explain how the law "unpacks" a Genesis theme into the texture of daily national life.
+          <br><span style="font-size:.82rem;color:#607590;">Sub: How does this support the claim that "one command in Eden becomes ~200 laws in Deuteronomy"?</span> <em>(→ Law page, Eden in the Law Core section)</em></li>
+      </ol>
+
+      <!-- ── CLUSTER D: Leadership, Worship & Mission ── -->
+      <h4 style="color:var(--page-accent-dark);font-size:1rem;margin:1.5rem 0 .5rem;padding-bottom:.35rem;border-bottom:2px solid var(--page-accent-border);">👑 Cluster D — Leadership, Worship & Mission</h4>
+      <ol class="q-list" start="13">
+        <li><strong>King Under Torah:</strong> How does the law of the king (17:14–20) subvert ancient Near Eastern royal ideology? Why must the king write and read Torah daily — and what does "his heart shall not be lifted above his brothers" mean for political theology?
+          <br><span style="font-size:.82rem;color:#607590;">Sub: How does placing all four offices (judge, priest, king, prophet) under Torah create a radical accountability structure unknown in the ANE?</span> <em>(→ Law + Structure pages)</em></li>
+        <li><strong>The Prophet Like Moses:</strong> Deut 18:15–18 promises a future prophet. Deut 34:10 says "no prophet has arisen like Moses." How do these two texts together create the "promissory gap" that drives the rest of the biblical story?
+          <br><span style="font-size:.82rem;color:#607590;">Sub: How does every subsequent prophet (Samuel, Elijah, Jeremiah) become a "mini-Moses" — and why does none fully fill the role?</span> <em>(→ Theology + Poems pages)</em></li>
+        <li><strong>Centralized Worship & Name Theology:</strong> Deuteronomy 12 introduces "the place Yahweh will choose." Why does God's "name" dwell there rather than God himself — and what does this protect theologically?
+          <br><span style="font-size:.82rem;color:#607590;">Sub: How does the firstfruits confession (26:5–10) turn the law collection back into story, gratitude, and covenant identity?</span> <em>(→ Theology, Land section; Law page)</em></li>
+        <li><strong>Election & Mission:</strong> "The LORD did not choose you because you were the greatest — you were the fewest" (7:7). Israel is chosen not for merit but for mission. How do concrete law practices — same-day wages (24:14), gleaning margins (24:19), fair courts (16:19), debt release (15:1) — become the visible mechanism of the Abrahamic mission to the nations?
+          <br><span style="font-size:.82rem;color:#607590;">Sub: How does 4:6–8 ("what great nation has a God so near?") define what the nations are supposed to see?</span> <em>(→ Theology, Election section; Law page)</em></li>
+      </ol>
+
+      <!-- ── CLUSTER E: Canon & Poems ── -->
+      <h4 style="color:var(--page-accent-dark);font-size:1rem;margin:1.5rem 0 .5rem;padding-bottom:.35rem;border-bottom:2px solid var(--page-accent-border);">🔗 Cluster E — Canon & Poems</h4>
+      <ol class="q-list" start="17">
+        <li><strong>Jesus and the Law:</strong> In the Sermon on the Mount (Matt 5–7), Jesus takes Deuteronomic laws and intensifies them — going beneath literal application to find the divine wisdom about human dignity. In Matt 19:8, he calls divorce law a "concession to hardness of heart" and goes behind it to Genesis. How does Jesus model reading Torah at its deepest level — and how is this different from rejecting Torah?
+          <br><span style="font-size:.82rem;color:#607590;">Sub: Pick one of the six case studies (murder, adultery, divorce, oaths, retaliation, neighbor-love) and trace the "ramp-up."</span> <em>(→ Law page, Jesus Case Studies; Connections page)</em></li>
+        <li><strong>Paul and Deuteronomy:</strong> Choose one: (a) Romans 10:6–8 — Paul quotes "the word is near you" and applies it to faith in Christ. (b) Galatians 3:10–14 — Christ "became a curse" quoting Deut 27:26 and 21:23. (c) 2 Corinthians 8–10 — Paul applies Deut 15 generosity across ethnic lines. How does the NT author interpret and apply the Deuteronomy text — and what interpretive method are they using?
+          <br><span style="font-size:.82rem;color:#607590;">Sub: How does Romans 2:28–29 ("circumcision of the heart, by the Spirit") claim to fulfill Deut 30:6?</span> <em>(→ Connections page, Paul section)</em></li>
+        <li><strong>The Song of Moses & Jeshurun:</strong> How does the Song (ch. 32) function as a covenant lawsuit and prophetic program? The name Jeshurun ("upright one") appears at 32:15 ironically (Jeshurun rebels) and at 33:5, 26 with hope (God rides the heavens for Jeshurun). What does it mean that God names Israel by their destiny rather than their track record?
+          <br><span style="font-size:.82rem;color:#607590;">Sub: How do NT authors reuse the Song — particularly Rom 10:19 (Gentile jealousy), Rom 12:19 ("vengeance is mine"), and Rev 15:3 (the redeemed sing Moses' song)?</span> <em>(→ Poems page, Song + Jeshurun + Canonical Echoes)</em></li>
+        <li><strong>The Song Chain:</strong> The Song of Moses (Deut 32) echoes forward into Hannah's Song (1 Sam 2:1–10), which echoes into Mary's Magnificat (Luke 1:46–55). Trace the theological vocabulary that connects these three songs: God as Rock, reversal of fortunes, the barren bearing, covenant promises to Abraham. What does this chain reveal about how the biblical authors understood God's pattern of vindicating the humble?
+          <br><span style="font-size:.82rem;color:#607590;">Sub: The Blessing of Moses (ch. 33) is framed by a theophany hymn (33:2–5, 26–29). How does this frame change the meaning of the tribal blessings?</span> <em>(→ Poems page, Canonical Echoes + Theophany Frame)</em></li>
       </ol>
     </div>
 
-    <!-- READING PLAN -->
+    <!-- ═══════════════════════════════════════
+         READING PLAN
+         ═══════════════════════════════════════ -->
     <div class="theology-card animate-on-scroll" id="reading-plan">
       <h3>7-Session Reading Plan</h3>
       <p style="font-size:.92rem;color:#4A5E78;margin-bottom:.75rem;">For a weekly study group or personal devotional series. Each session pairs a text block with the relevant study page.</p>
@@ -122,14 +261,16 @@
         <div class="plan-card"><h4>Session 1</h4><p>Deut 1–4<br><em>History retold</em><br>→ Overview + Structure</p></div>
         <div class="plan-card"><h4>Session 2</h4><p>Deut 5–6<br><em>Ten Words + Shema</em><br>→ Hebrew + Theology</p></div>
         <div class="plan-card"><h4>Session 3</h4><p>Deut 7–11<br><em>Loyalty sermons</em><br>→ Theology (heart, land)</p></div>
-        <div class="plan-card"><h4>Session 4</h4><p>Deut 12–18<br><em>Loving God laws</em><br>→ Law page</p></div>
-        <div class="plan-card"><h4>Session 5</h4><p>Deut 19–26<br><em>Loving neighbor laws</em><br>→ Law page</p></div>
+        <div class="plan-card"><h4>Session 4</h4><p>Deut 12–18<br><em>Loving God laws</em><br>→ Law (+ treaty exemplars)</p></div>
+        <div class="plan-card"><h4>Session 5</h4><p>Deut 19–26<br><em>Loving neighbor laws</em><br>→ Law (+ Eden echoes)</p></div>
         <div class="plan-card"><h4>Session 6</h4><p>Deut 27–30<br><em>Blessing, curse, choice</em><br>→ Theology + Connections</p></div>
-        <div class="plan-card"><h4>Session 7</h4><p>Deut 31–34<br><em>Song, blessing, death</em><br>→ Poems page</p></div>
+        <div class="plan-card"><h4>Session 7</h4><p>Deut 31–34<br><em>Song, blessing, death</em><br>→ Poems (+ Jeshurun)</p></div>
       </div>
     </div>
 
-    <!-- KEY VERSES -->
+    <!-- ═══════════════════════════════════════
+         KEY VERSES
+         ═══════════════════════════════════════ -->
     <div class="theology-card animate-on-scroll" id="key-verses">
       <h3>Key Verses for Memorization</h3>
       <div class="verse-grid">
@@ -144,7 +285,9 @@
       </div>
     </div>
 
-    <!-- COMPLETE PAGE INDEX -->
+    <!-- ═══════════════════════════════════════
+         COMPLETE PAGE INDEX (UPDATED descriptions)
+         ═══════════════════════════════════════ -->
     <div class="theology-card animate-on-scroll" id="page-index">
       <h3>Complete Study Page Index</h3>
       <p style="font-size:.92rem;color:#4A5E78;margin-bottom:.75rem;">All nine pages of the Deuteronomy book study, with descriptions.</p>
@@ -154,26 +297,28 @@
         <a href="deut-literary.html" class="index-card"><strong>✍️ Literary Design</strong><span>Chiasm, treaty, law mapping, narrative techniques, sermon literature</span></a>
         <a href="deut-hebrew.html" class="index-card"><strong>🔤 Hebrew Vocabulary</strong><span>18 key terms, featured Shema/Be'er, theology diagrams, quick reference</span></a>
         <a href="deut-structure.html" class="index-card"><strong>🏛️ Structural Design</strong><span>8 patterns, confidence ratings, sub-movements, 5-layer map</span></a>
-        <a href="deut-law.html" class="index-card"><strong>⚖️ The Law Collection</strong><span>Law as wisdom, two halves, 13 clusters, ANE comparison, Jesus case studies, wisdom engine, none/all apply</span></a>
+        <a href="deut-law.html" class="index-card"><strong>⚖️ The Law Collection</strong><span>Law as wisdom, 13 clusters, ANE treaty exemplars, heart diagnosis, Eden echoes, Jesus case studies, wisdom engine</span></a>
         <a href="deut-theology.html" class="index-card"><strong>🕊️ Theological Themes</strong><span>Covenant, heart, Shema, blessing/curse, land, election, prophet, tensions</span></a>
-        <a href="deut-intertext.html" class="index-card"><strong>🔗 Biblical Connections</strong><span>Genesis bookends, Joshua–Kings, Prophets, Psalms, Jesus, Paul</span></a>
-        <a href="deut-poems.html" class="index-card"><strong>🎵 Poems & Final Words</strong><span>Song of Moses, Blessing, death, transition complex</span></a>
-        <a href="deut-study-kit.html" class="index-card"><strong>📚 Study Kit</strong><span>Questions, reading plan, key verses, page index</span></a>
+        <a href="deut-intertext.html" class="index-card"><strong>🔗 Biblical Connections</strong><span>Genesis bookends, Joshua–Kings, Prophets (incl. Micah 6), Psalms 78/106, Jesus (Sermon on Mount), Paul (Rom 9:4), influence web</span></a>
+        <a href="deut-poems.html" class="index-card"><strong>🎵 Poems & Final Words</strong><span>Song of Moses, Jeshurun, theophany frame, NT Song quotations (Rom 10/12/15, Heb 10, Rev 15), Hannah–Magnificat chain, death of Moses</span></a>
+        <a href="deut-study-kit.html" class="index-card"><strong>📚 Study Kit</strong><span>20 questions in 5 clusters, reading plan, key verses, page index, master bibliography</span></a>
       </div>
     </div>
 
-    <!-- MASTER BIBLIOGRAPHY -->
+    <!-- ═══════════════════════════════════════
+         MASTER BIBLIOGRAPHY
+         ═══════════════════════════════════════ -->
     <div class="theology-card animate-on-scroll" id="bibliography">
       <h3>Selected Bibliography</h3>
       <p style="font-size:.92rem;color:#4A5E78;margin-bottom:1rem;">The following sources informed the research, literary analysis, and theological interpretation presented throughout the Deuteronomy study.</p>
 
-      <h4 style="color:var(--page-accent-dark);font-size:.92rem;margin:1.25rem 0 .5rem;border-bottom:2px solid var(--page-accent-border);padding-bottom:.35rem;">Biblical Texts</h4>
+      <h4 style="color:var(--page-accent-dark);font-size:.92rem;margin:1.25rem 0 .5rem;border-bottom:2px solid var(--page-accent-border);padding-bottom:.35rem;">📖 Biblical Texts</h4>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.75rem;margin-bottom:1.25rem;">
         <div class="verse-card" style="border-left-color:var(--page-accent-dark);"><div class="verse-ref" style="color:var(--page-accent-dark);">Biblia Hebraica Stuttgartensia</div><p style="font-style:normal;">Masoretic Text edition used for Hebrew vocabulary and textual study.</p></div>
         <div class="verse-card" style="border-left-color:var(--page-accent-dark);"><div class="verse-ref" style="color:var(--page-accent-dark);">Septuagint (Rahlfs–Hanhart)</div><p style="font-style:normal;">Greek translation of the Hebrew Scriptures used for comparative study.</p></div>
       </div>
 
-      <h4 style="color:var(--page-accent-dark);font-size:.92rem;margin:1.25rem 0 .5rem;border-bottom:2px solid var(--page-accent-border);padding-bottom:.35rem;">Scholarly Commentaries</h4>
+      <h4 style="color:var(--page-accent-dark);font-size:.92rem;margin:1.25rem 0 .5rem;border-bottom:2px solid var(--page-accent-border);padding-bottom:.35rem;">📚 Scholarly Commentaries</h4>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.75rem;margin-bottom:1.25rem;">
         <div class="verse-card" style="border-left-color:var(--page-accent);"><div class="verse-ref">Craigie, Peter C.</div><p style="font-style:normal;"><em>The Book of Deuteronomy.</em> NICOT. Eerdmans.</p><div class="verse-theme">Treaty structure · ANE context</div></div>
         <div class="verse-card" style="border-left-color:var(--page-accent);"><div class="verse-ref">Tigay, Jeffrey H.</div><p style="font-style:normal;"><em>Deuteronomy.</em> JPS Torah Commentary.</p><div class="verse-theme">Jewish scholarly tradition</div></div>
@@ -184,7 +329,7 @@
         <div class="verse-card" style="border-left-color:var(--page-accent);"><div class="verse-ref">Olson, Dennis T.</div><p style="font-style:normal;"><em>Deuteronomy and the Death of Moses.</em> OBT. Fortress.</p><div class="verse-theme">Death · Transition · Poetry</div></div>
       </div>
 
-      <h4 style="color:var(--page-accent-dark);font-size:.92rem;margin:1.25rem 0 .5rem;border-bottom:2px solid var(--page-accent-border);padding-bottom:.35rem;">Background & Literary Studies</h4>
+      <h4 style="color:var(--page-accent-dark);font-size:.92rem;margin:1.25rem 0 .5rem;border-bottom:2px solid var(--page-accent-border);padding-bottom:.35rem;">🏛️ Background & Literary Studies</h4>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.75rem;margin-bottom:1.25rem;">
         <div class="verse-card" style="border-left-color:var(--page-accent-light);"><div class="verse-ref">Kline, Meredith G.</div><p style="font-style:normal;"><em>Treaty of the Great King.</em> Eerdmans.</p><div class="verse-theme">Covenant treaty structure</div></div>
         <div class="verse-card" style="border-left-color:var(--page-accent-light);"><div class="verse-ref">Walton, John H.</div><p style="font-style:normal;"><em>Ancient Near Eastern Thought and the OT.</em> Baker Academic.</p><div class="verse-theme">Cultural background · ANE law</div></div>
@@ -193,17 +338,19 @@
         <div class="verse-card" style="border-left-color:var(--page-accent-light);"><div class="verse-ref">Weinfeld, Moshe</div><p style="font-style:normal;"><em>Deuteronomy and the Deuteronomic School.</em> Clarendon.</p><div class="verse-theme">Treaty parallels · ANE context</div></div>
         <div class="verse-card" style="border-left-color:var(--page-accent-light);"><div class="verse-ref">Wenham, Gordon J.</div><p style="font-style:normal;"><em>Exploring the Old Testament: The Pentateuch.</em> SPCK.</p><div class="verse-theme">Torah overview · Introduction</div></div>
         <div class="verse-card" style="border-left-color:var(--page-accent-light);"><div class="verse-ref">Hallo, William W., ed.</div><p style="font-style:normal;"><em>The Context of Scripture.</em> 3 vols. Brill.</p><div class="verse-theme">Hammurabi · ANE law codes</div></div>
+        <div class="verse-card" style="border-left-color:var(--page-accent-light);"><div class="verse-ref">Hoffner, Harry A., Jr.</div><p style="font-style:normal;">"Treaty of Tudḫaliya IV with Kurunta." In COS 2.18.</p><div class="verse-theme">Hittite suzerainty treaty</div></div>
+        <div class="verse-card" style="border-left-color:var(--page-accent-light);"><div class="verse-ref">Parpola, Simo, and Watanabe, Kazuko</div><p style="font-style:normal;"><em>Neo-Assyrian Treaties and Loyalty Oaths.</em> SAA 2.</p><div class="verse-theme">Esarhaddon oaths · Treaty corpus</div></div>
       </div>
 
-      <h4 style="color:var(--page-accent-dark);font-size:.92rem;margin:1.25rem 0 .5rem;border-bottom:2px solid var(--page-accent-border);padding-bottom:.35rem;">Canonical & NT Use</h4>
+      <h4 style="color:var(--page-accent-dark);font-size:.92rem;margin:1.25rem 0 .5rem;border-bottom:2px solid var(--page-accent-border);padding-bottom:.35rem;">✝️ Canonical & NT Use</h4>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.75rem;margin-bottom:1.25rem;">
         <div class="verse-card" style="border-left-color:#1A3D6E;"><div class="verse-ref">Sailhamer, John H.</div><p style="font-style:normal;"><em>The Pentateuch as Narrative.</em> Zondervan.</p><div class="verse-theme">Genesis bookends · Torah shape</div></div>
         <div class="verse-card" style="border-left-color:#1A3D6E;"><div class="verse-ref">Dempster, Stephen G.</div><p style="font-style:normal;"><em>Dominion and Dynasty.</em> NSBT 15. IVP.</p><div class="verse-theme">Canonical shape · TaNaK</div></div>
-        <div class="verse-card" style="border-left-color:#1A3D6E;"><div class="verse-ref">Beale, G.K., and D.A. Carson, eds.</div><p style="font-style:normal;"><em>Commentary on the NT Use of the OT.</em> Baker.</p><div class="verse-theme">Jesus · Paul · Deuteronomy</div></div>
+        <div class="verse-card" style="border-left-color:#1A3D6E;"><div class="verse-ref">Beale, G.K., and D.A. Carson, eds.</div><p style="font-style:normal;"><em>Commentary on the NT Use of the OT.</em> Baker.</p><div class="verse-theme">Jesus · Paul · Rom 10:19 · 12:19 · Heb 10:30 · Rev 15:3</div></div>
         <div class="verse-card" style="border-left-color:#1A3D6E;"><div class="verse-ref">Wright, Christopher J. H.</div><p style="font-style:normal;"><em>Old Testament Ethics for the People of God.</em> IVP.</p><div class="verse-theme">Wisdom reflection · Modern ethics</div></div>
       </div>
 
-      <h4 style="color:var(--page-accent-dark);font-size:.92rem;margin:1.25rem 0 .5rem;border-bottom:2px solid var(--page-accent-border);padding-bottom:.35rem;">BibleProject Podcast Sources</h4>
+      <h4 style="color:var(--page-accent-dark);font-size:.92rem;margin:1.25rem 0 .5rem;border-bottom:2px solid var(--page-accent-border);padding-bottom:.35rem;">🎙️ BibleProject Podcast Sources</h4>
       <div style="font-size:.88rem;color:#4A5E78;line-height:1.65;">
         <p style="margin-bottom:.5rem;">Mackie, Tim, and Jon Collins. <em>The Scroll of Deuteronomy</em> podcast series. BibleProject, 2022. Individual episodes used throughout this study:</p>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.5rem;margin:.5rem 0;">
@@ -230,5 +377,65 @@
   <div class="mobile-menu-overlay"></div>
   <script type="module">import NavigationComponent from '/assets/js/nav-component.js';const navigation = new NavigationComponent({currentPage:'studies/tanakh/torah/deuteronomy/deut-study-kit',hubType:'tanakh'});</script>
   <script src="/assets/js/character-page-v5-8.js" defer></script>
+  <script>
+  // ══════════════════════════════════════════
+  // ANIMATION ENGINE — Study Kit Page
+  // ══════════════════════════════════════════
+  document.addEventListener('DOMContentLoaded', function() {
+    var stagger = 120;
+
+    // 1. Every theology-card gets section-level entrance
+    document.querySelectorAll('.theology-card').forEach(function(card) {
+      card.classList.add('anim-section');
+    });
+
+    // 2. Verse cards — staggered
+    document.querySelectorAll('.verse-card').forEach(function(card, i) {
+      card.classList.add('anim-card');
+      card.style.transitionDelay = (i % 8) * stagger + 'ms';
+    });
+
+    // 3. Plan cards — staggered
+    document.querySelectorAll('.plan-card').forEach(function(card, i) {
+      card.classList.add('anim-card');
+      card.style.transitionDelay = i * stagger + 'ms';
+    });
+
+    // 4. Index cards — staggered
+    document.querySelectorAll('.index-card').forEach(function(card, i) {
+      card.classList.add('anim-card');
+      card.style.transitionDelay = i * stagger + 'ms';
+    });
+
+    // 5. Question list items — staggered rows
+    document.querySelectorAll('.q-list li').forEach(function(item, i) {
+      item.classList.add('anim-row');
+      item.style.transitionDelay = (i % 10) * 80 + 'ms';
+    });
+
+    // 6. Podcast episode tiles
+    document.querySelectorAll('#bibliography [style*="border-left:3px solid var(--page-accent-border)"]').forEach(function(tile, i) {
+      tile.classList.add('anim-card');
+      tile.style.transitionDelay = i * 80 + 'ms';
+    });
+
+    // IntersectionObserver
+    var selector = '.anim-card,.anim-section,.anim-row';
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('anim-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll(selector).forEach(function(el) {
+      observer.observe(el);
+    });
+
+    console.log('Study Kit animation engine: active (' + document.querySelectorAll(selector).length + ' elements)');
+  });
+  </script>
 </body>
 </html>
