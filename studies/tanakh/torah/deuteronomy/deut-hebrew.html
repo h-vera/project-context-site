@@ -37,38 +37,21 @@
   <link rel="stylesheet" href="/assets/css/mobile-tabs-v5-8.css">
 
   <style>
-    /* Minimal page-specific layout helpers aligned with v5.8.1 structure */
-    .page-nav-bar {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-bottom: 2rem;
-      padding: 1rem;
-      background: #F7F9FC;
-      border: 1px solid #C8D6E8;
-      border-radius: 10px;
-    }
-    .page-nav-bar a {
-      padding: 0.5rem 1rem;
-      font-size: 0.85rem;
-      color: #607590;
-      text-decoration: none;
-      border-radius: 6px;
-      transition: all 0.2s;
-    }
-    .page-nav-bar a:hover { background: #F5F8FC; color: #1A3D6E; }
-    .page-nav-bar a.current {
-      background: #2B5EA7;
-      color: white;
-      font-weight: 600;
-    }
+    /* ── CSS Variables (standardized) ── */
+    :root{--page-accent:#2B5EA7;--page-accent-light:#D4A940;--page-accent-dark:#1A3D6E;--page-accent-bg:#F5F8FC;--page-accent-border:#C8D6E8;--page-accent-glow:rgba(43,94,167,.12)}
+
+    /* ── Study Nav Tabs (pill-shaped, standardized) ── */
+    .study-nav-tabs{display:flex;gap:.5rem;padding:1rem;margin-bottom:2rem;flex-wrap:wrap;justify-content:center;background:white;border-radius:10px;border:1px solid var(--page-accent-border);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+    .study-link{color:#607590;text-decoration:none;padding:.5rem 1.1rem;border-radius:999px;font-weight:500;font-size:.88rem;transition:all .25s ease;border:2px solid transparent;white-space:nowrap;display:inline-flex;align-items:center;gap:.3rem;min-height:38px}
+    .study-link:hover{background:var(--page-accent-bg);color:var(--page-accent-dark);border-color:var(--page-accent-border)}
+    .study-link.active{background:linear-gradient(135deg,var(--page-accent) 0%,var(--page-accent-dark) 100%);color:white;font-weight:600;border-color:transparent;box-shadow:0 4px 12px rgba(43,94,167,.3)}
 
     .page-header-banner {
       background: linear-gradient(135deg, #0C1929 0%, #1A3D6E 40%, #122B4D 100%);
       color: #EEF2F7;
       padding: 2.75rem 2rem;
       border-radius: 16px;
-      margin-bottom: 2rem;
+      margin-bottom: 0;
       position: relative;
       overflow: hidden;
     }
@@ -474,9 +457,32 @@
       line-height: 1.5;
     }
 
+    /* ══════════════════════════════════════
+       SCROLL-TRIGGERED ANIMATIONS
+       ══════════════════════════════════════ */
+    .anim-section{opacity:0;transform:translateY(24px);transition:opacity .7s ease-out,transform .7s ease-out}
+    .anim-section.anim-visible{opacity:1;transform:translateY(0);transition:transform .3s ease,box-shadow .3s ease}
+    .anim-section h3{opacity:0;transform:translateX(-24px);transition:opacity .5s ease-out,transform .5s ease-out}
+    .anim-section.anim-visible h3{opacity:1;transform:translateX(0)}
+    .anim-section>p{opacity:0;transform:translateX(-14px);transition:opacity .5s ease-out,transform .5s ease-out}
+    .anim-section.anim-visible>p:nth-of-type(1){opacity:1;transform:translateX(0);transition-delay:.1s}
+    .anim-section .key-insight{opacity:0;transform:translateX(-20px);transition:opacity .5s ease-out,transform .5s ease-out}
+    .anim-section.anim-visible .key-insight{opacity:1;transform:translateX(0);transition-delay:.4s}
+    .anim-card{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease}
+    .anim-card.anim-visible{opacity:1;transform:translateY(0)}
+    .anim-flow{opacity:0;transform:translateX(-12px);transition:opacity .4s ease,transform .4s ease}
+    .anim-flow.anim-visible{opacity:1;transform:translateX(0)}
+    .anim-row{opacity:0;transform:translateY(8px);transition:opacity .45s ease,transform .45s ease}
+    .anim-row.anim-visible{opacity:1;transform:translateY(0)}
+
     @media (max-width: 768px) {
       .page-header-banner { padding: 2rem 1.25rem; }
       .page-header-banner h1 { font-size: 1.6rem; }
+    }
+
+    @media(prefers-reduced-motion:reduce){
+      .anim-section,.anim-card,.anim-flow,.anim-row{opacity:1!important;transform:none!important;transition:none!important}
+      .anim-section h3,.anim-section>p,.anim-section .key-insight{opacity:1!important;transform:none!important;transition:none!important}
     }
   </style>
 </head>
@@ -490,22 +496,11 @@
 
     <div class="breadcrumbs">
       <a href="/">Home</a> ›
-      <a href="/studies/studies-overview.html">Studies</a> ›
-      <a href="/studies/tanakh/tanakh-hub.html">Tanakh</a> ›
-      <a href="/studies/tanakh/tanakh-hub.html#torah">Torah</a> ›
+      <a href="/studies/">Studies</a> ›
+      <a href="/studies/tanakh/">Tanakh</a> ›
+      <a href="/studies/tanakh/torah/">Torah</a> ›
       <a href="deut-overview.html">Deuteronomy</a> ›
       Hebrew Vocabulary
-    </div>
-
-    <div class="page-nav-bar">
-      <a href="deut-overview.html">📖 Overview</a>
-      <a href="deut-literary.html">✍️ Literary Design</a>
-      <a href="deut-hebrew.html" class="current">📜 Hebrew</a>
-      <a href="deut-law.html">⚖️ Laws</a>
-      <a href="deut-theology.html">🔥 Theology</a>
-      <a href="deut-intertext.html">🔗 Connections</a>
-      <a href="deut-poems.html">🎵 Poems</a>
-      <a href="deut-study-kit.html">📚 Study Kit</a>
     </div>
 
     <section class="page-header-banner" id="overview">
@@ -525,6 +520,19 @@
         <span class="meta-pill">Refrains & Wordplay</span>
       </div>
     </section>
+
+    <!-- Study Navigation Pills (standardized) -->
+    <nav class="study-nav-tabs" aria-label="Study pages">
+      <a href="deut-overview.html" class="study-link">📖 Overview</a>
+      <a href="deut-literary.html" class="study-link">✍️ Literary</a>
+      <a href="deut-hebrew.html" class="study-link active">🔤 Hebrew</a>
+      <a href="deut-structure.html" class="study-link">🏛️ Structure</a>
+      <a href="deut-law.html" class="study-link">⚖️ Law</a>
+      <a href="deut-theology.html" class="study-link">🕊️ Theology</a>
+      <a href="deut-intertext.html" class="study-link">🔗 Connections</a>
+      <a href="deut-poems.html" class="study-link">🎵 Poems</a>
+      <a href="deut-study-kit.html" class="study-link">📚 Study Kit</a>
+    </nav>
 
     <div class="theology-card animate-on-scroll" id="narrative">
       <h3>Why Vocabulary Matters in Deuteronomy</h3>
@@ -602,7 +610,7 @@
 
       <div class="word-grid">
         <article class="word-card">
-          <div class="word-form">שָׁמַע / שְׁמַע</div>
+          <div class="word-form">שָׁמַע / שְׁמַע</div>
           <h4>Shema</h4>
           <div class="word-translit">hear · listen · heed · obey</div>
           <p>The central verbal idea of Deuteronomy. Hearing is never passive; to hear Yahweh truly is to respond in covenant obedience.</p>
@@ -638,7 +646,7 @@
         </article>
 
         <article class="word-card">
-          <div class="word-form">בְּרִית</div>
+          <div class="word-form">בְּרִית</div>
           <h4>Berit</h4>
           <div class="word-translit">covenant · pledged relationship</div>
           <p>Deuteronomy is covenant renewal. The book restates Sinai for a new generation and frames all law as covenant relationship rather than isolated rules.</p>
@@ -650,7 +658,7 @@
         </article>
 
         <article class="word-card">
-          <div class="word-form">בְּרָכָה</div>
+          <div class="word-form">בְּרָכָה</div>
           <h4>Berakhah</h4>
           <div class="word-translit">blessing · flourishing · life-giving abundance</div>
           <p>Blessing is the flourishing that comes from life aligned with Yahweh's wisdom and presence. In Deuteronomy it often carries Eden-like resonance.</p>
@@ -685,7 +693,7 @@
         </article>
 
         <article class="word-card">
-          <div class="word-form">שָׁכַח</div>
+          <div class="word-form">שָׁכַח</div>
           <h4>Shakhach</h4>
           <div class="word-translit">forget · neglect · lose covenant awareness</div>
           <p>Forgetting Yahweh is the seedbed of idolatry. Deuteronomy repeatedly warns that prosperity in the land can lead to covenant amnesia.</p>
@@ -696,7 +704,7 @@
         </article>
 
         <article class="word-card">
-          <div class="word-form">שָׁמַר</div>
+          <div class="word-form">שָׁמַר</div>
           <h4>Shamar</h4>
           <div class="word-translit">keep · guard · watch carefully</div>
           <p>One of Deuteronomy's core obedience words. The commandments are to be guarded, kept, and preserved with care, not treated casually.</p>
@@ -1108,5 +1116,82 @@
   </script>
 
   <script src="/assets/js/character-page-v5-8.js" defer></script>
+
+  <!-- Animation Engine (standardized) -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var stagger = 120;
+
+    // 1. Every theology-card gets section-level entrance
+    document.querySelectorAll('.theology-card').forEach(function(card) {
+      card.classList.add('anim-section');
+    });
+
+    // 2. Word cards — staggered
+    document.querySelectorAll('.word-card').forEach(function(card, i) {
+      card.classList.add('anim-card');
+      card.style.transitionDelay = (i % 8) * stagger + 'ms';
+    });
+
+    // 3. Refrain cards — staggered
+    document.querySelectorAll('.refrain-card').forEach(function(card, i) {
+      card.classList.add('anim-card');
+      card.style.transitionDelay = (i % 6) * stagger + 'ms';
+    });
+
+    // 4. Shema chain steps — sequential flow
+    document.querySelectorAll('.shema-step').forEach(function(el, i) {
+      el.classList.add('anim-flow');
+      el.style.transitionDelay = i * 120 + 'ms';
+    });
+
+    // 5. Heart progression stages
+    document.querySelectorAll('.heart-stage').forEach(function(el, i) {
+      el.classList.add('anim-flow');
+      el.style.transitionDelay = i * 140 + 'ms';
+    });
+
+    // 6. Memory split paths
+    document.querySelectorAll('.memory-path').forEach(function(el, i) {
+      el.classList.add('anim-card');
+      el.style.transitionDelay = i * 200 + 'ms';
+    });
+
+    // 7. Land flow steps
+    document.querySelectorAll('.land-step').forEach(function(el, i) {
+      el.classList.add('anim-flow');
+      el.style.transitionDelay = i * 120 + 'ms';
+    });
+
+    // 8. Table rows
+    document.querySelectorAll('table tbody tr').forEach(function(row, i) {
+      row.classList.add('anim-row');
+      row.style.transitionDelay = (i % 10) * 80 + 'ms';
+    });
+
+    // 9. Cross-page cards
+    document.querySelectorAll('.cross-page-card').forEach(function(card, i) {
+      card.classList.add('anim-card');
+      card.style.transitionDelay = i * stagger + 'ms';
+    });
+
+    // IntersectionObserver
+    var selector = '.anim-card,.anim-section,.anim-flow,.anim-row';
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('anim-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll(selector).forEach(function(el) {
+      observer.observe(el);
+    });
+
+    console.log('Hebrew page animation engine: active (' + document.querySelectorAll(selector).length + ' elements)');
+  });
+  </script>
 </body>
 </html>
