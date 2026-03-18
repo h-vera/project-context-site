@@ -27,32 +27,128 @@
   <link rel="stylesheet" href="/assets/css/mobile-tabs-v5-8.css">
 
   <style>
-    :root{--page-accent:#2B5EA7;--page-accent-light:#D4A940;--page-accent-dark:#1A3D6E;--page-accent-bg:#F5F8FC;--page-accent-border:#C8D6E8}
+    :root{--page-accent:#2B5EA7;--page-accent-light:#D4A940;--page-accent-dark:#1A3D6E;--page-accent-bg:#F5F8FC;--page-accent-border:#C8D6E8;--page-accent-glow:rgba(43,94,167,.12)}
+
+    /* ── Page nav bar ── */
     .page-nav-bar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem;padding:1rem;background:#F7F9FC;border:1px solid var(--page-accent-border);border-radius:10px}
-    .page-nav-bar a{padding:.5rem 1rem;font-size:.85rem;color:#607590;text-decoration:none;border-radius:6px;transition:all .2s}
-    .page-nav-bar a:hover{background:var(--page-accent-bg);color:var(--page-accent-dark)}
-    .page-nav-bar a.current{background:var(--page-accent);color:white;font-weight:600}
-    .page-header-banner{background:linear-gradient(135deg,#0C1929 0%,#1A3D6E 40%,#122B4D 100%);color:#EEF2F7;padding:2.75rem 2rem;border-radius:16px;margin-bottom:2rem;position:relative;overflow:hidden}
+    .page-nav-bar a{padding:.5rem 1rem;font-size:.85rem;color:#607590;text-decoration:none;border-radius:6px;transition:all .25s ease}
+    .page-nav-bar a:hover{background:var(--page-accent-bg);color:var(--page-accent-dark);transform:translateY(-1px)}
+    .page-nav-bar a.current{background:var(--page-accent);color:white;font-weight:600;box-shadow:0 4px 12px rgba(43,94,167,.3)}
+
+    /* ── Hero banner ── */
+    .page-header-banner{background:linear-gradient(135deg,#0C1929 0%,#1A3D6E 40%,#122B4D 100%);color:#EEF2F7;padding:2.75rem 2rem;border-radius:16px;margin-bottom:0;position:relative;overflow:hidden}
     .page-header-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 0% 0%,rgba(255,255,255,.08) 0%,transparent 52%),radial-gradient(circle at 100% 100%,rgba(212,169,64,.12) 0%,transparent 55%);pointer-events:none}
+    .page-header-banner::after{content:'';position:absolute;inset:0;background:radial-gradient(600px 400px at 50% 30%,rgba(255,255,255,.04),transparent 60%);pointer-events:none;animation:heroBreathe 8s ease-in-out infinite}
     .page-header-banner>*{position:relative;z-index:1}
     .page-header-kicker{text-transform:uppercase;letter-spacing:.16em;font-size:.78rem;font-weight:600;opacity:.9;margin-bottom:.65rem}
     .page-header-banner h1{margin:0 0 .5rem;font-size:2rem;line-height:1.25}
     .page-header-subtitle{max-width:42rem;font-size:1rem;opacity:.94;margin-bottom:1.5rem}
-    .meta-pill{padding:.4rem .8rem;border-radius:999px;background:rgba(15,23,42,.35);border:1px solid rgba(200,214,232,.5);white-space:nowrap;font-size:.82rem}
-    .dark-feature{background:linear-gradient(135deg,#0C1929 0%,#1A3D6E 40%,#122B4D 100%);border-radius:16px;padding:2rem;color:#EEF2F7;position:relative;overflow:hidden;margin:1.5rem 0}
+    .meta-pill{padding:.4rem .8rem;border-radius:999px;background:rgba(15,23,42,.35);border:1px solid rgba(200,214,232,.5);white-space:nowrap;font-size:.82rem;transition:all .2s}
+    .meta-pill:hover{background:rgba(15,23,42,.55);border-color:rgba(200,214,232,.7)}
+
+    /* ── Quick nav pills ── */
+    .quick-nav-pills{margin:0 0 2rem;padding:1rem 1.25rem;background:linear-gradient(135deg,rgba(43,94,167,.04),rgba(212,169,64,.03));border:1.5px solid rgba(43,94,167,.12);border-radius:14px;display:flex;align-items:center;gap:.75rem;position:relative;overflow:hidden}
+    .quick-nav-pills::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--page-accent),var(--page-accent-light),var(--page-accent));border-radius:14px 14px 0 0;opacity:.4}
+    .quick-nav-label{flex-shrink:0;font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--page-accent-dark);opacity:.6;padding-right:.5rem;border-right:2px solid rgba(43,94,167,.15)}
+    .quick-nav-scroll{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+    .nav-pill{display:inline-flex;align-items:center;gap:.25rem;padding:.35rem .75rem;border-radius:999px;font-size:.82rem;font-weight:600;text-decoration:none;white-space:nowrap;color:#4A5E78;background:white;border:1.5px solid rgba(43,94,167,.18);box-shadow:0 1px 4px rgba(0,0,0,.04);transition:all .25s ease;cursor:pointer}
+    .nav-pill:hover{color:var(--page-accent-dark);background:linear-gradient(135deg,rgba(43,94,167,.08),rgba(212,169,64,.05));border-color:var(--page-accent);box-shadow:0 3px 10px var(--page-accent-glow);transform:translateY(-2px)}
+
+    /* ── Dark feature (enhanced) ── */
+    .dark-feature{background:linear-gradient(135deg,#0C1929 0%,#1A3D6E 40%,#122B4D 100%);border-radius:16px;padding:2rem;color:#EEF2F7;position:relative;overflow:hidden;margin:1.5rem 0;transition:all .3s ease}
     .dark-feature::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 15% 0%,rgba(255,255,255,.06) 0%,transparent 55%),radial-gradient(circle at 100% 100%,rgba(212,169,64,.12) 0%,transparent 65%);pointer-events:none}
     .dark-feature>*{position:relative;z-index:1}
     .dark-feature h4{color:var(--page-accent-light);margin:0 0 .5rem;font-size:1.05rem}
     .dark-feature p{color:#D8E1EC;font-size:.92rem;line-height:1.65;margin:.35rem 0}
+    .dark-feature:hover{box-shadow:0 8px 28px rgba(26,61,110,.25);transform:translateY(-2px)}
+
+    /* ── Panel hover ── */
+    .panel{transition:all .3s ease;border:1px solid transparent}
+    .panel:hover{transform:translateY(-4px);box-shadow:0 6px 18px var(--page-accent-glow);border-color:var(--page-accent-border)}
+    .panel:hover h4{transform:translateX(3px);transition:transform .3s ease}
+
+    /* ── Key insight hover ── */
+    .key-insight{transition:all .3s ease}
+    .key-insight:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(59,130,246,.12);border-left-width:6px}
+
+    /* ── Chiasm structure ── */
     .chiasm-structure{background:linear-gradient(135deg,#f8f9fa,#fff);padding:1.75rem;border-radius:12px;margin:1.25rem 0;font-size:.92rem;line-height:2;border:1px solid #e8eaf6}
     .chiasm-line{padding:.4rem 1rem;margin:.2rem 0;border-radius:6px;transition:all .25s}
-    .chiasm-line:hover{transform:translateX(5px)}
+    .chiasm-line:hover{transform:translateX(8px);box-shadow:0 2px 8px var(--page-accent-glow)}
     .pair-1{background:linear-gradient(90deg,rgba(43,94,167,.14),rgba(43,94,167,.05));border-left:4px solid #2B5EA7}
     .pair-2{background:linear-gradient(90deg,rgba(212,169,64,.18),rgba(212,169,64,.06));border-left:4px solid #D4A940}
     .pair-3{background:linear-gradient(90deg,rgba(26,58,110,.14),rgba(26,58,110,.05));border-left:4px solid #1A3D6E}
     .indent-1{padding-left:2rem}.indent-2{padding-left:4rem}
-    .chiasm-center{background:linear-gradient(135deg,#2B5EA7,#1A3D6E);color:white;font-weight:bold;text-align:center;padding:1.1rem;margin:.75rem 0;border-radius:12px;font-size:.98rem;box-shadow:0 4px 15px rgba(43,94,167,.28)}
-    @media(max-width:768px){.page-header-banner h1{font-size:1.6rem}.chiasm-structure{padding:1.25rem;font-size:.85rem}.indent-1{padding-left:1.25rem}.indent-2{padding-left:2.5rem}}
+    .chiasm-center{background:linear-gradient(135deg,#2B5EA7,#1A3D6E);color:white;font-weight:bold;text-align:center;padding:1.1rem;margin:.75rem 0;border-radius:12px;font-size:.98rem;box-shadow:0 4px 15px rgba(43,94,167,.28);transition:all .3s ease}
+    .chiasm-center:hover{box-shadow:0 8px 24px rgba(43,94,167,.35);transform:scale(1.02)}
+
+    /* ── Timeline buttons ── */
+    .stl-btn{transition:all .25s ease!important}
+    .stl-btn:hover{transform:translateY(-3px)!important;box-shadow:0 4px 14px var(--page-accent-glow)!important}
+
+    /* ── Transition steps ── */
+    .trans-step{transition:all .3s ease}
+    .trans-step:hover{transform:translateX(6px);box-shadow:0 4px 14px var(--page-accent-glow)}
+
+    /* ── Echo card ── */
+    .echo-card{background:white;border:1px solid var(--page-accent-border);border-radius:12px;padding:1.25rem;border-top:4px solid var(--page-accent);transition:all .3s ease;position:relative;overflow:hidden}
+    .echo-card::after{content:'';position:absolute;inset:-2px;background:linear-gradient(135deg,rgba(43,94,167,.1),rgba(212,169,64,.08));border-radius:12px;z-index:-1;opacity:0;transition:opacity .3s ease}
+    .echo-card:hover{border-color:var(--page-accent);box-shadow:0 8px 24px var(--page-accent-glow);transform:translateY(-6px) scale(1.02)}
+    .echo-card:hover::after{opacity:.35}
+    .echo-card:hover h4{transform:translateX(4px);transition:transform .3s ease}
+    .echo-card h4{margin:0 0 .25rem;color:var(--page-accent-dark);font-size:.92rem}
+    .echo-card .echo-ref{font-size:.78rem;color:#607590;font-weight:600;margin-bottom:.4rem}
+    .echo-card p{margin:0;color:#4A5E78;font-size:.86rem;line-height:1.55}
+
+    /* ── Navigation cards hover ── */
+    #navigation a{transition:all .3s ease}
+    #navigation a:hover{transform:translateY(-4px);box-shadow:0 6px 18px var(--page-accent-glow);border-color:var(--page-accent)}
+    #navigation a:hover strong{color:var(--page-accent)}
+
+    /* ══════════════════════════════════════
+       SCROLL-TRIGGERED ANIMATIONS
+       ══════════════════════════════════════ */
+    .anim-section{opacity:0;transform:translateY(24px);transition:opacity .7s ease-out,transform .7s ease-out}
+    .anim-section.anim-visible{opacity:1;transform:translateY(0);transition:transform .3s ease,box-shadow .3s ease}
+    .anim-section h3{opacity:0;transform:translateX(-24px);transition:opacity .5s ease-out,transform .5s ease-out}
+    .anim-section.anim-visible h3{opacity:1;transform:translateX(0)}
+    .anim-section>p{opacity:0;transform:translateX(-14px);transition:opacity .5s ease-out,transform .5s ease-out}
+    .anim-section.anim-visible>p:nth-of-type(1){opacity:1;transform:translateX(0);transition-delay:.1s}
+    .anim-section.anim-visible>p:nth-of-type(2){opacity:1;transform:translateX(0);transition-delay:.2s}
+    .anim-section .key-insight,.anim-section .wisdom-callout{opacity:0;transform:translateX(-20px);transition:opacity .5s ease-out,transform .5s ease-out}
+    .anim-section.anim-visible .key-insight,.anim-section.anim-visible .wisdom-callout{opacity:1;transform:translateX(0);transition-delay:.4s}
+    .anim-section .dark-feature{opacity:0;transform:translateY(16px) scale(.98);transition:opacity .6s ease-out,transform .6s ease-out}
+    .anim-section.anim-visible .dark-feature{opacity:1;transform:translateY(0) scale(1);transition-delay:.5s}
+    .anim-section .panel{opacity:0;transform:translateY(14px);transition:opacity .5s ease-out,transform .5s ease-out}
+    .anim-section.anim-visible .panel:nth-child(1){opacity:1;transform:translateY(0);transition-delay:.15s}
+    .anim-section.anim-visible .panel:nth-child(2){opacity:1;transform:translateY(0);transition-delay:.3s}
+    .anim-card{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease}
+    .anim-card.anim-visible{opacity:1;transform:translateY(0)}
+    .anim-flow{opacity:0;transform:translateX(-12px);transition:opacity .4s ease,transform .4s ease}
+    .anim-flow.anim-visible{opacity:1;transform:translateX(0)}
+    .anim-row{opacity:0;transform:translateY(8px);transition:opacity .45s ease,transform .45s ease}
+    .anim-row.anim-visible{opacity:1;transform:translateY(0)}
+    .anim-section.anim-visible .key-insight strong:first-child{background:linear-gradient(120deg,transparent 0%,rgba(212,169,64,.2) 50%,transparent 100%);background-size:200% 100%;animation:highlightSweep 2s ease-out .6s 1;padding:0 .2rem}
+
+    @keyframes heroBreathe{0%,100%{opacity:.04}50%{opacity:.08}}
+    @keyframes highlightSweep{0%{background-position:-100% 0}50%{background-position:0 0}100%{background-position:100% 0}}
+
+    @media(max-width:768px){
+      .page-header-banner h1{font-size:1.6rem}
+      .chiasm-structure{padding:1.25rem;font-size:.85rem}
+      .indent-1{padding-left:1.25rem}.indent-2{padding-left:2.5rem}
+      .quick-nav-pills{flex-direction:column;align-items:flex-start;gap:.5rem}
+      .quick-nav-label{border-right:none;border-bottom:2px solid rgba(43,94,167,.12);width:100%;padding-bottom:.25rem}
+      .quick-nav-scroll{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:.25rem;width:100%}
+      .quick-nav-scroll::-webkit-scrollbar{display:none}
+    }
+
+    @media(prefers-reduced-motion:reduce){
+      .anim-section,.anim-card,.anim-flow,.anim-row{opacity:1!important;transform:none!important;transition:none!important}
+      .anim-section h3,.anim-section>p,.anim-section .key-insight,.anim-section .dark-feature,.anim-section .panel{opacity:1!important;transform:none!important;transition:none!important;animation:none!important}
+      .page-header-banner::after{animation:none!important}
+      .dark-feature:hover,.panel:hover,.echo-card:hover,.stl-btn:hover,.trans-step:hover,#navigation a:hover{transform:none!important}
+    }
   </style>
 </head>
 <body class="character-profile" dir="ltr">
@@ -66,10 +162,7 @@
       <a href="/">Home</a> › <a href="/studies/">Studies</a> › <a href="/studies/tanakh/">Tanakh</a> › <a href="/studies/tanakh/torah/">Torah</a> › <a href="/studies/tanakh/torah/deuteronomy/">Deuteronomy</a> › Poems & Final Words
     </div>
 
-    <nav class="page-nav-bar">
-      <a href="deut-overview.html">📖 Overview</a><a href="deut-literary.html">✍️ Literary</a><a href="deut-hebrew.html">🔤 Hebrew</a><a href="deut-structure.html">🏛️ Structure</a><a href="deut-law.html">⚖️ Law</a><a href="deut-theology.html">🕊️ Theology</a><a href="deut-intertext.html">🔗 Connections</a><a href="deut-poems.html" class="current">🎵 Poems</a><a href="deut-study-kit.html">📚 Study Kit</a>
-    </nav>
-
+    <!-- HERO -->
     <section class="page-header-banner" id="overview">
       <div class="page-header-kicker">Book of Deuteronomy · Poems & Final Words</div>
       <h1>The Song, the Blessing, and the Death of Moses</h1>
@@ -82,10 +175,39 @@
       </div>
     </section>
 
-    <!-- SONG OF MOSES -->
+    <!-- NAV (below hero) -->
+    <nav class="page-nav-bar">
+      <a href="deut-overview.html">📖 Overview</a>
+      <a href="deut-literary.html">✍️ Literary</a>
+      <a href="deut-hebrew.html">🔤 Hebrew</a>
+      <a href="deut-structure.html">🏛️ Structure</a>
+      <a href="deut-law.html">⚖️ Law</a>
+      <a href="deut-theology.html">🕊️ Theology</a>
+      <a href="deut-intertext.html">🔗 Connections</a>
+      <a href="deut-poems.html" class="current">🎵 Poems</a>
+      <a href="deut-study-kit.html">📚 Study Kit</a>
+    </nav>
+
+    <!-- Quick Nav Pills -->
+    <div class="quick-nav-pills">
+      <span class="quick-nav-label">Jump to</span>
+      <div class="quick-nav-scroll">
+        <a href="#song" class="nav-pill">🎵 Song of Moses</a>
+        <a href="#blessing" class="nav-pill">🙌 Blessing</a>
+        <a href="#jeshurun" class="nav-pill">📛 Jeshurun</a>
+        <a href="#echoes" class="nav-pill">🔗 Canonical Echoes</a>
+        <a href="#death" class="nav-pill">⛰️ Death of Moses</a>
+        <a href="#transition" class="nav-pill">📜 Transition</a>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════
+         SONG OF MOSES
+         ═══════════════════════════════════════ -->
     <div class="theology-card animate-on-scroll" id="song">
       <h3>The Song of Moses (Deuteronomy 32)</h3>
       <p style="font-size:.92rem;line-height:1.7;color:#4A5E78;">The Song of Moses is not just a poem inserted at the end. It functions as a covenant lawsuit in poetic form — a witness that compresses the future history of Israel into one prophetic song. Moses calls heaven and earth as witnesses (32:1), then lays out the case: God is righteous, Israel will rebel, judgment will come, but Yahweh's justice and mercy will define the end of the story.</p>
+      <p style="font-size:.92rem;line-height:1.7;color:#4A5E78;">The Song uses the same <em>rîb</em> (lawsuit) form found in ANE treaty enforcement: witnesses summoned, charges filed, evidence presented, verdict rendered. Every writing prophet after Moses will borrow this exact template. <a href="deut-law.html#treaty-exemplars" style="color:#1e40af;">See the Law page's ANE treaty exemplars</a> for the suzerainty background.</p>
 
       <h4 style="color:var(--page-accent-dark);font-size:1rem;margin:1.5rem 0 .5rem;">Chiastic Structure of the Song</h4>
       <div class="chiasm-structure">
@@ -100,13 +222,13 @@
 
       <div class="dark-feature">
         <h4>Why This Song Matters</h4>
-        <p>The Song of Moses lays out the program you're about to read in Joshua, Judges, Samuel, and Kings. Moses becomes the archetypal prophet here — and every prophet after him just becomes a mini-Moses, quoting this song's vocabulary of rebellion, judgment, and restoration.</p>
+        <p>The Song of Moses lays out the program you're about to read in Joshua, Judges, Samuel, and Kings. Moses becomes the archetypal prophet here — and every prophet after him just becomes a mini-Moses, quoting this song's vocabulary of rebellion, judgment, and restoration. <a href="deut-intertext.html#story-engine" style="color:#D4A940;">See the Connections page's Story Engine</a> for how this 9-step cycle shapes the entire narrative arc.</p>
         <p>Yahweh identifies himself with a faithful remnant — a persecuted minority throughout Israel's history. "Those are Yahweh's actual people." Israel associated with kings and wars and kingdoms were in reality the faithless ones. But for the remnant, there is vindication and atonement.</p>
-        <p style="margin-top:.75rem;padding-left:.9rem;border-left:3px solid var(--page-accent-light);color:#D4A940;">The song also uses Genesis 6 language: "God looks at the human heart… and the purpose of their scheming hearts is only evil all the time." Yahweh says: "I know their hearts. I want this song to stand as a witness."</p>
+        <p style="margin-top:.75rem;padding-left:.9rem;border-left:3px solid var(--page-accent-light);color:#D4A940;">The song also uses Genesis 6 language: "God looks at the human heart… and the purpose of their scheming hearts is only evil all the time." Yahweh says: "I know their hearts. I want this song to stand as a witness." This is the same heart diagnosis the <a href="deut-theology.html#heart" style="color:#D4A940;">Theology page</a> and the <a href="deut-law.html#heart-diagnosis" style="color:#D4A940;">Law page's Heart Diagnosis section</a> trace through the legal code.</p>
       </div>
 
       <div class="grid-2" style="margin-top:1.25rem;">
-        <div class="panel"><h4>Covenant Lawsuit Pattern</h4><p style="font-size:.88rem;color:#4A5E78;line-height:1.55;">Witnesses called → charges filed → evidence presented → judgment declared → restoration promised. This is the exact pattern the later writing prophets use. The Song is the template.</p></div>
+        <div class="panel"><h4>Covenant Lawsuit Pattern</h4><p style="font-size:.88rem;color:#4A5E78;line-height:1.55;">Witnesses called → charges filed → evidence presented → judgment declared → restoration promised. This is the exact pattern the later writing prophets use. Isaiah 1:2 opens with the same cosmic witness call; Micah 6:1–8 uses the same <em>rîb</em> form. The Song is the template.</p></div>
         <div class="panel"><h4>The Rock · <span style="font-family:'SBL Hebrew',serif;direction:rtl;">צוּר</span></h4><p style="font-size:.88rem;color:#4A5E78;line-height:1.55;">Yahweh is called "the Rock" six times in the Song (32:4, 15, 18, 30, 31 [2×]). Israel's gods are "no-rock" (32:31). The metaphor contrasts Yahweh's stability and faithfulness with the hollow unreliability of idols.</p></div>
       </div>
 
@@ -121,9 +243,9 @@
           <tbody>
             <tr style="border-bottom:1px solid #D8E1EC;"><td style="padding:.45rem .75rem;font-weight:600;color:var(--page-accent-dark);">Deut 30:19</td><td style="padding:.45rem .75rem;color:#4A5E78;">Life vs. death covenant choice</td></tr>
             <tr style="border-bottom:1px solid #D8E1EC;background:#F7F9FC;"><td style="padding:.45rem .75rem;font-weight:600;color:var(--page-accent-dark);">Deut 32:1</td><td style="padding:.45rem .75rem;color:#4A5E78;">Song of Moses — covenant lawsuit witness</td></tr>
-            <tr style="border-bottom:1px solid #D8E1EC;"><td style="padding:.45rem .75rem;font-weight:600;color:var(--page-accent-dark);">Isaiah 1:2</td><td style="padding:.45rem .75rem;color:#4A5E78;">Prophetic lawsuit — "Hear, O heavens, and give ear, O earth"</td></tr>
+            <tr style="border-bottom:1px solid #D8E1EC;"><td style="padding:.45rem .75rem;font-weight:600;color:var(--page-accent-dark);">Isaiah 1:2</td><td style="padding:.45rem .75rem;color:#4A5E78;">Prophetic lawsuit — direct quotation of Deut 32:1</td></tr>
             <tr style="border-bottom:1px solid #D8E1EC;background:#F7F9FC;"><td style="padding:.45rem .75rem;font-weight:600;color:var(--page-accent-dark);">Jeremiah 2:12</td><td style="padding:.45rem .75rem;color:#4A5E78;">Heavens shocked at Israel's apostasy</td></tr>
-            <tr><td style="padding:.45rem .75rem;font-weight:600;color:var(--page-accent-dark);">Micah 6:1–2</td><td style="padding:.45rem .75rem;color:#4A5E78;">Mountains and hills summoned as witnesses</td></tr>
+            <tr><td style="padding:.45rem .75rem;font-weight:600;color:var(--page-accent-dark);">Micah 6:1–2</td><td style="padding:.45rem .75rem;color:#4A5E78;">Mountains and hills summoned as witnesses in <em>rîb</em> lawsuit</td></tr>
           </tbody>
         </table>
       </div>
@@ -131,21 +253,30 @@
       <h4 style="color:var(--page-accent-dark);font-size:1rem;margin:1.5rem 0 .5rem;">Song of Moses Prophetic Timeline</h4>
       <p style="font-size:.88rem;color:#4A5E78;margin-bottom:.75rem;">The Song compresses Israel's entire future into five movements. Click each stage:</p>
       <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem;margin:.75rem 0;" id="song-timeline">
-        <button class="stl-btn" onclick="showSongStage(this,'rock')" style="flex:1;min-width:130px;padding:.75rem;border-radius:10px;border:2px solid var(--page-accent);background:var(--page-accent-bg);cursor:pointer;text-align:center;font-family:inherit;transition:all .2s;"><strong style="display:block;color:var(--page-accent-dark);font-size:.85rem;">1. The Rock</strong><span style="font-size:.75rem;color:#607590;">32:1–4</span></button>
-        <button class="stl-btn" onclick="showSongStage(this,'rebel')" style="flex:1;min-width:130px;padding:.75rem;border-radius:10px;border:2px solid var(--page-accent-border);background:white;cursor:pointer;text-align:center;font-family:inherit;transition:all .2s;"><strong style="display:block;color:var(--page-accent-dark);font-size:.85rem;">2. Israel Rebels</strong><span style="font-size:.75rem;color:#607590;">32:5–18</span></button>
-        <button class="stl-btn" onclick="showSongStage(this,'judgment')" style="flex:1;min-width:130px;padding:.75rem;border-radius:10px;border:2px solid var(--page-accent-border);background:white;cursor:pointer;text-align:center;font-family:inherit;transition:all .2s;"><strong style="display:block;color:var(--page-accent-dark);font-size:.85rem;">3. Judgment</strong><span style="font-size:.75rem;color:#607590;">32:19–25</span></button>
-        <button class="stl-btn" onclick="showSongStage(this,'nations')" style="flex:1;min-width:130px;padding:.75rem;border-radius:10px;border:2px solid var(--page-accent-border);background:white;cursor:pointer;text-align:center;font-family:inherit;transition:all .2s;"><strong style="display:block;color:var(--page-accent-dark);font-size:.85rem;">4. Nations Rise</strong><span style="font-size:.75rem;color:#607590;">32:26–35</span></button>
-        <button class="stl-btn" onclick="showSongStage(this,'restore')" style="flex:1;min-width:130px;padding:.75rem;border-radius:10px;border:2px solid var(--page-accent-border);background:white;cursor:pointer;text-align:center;font-family:inherit;transition:all .2s;"><strong style="display:block;color:var(--page-accent-dark);font-size:.85rem;">5. God Restores</strong><span style="font-size:.75rem;color:#607590;">32:36–43</span></button>
+        <button class="stl-btn" onclick="showSongStage(this,'rock')" style="flex:1;min-width:130px;padding:.75rem;border-radius:10px;border:2px solid var(--page-accent);background:var(--page-accent-bg);cursor:pointer;text-align:center;font-family:inherit;"><strong style="display:block;color:var(--page-accent-dark);font-size:.85rem;">1. The Rock</strong><span style="font-size:.75rem;color:#607590;">32:1–4</span></button>
+        <button class="stl-btn" onclick="showSongStage(this,'rebel')" style="flex:1;min-width:130px;padding:.75rem;border-radius:10px;border:2px solid var(--page-accent-border);background:white;cursor:pointer;text-align:center;font-family:inherit;"><strong style="display:block;color:var(--page-accent-dark);font-size:.85rem;">2. Israel Rebels</strong><span style="font-size:.75rem;color:#607590;">32:5–18</span></button>
+        <button class="stl-btn" onclick="showSongStage(this,'judgment')" style="flex:1;min-width:130px;padding:.75rem;border-radius:10px;border:2px solid var(--page-accent-border);background:white;cursor:pointer;text-align:center;font-family:inherit;"><strong style="display:block;color:var(--page-accent-dark);font-size:.85rem;">3. Judgment</strong><span style="font-size:.75rem;color:#607590;">32:19–25</span></button>
+        <button class="stl-btn" onclick="showSongStage(this,'nations')" style="flex:1;min-width:130px;padding:.75rem;border-radius:10px;border:2px solid var(--page-accent-border);background:white;cursor:pointer;text-align:center;font-family:inherit;"><strong style="display:block;color:var(--page-accent-dark);font-size:.85rem;">4. Nations Rise</strong><span style="font-size:.75rem;color:#607590;">32:26–35</span></button>
+        <button class="stl-btn" onclick="showSongStage(this,'restore')" style="flex:1;min-width:130px;padding:.75rem;border-radius:10px;border:2px solid var(--page-accent-border);background:white;cursor:pointer;text-align:center;font-family:inherit;"><strong style="display:block;color:var(--page-accent-dark);font-size:.85rem;">5. God Restores</strong><span style="font-size:.75rem;color:#607590;">32:36–43</span></button>
       </div>
       <div id="song-stage-display" style="background:#F7F9FC;border:1px solid var(--page-accent-border);border-radius:12px;padding:1rem;min-height:50px;transition:all .3s;">
         <p style="margin:0;font-size:.88rem;color:#4A5E78;"><strong style="color:var(--page-accent-dark);">Yahweh the Rock (32:1–4):</strong> The Song begins by declaring God's perfect character. He is the faithful Rock whose works are perfect, whose ways are just. Heaven and earth are called to witness this covenant.</p>
       </div>
     </div>
 
-    <!-- BLESSING OF MOSES -->
+    <!-- ═══════════════════════════════════════
+         BLESSING OF MOSES
+         ═══════════════════════════════════════ -->
     <div class="theology-card animate-on-scroll" id="blessing">
       <h3>The Blessing of Moses (Deuteronomy 33)</h3>
       <p style="font-size:.92rem;line-height:1.7;color:#4A5E78;">After the Song's covenant lawsuit, Moses pronounces blessing over each tribe — mirroring Jacob's blessing in Genesis 49. This creates a Torah bookend: the first scroll (Genesis) and the last (Deuteronomy) both end with a dying patriarch blessing Israel's tribes.</p>
+
+      <!-- ENHANCED: Theophany frame -->
+      <div class="dark-feature">
+        <h4>The Theophany Frame: God Arrives (33:2–5, 26–29)</h4>
+        <p>The tribal blessings are not just deathbed predictions. They are wrapped in a theophany hymn — a poem of divine arrival. "The LORD came from Sinai and dawned from Seir upon them; he shone forth from Mount Paran" (33:2). God approaches with ten thousands of holy ones, fire at his right hand.</p>
+        <p>The closing frame (33:26–29) matches: "There is none like God, O <strong>Jeshurun</strong>, who rides through the heavens to your help." The tribal blessings sit inside a vision of God himself coming to dwell with and fight for his people. The blessings are not Moses' wishes — they are grounded in God's own arrival.</p>
+      </div>
 
       <div style="overflow-x:auto;margin:1.25rem 0;">
         <table style="width:100%;border-collapse:collapse;font-size:.88rem;">
@@ -158,7 +289,8 @@
             <tr style="border-bottom:1px solid #D8E1EC;"><td style="padding:.55rem 1rem;font-weight:600;color:var(--page-accent-dark);">Speaker</td><td style="padding:.55rem 1rem;color:#4A5E78;">Dying patriarch (Jacob)</td><td style="padding:.55rem 1rem;color:#4A5E78;">Dying prophet (Moses)</td></tr>
             <tr style="border-bottom:1px solid #D8E1EC;background:#F7F9FC;"><td style="padding:.55rem 1rem;font-weight:600;color:var(--page-accent-dark);">Setting</td><td style="padding:.55rem 1rem;color:#4A5E78;">End of Genesis, in Egypt</td><td style="padding:.55rem 1rem;color:#4A5E78;">End of Torah, at the Jordan</td></tr>
             <tr style="border-bottom:1px solid #D8E1EC;"><td style="padding:.55rem 1rem;font-weight:600;color:var(--page-accent-dark);">Tone</td><td style="padding:.55rem 1rem;color:#4A5E78;">Mixed — includes judgment on some tribes</td><td style="padding:.55rem 1rem;color:#4A5E78;">Mostly positive — blessing-focused</td></tr>
-            <tr style="border-bottom:1px solid #D8E1EC;background:#F7F9FC;"><td style="padding:.55rem 1rem;font-weight:600;color:var(--page-accent-dark);">Judah</td><td style="padding:.55rem 1rem;color:#4A5E78;">Royal promise, scepter, lion</td><td style="padding:.55rem 1rem;color:#4A5E78;">Brief prayer for strength</td></tr>
+            <tr style="border-bottom:1px solid #D8E1EC;background:#F7F9FC;"><td style="padding:.55rem 1rem;font-weight:600;color:var(--page-accent-dark);">Frame</td><td style="padding:.55rem 1rem;color:#4A5E78;">Patriarch's deathbed (Gen 49:1, 33)</td><td style="padding:.55rem 1rem;color:#4A5E78;">Theophany hymn — God arrives (33:2–5, 26–29)</td></tr>
+            <tr style="border-bottom:1px solid #D8E1EC;"><td style="padding:.55rem 1rem;font-weight:600;color:var(--page-accent-dark);">Judah</td><td style="padding:.55rem 1rem;color:#4A5E78;">Royal promise, scepter, lion</td><td style="padding:.55rem 1rem;color:#4A5E78;">Brief prayer for strength</td></tr>
             <tr><td style="padding:.55rem 1rem;font-weight:600;color:var(--page-accent-dark);">Levi</td><td style="padding:.55rem 1rem;color:#4A5E78;">Cursed for violence (Gen 49:5–7)</td><td style="padding:.55rem 1rem;color:#4A5E78;">Honored as Torah guardians (33:8–11)</td></tr>
           </tbody>
         </table>
@@ -184,18 +316,64 @@
       </details>
     </div>
 
-    <!-- CANONICAL ECHOES -->
+    <!-- ═══════════════════════════════════════
+         JESHURUN (NEW SECTION)
+         ═══════════════════════════════════════ -->
+    <div class="theology-card animate-on-scroll" id="jeshurun">
+      <h3>Jeshurun: The Name Israel Is Meant to Be · <span style="font-family:'SBL Hebrew',serif;direction:rtl;font-size:1.1em;">יְשֻׁרוּן</span></h3>
+      <p style="font-size:.92rem;line-height:1.7;color:#4A5E78;">One of the most overlooked details in Deuteronomy's poetry is the rare name <strong>Jeshurun</strong> (<span style="font-family:'SBL Hebrew',serif;direction:rtl;">יְשֻׁרוּן</span>, "the upright one"), which appears only four times in the entire Bible — three of them in these final poems.</p>
+
+      <div style="overflow-x:auto;margin:1.25rem 0;">
+        <table style="width:100%;border-collapse:collapse;font-size:.88rem;">
+          <thead><tr style="background:linear-gradient(135deg,#1A3D6E,#2B5EA7);color:white;">
+            <th style="padding:.65rem 1rem;text-align:left;">Passage</th>
+            <th style="padding:.65rem 1rem;text-align:left;">Context</th>
+            <th style="padding:.65rem 1rem;text-align:left;">Significance</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid #D8E1EC;"><td style="padding:.55rem 1rem;font-weight:600;color:var(--page-accent-dark);">Deut 32:15</td><td style="padding:.55rem 1rem;color:#4A5E78;">"Jeshurun grew fat, and kicked"</td><td style="padding:.55rem 1rem;color:#4A5E78;">The ironic use — the "upright one" is anything but</td></tr>
+            <tr style="border-bottom:1px solid #D8E1EC;background:#F7F9FC;"><td style="padding:.55rem 1rem;font-weight:600;color:var(--page-accent-dark);">Deut 33:5</td><td style="padding:.55rem 1rem;color:#4A5E78;">"He became king in Jeshurun"</td><td style="padding:.55rem 1rem;color:#4A5E78;">God himself is king of the upright community</td></tr>
+            <tr style="border-bottom:1px solid #D8E1EC;"><td style="padding:.55rem 1rem;font-weight:600;color:var(--page-accent-dark);">Deut 33:26</td><td style="padding:.55rem 1rem;color:#4A5E78;">"There is none like God, O Jeshurun"</td><td style="padding:.55rem 1rem;color:#4A5E78;">Theophany climax — God rides heavens for Jeshurun</td></tr>
+            <tr><td style="padding:.55rem 1rem;font-weight:600;color:var(--page-accent-dark);">Isaiah 44:2</td><td style="padding:.55rem 1rem;color:#4A5E78;">"Fear not, O Jacob… O Jeshurun"</td><td style="padding:.55rem 1rem;color:#4A5E78;">Isaiah picks up the name in a restoration oracle</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="key-insight"><strong>God calls Israel by the name of their destiny, not their track record.</strong> In the Song, Jeshurun rebels. In the Blessing, God rides through the heavens to rescue Jeshurun. The name holds the tension of the entire Torah: Israel is called "upright" even though Deuteronomy has spent 30 chapters documenting their stubbornness. The name is eschatological — it points to what God will make them, not what they currently are.</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════
+         CANONICAL ECHOES (EXPANDED)
+         ═══════════════════════════════════════ -->
     <div class="theology-card animate-on-scroll" id="echoes">
       <h3>Canonical Echoes of the Poems</h3>
-      <p style="font-size:.92rem;line-height:1.7;color:#4A5E78;">The two poems at the end of Deuteronomy generate echoes across the entire biblical canon.</p>
+      <p style="font-size:.92rem;line-height:1.7;color:#4A5E78;">The Song of Moses generates echoes across the entire biblical canon — far more than most readers realize. Later writers don't just allude to it; they directly quote it.</p>
+
+      <h4 style="color:var(--page-accent-dark);font-size:1rem;margin:1.25rem 0 .5rem;">NT Quotations of Deuteronomy 32</h4>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin:.75rem 0;">
+        <div class="echo-card"><h4>Romans 10:19</h4><div class="echo-ref">← Deut 32:21</div><p>"I will make you jealous of those who are not a nation." Paul quotes the Song to explain Gentile inclusion — God provokes Israel to jealousy by extending covenant blessings to outsiders.</p></div>
+        <div class="echo-card"><h4>Romans 12:19</h4><div class="echo-ref">← Deut 32:35</div><p>"Vengeance is mine, I will repay, says the Lord." Paul quotes the Song's climactic declaration to reframe how the community handles injustice — leave judgment to God.</p></div>
+        <div class="echo-card"><h4>Hebrews 10:30</h4><div class="echo-ref">← Deut 32:35–36</div><p>The Hebrews author also quotes "Vengeance is mine" and "The Lord will judge his people" as a warning against treating the new covenant lightly — the Song's covenant enforcement still applies.</p></div>
+        <div class="echo-card"><h4>Romans 15:10</h4><div class="echo-ref">← Deut 32:43</div><p>"Rejoice, O Gentiles, with his people." Paul quotes the Song's final line as proof that God always intended the nations to share in Israel's celebration.</p></div>
+        <div class="echo-card"><h4>Revelation 15:3</h4><div class="echo-ref">← Deut 32</div><p>The redeemed sing "the song of Moses the servant of God, and the song of the Lamb." The Song of Deuteronomy 32 becomes the anthem of the final restoration — covenant lawsuit resolved, vindication complete.</p></div>
+      </div>
+
+      <h4 style="color:var(--page-accent-dark);font-size:1rem;margin:1.5rem 0 .5rem;">OT Songs in the Wake of Moses</h4>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin:.75rem 0;">
+        <div class="echo-card"><h4>Hannah's Song (1 Sam 2:1–10)</h4><div class="echo-ref">← Deut 32:4, 39</div><p>Hannah's prayer echoes the Song's vocabulary: God as Rock, the reversal of fortunes, the barren bearing seven. Her song closes by anticipating God's anointed king — threading the Song's vindication into a messianic expectation.</p></div>
+        <div class="echo-card"><h4>Mary's Magnificat (Luke 1:46–55)</h4><div class="echo-ref">← 1 Sam 2 ← Deut 32</div><p>Mary's song echoes Hannah's, which echoes Moses'. The chain is deliberate: mighty brought low, humble exalted, covenant promises to Abraham fulfilled. The Song of Moses reverberates into the announcement of the Messiah.</p></div>
+        <div class="echo-card"><h4>Joshua 24</h4><div class="echo-ref">← Deut 32; 30:19</div><p>Joshua continues the covenant witness theme at Shechem, calling Israel to choose Yahweh — the same life-or-death choice the Song dramatizes.</p></div>
+      </div>
+
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;margin:.75rem 0;">
-        <div class="panel"><h4 style="color:var(--page-accent-dark);font-size:.88rem;">Joshua 24</h4><p style="font-size:.82rem;color:#4A5E78;line-height:1.45;">Joshua continues the covenant witness theme, calling Israel to renewed loyalty at Shechem.</p></div>
-        <div class="panel"><h4 style="color:var(--page-accent-dark);font-size:.88rem;">The Prophets</h4><p style="font-size:.82rem;color:#4A5E78;line-height:1.45;">Isaiah, Jeremiah, Hosea, and Micah all echo the Song's themes of rebellion, covenant lawsuit, and restoration.</p></div>
-        <div class="panel"><h4 style="color:var(--page-accent-dark);font-size:.88rem;">Revelation 15:3</h4><p style="font-size:.82rem;color:#4A5E78;line-height:1.45;">The redeemed in Revelation sing "the song of Moses the servant of God, and the song of the Lamb." The Song of Deuteronomy 32 becomes the anthem of the final restoration.</p></div>
+        <div class="panel"><h4 style="color:var(--page-accent-dark);font-size:.88rem;">The Prophets</h4><p style="font-size:.82rem;color:#4A5E78;line-height:1.45;">Isaiah, Jeremiah, Hosea, and Micah all echo the Song's themes of rebellion, cosmic witness, covenant lawsuit, and restoration. <a href="deut-intertext.html#prophets" style="color:#1e40af;font-size:.82rem;">See Connections page →</a></p></div>
+        <div class="panel"><h4 style="color:var(--page-accent-dark);font-size:.88rem;">Psalm 78 & 106</h4><p style="font-size:.82rem;color:#4A5E78;line-height:1.45;">Both retell the Song's narrative arc — God's faithfulness, Israel's rebellion, judgment, gracious restoration — as liturgical confession and intergenerational teaching.</p></div>
       </div>
     </div>
 
-    <!-- DEATH OF MOSES -->
+    <!-- ═══════════════════════════════════════
+         DEATH OF MOSES
+         ═══════════════════════════════════════ -->
     <div class="theology-card animate-on-scroll" id="death">
       <h3>The Death of Moses (Deuteronomy 34)</h3>
       <p style="font-size:.92rem;line-height:1.7;color:#4A5E78;">Moses walks up Mount Nebo, sees the promised land, and dies. God buries him in an unknown grave. The Torah's greatest human character exits the stage — and the narrator delivers one of the most theologically loaded closing lines in all of Scripture.</p>
@@ -205,11 +383,11 @@
         <p>This is not just an obituary. It is a <strong>promissory gap</strong>. Deuteronomy 18:15 promised a prophet like Moses would come. The Torah closes by saying that prophet hasn't arrived yet. Every reader is left waiting.</p>
         <p>The ending creates expectation. The Torah's major plot tensions are all in place but deliberately unresolved:</p>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.65rem;margin:.75rem 0;">
-          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:.75rem;"><div style="font-size:.75rem;color:#D4A940;font-weight:600;margin-bottom:.2rem;">The Promised Land</div><div style="font-size:.82rem;color:#D8E1EC;">Moses sees it but cannot enter. The Torah points to a destination it cannot reach. <em style="color:#607590;">Deut 34</em></div></div>
-          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:.75rem;"><div style="font-size:.75rem;color:#D4A940;font-weight:600;margin-bottom:.2rem;">Human Hearts</div><div style="font-size:.82rem;color:#D8E1EC;">Israel receives the law, but their hearts remain unchanged. Who will circumcise the heart? <em style="color:#607590;">Deut 29–30</em></div></div>
-          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:.75rem;"><div style="font-size:.75rem;color:#D4A940;font-weight:600;margin-bottom:.2rem;">Future Exile</div><div style="font-size:.82rem;color:#D8E1EC;">Deuteronomy already predicts Israel will break the covenant and be scattered. <em style="color:#607590;">Deut 31</em></div></div>
-          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:.75rem;"><div style="font-size:.75rem;color:#D4A940;font-weight:600;margin-bottom:.2rem;">The Prophet Like Moses</div><div style="font-size:.82rem;color:#D8E1EC;">God promises a future prophet who will speak his words — but no one has come yet. <em style="color:#607590;">Deut 18:15</em></div></div>
-          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:.75rem;"><div style="font-size:.75rem;color:#D4A940;font-weight:600;margin-bottom:.2rem;">The King</div><div style="font-size:.82rem;color:#D8E1EC;">The Torah anticipates a king who will lead under Torah — but will any king measure up? <em style="color:#607590;">Deut 17:14–20</em></div></div>
+          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:.75rem;transition:all .25s;cursor:default;" onmouseover="this.style.background='rgba(255,255,255,.12)';this.style.transform='translateY(-3px)'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.transform='translateY(0)'"><div style="font-size:.75rem;color:#D4A940;font-weight:600;margin-bottom:.2rem;">The Promised Land</div><div style="font-size:.82rem;color:#D8E1EC;">Moses sees it but cannot enter. The Torah points to a destination it cannot reach. <em style="color:#607590;">Deut 34</em></div></div>
+          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:.75rem;transition:all .25s;cursor:default;" onmouseover="this.style.background='rgba(255,255,255,.12)';this.style.transform='translateY(-3px)'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.transform='translateY(0)'"><div style="font-size:.75rem;color:#D4A940;font-weight:600;margin-bottom:.2rem;">Human Hearts</div><div style="font-size:.82rem;color:#D8E1EC;">Israel receives the law, but their hearts remain unchanged. Who will circumcise the heart? <em style="color:#607590;">Deut 29–30</em></div></div>
+          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:.75rem;transition:all .25s;cursor:default;" onmouseover="this.style.background='rgba(255,255,255,.12)';this.style.transform='translateY(-3px)'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.transform='translateY(0)'"><div style="font-size:.75rem;color:#D4A940;font-weight:600;margin-bottom:.2rem;">Future Exile</div><div style="font-size:.82rem;color:#D8E1EC;">Deuteronomy already predicts Israel will break the covenant and be scattered. <em style="color:#607590;">Deut 31</em></div></div>
+          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:.75rem;transition:all .25s;cursor:default;" onmouseover="this.style.background='rgba(255,255,255,.12)';this.style.transform='translateY(-3px)'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.transform='translateY(0)'"><div style="font-size:.75rem;color:#D4A940;font-weight:600;margin-bottom:.2rem;">The Prophet Like Moses</div><div style="font-size:.82rem;color:#D8E1EC;">God promises a future prophet who will speak his words — but no one has come yet. <em style="color:#607590;">Deut 18:15</em></div></div>
+          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:.75rem;transition:all .25s;cursor:default;" onmouseover="this.style.background='rgba(255,255,255,.12)';this.style.transform='translateY(-3px)'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.transform='translateY(0)'"><div style="font-size:.75rem;color:#D4A940;font-weight:600;margin-bottom:.2rem;">The King</div><div style="font-size:.82rem;color:#D8E1EC;">The Torah anticipates a king who will lead under Torah — but will any king measure up? <em style="color:#607590;">Deut 17:14–20</em></div></div>
         </div>
         <p style="margin-top:.75rem;padding-left:.9rem;border-left:3px solid var(--page-accent-light);color:#D4A940;font-weight:600;">You just have to keep reading to find out. That's what the book of Deuteronomy is all about.</p>
       </div>
@@ -220,23 +398,27 @@
       </div>
     </div>
 
-    <!-- POEMS AS TRANSITION -->
+    <!-- ═══════════════════════════════════════
+         POEMS AS TRANSITION
+         ═══════════════════════════════════════ -->
     <div class="theology-card animate-on-scroll" id="transition">
       <h3>The Final Chapters as a Transition Complex</h3>
       <p style="font-size:.92rem;line-height:1.7;color:#4A5E78;">Deuteronomy 31–34 is not an afterthought. It is a carefully layered exit sequence that transmits the covenant to the future:</p>
       <div style="display:flex;flex-direction:column;gap:0;margin:1rem auto;max-width:480px;">
-        <div style="display:flex;gap:.75rem;padding:.65rem 1rem;background:white;border:2px solid var(--page-accent-border);border-radius:8px;align-items:center;"><div style="flex:0 0 28px;font-weight:700;color:var(--page-accent-dark);font-size:.85rem;">31</div><div style="font-size:.85rem;color:#4A5E78;">Joshua commissioned · Torah written · public reading commanded</div></div>
+        <div class="trans-step" style="display:flex;gap:.75rem;padding:.65rem 1rem;background:white;border:2px solid var(--page-accent-border);border-radius:8px;align-items:center;"><div style="flex:0 0 28px;font-weight:700;color:var(--page-accent-dark);font-size:.85rem;">31</div><div style="font-size:.85rem;color:#4A5E78;">Joshua commissioned · Torah written · public reading commanded</div></div>
         <div style="text-align:center;color:var(--page-accent-light);font-size:.9rem;padding:.1rem 0;">↓</div>
-        <div style="display:flex;gap:.75rem;padding:.65rem 1rem;background:white;border:2px solid var(--page-accent-border);border-radius:8px;align-items:center;"><div style="flex:0 0 28px;font-weight:700;color:var(--page-accent-dark);font-size:.85rem;">32</div><div style="font-size:.85rem;color:#4A5E78;">Song of Moses — prophetic witness poem</div></div>
+        <div class="trans-step" style="display:flex;gap:.75rem;padding:.65rem 1rem;background:white;border:2px solid var(--page-accent-border);border-radius:8px;align-items:center;"><div style="flex:0 0 28px;font-weight:700;color:var(--page-accent-dark);font-size:.85rem;">32</div><div style="font-size:.85rem;color:#4A5E78;">Song of Moses — prophetic witness poem</div></div>
         <div style="text-align:center;color:var(--page-accent-light);font-size:.9rem;padding:.1rem 0;">↓</div>
-        <div style="display:flex;gap:.75rem;padding:.65rem 1rem;background:white;border:2px solid var(--page-accent-border);border-radius:8px;align-items:center;"><div style="flex:0 0 28px;font-weight:700;color:var(--page-accent-dark);font-size:.85rem;">33</div><div style="font-size:.85rem;color:#4A5E78;">Blessing of the tribes — patriarchal echo</div></div>
+        <div class="trans-step" style="display:flex;gap:.75rem;padding:.65rem 1rem;background:white;border:2px solid var(--page-accent-border);border-radius:8px;align-items:center;"><div style="flex:0 0 28px;font-weight:700;color:var(--page-accent-dark);font-size:.85rem;">33</div><div style="font-size:.85rem;color:#4A5E78;">Blessing of the tribes — theophany frame + patriarchal echo</div></div>
         <div style="text-align:center;color:var(--page-accent-light);font-size:.9rem;padding:.1rem 0;">↓</div>
-        <div style="display:flex;gap:.75rem;padding:.65rem 1rem;background:white;border:2px solid var(--page-accent-border);border-radius:8px;border-style:dashed;align-items:center;"><div style="flex:0 0 28px;font-weight:700;color:#607590;font-size:.85rem;">34</div><div style="font-size:.85rem;color:#607590;">Death of Moses — <em>the Torah creates expectation</em></div></div>
+        <div class="trans-step" style="display:flex;gap:.75rem;padding:.65rem 1rem;background:white;border:2px solid var(--page-accent-border);border-radius:8px;border-style:dashed;align-items:center;"><div style="flex:0 0 28px;font-weight:700;color:#607590;font-size:.85rem;">34</div><div style="font-size:.85rem;color:#607590;">Death of Moses — <em>the Torah creates expectation</em></div></div>
       </div>
       <div class="key-insight" style="margin-top:1rem;"><strong>The Torah is written down, transmitted, sung, blessed, and then left behind in the death of its mediator.</strong> The ending is designed to create a reader who is still waiting — for the prophet, for the heart renewal, for the land, for the blessing to reach the nations.</div>
     </div>
 
-    <!-- NAVIGATION -->
+    <!-- ═══════════════════════════════════════
+         NAVIGATION
+         ═══════════════════════════════════════ -->
     <div class="theology-card animate-on-scroll" id="navigation">
       <h3 style="text-align:center;margin-bottom:1rem;">Continue the Deuteronomy Study</h3>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;">
@@ -247,13 +429,22 @@
       </div>
     </div>
 
+    <!-- ═══════════════════════════════════════
+         BIBLIOGRAPHY
+         ═══════════════════════════════════════ -->
     <details class="bibliography-section enhanced" id="bibliography">
       <summary><div class="bibliography-header"><div class="bibliography-inner"><span class="bibliography-icon">📚</span><div class="bibliography-text"><h3 class="bibliography-title">Bibliography & Sources</h3><p class="bibliography-subtitle">Academic references for Deuteronomy's poetry and final chapters</p></div><div class="expand-indicator"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div></div></div></summary>
       <div class="bibliography-content">
         <div class="source-category"><h4>Commentaries</h4>
           <div class="source-entry"><div class="source-citation"><strong>Olson, Dennis T.</strong> <em>Deuteronomy and the Death of Moses.</em> OBT. Minneapolis: Fortress, 1994.</div><div class="source-usage"><span class="usage-tag">Death · Transition</span></div></div>
-          <div class="source-entry"><div class="source-citation"><strong>Block, Daniel I.</strong> <em>Deuteronomy.</em> NIVAC. Grand Rapids: Zondervan, 2012.</div><div class="source-usage"><span class="usage-tag">Song · Blessing</span></div></div>
-          <div class="source-entry"><div class="source-citation"><strong>The Bible Project.</strong> "Moses' Final Words." Deuteronomy Scroll Episode 9, November 2022.</div><div class="source-usage"><span class="usage-tag">Song · Death · Remnant</span></div></div>
+          <div class="source-entry"><div class="source-citation"><strong>Block, Daniel I.</strong> <em>Deuteronomy.</em> NIVAC. Grand Rapids: Zondervan, 2012.</div><div class="source-usage"><span class="usage-tag">Song · Blessing · Jeshurun</span></div></div>
+          <div class="source-entry"><div class="source-citation"><strong>McConville, J. Gordon.</strong> <em>Deuteronomy.</em> Apollos. Leicester: IVP, 2002.</div><div class="source-usage"><span class="usage-tag">Song Chiasm · Theophany</span></div></div>
+        </div>
+        <div class="source-category"><h4>New Testament Use</h4>
+          <div class="source-entry"><div class="source-citation"><strong>Beale, G.K., and D.A. Carson, eds.</strong> <em>Commentary on the New Testament Use of the Old Testament.</em> Grand Rapids: Baker, 2007.</div><div class="source-usage"><span class="usage-tag">Rom 10:19 · 12:19 · 15:10 · Heb 10:30 · Rev 15:3</span></div></div>
+        </div>
+        <div class="source-category"><h4>BibleProject Podcast</h4>
+          <div class="source-entry"><div class="source-citation"><strong>Mackie, Tim, and Jon Collins.</strong> "Moses' Final Words." <em>Deuteronomy Scroll Series, Episode 9.</em> BibleProject, November 2022.</div><div class="source-usage"><span class="usage-tag">Song · Death · Remnant</span></div></div>
         </div>
         <div class="citation-note"><p><strong>Full bibliography:</strong> See the <a href="deut-study-kit.html#bibliography">Study Kit master bibliography</a> for the complete source list.</p><p><strong>Citation Format:</strong> Chicago Manual of Style, 17th edition</p></div>
       </div>
@@ -266,8 +457,82 @@
   <script type="module">import NavigationComponent from '/assets/js/nav-component.js';const navigation = new NavigationComponent({currentPage:'studies/tanakh/torah/deuteronomy/deut-poems',hubType:'tanakh'});</script>
   <script src="/assets/js/character-page-v5-8.js" defer></script>
   <script>
-  const songStages={rock:'<strong style="color:var(--page-accent-dark);">Yahweh the Rock (32:1–4):</strong> The Song begins by declaring God\'s perfect character. He is the faithful Rock whose works are perfect, whose ways are just. Heaven and earth are called to witness this covenant.',rebel:'<strong style="color:var(--page-accent-dark);">Israel\'s Corruption (32:5–18):</strong> Despite God\'s faithfulness, Israel turns to other gods. The poem accuses Israel of forgetting the God who found them in the wilderness, carried them like an eagle, and gave them life. They grew fat on blessing and kicked against their maker.',judgment:'<strong style="color:var(--page-accent-dark);">Divine Judgment (32:19–25):</strong> God responds by hiding his face and allowing disaster to fall. This is the center of the chiasm — the most devastating moment. Yahweh\'s controversy with his people reaches its peak.',nations:'<strong style="color:var(--page-accent-dark);">Nations Rise (32:26–35):</strong> Foreign nations become instruments of divine discipline, but God warns them against arrogance. Their "rock" is not like Israel\'s Rock. They too will be measured and found wanting.',restore:'<strong style="color:var(--page-accent-dark);">God Restores (32:36–43):</strong> Ultimately Yahweh vindicates his servants and defeats their enemies. The song ends with atonement for the land and hope for future redemption. "Rejoice, O nations, with his people."'};
-  function showSongStage(btn,key){document.querySelectorAll('.stl-btn').forEach(b=>{b.style.borderColor='var(--page-accent-border)';b.style.background='white'});btn.style.borderColor='var(--page-accent)';btn.style.background='var(--page-accent-bg)';document.getElementById('song-stage-display').innerHTML='<p style="margin:0;font-size:.88rem;color:#4A5E78;">'+songStages[key]+'</p>';}
+  // ══════════════════════════════════════════
+  // SONG STAGE INTERACTIVE
+  // ══════════════════════════════════════════
+  const songStages={rock:'<strong style="color:var(--page-accent-dark);">Yahweh the Rock (32:1–4):</strong> The Song begins by declaring God\'s perfect character. He is the faithful Rock whose works are perfect, whose ways are just. Heaven and earth are called to witness this covenant.',rebel:'<strong style="color:var(--page-accent-dark);">Israel\'s Corruption (32:5–18):</strong> Despite God\'s faithfulness, Israel turns to other gods. The poem accuses Israel of forgetting the God who found them in the wilderness, carried them like an eagle, and gave them life. They grew fat on blessing and kicked against their maker — the ironic reversal embedded in the name <em>Jeshurun</em> ("upright one") used at 32:15.',judgment:'<strong style="color:var(--page-accent-dark);">Divine Judgment (32:19–25):</strong> God responds by hiding his face and allowing disaster to fall. This is the center of the chiasm — the most devastating moment. Yahweh\'s controversy with his people reaches its peak.',nations:'<strong style="color:var(--page-accent-dark);">Nations Rise (32:26–35):</strong> Foreign nations become instruments of divine discipline, but God warns them against arrogance. Their "rock" is not like Israel\'s Rock. They too will be measured and found wanting. "Vengeance is mine, and recompense" (32:35) — quoted later by both Paul (Rom 12:19) and the author of Hebrews (10:30).',restore:'<strong style="color:var(--page-accent-dark);">God Restores (32:36–43):</strong> Ultimately Yahweh vindicates his servants and defeats their enemies. The song ends with atonement for the land and hope for future redemption. "Rejoice, O nations, with his people" (32:43) — Paul quotes this as proof that the nations were always meant to share in Israel\'s restoration (Rom 15:10). In Revelation 15:3, the redeemed sing this song at the end of all things.'};
+  function showSongStage(btn,key){document.querySelectorAll('.stl-btn').forEach(b=>{b.style.borderColor='var(--page-accent-border)';b.style.background='white'});btn.style.borderColor='var(--page-accent)';btn.style.background='var(--page-accent-bg)';document.getElementById('song-stage-display').innerHTML='<p style="margin:0;font-size:.88rem;color:#4A5E78;line-height:1.6;">'+songStages[key]+'</p>';}
+
+  // ══════════════════════════════════════════
+  // ANIMATION ENGINE — Poems Page
+  // ══════════════════════════════════════════
+  document.addEventListener('DOMContentLoaded', function() {
+    var stagger = 120;
+
+    // 1. Every theology-card gets section-level entrance
+    document.querySelectorAll('.theology-card').forEach(function(card) {
+      card.classList.add('anim-section');
+    });
+
+    // 2. Echo cards — staggered
+    document.querySelectorAll('.echo-card').forEach(function(card, i) {
+      card.classList.add('anim-card');
+      card.style.transitionDelay = (i % 9) * stagger + 'ms';
+    });
+
+    // 3. Chiasm lines — staggered flow
+    document.querySelectorAll('.chiasm-line, .chiasm-center').forEach(function(line, i) {
+      line.classList.add('anim-flow');
+      line.style.transitionDelay = i * 100 + 'ms';
+    });
+
+    // 4. Transition steps — sequential flow
+    document.querySelectorAll('.trans-step').forEach(function(el, i) {
+      el.classList.add('anim-flow');
+      el.style.transitionDelay = i * 120 + 'ms';
+    });
+
+    // 5. Timeline buttons — staggered
+    document.querySelectorAll('.stl-btn').forEach(function(btn, i) {
+      btn.classList.add('anim-card');
+      btn.style.transitionDelay = i * 100 + 'ms';
+    });
+
+    // 6. Table rows
+    document.querySelectorAll('table tbody tr').forEach(function(row, i) {
+      row.classList.add('anim-row');
+      row.style.transitionDelay = i * stagger + 'ms';
+    });
+
+    // 7. Navigation cards
+    document.querySelectorAll('#navigation a[style]').forEach(function(card, i) {
+      card.classList.add('anim-card');
+      card.style.transitionDelay = i * stagger + 'ms';
+    });
+
+    // 8. Panels
+    document.querySelectorAll('.panel').forEach(function(panel, i) {
+      panel.classList.add('anim-card');
+      panel.style.transitionDelay = i * stagger + 'ms';
+    });
+
+    // IntersectionObserver
+    var selector = '.anim-card,.anim-section,.anim-flow,.anim-row';
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('anim-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll(selector).forEach(function(el) {
+      observer.observe(el);
+    });
+
+    console.log('Poems page animation engine: active (' + document.querySelectorAll(selector).length + ' elements)');
+  });
   </script>
 </body>
 </html>
