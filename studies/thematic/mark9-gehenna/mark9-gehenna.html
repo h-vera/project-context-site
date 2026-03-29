@@ -596,10 +596,142 @@
     .page-footer { background: var(--panel); border-top: 1px solid var(--border); padding: 40px 24px; text-align: center; }
     .page-footer p { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: rgba(245,240,232,0.38); margin-bottom: 0; }
 
-    /* ── ANIMATIONS ──────────────────────────────────────── */
+    /* ── ANIMATIONS — extending global-v2.css ─────────────── */
+
+    /* Hero entrance (page-specific) */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(16px); }
       to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Content slide-in — matches global-v2 fadeSlideLeft */
+    @keyframes fadeSlideLeft {
+      from { opacity: 0; transform: translateX(-24px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    /* Panel fade — matches global-v2 slideDown */
+    @keyframes panelFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Arc item stagger */
+    @keyframes arcItemIn {
+      from { opacity: 0; transform: translateX(-16px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ── ANIMATE ON SCROLL — charcoal override ─────────────── */
+    /* global-v2 sets opacity:0 / translateY(30px) / transition 0.6s */
+    /* We keep that but ensure it works on dark bg */
+    .animate-on-scroll { opacity: 0; transform: translateY(22px); transition: opacity 0.55s ease, transform 0.55s ease; }
+    .animate-on-scroll.visible { opacity: 1; transform: translateY(0); }
+
+    /* Panel content animates when tab becomes active */
+    .panel.active .content-wrap { animation: panelFadeIn 0.38s ease-out both; }
+
+    /* ── STAGGERED TIMELINE ITEMS — from global-v2 pattern ─── */
+    /* Arc items (timeline on cream background) */
+    .arc-item {
+      opacity: 0;
+      transform: translateX(-16px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+    .arc-item.visible { opacity: 1; transform: translateX(0); }
+
+    /* Stagger delays — mirrors global-v2 timeline-item nth-child pattern */
+    .arc-item:nth-child(1) { transition-delay: 0.05s; }
+    .arc-item:nth-child(2) { transition-delay: 0.12s; }
+    .arc-item:nth-child(3) { transition-delay: 0.19s; }
+    .arc-item:nth-child(4) { transition-delay: 0.26s; }
+    .arc-item:nth-child(5) { transition-delay: 0.33s; }
+    .arc-item:nth-child(6) { transition-delay: 0.40s; }
+    .arc-item:nth-child(7) { transition-delay: 0.47s; }
+    .arc-item:nth-child(8) { transition-delay: 0.54s; }
+    .arc-item:nth-child(9) { transition-delay: 0.61s; }
+
+    /* Chiasm rows slide in */
+    .chiasm-row {
+      opacity: 0;
+      transform: translateX(-12px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .chiasm-row.visible { opacity: 1; transform: translateX(0); }
+    .chiasm-row:nth-child(1) { transition-delay: 0.04s; }
+    .chiasm-row:nth-child(2) { transition-delay: 0.10s; }
+    .chiasm-row:nth-child(3) { transition-delay: 0.16s; }
+    .chiasm-row:nth-child(4) { transition-delay: 0.22s; }
+    .chiasm-row:nth-child(5) { transition-delay: 0.28s; }
+    .chiasm-row:nth-child(6) { transition-delay: 0.34s; }
+
+    /* ── TILE / CARD HOVER EFFECTS — from global-v2 pattern ── */
+    /* Dark tiles: word-study, chiasm, synoptic, triad, split-panel */
+    .word-study,
+    .chiasm,
+    .intertext,
+    .myth-bust,
+    .translation-note {
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+    .word-study:hover,
+    .chiasm:hover,
+    .intertext:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.28);
+    }
+
+    /* Triad tiles individual hover */
+    .triad-item {
+      transition: background 0.22s ease, transform 0.22s ease;
+    }
+    .triad-item:hover {
+      background: #2e2e2e;
+      transform: translateY(-2px);
+    }
+
+    /* Synoptic columns */
+    .synoptic-col {
+      transition: background 0.2s ease;
+    }
+    .synoptic-col:hover { background: #2a2a2a; }
+
+    /* Split panels */
+    .split-col {
+      transition: background 0.2s ease;
+    }
+    .split-col:hover { background: #2a2a2a; }
+
+    /* Fire thread items */
+    .fire-item {
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .fire-item:hover {
+      background: #2e2e2e;
+      transform: translateY(-2px);
+    }
+
+    /* Arc items hover — on cream bg */
+    .arc-item:hover .arc-label { color: var(--gold); }
+
+    /* ── READING PROGRESS & BACK-TO-TOP — color overrides ──── */
+    /* global-v2 handles positioning; we override gradient colors */
+    .reading-progress {
+      background: linear-gradient(90deg, var(--gold-mid), var(--gold-lt)) !important;
+    }
+    .back-to-top {
+      background: var(--panel) !important;
+      color: var(--gold-lt) !important;
+      border: 1px solid var(--border) !important;
+      box-shadow: none !important;
+      width: 40px !important;
+      height: 40px !important;
+    }
+    .back-to-top:hover {
+      background: var(--gold) !important;
+      color: var(--deep) !important;
+      transform: translateY(-3px) !important;
+      box-shadow: 0 6px 16px rgba(184,136,42,0.3) !important;
     }
 
     /* ── BIBLIOGRAPHY ────────────────────────────────────── */
@@ -672,7 +804,7 @@
   <a href="#main-content" class="skip-link" style="position:absolute;left:-999px;top:auto;background:var(--gold);color:var(--deep);padding:8px 16px;font-family:var(--mono);font-size:12px;z-index:10000;text-decoration:none;">Skip to main content</a>
 
   <!-- Reading Progress Bar -->
-  <div class="reading-progress" id="reading-progress" style="position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,var(--gold-mid),var(--gold-lt));z-index:9999;transition:width 0.1s linear;"></div>
+  <div class="reading-progress" id="reading-progress"></div>
 
   <!-- Navigation Component — injected by nav-component.js -->
 
@@ -1890,7 +2022,7 @@
   </main>
 
   <!-- Back to Top Button -->
-  <a href="#main-content" class="back-to-top" id="back-to-top" aria-label="Back to top" style="position:fixed;bottom:28px;right:24px;width:40px;height:40px;background:var(--panel);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);text-decoration:none;font-size:1rem;opacity:0;pointer-events:none;transition:opacity 0.2s ease,background 0.2s ease;z-index:100;">↑</a>
+  <a href="#main-content" class="back-to-top" id="back-to-top" aria-label="Back to top">↑</a>
 
   <!-- Mobile Menu Overlay -->
   <div class="mobile-menu-overlay"></div>
@@ -1912,33 +2044,69 @@
   <script src="/assets/js/character-page-v5-8.js" defer></script>
 
   <script>
-    // Reading progress bar
+    // ── READING PROGRESS (global-v2 pattern) ─────────────────
     const bar = document.getElementById('reading-progress');
     const btn = document.getElementById('back-to-top');
     window.addEventListener('scroll', () => {
       const total = document.documentElement.scrollHeight - window.innerHeight;
       if (bar) bar.style.width = (total > 0 ? (window.scrollY / total) * 100 : 0) + '%';
-      if (btn) { btn.style.opacity = window.scrollY > 400 ? '1' : '0'; btn.style.pointerEvents = window.scrollY > 400 ? 'auto' : 'none'; }
-    });
+      // back-to-top uses global-v2 .visible class
+      if (btn) btn.classList.toggle('visible', window.scrollY > 400);
+    }, { passive: true });
     btn && btn.addEventListener('click', e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
-    // Tab switching
+    // ── INTERSECTION OBSERVER — animate-on-scroll + arc-item + chiasm-row ──
+    // Matches global-v2 pattern; extended to dark-panel elements
+    const observerOpts = { threshold: 0.08, rootMargin: '0px 0px -40px 0px' };
+
+    const scrollObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          scrollObserver.unobserve(e.target);
+        }
+      });
+    }, observerOpts);
+
+    function observeAnimated(root) {
+      root.querySelectorAll('.animate-on-scroll, .arc-item, .chiasm-row').forEach(el => {
+        // Reset then observe (handles re-observation when tab switches)
+        el.classList.remove('visible');
+        scrollObserver.observe(el);
+      });
+    }
+
+    // ── TAB SWITCHING — with panel fadeIn ────────────────────
     const tabs   = document.querySelectorAll('.tab-btn');
     const panels = document.querySelectorAll('.panel');
+
+    function activateTab(target) {
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+
+      const activeTab = document.querySelector(`.tab-btn[data-tab="${target}"]`);
+      const activePanel = document.getElementById('panel-' + target);
+
+      if (activeTab) activeTab.classList.add('active');
+      if (activePanel) {
+        activePanel.classList.add('active');
+        // Trigger animations inside newly visible panel
+        requestAnimationFrame(() => observeAnimated(activePanel));
+      }
+      window.scrollTo({ top: document.querySelector('.tab-bar').offsetTop - 2, behavior: 'smooth' });
+    }
+
     tabs.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const target = btn.dataset.tab;
-        tabs.forEach(t => t.classList.remove('active'));
-        panels.forEach(p => p.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById('panel-' + target).classList.add('active');
-        window.scrollTo({ top: document.querySelector('.tab-bar').offsetTop - 2, behavior: 'smooth' });
-      });
+      btn.addEventListener('click', () => activateTab(btn.dataset.tab));
     });
 
+    // ── INIT — observe elements in the default active panel ───
     document.addEventListener('DOMContentLoaded', () => {
+      const activePanel = document.querySelector('.panel.active');
+      if (activePanel) requestAnimationFrame(() => observeAnimated(activePanel));
+
       console.log('Project Context — Thematic Study v5.8.1 initialized');
-      console.log('Page: Where the Worm Does Not Die | Mark 9:42–50 · Isaiah 66 · Daniel 12');
+      console.log('Animations: global-v2 integrated | Page: Where the Worm Does Not Die');
     });
   </script>
 
