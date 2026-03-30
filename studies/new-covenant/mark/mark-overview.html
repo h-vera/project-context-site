@@ -133,28 +133,48 @@
     /* ── Hero ── */
     .hero {
       position: relative;
-      background: var(--grad-hero);
+      background: linear-gradient(180deg, #0a0a0a 0%, #130a1e 100%);
       color: #f0e8ff;
       padding: 90px 24px 72px;
       overflow: hidden;
     }
 
+    /* Animated gradient orbs */
     .hero::before {
       content: '';
       position: absolute;
       inset: 0;
       background:
+        radial-gradient(ellipse at 20% 30%, rgba(114,9,183,0.38) 0%, transparent 48%),
+        radial-gradient(ellipse at 78% 20%, rgba(225,29,72,0.28) 0%, transparent 42%),
+        radial-gradient(ellipse at 50% 80%, rgba(0,180,216,0.16) 0%, transparent 52%);
+      animation: heroOrbs 12s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes heroOrbs {
+      0%   { opacity: 1;    transform: scale(1) translateY(0px); }
+      33%  { opacity: 0.85; transform: scale(1.04) translateY(-8px); }
+      66%  { opacity: 0.92; transform: scale(0.97) translateY(5px); }
+      100% { opacity: 1;    transform: scale(1.02) translateY(-3px); }
+    }
+
+    /* Subtle grid overlay — static */
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background:
         repeating-linear-gradient(
           90deg,
-          rgba(255,255,255,.015) 0px,
-          rgba(255,255,255,.015) 1px,
+          rgba(255,255,255,.012) 0px,
+          rgba(255,255,255,.012) 1px,
           transparent 1px,
           transparent 60px
         ),
         repeating-linear-gradient(
           0deg,
-          rgba(255,255,255,.015) 0px,
-          rgba(255,255,255,.015) 1px,
+          rgba(255,255,255,.012) 0px,
+          rgba(255,255,255,.012) 1px,
           transparent 1px,
           transparent 60px
         );
@@ -405,10 +425,16 @@
     }
 
     .dark-card h3, .dark-card h4 { color: #f5f0ff; }
-    .dark-card .mini-label { color: #c4b5fd; }
-    .dark-card p, .dark-card li { color: rgba(240,232,255,.82); }
+    .dark-card .mini-label {
+      background: linear-gradient(135deg, #c084fc, #fb7185);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .dark-card h3, .dark-card h4 { color: #f5f0ff; }
+    .dark-card p, .dark-card li { color: rgba(240,232,255,.88); }
 
-    /* ── Mini Label ── */
+    /* Mini Label — gradient on light backgrounds, solid on dark */
     .mini-label {
       font-family: var(--mono);
       text-transform: uppercase;
@@ -420,6 +446,10 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
+
+    /* Override gradient clip for dark-background contexts */
+    .chiasm-card .mini-label,
+    .word-card .word-transliteration { -webkit-text-fill-color: initial; }
 
     /* ── Grid Systems ── */
     .grid-2 {
@@ -1377,6 +1407,7 @@
 
   <!-- ── HERO ── -->
   <header class="hero">
+    <div class="hero-grid"></div>
     <div class="hero-inner">
       <div class="eyebrow">Project Context · New Covenant · Gospel Study Guide</div>
       <h1>The Gospel According to <em>Mark</em></h1>
@@ -2457,180 +2488,432 @@
     <section class="panel-section" id="panel-resources">
       <div class="kicker">Study Library</div>
       <h2>Resources for Reading Mark</h2>
-      <p class="lede">Books drawn from Tim Mackie's personal library and teaching bibliography, organized by how they serve the Mark study guide. This is not an exhaustive list — it is a curated starting point built around the literary, theological, and Second Temple approaches that shape Project Context studies.</p>
+      <p class="lede">Sources organized by category using the Project Context 5.8.1 bibliography format. BibleProject video and classroom resources are listed first as they provide the primary framing methodology. Academic commentaries and specialized studies follow. All sources are cited in Chicago Manual of Style, 17th edition.</p>
 
-      <!-- Commentaries on Mark -->
-      <h3 style="margin: 32px 0 14px;">Commentaries on Mark</h3>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>Title &amp; Author</th><th>Why It Matters for This Study</th><th>Series / Tag</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>The Gospel of Mark</strong><br><span style="font-size:.9rem;color:#555;">R. T. France (2014)</span></td>
-              <td>The best single-volume Greek-text commentary on Mark. Rigorous exegesis of every passage; essential for the Gehenna material, the passion chiasm, and the royal-priest theme. France's handling of Mark's literary structure is exceptional.</td>
-              <td><span class="pill">Mark Commentary</span> <span class="pill rose">Firstborn / Last Will Be First Series</span></td>
-            </tr>
-            <tr>
-              <td><strong>Mark 8–16</strong> (Anchor Yale Bible 27A)<br><span style="font-size:.9rem;color:#555;">Joel Marcus (2009)</span></td>
-              <td>Indispensable for Act 2 and the passion narrative. Marcus's intertextual work connecting Mark to Isaiah and Second Temple texts is directly behind the Isaiah 66:24 material in this guide. Essential for Gehenna, σχίζω, and the passion chiasm.</td>
-              <td><span class="pill">Mark Commentary</span></td>
-            </tr>
-            <tr>
-              <td><strong>The Gospel of Mark: A Commentary on the Greek Text</strong><br><span style="font-size:.9rem;color:#555;">William L. Lane (1974)</span></td>
-              <td>Classic NICNT commentary; theologically rich and still valuable for narrative flow, the Messianic secret, and the discipleship section. A good second opinion alongside France.</td>
-              <td><span class="pill">Mark Commentary</span></td>
-            </tr>
-            <tr>
-              <td><strong>The Gospel of Mark: A Socio-Rhetorical Commentary</strong><br><span style="font-size:.9rem;color:#555;">Ben Witherington III (2001)</span></td>
-              <td>Strong on the socio-rhetorical context of Mark — helpful for understanding the Roman audience, honor/shame dynamics, and the royal-priestly framework that shapes the whole narrative.</td>
-              <td><span class="pill">Mark Commentary</span> <span class="pill blue">Royal Priesthood Series</span></td>
-            </tr>
-            <tr>
-              <td><strong>The Gospel According to Saint Mark</strong><br><span style="font-size:.9rem;color:#555;">Morna D. Hooker (1991)</span></td>
-              <td>Accessible and theologically astute. Hooker's commentary is the source of some of the best observations in this guide about the disciples' misunderstanding pattern and the "little ones" material.</td>
-              <td><span class="pill">Mark Commentary</span></td>
-            </tr>
-            <tr>
-              <td><strong>Mark</strong> (Understanding the Bible Commentary)<br><span style="font-size:.9rem;color:#555;">Larry W. Hurtado (1989)</span></td>
-              <td>Concise and accessible entry point. Good for readers coming to Mark scholarship for the first time.</td>
-              <td><span class="pill">Mark Commentary</span></td>
-            </tr>
-            <tr>
-              <td><strong>A Theology of Mark's Gospel</strong><br><span style="font-size:.9rem;color:#555;">David E. Garland (2015)</span></td>
-              <td>Part of the Biblical Theology of the New Testament series. Excellent for understanding how Mark's individual themes integrate into a coherent theological whole — especially the Son of God title, the cross, and discipleship.</td>
-              <td><span class="pill">Biblical Theology</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <!-- ── BIBLEPROJECT VIDEO & CLASSROOM ── -->
+      <details class="bibliography-section enhanced animate-on-scroll" open>
+        <summary>
+          <div class="bibliography-header">
+            <div class="bibliography-inner">
+              <span class="bibliography-icon">
+                <img src="/assets/images/icons/BP_icon-blu.png" alt="BibleProject" style="width:28px;height:28px;object-fit:contain;vertical-align:middle;filter:brightness(0) invert(1);">
+              </span>
+              <div class="bibliography-text">
+                <h3 class="bibliography-title">BibleProject Video &amp; Classroom Resources</h3>
+                <p class="bibliography-subtitle">Primary framing resources — the interpretive methodology behind this guide</p>
+              </div>
+              <div class="expand-indicator">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </div>
+            </div>
+          </div>
+        </summary>
+        <div class="bibliography-content">
 
-      <!-- Son of Man and Christology -->
-      <h3 style="margin: 32px 0 14px;">Son of Man &amp; Christology</h3>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>Title &amp; Author</th><th>Relevance</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>The Son of Man in Mark</strong><br><span style="font-size:.9rem;color:#555;">Morna D. Hooker (1967)</span></td>
-              <td>Definitive study of the Son of Man background in Daniel and its deployment in Mark. Essential reading alongside the wordplay tab's Son of Man section. Hooker argues carefully for the Danielic origin and the authority → suffering → glory trajectory traced in this guide.</td>
-            </tr>
-            <tr>
-              <td><strong>Daniel's Son of Man in Mark</strong><br><span style="font-size:.9rem;color:#555;">Robert S. Snow (2016)</span></td>
-              <td>Argues that the Son of Man in Mark is doing constructive work on the Jerusalem temple — redefining its function and forming a new covenant community around Jesus as the Danielic figure. Directly relevant to the temple confrontation sections (11–13) and the Psalm 110 chiasm.</td>
-            </tr>
-            <tr>
-              <td><strong>The Preexistent Son</strong><br><span style="font-size:.9rem;color:#555;">Simon J. Gathercole (2006)</span></td>
-              <td>Recovers the "I have come" sayings in Mark as expressions of divine mission and preexistence — deepens the Christological weight of Mark 10:45 and the royal-priestly themes.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+          <div class="source-category">
+            <h4>Gospel of Mark</h4>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>The Bible Project.</strong> "The Gospel of Mark Summary: A Complete Animated Overview." YouTube, BibleProject, n.d. Available at <a href="https://bibleproject.com/videos/mark" target="_blank" rel="noopener" style="color:inherit;">bibleproject.com/videos/mark</a>
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Overview</span>
+                <span class="usage-tag">Structure</span>
+                <span class="usage-tag">Themes</span>
+                <span class="usage-note">Mark's three-act movement, the suffering servant Christology from Isaiah 53, the disciples' misunderstanding pattern, Act 2 on the way to Jerusalem, the abrupt ending at 16:8</span>
+              </div>
+            </div>
+          </div>
 
-      <!-- Isaiah and Intertextual -->
-      <h3 style="margin: 32px 0 14px;">Isaiah, Intertextual Connections &amp; Kingdom</h3>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>Title &amp; Author</th><th>Relevance</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Isaiah's New Exodus in Mark</strong><br><span style="font-size:.9rem;color:#555;">Rikk Watts (2001)</span></td>
-              <td>The single most important book for understanding Mark's use of Isaiah. Watts demonstrates that Mark's entire structure is shaped by Isaiah 40–66's new exodus narrative: the messenger (John/Isa 40:3), the way (ὁδός), the proclamation of good news (εὐαγγέλιον / Isa 52:7), the healing of blindness, and the suffering servant. Essential background for the Wordplay tab's ὁδός entry and the σχίζω inclusio.</td>
-            </tr>
-            <tr>
-              <td><strong>Echoes of Scripture in the Gospels</strong><br><span style="font-size:.9rem;color:#555;">Richard B. Hays (2017)</span></td>
-              <td>Hays applies his metalepsis methodology to all four Gospels. The Mark chapter is directly relevant to this guide — especially his work on how Mark's OT citations function as more than proof texts, evoking whole narrative contexts from Israel's scripture.</td>
-            </tr>
-            <tr>
-              <td><strong>How God Became King</strong><br><span style="font-size:.9rem;color:#555;">N. T. Wright (2016)</span></td>
-              <td>Argues that the four Gospels are best read as accounts of how God's long-promised kingdom arrived through Jesus. Directly relevant to the Kingdom theme in this guide and the connection between the kingdom announcement (Mk 1:14–15) and Isaiah's herald theology.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+          <div class="source-category">
+            <h4>Royal Priest Theme</h4>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>The Bible Project.</strong> "Jesus the Royal Priest." <em>Royal Priest</em> theme series. YouTube, BibleProject, n.d. Available at <a href="https://bibleproject.com/videos/jesus-the-royal-priest" target="_blank" rel="noopener" style="color:inherit;">bibleproject.com/videos/jesus-the-royal-priest</a><br>
+                <span style="font-size:.88rem;color:var(--text-gray);">Mark Overview Poster (printable): <a href="https://d1bsmz3sdihplr.cloudfront.net/media/Posters%20Download/44-Mark-FNL.jpg" target="_blank" rel="noopener" style="color:inherit;">Download 44-Mark-FNL.jpg</a></span>
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Themes</span>
+                <span class="usage-tag">Royal Priest Lens</span>
+                <span class="usage-note">Baptism as royal-priestly ordination (Ps 2 + Gen 22 + Isa 42); Jesus acting as priest outside the temple system; Psalm 110 claim; curtain torn (σχίζω) as Eden-blessing released; connection of Mark 1:9–11, 12:35–37, and 15:38</span>
+              </div>
+            </div>
+          </div>
 
-      <!-- Gospel Reading and Methodology -->
-      <h3 style="margin: 32px 0 14px;">Gospel Reading Methodology</h3>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>Title &amp; Author</th><th>Relevance</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Reading the Gospels Wisely</strong><br><span style="font-size:.9rem;color:#555;">Jonathan T. Pennington (2012)</span></td>
-              <td>The best introductory book for approaching the Gospels as theological narratives. Covers genre, historical context, literary approach, and theological reading. Recommended as a first read before diving into Mark-specific commentaries.</td>
-            </tr>
-            <tr>
-              <td><strong>The Gospels as Stories</strong><br><span style="font-size:.9rem;color:#555;">Jeannine K. Brown (2020)</span></td>
-              <td>A narrative-critical introduction to all four Gospels. Useful for the structural and literary observations behind this guide's Chiasms and Wordplay tabs.</td>
-            </tr>
-            <tr>
-              <td><strong>The Disciples According to Mark</strong><br><span style="font-size:.9rem;color:#555;">C. Clifton Black (2012)</span></td>
-              <td>Focused study of Markan redaction as it relates to the disciples. Directly relevant to the blind-man chiasm analysis and the three-fold misunderstanding pattern traced in the Structure tab.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+          <div class="source-category">
+            <h4>Gehenna Word Study</h4>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>The Bible Project.</strong> "Gehenna." <em>Word Study</em> series. YouTube, BibleProject, n.d. Available at bibleproject.com/explore/video/gehenna/
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Wordplay &amp; Style</span>
+                <span class="usage-tag">Chiasms</span>
+                <span class="usage-note">Gehenna as proper name and prophetic image; the fire of God's justice consuming evil from creation; the logic of reversal — the fires kings lit to consume children turn to consume those who lit them; Jesus's use of Gehenna in Mark 9:43–48 to describe God's response to causing the little ones to stumble</span>
+              </div>
+            </div>
+          </div>
 
-      <!-- Messianic Torah background -->
-      <h3 style="margin: 32px 0 14px;">Torah, Kingdom Background &amp; Jesus' Teaching Method</h3>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>Title &amp; Author</th><th>Relevance</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Messianic Torah Class Notes</strong><br><span style="font-size:.9rem;color:#555;">Tim Mackie, BibleProject Classroom (2024–25)</span></td>
-              <td>245-page classroom notes on Matthew 5–7 (Sermon on the Mount). Directly relevant to Mark because: (1) Sessions 1–2 provide the philosophical and prophetic background for Jesus-as-teacher that underlies Mark's narrative; (2) Session 7 contains Mackie's full Gehenna exegesis paralleling the Mark 9 study; (3) Session 5 covers the salt/covenant connection directly relevant to Mark 9:49–50; (4) the Kingdom background from Daniel 7 and Isaiah anchors Mark 1:14–15.</td>
-            </tr>
-            <tr>
-              <td><strong>Jesus the Great Philosopher</strong><br><span style="font-size:.9rem;color:#555;">Jonathan T. Pennington (2020)</span></td>
-              <td>Argues that Jesus inhabited the ancient philosophical tradition as a teacher of the "good life" — directly relevant to Mark's portrait of Jesus as one who teaches with authority and forms disciples around his own person rather than citing a lineage.</td>
-            </tr>
-            <tr>
-              <td><strong>Heaven and Earth in the Gospel of Matthew</strong><br><span style="font-size:.9rem;color:#555;">Jonathan T. Pennington (2009)</span></td>
-              <td>Argues that Matthew consistently uses "kingdom of the skies" (not "kingdom of heaven") as a deliberate contrast between the heavenly realm and the earthly — directly informs the heaven-and-earth framework used in the Mark 9 thematic study and the Themes tab.</td>
-            </tr>
-            <tr>
-              <td><strong>The Sermon on the Mount and Human Flourishing</strong><br><span style="font-size:.9rem;color:#555;">Jonathan T. Pennington (2017)</span></td>
-              <td>The best sustained treatment of the Beatitudes as apocalyptic-wisdom reversal announcements. The Beatitude background (who has the "good life"?) runs in exact parallel to Mark's repeated pattern of the last being first and the child in the center — the same upside-down kingdom logic.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+          <div class="source-category">
+            <h4>Classroom — Messianic Torah &amp; Rise of the Messiah</h4>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Mackie, Timothy.</strong> <em>The Messianic Torah: Class Notes.</em> BibleProject Classroom, 2024–25. 245 pp. Available at <a href="https://bibleproject.com/classroom/messianic-torah/downloads" target="_blank" rel="noopener" style="color:inherit;">bibleproject.com/classroom/messianic-torah/downloads</a>
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Themes</span>
+                <span class="usage-tag">Reading Tools</span>
+                <span class="usage-tag">Resources</span>
+                <span class="usage-note">Session 1–2: Jesus as philosopher, prophet, and new Moses — the triple role underlying Mark's portrait of Jesus as authoritative teacher (Mk 1:22; 7:28–29); Session 5: salt as covenant substance (Lev 2:13; Num 18:19) directly relevant to Mark 9:49–50; Session 7: full Gehenna exegesis including Valley of Ben-Hinnom history, Isaiah 66:24, and the three competing Second Temple streams; Kingdom background from Daniel 7 anchoring Mark 1:14–15</span>
+              </div>
+            </div>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Mackie, Timothy.</strong> "Heaven and Earth." <em>BibleProject Classroom: Genesis 1.</em> BibleProject, last updated October 8, 2024. Available at bibleproject.com/classroom/
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Themes</span>
+                <span class="usage-note">Three-space cosmological framework (shamayim / ʾerets / mayim); temple as overlap of heaven and earth; shabbat and nuakh — the Sabbath with no end; Jesus as the decisive overlap — healings, forgiveness, and exorcisms as kingdom-arrival events; the heaven-and-earth frame behind the Themes tab and the Mark 9 thematic study</span>
+              </div>
+            </div>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Mackie, Timothy.</strong> "Session 8: Adultery and Lust." <em>BibleProject Classroom: The Messianic Torah.</em> BibleProject, 2024. Available at bibleproject.com/classroom/messianic-torah/sessions/8
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Wordplay &amp; Style</span>
+                <span class="usage-note">Eye-hand-foot as recognized Hebrew biblical idiom for the whole person's orientation; the Genesis 3 see-desire-take sequence (khamad / epithumeō) as the root pattern behind Mark 9:43–48 and the body-part triad; sustained stare as mental habit formation; community environment as discipleship concern</span>
+              </div>
+            </div>
+          </div>
 
-      <!-- Primary Sources -->
-      <h3 style="margin: 32px 0 14px;">Primary Greek &amp; Hebrew Sources</h3>
-      <div class="grid-2">
-        <div class="card tight animate-on-scroll">
-          <div class="mini-label">Greek New Testament</div>
-          <ul class="std">
-            <li><strong>Nestle-Aland Novum Testamentum Graece</strong>, 28th ed. — Greek text for all wordplay entries (εὐθύς, ὁδός, σχίζω, ἄρτος, ἀπαρνέομαι, περιβλέπομαι)</li>
-            <li><strong>BDAG</strong> (Bauer-Danker-Arndt-Gingrich) — Greek lexicon; the Gehenna / Hades / Tartarus distinction</li>
-            <li><strong>Theological Dictionary of the New Testament</strong> (Kittel, 10 vols.) — word-study depth for Son of Man, kingdom, and covenant vocabulary</li>
-          </ul>
+          <div class="source-category">
+            <h4>Thematic Studies Referenced in This Guide</h4>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>The Bible Project.</strong> "The Book of Isaiah Summary: Part 1 (1–39) and Part 2 (40–66)." YouTube, BibleProject, n.d. Available at bibleproject.com/explore/video/isaiah-1-39/ and bibleproject.com/explore/video/isaiah-40-66/
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Wordplay &amp; Style</span>
+                <span class="usage-tag">Themes</span>
+                <span class="usage-note">The purifying fire of judgment (Isaiah 1, 6); the suffering servant and the servants/wicked division (Isaiah 49–66); Isaiah 65–66 new creation frame; the herald announcing God's return as King (Isa 40:9; 52:7) — the εὐαγγέλιον source behind Mark 1:1, 1:14–15</span>
+              </div>
+            </div>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>The Bible Project.</strong> "The Book of Daniel" and "Daniel, Second Edition." YouTube, BibleProject, n.d. Available at bibleproject.com/explore/video/daniel/
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Wordplay &amp; Style</span>
+                <span class="usage-tag">Themes</span>
+                <span class="usage-note">The Son of Man figure in Daniel 7:13–14 as source of the ὁ υἱὸς τοῦ ἀνθρώπου trajectory in Mark; Daniel 7:22 LXX as the source text behind Mark 1:15's kingdom announcement; Daniel as new Adam pointing to the Danielic Son of Man</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="citation-note">
+            <p><strong>On BibleProject sources:</strong> Video transcripts and classroom notes are used as primary framing resources reflecting Tim Mackie's methodology of literary design, canonical reading, Hebrew wordplay, and intertextual connections — the interpretive approach that shapes Project Context studies.</p>
+          </div>
         </div>
-        <div class="card tight animate-on-scroll">
-          <div class="mini-label">Hebrew OT &amp; Second Temple</div>
-          <ul class="std">
-            <li><strong>Biblia Hebraica Stuttgartensia</strong> — Hebrew text for Isaiah 66:24 (deraon, pegarim), Daniel 12:2, and the ὁδός / דֶּרֶךְ connection</li>
-            <li><strong>The Old Testament Pseudepigrapha</strong>, 2 vols. (Charlesworth, ed.) — 1 Enoch 26–27 on Gehenna; Second Temple background throughout</li>
-            <li><strong>The Dead Sea Scrolls Study Edition</strong> (García Martínez) — Qumran parallels for messianic expectation and the two-paths motif</li>
-          </ul>
-        </div>
-      </div>
+      </details>
 
-      <div class="callout" style="margin-top: 28px;">
-        <div class="mini-label">Reading Priority</div>
-        <p>If you are new to Mark scholarship, start with <strong>Pennington's Reading the Gospels Wisely</strong> for methodology, then read <strong>France's NIGTC commentary</strong> alongside the Gospel itself. Add <strong>Watts' Isaiah's New Exodus in Mark</strong> when you reach the Wordplay and Themes tabs — it will transform how you read ὁδός, εὐαγγέλιον, and σχίζω. For the Gehenna material, <strong>Marcus's Anchor Yale commentary on Mark 8–16</strong> and Mackie's <strong>Messianic Torah notes, Session 7</strong> should be read in parallel with the existing Mark 9 thematic study at Project Context.</p>
-      </div>
+      <!-- ── MARK COMMENTARIES ── -->
+      <details class="bibliography-section enhanced animate-on-scroll">
+        <summary>
+          <div class="bibliography-header">
+            <div class="bibliography-inner">
+              <span class="bibliography-icon">📖</span>
+              <div class="bibliography-text">
+                <h3 class="bibliography-title">Mark Commentaries</h3>
+                <p class="bibliography-subtitle">Primary exegetical sources for the Gospel of Mark</p>
+              </div>
+              <div class="expand-indicator">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </div>
+            </div>
+          </div>
+        </summary>
+        <div class="bibliography-content">
+          <div class="source-category">
+            <h4>Major Academic Commentaries</h4>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>France, R. T.</strong> <em>The Gospel of Mark: A Commentary on the Greek Text.</em> New International Greek Testament Commentary. Grand Rapids: Eerdmans, 2014.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Structure</span>
+                <span class="usage-tag">Chiasms</span>
+                <span class="usage-tag">Themes</span>
+                <span class="usage-note">Best single-volume Greek-text commentary; exegesis of the passion chiasm, the royal-priest framework, Gehenna, and Mark's three-act literary structure; primary source for the Firstborn / Last Will Be First series</span>
+              </div>
+            </div>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Marcus, Joel.</strong> <em>Mark 8–16: A New Translation with Introduction and Commentary.</em> Anchor Yale Bible 27A. New Haven: Yale University Press, 2009.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Chiasms</span>
+                <span class="usage-tag">Wordplay &amp; Style</span>
+                <span class="usage-tag">Themes</span>
+                <span class="usage-note">Indispensable for Act 2 and the passion narrative; intertextual connections to Isaiah and Second Temple texts behind the Isaiah 66:24 / Gehenna material; essential for σχίζω and the passion trial chiasm</span>
+              </div>
+            </div>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Lane, William L.</strong> <em>The Gospel according to Mark: The English Text With Introduction, Exposition, and Notes.</em> New International Commentary on the New Testament. Grand Rapids: Eerdmans, 1974.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Structure</span>
+                <span class="usage-tag">Themes</span>
+                <span class="usage-note">Classic NICNT commentary; theologically rich for narrative flow, the Messianic secret, and the discipleship section</span>
+              </div>
+            </div>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Witherington III, Ben.</strong> <em>The Gospel of Mark: A Socio-Rhetorical Commentary.</em> Grand Rapids: Eerdmans, 2001.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Themes</span>
+                <span class="usage-tag">Resources</span>
+                <span class="usage-note">Roman audience, honor/shame dynamics, and the royal-priestly framework; tagged to the Royal Priesthood theme series</span>
+              </div>
+            </div>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Hooker, Morna D.</strong> <em>The Gospel According to Saint Mark.</em> Black's New Testament Commentary. London: A&amp;C Black, 1991.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Structure</span>
+                <span class="usage-tag">Chiasms</span>
+                <span class="usage-note">Disciples' misunderstanding pattern, the "little ones" material, and the discipleship section in Act 2</span>
+              </div>
+            </div>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Garland, David E.</strong> <em>A Theology of Mark's Gospel: Good News about Jesus the Messiah, the Son of God.</em> Biblical Theology of the New Testament Series. Grand Rapids: Zondervan, 2015.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Themes</span>
+                <span class="usage-tag">Overview</span>
+                <span class="usage-note">How Mark's individual themes integrate into a coherent theological whole — Son of God title arc, the cross, and discipleship</span>
+              </div>
+            </div>
+          </div>
+          <div class="source-category">
+            <h4>Son of Man &amp; Christology</h4>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Hooker, Morna D.</strong> <em>The Son of Man in Mark: A Study of the Background of the Term "Son of Man" and Its Use in St. Mark's Gospel.</em> London: SPCK, 1967.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Wordplay &amp; Style</span>
+                <span class="usage-tag">Themes</span>
+                <span class="usage-note">Definitive study of the Danielic Son of Man background; the authority → suffering → glory trajectory traced in the Wordplay tab's ὁ υἱὸς τοῦ ἀνθρώπου entry</span>
+              </div>
+            </div>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Snow, Robert S.</strong> <em>Daniel's Son of Man in Mark: A Redefinition of the Jerusalem Temple and the Formation of a New Covenant Community.</em> 2016.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Chiasms</span>
+                <span class="usage-tag">Themes</span>
+                <span class="usage-note">Son of Man doing constructive work on the Jerusalem temple; forming a new covenant community around Jesus as the Danielic figure — relevant to the temple confrontation (Mark 11–13) and Psalm 110 claim</span>
+              </div>
+            </div>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Black, C. Clifton.</strong> <em>The Disciples According to Mark: Markan Redaction in Current Debate.</em> 2nd ed. Journal for the Study of the New Testament Supplement Series. Sheffield: Sheffield Academic Press, 2012.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Structure</span>
+                <span class="usage-tag">Chiasms</span>
+                <span class="usage-note">Markan redaction as it relates to the disciples; the blind-man chiasm analysis and the three-fold misunderstanding pattern</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- ── ISAIAH, INTERTEXTUAL, GOSPEL METHODOLOGY ── -->
+      <details class="bibliography-section enhanced animate-on-scroll">
+        <summary>
+          <div class="bibliography-header">
+            <div class="bibliography-inner">
+              <span class="bibliography-icon">📜</span>
+              <div class="bibliography-text">
+                <h3 class="bibliography-title">Isaiah, Intertextual Connections &amp; Gospel Methodology</h3>
+                <p class="bibliography-subtitle">The OT narrative background and approach to reading the Gospels as literature</p>
+              </div>
+              <div class="expand-indicator">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </div>
+            </div>
+          </div>
+        </summary>
+        <div class="bibliography-content">
+          <div class="source-category">
+            <h4>Isaiah &amp; New Exodus</h4>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Watts, Rikk.</strong> <em>Isaiah's New Exodus in Mark.</em> Biblical Studies Library. Grand Rapids: Baker Academic, 2001.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Wordplay &amp; Style</span>
+                <span class="usage-tag">Structure</span>
+                <span class="usage-tag">Themes</span>
+                <span class="usage-note">The single most important secondary work for this guide; demonstrates that Mark's entire structure is shaped by Isaiah 40–66's new exodus narrative; essential background for ὁδός, εὐαγγέλιον, σχίζω, and the Isaiah 66:24 / Gehenna material</span>
+              </div>
+            </div>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Hays, Richard B.</strong> <em>Echoes of Scripture in the Gospels.</em> Waco: Baylor University Press, 2017.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Wordplay &amp; Style</span>
+                <span class="usage-tag">Chiasms</span>
+                <span class="usage-note">Metalepsis methodology applied to all four Gospels; how Mark's OT citations evoke whole narrative contexts from Israel's scripture, not merely proof texts</span>
+              </div>
+            </div>
+          </div>
+          <div class="source-category">
+            <h4>Kingdom &amp; Gospel Reading</h4>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Wright, N. T.</strong> <em>How God Became King: The Forgotten Story of the Gospels.</em> New York: HarperOne, 2016.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Themes</span>
+                <span class="usage-tag">Overview</span>
+                <span class="usage-note">The four Gospels as accounts of how God's long-promised kingdom arrived through Jesus; the kingdom announcement (Mk 1:14–15) and Isaiah's herald theology</span>
+              </div>
+            </div>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Pennington, Jonathan T.</strong> <em>Reading the Gospels Wisely: A Narrative and Theological Introduction.</em> Grand Rapids: Baker Academic, 2012.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Overview</span>
+                <span class="usage-tag">Reading Tools</span>
+                <span class="usage-note">Best introductory methodology for approaching the Gospels as theological narratives; recommended first read before Mark-specific commentaries</span>
+              </div>
+            </div>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Brown, Jeannine K.</strong> <em>The Gospels as Stories: A Narrative Approach to Matthew, Mark, Luke, and John.</em> Grand Rapids: Baker Academic, 2020.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Chiasms</span>
+                <span class="usage-tag">Wordplay &amp; Style</span>
+                <span class="usage-note">Narrative-critical introduction to all four Gospels; structural and literary observations behind the Chiasms and Wordplay tabs</span>
+              </div>
+            </div>
+          </div>
+          <div class="source-category">
+            <h4>Kingdom Background &amp; Jesus' Teaching Method</h4>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Pennington, Jonathan T.</strong> <em>Jesus the Great Philosopher: Rediscovering the Wisdom Needed for the Good Life.</em> Grand Rapids: Brazos Press, 2020.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Themes</span>
+                <span class="usage-note">Jesus as ancient philosophical teacher of the good life — directly relevant to Mark's portrait of Jesus teaching with authority rather than citing precedents (Mk 7:28–29)</span>
+              </div>
+            </div>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Pennington, Jonathan T.</strong> <em>Heaven and Earth in the Gospel of Matthew.</em> Grand Rapids: Baker Academic, 2009.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Themes</span>
+                <span class="usage-note">Matthew's "kingdom of the skies" as deliberate heaven-earth contrast; directly informs the heaven-and-earth framework in the Themes tab and the Mark 9 thematic study</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- ── PRIMARY SOURCES ── -->
+      <details class="bibliography-section enhanced animate-on-scroll">
+        <summary>
+          <div class="bibliography-header">
+            <div class="bibliography-inner">
+              <span class="bibliography-icon">📘</span>
+              <div class="bibliography-text">
+                <h3 class="bibliography-title">Primary &amp; Reference Sources</h3>
+                <p class="bibliography-subtitle">Greek and Hebrew critical texts, lexicons, and Second Temple literature</p>
+              </div>
+              <div class="expand-indicator">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </div>
+            </div>
+          </div>
+        </summary>
+        <div class="bibliography-content">
+          <div class="source-category">
+            <h4>Critical Texts</h4>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Nestle-Aland.</strong> <em>Novum Testamentum Graece.</em> 28th ed. Stuttgart: Deutsche Bibelgesellschaft, 2012.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Wordplay &amp; Style</span>
+                <span class="usage-tag">All Sections</span>
+                <span class="usage-note">Greek text for all wordplay entries: εὐθύς, ὁδός, σχίζω, ἄρτος, ἀπαρνέομαι, ἐπιτιμάω, περιβλέπομαι, ὁ υἱὸς τοῦ ἀνθρώπου</span>
+              </div>
+            </div>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Biblia Hebraica Stuttgartensia.</strong> Stuttgart: Deutsche Bibelgesellschaft, 1997.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Wordplay &amp; Style</span>
+                <span class="usage-tag">Themes</span>
+                <span class="usage-note">Hebrew text for Isaiah 66:24 (deraon, pegarim, lo tichbeh), Daniel 12:2 (deraon connection), and the ὁδός / דֶּרֶךְ intertextual link</span>
+              </div>
+            </div>
+          </div>
+          <div class="source-category">
+            <h4>Lexicons &amp; Reference Works</h4>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Bauer, Walter, Frederick W. Danker, W. F. Arndt, and F. W. Gingrich.</strong> <em>A Greek-English Lexicon of the New Testament and Other Early Christian Literature.</em> 3rd ed. Chicago: University of Chicago Press, 2000.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Wordplay &amp; Style</span>
+                <span class="usage-note">Entries for γέεννα, εὐθύς, ὁδός, σχίζω, ἐπιτιμάω, περιβλέπομαι, μωρανθῇ; the Gehenna / Hades / Tartarus lexical distinction</span>
+              </div>
+            </div>
+          </div>
+          <div class="source-category">
+            <h4>Second Temple &amp; Jewish Sources</h4>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>Charlesworth, James H., ed.</strong> <em>The Old Testament Pseudepigrapha.</em> 2 vols. New York: Doubleday, 1983–1985.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Themes</span>
+                <span class="usage-tag">Wordplay &amp; Style</span>
+                <span class="usage-note">1 Enoch 26–27 (Book of the Watchers): Enoch's visionary tour of the Valley of Hinnom and Uriel's identification of it as the gathering place of the permanently accursed; the deraon thread connecting Isaiah 66:24 → Daniel 12:2 → Mark 9:48</span>
+              </div>
+            </div>
+            <div class="source-entry">
+              <div class="source-citation">
+                <strong>García Martínez, Florentino, and Eibert J. C. Tigchelaar.</strong> <em>The Dead Sea Scrolls Study Edition.</em> 2 vols. Grand Rapids: Eerdmans, 1999.
+              </div>
+              <div class="source-usage">
+                <span class="usage-tag">Themes</span>
+                <span class="usage-note">Qumran parallels for messianic expectation and the two-paths motif (1QS 3:17–21); 4Q521 messianic apocalypse relevant to Jesus' kingdom announcement</span>
+              </div>
+            </div>
+          </div>
+          <div class="citation-note">
+            <p><strong>Citation Format:</strong> Chicago Manual of Style, 17th edition.</p>
+            <p><strong>On usage tags:</strong> Tags reference the tab in this study guide where each source most directly informs the content. Sources may inform multiple tabs.</p>
+          </div>
+        </div>
+      </details>
+
     </section>
 
   </main>
