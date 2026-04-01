@@ -1391,6 +1391,135 @@
       color: var(--accent-rose);
       font-style: italic;
     }
+
+    /* ==========================================
+       CHIASM TIER SYSTEM — v2
+    ========================================== */
+    .chiasm-tier-divider {
+      display: flex; align-items: center; gap: 14px;
+      margin: 54px 0 10px;
+    }
+    .chiasm-tier-divider .tier-rule { flex: 1; height: 1px; background: var(--border); }
+    .tier-badge {
+      font-family: var(--mono); font-size: 9px; text-transform: uppercase;
+      letter-spacing: .18em; padding: 5px 14px; border-radius: 999px;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .tier-badge.macro    { background: rgba(114,9,183,.09); border: 1px solid rgba(114,9,183,.25); color: var(--accent-purple); }
+    .tier-badge.nested   { background: rgba(225,29,72,.07);  border: 1px solid rgba(225,29,72,.22);  color: var(--accent-rose); }
+    .tier-badge.micro    { background: rgba(0,180,216,.08);  border: 1px solid rgba(0,180,216,.22);  color: var(--accent-blue); }
+    .tier-badge.gold     { background: rgba(212,175,55,.07); border: 1px solid rgba(212,175,55,.22); color: var(--accent-gold); }
+    .tier-badge.registry { background: rgba(0,0,0,.04);      border: 1px solid rgba(0,0,0,.12);      color: var(--text-gray); }
+    .tier-desc { font-size: .96rem; color: var(--text-gray); margin: 8px 0 26px; max-width: 740px; line-height: 1.65; }
+
+    /* ── Nested Card (rose left border) ── */
+    .nested-card {
+      background: var(--bg);
+      border: 1px solid rgba(225,29,72,.18);
+      border-left: 4px solid var(--accent-rose);
+      border-radius: var(--radius);
+      padding: 26px 28px 22px;
+      margin: 18px 0 28px;
+      box-shadow: 0 2px 10px rgba(225,29,72,.05), 0 1px 3px rgba(0,0,0,.04);
+    }
+    /* ── Micro Card (blue left border) ── */
+    .micro-card {
+      background: var(--bg);
+      border: 1px solid rgba(0,180,216,.18);
+      border-left: 4px solid var(--accent-blue);
+      border-radius: var(--radius);
+      padding: 26px 28px 22px;
+      margin: 18px 0 28px;
+      box-shadow: 0 2px 10px rgba(0,180,216,.05), 0 1px 3px rgba(0,0,0,.04);
+    }
+    .nested-card h3, .micro-card h3 { margin-bottom: 6px; }
+    .nested-card .chiasm-desc, .micro-card .chiasm-desc {
+      color: var(--text-gray); font-size: .97rem; margin-bottom: 20px; max-width: 760px;
+    }
+    .nested-card .chiasm-insight, .micro-card .chiasm-insight {
+      background: linear-gradient(135deg, rgba(114,9,183,.05), rgba(225,29,72,.03));
+      border-left: 3px solid var(--accent-purple);
+      border-radius: 0 6px 6px 0;
+      padding: 14px 18px; margin-top: 16px; font-size: .97rem;
+    }
+
+    /* ── Context Pill (breadcrumb) ── */
+    .context-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: .15em;
+      padding: 4px 11px; border-radius: 999px; margin-bottom: 14px;
+    }
+    .context-pill.rose { color: var(--accent-rose); background: rgba(225,29,72,.07);  border: 1px solid rgba(225,29,72,.2); }
+    .context-pill.blue { color: var(--accent-blue); background: rgba(0,180,216,.07);  border: 1px solid rgba(0,180,216,.2); }
+    .context-pill.gray { color: var(--text-gray);   background: rgba(0,0,0,.04);      border: 1px solid rgba(0,0,0,.1); }
+
+    /* ── Parent Context Display (greyed parent chiasm) ── */
+    .parent-context {
+      background: var(--bg-soft); border: 1px dashed rgba(0,0,0,.1);
+      border-radius: 8px; padding: 14px 18px 10px; margin: 0 0 16px;
+    }
+    .parent-context-label {
+      font-family: var(--mono); font-size: 9px; text-transform: uppercase;
+      letter-spacing: .2em; color: var(--text-muted); margin-bottom: 10px;
+    }
+    .pcl {
+      display: flex; align-items: baseline; gap: 10px;
+      opacity: .55; margin-bottom: 3px;
+      font-family: var(--mono); font-size: 12.5px; line-height: 1.8;
+    }
+    .pcl.lit { opacity: 1; }
+    .pcl-key { font-weight: 700; min-width: 28px; color: var(--text-muted); flex-shrink: 0; }
+    .pcl.lit .pcl-key {
+      background: var(--grad-primary); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .pcl-ref { font-size: 10px; color: var(--text-muted); min-width: 78px; flex-shrink: 0; }
+    .pcl.lit .pcl-ref { color: var(--accent-purple); }
+    .pcl-text { color: var(--text-muted); font-size: 12px; }
+    .pcl.lit .pcl-text { color: var(--ink); font-weight: 500; }
+    .pcl.i1 { padding-left: 1.4rem; }
+    .pcl.i2 { padding-left: 2.8rem; }
+    .pcl.i3 { padding-left: 4.2rem; }
+
+    /* ── Inner Divider ── */
+    .inner-divider {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: .18em;
+      margin: 14px 0 10px;
+    }
+    .inner-divider::before, .inner-divider::after { content: ''; flex: 1; height: 1px; }
+    .inner-divider.rose { color: var(--accent-rose); }
+    .inner-divider.rose::before, .inner-divider.rose::after { background: rgba(225,29,72,.2); }
+    .inner-divider.blue { color: var(--accent-blue); }
+    .inner-divider.blue::before, .inner-divider.blue::after { background: rgba(0,180,216,.2); }
+
+    /* ── Arc Map ── */
+    .arc-map-wrap {
+      background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 24px 16px 16px; margin: 24px 0 28px; overflow-x: auto;
+      box-shadow: var(--shadow-sm);
+    }
+    .arc-map-wrap svg { display: block; min-width: 700px; }
+    .arc-map-legend {
+      display: flex; flex-wrap: wrap; gap: 18px; margin-top: 16px;
+      font-family: var(--mono); font-size: 9.5px; text-transform: uppercase; letter-spacing: .12em;
+    }
+    .aml-item { display: flex; align-items: center; gap: 7px; color: var(--text-gray); }
+    .aml-line { width: 26px; height: 2.5px; border-radius: 2px; }
+
+    /* ── Registry ── */
+    .confidence-badge {
+      display: inline-block; font-family: var(--mono); font-size: 9px;
+      text-transform: uppercase; letter-spacing: .1em; padding: 3px 9px; border-radius: 999px;
+    }
+    .confidence-badge.definite { background: rgba(114,9,183,.08); color: var(--accent-purple); border: 1px solid rgba(114,9,183,.2); }
+    .confidence-badge.strong   { background: rgba(0,180,216,.07);  color: var(--accent-blue);   border: 1px solid rgba(0,180,216,.18); }
+    .confidence-badge.proposed { background: rgba(0,0,0,.04);      color: var(--text-gray);     border: 1px solid rgba(0,0,0,.12); }
+    .type-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; vertical-align: middle; margin-right: 5px; }
+    .type-dot.macro    { background: var(--accent-purple); }
+    .type-dot.micro    { background: var(--accent-blue); }
+    .type-dot.nested   { background: var(--accent-rose); }
+    .type-dot.proposed { background: var(--text-muted); }
   </style>
 </head>
 <body class="book-study-guide" dir="ltr">
@@ -1427,10 +1556,10 @@
     <div class="tab-row">
       <button class="tab-btn active" data-tab="overview">Overview</button>
       <button class="tab-btn" data-tab="structure">Structure</button>
+      <button class="tab-btn" data-tab="chapters">Chapter Guide</button>
       <button class="tab-btn" data-tab="themes">Themes</button>
       <button class="tab-btn" data-tab="chiasms">Chiasms</button>
       <button class="tab-btn" data-tab="wordplay">Wordplay &amp; Style</button>
-      <button class="tab-btn" data-tab="chapters">Chapter Guide</button>
       <button class="tab-btn" data-tab="reading">Reading Plan</button>
       <button class="tab-btn" data-tab="questions">Study Questions</button>
       <button class="tab-btn" data-tab="tools">Reading Tools</button>
@@ -1575,8 +1704,16 @@
             <div class="pm-num">5–6</div>
             <div class="pm-body">
               <div class="pm-phase">Phase 5–6 · Intertextual + Literary</div>
-              <div class="pm-tab">Chiasms + Wordplay</div>
+              <div class="pm-tab">Chiasms + Wordplay &amp; Style</div>
               <div class="pm-desc">Mark is in deep conversation with Isaiah, Daniel, and the Psalms. His literary craft — chiasms, sandwiches, verbal patterns — carries theological meaning.</div>
+            </div>
+          </div>
+          <div class="pm-item">
+            <div class="pm-num">+</div>
+            <div class="pm-body">
+              <div class="pm-phase">Throughout — Use at Every Phase</div>
+              <div class="pm-tab">Reading Plan · Study Questions · Reading Tools</div>
+              <div class="pm-desc">The multi-pass reading plan keeps you in the text; the study questions are calibrated to the phase you're in; the margin-code system and anchor verses belong beside you on every pass.</div>
             </div>
           </div>
           <div class="pm-item">
@@ -1585,14 +1722,6 @@
               <div class="pm-phase">Phase 7 · Contextual</div>
               <div class="pm-tab">Resources</div>
               <div class="pm-desc">Historical background, Second Temple context, and secondary literature. Consult these after your own observation is solid.</div>
-            </div>
-          </div>
-          <div class="pm-item">
-            <div class="pm-num">+</div>
-            <div class="pm-body">
-              <div class="pm-phase">Throughout</div>
-              <div class="pm-tab">Reading Plan + Questions + Tools</div>
-              <div class="pm-desc">Multi-pass reading plan, reflection questions for each phase, and margin-code system to mark what you find.</div>
             </div>
           </div>
         </div>
@@ -1795,269 +1924,6 @@
         <div class="callout tight" style="margin-top: 18px;">
           <div class="mini-label">What the Escalation Reveals</div>
           <p>Each cycle intensifies. A personal rebuke → a group argument about rank → a bold request for thrones. As the predictions grow more specific about suffering, the disciples' responses grow more ambitious about glory. The gap between what Jesus announces and what the disciples want closes only at the cross. Mark uses this three-part repetition to make one thing unmistakable: <strong>the Messiah's path is the servant's path, and there is no alternative route</strong>.</p>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- ========== TAB: READING PLAN ========== -->
-    <section class="panel-section" id="panel-reading">
-      <div class="kicker">Use While Reading</div>
-      <h2>Suggested Reading Plan</h2>
-      <p class="lede">This plan lets you read Mark in manageable units while keeping the flow intact. Each day includes a core focus so you know what to watch for on that pass through the text.</p>
-
-      <div class="reading-plan animate-on-scroll">
-        <div class="plan-day">
-          <div class="plan-head"><span class="day-tag">Day 1</span><div class="plan-title">Mark 1–2 · Authority Arrives</div></div>
-          <div class="plan-note">Watch how quickly Jesus acts, how kingdom announcement and healing belong together, and how conflict begins early around sin, sabbath, and authority.</div>
-        </div>
-        <div class="plan-day">
-          <div class="plan-head"><span class="day-tag">Day 2</span><div class="plan-title">Mark 3–4 · Division and Hidden Kingdom</div></div>
-          <div class="plan-note">Track who gathers to Jesus and who turns against him. Pay special attention to the parables and the different soils as a map of responses to Jesus.</div>
-        </div>
-        <div class="plan-day">
-          <div class="plan-head"><span class="day-tag">Day 3</span><div class="plan-title">Mark 5–6 · Power, Rejection, and Provision</div></div>
-          <div class="plan-note">Notice how far Jesus' authority reaches. Also notice that great power does not eliminate rejection or misunderstanding.</div>
-        </div>
-        <div class="plan-day">
-          <div class="plan-head"><span class="day-tag">Day 4</span><div class="plan-title">Mark 7–8 · Blindness and Breakthrough</div></div>
-          <div class="plan-note">Watch disputes about purity, the feeding scenes, and the healing of the blind man at Bethsaida. That healing prepares for the disciples' partial understanding.</div>
-        </div>
-        <div class="plan-day">
-          <div class="plan-head"><span class="day-tag">Day 5</span><div class="plan-title">Mark 8:27–10 · On the Way to the Cross</div></div>
-          <div class="plan-note">Read slowly. This is the theological center. Mark the three passion predictions and the way the disciples respond each time.</div>
-        </div>
-        <div class="plan-day">
-          <div class="plan-head"><span class="day-tag">Day 6</span><div class="plan-title">Mark 11–13 · Jerusalem, Temple, Judgment</div></div>
-          <div class="plan-note">Track royal imagery, temple confrontation, debates with leaders, and Jesus' warning about Jerusalem's downfall.</div>
-        </div>
-        <div class="plan-day">
-          <div class="plan-head"><span class="day-tag">Day 7</span><div class="plan-title">Mark 14–16 · Passover, Cross, Resurrection</div></div>
-          <div class="plan-note">Watch how Passover is reframed around Jesus' death. Then slow down at the crucifixion and the abrupt ending at the tomb. Mark 16:8 is almost certainly the original ending — the women say nothing to anyone, for they were afraid. Sit with that silence. Mark does not resolve it for you. He is asking: <em>Will you run in fear, or will you proclaim the good news?</em> Note also that the longer ending (16:9–20) is a later scribal addition absent from the earliest manuscripts.</div>
-        </div>
-      </div>
-
-      <div class="question-box animate-on-scroll">
-        <h4>Best Practice for a Second Pass</h4>
-        <ol>
-          <li>Read the whole Gospel in one sitting if possible.</li>
-          <li>Then read again with a pencil and mark every question people ask about Jesus.</li>
-          <li>On a third pass, mark every place the disciples fail to understand.</li>
-          <li>On a fourth pass, track what Jesus says about the cross, service, and following him.</li>
-        </ol>
-      </div>
-    </section>
-
-    <!-- ========== TAB: THEMES ========== -->
-    <section class="panel-section" id="panel-themes">
-      <div class="kicker">Major Threads</div>
-      <h2>Key Themes to Track in Mark</h2>
-
-      <div class="grid-3">
-        <div class="theme-card animate-on-scroll t-purple">
-          <div class="mini-label">Theme 1</div>
-          <h3>Identity</h3>
-          <p>Mark keeps pressing the question of Jesus' identity. Demons know him, crowds wonder, disciples hesitate, and the cross reveals what power alone did not.</p>
-        </div>
-        <div class="theme-card animate-on-scroll t-rose">
-          <div class="mini-label">Theme 2</div>
-          <h3>Kingdom</h3>
-          <p>Jesus announces that God's reign has come near — but it does not arrive the way anyone expected. Mark's parables trace a four-stage arc that runs against every instinct about power:</p>
-          <div style="display: flex; flex-direction: column; gap: 7px; margin-top: 12px;">
-            <div style="display: flex; align-items: baseline; gap: 9px; font-size: .93rem;">
-              <span style="font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: .12em; color: var(--accent-rose); white-space: nowrap;">Hidden</span>
-              <span style="color: #374151;">Planted in secret, invisible at first — like a seed in dark soil <em>(4:26–29)</em></span>
-            </div>
-            <div style="display: flex; align-items: baseline; gap: 9px; font-size: .93rem;">
-              <span style="font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: .12em; color: var(--accent-rose); white-space: nowrap;">Growing</span>
-              <span style="color: #374151;">Unstoppable growth from a small beginning — the mustard seed <em>(4:30–32)</em></span>
-            </div>
-            <div style="display: flex; align-items: baseline; gap: 9px; font-size: .93rem;">
-              <span style="font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: .12em; color: var(--accent-rose); white-space: nowrap;">Unexpected</span>
-              <span style="color: #374151;">Arrives through suffering and a cross, not through conquest</span>
-            </div>
-            <div style="display: flex; align-items: baseline; gap: 9px; font-size: .93rem;">
-              <span style="font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: .12em; color: var(--accent-rose); white-space: nowrap;">Victorious</span>
-              <span style="color: #374151;">The empty tomb is the kingdom's announcement that death does not win</span>
-            </div>
-          </div>
-        </div>
-        <div class="theme-card animate-on-scroll t-blue">
-          <div class="mini-label">Theme 3</div>
-          <h3>Discipleship</h3>
-          <p>Following Jesus means more than admiring his power. It means receiving his way of self-giving service, humility, and cross-bearing.</p>
-        </div>
-      </div>
-
-      <div class="grid-4">
-        <div class="dark-card tight animate-on-scroll">
-          <div class="mini-label">Watch</div>
-          <h4>Secrecy</h4>
-          <p>Jesus often silences demons or crowds because people are ready for the wrong kind of Messiah.</p>
-        </div>
-        <div class="dark-card tight animate-on-scroll">
-          <div class="mini-label">Watch</div>
-          <h4>Conflict</h4>
-          <p>Religious leaders increasingly oppose Jesus because his authority threatens their structures and assumptions.</p>
-        </div>
-        <div class="dark-card tight animate-on-scroll">
-          <div class="mini-label">Watch</div>
-          <h4>Failure</h4>
-          <p>The disciples are not flattering portraits. Their failure is part of Mark's realism and part of his invitation to readers.</p>
-        </div>
-        <div class="dark-card tight animate-on-scroll">
-          <div class="mini-label">Watch</div>
-          <h4>Reversal</h4>
-          <p>The one who serves is greatest, the last becomes first, and the king reigns from a cross before an empty tomb.</p>
-        </div>
-      </div>
-
-      <!-- Irony Pattern -->
-      <div style="margin: 0 0 28px; background: linear-gradient(160deg, var(--surface-dark) 0%, #0e1a2e 100%); border: 1px solid rgba(0,180,216,.25); border-radius: var(--radius); padding: 24px 26px; color: rgba(240,232,255,.88); box-shadow: 0 4px 20px rgba(0,0,0,.18);">
-        <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.18em;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;">Narrative Technique · Throughout Mark</div>
-        <h4 style="color:#f5f0ff;margin-bottom:12px;">The Irony Pattern: Insiders Blind, Outsiders See</h4>
-        <p style="color:rgba(240,232,255,.82);font-size:.97rem;margin-bottom:18px;line-height:1.75;">One of Mark's most consistent and striking patterns is that the people who <em>should</em> recognize Jesus consistently fail to, while the people no one would expect are the ones who get it right. This is not accidental — it is Mark's theological argument that seeing Jesus correctly requires a different kind of vision than religious insider status provides.</p>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-          <div style="background: rgba(0,0,0,.25); border: 1px solid rgba(225,29,72,.25); border-radius: 8px; padding: 16px 18px;">
-            <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:rgba(251,113,133,.9);margin-bottom:10px;">Insiders → Blind</div>
-            <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
-              <li style="font-size:.9rem;color:rgba(240,232,255,.78);"><strong style="color:#f5f0ff;">Religious leaders</strong> — see the miracles, explain them as demon power (3:22)</li>
-              <li style="font-size:.9rem;color:rgba(240,232,255,.78);"><strong style="color:#f5f0ff;">The Twelve</strong> — confess correctly, then argue about status and flee at the cross</li>
-              <li style="font-size:.9rem;color:rgba(240,232,255,.78);"><strong style="color:#f5f0ff;">Jesus' hometown</strong> — knows him too well to believe him (6:1–6)</li>
-            </ul>
-          </div>
-          <div style="background: rgba(0,0,0,.25); border: 1px solid rgba(0,180,216,.25); border-radius: 8px; padding: 16px 18px;">
-            <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:rgba(103,232,249,.9);margin-bottom:10px;">Outsiders → See</div>
-            <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
-              <li style="font-size:.9rem;color:rgba(240,232,255,.78);"><strong style="color:#f5f0ff;">The Syrophoenician woman</strong> — Gentile, receives faith's reward from a reluctant Jesus (7:24–30)</li>
-              <li style="font-size:.9rem;color:rgba(240,232,255,.78);"><strong style="color:#f5f0ff;">Blind Bartimaeus</strong> — physically blind, calls out "Son of David" and follows on the way (10:46–52)</li>
-              <li style="font-size:.9rem;color:rgba(240,232,255,.78);"><strong style="color:#f5f0ff;">The Roman centurion</strong> — at the cross, where the disciples aren't: "Truly this man was the Son of God" (15:39)</li>
-            </ul>
-          </div>
-        </div>
-        <p style="color:rgba(240,232,255,.7);font-size:.88rem;margin-top:14px;line-height:1.65;border-top:1px solid rgba(255,255,255,.06);padding-top:14px;"><strong style="color:#e2d9f3;">The implication:</strong> Religious knowledge and proximity to power do not guarantee spiritual sight. In Mark, seeing Jesus correctly seems to require need, honesty, and willingness to be an outsider to the world's definitions of greatness — qualities the disciples keep failing to embody.</p>
-      </div>
-
-      <div class="quote-block animate-on-scroll">
-        <p>"For even the Son of Man came not to be served but to serve, and to give his life as a ransom for many."</p>
-        <div class="quote-ref">Mark 10:45 · One of the clearest summary lines in the Gospel</div>
-      </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>Theme</th><th>Where it shows up</th><th>What it does in Mark</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Son of God</strong></td>
-              <td>1:1, 1:11, 9:7, 15:39</td>
-              <td>Frames the whole Gospel from divine declaration to human confession at the cross.</td>
-            </tr>
-            <tr>
-              <td><strong>Kingdom of God</strong></td>
-              <td>1:14–15; parables in ch. 4</td>
-              <td>Shows that Jesus is bringing God's reign, but in a form many do not expect.</td>
-            </tr>
-            <tr>
-              <td><strong>Messianic misunderstanding</strong></td>
-              <td>8:27–10:52</td>
-              <td>Exposes false expectations about triumph, greatness, and power.</td>
-            </tr>
-            <tr>
-              <td><strong>Temple and authority</strong></td>
-              <td>11–13</td>
-              <td>Shows Jesus acting with royal and priestly authority over Israel's center.</td>
-            </tr>
-            <tr>
-              <td><strong>Fear and amazement</strong></td>
-              <td>4:41; 5:15; 16:8</td>
-              <td>Keeps the reader from domesticating Jesus. He overwhelms categories.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Royal Priest callout using the BibleProject SR PDF material -->
-      <div class="royal-callout animate-on-scroll">
-        <div class="rc-label">Royal Priest Lens · BibleProject Theme</div>
-        <h4 style="margin-bottom: 8px;">Jesus as the Ultimate Royal Priest</h4>
-        <p>Mark is especially powerful when read with priestly and royal categories in mind. At his baptism, heaven opens and God declares Jesus his beloved Son — words blending Psalm 2, Genesis 22, and Isaiah 42 that function as a royal-priestly ordination. From there, Jesus acts like a priest operating outside the temple system: forgiving sins, restoring the impure, confronting the temple order, and quoting Psalm 110 to claim the role of the ruling priest at God's right hand. He wins the throne not through domination but through sacrificial offering — and when he dies, the temple curtain tears, releasing Eden's blessing into all creation.</p>
-        <div class="pill-row" style="margin-top: 14px;">
-          <span class="pill blue">Baptism as Ordination · Mk 1:9–11</span>
-          <span class="pill blue">Psalm 110 Claim · Mk 12:35–37</span>
-          <span class="pill blue">Curtain Torn · Mk 15:38</span>
-        </div>
-      </div>
-
-      <!-- Messianic Torah Teacher section from Tim Mackie's class notes -->
-      <div class="card" style="margin-top: 28px;">
-        <div class="mini-label">Messianic Torah Teacher Lens · From Tim Mackie's Messianic Torah Class</div>
-        <h3>Jesus as Philosopher, Prophet, and New Moses</h3>
-        <p>Mark's Jesus is not only a healer or exorcist — he is a teacher of the first order, and Mark's opening summary (1:14–15) functions as the thesis statement of his entire mission: <em>"The time is fulfilled, and the kingdom of God has come near; repent and believe the good news."</em> This announcement draws directly from Daniel 7:22 (LXX: the time came and the holy ones possessed the kingdom) and Isaiah's herald announcing the return of Yahweh as King (Isa 40:9; 52:7).</p>
-
-        <p>Tim Mackie's classroom framework for Matthew applies with full force in Mark. Jesus inhabits three overlapping roles simultaneously:</p>
-
-        <div class="grid-3" style="margin: 18px 0 14px;">
-          <div class="lens-card purple">
-            <div class="lens-label">Torah</div>
-            <h3 style="font-size:1.2rem;">New Moses</h3>
-            <p style="font-size:.96rem;">Jesus teaches God's covenant will with the authority of the One who gave the original Torah — not citing precedent but speaking in his own name ("I say to you"). His discipleship demands in Mark 8–10 are Deuteronomy-shaped: the call to follow him on the way parallels Moses' call to "choose life" at the Jordan.</p>
-          </div>
-          <div class="lens-card rose">
-            <div class="lens-label">Prophetic</div>
-            <h3 style="font-size:1.2rem;">Kingdom Herald</h3>
-            <p style="font-size:.96rem;">Mark's εὐαγγέλιον ("good news") in 1:1 and 1:15 is Isaiah's vocabulary (Isa 40:9; 52:7; 61:1). Jesus' healings, exorcisms, and forgiveness are not random demonstrations of power — they are kingdom-arrival events, signs that God's reign is breaking into creation and confronting everything that corrupts it.</p>
-          </div>
-          <div class="lens-card blue">
-            <div class="lens-label">Wisdom</div>
-            <h3 style="font-size:1.2rem;">True Philosopher</h3>
-            <p style="font-size:.96rem;">Like Israel's wisdom tradition and the ancient philosophical schools, Jesus forms a community of disciples around his person and teaching. The goal is not information transfer but character formation — producing people who embody the values of the kingdom and can distinguish between the way that leads to life and the way that leads to ruin.</p>
-          </div>
-        </div>
-
-        <div class="callout tight" style="margin: 14px 0 0;">
-          <div class="mini-label">The Kingdom Announcement — Mark 1:14–15</div>
-          <p>Mark's compressed summary of Jesus' message ("The kingdom of God has come near") is the same announcement that saturates Matthew's Sermon on the Mount. For Mark, this is not an abstract theological claim — it is a declaration that the cosmic sovereignty promised in Daniel 7:13–14 to the "one like a Son of Man" is now arriving in Jesus' person and actions. Every miracle, exorcism, and act of forgiveness in chapters 1–8 is a demonstration of this arrival, not merely a display of power.</p>
-        </div>
-      </div>
-
-      <!-- CONFESSIONAL ARC -->
-      <div class="dark-card animate-on-scroll" style="margin-top:28px;">
-        <div class="mini-label">Triads, Creeds &amp; Doxologies</div>
-        <h3 style="color:#f5f0ff;margin-bottom:6px;">The Confessional Arc</h3>
-        <p style="color:rgba(240,232,255,.75);font-size:.93rem;margin-bottom:20px;">Mark does not explain who Jesus is at the beginning and let the story prove it. He structures the entire Gospel around the question of identity — and the answer arrives in three carefully placed divine and human confessions, moving from heaven to earth, from private to public, from first to last.</p>
-
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:24px;">
-          <div style="background:rgba(114,9,183,.15);border:1px solid rgba(114,9,183,.35);border-radius:10px;padding:18px;">
-            <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.16em;background:linear-gradient(135deg,#c084fc,#fb7185);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;">First Confession · 1:11</div>
-            <div style="color:#f5f0ff;font-weight:600;margin-bottom:6px;">Divine Voice — Private</div>
-            <p style="color:rgba(240,232,255,.82);font-size:.9rem;margin:0;">"You are my beloved Son, with you I am well pleased." Heaven speaks at the baptism. The audience is Jesus alone. The ordination is royal-priestly (Ps 2 + Isa 42). No human hears it.</p>
-          </div>
-          <div style="background:rgba(114,9,183,.15);border:1px solid rgba(114,9,183,.35);border-radius:10px;padding:18px;">
-            <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.16em;background:linear-gradient(135deg,#c084fc,#fb7185);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;">Second Confession · 9:7</div>
-            <div style="color:#f5f0ff;font-weight:600;margin-bottom:6px;">Divine Voice — Semi-Private</div>
-            <p style="color:rgba(240,232,255,.82);font-size:.9rem;margin:0;">"This is my beloved Son, listen to him." Heaven speaks again at the Transfiguration. Three disciples hear it — but are commanded to silence. The midpoint of the Gospel, just after the cross is announced.</p>
-          </div>
-          <div style="background:rgba(225,29,72,.15);border:1px solid rgba(225,29,72,.35);border-radius:10px;padding:18px;">
-            <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.16em;background:linear-gradient(135deg,#c084fc,#fb7185);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;">Third Confession · 15:39</div>
-            <div style="color:#f5f0ff;font-weight:600;margin-bottom:6px;">Human Voice — Public</div>
-            <p style="color:rgba(240,232,255,.82);font-size:.9rem;margin:0;">"Truly this man was the Son of God." A Roman centurion — the last person expected, watching from the foot of a cross — gets the answer right. The only human in Mark to confess correctly without being silenced.</p>
-          </div>
-        </div>
-
-        <div style="background:rgba(255,255,255,.04);border-left:3px solid rgba(192,132,252,.5);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:20px;">
-          <p style="color:rgba(240,232,255,.88);font-size:.91rem;margin:0;"><strong style="color:#e2d9f3;">The progression:</strong> Private → semi-private → public. Divine voice → divine voice → human voice. Jewish setting → Jewish mountaintop → Roman execution. And the only person who confesses openly in the public square is a Gentile soldier standing at the cross. That is Mark's Christology in three sentences.</p>
-        </div>
-
-        <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:20px;">
-          <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.16em;background:linear-gradient(135deg,#c084fc,#fb7185);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;">Creedal Moment · Mark 12:28–34</div>
-          <h4 style="color:#f5f0ff;margin-bottom:8px;">The Shema Exchange</h4>
-          <p style="color:rgba(240,232,255,.82);font-size:.91rem;margin-bottom:10px;">The closest thing to a mutual creedal dialogue in Mark. A scribe asks about the greatest commandment. Jesus answers with Deuteronomy 6:4–5 (the Shema) joined to Leviticus 19:18. The scribe then <em>recites the answer back</em> — paraphrasing, affirming, and adding: "more than all burnt offerings and sacrifices" (v. 33).</p>
-          <p style="color:rgba(240,232,255,.82);font-size:.91rem;margin-bottom:10px;">That addition is striking: the scribe embeds a critique of the temple cult <em>inside</em> his agreement with Jesus. Jesus responds: "You are not far from the kingdom of God." This is the only exchange in Mark where Jesus and a Jewish teacher reach agreement — and it happens in the temple courts, days before the crucifixion.</p>
-          <div style="background:rgba(0,180,216,.1);border:1px solid rgba(0,180,216,.25);border-radius:8px;padding:12px 16px;font-size:.88rem;color:rgba(240,232,255,.78);">
-            <strong style="color:#a5f3fc;">Creedal structure:</strong> Deut 6:4–5 (love God) + Lev 19:18 (love neighbor) — two Torah commands joined into a single catechetical formula that the early church would carry forward (cf. Rom 13:9; Gal 5:14; Jas 2:8). Mark presents Jesus as the one who first fuses them.
-          </div>
         </div>
       </div>
 
@@ -2320,6 +2186,1286 @@
       </details>
     </section>
 
+    <!-- ========== TAB: THEMES ========== -->
+    <section class="panel-section" id="panel-themes">
+      <div class="kicker">Major Threads</div>
+      <h2>Key Themes to Track in Mark</h2>
+
+      <div class="grid-3">
+        <div class="theme-card animate-on-scroll t-purple">
+          <div class="mini-label">Theme 1</div>
+          <h3>Identity</h3>
+          <p>Mark keeps pressing the question of Jesus' identity. Demons know him, crowds wonder, disciples hesitate, and the cross reveals what power alone did not.</p>
+        </div>
+        <div class="theme-card animate-on-scroll t-rose">
+          <div class="mini-label">Theme 2</div>
+          <h3>Kingdom</h3>
+          <p>Jesus announces that God's reign has come near — but it does not arrive the way anyone expected. Mark's parables trace a four-stage arc that runs against every instinct about power:</p>
+          <div style="display: flex; flex-direction: column; gap: 7px; margin-top: 12px;">
+            <div style="display: flex; align-items: baseline; gap: 9px; font-size: .93rem;">
+              <span style="font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: .12em; color: var(--accent-rose); white-space: nowrap;">Hidden</span>
+              <span style="color: #374151;">Planted in secret, invisible at first — like a seed in dark soil <em>(4:26–29)</em></span>
+            </div>
+            <div style="display: flex; align-items: baseline; gap: 9px; font-size: .93rem;">
+              <span style="font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: .12em; color: var(--accent-rose); white-space: nowrap;">Growing</span>
+              <span style="color: #374151;">Unstoppable growth from a small beginning — the mustard seed <em>(4:30–32)</em></span>
+            </div>
+            <div style="display: flex; align-items: baseline; gap: 9px; font-size: .93rem;">
+              <span style="font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: .12em; color: var(--accent-rose); white-space: nowrap;">Unexpected</span>
+              <span style="color: #374151;">Arrives through suffering and a cross, not through conquest</span>
+            </div>
+            <div style="display: flex; align-items: baseline; gap: 9px; font-size: .93rem;">
+              <span style="font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: .12em; color: var(--accent-rose); white-space: nowrap;">Victorious</span>
+              <span style="color: #374151;">The empty tomb is the kingdom's announcement that death does not win</span>
+            </div>
+          </div>
+        </div>
+        <div class="theme-card animate-on-scroll t-blue">
+          <div class="mini-label">Theme 3</div>
+          <h3>Discipleship</h3>
+          <p>Following Jesus means more than admiring his power. It means receiving his way of self-giving service, humility, and cross-bearing.</p>
+        </div>
+      </div>
+
+      <div class="grid-4">
+        <div class="dark-card tight animate-on-scroll">
+          <div class="mini-label">Watch</div>
+          <h4>Secrecy</h4>
+          <p>Jesus often silences demons or crowds because people are ready for the wrong kind of Messiah.</p>
+        </div>
+        <div class="dark-card tight animate-on-scroll">
+          <div class="mini-label">Watch</div>
+          <h4>Conflict</h4>
+          <p>Religious leaders increasingly oppose Jesus because his authority threatens their structures and assumptions.</p>
+        </div>
+        <div class="dark-card tight animate-on-scroll">
+          <div class="mini-label">Watch</div>
+          <h4>Failure</h4>
+          <p>The disciples are not flattering portraits. Their failure is part of Mark's realism and part of his invitation to readers.</p>
+        </div>
+        <div class="dark-card tight animate-on-scroll">
+          <div class="mini-label">Watch</div>
+          <h4>Reversal</h4>
+          <p>The one who serves is greatest, the last becomes first, and the king reigns from a cross before an empty tomb.</p>
+        </div>
+      </div>
+
+      <!-- Irony Pattern -->
+      <div style="margin: 0 0 28px; background: linear-gradient(160deg, var(--surface-dark) 0%, #0e1a2e 100%); border: 1px solid rgba(0,180,216,.25); border-radius: var(--radius); padding: 24px 26px; color: rgba(240,232,255,.88); box-shadow: 0 4px 20px rgba(0,0,0,.18);">
+        <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.18em;background:linear-gradient(135deg,var(--accent-blue),var(--accent-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;">Narrative Technique · Throughout Mark</div>
+        <h4 style="color:#f5f0ff;margin-bottom:12px;">The Irony Pattern: Insiders Blind, Outsiders See</h4>
+        <p style="color:rgba(240,232,255,.82);font-size:.97rem;margin-bottom:18px;line-height:1.75;">One of Mark's most consistent and striking patterns is that the people who <em>should</em> recognize Jesus consistently fail to, while the people no one would expect are the ones who get it right. This is not accidental — it is Mark's theological argument that seeing Jesus correctly requires a different kind of vision than religious insider status provides.</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div style="background: rgba(0,0,0,.25); border: 1px solid rgba(225,29,72,.25); border-radius: 8px; padding: 16px 18px;">
+            <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:rgba(251,113,133,.9);margin-bottom:10px;">Insiders → Blind</div>
+            <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+              <li style="font-size:.9rem;color:rgba(240,232,255,.78);"><strong style="color:#f5f0ff;">Religious leaders</strong> — see the miracles, explain them as demon power (3:22)</li>
+              <li style="font-size:.9rem;color:rgba(240,232,255,.78);"><strong style="color:#f5f0ff;">The Twelve</strong> — confess correctly, then argue about status and flee at the cross</li>
+              <li style="font-size:.9rem;color:rgba(240,232,255,.78);"><strong style="color:#f5f0ff;">Jesus' hometown</strong> — knows him too well to believe him (6:1–6)</li>
+            </ul>
+          </div>
+          <div style="background: rgba(0,0,0,.25); border: 1px solid rgba(0,180,216,.25); border-radius: 8px; padding: 16px 18px;">
+            <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:rgba(103,232,249,.9);margin-bottom:10px;">Outsiders → See</div>
+            <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+              <li style="font-size:.9rem;color:rgba(240,232,255,.78);"><strong style="color:#f5f0ff;">The Syrophoenician woman</strong> — Gentile, receives faith's reward from a reluctant Jesus (7:24–30)</li>
+              <li style="font-size:.9rem;color:rgba(240,232,255,.78);"><strong style="color:#f5f0ff;">Blind Bartimaeus</strong> — physically blind, calls out "Son of David" and follows on the way (10:46–52)</li>
+              <li style="font-size:.9rem;color:rgba(240,232,255,.78);"><strong style="color:#f5f0ff;">The Roman centurion</strong> — at the cross, where the disciples aren't: "Truly this man was the Son of God" (15:39)</li>
+            </ul>
+          </div>
+        </div>
+        <p style="color:rgba(240,232,255,.7);font-size:.88rem;margin-top:14px;line-height:1.65;border-top:1px solid rgba(255,255,255,.06);padding-top:14px;"><strong style="color:#e2d9f3;">The implication:</strong> Religious knowledge and proximity to power do not guarantee spiritual sight. In Mark, seeing Jesus correctly seems to require need, honesty, and willingness to be an outsider to the world's definitions of greatness — qualities the disciples keep failing to embody.</p>
+      </div>
+
+      <div class="quote-block animate-on-scroll">
+        <p>"For even the Son of Man came not to be served but to serve, and to give his life as a ransom for many."</p>
+        <div class="quote-ref">Mark 10:45 · One of the clearest summary lines in the Gospel</div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Theme</th><th>Where it shows up</th><th>What it does in Mark</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Son of God</strong></td>
+              <td>1:1, 1:11, 9:7, 15:39</td>
+              <td>Frames the whole Gospel from divine declaration to human confession at the cross.</td>
+            </tr>
+            <tr>
+              <td><strong>Kingdom of God</strong></td>
+              <td>1:14–15; parables in ch. 4</td>
+              <td>Shows that Jesus is bringing God's reign, but in a form many do not expect.</td>
+            </tr>
+            <tr>
+              <td><strong>Messianic misunderstanding</strong></td>
+              <td>8:27–10:52</td>
+              <td>Exposes false expectations about triumph, greatness, and power.</td>
+            </tr>
+            <tr>
+              <td><strong>Temple and authority</strong></td>
+              <td>11–13</td>
+              <td>Shows Jesus acting with royal and priestly authority over Israel's center.</td>
+            </tr>
+            <tr>
+              <td><strong>Fear and amazement</strong></td>
+              <td>4:41; 5:15; 16:8</td>
+              <td>Keeps the reader from domesticating Jesus. He overwhelms categories.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Royal Priest callout using the BibleProject SR PDF material -->
+      <div class="royal-callout animate-on-scroll">
+        <div class="rc-label">Royal Priest Lens · BibleProject Theme</div>
+        <h4 style="margin-bottom: 8px;">Jesus as the Ultimate Royal Priest</h4>
+        <p>Mark is especially powerful when read with priestly and royal categories in mind. At his baptism, heaven opens and God declares Jesus his beloved Son — words blending Psalm 2, Genesis 22, and Isaiah 42 that function as a royal-priestly ordination. From there, Jesus acts like a priest operating outside the temple system: forgiving sins, restoring the impure, confronting the temple order, and quoting Psalm 110 to claim the role of the ruling priest at God's right hand. He wins the throne not through domination but through sacrificial offering — and when he dies, the temple curtain tears, releasing Eden's blessing into all creation.</p>
+        <div class="pill-row" style="margin-top: 14px;">
+          <span class="pill blue">Baptism as Ordination · Mk 1:9–11</span>
+          <span class="pill blue">Psalm 110 Claim · Mk 12:35–37</span>
+          <span class="pill blue">Curtain Torn · Mk 15:38</span>
+        </div>
+      </div>
+
+      <!-- Messianic Torah Teacher section from Tim Mackie's class notes -->
+      <div class="card" style="margin-top: 28px;">
+        <div class="mini-label">Messianic Torah Teacher Lens · From Tim Mackie's Messianic Torah Class</div>
+        <h3>Jesus as Philosopher, Prophet, and New Moses</h3>
+        <p>Mark's Jesus is not only a healer or exorcist — he is a teacher of the first order, and Mark's opening summary (1:14–15) functions as the thesis statement of his entire mission: <em>"The time is fulfilled, and the kingdom of God has come near; repent and believe the good news."</em> This announcement draws directly from Daniel 7:22 (LXX: the time came and the holy ones possessed the kingdom) and Isaiah's herald announcing the return of Yahweh as King (Isa 40:9; 52:7).</p>
+
+        <p>Tim Mackie's classroom framework for Matthew applies with full force in Mark. Jesus inhabits three overlapping roles simultaneously:</p>
+
+        <div class="grid-3" style="margin: 18px 0 14px;">
+          <div class="lens-card purple">
+            <div class="lens-label">Torah</div>
+            <h3 style="font-size:1.2rem;">New Moses</h3>
+            <p style="font-size:.96rem;">Jesus teaches God's covenant will with the authority of the One who gave the original Torah — not citing precedent but speaking in his own name ("I say to you"). His discipleship demands in Mark 8–10 are Deuteronomy-shaped: the call to follow him on the way parallels Moses' call to "choose life" at the Jordan.</p>
+          </div>
+          <div class="lens-card rose">
+            <div class="lens-label">Prophetic</div>
+            <h3 style="font-size:1.2rem;">Kingdom Herald</h3>
+            <p style="font-size:.96rem;">Mark's εὐαγγέλιον ("good news") in 1:1 and 1:15 is Isaiah's vocabulary (Isa 40:9; 52:7; 61:1). Jesus' healings, exorcisms, and forgiveness are not random demonstrations of power — they are kingdom-arrival events, signs that God's reign is breaking into creation and confronting everything that corrupts it.</p>
+          </div>
+          <div class="lens-card blue">
+            <div class="lens-label">Wisdom</div>
+            <h3 style="font-size:1.2rem;">True Philosopher</h3>
+            <p style="font-size:.96rem;">Like Israel's wisdom tradition and the ancient philosophical schools, Jesus forms a community of disciples around his person and teaching. The goal is not information transfer but character formation — producing people who embody the values of the kingdom and can distinguish between the way that leads to life and the way that leads to ruin.</p>
+          </div>
+        </div>
+
+        <div class="callout tight" style="margin: 14px 0 0;">
+          <div class="mini-label">The Kingdom Announcement — Mark 1:14–15</div>
+          <p>Mark's compressed summary of Jesus' message ("The kingdom of God has come near") is the same announcement that saturates Matthew's Sermon on the Mount. For Mark, this is not an abstract theological claim — it is a declaration that the cosmic sovereignty promised in Daniel 7:13–14 to the "one like a Son of Man" is now arriving in Jesus' person and actions. Every miracle, exorcism, and act of forgiveness in chapters 1–8 is a demonstration of this arrival, not merely a display of power.</p>
+        </div>
+      </div>
+
+      <!-- CONFESSIONAL ARC -->
+      <div class="dark-card animate-on-scroll" style="margin-top:28px;">
+        <div class="mini-label">Triads, Creeds &amp; Doxologies</div>
+        <h3 style="color:#f5f0ff;margin-bottom:6px;">The Confessional Arc</h3>
+        <p style="color:rgba(240,232,255,.75);font-size:.93rem;margin-bottom:20px;">Mark does not explain who Jesus is at the beginning and let the story prove it. He structures the entire Gospel around the question of identity — and the answer arrives in three carefully placed divine and human confessions, moving from heaven to earth, from private to public, from first to last.</p>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:24px;">
+          <div style="background:rgba(114,9,183,.15);border:1px solid rgba(114,9,183,.35);border-radius:10px;padding:18px;">
+            <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.16em;background:linear-gradient(135deg,#c084fc,#fb7185);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;">First Confession · 1:11</div>
+            <div style="color:#f5f0ff;font-weight:600;margin-bottom:6px;">Divine Voice — Private</div>
+            <p style="color:rgba(240,232,255,.82);font-size:.9rem;margin:0;">"You are my beloved Son, with you I am well pleased." Heaven speaks at the baptism. The audience is Jesus alone. The ordination is royal-priestly (Ps 2 + Isa 42). No human hears it.</p>
+          </div>
+          <div style="background:rgba(114,9,183,.15);border:1px solid rgba(114,9,183,.35);border-radius:10px;padding:18px;">
+            <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.16em;background:linear-gradient(135deg,#c084fc,#fb7185);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;">Second Confession · 9:7</div>
+            <div style="color:#f5f0ff;font-weight:600;margin-bottom:6px;">Divine Voice — Semi-Private</div>
+            <p style="color:rgba(240,232,255,.82);font-size:.9rem;margin:0;">"This is my beloved Son, listen to him." Heaven speaks again at the Transfiguration. Three disciples hear it — but are commanded to silence. The midpoint of the Gospel, just after the cross is announced.</p>
+          </div>
+          <div style="background:rgba(225,29,72,.15);border:1px solid rgba(225,29,72,.35);border-radius:10px;padding:18px;">
+            <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.16em;background:linear-gradient(135deg,#c084fc,#fb7185);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;">Third Confession · 15:39</div>
+            <div style="color:#f5f0ff;font-weight:600;margin-bottom:6px;">Human Voice — Public</div>
+            <p style="color:rgba(240,232,255,.82);font-size:.9rem;margin:0;">"Truly this man was the Son of God." A Roman centurion — the last person expected, watching from the foot of a cross — gets the answer right. The only human in Mark to confess correctly without being silenced.</p>
+          </div>
+        </div>
+
+        <div style="background:rgba(255,255,255,.04);border-left:3px solid rgba(192,132,252,.5);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:20px;">
+          <p style="color:rgba(240,232,255,.88);font-size:.91rem;margin:0;"><strong style="color:#e2d9f3;">The progression:</strong> Private → semi-private → public. Divine voice → divine voice → human voice. Jewish setting → Jewish mountaintop → Roman execution. And the only person who confesses openly in the public square is a Gentile soldier standing at the cross. That is Mark's Christology in three sentences.</p>
+        </div>
+
+        <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:20px;">
+          <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.16em;background:linear-gradient(135deg,#c084fc,#fb7185);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;">Creedal Moment · Mark 12:28–34</div>
+          <h4 style="color:#f5f0ff;margin-bottom:8px;">The Shema Exchange</h4>
+          <p style="color:rgba(240,232,255,.82);font-size:.91rem;margin-bottom:10px;">The closest thing to a mutual creedal dialogue in Mark. A scribe asks about the greatest commandment. Jesus answers with Deuteronomy 6:4–5 (the Shema) joined to Leviticus 19:18. The scribe then <em>recites the answer back</em> — paraphrasing, affirming, and adding: "more than all burnt offerings and sacrifices" (v. 33).</p>
+          <p style="color:rgba(240,232,255,.82);font-size:.91rem;margin-bottom:10px;">That addition is striking: the scribe embeds a critique of the temple cult <em>inside</em> his agreement with Jesus. Jesus responds: "You are not far from the kingdom of God." This is the only exchange in Mark where Jesus and a Jewish teacher reach agreement — and it happens in the temple courts, days before the crucifixion.</p>
+          <div style="background:rgba(0,180,216,.1);border:1px solid rgba(0,180,216,.25);border-radius:8px;padding:12px 16px;font-size:.88rem;color:rgba(240,232,255,.78);">
+            <strong style="color:#a5f3fc;">Creedal structure:</strong> Deut 6:4–5 (love God) + Lev 19:18 (love neighbor) — two Torah commands joined into a single catechetical formula that the early church would carry forward (cf. Rom 13:9; Gal 5:14; Jas 2:8). Mark presents Jesus as the one who first fuses them.
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========== TAB: CHIASMS ========== -->
+    <section class="panel-section" id="panel-chiasms">
+      <div class="kicker">Literary Architecture</div>
+      <h2>Chiastic Structures in Mark</h2>
+      <p class="lede">Mark is not just a rapid-fire story collection. He is a careful literary architect who layers chiastic patterns at multiple scales simultaneously — three major arches spanning large sections of the gospel, six nested and micro chiasms operating inside them, and six intercalation sandwiches woven throughout. Seeing them all at once reveals a compositional intelligence rarely appreciated at the popular level.</p>
+
+      <!-- ══ TIER 1 ══════════════════════════════════════════════ -->
+      <div class="chiasm-tier-divider">
+        <span class="tier-badge macro">Tier 1 · Macro Chiasms</span>
+        <div class="tier-rule"></div>
+      </div>
+      <p class="tier-desc">Three large-scale structures carry the weight of the entire Gospel. Each spans multiple chapters and places a theologically decisive center at its pivot. These are the load-bearing arches of Mark's composition.</p>
+
+      <!-- CHIASM 1 -->
+      <div class="chiasm-card animate-on-scroll">
+        <div class="mini-label">Chiasm 1 · Mark 2:1–3:6</div>
+        <h3>The Five Conflict Stories</h3>
+        <p class="chiasm-desc">Mark opens Jesus' public ministry with five controversy stories arranged in a careful arch. The center — the question about fasting and new wine — is the theological hinge: Jesus is not patching an old system but bringing something entirely new. The outer pairs mirror each other around that claim.</p>
+        <div class="chiasm-structure">
+          <div class="cl">
+            <span class="cl-key">A</span>
+            <span class="cl-ref">2:1–12</span>
+            <span class="cl-text">Healing of the paralytic — authority to <strong>forgive sins</strong> (indoor, Capernaum)</span>
+          </div>
+          <div class="cl i1">
+            <span class="cl-key">B</span>
+            <span class="cl-ref">2:13–17</span>
+            <span class="cl-text">Eating with sinners — "Why does he eat with tax collectors?"</span>
+          </div>
+          <div class="cl i2 cl-center">
+            <span class="cl-key">C</span>
+            <span class="cl-ref">2:18–22</span>
+            <span class="cl-text">CENTER: Fasting question — new wine, new wineskins. The old order cannot contain what Jesus brings.</span>
+          </div>
+          <div class="cl i1">
+            <span class="cl-key">B'</span>
+            <span class="cl-ref">2:23–28</span>
+            <span class="cl-text">Eating grain on the Sabbath — "Why do they do what is unlawful?"</span>
+          </div>
+          <div class="cl">
+            <span class="cl-key">A'</span>
+            <span class="cl-ref">3:1–6</span>
+            <span class="cl-text">Healing the withered hand — authority over <strong>the Sabbath</strong> (synagogue, public; ends in death plot)</span>
+          </div>
+        </div>
+        <div class="chiasm-insight">
+          <strong>Why it matters:</strong> A and A' both involve healing and raise the question of Jesus' authority. B and B' both involve eating and challenge religious boundaries. The center announces the interpretive key to all five: Jesus is the <em>bridegroom</em> who brings a fundamentally new order. Religious leaders end the section plotting to kill him (3:6) — the cross is already in view.
+        </div>
+      </div>
+
+      <!-- CHIASM 2 -->
+      <div class="chiasm-card animate-on-scroll">
+        <div class="mini-label">Chiasm 2 · Mark 8:22–10:52</div>
+        <h3>The Way of the Cross — Blind Man Bookends</h3>
+        <p class="chiasm-desc">The entire middle section of Mark is framed by two healings of blind men (Bethsaida, 8:22–26; Bartimaeus, 10:46–52). Between them, the disciples progressively fail to "see" Jesus for who he is. Three passion predictions anchor three symmetrical cycles of misunderstanding and correction. Note: Chiasms 5 and 6 are nested within this structure's C′ arm.</p>
+        <div class="chiasm-structure">
+          <div class="cl">
+            <span class="cl-key">A</span>
+            <span class="cl-ref">8:22–26</span>
+            <span class="cl-text">Blind man of Bethsaida healed <em>in two stages</em> — partial sight at first</span>
+          </div>
+          <div class="cl i1">
+            <span class="cl-key">B</span>
+            <span class="cl-ref">8:27–30</span>
+            <span class="cl-text">Peter's confession: "You are the Messiah" — sees, but only partially</span>
+          </div>
+          <div class="cl i2">
+            <span class="cl-key">C</span>
+            <span class="cl-ref">8:31–9:29</span>
+            <span class="cl-text">Passion Prediction 1 → Peter rebuked → Cross-discipleship → Transfiguration</span>
+          </div>
+          <div class="cl i3 cl-center">
+            <span class="cl-key">D</span>
+            <span class="cl-ref">9:30–37</span>
+            <span class="cl-text">CENTER: Passion Prediction 2 + "Who is the greatest?" → child in the midst. Servant = first. <em style="color:var(--text-muted);font-family:var(--mono);font-size:10px;">← Chiasm 5 opens here</em></span>
+          </div>
+          <div class="cl i2">
+            <span class="cl-key">C'</span>
+            <span class="cl-ref">9:38–10:31</span>
+            <span class="cl-text">Teaching on stumbling, divorce, children, wealth — all define the cross-shaped life <em style="color:var(--text-muted);font-family:var(--mono);font-size:10px;">← Chiasms 5 &amp; 6 live here</em></span>
+          </div>
+          <div class="cl i1">
+            <span class="cl-key">B'</span>
+            <span class="cl-ref">10:32–45</span>
+            <span class="cl-text">Passion Prediction 3 → James &amp; John seek positions → "Not to be served but to serve"</span>
+          </div>
+          <div class="cl">
+            <span class="cl-key">A'</span>
+            <span class="cl-ref">10:46–52</span>
+            <span class="cl-text">Blind Bartimaeus healed <em>completely, immediately</em> — "followed him on the way"</span>
+          </div>
+        </div>
+        <div class="chiasm-insight">
+          <strong>Why it matters:</strong> The two healings of blind men are not random miracles — they frame the entire discipleship section as a question of spiritual sight. The disciples are like the man at Bethsaida: they see partially (Peter's confession) but distort what they see. Bartimaeus, by contrast, sees clearly immediately and follows on "the way" — modeling what the disciples failed to do. The center on a child receiving service is the theological answer to every prideful misunderstanding in the arc.
+        </div>
+      </div>
+
+      <!-- CHIASM 3 -->
+      <div class="chiasm-card animate-on-scroll">
+        <div class="mini-label">Chiasm 3 · Mark 14:53–15:32</div>
+        <h3>The Passion Trial Chiasm</h3>
+        <p class="chiasm-desc">The trial and crucifixion sequence forms a precise chiastic arch where Jewish and Roman settings mirror each other, with the Roman judgment at the center. Each panel ironically crowns and mocks Jesus even as it reveals his true identity. Chiasm 9 (Crucifixion Climax) follows immediately after this structure at 15:33.</p>
+        <div class="chiasm-structure">
+          <div class="cl">
+            <span class="cl-key">A</span>
+            <span class="cl-ref">14:53–65</span>
+            <span class="cl-text">Jewish trial: "Are you the Messiah?" — false witnesses, struck by guards, mocked as prophet</span>
+          </div>
+          <div class="cl i1">
+            <span class="cl-key">B</span>
+            <span class="cl-ref">14:66–72</span>
+            <span class="cl-text">Peter denies Jesus three times before a servant girl — "I do not know this man"</span>
+          </div>
+          <div class="cl i2 cl-center">
+            <span class="cl-key">C</span>
+            <span class="cl-ref">15:1–15</span>
+            <span class="cl-text">CENTER: Roman trial — "Are you the King of the Jews?" Pilate hands him over to be crucified</span>
+          </div>
+          <div class="cl i1">
+            <span class="cl-key">B'</span>
+            <span class="cl-ref">15:16–20</span>
+            <span class="cl-text">Soldiers mock Jesus as "King of the Jews" — purple robe, crown of thorns, kneel in false homage</span>
+          </div>
+          <div class="cl">
+            <span class="cl-key">A'</span>
+            <span class="cl-ref">15:21–32</span>
+            <span class="cl-text">Crucifixion: "King of the Jews" on the placard — passers-by mock, leaders mock, co-crucified mock</span>
+          </div>
+        </div>
+        <div class="chiasm-insight">
+          <strong>Why it matters:</strong> Mark constructs the passion around irony: every act of mockery and rejection is simultaneously an act of coronation. "King of the Jews" is written in derision, but Mark means it literally. Peter's denial (B) and the soldiers' mockery (B') mirror each other as two kinds of human failure flanking the Gentile verdict at the center. Both Jewish and Roman systems condemn Jesus — yet the reader watches the king being enthroned.
+        </div>
+      </div>
+
+      <!-- ══ TIER 2 — NESTED ═══════════════════════════════════════ -->
+      <div class="chiasm-tier-divider">
+        <span class="tier-badge nested">Tier 2 · Nested Chiasms</span>
+        <div class="tier-rule"></div>
+      </div>
+      <p class="tier-desc">These structures operate <em>inside</em> the macro chiasms — the arms of the larger arches are themselves architecturally organized. Each card shows the parent structure in grey; lit arms indicate where the nested chiasm lives.</p>
+
+      <!-- CHIASM 5: Covenant Community -->
+      <div class="nested-card animate-on-scroll">
+        <span class="context-pill rose">↳ Nested inside Chiasm 2 · D center &amp; C′ arm</span>
+        <div class="mini-label">Chiasm 5 · Mark 9:33–50</div>
+        <h3>The Covenant Community — Greatness, the Little Ones, and Peace</h3>
+        <p class="chiasm-desc">This unit forms the theological heart of the C′ arm. It opens with disciples competing for status and closes with a command to be at peace — the same community, reordered by Jesus' definition of greatness. The pivot at v. 42 applies maximum rhetorical force to everything before it. Note that the chiasm straddles two arms of Chiasm 2: it begins inside the D center (9:33–37) and extends into C′ (9:38–50).</p>
+        <div class="parent-context">
+          <div class="parent-context-label">Parent Structure — Chiasm 2 (8:22–10:52)</div>
+          <div class="pcl"><span class="pcl-key">A</span><span class="pcl-ref">8:22–26</span><span class="pcl-text">Blind man of Bethsaida</span></div>
+          <div class="pcl i1"><span class="pcl-key">B</span><span class="pcl-ref">8:27–30</span><span class="pcl-text">Peter's confession</span></div>
+          <div class="pcl i2"><span class="pcl-key">C</span><span class="pcl-ref">8:31–9:29</span><span class="pcl-text">PP1 → Transfiguration</span></div>
+          <div class="pcl i3 lit"><span class="pcl-key">D</span><span class="pcl-ref">9:30–37</span><span class="pcl-text">CENTER: PP2 + child in the midst ← Chiasm 5 begins here (a–b)</span></div>
+          <div class="pcl i2 lit"><span class="pcl-key">C′</span><span class="pcl-ref">9:38–10:31</span><span class="pcl-text">Stumbling / covenant community / wealth ← Chiasm 5 continues here (c–c′–b′–a′)</span></div>
+          <div class="pcl i1"><span class="pcl-key">B′</span><span class="pcl-ref">10:32–45</span><span class="pcl-text">PP3 → James &amp; John → serve</span></div>
+          <div class="pcl"><span class="pcl-key">A′</span><span class="pcl-ref">10:46–52</span><span class="pcl-text">Blind Bartimaeus</span></div>
+        </div>
+        <div class="inner-divider rose">Inner Chiasm — 9:33–50</div>
+        <div class="chiasm-structure">
+          <div class="cl">
+            <span class="cl-key">a</span>
+            <span class="cl-ref">9:33–34</span>
+            <span class="cl-text">Disciples argue who is <strong>greatest</strong> — status competition; they are <strong>not at peace</strong> with one another</span>
+          </div>
+          <div class="cl i1">
+            <span class="cl-key">b</span>
+            <span class="cl-ref">9:35–37</span>
+            <span class="cl-text">Child placed in the center — <em>receive the small.</em> Greatness redefined around the vulnerable and powerless.</span>
+          </div>
+          <div class="cl i2">
+            <span class="cl-key">c</span>
+            <span class="cl-ref">9:38–41</span>
+            <span class="cl-text">Unknown exorcist: <em>do not hinder him.</em> Disciples' first instinct after "receive the small" is to police the boundary.</span>
+          </div>
+          <div class="cl i2 cl-center">
+            <span class="cl-key">c′</span>
+            <span class="cl-ref">9:42 — pivot</span>
+            <span class="cl-text">CENTER: <em>Do not cause the little ones who believe to stumble.</em> The millstone. Maximum severity applied to the gatekeeping of c.</span>
+          </div>
+          <div class="cl i1">
+            <span class="cl-key">b′</span>
+            <span class="cl-ref">9:43–48</span>
+            <span class="cl-text">Hand, foot, eye — better <strong>maimed than causing harm.</strong> The body as site of the ethical decision. Gehenna. Isaiah 66:24.</span>
+          </div>
+          <div class="cl">
+            <span class="cl-key">a′</span>
+            <span class="cl-ref">9:49–50</span>
+            <span class="cl-text"><em>Have salt in yourselves, and <strong>be at peace</strong> with one another.</em> Resolution to a. The community reordered by covenant rather than competition.</span>
+          </div>
+        </div>
+        <div class="chiasm-insight">
+          <strong>Why it matters:</strong> The inclusio is unmistakable — opens with a community at war over rank; closes with a command to peace. The chiasm makes the argument: receiving children (b/b′) and not causing stumbling (c/c′) are the same disposition expressed inward and outward. One chiasm's center (D of Chiasm 2) seeds this chiasm's problem (a); the C′ arm carries the resolution (a′).
+        </div>
+      </div>
+
+      <!-- CHIASM 6: Discipleship Teaching -->
+      <div class="nested-card animate-on-scroll">
+        <span class="context-pill rose">↳ Nested inside Chiasm 2 · C′ arm (second half)</span>
+        <div class="mini-label">Chiasm 6 · Mark 10:1–31</div>
+        <h3>Discipleship Teaching — Covenant, Children, and Wealth</h3>
+        <p class="chiasm-desc">The second half of Chiasm 2's C′ arm (following Chiasm 5) is itself chiactically organized around a central encounter. Three domains of discipleship — marriage, children, wealth — converge on the rich man's question, which is answered symmetrically on both sides: who receives the kingdom (b/b′) and what covenant commitment costs (a/a′).</p>
+        <div class="parent-context">
+          <div class="parent-context-label">Parent Structure — Chiasm 2 (8:22–10:52) · C′ arm</div>
+          <div class="pcl"><span class="pcl-key">A</span><span class="pcl-ref">8:22–26</span><span class="pcl-text">Blind man of Bethsaida</span></div>
+          <div class="pcl i1"><span class="pcl-key">B</span><span class="pcl-ref">8:27–30</span><span class="pcl-text">Peter's confession</span></div>
+          <div class="pcl i2"><span class="pcl-key">C</span><span class="pcl-ref">8:31–9:29</span><span class="pcl-text">PP1 → Transfiguration</span></div>
+          <div class="pcl i3"><span class="pcl-key">D</span><span class="pcl-ref">9:30–37</span><span class="pcl-text">CENTER: PP2 + child in the midst</span></div>
+          <div class="pcl i2 lit"><span class="pcl-key">C′</span><span class="pcl-ref">9:38–10:31</span><span class="pcl-text">Stumbling / covenant community / wealth ← Chiasm 6 lives in the 10:1–31 portion</span></div>
+          <div class="pcl i1"><span class="pcl-key">B′</span><span class="pcl-ref">10:32–45</span><span class="pcl-text">PP3 → James &amp; John → serve</span></div>
+          <div class="pcl"><span class="pcl-key">A′</span><span class="pcl-ref">10:46–52</span><span class="pcl-text">Blind Bartimaeus</span></div>
+        </div>
+        <div class="inner-divider rose">Inner Chiasm — 10:1–31</div>
+        <div class="chiasm-structure">
+          <div class="cl">
+            <span class="cl-key">A</span>
+            <span class="cl-ref">10:1–12</span>
+            <span class="cl-text">Divorce and marriage — <strong>covenant permanence.</strong> What God has joined, let no one separate.</span>
+          </div>
+          <div class="cl i1">
+            <span class="cl-key">B</span>
+            <span class="cl-ref">10:13–16</span>
+            <span class="cl-text">Receive children — <em>"the kingdom of God belongs to such as these."</em> Entry requires becoming like a child.</span>
+          </div>
+          <div class="cl i2 cl-center">
+            <span class="cl-key">C</span>
+            <span class="cl-ref">10:17–22</span>
+            <span class="cl-text">CENTER: Rich man — <em>"What must I do to inherit eternal life?"</em> He keeps the commandments; Jesus adds: give everything and follow. He goes away grieving.</span>
+          </div>
+          <div class="cl i1">
+            <span class="cl-key">B′</span>
+            <span class="cl-ref">10:23–27</span>
+            <span class="cl-text">Wealth and the kingdom — harder for a camel than for a thread through a needle's eye. <em>"With God all things are possible."</em></span>
+          </div>
+          <div class="cl">
+            <span class="cl-key">A′</span>
+            <span class="cl-ref">10:28–31</span>
+            <span class="cl-text">"We have left everything" — Peter's question. Jesus: <strong>hundredfold now</strong> and eternal life; first will be last.</span>
+          </div>
+        </div>
+        <div class="chiasm-insight">
+          <strong>Why it matters:</strong> The center question — "what must I do to inherit eternal life?" — is answered symmetrically by what flanks it. B/B′ establish who does receive the kingdom (children, the poor in spirit); A/A′ establish the cost of covenant commitment (no divorce, no clinging to wealth). The rich man's grief at the center is the shadow cast over every disciple who hears the same question.
+        </div>
+      </div>
+
+      <!-- CHIASM 8: Gethsemane -->
+      <div class="nested-card animate-on-scroll">
+        <span class="context-pill rose">↳ Passion Narrative · Mark 14 — preceding Chiasm 3</span>
+        <div class="mini-label">Chiasm 8 · Mark 14:32–42</div>
+        <h3>Gethsemane — Prayer, Sleep, and the Hour</h3>
+        <p class="chiasm-desc">The garden scene forms a tight concentric structure around one center: the disciples' inability to watch and pray. Jesus' prayer brackets their failure on both sides, making the contrast impossible to miss. This unit immediately precedes Chiasm 3 (14:53) — the will of the Father settled in the garden before the trial begins.</p>
+        <div class="parent-context">
+          <div class="parent-context-label">Location in the Passion Narrative · Mark 14</div>
+          <div class="pcl"><span class="pcl-key">—</span><span class="pcl-ref">14:1–11</span><span class="pcl-text">Plot to kill Jesus + Anointing + Judas' betrayal (Sandwich 5)</span></div>
+          <div class="pcl"><span class="pcl-key">—</span><span class="pcl-ref">14:12–31</span><span class="pcl-text">Last Supper + institution of the covenant meal</span></div>
+          <div class="pcl lit"><span class="pcl-key">→</span><span class="pcl-ref">14:32–42</span><span class="pcl-text">GETHSEMANE ← Chiasm 8 (this structure)</span></div>
+          <div class="pcl"><span class="pcl-key">—</span><span class="pcl-ref">14:43–52</span><span class="pcl-text">Betrayal and arrest</span></div>
+          <div class="pcl"><span class="pcl-key">—</span><span class="pcl-ref">14:53–15:32</span><span class="pcl-text">Passion Trial (Chiasm 3)</span></div>
+        </div>
+        <div class="inner-divider rose">Inner Chiasm — 14:32–42</div>
+        <div class="chiasm-structure">
+          <div class="cl">
+            <span class="cl-key">A</span>
+            <span class="cl-ref">14:32–34</span>
+            <span class="cl-text">"Sit here while I pray." Disciples left behind; Jesus takes Peter, James, John and grows distressed.</span>
+          </div>
+          <div class="cl i1">
+            <span class="cl-key">B</span>
+            <span class="cl-ref">14:35–36</span>
+            <span class="cl-text">Prayer: <em>"Remove this cup from me — yet not what I will, but what you will."</em> The will of the Son submitted to the Father.</span>
+          </div>
+          <div class="cl i2 cl-center">
+            <span class="cl-key">C</span>
+            <span class="cl-ref">14:37–38</span>
+            <span class="cl-text">CENTER: Disciples asleep. <em>"Simon, are you sleeping? Watch and pray, lest you enter into temptation."</em> The one thing asked; the one thing refused.</span>
+          </div>
+          <div class="cl i1">
+            <span class="cl-key">B′</span>
+            <span class="cl-ref">14:39</span>
+            <span class="cl-text">Prayer again — the same words. Jesus prays twice; the disciples sleep twice.</span>
+          </div>
+          <div class="cl">
+            <span class="cl-key">A′</span>
+            <span class="cl-ref">14:40–42</span>
+            <span class="cl-text">Disciples still sleeping. <em>"The hour has come; the Son of Man is betrayed into the hands of sinners. Rise, let us go."</em></span>
+          </div>
+        </div>
+        <div class="chiasm-insight">
+          <strong>Why it matters:</strong> The structure makes the disciples' failure the center of the scene — not Jesus' prayer. That's the point. Jesus prays, settles his will, and prays again. The disciples sleep, and sleep again. The pivot at C ("watch and pray") is the one imperative that could have prepared them for what follows — and they miss it. When Jesus says "Rise, let us go," he is ready. They are not.
+        </div>
+      </div>
+
+      <!-- CHIASM 9: Crucifixion Climax -->
+      <div class="nested-card animate-on-scroll">
+        <span class="context-pill rose">↳ Passion Narrative · Mark 15 — following Chiasm 3</span>
+        <div class="mini-label">Chiasm 9 · Mark 15:33–39</div>
+        <h3>The Crucifixion Climax — Darkness, Cry, and Confession</h3>
+        <p class="chiasm-desc">The seven verses immediately following Chiasm 3 form a precise five-beat arch that is the theological apex of the entire Gospel. Cosmic darkness brackets human misunderstanding at the center, and the passage moves from dereliction cry to death cry to public confession — with the temple veil as the final act of God.</p>
+        <div class="parent-context">
+          <div class="parent-context-label">Location in the Passion Narrative · Mark 15</div>
+          <div class="pcl"><span class="pcl-key">—</span><span class="pcl-ref">14:53–15:32</span><span class="pcl-text">Passion Trial (Chiasm 3)</span></div>
+          <div class="pcl lit"><span class="pcl-key">→</span><span class="pcl-ref">15:33–39</span><span class="pcl-text">CRUCIFIXION CLIMAX ← Chiasm 9 (this structure)</span></div>
+          <div class="pcl"><span class="pcl-key">—</span><span class="pcl-ref">15:40–47</span><span class="pcl-text">Women witnesses at cross and burial (Passion Triad)</span></div>
+          <div class="pcl"><span class="pcl-key">—</span><span class="pcl-ref">16:1–8</span><span class="pcl-text">Empty tomb — women, angel, silence</span></div>
+        </div>
+        <div class="inner-divider rose">Inner Chiasm — 15:33–39</div>
+        <div class="chiasm-structure">
+          <div class="cl">
+            <span class="cl-key">A</span>
+            <span class="cl-ref">15:33</span>
+            <span class="cl-text"><strong>Darkness</strong> over the whole land from the sixth hour to the ninth hour. Cosmic sign of judgment.</span>
+          </div>
+          <div class="cl i1">
+            <span class="cl-key">B</span>
+            <span class="cl-ref">15:34</span>
+            <span class="cl-text">Jesus cries: <em>"Eloi, Eloi, lema sabachthani?"</em> — "My God, my God, why have you forsaken me?" (Psalm 22:1)</span>
+          </div>
+          <div class="cl i2 cl-center">
+            <span class="cl-key">C</span>
+            <span class="cl-ref">15:35–36</span>
+            <span class="cl-text">CENTER: Bystanders misunderstand — "He is calling Elijah." Sour wine offered. <em>"Let us see whether Elijah will come to take him down."</em></span>
+          </div>
+          <div class="cl i1">
+            <span class="cl-key">B′</span>
+            <span class="cl-ref">15:37</span>
+            <span class="cl-text">Jesus utters a loud cry and breathes his last. The second cry — from lament to death.</span>
+          </div>
+          <div class="cl">
+            <span class="cl-key">A′</span>
+            <span class="cl-ref">15:38–39</span>
+            <span class="cl-text">Temple <strong>curtain torn</strong> top to bottom (God's act). A Gentile centurion: <em>"Truly this man was the Son of God."</em></span>
+          </div>
+        </div>
+        <div class="chiasm-insight">
+          <strong>Why it matters:</strong> The center misunderstanding (Elijah confusion) is flanked by the two cries — the cry of dereliction and the cry of death — while A/A′ move from cosmic darkness to cosmic disclosure. The structure enacts the gospel's central irony: at the moment of maximum abandonment, the temple veil tears and a pagan soldier sees what the Jewish leadership never did. The curtain tearing (A′) answers the darkness (A) — judgment gives way to access.
+        </div>
+      </div>
+
+      <!-- ══ TIER 2 — STANDALONE MICRO ══════════════════════════════ -->
+      <div class="chiasm-tier-divider">
+        <span class="tier-badge micro">Tier 2 · Standalone Micro Chiasms</span>
+        <div class="tier-rule"></div>
+      </div>
+      <p class="tier-desc">These self-contained structures do not nest inside the macro chiasms — they operate independently within a single discourse or narrative unit. Both are in structural dialogue with the macro chiasms that surround them.</p>
+
+      <!-- CHIASM 4: Parable Discourse -->
+      <div class="micro-card animate-on-scroll">
+        <span class="context-pill blue">Standalone · Mark 4 — Act 1</span>
+        <div class="mini-label">Chiasm 4 · Mark 4:1–34</div>
+        <h3>The Parable Discourse — Hearing and the Secret of the Kingdom</h3>
+        <p class="chiasm-desc">The only extended teaching discourse in Mark's Act 1 is itself chiactically organized. The center is not a new parable — it is the interpretation of the first one, signaling that the ability to hear and understand is itself the point. The outer pairs are parables about growth; the inner pairs are about the conditions for receiving the word.</p>
+        <div class="chiasm-structure">
+          <div class="cl">
+            <span class="cl-key">A</span>
+            <span class="cl-ref">4:1–9</span>
+            <span class="cl-text">Sower parable — four soils, four responses to the word. Closes: <em>"He who has ears to hear, let him hear."</em></span>
+          </div>
+          <div class="cl i1">
+            <span class="cl-key">B</span>
+            <span class="cl-ref">4:10–12</span>
+            <span class="cl-text">Why parables? — <em>"To you the secret of the kingdom of God is given; to those outside, everything is in parables."</em> Insider vs. outsider framing.</span>
+          </div>
+          <div class="cl i2 cl-center">
+            <span class="cl-key">C</span>
+            <span class="cl-ref">4:13–20</span>
+            <span class="cl-text">CENTER: Interpretation of the Sower. <em>"Do you not understand this parable? How then will you understand all the parables?"</em> The key to every other parable.</span>
+          </div>
+          <div class="cl i1">
+            <span class="cl-key">B′</span>
+            <span class="cl-ref">4:21–25</span>
+            <span class="cl-text">Lamp and measure sayings — <em>"Pay attention to what you hear… to the one who has, more will be given."</em> Insider/outsider dynamic revisited.</span>
+          </div>
+          <div class="cl">
+            <span class="cl-key">A′</span>
+            <span class="cl-ref">4:26–32</span>
+            <span class="cl-text">Growing seed + Mustard seed — the kingdom grows with hidden, unstoppable force. Two parables of growth mirror the two of A.</span>
+          </div>
+        </div>
+        <div class="chiasm-insight">
+          <strong>Why it matters:</strong> The center isn't a new parable — it's the master key to all parables. Mark places the question of <em>hearing</em> at the exact structural center of the only extended teaching in Act 1. The discourse is self-referential: it is itself a test of whether the listener has ears to hear. The parable about hearing is arranged as a chiasm that requires you to notice its structure to understand what it's saying.
+        </div>
+      </div>
+
+      <!-- CHIASM 7: Jerusalem Controversies -->
+      <div class="micro-card animate-on-scroll">
+        <span class="context-pill blue">Standalone · Mark 12 — Act 3 · mirrors Chiasm 1</span>
+        <div class="mini-label">Chiasm 7 · Mark 12:13–40</div>
+        <h3>The Jerusalem Controversy Chiasm — And the Scribe Who Almost Saw It</h3>
+        <p class="chiasm-desc">Mark deliberately mirrors Chiasm 1 (the five Galilee conflicts) with five Jerusalem controversy stories arranged in the same arch pattern. The Galilee center declared new wine; the Jerusalem center produces a scribe who is "not far from the kingdom" — almost, but not quite, seeing what Jesus is. The two chiasms frame the entire gospel ministry.</p>
+        <div class="chiasm-structure">
+          <div class="cl">
+            <span class="cl-key">A</span>
+            <span class="cl-ref">12:13–17</span>
+            <span class="cl-text">Taxes to Caesar — Pharisees and Herodians. <em>"Render to Caesar the things that are Caesar's, and to God the things that are God's."</em> They marvel; say nothing.</span>
+          </div>
+          <div class="cl i1">
+            <span class="cl-key">B</span>
+            <span class="cl-ref">12:18–27</span>
+            <span class="cl-text">Resurrection question — Sadducees. Jesus: <em>"You know neither the scriptures nor the power of God."</em> God of the living, not the dead.</span>
+          </div>
+          <div class="cl i2 cl-center">
+            <span class="cl-key">C</span>
+            <span class="cl-ref">12:28–34</span>
+            <span class="cl-text">CENTER: Greatest commandment — a scribe asks sincerely; Jesus answers: love God, love neighbor. The scribe agrees. Jesus: <em>"You are not far from the kingdom of God."</em></span>
+          </div>
+          <div class="cl i1">
+            <span class="cl-key">B′</span>
+            <span class="cl-ref">12:35–37</span>
+            <span class="cl-text">David's Son question — Jesus challenges the scribal teaching: if David calls the Messiah "Lord," how is he David's son? The crowd delights.</span>
+          </div>
+          <div class="cl">
+            <span class="cl-key">A′</span>
+            <span class="cl-ref">12:38–40</span>
+            <span class="cl-text">Warning against scribes — devour widows' houses, make long prayers for show. <em>"They will receive the greater condemnation."</em></span>
+          </div>
+        </div>
+        <div class="chiasm-insight">
+          <strong>Why it matters:</strong> This mirrors Chiasm 1 structurally — five controversies, same A–B–C–B′–A′ pattern, same movement from authority challenge to death threat. But the center scribe "not far from the kingdom" is a deliberate contrast to Chiasm 1's center ("new wine, new wineskins") — there, the old order was declared finished; here, one insider almost enters the new order but stops short. The two chiasms bracket the entire public ministry as a question: who will receive what Jesus brings?
+        </div>
+      </div>
+
+      <!-- ══ SANDWICHES ══════════════════════════════════════════════ -->
+      <div class="chiasm-tier-divider">
+        <span class="tier-badge gold">Intercalations · Markan Sandwiches</span>
+        <div class="tier-rule"></div>
+      </div>
+      <p class="tier-desc">Mark's most distinctive compositional tool is the <em>intercalation</em> — often called a "Markan sandwich." He interrupts Story A with Story B, then completes Story A. The interrupting story interprets the outer story, and vice versa. Mark uses this at least six times.</p>
+
+      <div class="sandwich-grid">
+
+        <div class="sandwich-item animate-on-scroll">
+          <div class="sandwich-header">
+            <span class="sandwich-ref">Mark 3:20–35 · Family / Beelzebul / Family</span>
+            <span class="pill" style="font-size: 9px;">Insiders vs. Outsiders</span>
+          </div>
+          <div class="sandwich-body">
+            <div class="sw-layer">
+              <div class="sw-bracket outer">A</div>
+              <div class="sw-content"><strong>3:20–21</strong> — Jesus' family sets out to "seize" him; they say he is "out of his mind"<em>Outer bread: his own kin reject him</em></div>
+            </div>
+            <div class="sw-layer">
+              <div class="sw-bracket inner">B</div>
+              <div class="sw-content"><strong>3:22–30</strong> — Scribes from Jerusalem: "He has Beelzebul / casts out demons by the prince of demons" — the unforgivable sin accusation<em>Filling: religious leaders charge him with being demonically possessed</em></div>
+            </div>
+            <div class="sw-layer">
+              <div class="sw-bracket outer">A'</div>
+              <div class="sw-content"><strong>3:31–35</strong> — His mother and brothers arrive; Jesus redefines family as those who do God's will<em>Outer bread completed: true family is not biological but obedient</em></div>
+            </div>
+          </div>
+          <div class="sw-meaning">Both stories ask: who truly belongs to Jesus? The religious insiders are really outsiders; the new family is those who hear and obey.</div>
+        </div>
+
+        <div class="sandwich-item animate-on-scroll">
+          <div class="sandwich-header">
+            <span class="sandwich-ref">Mark 5:21–43 · Jairus / Woman / Jairus</span>
+            <span class="pill rose" style="font-size: 9px;">Faith That Reaches</span>
+          </div>
+          <div class="sandwich-body">
+            <div class="sw-layer">
+              <div class="sw-bracket outer">A</div>
+              <div class="sw-content"><strong>5:21–24</strong> — Jairus, synagogue ruler, falls at Jesus' feet: "My daughter is at the point of death"<em>Outer bread: socially prominent, desperate father</em></div>
+            </div>
+            <div class="sw-layer">
+              <div class="sw-bracket inner">B</div>
+              <div class="sw-content"><strong>5:25–34</strong> — Woman with 12-year hemorrhage touches Jesus' garment and is healed; "Your faith has made you well"<em>Filling: socially marginalized woman; 12 years of suffering</em></div>
+            </div>
+            <div class="sw-layer">
+              <div class="sw-bracket outer">A'</div>
+              <div class="sw-content"><strong>5:35–43</strong> — Jairus' daughter declared dead; Jesus raises her (she is 12 years old)<em>Outer bread completed: "the child" is also restored</em></div>
+            </div>
+          </div>
+          <div class="sw-meaning">The 12-year hemorrhage and the 12-year-old girl are no accident — they mirror Israel's condition. Both healings hinge on the same word: faith. The interruption defines what makes the outer miracle possible.</div>
+        </div>
+
+        <div class="sandwich-item animate-on-scroll">
+          <div class="sandwich-header">
+            <span class="sandwich-ref">Mark 6:7–30 · Mission / John's Death / Mission</span>
+            <span class="pill blue" style="font-size: 9px;">Mission and Martyrdom</span>
+          </div>
+          <div class="sandwich-body">
+            <div class="sw-layer">
+              <div class="sw-bracket outer">A</div>
+              <div class="sw-content"><strong>6:7–13</strong> — Jesus sends out the Twelve with authority; they go two by two, cast out demons, heal<em>Outer bread: mission launched</em></div>
+            </div>
+            <div class="sw-layer">
+              <div class="sw-bracket inner">B</div>
+              <div class="sw-content"><strong>6:14–29</strong> — Flashback: Herod arrests, imprisons, and beheads John the Baptist at a banquet<em>Filling: the fate of God's messenger under political power</em></div>
+            </div>
+            <div class="sw-layer">
+              <div class="sw-bracket outer">A'</div>
+              <div class="sw-content"><strong>6:30</strong> — The apostles return and report all they did<em>Outer bread completed: mission returns</em></div>
+            </div>
+          </div>
+          <div class="sw-meaning">The shadow of John's death falls over the disciples' mission. They return from successful ministry into a world that kills God's messengers. This is the cost of the mission they have joined.</div>
+        </div>
+
+        <div class="sandwich-item animate-on-scroll">
+          <div class="sandwich-header">
+            <span class="sandwich-ref">Mark 11:12–25 · Fig Tree / Temple / Fig Tree</span>
+            <span class="pill" style="font-size: 9px;">Prophetic Judgment</span>
+          </div>
+          <div class="sandwich-body">
+            <div class="sw-layer">
+              <div class="sw-bracket outer">A</div>
+              <div class="sw-content"><strong>11:12–14</strong> — Jesus curses the fruitless fig tree ("May no one ever eat fruit from you again")<em>Outer bread: Israel's leadership like a leafy but fruitless tree</em></div>
+            </div>
+            <div class="sw-layer">
+              <div class="sw-bracket inner">B</div>
+              <div class="sw-content"><strong>11:15–19</strong> — Jesus overturns tables in the temple: "a den of robbers" — enacts prophetic judgment on the temple system<em>Filling: the temple institution is under the same curse</em></div>
+            </div>
+            <div class="sw-layer">
+              <div class="sw-bracket outer">A'</div>
+              <div class="sw-content"><strong>11:20–25</strong> — Disciples see the fig tree withered to its roots; Jesus teaches on faith, prayer, and forgiveness<em>Outer bread completed: the withering is fulfilled</em></div>
+            </div>
+          </div>
+          <div class="sw-meaning">The fig tree explains the temple and the temple explains the fig tree. Israel's cultic center — like the tree — has leaves (religious activity) but no fruit. The sandwich makes clear that the temple action is not a cleansing but a judgment.</div>
+        </div>
+
+        <div class="sandwich-item animate-on-scroll">
+          <div class="sandwich-header">
+            <span class="sandwich-ref">Mark 14:1–11 · Plot / Anointing / Betrayal</span>
+            <span class="pill rose" style="font-size: 9px;">Devotion vs. Treachery</span>
+          </div>
+          <div class="sandwich-body">
+            <div class="sw-layer">
+              <div class="sw-bracket outer">A</div>
+              <div class="sw-content"><strong>14:1–2</strong> — Chief priests and scribes seek how to arrest and kill Jesus; "not during the feast, lest there be an uproar"<em>Outer bread: murder is being planned in secret</em></div>
+            </div>
+            <div class="sw-layer">
+              <div class="sw-bracket inner">B</div>
+              <div class="sw-content"><strong>14:3–9</strong> — An unnamed woman anoints Jesus' head with expensive nard. Jesus declares: "She has done a beautiful thing to me … she has anointed my body beforehand for burial … wherever the gospel is proclaimed, what she has done will be told"<em>Filling: an outsider understands the cross; the insiders do not</em></div>
+            </div>
+            <div class="sw-layer">
+              <div class="sw-bracket outer">A'</div>
+              <div class="sw-content"><strong>14:10–11</strong> — Judas, one of the Twelve, goes to the chief priests to betray Jesus; they are delighted and promise money<em>Outer bread completed: an insider joins the murderous plot for profit</em></div>
+            </div>
+          </div>
+          <div class="sw-meaning">The woman and Judas are placed in deliberate contrast. She gives extravagantly to honor Jesus before his death; Judas sells Jesus for money. She is unnamed but remembered forever; Judas is named but remembered in shame. The interruption reframes A and A' as a study in the two possible responses to Jesus at the point of ultimate cost.</div>
+        </div>
+
+      </div>
+
+      <div class="callout">
+        <div class="mini-label">Reading Tip</div>
+        <p>When you see Mark interrupt a story with another story, pause and ask: <strong>How does the inserted story interpret the outer story?</strong> How does the outer story reframe the inserted one? The meaning lives in the gap between the two. Mark never uses the sandwich accidentally. <em>Note: the sixth and final sandwich (14:53–72, Jesus' trial / Peter's denial / trial) is treated above as Chiasm 3, where its mirror structure carries the fullest theological weight.</em></p>
+      </div>
+
+      <!-- PASSION TRIADS -->
+      <div class="theology-card animate-on-scroll" style="margin-top:28px;">
+        <div class="mini-label">Passion Triads</div>
+        <h3>Structured Patterns in the Crucifixion Narrative</h3>
+        <p style="color:var(--text-gray);font-size:.93rem;margin-bottom:22px;">Mark's passion account (chapters 14–16) is not raw reportage — it is architecturally shaped. Two triadic patterns frame the cross from opposite directions: one from mockery, one from witness.</p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px;">
+          <div>
+            <h4 style="margin-bottom:12px;">Three Mockers at the Cross <span style="font-weight:400;color:var(--text-gray);font-size:.88rem;">(15:29–32)</span></h4>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="padding:12px 14px;background:rgba(225,29,72,.06);border-left:3px solid rgba(225,29,72,.4);border-radius:0 6px 6px 0;">
+                <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent-rose);margin-bottom:4px;">First · vv. 29–30</div>
+                <strong style="font-size:.91rem;">Passers-by</strong>
+                <p style="margin:4px 0 0;font-size:.88rem;color:var(--text-gray);">Ordinary people walking past. They wag their heads and mock the temple claim. The crowd — anonymous Israel.</p>
+              </div>
+              <div style="padding:12px 14px;background:rgba(225,29,72,.06);border-left:3px solid rgba(225,29,72,.4);border-radius:0 6px 6px 0;">
+                <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent-rose);margin-bottom:4px;">Second · vv. 31–32a</div>
+                <strong style="font-size:.91rem;">Chief Priests &amp; Scribes</strong>
+                <p style="margin:4px 0 0;font-size:.88rem;color:var(--text-gray);">Religious leadership. "He saved others; he cannot save himself." The irony is sharpest here — they are accidentally correct in the deepest theological sense.</p>
+              </div>
+              <div style="padding:12px 14px;background:rgba(225,29,72,.06);border-left:3px solid rgba(225,29,72,.4);border-radius:0 6px 6px 0;">
+                <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent-rose);margin-bottom:4px;">Third · v. 32b</div>
+                <strong style="font-size:.91rem;">The Co-Crucified</strong>
+                <p style="margin:4px 0 0;font-size:.88rem;color:var(--text-gray);">Those crucified alongside him join the mockery. Even the condemned revile their fellow condemned. Every social layer has rejected him.</p>
+              </div>
+            </div>
+            <div style="margin-top:12px;padding:10px 14px;background:rgba(0,0,0,.04);border-radius:6px;font-size:.88rem;color:var(--text-gray);">
+              <strong>The reversal:</strong> After three layers of mockery by Jewish society (crowd → leaders → condemned), a single Gentile soldier confesses at 15:39. Mark arranges this contrast structurally — the failure of Israel's recognition is the backdrop for the Gentile confession.
+            </div>
+          </div>
+
+          <div>
+            <h4 style="margin-bottom:12px;">Three Women Witnesses — Inclusio <span style="font-weight:400;color:var(--text-gray);font-size:.88rem;">(15:40 / 15:47 / 16:1)</span></h4>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="padding:12px 14px;background:rgba(0,180,216,.06);border-left:3px solid rgba(0,180,216,.4);border-radius:0 6px 6px 0;">
+                <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent-blue);margin-bottom:4px;">First · 15:40</div>
+                <strong style="font-size:.91rem;">At the Cross</strong>
+                <p style="margin:4px 0 0;font-size:.88rem;color:var(--text-gray);">Mary Magdalene, Mary mother of James and Joses, and Salome. Named, watching from a distance while the Twelve are absent.</p>
+              </div>
+              <div style="padding:12px 14px;background:rgba(0,180,216,.06);border-left:3px solid rgba(0,180,216,.4);border-radius:0 6px 6px 0;">
+                <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent-blue);margin-bottom:4px;">Second · 15:47</div>
+                <strong style="font-size:.91rem;">At the Burial</strong>
+                <p style="margin:4px 0 0;font-size:.88rem;color:var(--text-gray);">Mary Magdalene and Mary mother of Joses. They observe where the body is laid — establishing continuity between the death and the empty tomb.</p>
+              </div>
+              <div style="padding:12px 14px;background:rgba(0,180,216,.06);border-left:3px solid rgba(0,180,216,.4);border-radius:0 6px 6px 0;">
+                <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent-blue);margin-bottom:4px;">Third · 16:1</div>
+                <strong style="font-size:.91rem;">At the Empty Tomb</strong>
+                <p style="margin:4px 0 0;font-size:.88rem;color:var(--text-gray);">The same three women return at dawn. They are the only continuous witnesses across the passion — cross, burial, resurrection. The disciples who ran are not here. The women are.</p>
+              </div>
+            </div>
+            <div style="margin-top:12px;padding:10px 14px;background:rgba(0,0,0,.04);border-radius:6px;font-size:.88rem;color:var(--text-gray);">
+              <strong>Structural function:</strong> This three-part appearance is an inclusio bracketing the entire passion-resurrection sequence. The same witnesses anchor both ends, making the women the evidentiary backbone of Mark's resurrection claim. Their fidelity contrasts sharply with the flight of the Twelve.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ TIER 3 — REGISTRY ══════════════════════════════════════ -->
+      <div class="chiasm-tier-divider">
+        <span class="tier-badge registry">Registry · Complete Structure Map</span>
+        <div class="tier-rule"></div>
+      </div>
+      <p class="tier-desc">Every identified chiastic and mirror-pattern structure in Mark, mapped against the chapter timeline and rated by confidence. The arc map shows all nine at once — the density of Mark's architectural intelligence made visible.</p>
+
+      <!-- ARC MAP -->
+      <div class="arc-map-wrap">
+        <svg viewBox="0 0 720 230" xmlns="http://www.w3.org/2000/svg" aria-label="Chiastic structures mapped across Mark chapters 1-16">
+          <!-- Baseline -->
+          <line x1="60" y1="195" x2="680" y2="195" stroke="#e5e7eb" stroke-width="1.5"/>
+
+          <!-- Chapter tick marks and labels -->
+          <!-- Ch widths: 1-4=30px, 5-8=30px, 9-10=50px, 11-13=30px, 14-15=75px, 16=40px -->
+          <!-- x positions: 1=60,2=90,3=120,4=150,5=180,6=210,7=240,8=270,9=300,10=350,11=400,12=430,13=460,14=490,15=565,16=640,end=680 -->
+          <g font-family="'IBM Plex Mono', monospace" font-size="9" fill="#9ca3af" text-anchor="middle">
+            <line x1="60"  y1="193" x2="60"  y2="198" stroke="#d1d5db" stroke-width="1"/>
+            <line x1="90"  y1="193" x2="90"  y2="198" stroke="#d1d5db" stroke-width="1"/>
+            <line x1="120" y1="193" x2="120" y2="198" stroke="#d1d5db" stroke-width="1"/>
+            <line x1="150" y1="193" x2="150" y2="198" stroke="#d1d5db" stroke-width="1"/>
+            <line x1="180" y1="193" x2="180" y2="198" stroke="#d1d5db" stroke-width="1"/>
+            <line x1="210" y1="193" x2="210" y2="198" stroke="#d1d5db" stroke-width="1"/>
+            <line x1="240" y1="193" x2="240" y2="198" stroke="#d1d5db" stroke-width="1"/>
+            <line x1="270" y1="193" x2="270" y2="198" stroke="#d1d5db" stroke-width="1"/>
+            <line x1="300" y1="193" x2="300" y2="198" stroke="#d1d5db" stroke-width="1"/>
+            <line x1="350" y1="193" x2="350" y2="198" stroke="#d1d5db" stroke-width="1"/>
+            <line x1="400" y1="193" x2="400" y2="198" stroke="#d1d5db" stroke-width="1"/>
+            <line x1="430" y1="193" x2="430" y2="198" stroke="#d1d5db" stroke-width="1"/>
+            <line x1="460" y1="193" x2="460" y2="198" stroke="#d1d5db" stroke-width="1"/>
+            <line x1="490" y1="193" x2="490" y2="198" stroke="#d1d5db" stroke-width="1"/>
+            <line x1="565" y1="193" x2="565" y2="198" stroke="#d1d5db" stroke-width="1"/>
+            <line x1="640" y1="193" x2="640" y2="198" stroke="#d1d5db" stroke-width="1"/>
+            <line x1="680" y1="193" x2="680" y2="198" stroke="#d1d5db" stroke-width="1"/>
+            <!-- Chapter numbers -->
+            <text x="75"  y="210">1</text>
+            <text x="105" y="210">2</text>
+            <text x="135" y="210">3</text>
+            <text x="165" y="210">4</text>
+            <text x="195" y="210">5</text>
+            <text x="225" y="210">6</text>
+            <text x="255" y="210">7</text>
+            <text x="285" y="210">8</text>
+            <text x="325" y="210">9</text>
+            <text x="375" y="210">10</text>
+            <text x="415" y="210">11</text>
+            <text x="445" y="210">12</text>
+            <text x="475" y="210">13</text>
+            <text x="527" y="210">14</text>
+            <text x="602" y="210">15</text>
+            <text x="660" y="210">16</text>
+          </g>
+
+          <!-- ── PROPOSED: Prologue ↔ Empty Tomb (1:1–16:8) dashed grey ── -->
+          <path d="M 60,195 Q 370,68 680,195" fill="none" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.55"/>
+          <text x="370" y="62" font-family="'IBM Plex Mono', monospace" font-size="8.5" fill="#9ca3af" text-anchor="middle" opacity="0.7">1:1–16:8 proposed</text>
+
+          <!-- ── MACRO 1: Five Conflicts (2:1–3:6) ── -->
+          <path d="M 90,195 Q 107,133 128,195" fill="none" stroke="#7209b7" stroke-width="2.5" opacity="0.85"/>
+          <text x="109" y="127" font-family="'IBM Plex Mono', monospace" font-size="8" fill="#7209b7" text-anchor="middle" font-weight="600">①</text>
+
+          <!-- ── MICRO 4: Parable Discourse (4:1–34) ── -->
+          <path d="M 150,195 Q 163,157 177,195" fill="none" stroke="#00b4d8" stroke-width="2" opacity="0.85"/>
+          <text x="163" y="151" font-family="'IBM Plex Mono', monospace" font-size="8" fill="#00b4d8" text-anchor="middle" font-weight="600">④</text>
+
+          <!-- ── MACRO 2: Way of the Cross (8:22–10:52) ── -->
+          <path d="M 283,195 Q 341,117 400,195" fill="none" stroke="#7209b7" stroke-width="2.5" opacity="0.85"/>
+          <text x="341" y="111" font-family="'IBM Plex Mono', monospace" font-size="8" fill="#7209b7" text-anchor="middle" font-weight="600">②</text>
+
+          <!-- ── NESTED 5: Covenant Community (9:33–50) inside Chiasm 2 ── -->
+          <path d="M 333,195 Q 341,169 350,195" fill="none" stroke="#e11d48" stroke-width="2" opacity="0.85"/>
+          <text x="341" y="163" font-family="'IBM Plex Mono', monospace" font-size="8" fill="#e11d48" text-anchor="middle" font-weight="600">⑤</text>
+
+          <!-- ── NESTED 6: Discipleship Teaching (10:1–31) inside Chiasm 2 ── -->
+          <path d="M 350,195 Q 365,175 380,195" fill="none" stroke="#e11d48" stroke-width="2" opacity="0.85"/>
+          <text x="365" y="169" font-family="'IBM Plex Mono', monospace" font-size="8" fill="#e11d48" text-anchor="middle" font-weight="600">⑥</text>
+
+          <!-- ── MICRO 7: Jerusalem Controversies (12:13–40) ── -->
+          <path d="M 439,195 Q 448,157 457,195" fill="none" stroke="#00b4d8" stroke-width="2" opacity="0.85"/>
+          <text x="448" y="151" font-family="'IBM Plex Mono', monospace" font-size="8" fill="#00b4d8" text-anchor="middle" font-weight="600">⑦</text>
+
+          <!-- ── NESTED 8: Gethsemane (14:32–42) ── -->
+          <path d="M 519,195 Q 531,171 543,195" fill="none" stroke="#e11d48" stroke-width="2" opacity="0.85"/>
+          <text x="531" y="165" font-family="'IBM Plex Mono', monospace" font-size="8" fill="#e11d48" text-anchor="middle" font-weight="600">⑧</text>
+
+          <!-- ── MACRO 3: Passion Trial (14:53–15:32) ── -->
+          <path d="M 545,195 Q 580,133 616,195" fill="none" stroke="#7209b7" stroke-width="2.5" opacity="0.85"/>
+          <text x="580" y="127" font-family="'IBM Plex Mono', monospace" font-size="8" fill="#7209b7" text-anchor="middle" font-weight="600">③</text>
+
+          <!-- ── NESTED 9: Crucifixion Climax (15:33–39) ── -->
+          <path d="M 617,195 Q 630,177 643,195" fill="none" stroke="#e11d48" stroke-width="2" opacity="0.85"/>
+          <text x="630" y="171" font-family="'IBM Plex Mono', monospace" font-size="8" fill="#e11d48" text-anchor="middle" font-weight="600">⑨</text>
+
+          <!-- Act labels -->
+          <text x="130" y="225" font-family="'IBM Plex Mono', monospace" font-size="8" fill="#d1d5db" text-anchor="middle" letter-spacing="1">ACT 1</text>
+          <text x="341" y="225" font-family="'IBM Plex Mono', monospace" font-size="8" fill="#d1d5db" text-anchor="middle" letter-spacing="1">ACT 2</text>
+          <text x="570" y="225" font-family="'IBM Plex Mono', monospace" font-size="8" fill="#d1d5db" text-anchor="middle" letter-spacing="1">ACT 3</text>
+        </svg>
+
+        <div class="arc-map-legend">
+          <div class="aml-item"><div class="aml-line" style="background:#7209b7;"></div> Macro chiasm</div>
+          <div class="aml-item"><div class="aml-line" style="background:#00b4d8;"></div> Standalone micro</div>
+          <div class="aml-item"><div class="aml-line" style="background:#e11d48;"></div> Nested chiasm</div>
+          <div class="aml-item"><div class="aml-line" style="background:#9ca3af;border-top:1px dashed #9ca3af;height:0;"></div> Proposed / contested</div>
+        </div>
+      </div>
+
+      <!-- REGISTRY TABLE -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Reference</th>
+              <th>Type</th>
+              <th>Confidence</th>
+              <th>Nested In</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1</strong></td>
+              <td>Five Conflict Stories</td>
+              <td style="font-family:var(--mono);font-size:.88rem;">2:1–3:6</td>
+              <td><span class="type-dot macro"></span>Macro</td>
+              <td><span class="confidence-badge definite">Definite</span></td>
+              <td style="color:var(--text-muted);">—</td>
+            </tr>
+            <tr>
+              <td><strong>2</strong></td>
+              <td>Way of the Cross</td>
+              <td style="font-family:var(--mono);font-size:.88rem;">8:22–10:52</td>
+              <td><span class="type-dot macro"></span>Macro</td>
+              <td><span class="confidence-badge definite">Definite</span></td>
+              <td style="color:var(--text-muted);">—</td>
+            </tr>
+            <tr>
+              <td><strong>3</strong></td>
+              <td>Passion Trial</td>
+              <td style="font-family:var(--mono);font-size:.88rem;">14:53–15:32</td>
+              <td><span class="type-dot macro"></span>Macro</td>
+              <td><span class="confidence-badge definite">Definite</span></td>
+              <td style="color:var(--text-muted);">—</td>
+            </tr>
+            <tr>
+              <td><strong>4</strong></td>
+              <td>Parable Discourse</td>
+              <td style="font-family:var(--mono);font-size:.88rem;">4:1–34</td>
+              <td><span class="type-dot micro"></span>Standalone Micro</td>
+              <td><span class="confidence-badge definite">Definite</span></td>
+              <td style="color:var(--text-muted);">—</td>
+            </tr>
+            <tr>
+              <td><strong>5</strong></td>
+              <td>Covenant Community</td>
+              <td style="font-family:var(--mono);font-size:.88rem;">9:33–50</td>
+              <td><span class="type-dot nested"></span>Nested</td>
+              <td><span class="confidence-badge definite">Definite</span></td>
+              <td>Chiasm 2 · D/C′</td>
+            </tr>
+            <tr>
+              <td><strong>6</strong></td>
+              <td>Discipleship Teaching</td>
+              <td style="font-family:var(--mono);font-size:.88rem;">10:1–31</td>
+              <td><span class="type-dot nested"></span>Nested</td>
+              <td><span class="confidence-badge strong">Strong</span></td>
+              <td>Chiasm 2 · C′</td>
+            </tr>
+            <tr>
+              <td><strong>7</strong></td>
+              <td>Jerusalem Controversies</td>
+              <td style="font-family:var(--mono);font-size:.88rem;">12:13–40</td>
+              <td><span class="type-dot micro"></span>Standalone Micro</td>
+              <td><span class="confidence-badge definite">Definite</span></td>
+              <td style="color:var(--text-muted);">—</td>
+            </tr>
+            <tr>
+              <td><strong>8</strong></td>
+              <td>Gethsemane Prayer</td>
+              <td style="font-family:var(--mono);font-size:.88rem;">14:32–42</td>
+              <td><span class="type-dot nested"></span>Nested</td>
+              <td><span class="confidence-badge strong">Strong</span></td>
+              <td>Passion Narrative · pre-Chiasm 3</td>
+            </tr>
+            <tr>
+              <td><strong>9</strong></td>
+              <td>Crucifixion Climax</td>
+              <td style="font-family:var(--mono);font-size:.88rem;">15:33–39</td>
+              <td><span class="type-dot nested"></span>Nested</td>
+              <td><span class="confidence-badge strong">Strong</span></td>
+              <td>Passion Narrative · post-Chiasm 3</td>
+            </tr>
+            <tr style="opacity:.65;">
+              <td><strong>—</strong></td>
+              <td>Prologue ↔ Empty Tomb</td>
+              <td style="font-family:var(--mono);font-size:.88rem;">1:1–13 / 16:1–8</td>
+              <td><span class="type-dot proposed"></span>Macro</td>
+              <td><span class="confidence-badge proposed">Proposed</span></td>
+              <td style="color:var(--text-muted);">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+
+    <!-- ========== TAB: WORDPLAY ========== -->
+    <section class="panel-section" id="panel-wordplay">
+      <div class="kicker">Greek Literary Artistry</div>
+      <h2>Wordplay &amp; Verbal Patterns in Mark</h2>
+      <p class="lede">Mark writes in relatively simple Koine Greek, but his simplicity is strategic. He returns to key words repeatedly, positions them at structural turning points, and sometimes uses the same word across wildly different scenes to create irony or depth. These patterns are lost in translation unless you know to look for them.</p>
+
+      <div class="words-grid">
+
+        <!-- εὐθύς -->
+        <div class="word-card animate-on-scroll">
+          <div class="word-greek">εὐθύς</div>
+          <div class="word-transliteration">euthys · eutheos</div>
+          <div class="word-gloss">"immediately / straightway"</div>
+          <span class="word-count">~41× in Mark · 6× in Matthew · 1× in Luke</span>
+          <p class="word-body">Mark's signature word. He uses it more than any other NT writer — nearly once per paragraph in chapters 1–6. It creates a breathless, urgent, forward-hurtling narrative momentum. Jesus does not reflect; he acts. The kingdom does not wait; it arrives. Scholars sometimes call this Mark's "parataxis" style: rapid short sentences linked by καί ("and") and εὐθύς.</p>
+          <p class="word-body">The urgency is not accidental. Mark presents a world in the grip of evil that needs decisive rescue — and a king who moves without delay. When εὐθύς clusters slow in the passion narrative (chapters 14–16), the contrast is striking: here the pace changes to deliberate suffering.</p>
+          <div class="word-refs">
+            <span class="wr highlight">1:10 — Spirit descends</span>
+            <span class="wr highlight">1:12 — into the wilderness</span>
+            <span class="wr highlight">1:18 — disciples leave nets</span>
+            <span class="wr highlight">1:20 — James and John follow</span>
+            <span class="wr highlight">1:21 — enters Capernaum</span>
+            <span class="wr">1:23, 29, 30…</span>
+          </div>
+        </div>
+
+        <!-- ὁδός -->
+        <div class="word-card animate-on-scroll">
+          <div class="word-greek">ὁδός</div>
+          <div class="word-transliteration">hodos</div>
+          <div class="word-gloss">"way / road / path"</div>
+          <span class="word-count">16× in Mark</span>
+          <p class="word-body">One of Mark's most theologically loaded words. It operates on three levels simultaneously: (1) the <em>literal road</em> from Galilee to Jerusalem; (2) the <em>messianic way</em> prophesied in Isaiah 40:3 ("Prepare the way of the Lord") — which Mark quotes in 1:2–3; and (3) the <em>way of discipleship</em> that Jesus himself defines.</p>
+          <p class="word-body">The climax of Act 2 is perfectly positioned: Bartimaeus is healed and immediately "followed him on the way" (10:52 — ἐν τῇ ὁδῷ). He models what the disciples throughout chapters 8–10 refused to do. The whole journey section is framed as a question: will you follow Jesus on his way?</p>
+          <div class="word-refs">
+            <span class="wr highlight">1:2–3 — Isaiah's "way of the Lord"</span>
+            <span class="wr highlight">8:27 — "on the way" to Caesarea Philippi</span>
+            <span class="wr highlight">9:33–34 — argued "on the way" about greatness</span>
+            <span class="wr highlight">10:32 — "on the way" to Jerusalem</span>
+            <span class="wr highlight">10:52 — Bartimaeus follows "on the way"</span>
+          </div>
+        </div>
+
+        <!-- σχίζω -->
+        <div class="word-card animate-on-scroll">
+          <div class="word-greek">σχίζω</div>
+          <div class="word-transliteration">schizō</div>
+          <div class="word-gloss">"to tear / to split open"</div>
+          <span class="word-count">2× in Mark — a structural inclusio</span>
+          <p class="word-body">Mark uses this violent, irreversible word exactly twice — and the two uses form the Gospel's deepest structural bracket. At the baptism, the heavens are "torn open" (σχιζομένους) and God declares Jesus his Son (1:10). At the death, the temple curtain is "torn in two" (ἐσχίσθη) from top to bottom (15:38). Both are unambiguously acts of God. Both are followed by a declaration of Jesus' identity.</p>
+          <div class="contrast-block">
+            <div class="cb-half purple">
+              <div class="cb-label">1:10 — Opening</div>
+              <p style="font-size:.95rem;">Heavens tear → Spirit descends → "You are my Son" (divine voice, private)</p>
+            </div>
+            <div class="cb-half rose">
+              <div class="cb-label">15:38 — Closing</div>
+              <p style="font-size:.95rem;">Curtain tears → Darkness ends → "This man was the Son of God" (human voice, public)</p>
+            </div>
+          </div>
+          <p class="word-body" style="margin-top:12px;">The word does not mean "open gently." It means <em>rip</em>. Mark is saying that Jesus' arrival and death are world-rupturing events. The barrier between heaven and earth — represented first by the sky at the Jordan, then by the veil before the Holy of Holies — does not open; it is destroyed.</p>
+        </div>
+
+        <!-- Son of Man trajectory -->
+        <div class="word-card animate-on-scroll">
+          <div class="word-greek">ὁ υἱὸς<br>τοῦ ἀνθρώπου</div>
+          <div class="word-transliteration">ho huios tou anthrōpou</div>
+          <div class="word-gloss">"the Son of Man" (Dan 7:13–14)</div>
+          <span class="word-count">14× in Mark</span>
+          <p class="word-body">Jesus' self-designation appears in three distinct clusters that trace the arc of the whole Gospel: authority → suffering → glory. Mark never explains the title; the reader is expected to trace its trajectory and feel its weight building.</p>
+          <div class="contrast-block">
+            <div class="cb-half purple">
+              <div class="cb-label">Authority (Acts 1–2)</div>
+              <p style="font-size:.93rem; margin: 0;">2:10 forgives sins · 2:28 Lord of Sabbath</p>
+            </div>
+            <div class="cb-half rose">
+              <div class="cb-label">Glory (Act 3)</div>
+              <p style="font-size:.93rem; margin: 0;">8:38 returns in glory · 13:26 on the clouds · 14:62 at God's right hand</p>
+            </div>
+          </div>
+          <p class="word-body" style="margin-top:10px;"><strong>The middle cluster (suffering)</strong> is the largest: 8:31, 9:9, 9:12, 9:31, 10:33, 10:45, 14:21 (×2), 14:41. Mark uses the title most densely in Act 2 — the same section structured by the blind-man chiasm — to insist that the route from authority to glory runs through the cross. The Daniel 7 figure who receives the kingdom comes to earth not to be served, but to give his life as a ransom (10:45).</p>
+        </div>
+
+        <!-- ἐπιτιμάω / the rebuke word -->
+        <div class="word-card animate-on-scroll">
+          <div class="word-greek">ἐπιτιμάω</div>
+          <div class="word-transliteration">epitimaō</div>
+          <div class="word-gloss">"to rebuke / to sternly warn"</div>
+          <span class="word-count">9× in Mark</span>
+          <p class="word-body">Mark's "rebuke" word carries exorcism-level authority. It is the word Jesus uses to silence unclean spirits (1:25), to rebuke a fever (in parallel accounts), to silence the crowd's messianic acclaim (3:12), and — most shockingly — to rebuke Peter (8:33) with the words "Get behind me, Satan."</p>
+          <p class="word-body">The irony is structured: in 8:32, Peter "rebukes" (ἐπιτιμᾶν) Jesus for predicting the cross. In 8:33, Jesus rebukes (ἐπετίμησεν) Peter right back using the same word he uses against demons. The verbal echo is intentional. Mark is saying Peter's resistance to the cross is not merely misguided — it belongs to the same category as demonic opposition.</p>
+          <div class="word-refs">
+            <span class="wr highlight">1:25 — rebukes unclean spirit</span>
+            <span class="wr">3:12 — rebukes spirits to silence</span>
+            <span class="wr highlight">8:32 — Peter rebukes Jesus</span>
+            <span class="wr highlight">8:33 — Jesus rebukes Peter ("Satan")</span>
+            <span class="wr">9:25 — rebukes deaf/mute spirit</span>
+            <span class="wr">10:13 — disciples rebuke those bringing children</span>
+            <span class="wr">10:48 — crowd rebukes Bartimaeus</span>
+          </div>
+        </div>
+
+        <!-- ἄρτος — bread -->
+        <div class="word-card animate-on-scroll">
+          <div class="word-greek">ἄρτος</div>
+          <div class="word-transliteration">artos</div>
+          <div class="word-gloss">"bread / loaf"</div>
+          <span class="word-count">Concentrated in 6:30–8:21</span>
+          <p class="word-body">In the central section of Act 1, the word "bread" (ἄρτος) accumulates with deliberate intensity: the feeding of the 5,000 (6:30–44), Jesus walking on water while the disciples "did not understand about the loaves" (6:52), the controversy about bread and tradition (7:1–23), the Syrophoenician woman's reply about "children's bread" (7:27–28), the feeding of the 4,000 (8:1–10), and the disciples arguing about having no bread in the boat (8:14–21).</p>
+          <p class="word-body">Jesus ends the sequence with a frustrated double question: <em>"Do you not yet understand? Do you not yet perceive?"</em> (8:17–18). He lists both feedings and asks: "How many baskets?" The point is not mathematics. The point is that the disciples should have understood <em>who he is</em> from the bread. Mark is weaving eucharistic and identity themes together — the one who multiplies bread is the one who will give his body (14:22).</p>
+          <div class="word-refs">
+            <span class="wr highlight">6:52 — didn't understand the loaves</span>
+            <span class="wr highlight">7:27 — bread for the children</span>
+            <span class="wr highlight">8:16–17 — no bread / do you not perceive?</span>
+            <span class="wr highlight">14:22 — "Take; this is my body"</span>
+          </div>
+        </div>
+
+        <!-- ἀπαρνέομαι — deny -->
+        <div class="word-card animate-on-scroll">
+          <div class="word-greek">ἀπαρνέομαι</div>
+          <div class="word-transliteration">aparneomai</div>
+          <div class="word-gloss">"to deny / disown"</div>
+          <span class="word-count">5× in Mark — a sharp irony</span>
+          <p class="word-body">In 8:34, Jesus calls the crowd and his disciples and says: <em>"If anyone would come after me, let him deny <strong>himself</strong>"</em> (ἀπαρνησάσθω ἑαυτόν). The same verb appears nowhere else in Mark until the passion — when Peter denies (ἀπαρνήσομαι) Jesus three times (14:30–31, 72).</p>
+          <p class="word-body">The irony is devastating. Jesus calls disciples to self-denial; Peter practices a different kind of denial entirely — he denies his Lord rather than himself. Mark has pre-loaded the word in chapter 8 so that the reader feels its full weight when it reappears in chapter 14. Peter did not deny himself to follow Jesus on the way. Instead, he denied Jesus to save himself.</p>
+          <div class="word-refs">
+            <span class="wr highlight">8:34 — "deny himself, take up his cross"</span>
+            <span class="wr highlight">14:30 — "you will deny me three times"</span>
+            <span class="wr highlight">14:31 — "I will never deny you"</span>
+            <span class="wr highlight">14:72 — Peter breaks down weeping</span>
+          </div>
+        </div>
+
+        <!-- περιβλέπομαι — Jesus' gaze -->
+        <div class="word-card animate-on-scroll">
+          <div class="word-greek">περιβλέπομαι</div>
+          <div class="word-transliteration">periblepomato</div>
+          <div class="word-gloss">"looked around (at them)"</div>
+          <span class="word-count">6× in Mark · 0× in Matthew · 1× in Luke</span>
+          <p class="word-body">This intensified compound verb — "looked around on all sides" — is virtually unique to Mark among the Gospels. It always describes Jesus' gaze, never anyone else's in this form. It appears at moments of confrontation, challenge, or intimate recognition. The word creates a characteristic Markan scene: Jesus stops, slowly scans the room or crowd, and acts with deliberate divine authority.</p>
+          <div class="word-refs">
+            <span class="wr highlight">3:5 — looked around in anger at hard hearts</span>
+            <span class="wr highlight">3:34 — looked around at those seated, "my family"</span>
+            <span class="wr highlight">5:32 — looked around to see who touched him</span>
+            <span class="wr highlight">9:8 — looked around, saw only Jesus</span>
+            <span class="wr highlight">10:23 — looked around, "how hard for the rich"</span>
+          </div>
+          <p class="word-body" style="margin-top: 10px;">This is one of Mark's most vivid portrait touches. Matthew and Luke tend to smooth it over, but Mark keeps it because it communicates something about Jesus' searching, knowing, authoritative gaze.</p>
+        </div>
+
+        <!-- Jesus' emotional portrait -->
+        <div class="word-card animate-on-scroll" style="grid-column: 1 / -1;">
+          <div class="word-greek" style="font-size:1.4rem;">σπλαγχνίζομαι · ἐμβριμάομαι · ἀναστενάζω</div>
+          <div class="word-transliteration">splanchnizomai · embrimaomai · anastenazō</div>
+          <div class="word-gloss">Mark's Emotional Vocabulary — Jesus' Inner Life</div>
+          <span class="word-count">Unique depth among the four Gospels</span>
+          <p class="word-body">One of Mark's most distinctive literary features is its willingness to show Jesus' emotional interior in ways that Matthew and Luke frequently edit out or soften. This is not incidental — it is Mark's Christology in action: the Son of God has a fully human inner life, and Mark wants you to feel it.</p>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:14px 0;">
+            <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:13px 14px;">
+              <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.13em;background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;">1:41 / 6:34 / 8:2</div>
+              <strong style="font-size:.95rem;">σπλαγχνίζομαι</strong>
+              <p style="font-size:.85rem;color:var(--text-gray);margin:5px 0 0;line-height:1.5;">Gut-level compassion — the visceral, physical word for mercy. Used of Jesus moved by a leper, by a crowd without a shepherd, and by the hungry crowd. Mark and Luke use it of Jesus; Matthew also uses it in parables. It is never flatly translated by "felt sorry."</p>
+            </div>
+            <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:13px 14px;">
+              <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.13em;background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;">1:43 / 14:5</div>
+              <strong style="font-size:.95rem;">ἐμβριμάομαι</strong>
+              <p style="font-size:.85rem;color:var(--text-gray);margin:5px 0 0;line-height:1.5;">Stern intensity — a snorting, forceful word usually translated "sternly charged" or "sternly warned." After healing the leper (1:43) and rebuking the waste of nard (14:5). It conveys something closer to righteous intensity than gentleness.</p>
+            </div>
+            <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:13px 14px;">
+              <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.13em;background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;">7:34 / 8:12</div>
+              <strong style="font-size:.95rem;">ἀναστενάζω / στενάζω</strong>
+              <p style="font-size:.85rel;color:var(--text-gray);margin:5px 0 0;line-height:1.5;">Deep sighing — used uniquely by Mark. At 7:34, Jesus looks up to heaven and "sighs" before healing the deaf man. At 8:12, he "sighs deeply in his spirit" when the Pharisees demand a sign. The sigh is not frustration alone — it is the sound of someone who carries the weight of what he sees.</p>
+            </div>
+            <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:13px 14px;">
+              <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.13em;background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;">3:5</div>
+              <strong style="font-size:.95rem;">ὀργή + συλλυπούμενος</strong>
+              <p style="font-size:.85rem;color:var(--text-gray);margin:5px 0 0;line-height:1.5;">Anger and grief together — at 3:5, Jesus looks around the synagogue "with anger, grieved at their hardness of heart." Two emotions held simultaneously. Matthew and Luke omit the anger. Mark keeps it because it shows Jesus' response to willful blindness is not detached — it costs him something.</p>
+            </div>
+            <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:13px 14px;">
+              <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.13em;background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;">6:6</div>
+              <strong style="font-size:.95rem;">ἐθαύμαζεν</strong>
+              <p style="font-size:.85rem;color:var(--text-gray);margin:5px 0 0;line-height:1.5;">Amazement — Jesus is amazed at the unbelief in Nazareth (6:6). This is the only place in the Synoptics where Jesus is the subject of the amazement verb rather than the cause of it. Mark presents a Jesus for whom the failure of faith is genuinely surprising — not omnisciently bypassed.</p>
+            </div>
+            <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:13px 14px;">
+              <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.13em;background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;">14:33–34</div>
+              <strong style="font-size:.95rem;">ἐκθαμβεῖσθαι + ἀδημονεῖν</strong>
+              <p style="font-size:.85rem;color:var(--text-gray);margin:5px 0 0;line-height:1.5;">Distress and anguish in Gethsemane — "greatly distressed and troubled." The first word means something closer to alarmed or overwhelmed; the second means a restless, unsettled anguish. Again, Matthew softens this; Mark does not. This is not performance — it is the full weight of the cup landing on a fully human person.</p>
+            </div>
+          </div>
+          <p class="word-body">What makes this pattern significant is what it says about Mark's Christology. He is not afraid to show a Jesus who sighs, grieves, is startled, and is moved in his gut — because this is precisely what the incarnation requires. The portrait is not weakened by these emotions; it is deepened. The Son of God fully enters human experience, and Mark wants every reader to feel that.</p>
+        </div>
+
+      </div>
+
+      <div class="quote-block animate-on-scroll" style="margin-top: 10px;">
+        <p>"Do you not yet understand? Do you not yet perceive? Are your hearts hardened? Having eyes do you not see, and having ears do you not hear?"</p>
+        <div class="quote-ref">Mark 8:17–18 · The bread discourse — ironic echo of Jeremiah 5:21 / Ezekiel 12:2 / Isaiah 6:9–10</div>
+      </div>
+
+      <div class="callout" style="margin-top: 10px;">
+        <div class="mini-label">A Pattern Worth Tracking</div>
+        <p>Mark's "blindness" vocabulary (βλέπω, ὁράω, ὀφθαλμός, τυφλός) runs through the whole Gospel as a spiritual diagnostic. The two blind men who are healed (8:22–26, 10:46–52) bracket the section where the disciples are most spiritually blind. Meanwhile, the demons always "see" Jesus clearly, the woman with the hemorrhage "sees" her healing, and finally a Gentile centurion "sees" and confesses at the cross (15:39). Mark asks the reader: which kind of seeing do you have?</p>
+      </div>
+    </section>
+
+    <!-- ========== TAB: READING PLAN ========== -->
+    <section class="panel-section" id="panel-reading">
+      <div class="kicker">Use While Reading</div>
+      <h2>Suggested Reading Plan</h2>
+      <p class="lede">This plan lets you read Mark in manageable units while keeping the flow intact. Each day includes a core focus so you know what to watch for on that pass through the text.</p>
+
+      <div class="reading-plan animate-on-scroll">
+        <div class="plan-day">
+          <div class="plan-head"><span class="day-tag">Day 1</span><div class="plan-title">Mark 1–2 · Authority Arrives</div></div>
+          <div class="plan-note">Watch how quickly Jesus acts, how kingdom announcement and healing belong together, and how conflict begins early around sin, sabbath, and authority.</div>
+        </div>
+        <div class="plan-day">
+          <div class="plan-head"><span class="day-tag">Day 2</span><div class="plan-title">Mark 3–4 · Division and Hidden Kingdom</div></div>
+          <div class="plan-note">Track who gathers to Jesus and who turns against him. Pay special attention to the parables and the different soils as a map of responses to Jesus.</div>
+        </div>
+        <div class="plan-day">
+          <div class="plan-head"><span class="day-tag">Day 3</span><div class="plan-title">Mark 5–6 · Power, Rejection, and Provision</div></div>
+          <div class="plan-note">Notice how far Jesus' authority reaches. Also notice that great power does not eliminate rejection or misunderstanding.</div>
+        </div>
+        <div class="plan-day">
+          <div class="plan-head"><span class="day-tag">Day 4</span><div class="plan-title">Mark 7–8 · Blindness and Breakthrough</div></div>
+          <div class="plan-note">Watch disputes about purity, the feeding scenes, and the healing of the blind man at Bethsaida. That healing prepares for the disciples' partial understanding.</div>
+        </div>
+        <div class="plan-day">
+          <div class="plan-head"><span class="day-tag">Day 5</span><div class="plan-title">Mark 8:27–10 · On the Way to the Cross</div></div>
+          <div class="plan-note">Read slowly. This is the theological center. Mark the three passion predictions and the way the disciples respond each time.</div>
+        </div>
+        <div class="plan-day">
+          <div class="plan-head"><span class="day-tag">Day 6</span><div class="plan-title">Mark 11–13 · Jerusalem, Temple, Judgment</div></div>
+          <div class="plan-note">Track royal imagery, temple confrontation, debates with leaders, and Jesus' warning about Jerusalem's downfall.</div>
+        </div>
+        <div class="plan-day">
+          <div class="plan-head"><span class="day-tag">Day 7</span><div class="plan-title">Mark 14–16 · Passover, Cross, Resurrection</div></div>
+          <div class="plan-note">Watch how Passover is reframed around Jesus' death. Then slow down at the crucifixion and the abrupt ending at the tomb. Mark 16:8 is almost certainly the original ending — the women say nothing to anyone, for they were afraid. Sit with that silence. Mark does not resolve it for you. He is asking: <em>Will you run in fear, or will you proclaim the good news?</em> Note also that the longer ending (16:9–20) is a later scribal addition absent from the earliest manuscripts.</div>
+        </div>
+      </div>
+
+      <div class="question-box animate-on-scroll">
+        <h4>Best Practice for a Second Pass</h4>
+        <ol>
+          <li>Read the whole Gospel in one sitting if possible.</li>
+          <li>Then read again with a pencil and mark every question people ask about Jesus.</li>
+          <li>On a third pass, mark every place the disciples fail to understand.</li>
+          <li>On a fourth pass, track what Jesus says about the cross, service, and following him.</li>
+        </ol>
+      </div>
+    </section>
+
     <!-- ========== TAB: QUESTIONS ========== -->
     <section class="panel-section" id="panel-questions">
       <div class="kicker">Discussion and Reflection</div>
@@ -2571,521 +3717,6 @@
           </div>
 
         </div>
-      </div>
-    </section>
-
-    <!-- ========== TAB: CHIASMS ========== -->
-    <section class="panel-section" id="panel-chiasms">
-      <div class="kicker">Literary Architecture</div>
-      <h2>Major Chiastic Structures in Mark</h2>
-      <p class="lede">Mark is not just a rapid-fire story collection. He is a careful literary architect who uses chiasm (a mirror-image ABCB'A' pattern) and the sandwich technique (intercalation) to create meaning through structure. Noticing these patterns changes how you read the text.</p>
-
-      <!-- 1: Five Conflict Stories -->
-      <div class="chiasm-card animate-on-scroll">
-        <div class="mini-label">Chiasm 1 · Mark 2:1–3:6</div>
-        <h3>The Five Conflict Stories</h3>
-        <p class="chiasm-desc">Mark opens Jesus' public ministry with five controversy stories arranged in a careful arch. The center — the question about fasting and new wine — is the theological hinge: Jesus is not patching an old system but bringing something entirely new. The outer pairs mirror each other around that claim.</p>
-        <div class="chiasm-structure">
-          <div class="cl">
-            <span class="cl-key">A</span>
-            <span class="cl-ref">2:1–12</span>
-            <span class="cl-text">Healing of the paralytic — authority to <strong>forgive sins</strong> (indoor, Capernaum)</span>
-          </div>
-          <div class="cl i1">
-            <span class="cl-key">B</span>
-            <span class="cl-ref">2:13–17</span>
-            <span class="cl-text">Eating with sinners — "Why does he eat with tax collectors?"</span>
-          </div>
-          <div class="cl i2 cl-center">
-            <span class="cl-key">C</span>
-            <span class="cl-ref">2:18–22</span>
-            <span class="cl-text">CENTER: Fasting question — new wine, new wineskins. The old order cannot contain what Jesus brings.</span>
-          </div>
-          <div class="cl i1">
-            <span class="cl-key">B'</span>
-            <span class="cl-ref">2:23–28</span>
-            <span class="cl-text">Eating grain on the Sabbath — "Why do they do what is unlawful?"</span>
-          </div>
-          <div class="cl">
-            <span class="cl-key">A'</span>
-            <span class="cl-ref">3:1–6</span>
-            <span class="cl-text">Healing the withered hand — authority over <strong>the Sabbath</strong> (synagogue, public; ends in death plot)</span>
-          </div>
-        </div>
-        <div class="chiasm-insight">
-          <strong>Why it matters:</strong> A and A' both involve healing and raise the question of Jesus' authority. B and B' both involve eating and challenge religious boundaries. The center announces the interpretive key to all five: Jesus is the <em>bridegroom</em> who brings a fundamentally new order. Religious leaders end the section plotting to kill him (3:6) — the cross is already in view.
-        </div>
-      </div>
-
-      <!-- 2: Central Discipleship Section -->
-      <div class="chiasm-card animate-on-scroll">
-        <div class="mini-label">Chiasm 2 · Mark 8:22–10:52</div>
-        <h3>The Way of the Cross — Blind Man Bookends</h3>
-        <p class="chiasm-desc">The entire middle section of Mark is framed by two healings of blind men (Bethsaida, 8:22–26; Bartimaeus, 10:46–52). Between them, the disciples progressively fail to "see" Jesus for who he is. Three passion predictions anchor three symmetrical cycles of misunderstanding and correction.</p>
-        <div class="chiasm-structure">
-          <div class="cl">
-            <span class="cl-key">A</span>
-            <span class="cl-ref">8:22–26</span>
-            <span class="cl-text">Blind man of Bethsaida healed <em>in two stages</em> — partial sight at first</span>
-          </div>
-          <div class="cl i1">
-            <span class="cl-key">B</span>
-            <span class="cl-ref">8:27–30</span>
-            <span class="cl-text">Peter's confession: "You are the Messiah" — sees, but only partially</span>
-          </div>
-          <div class="cl i2">
-            <span class="cl-key">C</span>
-            <span class="cl-ref">8:31–9:29</span>
-            <span class="cl-text">Passion Prediction 1 → Peter rebuked → Cross-discipleship → Transfiguration</span>
-          </div>
-          <div class="cl i3 cl-center">
-            <span class="cl-key">D</span>
-            <span class="cl-ref">9:30–37</span>
-            <span class="cl-text">CENTER: Passion Prediction 2 + "Who is the greatest?" → child in the midst. Servant = first.</span>
-          </div>
-          <div class="cl i2">
-            <span class="cl-key">C'</span>
-            <span class="cl-ref">9:38–10:31</span>
-            <span class="cl-text">Teaching on stumbling, divorce, children, wealth — all define the cross-shaped life</span>
-          </div>
-          <div class="cl i1">
-            <span class="cl-key">B'</span>
-            <span class="cl-ref">10:32–45</span>
-            <span class="cl-text">Passion Prediction 3 → James &amp; John seek positions → "Not to be served but to serve"</span>
-          </div>
-          <div class="cl">
-            <span class="cl-key">A'</span>
-            <span class="cl-ref">10:46–52</span>
-            <span class="cl-text">Blind Bartimaeus healed <em>completely, immediately</em> — "followed him on the way"</span>
-          </div>
-        </div>
-        <div class="chiasm-insight">
-          <strong>Why it matters:</strong> The two healings of blind men are not random miracles — they frame the entire discipleship section as a question of spiritual sight. The disciples are like the man at Bethsaida: they see partially (Peter's confession) but distort what they see. Bartimaeus, by contrast, sees clearly immediately and follows on "the way" — modeling what the disciples failed to do. The center on a child receiving service is the theological answer to every prideful misunderstanding in the arc.
-        </div>
-      </div>
-
-      <!-- 3: Passion Chiasm -->
-      <div class="chiasm-card animate-on-scroll">
-        <div class="mini-label">Chiasm 3 · Mark 14:53–15:32</div>
-        <h3>The Passion Trial Chiasm</h3>
-        <p class="chiasm-desc">The trial and crucifixion sequence forms a precise chiastic arch where Jewish and Roman settings mirror each other, with the Roman judgment at the center. Each panel ironically crowns and mocks Jesus even as it reveals his true identity.</p>
-        <div class="chiasm-structure">
-          <div class="cl">
-            <span class="cl-key">A</span>
-            <span class="cl-ref">14:53–65</span>
-            <span class="cl-text">Jewish trial: "Are you the Messiah?" — false witnesses, struck by guards, mocked as prophet</span>
-          </div>
-          <div class="cl i1">
-            <span class="cl-key">B</span>
-            <span class="cl-ref">14:66–72</span>
-            <span class="cl-text">Peter denies Jesus three times before a servant girl — "I do not know this man"</span>
-          </div>
-          <div class="cl i2 cl-center">
-            <span class="cl-key">C</span>
-            <span class="cl-ref">15:1–15</span>
-            <span class="cl-text">CENTER: Roman trial — "Are you the King of the Jews?" Pilate hands him over to be crucified</span>
-          </div>
-          <div class="cl i1">
-            <span class="cl-key">B'</span>
-            <span class="cl-ref">15:16–20</span>
-            <span class="cl-text">Soldiers mock Jesus as "King of the Jews" — purple robe, crown of thorns, kneel in false homage</span>
-          </div>
-          <div class="cl">
-            <span class="cl-key">A'</span>
-            <span class="cl-ref">15:21–32</span>
-            <span class="cl-text">Crucifixion: "King of the Jews" on the placard — passers-by mock, leaders mock, co-crucified mock</span>
-          </div>
-        </div>
-        <div class="chiasm-insight">
-          <strong>Why it matters:</strong> Mark constructs the passion around irony: every act of mockery and rejection is simultaneously an act of coronation. "King of the Jews" is written in derision, but Mark means it literally. Peter's denial (B) and the soldiers' mockery (B') mirror each other as two kinds of human failure flanking the Gentile verdict at the center. Both Jewish and Roman systems condemn Jesus — yet the reader watches the king being enthroned.
-        </div>
-      </div>
-
-      <!-- 4: Intercalations / Sandwiches -->
-      <h3 style="margin: 38px 0 6px;">The Markan Sandwich (Intercalation)</h3>
-      <p class="lede" style="margin-bottom: 18px;">Mark's most distinctive compositional tool is the <em>intercalation</em> — often called a "Markan sandwich." He interrupts Story A with Story B, then completes Story A. The interrupting story interprets the outer story, and vice versa. Mark uses this at least six times.</p>
-
-      <div class="sandwich-grid">
-
-        <div class="sandwich-item animate-on-scroll">
-          <div class="sandwich-header">
-            <span class="sandwich-ref">Mark 3:20–35 · Family / Beelzebul / Family</span>
-            <span class="pill" style="font-size: 9px;">Insiders vs. Outsiders</span>
-          </div>
-          <div class="sandwich-body">
-            <div class="sw-layer">
-              <div class="sw-bracket outer">A</div>
-              <div class="sw-content"><strong>3:20–21</strong> — Jesus' family sets out to "seize" him; they say he is "out of his mind"<em>Outer bread: his own kin reject him</em></div>
-            </div>
-            <div class="sw-layer">
-              <div class="sw-bracket inner">B</div>
-              <div class="sw-content"><strong>3:22–30</strong> — Scribes from Jerusalem: "He has Beelzebul / casts out demons by the prince of demons" — the unforgivable sin accusation<em>Filling: religious leaders charge him with being demonically possessed</em></div>
-            </div>
-            <div class="sw-layer">
-              <div class="sw-bracket outer">A'</div>
-              <div class="sw-content"><strong>3:31–35</strong> — His mother and brothers arrive; Jesus redefines family as those who do God's will<em>Outer bread completed: true family is not biological but obedient</em></div>
-            </div>
-          </div>
-          <div class="sw-meaning">Both stories ask: who truly belongs to Jesus? The religious insiders are really outsiders; the new family is those who hear and obey.</div>
-        </div>
-
-        <div class="sandwich-item animate-on-scroll">
-          <div class="sandwich-header">
-            <span class="sandwich-ref">Mark 5:21–43 · Jairus / Woman / Jairus</span>
-            <span class="pill rose" style="font-size: 9px;">Faith That Reaches</span>
-          </div>
-          <div class="sandwich-body">
-            <div class="sw-layer">
-              <div class="sw-bracket outer">A</div>
-              <div class="sw-content"><strong>5:21–24</strong> — Jairus, synagogue ruler, falls at Jesus' feet: "My daughter is at the point of death"<em>Outer bread: socially prominent, desperate father</em></div>
-            </div>
-            <div class="sw-layer">
-              <div class="sw-bracket inner">B</div>
-              <div class="sw-content"><strong>5:25–34</strong> — Woman with 12-year hemorrhage touches Jesus' garment and is healed; "Your faith has made you well"<em>Filling: socially marginalized woman; 12 years of suffering</em></div>
-            </div>
-            <div class="sw-layer">
-              <div class="sw-bracket outer">A'</div>
-              <div class="sw-content"><strong>5:35–43</strong> — Jairus' daughter declared dead; Jesus raises her (she is 12 years old)<em>Outer bread completed: "the child" is also restored</em></div>
-            </div>
-          </div>
-          <div class="sw-meaning">The 12-year hemorrhage and the 12-year-old girl are no accident — they mirror Israel's condition. Both healings hinge on the same word: faith. The interruption defines what makes the outer miracle possible.</div>
-        </div>
-
-        <div class="sandwich-item animate-on-scroll">
-          <div class="sandwich-header">
-            <span class="sandwich-ref">Mark 6:7–30 · Mission / John's Death / Mission</span>
-            <span class="pill blue" style="font-size: 9px;">Mission and Martyrdom</span>
-          </div>
-          <div class="sandwich-body">
-            <div class="sw-layer">
-              <div class="sw-bracket outer">A</div>
-              <div class="sw-content"><strong>6:7–13</strong> — Jesus sends out the Twelve with authority; they go two by two, cast out demons, heal<em>Outer bread: mission launched</em></div>
-            </div>
-            <div class="sw-layer">
-              <div class="sw-bracket inner">B</div>
-              <div class="sw-content"><strong>6:14–29</strong> — Flashback: Herod arrests, imprisons, and beheads John the Baptist at a banquet<em>Filling: the fate of God's messenger under political power</em></div>
-            </div>
-            <div class="sw-layer">
-              <div class="sw-bracket outer">A'</div>
-              <div class="sw-content"><strong>6:30</strong> — The apostles return and report all they did<em>Outer bread completed: mission returns</em></div>
-            </div>
-          </div>
-          <div class="sw-meaning">The shadow of John's death falls over the disciples' mission. They return from successful ministry into a world that kills God's messengers. This is the cost of the mission they have joined.</div>
-        </div>
-
-        <div class="sandwich-item animate-on-scroll">
-          <div class="sandwich-header">
-            <span class="sandwich-ref">Mark 11:12–25 · Fig Tree / Temple / Fig Tree</span>
-            <span class="pill" style="font-size: 9px;">Prophetic Judgment</span>
-          </div>
-          <div class="sandwich-body">
-            <div class="sw-layer">
-              <div class="sw-bracket outer">A</div>
-              <div class="sw-content"><strong>11:12–14</strong> — Jesus curses the fruitless fig tree ("May no one ever eat fruit from you again")<em>Outer bread: Israel's leadership like a leafy but fruitless tree</em></div>
-            </div>
-            <div class="sw-layer">
-              <div class="sw-bracket inner">B</div>
-              <div class="sw-content"><strong>11:15–19</strong> — Jesus overturns tables in the temple: "a den of robbers" — enacts prophetic judgment on the temple system<em>Filling: the temple institution is under the same curse</em></div>
-            </div>
-            <div class="sw-layer">
-              <div class="sw-bracket outer">A'</div>
-              <div class="sw-content"><strong>11:20–25</strong> — Disciples see the fig tree withered to its roots; Jesus teaches on faith, prayer, and forgiveness<em>Outer bread completed: the withering is fulfilled</em></div>
-            </div>
-          </div>
-          <div class="sw-meaning">The fig tree explains the temple and the temple explains the fig tree. Israel's cultic center — like the tree — has leaves (religious activity) but no fruit. The sandwich makes clear that the temple action is not a cleansing but a judgment.</div>
-        </div>
-
-        <div class="sandwich-item animate-on-scroll">
-          <div class="sandwich-header">
-            <span class="sandwich-ref">Mark 14:1–11 · Plot / Anointing / Betrayal</span>
-            <span class="pill rose" style="font-size: 9px;">Devotion vs. Treachery</span>
-          </div>
-          <div class="sandwich-body">
-            <div class="sw-layer">
-              <div class="sw-bracket outer">A</div>
-              <div class="sw-content"><strong>14:1–2</strong> — Chief priests and scribes seek how to arrest and kill Jesus; "not during the feast, lest there be an uproar"<em>Outer bread: murder is being planned in secret</em></div>
-            </div>
-            <div class="sw-layer">
-              <div class="sw-bracket inner">B</div>
-              <div class="sw-content"><strong>14:3–9</strong> — An unnamed woman anoints Jesus' head with expensive nard. Jesus declares: "She has done a beautiful thing to me … she has anointed my body beforehand for burial … wherever the gospel is proclaimed, what she has done will be told"<em>Filling: an outsider understands the cross; the insiders do not</em></div>
-            </div>
-            <div class="sw-layer">
-              <div class="sw-bracket outer">A'</div>
-              <div class="sw-content"><strong>14:10–11</strong> — Judas, one of the Twelve, goes to the chief priests to betray Jesus; they are delighted and promise money<em>Outer bread completed: an insider joins the murderous plot for profit</em></div>
-            </div>
-          </div>
-          <div class="sw-meaning">The woman and Judas are placed in deliberate contrast. She gives extravagantly to honor Jesus before his death; Judas sells Jesus for money. She is unnamed but remembered forever; Judas is named but remembered in shame. The interruption reframes A and A' as a study in the two possible responses to Jesus at the point of ultimate cost.</div>
-        </div>
-
-      </div>
-
-      <div class="callout">
-        <div class="mini-label">Reading Tip</div>
-        <p>When you see Mark interrupt a story with another story, pause and ask: <strong>How does the inserted story interpret the outer story?</strong> How does the outer story reframe the inserted one? The meaning lives in the gap between the two. Mark never uses the sandwich accidentally. <em>Note: the sixth and final sandwich (14:53–72, Jesus' trial / Peter's denial / trial) is treated above as Chiasm 3, where its mirror structure carries the fullest theological weight.</em></p>
-      </div>
-
-      <!-- PASSION TRIADS -->
-      <div class="theology-card animate-on-scroll" style="margin-top:28px;">
-        <div class="mini-label">Passion Triads</div>
-        <h3>Structured Patterns in the Crucifixion Narrative</h3>
-        <p style="color:var(--text-gray);font-size:.93rem;margin-bottom:22px;">Mark's passion account (chapters 14–16) is not raw reportage — it is architecturally shaped. Two triadic patterns frame the cross from opposite directions: one from mockery, one from witness.</p>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px;">
-          <div>
-            <h4 style="margin-bottom:12px;">Three Mockers at the Cross <span style="font-weight:400;color:var(--text-gray);font-size:.88rem;">(15:29–32)</span></h4>
-            <div style="display:flex;flex-direction:column;gap:10px;">
-              <div style="padding:12px 14px;background:rgba(225,29,72,.06);border-left:3px solid rgba(225,29,72,.4);border-radius:0 6px 6px 0;">
-                <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent-rose);margin-bottom:4px;">First · vv. 29–30</div>
-                <strong style="font-size:.91rem;">Passers-by</strong>
-                <p style="margin:4px 0 0;font-size:.88rem;color:var(--text-gray);">Ordinary people walking past. They wag their heads and mock the temple claim. The crowd — anonymous Israel.</p>
-              </div>
-              <div style="padding:12px 14px;background:rgba(225,29,72,.06);border-left:3px solid rgba(225,29,72,.4);border-radius:0 6px 6px 0;">
-                <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent-rose);margin-bottom:4px;">Second · vv. 31–32a</div>
-                <strong style="font-size:.91rem;">Chief Priests &amp; Scribes</strong>
-                <p style="margin:4px 0 0;font-size:.88rem;color:var(--text-gray);">Religious leadership. "He saved others; he cannot save himself." The irony is sharpest here — they are accidentally correct in the deepest theological sense.</p>
-              </div>
-              <div style="padding:12px 14px;background:rgba(225,29,72,.06);border-left:3px solid rgba(225,29,72,.4);border-radius:0 6px 6px 0;">
-                <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent-rose);margin-bottom:4px;">Third · v. 32b</div>
-                <strong style="font-size:.91rem;">The Co-Crucified</strong>
-                <p style="margin:4px 0 0;font-size:.88rem;color:var(--text-gray);">Those crucified alongside him join the mockery. Even the condemned revile their fellow condemned. Every social layer has rejected him.</p>
-              </div>
-            </div>
-            <div style="margin-top:12px;padding:10px 14px;background:rgba(0,0,0,.04);border-radius:6px;font-size:.88rem;color:var(--text-gray);">
-              <strong>The reversal:</strong> After three layers of mockery by Jewish society (crowd → leaders → condemned), a single Gentile soldier confesses at 15:39. Mark arranges this contrast structurally — the failure of Israel's recognition is the backdrop for the Gentile confession.
-            </div>
-          </div>
-
-          <div>
-            <h4 style="margin-bottom:12px;">Three Women Witnesses — Inclusio <span style="font-weight:400;color:var(--text-gray);font-size:.88rem;">(15:40 / 15:47 / 16:1)</span></h4>
-            <div style="display:flex;flex-direction:column;gap:10px;">
-              <div style="padding:12px 14px;background:rgba(0,180,216,.06);border-left:3px solid rgba(0,180,216,.4);border-radius:0 6px 6px 0;">
-                <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent-blue);margin-bottom:4px;">First · 15:40</div>
-                <strong style="font-size:.91rem;">At the Cross</strong>
-                <p style="margin:4px 0 0;font-size:.88rem;color:var(--text-gray);">Mary Magdalene, Mary mother of James and Joses, and Salome. Named, watching from a distance while the Twelve are absent.</p>
-              </div>
-              <div style="padding:12px 14px;background:rgba(0,180,216,.06);border-left:3px solid rgba(0,180,216,.4);border-radius:0 6px 6px 0;">
-                <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent-blue);margin-bottom:4px;">Second · 15:47</div>
-                <strong style="font-size:.91rem;">At the Burial</strong>
-                <p style="margin:4px 0 0;font-size:.88rem;color:var(--text-gray);">Mary Magdalene and Mary mother of Joses. They observe where the body is laid — establishing continuity between the death and the empty tomb.</p>
-              </div>
-              <div style="padding:12px 14px;background:rgba(0,180,216,.06);border-left:3px solid rgba(0,180,216,.4);border-radius:0 6px 6px 0;">
-                <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent-blue);margin-bottom:4px;">Third · 16:1</div>
-                <strong style="font-size:.91rem;">At the Empty Tomb</strong>
-                <p style="margin:4px 0 0;font-size:.88rem;color:var(--text-gray);">The same three women return at dawn. They are the only continuous witnesses across the passion — cross, burial, resurrection. The disciples who ran are not here. The women are.</p>
-              </div>
-            </div>
-            <div style="margin-top:12px;padding:10px 14px;background:rgba(0,0,0,.04);border-radius:6px;font-size:.88rem;color:var(--text-gray);">
-              <strong>Structural function:</strong> This three-part appearance is an inclusio bracketing the entire passion-resurrection sequence. The same witnesses anchor both ends, making the women the evidentiary backbone of Mark's resurrection claim. Their fidelity contrasts sharply with the flight of the Twelve.
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- ========== TAB: WORDPLAY ========== -->
-    <section class="panel-section" id="panel-wordplay">
-      <div class="kicker">Greek Literary Artistry</div>
-      <h2>Wordplay &amp; Verbal Patterns in Mark</h2>
-      <p class="lede">Mark writes in relatively simple Koine Greek, but his simplicity is strategic. He returns to key words repeatedly, positions them at structural turning points, and sometimes uses the same word across wildly different scenes to create irony or depth. These patterns are lost in translation unless you know to look for them.</p>
-
-      <div class="words-grid">
-
-        <!-- εὐθύς -->
-        <div class="word-card animate-on-scroll">
-          <div class="word-greek">εὐθύς</div>
-          <div class="word-transliteration">euthys · eutheos</div>
-          <div class="word-gloss">"immediately / straightway"</div>
-          <span class="word-count">~41× in Mark · 6× in Matthew · 1× in Luke</span>
-          <p class="word-body">Mark's signature word. He uses it more than any other NT writer — nearly once per paragraph in chapters 1–6. It creates a breathless, urgent, forward-hurtling narrative momentum. Jesus does not reflect; he acts. The kingdom does not wait; it arrives. Scholars sometimes call this Mark's "parataxis" style: rapid short sentences linked by καί ("and") and εὐθύς.</p>
-          <p class="word-body">The urgency is not accidental. Mark presents a world in the grip of evil that needs decisive rescue — and a king who moves without delay. When εὐθύς clusters slow in the passion narrative (chapters 14–16), the contrast is striking: here the pace changes to deliberate suffering.</p>
-          <div class="word-refs">
-            <span class="wr highlight">1:10 — Spirit descends</span>
-            <span class="wr highlight">1:12 — into the wilderness</span>
-            <span class="wr highlight">1:18 — disciples leave nets</span>
-            <span class="wr highlight">1:20 — James and John follow</span>
-            <span class="wr highlight">1:21 — enters Capernaum</span>
-            <span class="wr">1:23, 29, 30…</span>
-          </div>
-        </div>
-
-        <!-- ὁδός -->
-        <div class="word-card animate-on-scroll">
-          <div class="word-greek">ὁδός</div>
-          <div class="word-transliteration">hodos</div>
-          <div class="word-gloss">"way / road / path"</div>
-          <span class="word-count">16× in Mark</span>
-          <p class="word-body">One of Mark's most theologically loaded words. It operates on three levels simultaneously: (1) the <em>literal road</em> from Galilee to Jerusalem; (2) the <em>messianic way</em> prophesied in Isaiah 40:3 ("Prepare the way of the Lord") — which Mark quotes in 1:2–3; and (3) the <em>way of discipleship</em> that Jesus himself defines.</p>
-          <p class="word-body">The climax of Act 2 is perfectly positioned: Bartimaeus is healed and immediately "followed him on the way" (10:52 — ἐν τῇ ὁδῷ). He models what the disciples throughout chapters 8–10 refused to do. The whole journey section is framed as a question: will you follow Jesus on his way?</p>
-          <div class="word-refs">
-            <span class="wr highlight">1:2–3 — Isaiah's "way of the Lord"</span>
-            <span class="wr highlight">8:27 — "on the way" to Caesarea Philippi</span>
-            <span class="wr highlight">9:33–34 — argued "on the way" about greatness</span>
-            <span class="wr highlight">10:32 — "on the way" to Jerusalem</span>
-            <span class="wr highlight">10:52 — Bartimaeus follows "on the way"</span>
-          </div>
-        </div>
-
-        <!-- σχίζω -->
-        <div class="word-card animate-on-scroll">
-          <div class="word-greek">σχίζω</div>
-          <div class="word-transliteration">schizō</div>
-          <div class="word-gloss">"to tear / to split open"</div>
-          <span class="word-count">2× in Mark — a structural inclusio</span>
-          <p class="word-body">Mark uses this violent, irreversible word exactly twice — and the two uses form the Gospel's deepest structural bracket. At the baptism, the heavens are "torn open" (σχιζομένους) and God declares Jesus his Son (1:10). At the death, the temple curtain is "torn in two" (ἐσχίσθη) from top to bottom (15:38). Both are unambiguously acts of God. Both are followed by a declaration of Jesus' identity.</p>
-          <div class="contrast-block">
-            <div class="cb-half purple">
-              <div class="cb-label">1:10 — Opening</div>
-              <p style="font-size:.95rem;">Heavens tear → Spirit descends → "You are my Son" (divine voice, private)</p>
-            </div>
-            <div class="cb-half rose">
-              <div class="cb-label">15:38 — Closing</div>
-              <p style="font-size:.95rem;">Curtain tears → Darkness ends → "This man was the Son of God" (human voice, public)</p>
-            </div>
-          </div>
-          <p class="word-body" style="margin-top:12px;">The word does not mean "open gently." It means <em>rip</em>. Mark is saying that Jesus' arrival and death are world-rupturing events. The barrier between heaven and earth — represented first by the sky at the Jordan, then by the veil before the Holy of Holies — does not open; it is destroyed.</p>
-        </div>
-
-        <!-- Son of Man trajectory -->
-        <div class="word-card animate-on-scroll">
-          <div class="word-greek">ὁ υἱὸς<br>τοῦ ἀνθρώπου</div>
-          <div class="word-transliteration">ho huios tou anthrōpou</div>
-          <div class="word-gloss">"the Son of Man" (Dan 7:13–14)</div>
-          <span class="word-count">14× in Mark</span>
-          <p class="word-body">Jesus' self-designation appears in three distinct clusters that trace the arc of the whole Gospel: authority → suffering → glory. Mark never explains the title; the reader is expected to trace its trajectory and feel its weight building.</p>
-          <div class="contrast-block">
-            <div class="cb-half purple">
-              <div class="cb-label">Authority (Acts 1–2)</div>
-              <p style="font-size:.93rem; margin: 0;">2:10 forgives sins · 2:28 Lord of Sabbath</p>
-            </div>
-            <div class="cb-half rose">
-              <div class="cb-label">Glory (Act 3)</div>
-              <p style="font-size:.93rem; margin: 0;">8:38 returns in glory · 13:26 on the clouds · 14:62 at God's right hand</p>
-            </div>
-          </div>
-          <p class="word-body" style="margin-top:10px;"><strong>The middle cluster (suffering)</strong> is the largest: 8:31, 9:9, 9:12, 9:31, 10:33, 10:45, 14:21 (×2), 14:41. Mark uses the title most densely in Act 2 — the same section structured by the blind-man chiasm — to insist that the route from authority to glory runs through the cross. The Daniel 7 figure who receives the kingdom comes to earth not to be served, but to give his life as a ransom (10:45).</p>
-        </div>
-
-        <!-- ἐπιτιμάω / the rebuke word -->
-        <div class="word-card animate-on-scroll">
-          <div class="word-greek">ἐπιτιμάω</div>
-          <div class="word-transliteration">epitimaō</div>
-          <div class="word-gloss">"to rebuke / to sternly warn"</div>
-          <span class="word-count">9× in Mark</span>
-          <p class="word-body">Mark's "rebuke" word carries exorcism-level authority. It is the word Jesus uses to silence unclean spirits (1:25), to rebuke a fever (in parallel accounts), to silence the crowd's messianic acclaim (3:12), and — most shockingly — to rebuke Peter (8:33) with the words "Get behind me, Satan."</p>
-          <p class="word-body">The irony is structured: in 8:32, Peter "rebukes" (ἐπιτιμᾶν) Jesus for predicting the cross. In 8:33, Jesus rebukes (ἐπετίμησεν) Peter right back using the same word he uses against demons. The verbal echo is intentional. Mark is saying Peter's resistance to the cross is not merely misguided — it belongs to the same category as demonic opposition.</p>
-          <div class="word-refs">
-            <span class="wr highlight">1:25 — rebukes unclean spirit</span>
-            <span class="wr">3:12 — rebukes spirits to silence</span>
-            <span class="wr highlight">8:32 — Peter rebukes Jesus</span>
-            <span class="wr highlight">8:33 — Jesus rebukes Peter ("Satan")</span>
-            <span class="wr">9:25 — rebukes deaf/mute spirit</span>
-            <span class="wr">10:13 — disciples rebuke those bringing children</span>
-            <span class="wr">10:48 — crowd rebukes Bartimaeus</span>
-          </div>
-        </div>
-
-        <!-- ἄρτος — bread -->
-        <div class="word-card animate-on-scroll">
-          <div class="word-greek">ἄρτος</div>
-          <div class="word-transliteration">artos</div>
-          <div class="word-gloss">"bread / loaf"</div>
-          <span class="word-count">Concentrated in 6:30–8:21</span>
-          <p class="word-body">In the central section of Act 1, the word "bread" (ἄρτος) accumulates with deliberate intensity: the feeding of the 5,000 (6:30–44), Jesus walking on water while the disciples "did not understand about the loaves" (6:52), the controversy about bread and tradition (7:1–23), the Syrophoenician woman's reply about "children's bread" (7:27–28), the feeding of the 4,000 (8:1–10), and the disciples arguing about having no bread in the boat (8:14–21).</p>
-          <p class="word-body">Jesus ends the sequence with a frustrated double question: <em>"Do you not yet understand? Do you not yet perceive?"</em> (8:17–18). He lists both feedings and asks: "How many baskets?" The point is not mathematics. The point is that the disciples should have understood <em>who he is</em> from the bread. Mark is weaving eucharistic and identity themes together — the one who multiplies bread is the one who will give his body (14:22).</p>
-          <div class="word-refs">
-            <span class="wr highlight">6:52 — didn't understand the loaves</span>
-            <span class="wr highlight">7:27 — bread for the children</span>
-            <span class="wr highlight">8:16–17 — no bread / do you not perceive?</span>
-            <span class="wr highlight">14:22 — "Take; this is my body"</span>
-          </div>
-        </div>
-
-        <!-- ἀπαρνέομαι — deny -->
-        <div class="word-card animate-on-scroll">
-          <div class="word-greek">ἀπαρνέομαι</div>
-          <div class="word-transliteration">aparneomai</div>
-          <div class="word-gloss">"to deny / disown"</div>
-          <span class="word-count">5× in Mark — a sharp irony</span>
-          <p class="word-body">In 8:34, Jesus calls the crowd and his disciples and says: <em>"If anyone would come after me, let him deny <strong>himself</strong>"</em> (ἀπαρνησάσθω ἑαυτόν). The same verb appears nowhere else in Mark until the passion — when Peter denies (ἀπαρνήσομαι) Jesus three times (14:30–31, 72).</p>
-          <p class="word-body">The irony is devastating. Jesus calls disciples to self-denial; Peter practices a different kind of denial entirely — he denies his Lord rather than himself. Mark has pre-loaded the word in chapter 8 so that the reader feels its full weight when it reappears in chapter 14. Peter did not deny himself to follow Jesus on the way. Instead, he denied Jesus to save himself.</p>
-          <div class="word-refs">
-            <span class="wr highlight">8:34 — "deny himself, take up his cross"</span>
-            <span class="wr highlight">14:30 — "you will deny me three times"</span>
-            <span class="wr highlight">14:31 — "I will never deny you"</span>
-            <span class="wr highlight">14:72 — Peter breaks down weeping</span>
-          </div>
-        </div>
-
-        <!-- περιβλέπομαι — Jesus' gaze -->
-        <div class="word-card animate-on-scroll">
-          <div class="word-greek">περιβλέπομαι</div>
-          <div class="word-transliteration">periblepomato</div>
-          <div class="word-gloss">"looked around (at them)"</div>
-          <span class="word-count">6× in Mark · 0× in Matthew · 1× in Luke</span>
-          <p class="word-body">This intensified compound verb — "looked around on all sides" — is virtually unique to Mark among the Gospels. It always describes Jesus' gaze, never anyone else's in this form. It appears at moments of confrontation, challenge, or intimate recognition. The word creates a characteristic Markan scene: Jesus stops, slowly scans the room or crowd, and acts with deliberate divine authority.</p>
-          <div class="word-refs">
-            <span class="wr highlight">3:5 — looked around in anger at hard hearts</span>
-            <span class="wr highlight">3:34 — looked around at those seated, "my family"</span>
-            <span class="wr highlight">5:32 — looked around to see who touched him</span>
-            <span class="wr highlight">9:8 — looked around, saw only Jesus</span>
-            <span class="wr highlight">10:23 — looked around, "how hard for the rich"</span>
-          </div>
-          <p class="word-body" style="margin-top: 10px;">This is one of Mark's most vivid portrait touches. Matthew and Luke tend to smooth it over, but Mark keeps it because it communicates something about Jesus' searching, knowing, authoritative gaze.</p>
-        </div>
-
-        <!-- Jesus' emotional portrait -->
-        <div class="word-card animate-on-scroll" style="grid-column: 1 / -1;">
-          <div class="word-greek" style="font-size:1.4rem;">σπλαγχνίζομαι · ἐμβριμάομαι · ἀναστενάζω</div>
-          <div class="word-transliteration">splanchnizomai · embrimaomai · anastenazō</div>
-          <div class="word-gloss">Mark's Emotional Vocabulary — Jesus' Inner Life</div>
-          <span class="word-count">Unique depth among the four Gospels</span>
-          <p class="word-body">One of Mark's most distinctive literary features is its willingness to show Jesus' emotional interior in ways that Matthew and Luke frequently edit out or soften. This is not incidental — it is Mark's Christology in action: the Son of God has a fully human inner life, and Mark wants you to feel it.</p>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:14px 0;">
-            <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:13px 14px;">
-              <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.13em;background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;">1:41 / 6:34 / 8:2</div>
-              <strong style="font-size:.95rem;">σπλαγχνίζομαι</strong>
-              <p style="font-size:.85rem;color:var(--text-gray);margin:5px 0 0;line-height:1.5;">Gut-level compassion — the visceral, physical word for mercy. Used of Jesus moved by a leper, by a crowd without a shepherd, and by the hungry crowd. Mark and Luke use it of Jesus; Matthew also uses it in parables. It is never flatly translated by "felt sorry."</p>
-            </div>
-            <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:13px 14px;">
-              <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.13em;background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;">1:43 / 14:5</div>
-              <strong style="font-size:.95rem;">ἐμβριμάομαι</strong>
-              <p style="font-size:.85rem;color:var(--text-gray);margin:5px 0 0;line-height:1.5;">Stern intensity — a snorting, forceful word usually translated "sternly charged" or "sternly warned." After healing the leper (1:43) and rebuking the waste of nard (14:5). It conveys something closer to righteous intensity than gentleness.</p>
-            </div>
-            <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:13px 14px;">
-              <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.13em;background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;">7:34 / 8:12</div>
-              <strong style="font-size:.95rem;">ἀναστενάζω / στενάζω</strong>
-              <p style="font-size:.85rel;color:var(--text-gray);margin:5px 0 0;line-height:1.5;">Deep sighing — used uniquely by Mark. At 7:34, Jesus looks up to heaven and "sighs" before healing the deaf man. At 8:12, he "sighs deeply in his spirit" when the Pharisees demand a sign. The sigh is not frustration alone — it is the sound of someone who carries the weight of what he sees.</p>
-            </div>
-            <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:13px 14px;">
-              <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.13em;background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;">3:5</div>
-              <strong style="font-size:.95rem;">ὀργή + συλλυπούμενος</strong>
-              <p style="font-size:.85rem;color:var(--text-gray);margin:5px 0 0;line-height:1.5;">Anger and grief together — at 3:5, Jesus looks around the synagogue "with anger, grieved at their hardness of heart." Two emotions held simultaneously. Matthew and Luke omit the anger. Mark keeps it because it shows Jesus' response to willful blindness is not detached — it costs him something.</p>
-            </div>
-            <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:13px 14px;">
-              <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.13em;background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;">6:6</div>
-              <strong style="font-size:.95rem;">ἐθαύμαζεν</strong>
-              <p style="font-size:.85rem;color:var(--text-gray);margin:5px 0 0;line-height:1.5;">Amazement — Jesus is amazed at the unbelief in Nazareth (6:6). This is the only place in the Synoptics where Jesus is the subject of the amazement verb rather than the cause of it. Mark presents a Jesus for whom the failure of faith is genuinely surprising — not omnisciently bypassed.</p>
-            </div>
-            <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:13px 14px;">
-              <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.13em;background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;">14:33–34</div>
-              <strong style="font-size:.95rem;">ἐκθαμβεῖσθαι + ἀδημονεῖν</strong>
-              <p style="font-size:.85rem;color:var(--text-gray);margin:5px 0 0;line-height:1.5;">Distress and anguish in Gethsemane — "greatly distressed and troubled." The first word means something closer to alarmed or overwhelmed; the second means a restless, unsettled anguish. Again, Matthew softens this; Mark does not. This is not performance — it is the full weight of the cup landing on a fully human person.</p>
-            </div>
-          </div>
-          <p class="word-body">What makes this pattern significant is what it says about Mark's Christology. He is not afraid to show a Jesus who sighs, grieves, is startled, and is moved in his gut — because this is precisely what the incarnation requires. The portrait is not weakened by these emotions; it is deepened. The Son of God fully enters human experience, and Mark wants every reader to feel that.</p>
-        </div>
-
-      </div>
-
-      <div class="quote-block animate-on-scroll" style="margin-top: 10px;">
-        <p>"Do you not yet understand? Do you not yet perceive? Are your hearts hardened? Having eyes do you not see, and having ears do you not hear?"</p>
-        <div class="quote-ref">Mark 8:17–18 · The bread discourse — ironic echo of Jeremiah 5:21 / Ezekiel 12:2 / Isaiah 6:9–10</div>
-      </div>
-
-      <div class="callout" style="margin-top: 10px;">
-        <div class="mini-label">A Pattern Worth Tracking</div>
-        <p>Mark's "blindness" vocabulary (βλέπω, ὁράω, ὀφθαλμός, τυφλός) runs through the whole Gospel as a spiritual diagnostic. The two blind men who are healed (8:22–26, 10:46–52) bracket the section where the disciples are most spiritually blind. Meanwhile, the demons always "see" Jesus clearly, the woman with the hemorrhage "sees" her healing, and finally a Gentile centurion "sees" and confesses at the cross (15:39). Mark asks the reader: which kind of seeing do you have?</p>
       </div>
     </section>
 
