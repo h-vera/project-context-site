@@ -109,9 +109,8 @@
   <!-- ============================================================
        STYLESHEETS
        ============================================================ -->
-  <!-- Project Context global styles (wire in when deploying) -->
-  <!-- <link rel="stylesheet" href="/assets/css/global-v2.css"> -->
-  <!-- <link rel="stylesheet" href="/assets/css/mobile-tabs-v5-8.css"> -->
+  <link rel="stylesheet" href="/assets/css/global-v2.css">
+  <link rel="stylesheet" href="/assets/css/mobile-tabs-v5-8.css">
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
@@ -141,45 +140,80 @@ body {
 }
 
 /* ─────────────────────────────────────
-   TOP BAR
+   GLOBAL NAV OVERRIDES
+   nav-component.js injects #main-nav.
+   Override to be transparent over hero,
+   dark + frosted on scroll.
 ───────────────────────────────────── */
-.topbar {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.4rem 3rem;
-  transition: background 0.5s, backdrop-filter 0.5s, border-color 0.5s;
-  border-bottom: 1px solid transparent;
+
+/* Kill global-v2.css body padding so hero is full-bleed */
+body {
+  padding-top: 0 !important;
+  background: var(--navy) !important;
 }
-.topbar.scrolled {
-  background: rgba(8,20,42,0.93);
-  backdrop-filter: blur(14px);
-  border-color: rgba(196,137,159,0.18);
+
+/* Transparent nav over hero */
+#main-nav {
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  transition: background 0.5s ease, box-shadow 0.5s ease, backdrop-filter 0.5s ease !important;
+  border-bottom: 1px solid transparent !important;
 }
-.logo {
+
+/* Frosted dark nav once scrolled past hero */
+#main-nav.scrolled {
+  background: rgba(8,20,42,0.93) !important;
+  backdrop-filter: blur(14px) !important;
+  box-shadow: 0 1px 0 rgba(196,137,159,0.18) !important;
+  border-color: rgba(196,137,159,0.18) !important;
+}
+
+/* Logo text — cream on dark */
+#main-nav .logo-text {
+  color: var(--cream) !important;
   font-family: 'Cinzel', serif;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--cream);
+  letter-spacing: 0.18em;
 }
-.logo em { color: var(--rose); font-style: normal; margin: 0 0.2em; }
-.nav-links { display: flex; gap: 2.2rem; }
-.nav-links a {
-  font-family: 'Cinzel', serif;
-  font-size: 0.58rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba(237,232,216,0.55);
-  text-decoration: none;
-  transition: color 0.25s;
+
+/* Nav links — subdued cream, brighten on hover */
+#main-nav .nav-links a {
+  color: rgba(237,232,216,0.58) !important;
+  transition: color 0.25s, background 0.25s !important;
 }
-.nav-links a:hover, .nav-links a.active { color: var(--cream); }
-.nav-links a.active { color: var(--rose-lt); }
+#main-nav .nav-links a:hover {
+  color: var(--cream) !important;
+  background: rgba(255,255,255,0.06) !important;
+}
+#main-nav .nav-links a.active {
+  color: var(--rose-lt) !important;
+  background: rgba(196,137,159,0.1) !important;
+}
+
+/* Dropdown menus — dark themed */
+#main-nav .dropdown-content {
+  background: rgba(8,20,42,0.97) !important;
+  border: 1px solid rgba(196,137,159,0.2) !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5) !important;
+}
+#main-nav .dropdown-content a {
+  color: rgba(237,232,216,0.7) !important;
+}
+#main-nav .dropdown-content a:hover {
+  background: rgba(196,137,159,0.1) !important;
+  color: var(--cream) !important;
+}
+
+/* Mobile hamburger lines — cream colored */
+#main-nav .mobile-menu-toggle span {
+  background: var(--cream) !important;
+}
+
+/* Mobile menu panel — dark */
+#main-nav ~ * .nav-links,
+#main-nav .nav-links {
+  /* Desktop: keep inline flex. Mobile: handled by global nav JS */
+}
 
 /* ─────────────────────────────────────
    HERO
@@ -214,26 +248,26 @@ body {
 .braid-pos {
   background: repeating-linear-gradient(
     45deg,
-    transparent        0px,  transparent        20px,
-    rgba(221,213,184,0.52) 20px, rgba(221,213,184,0.52) 26px,
-    transparent        26px, transparent        47px,
-    rgba(196,137,159,0.45) 47px, rgba(196,137,159,0.45) 53px,
-    transparent        53px, transparent        56px
+    transparent        0px,  transparent        18px,
+    rgba(221,213,184,0.72) 18px, rgba(221,213,184,0.72) 25px,
+    transparent        25px, transparent        44px,
+    rgba(196,137,159,0.62) 44px, rgba(196,137,159,0.62) 51px,
+    transparent        51px, transparent        56px
   );
-  animation: braidPos 11s linear infinite;
+  animation: braidPos 7s linear infinite;
 }
 
 /* -45° stripe set — same colors, different angle, different speed = weaving feel */
 .braid-neg {
   background: repeating-linear-gradient(
     -45deg,
-    transparent        0px,  transparent        20px,
-    rgba(221,213,184,0.45) 20px, rgba(221,213,184,0.45) 26px,
-    transparent        26px, transparent        47px,
-    rgba(196,137,159,0.38) 47px, rgba(196,137,159,0.38) 53px,
-    transparent        53px, transparent        56px
+    transparent        0px,  transparent        18px,
+    rgba(221,213,184,0.62) 18px, rgba(221,213,184,0.62) 25px,
+    transparent        25px, transparent        44px,
+    rgba(196,137,159,0.52) 44px, rgba(196,137,159,0.52) 51px,
+    transparent        51px, transparent        56px
   );
-  animation: braidNeg 15s linear infinite;
+  animation: braidNeg 10s linear infinite;
 }
 
 /* "Warp" depth layer — dark bands at 45° that simulate over-under interlacing  */
@@ -245,7 +279,7 @@ body {
     rgba(8,20,42,0.35) 40px, rgba(8,20,42,0.35)   54px,
     transparent        54px, transparent           80px
   );
-  animation: braidWarp 7.5s linear infinite;
+  animation: braidWarp 5s linear infinite;
 }
 
 @keyframes braidPos  { from { transform: translate(  0px, 0px); } to { transform: translate( 40px, 40px); } }
@@ -625,8 +659,6 @@ body {
 ───────────────────────────────────── */
 @media (max-width: 900px) {
   .card, .card.wide, .card.narrow, .card.trio { grid-column: span 12 !important; }
-  .topbar { padding: 1.1rem 1.5rem; }
-  .nav-links { display: none; }
   .footer-strip { flex-direction: column; gap: 1rem; text-align: center; }
   .footer-verse { text-align: center; }
 }
@@ -640,19 +672,8 @@ body {
 </head>
 <body>
 
-<!-- ══════════════════════════════
-     TOP BAR
-══════════════════════════════ -->
-<nav class="topbar" id="topbar">
-  <div class="logo">Project<em>·</em>Context</div>
-  <div class="nav-links">
-    <a href="#">Studies</a>
-    <a href="#">Books</a>
-    <a href="#" class="active">Connections</a>
-    <a href="#">Resources</a>
-    <a href="#">About</a>
-  </div>
-</nav>
+<!-- Nav component injected here by nav-component.js -->
+<div id="nav-placeholder"></div>
 
 <!-- ══════════════════════════════
      HERO
@@ -691,14 +712,14 @@ body {
 
     <p class="hero-sub">
       Every thread of Scripture interwoven — from Genesis to Revelation,<br>
-      Law to Prophet, Covenant fulfilled in every age
+      Instruction to Prophet, Covenant fulfilled in every age
     </p>
 
     <div class="chips">
       <div class="chip">Genesis 1–2</div>
-      <div class="chip">NC → Tanakh</div>
-      <div class="chip">Intra-Tanakh Quotation</div>
       <div class="chip">Torah Symmetry</div>
+      <div class="chip">Intra-Tanakh Quotation</div>
+      <div class="chip">NC → Tanakh</div>
       <div class="chip">All 66 Books</div>
     </div>
 
@@ -724,27 +745,48 @@ body {
 
   <div class="hub-grid">
 
-    <!-- 1. NC → Tanakh (wide) -->
-    <div class="card wide">
-      <div class="card-glyph">🔗</div>
-      <div class="card-kind">New Covenant → Tanakh</div>
-      <div class="card-name">NC Connections Back to the Tanakh</div>
+    <!-- 1. Genesis 1–2 (wide — LIVE, in production) -->
+    <div class="card wide" onclick="location.href='./genesis-1-2-connections.html'" style="cursor:pointer;">
+      <div class="card-glyph">🌅</div>
+      <div class="card-kind">Deep Dive · Creation</div>
+      <div class="card-name">Genesis 1–2 Connections</div>
       <div class="card-body">
-        How NC writers cite, allude to, echo, and fulfill the Tanakh — exploring 
-        the full depth of quotation, typology, and canonical intertextuality across 
-        the two-testament canon. From explicit formulaic citations to deep structural echoes.
+        The creation texts as fountainhead of all biblical theology — tracing how 
+        every subsequent writer reaches back to this first word. Image of God, Sabbath, 
+        cosmic temple, and new creation — the threads that run through the whole canon.
       </div>
       <div class="card-refs">
-        <span class="ref">Isa 53 → 1 Pet 2</span>
-        <span class="ref">Ps 22 → Mark 15</span>
+        <span class="ref">Image of God</span>
+        <span class="ref">Sabbath</span>
+        <span class="ref">New Creation</span>
+        <span class="ref">Cosmic Temple</span>
         <span class="ref">Gen 1 → John 1</span>
-        <span class="ref">Exod 12 → 1 Cor 5</span>
-        <span class="ref">Jer 31 → Heb 8</span>
+        <span class="ref">Gen 1 → Col 1</span>
+      </div>
+      <div style="margin-top:1.2rem; position:relative; z-index:1;">
+        <span style="font-family:'Cinzel',serif; font-size:0.54rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold); border-bottom: 1px solid rgba(200,169,110,0.35); padding-bottom:2px;">View Study →</span>
       </div>
     </div>
 
-    <!-- 2. Intra-Tanakh (narrow) -->
+    <!-- 2. Torah Symmetry (narrow — NEXT in production) -->
     <div class="card narrow">
+      <div class="card-glyph">⚖️</div>
+      <div class="card-kind">Torah Symmetry · Coming Next</div>
+      <div class="card-name">Connections in the Torah</div>
+      <div class="card-body">
+        Structural echoes, chiasms, and thematic symmetry across the First Five Books — 
+        the Torah as a single architecturally unified whole.
+      </div>
+      <div class="card-refs">
+        <span class="ref">Gen 1 ↔ Deut 34</span>
+        <span class="ref">Exod ↔ Num</span>
+        <span class="ref">Levitical center</span>
+      </div>
+      <div class="badge-soon">Coming Next</div>
+    </div>
+
+    <!-- 3. Intra-Tanakh Quotation (trio) -->
+    <div class="card trio">
       <div class="card-glyph">📜</div>
       <div class="card-kind">Intra-Tanakh Quotation</div>
       <div class="card-name">Tanakh Writers Quoting the Tanakh</div>
@@ -761,36 +803,19 @@ body {
       </div>
     </div>
 
-    <!-- 3. Genesis 1–2 (trio) -->
+    <!-- 4. NC → Tanakh (trio) -->
     <div class="card trio">
-      <div class="card-glyph">🌅</div>
-      <div class="card-kind">Deep Dive · Creation</div>
-      <div class="card-name">Genesis 1–2 Connections</div>
+      <div class="card-glyph">🔗</div>
+      <div class="card-kind">New Covenant → Tanakh</div>
+      <div class="card-name">NC Connections Back to the Tanakh</div>
       <div class="card-body">
-        The creation texts as fountainhead of all biblical theology — and how 
-        every subsequent writer reaches back to this first word.
+        How NC writers cite, allude to, echo, and fulfill the Tanakh — from explicit 
+        formulaic citations to deep structural echoes across the two-testament canon.
       </div>
       <div class="card-refs">
-        <span class="ref">Image of God</span>
-        <span class="ref">Sabbath</span>
-        <span class="ref">New Creation</span>
-        <span class="ref">Cosmic Temple</span>
-      </div>
-    </div>
-
-    <!-- 4. Torah Symmetry (trio) -->
-    <div class="card trio">
-      <div class="card-glyph">⚖️</div>
-      <div class="card-kind">Torah Symmetry</div>
-      <div class="card-name">Connections in the First Five Books</div>
-      <div class="card-body">
-        Structural echoes, chiasms, and thematic symmetry across Genesis through 
-        Deuteronomy — the Torah as an architecturally unified whole.
-      </div>
-      <div class="card-refs">
-        <span class="ref">Gen 1 ↔ Deut 34</span>
-        <span class="ref">Exod ↔ Num</span>
-        <span class="ref">Levitical center</span>
+        <span class="ref">Isa 53 → 1 Pet 2</span>
+        <span class="ref">Ps 22 → Mark 15</span>
+        <span class="ref">Jer 31 → Heb 8</span>
       </div>
     </div>
 
@@ -814,10 +839,10 @@ body {
   <div class="hub-header" style="margin-bottom:0;">
     <div class="hub-label" style="margin-bottom:0.5rem;">Next Connection Study</div>
     <h2 class="hub-headline" style="font-size: clamp(1.4rem,3vw,2.2rem); color: var(--cream);">
-      Torah Symmetry: Connections Within the First Five Books
+      Connections in the Torah: The First Five Books
     </h2>
     <p style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.05rem; color:rgba(221,213,184,0.55); margin-top:0.8rem; font-weight:300;">
-      Genesis through Deuteronomy as a unified literary architecture
+      Genesis through Deuteronomy as a single, architecturally unified whole
     </p>
   </div>
 
@@ -836,31 +861,44 @@ body {
 
 
 <!-- ============================================================
-     NAVIGATION COMPONENT (v5.8.1 — wire in when deploying)
+     NAVIGATION COMPONENT (v5.8.1)
      ============================================================ -->
-<!--
 <script type="module">
   import NavigationComponent from '/assets/js/nav-component.js';
-  const navigation = new NavigationComponent({
+  new NavigationComponent({
     currentPage: 'resources/connections-corner/connections-hub',
     hubType: 'connections'
   });
 </script>
-<script src="/assets/js/character-page-v5-8.js" defer></script>
--->
 
 <script>
-  // Topbar scroll effect
-  const topbar = document.getElementById('topbar');
-  window.addEventListener('scroll', () => {
-    topbar.classList.toggle('scrolled', window.scrollY > 60);
-  }, { passive: true });
-
-  // Page init log (mirrors v5.8.1 pattern)
   document.addEventListener('DOMContentLoaded', function () {
     console.log('Connections Hub v5.8.1 initialized');
-    console.log('Hub ID: connections-corner');
-    console.log('Template: 5.8.1 | Study type: intertextuality-hub');
+
+    // ── Animate cards on scroll ──────────────────────────────
+    const cards = document.querySelectorAll('.card');
+    const cardObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    cards.forEach((card, i) => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(24px)';
+      card.style.transition = `opacity 0.55s ease ${i * 0.08}s, transform 0.55s ease ${i * 0.08}s`;
+      cardObserver.observe(card);
+    });
+
+    // ── Confirm braid animations are running ─────────────────
+    const braidEls = document.querySelectorAll('.braid-stripe');
+    braidEls.forEach(el => {
+      // Force a reflow to ensure animations start
+      el.style.animationPlayState = 'running';
+    });
   });
 </script>
 
