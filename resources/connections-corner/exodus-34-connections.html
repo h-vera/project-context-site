@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Exodus 34 Echo Network — Intra-Tanakh Quotation | Project Context</title>
-  <meta name="description" content="One divine self-disclosure at Sinai — twelve explicit echoes across the Tanakh, from Moses at Kadesh Barnea to Nehemiah's post-exilic prayer. From Jonah's complaint to Nahum's indictment, Micah's doxology to five psalms: the Exodus 34:6–7 echo network fully mapped.">
+  <meta name="description" content="One divine self-disclosure at Sinai — twelve major reuse points across the Tanakh, from Moses at Kadesh Barnea to Nehemiah's post-exilic prayer. From Jonah's complaint to Nahum's indictment, Micah's doxology to five psalms: the Exodus 34:6–7 echo network fully mapped.">
 
   <meta name="page-type"        content="connections-visualization">
   <meta name="hub-id"           content="connections-corner">
@@ -362,8 +362,9 @@ svg.net { display: block; margin: 0 auto; }
   <h1 class="hdr-title">The Exodus 34 <b>Echo Network</b></h1>
   <div class="hdr-hebrew">יְהוָה יְהוָה אֵל רַחוּם וְחַנּוּן</div>
   <p class="hdr-sub">
-    One divine self-disclosure at Sinai — twelve explicit echoes across the Tanakh,
+    One divine self-disclosure at Sinai — twelve major reuse points across the Tanakh,
     from Moses at Kadesh Barnea to Nehemiah's post-exilic prayer five centuries later.
+    Widely regarded as the most re-quoted OT passage within the OT itself.
     The irony at the center: two prophets write about the same city,
     quote the same verse, and choose opposite halves.
   </p>
@@ -536,7 +537,7 @@ const ECHOES = [
     context:'Nahum prophesies Nineveh\'s destruction roughly a century after Jonah. The same city. The same verse — but Nahum quotes the justice half: "will by no means clear the guilty." Nineveh repented in Jonah\'s day; it returned to its violence. The mercy window has closed.',
     lexical:['slow to anger (retained)','will by no means clear the guilty'],
     what:'Nahum 1:3 is the deliberate canonical dark mirror of Jonah 4:2. Both cite Exod 34; both address Nineveh; but Jonah quotes mercy and is angry it exists, while Nahum quotes judgment and announces it is now operative. Crucially, Nahum retains "slow to anger" — implicitly acknowledging that time was given. But the time has run out.',
-    why:'The placement of Jonah and Nahum in the canonical Book of the Twelve is not chronological — it is theological. Jonah precedes Nahum in scroll order, ensuring the reader encounters mercy before judgment about Nineveh, in the same sequence the city experienced them. The canon arranges the Exod 34 story in order: mercy offered, mercy received, mercy exhausted, judgment executed.',
+    why:'When read in canonical sequence, Jonah and Nahum present a compelling theological arc. Jonah precedes Nahum in the scroll of the Twelve — ensuring the reader encounters mercy before judgment about Nineveh, in the same order the city experienced them. Whether this reflects deliberate editorial arrangement or a profound canonical convergence, the effect is the same: the full Exod 34 character unfolds across both books — mercy offered, mercy received, mercy exhausted, judgment executed.',
     ninevehNote:'Nahum quotes the JUSTICE SIDE of Exod 34 — Nineveh\'s day of mercy is past.',
   },
   {
@@ -599,6 +600,14 @@ function ninevehNoteHtml(e) {
   return `<div style="margin-top:.5rem;padding:.3rem .7rem;background:${e.side==='mercy'?'var(--mercy-b)':'var(--just-b)'};border:1px solid ${e.side==='mercy'?'rgba(90,143,114,0.3)':'rgba(138,74,90,0.3)'};font-size:.75rem;color:${col};font-weight:600;">${e.ninevehNote}</div>`;
 }
 
+function justiceNote(e) {
+  if (e.side !== 'just') return '';
+  return `<div style="margin-top:.5rem;padding:.45rem .8rem;border-top:1px solid rgba(138,74,90,0.15);display:flex;gap:.5rem;">
+    <span style="font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(196,122,138,0.55);flex-shrink:0;margin-top:2px;font-family:'Cinzel',serif;">Note</span>
+    <span style="font-size:.75rem;line-height:1.58;color:var(--tx-d);font-style:italic;">"Visiting the iniquity" describes consequences continuing across generations that <em>repeat</em> the same rebellion — not punishment of innocent descendants. Deut 5:9–10 clarifies: judgment falls on those who "hate" God; loyalty extends to those who "love" him.</span>
+  </div>`;
+}
+
 function showEcho(id) {
   const e = ECHOES.find(x=>x.id===id);
   const p = document.getElementById('info');
@@ -615,6 +624,7 @@ function showEcho(id) {
     </div>
     <div class="info-why"><span class="wl">The echo</span><span>${e.what}</span></div>
     <div class="info-why"><span class="wl">Why it matters</span><span>${e.why}</span></div>
+    ${justiceNote(e)}
   `;
 }
 
@@ -807,11 +817,14 @@ function drawArcs() {
   [
     {col:'#7dc49a', label:'Mercy attributes cited'},
     {col:'#c47a8a', label:'Justice attributes cited'},
-    {isDash:true, label:'Dashed arc = partial citation'},
+    {isDash:false, isSolid:true, label:'Solid arc = direct quotation'},
+    {isDash:true,  label:'Dashed arc = partial citation'},
   ].forEach(it => {
     const d = document.createElement('div'); d.className = 'leg';
     if (it.isDash) {
-      d.innerHTML = `<span class="leg-line" style="border-top:1px dashed rgba(196,192,180,0.4)"></span><span>${it.label}</span>`;
+      d.innerHTML = `<span class="leg-line" style="border-top:1px dashed rgba(196,192,180,0.45)"></span><span>${it.label}</span>`;
+    } else if (it.isSolid) {
+      d.innerHTML = `<span class="leg-line" style="border-top:1.5px solid rgba(196,192,180,0.45)"></span><span>${it.label}</span>`;
     } else {
       d.innerHTML = `<span class="leg-dot" style="background:${it.col}"></span><span>${it.label}</span>`;
     }
@@ -997,24 +1010,34 @@ function renderSources() {
 
   av.innerHTML = `<div class="sources-section">
 
-    <!-- Chiasm structure -->
+    <!-- Methodology note -->
+    <div style="margin-bottom:24px; padding:14px 20px; background:rgba(90,104,152,0.08); border:1px solid rgba(90,104,152,0.2); border-left:3px solid var(--both-lt);">
+      <div style="font-family:'Cinzel',serif; font-size:.56rem; letter-spacing:.22em; text-transform:uppercase; color:var(--both-lt); margin-bottom:7px;">How This Page Categorizes Connections</div>
+      <div style="font-size:.8rem; line-height:1.65; color:var(--tx-d);">
+        Echo types vary in strength: <strong style="color:var(--tx);">direct quotations</strong> reproduce key phrases near-verbatim (solid arc);
+        <strong style="color:var(--tx);">partial citations</strong> share significant lexical overlap but omit portions of the formula (dashed arc);
+        <strong style="color:var(--tx);">thematic reflections</strong> engage the same theological vocabulary without formal citation.
+        Not all references function identically — some are literary citations while others are theological developments rooted in the same tradition.
+        The count of "twelve major echoes" follows Tim Mackie's working list of the most significant reuses (BibleProject E1), which he estimates at 27+ total when smaller snippets are included.
+      </div>
+    </div>
     <div class="src-section-label">Literary Architecture of Exodus 34:6–7</div>
     <div class="chiasm-box">
       <div class="chiasm-title">Two Nested Chiasms · BibleProject Video Notes</div>
 
-      <div style="margin-bottom:14px;font-size:.7rem;color:var(--tx-d);text-align:center;">Chiasm 1 — The five attributes of v. 6</div>
-      <div class="chiasm-row"><div class="chiasm-letter">A</div><div class="chiasm-bar c1-a">a God <b>compassionate and gracious</b></div></div>
-      <div class="chiasm-row"><div class="chiasm-letter">B</div><div class="chiasm-bar c1-b"><b>slow to anger</b> <span style="color:var(--tx-d);font-size:.82rem">(center — the single reactive attribute)</span></div></div>
-      <div class="chiasm-row"><div class="chiasm-letter">A′</div><div class="chiasm-bar c1-c">abundant of <b>loyal love and faithfulness</b></div></div>
+      <div style="margin-bottom:10px;font-size:.66rem;color:var(--tx-d);text-align:left;letter-spacing:.06em;text-transform:uppercase;font-family:'Cinzel',serif;">Chiasm 1 — v. 6 · The Five Attributes</div>
+      <div class="chiasm-row" style="margin-left:0px">  <div class="chiasm-letter">A</div><div class="chiasm-bar c1-a">a God <b>compassionate and gracious</b></div></div>
+      <div class="chiasm-row" style="margin-left:24px"> <div class="chiasm-letter">B</div><div class="chiasm-bar c1-b"><b>slow to anger</b> <span style="color:var(--tx-d);font-size:.8rem;font-style:italic;">— center, the single reactive attribute</span></div></div>
+      <div class="chiasm-row" style="margin-left:0px">  <div class="chiasm-letter">A′</div><div class="chiasm-bar c1-c">abundant of <b>loyal love and faithfulness</b></div></div>
 
-      <div style="margin:16px 0 14px;font-size:.7rem;color:var(--tx-d);text-align:center;">Chiasm 2 — The two movements of v. 7</div>
-      <div class="chiasm-row"><div class="chiasm-letter">A</div><div class="chiasm-bar c2-a">keeper of loyal love <b>for thousands</b></div></div>
-      <div class="chiasm-row"><div class="chiasm-letter">B</div><div class="chiasm-bar c2-b">forgiver of <b>iniquity, transgression, and sin</b></div></div>
-      <div class="chiasm-row"><div class="chiasm-letter">C</div><div class="chiasm-bar c2-cp">yet he will <b>surely not clear the guilty</b> <span style="color:var(--tx-d);font-size:.82rem">(center — the justice pivot)</span></div></div>
-      <div class="chiasm-row"><div class="chiasm-letter">B′</div><div class="chiasm-bar c2-bp">visitor of iniquity of fathers upon sons — <b>third and fourth</b></div></div>
-      <div class="chiasm-row"><div class="chiasm-letter">A′</div><div class="chiasm-bar c2-ap"><b>thousands</b> who receive covenant loyalty</div></div>
+      <div style="margin:22px 0 10px;font-size:.66rem;color:var(--tx-d);text-align:left;letter-spacing:.06em;text-transform:uppercase;font-family:'Cinzel',serif;">Chiasm 2 — v. 7 · Mercy Framing Justice</div>
+      <div class="chiasm-row" style="margin-left:0px">  <div class="chiasm-letter">A</div><div class="chiasm-bar c2-a">keeper of loyal love <b>for thousands</b></div></div>
+      <div class="chiasm-row" style="margin-left:24px"> <div class="chiasm-letter">B</div><div class="chiasm-bar c2-b">forgiver of <b>iniquity, transgression, and sin</b></div></div>
+      <div class="chiasm-row" style="margin-left:48px"> <div class="chiasm-letter">C</div><div class="chiasm-bar c2-cp">yet he will <b>surely not clear the guilty</b> <span style="color:var(--tx-d);font-size:.8rem;font-style:italic;">— center, the justice pivot</span></div></div>
+      <div class="chiasm-row" style="margin-left:24px"> <div class="chiasm-letter">B′</div><div class="chiasm-bar c2-bp">visitor of iniquity of fathers upon sons — <b>third and fourth</b></div></div>
+      <div class="chiasm-row" style="margin-left:0px">  <div class="chiasm-letter">A′</div><div class="chiasm-bar c2-ap"><b>thousands</b> who receive covenant loyalty</div></div>
 
-      <div class="chiasm-note">The literary design weights mercy: "thousands" frames judgment; "third and fourth" is idiom for limited number vs. unlimited generations of loyal love.</div>
+      <div class="chiasm-note">The staggered structure shows how mercy frames judgment on both sides: "thousands" (A · A′) encloses "third and fourth" (B′), ensuring the literary weight falls on covenant loyalty rather than accountability.</div>
     </div>
 
     <!-- BibleProject episodes -->
