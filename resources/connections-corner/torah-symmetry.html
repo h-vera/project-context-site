@@ -149,6 +149,12 @@ body { background:var(--bg); color:var(--tx); font-family:'DM Sans',sans-serif; 
 .cb-c  { background:rgba(96,112,168,.28); color:var(--col-cb); border:1px solid rgba(200,160,224,.2); }
 .cb-sep { color:rgba(200,196,186,.2); font-size:.7rem; }
 
+/* ── Methodology statement ── */
+.method-stmt {
+  max-width:680px; margin:8px auto 0; font-size:.76rem; color:var(--tx-d);
+  line-height:1.55; text-align:center; padding:0 16px;
+}
+
 /* ── Tabs ── */
 .tabs { display:flex; justify-content:center; gap:0; margin:22px auto 0; max-width:600px; }
 .tbtn { flex:1; padding:10px; border:1px solid rgba(186,163,112,.15); background:transparent; color:var(--tx-d); font-family:'DM Sans',sans-serif; font-size:.68rem; font-weight:600; letter-spacing:.07em; text-transform:uppercase; cursor:pointer; transition:all .3s; white-space:nowrap; }
@@ -188,6 +194,23 @@ body { background:var(--bg); color:var(--tx); font-family:'DM Sans',sans-serif; 
   display:flex; gap:.4rem; align-items:baseline;
 }
 .info .why .wl { font-size:.58rem; text-transform:uppercase; letter-spacing:.1em; color:var(--gold-d); flex-shrink:0; }
+
+/* ── Certainty chips ── */
+.cert-chip {
+  display:inline-flex; align-items:center; padding:.15rem .5rem;
+  border-radius:999px; font-size:.58rem; letter-spacing:.07em;
+  text-transform:uppercase; font-weight:700; margin-left:.5rem;
+  vertical-align:middle;
+}
+.cert-textual   { background:rgba(90,140,106,.2);  color:#78c08e; }
+.cert-canonical  { background:rgba(186,163,112,.15); color:var(--gold-b); }
+.cert-synthesis  { background:rgba(200,160,224,.14); color:#c8a0e0; }
+
+/* ── How-to-explore default ── */
+.explore-hint { display:flex; gap:1rem; flex-wrap:wrap; margin-top:.5rem; }
+.explore-hint-item { flex:1; min-width:140px; padding:.5rem .7rem; border-radius:8px; background:rgba(255,255,255,.03); border:1px solid rgba(186,163,112,.1); }
+.explore-hint-item .ehl { font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; font-weight:700; margin-bottom:.2rem; }
+.explore-hint-item .ehd { font-size:.78rem; color:var(--tx-d); line-height:1.45; }
 
 /* ── SVG ── */
 .svg-area { width:100%; overflow-x:scroll; overflow-y:visible; -webkit-overflow-scrolling:touch; scrollbar-width:thin; scrollbar-color:rgba(186,163,112,.25) transparent; }
@@ -258,6 +281,7 @@ svg.chart { display:block; }
     <span class="cb-sep">·</span>
     <span class="cb cb-a">A′ · Deuteronomy</span>
   </div>
+  <p class="method-stmt">This page presents a canonical-theological reading of Torah symmetry. Some connections are direct textual parallels; others reflect literary and theological patterns recognized across the five books.</p>
   <div class="sub" style="margin-top:8px;">hover or tap a book or parallel theme to illuminate the connection</div>
 </div>
 
@@ -275,8 +299,14 @@ svg.chart { display:block; }
 
 <div class="main">
   <div class="info empty" id="info">
-    <div class="t">Select a Torah book or parallel theme to explore</div>
-    <div class="b"></div>
+    <div class="t">How to Explore</div>
+    <div class="b">
+      <div class="explore-hint">
+        <div class="explore-hint-item"><div class="ehl" style="color:var(--gold-b)">Arc</div><div class="ehd">See structural symmetry — how the five books mirror each other</div></div>
+        <div class="explore-hint-item"><div class="ehl" style="color:var(--col-ab)">Flow</div><div class="ehd">Follow the narrative movement from creation to covenant renewal</div></div>
+        <div class="explore-hint-item"><div class="ehl" style="color:var(--col-bb)">Scripture</div><div class="ehd">Study the key texts that anchor each connection</div></div>
+      </div>
+    </div>
   </div>
   <div class="svg-area" id="svg-area"></div>
   <div class="legend" id="legend"></div>
@@ -297,7 +327,7 @@ const BOOKS = [
     desc:'Redemption from Egypt, covenant at Sinai, manna and provision in the wilderness, and the tabernacle filled with glory. Israel moves from slaves to covenant people to dwelling-place of God.' },
   { id:'lev',  l:'Leviticus',   sh:'Lev',  letter:'C',  c:'#4a548a', cb:'#c8a0e0', pair:'lev',
     refs:'Lev 1–7 · Lev 8–10 · Lev 11–15 · Lev 16 · Lev 17–20 · Lev 26',
-    desc:'How a holy God dwells among a sinful people: offerings, priestly mediation, purity and pollution, and the Day of Atonement. Leviticus answers the crisis Exodus creates — God has moved in; now what?' },
+    desc:'Leviticus is the operating logic of God\'s presence among Israel. It maps sacred space, priestly mediation, impurity, blood purification, and the Day of Atonement as the annual reset that allows divine presence to remain in the camp.' },
   { id:'num',  l:'Numbers',     sh:'Num',  letter:"B′", c:'#2e6e6e', cb:'#62c4c4', pair:'en',
     refs:'Num 1–2 · Num 10:11–36 · Num 13–14 · Num 16 · Num 20:1–13 · Num 33',
     desc:'Camp structure around the tabernacle, wilderness testing, repeated rebellion, and the long road from Sinai to Moab. Exodus\'s gifts are resented; Exodus\'s faithfulness is forgotten.' },
@@ -306,14 +336,18 @@ const BOOKS = [
     desc:'Torah\'s closing bookend: covenant renewed for a new generation, life-or-death summons, the heart transformation promised (30:6), and Moses on Nebo. Genesis opened the story; Deuteronomy hands it forward unresolved.' },
 ];
 
+// ═══════ CERTAINTY LEVELS ═══════
+const CERT = {
+  textual: { label:'Textual Parallel', cls:'cert-textual' },
+  canonical: { label:'Canonical Echo', cls:'cert-canonical' },
+  synthesis: { label:'Theological Synthesis', cls:'cert-synthesis' },
+};
+
 // ═══════ PAIRS ═══════
-// Each entry: id, book, pair, label, refs (key texts for own side),
-//   own (insight text), ml (mirror description), mrefs (mirror refs),
-//   mlabel (mirror label), n (why it matters)
 const PAIRS = [
 
   // ── Genesis (A) ──
-  { id:'g1', book:'gen', pair:'ad', label:'Beginning of Story',
+  { id:'g1', book:'gen', pair:'ad', label:'Beginning of Story', cert:'textual',
     refs:'Gen 1:1; 2:4; 12:1-3',
     own:'Genesis opens the Torah: creation, fall, flood, and the call of Abraham. The whole biblical story begins here — a world made good, broken, and placed under a promise.',
     mrefs:'Deut 1:1-5; 34:1-12',
@@ -321,7 +355,7 @@ const PAIRS = [
     mlabel:'Conclusion & Transition',
     n:'The Torah\'s outer frame is a deliberate literary pair. Genesis stages the Eden drama at individual scale; Deuteronomy restages it at national scale — one garden becomes a land, one couple becomes a people, one command becomes Torah. Blessing is the flourishing God designed life to produce; curse is the decreation that follows when humans reject the source of life — Genesis 3 and Deuteronomy 28 speak the same language. And Deuteronomy adds what Eden never received: the promise of transformed hearts (Deut 30:6), opening a way back that the garden never offered.' },
 
-  { id:'g2', book:'gen', pair:'ad', label:'Promise Given — Abraham',
+  { id:'g2', book:'gen', pair:'ad', label:'Promise Given — Abraham', cert:'textual',
     refs:'Gen 12:1-3; 15:5-18; 17:1-8',
     own:'God calls Abram and in Gen 15 unilaterally binds himself by oath — passing between the divided animals alone, establishing the covenant\'s unconditional foundation. Later the covenant is developed with covenant responsibilities for Abraham\'s household (Gen 17; cf. Deut 28–30).',
     mrefs:'Deut 1:8; 7:6-8; 9:5; 30:20',
@@ -329,7 +363,7 @@ const PAIRS = [
     mlabel:'Promise Reaffirmed',
     n:'The Abrahamic promise is the backbone of the entire Torah. Genesis 12, 15, and 17 establish it; Deuteronomy confirms it still operative at the very edge of fulfillment. The same threefold formula — land, offspring, blessing for all nations — frames the Pentateuch from first book to last. Election in Deuteronomy is never for Israel\'s sake alone: Israel is chosen so that the nations see a community whose justice, worship, and social order display the Creator\'s wisdom (Deut 4:6). Promise and mission are one thing.' },
 
-  { id:'g3', book:'gen', pair:'ad', label:'Land Promised',
+  { id:'g3', book:'gen', pair:'ad', label:'Land Promised', cert:'textual',
     refs:'Gen 12:7; 13:14-17; 15:18-21',
     own:'The land of Canaan is promised but not yet possessed throughout Genesis. Abraham purchases only a burial plot at Machpelah — the rest is hope deferred. The land is walked through, viewed, and named, but never held.',
     mrefs:'Deut 11:31; 34:1-4',
@@ -337,7 +371,7 @@ const PAIRS = [
     mlabel:'Land About to Be Entered',
     n:'Genesis promises the land; Deuteronomy stands at its threshold. The Torah moves from "I will give you this land" (Gen 12:7) to Moses viewing it from Nebo (Deut 34) — 180 chapters of deferred hope about to materialize.' },
 
-  { id:'g4', book:'gen', pair:'ad', label:'Covenant Initiated',
+  { id:'g4', book:'gen', pair:'ad', label:'Covenant Initiated', cert:'textual',
     refs:'Gen 15:1-21; 17:1-14',
     own:'God seals the Abrahamic covenant in Gen 15 — passing between the divided animals alone, binding himself by oath. In Gen 17 the covenant is formalized with circumcision as its sign. The foundation is divine initiative and unconditional self-commitment.',
     mrefs:'Deut 5:2-3; 29:1; 30:6',
@@ -345,7 +379,7 @@ const PAIRS = [
     mlabel:'Covenant Renewed',
     n:'Covenants established in Genesis are renewed in Deuteronomy. The Torah\'s outer frame is a covenant narrative: the Abrahamic covenant initiated (Genesis) and the Sinaitic covenant restated for a new generation (Deuteronomy). Between them lies the entire history of exodus, wilderness, and Sinai.' },
 
-  { id:'g5', book:'gen', pair:'ad', label:'Patriarchs — First Generation',
+  { id:'g5', book:'gen', pair:'ad', label:'Patriarchs — First Generation', cert:'textual',
     refs:'Gen 12–50; Heb 11:8-16',
     own:'Abraham, Isaac, Jacob, and Joseph form the first covenant generation — receiving the promises but never possessing the land. They died in faith, "not having received the things promised, but having seen them and greeted them from afar" (Heb 11:13).',
     mrefs:'Deut 1:34-40; 29:10-15',
@@ -353,7 +387,7 @@ const PAIRS = [
     mlabel:'Israel — Second Generation',
     n:'The Torah traces one promise passing between two generations: the patriarchs who received it (Genesis) and Israel who will inherit it (Deuteronomy). Genesis belongs to those who died in faith; Deuteronomy addresses those who will turn faith into footsteps.' },
 
-  { id:'g6', book:'gen', pair:'ad', label:'Deaths of the Patriarchs',
+  { id:'g6', book:'gen', pair:'ad', label:'Deaths of the Patriarchs', cert:'textual',
     refs:'Gen 25:8-10; 49:29-33; 50:24-25',
     own:'Abraham, Isaac, Jacob, and Joseph all die in Genesis before the land is inherited — each burial a confession of faith. Joseph\'s dying request: "Carry up my bones from here" (Gen 50:25). Faithful death before full arrival is the patriarchal signature.',
     mrefs:'Deut 34:5-8; Num 20:12',
@@ -361,7 +395,7 @@ const PAIRS = [
     mlabel:'Death of Moses',
     n:'Death-before-full-arrival is the Torah\'s bookend signature. Patriarchs die confessing the promise in Genesis; Moses dies viewing the land in Deuteronomy. The promise outlives its first recipients and demands a next generation.' },
 
-  { id:'g7', book:'gen', pair:'ad', label:'Tribal Blessings — Jacob',
+  { id:'g7', book:'gen', pair:'ad', label:'Tribal Blessings — Jacob', cert:'textual',
     refs:'Gen 49:1-28',
     own:'On his deathbed, Jacob gathers his twelve sons and delivers a poetic oracle over each tribe — blessing and judgment, destiny and character woven together. The poem reads the tribes\'s futures through the lens of their founders. Judah receives the scepter that will not depart (Gen 49:10); Joseph receives the fullest portion. The oracle is the Torah\'s first comprehensive vision of Israel as twelve distinct peoples with one shared destiny.',
     mrefs:'Deut 33:1-29',
@@ -370,7 +404,7 @@ const PAIRS = [
     n:'The Torah bookends with two great poetic oracles over the twelve tribes: Jacob\'s in Genesis 49 and Moses\'s in Deuteronomy 33. Both are delivered by a dying leader who will not enter the land. Both imagine the tribes into their futures. The contrast is instructive: Jacob\'s oracle includes curse (Simeon and Levi, Gen 49:5-7) that Deuteronomy 33 absorbs into blessing — Levi\'s priestly vocation redeems the violence of their founder. What is pronounced as judgment in one bookend is transformed by covenant fidelity into calling in the other. The trajectory from Gen 49 to Deut 33 is itself a miniature gospel: judgment absorbed into grace, violence redirected into holy service.' },
 
   // ── Deuteronomy (A′) ──
-  { id:'d1', book:'deut', pair:'ad', label:'Conclusion & Transition',
+  { id:'d1', book:'deut', pair:'ad', label:'Conclusion & Transition', cert:'textual',
     refs:'Deut 1:1-5; 34:1-12',
     own:'Deuteronomy closes the Torah at the threshold of fulfillment — Moses\' final address, the Jordan River in view, Joshua commissioned. The story does not end; it pivots toward a new chapter. The Torah concludes with expectation, not arrival.',
     mrefs:'Gen 1:1; 2:4; 12:1-3',
@@ -378,7 +412,7 @@ const PAIRS = [
     mlabel:'Beginning of Story',
     n:'The Torah\'s outer frame is a deliberate literary pair. Genesis is the narrative of origins; Deuteronomy is the covenant address delivered on the verge of the land. Together they bracket one story that is not yet finished — the Jordan has not yet been crossed.' },
 
-  { id:'d2', book:'deut', pair:'ad', label:'Promise Reaffirmed',
+  { id:'d2', book:'deut', pair:'ad', label:'Promise Reaffirmed', cert:'textual',
     refs:'Deut 1:8; 7:6-8; 9:5; 30:20',
     own:'Moses rehearses the Abrahamic promise with urgency: "The LORD swore to your fathers, to Abraham, to Isaac, and to Jacob, to give them and their offspring after them the land" (Deut 1:8). What God swore 400 years before is still operative and now imminent.',
     mrefs:'Gen 12:1-3; 15:5-18; 17:1-8',
@@ -386,7 +420,7 @@ const PAIRS = [
     mlabel:'Promise Given — Abraham',
     n:'The Abrahamic promise is the backbone of the entire Torah. Genesis establishes it; Deuteronomy confirms it still operative across 400 years. The same threefold formula — land, offspring, blessing for all nations — frames the Pentateuch from first book to last.' },
 
-  { id:'d3', book:'deut', pair:'ad', label:'Land About to Be Entered',
+  { id:'d3', book:'deut', pair:'ad', label:'Land About to Be Entered', cert:'textual',
     refs:'Deut 11:31; 34:1-4',
     own:'"I have let you see it with your eyes, but you shall not go over there" (Deut 34:4). Moses climbs Nebo and sees Gilead to Dan, Naphtali, Ephraim, Judah, the western sea, and the Jordan valley. The promised land is now visible; one crossing away.',
     mrefs:'Gen 12:7; 13:14-17; 15:18-21',
@@ -394,7 +428,7 @@ const PAIRS = [
     mlabel:'Land Promised',
     n:'Genesis promises the land; Deuteronomy stands at its threshold. The entire Torah moves from "I will give you this land" (Gen 12:7) to Moses viewing the whole panorama from Nebo — a journey measured not in miles but in four centuries of covenant faithfulness.' },
 
-  { id:'d4', book:'deut', pair:'ad', label:'Covenant Renewed',
+  { id:'d4', book:'deut', pair:'ad', label:'Covenant Renewed', cert:'textual',
     refs:'Deut 5:2-3; 29:1; 30:6',
     own:'Moses expounds the Sinai covenant as direct personal address to the new generation: "Not with our fathers did the LORD make this covenant, but with us, who are all of us here alive today" (Deut 5:3). Deuteronomy is a full covenant renewal — past covenant, present people, future choice.',
     mrefs:'Gen 15:1-21; 17:1-14',
@@ -402,7 +436,7 @@ const PAIRS = [
     mlabel:'Covenant Initiated',
     n:'Covenants established in Genesis are renewed in Deuteronomy — but with a crucial addition. Genesis initiates the Abrahamic covenant through divine oath (Gen 15) and human sign (Gen 17). Deuteronomy renews the Sinaitic covenant for a new generation and adds what neither the Abrahamic nor Sinaitic covenant explicitly promised: God will perform inner surgery on the human heart (Deut 30:6). The covenant is not simply being repeated — it is being deepened toward its final form. This is what Jeremiah 31 (new covenant written on the heart) and Ezekiel 36 (new heart, new Spirit) will both build on directly.' },
 
-  { id:'d5', book:'deut', pair:'ad', label:'Israel — Second Generation',
+  { id:'d5', book:'deut', pair:'ad', label:'Israel — Second Generation', cert:'textual',
     refs:'Deut 1:34-40; 29:10-15',
     own:'"You are standing today, all of you, before the LORD your God" (Deut 29:10). The children of the Exodus generation stand at the Jordan — their parents died in the wilderness. They are the heirs of both promise and covenant, positioned to inherit what their fathers forfeited.',
     mrefs:'Gen 12–50; Heb 11:8-16',
@@ -410,7 +444,7 @@ const PAIRS = [
     mlabel:'Patriarchs — First Generation',
     n:'The Torah traces one promise passing between two generations: the patriarchs who received it (Genesis) and Israel who will inherit it (Deuteronomy). Genesis belongs to those who died in faith; Deuteronomy addresses those who will turn faith into footsteps.' },
 
-  { id:'d6', book:'deut', pair:'ad', label:'Death of Moses',
+  { id:'d6', book:'deut', pair:'ad', label:'Death of Moses', cert:'textual',
     refs:'Deut 34:5-8; Num 20:12',
     own:'"So Moses the servant of the LORD died there in the land of Moab, opposite Beth-peor; but no one knows the place of his burial to this day" (Deut 34:5-6). The Torah\'s greatest prophet dies on the threshold of the land he spent his life leading Israel toward.',
     mrefs:'Gen 25:8-10; 49:29-33; 50:24-25',
@@ -418,7 +452,7 @@ const PAIRS = [
     mlabel:'Deaths of the Patriarchs',
     n:'Death-before-full-arrival is the Torah\'s bookend signature. Patriarchs die confessing the promise in Genesis; Moses dies viewing the land in Deuteronomy. But Moses\' death carries a specific theological weight beyond the bookend pattern: "No prophet has arisen in Israel like Moses, whom the LORD knew face to face" (Deut 34:10). This is not just an obituary — it is a promissory gap. Deuteronomy 18:15 promised a prophet like Moses would come; the Torah closes by saying he hasn\'t arrived yet. The reader is launched into Joshua and the Prophets asking: where is he? Every prophet after Moses — Joshua, Elijah, Isaiah, Jeremiah — fills part of that role but none fully. The gap closes in the New Testament\'s identification of Jesus as the prophet like Moses (Acts 3:22; 7:37).' },
 
-  { id:'d7', book:'deut', pair:'ad', label:'Tribal Blessings — Moses',
+  { id:'d7', book:'deut', pair:'ad', label:'Tribal Blessings — Moses', cert:'textual',
     refs:'Deut 33:1-29',
     own:'Before his death, Moses delivers a tribal oracle over all twelve — entirely in blessing. Where Jacob\'s oracle (Gen 49) included curse, Moses speaks only of flourishing, protection, and vocation. Levi, cursed by Jacob for violence, receives the highest honor: "They shall teach Jacob your rules and Israel your law; they shall put incense before you and whole burnt offerings on your altar" (Deut 33:10). The oracle closes with a vision of Israel dwelling secure under God\'s protection (Deut 33:28-29).',
     mrefs:'Gen 49:1-28',
@@ -426,7 +460,7 @@ const PAIRS = [
     mlabel:'Tribal Blessings — Jacob',
     n:'The Torah bookends with two great poetic oracles over the twelve tribes: Jacob\'s in Gen 49 and Moses\'s in Deut 33. Both dying leaders, same cast, same poetic genre, completely different tone. The contrast is theologically significant: Levi moves from curse (Gen 49:5-7) to priestly honor (Deut 33:8-11). The tribe singled out for violence at Shechem is now guardian of the Torah and master of atonement. What Gen 49 pronounces as judgment, Deut 33 absorbs into calling — the same pattern that runs through the entire outer frame: Eden\'s curse absorbed into covenant hope, Abraham\'s family\'s failures absorbed into promise, Israel\'s rebellion absorbed into renewed covenant.' },
 
-  { id:'g8', book:'gen', pair:'ad', label:'The Serpent — Plausible Voice Against God',
+  { id:'g8', book:'gen', pair:'ad', label:'The Serpent — Plausible Voice Against God', cert:'canonical',
     refs:'Gen 3:1-5; 3:13',
     own:'In Eden, the serpent speaks — not through obvious heresy but through plausible reframing. It doesn\'t deny God exists; it reinterprets God\'s word ("Did God really say?"), performs a kind of sign (the fruit doesn\'t kill immediately), and leads toward an alternative vision of wisdom that excludes obedience. The test is theological, not spectacular. The serpent\'s deception works precisely because it sounds reasonable.',
     mrefs:'Deut 13:1-5',
@@ -434,7 +468,7 @@ const PAIRS = [
     mlabel:'The False Prophet — Signs That Lead Away',
     n:'Genesis 3 creates the template; Deuteronomy 13 institutionalizes it. The serpent\'s strategy — perform something credible, then redirect loyalty away from God — becomes the definition of false prophecy. This is why Deuteronomy 18:22 alone is insufficient as the test for prophecy: accurate prediction doesn\'t establish a prophet as true. The Eden narrative teaches Israel what the law then codifies: signs authenticate nothing if the destination is away from Yahweh. The heart of prophetic discernment is not "did it happen?" but "where does this voice lead?"' },
 
-  { id:'d8', book:'deut', pair:'ad', label:'The False Prophet — Signs That Lead Away',
+  { id:'d8', book:'deut', pair:'ad', label:'The False Prophet — Signs That Lead Away', cert:'canonical',
     refs:'Deut 13:1-5; 18:20-22',
     own:'Deuteronomy 13 addresses the hardest case: a prophet who performs genuine signs and wonders — and then says "Let us go after other gods." The law is unambiguous: do not listen, do not follow, put him to death. "The LORD your God is testing you." Miraculous display is insufficient to establish prophetic authority. The test is theological: does this voice lead toward or away from the God of the Exodus? Deut 18:20-22 adds the simpler test — if the prediction fails, the prophet is false. But the harder case of Deut 13 remains: signs succeed, and yet the prophet is still false.',
     mrefs:'Gen 3:1-5; 3:13',
@@ -443,7 +477,7 @@ const PAIRS = [
     n:'Deuteronomy 13 is the Torah\'s institutionalized response to Genesis 3. The Eden narrative shows how deception works — not through obvious falsehood but through plausible reframing of God\'s word. The law then builds the prophetic discernment framework Israel needs in the land: loyalty to Yahweh is the criterion that no sign, wonder, or compelling speaker can override. Every generation of prophets from Moses to the New Testament operates inside this framework — and every generation of false prophecy repeats the serpent\'s move.' },
 
   // ── Exodus (B) ──
-  { id:'e1', book:'exod', pair:'en', label:'Redemption from Egypt',
+  { id:'e1', book:'exod', pair:'en', label:'Redemption from Egypt', cert:'textual',
     refs:'Exod 1:1-14; 6:6-8; 12:1-14; 14:21-22',
     own:'The defining event: plagues, Passover, the Red Sea crossing. God hears Israel\'s cry, remembers his covenant with Abraham, and with a mighty hand and outstretched arm brings the nation out. "I will take you to be my people, and I will be your God" (Exod 6:7).',
     mrefs:'Num 10:11-12; 33:1-49',
@@ -451,7 +485,7 @@ const PAIRS = [
     mlabel:'Journey Toward the Land',
     n:'Exodus narrates liberation; Numbers narrates the journey liberation set in motion. Together they form the inner frame: the story of a redeemed people being shaped into covenant community by 40 years of wilderness testing.' },
 
-  { id:'e2', book:'exod', pair:'en', label:'Sinai Covenant Given',
+  { id:'e2', book:'exod', pair:'en', label:'Sinai Covenant Given', cert:'textual',
     refs:'Exod 19:5-6; 20:1-17; 24:7-8',
     own:'At Sinai, God speaks the Ten Words from fire and thunder and enters formal covenant with Israel: "You shall be my treasured possession… a kingdom of priests and a holy nation" (Exod 19:5-6). Moses seals it: "Behold the blood of the covenant which the LORD has made with you" (Exod 24:8).',
     mrefs:'Num 13:1-3; 14:1-4; 16:1-35; 25:1-9',
@@ -459,7 +493,7 @@ const PAIRS = [
     mlabel:'Covenant Tested',
     n:'What Sinai established, the wilderness tested. The covenant given with blood in Exod 24 was challenged almost immediately and kept being challenged across 40 years — Numbers is Sinai under pressure. But this isn\'t merely Israel\'s story. The Exodus-Numbers inner frame lays out the pattern that becomes the operating engine of all subsequent biblical history: covenant given, people pledge loyalty, prosperity breeds forgetfulness, idolatry follows, judgment falls, grace persists. Deuteronomy formalizes this as the 9-step covenant cycle that Joshua, Judges, Samuel, and Kings will replay — and that every writing prophet will use as their diagnostic grammar for Israel\'s ongoing life with God.' },
 
-  { id:'e3', book:'exod', pair:'en', label:'Tabernacle Constructed',
+  { id:'e3', book:'exod', pair:'en', label:'Tabernacle Constructed', cert:'textual',
     refs:'Exod 25:1-9; 40:1-2; 40:33-35',
     own:'Seven divine speeches commission the tabernacle (Exod 25-31); Bezalel builds it (Exod 35-40). Moses finishes — וַיְכַל (the same verb as God completing creation, Gen 2:2) — and the glory fills the tent (Exod 40:34-35). The sanctuary is complete; God takes up residence.',
     mrefs:'Num 1:50-54; 2:2; 3:7-8',
@@ -467,7 +501,7 @@ const PAIRS = [
     mlabel:'Tabernacle Central in Camp',
     n:'Exodus constructs the tabernacle; Numbers shows it governing Israel\'s communal life. What Exodus builds as theological and liturgical reality, Numbers makes into the social and spatial architecture of a nation on the move.' },
 
-  { id:'e4', book:'exod', pair:'en', label:'God Leads Out — Faith',
+  { id:'e4', book:'exod', pair:'en', label:'God Leads Out — Faith', cert:'textual',
     refs:'Exod 13:21-22; 14:21-22; 16:4-5; 19:8',
     own:'Cloud by day and fire by night; manna on the ground each morning; water from the rock at Rephidim. At Sinai the people pledge: "All that the LORD has spoken we will do" (Exod 19:8). Faith and initial obedience mark the Exodus generation in their first season.',
     mrefs:'Num 9:15-23; 11:1-35; 20:10-12',
@@ -475,7 +509,7 @@ const PAIRS = [
     mlabel:'God Leads Through — Testing',
     n:'Both books feature divine guidance and provision. Exodus shows a people responding with initial awe and pledged obedience; Numbers shows the same provision meeting habitual ingratitude. Together they trace the spiritual biography of a redeemed but still-fallen people.' },
 
-  { id:'e5', book:'exod', pair:'en', label:'Red Sea — Waters of Salvation',
+  { id:'e5', book:'exod', pair:'en', label:'Red Sea — Waters of Salvation', cert:'textual',
     refs:'Exod 14:21-29; 15:1-21',
     own:'"The LORD drove the sea back by a strong east wind… and the waters were divided" (Exod 14:21). Israel walks through on dry ground; Pharaoh\'s army drowns. Water becomes the medium of salvation. Miriam leads the nation in the Song of the Sea: "The LORD is my strength and my song."',
     mrefs:'Num 20:1-13; cf. Exod 17:1-7; Ps 95:8',
@@ -483,7 +517,7 @@ const PAIRS = [
     mlabel:'Meribah — Waters of Testing',
     n:'Water is the great mirror between Exodus and Numbers. The Red Sea is water as salvation (Exod 14-15); Meribah is water as testing and failure (Num 20). Psalm 95:8 pairs them deliberately as warnings against hardness of heart.' },
 
-  { id:'e6', book:'exod', pair:'en', label:'Manna — Daily Grace Given',
+  { id:'e6', book:'exod', pair:'en', label:'Manna — Daily Grace Given', cert:'textual',
     refs:'Exod 16:4-5; 16:31-35; Deut 8:3',
     own:'"I am about to rain bread from heaven for you" (Exod 16:4). The manna is given six days a week with double on the sixth — teaching Israel to live by Sabbath rhythm and by every word from God\'s mouth (Deut 8:3). Grace as lavish, structured, daily provision.',
     mrefs:'Num 11:4-6; 11:31-34',
@@ -492,7 +526,7 @@ const PAIRS = [
     n:'Manna is Exodus\'s clearest sign of sustaining grace. Its contempt in Numbers is the flashpoint of chronic ingratitude. The same bread, the same God, the same morning — two completely different hearts, one generation apart.' },
 
   // ── Numbers (B′) ──
-  { id:'n1', book:'num', pair:'en', label:'Journey Through Wilderness',
+  { id:'n1', book:'num', pair:'en', label:'Journey Through Wilderness', cert:'textual',
     refs:'Num 10:11-12; 33:1-49',
     own:'Numbers narrates 40 years of wilderness journey — from Sinai through the desert of Paran, through crises of water and food and leadership, toward the plains of Moab. "The people of Israel set out by stages from the wilderness of Sinai" (Num 10:12). The same God who redeemed now leads through.',
     mrefs:'Exod 1:1-14; 6:6-8; 12:1-14; 14:21-22',
@@ -500,7 +534,7 @@ const PAIRS = [
     mlabel:'Redemption from Egypt',
     n:'Exodus gives Israel its identity: a redeemed people. Numbers gives them their experience: a journeying, tested, and repeatedly-failing people. Together the inner frame traces the full arc — out of Egypt, through the wilderness, toward the land.' },
 
-  { id:'n2', book:'num', pair:'en', label:'Covenant Tested',
+  { id:'n2', book:'num', pair:'en', label:'Covenant Tested', cert:'textual',
     refs:'Num 13:1-3; 14:1-4; 16:1-35; 25:1-9',
     own:'The covenant is severely tested and repeatedly violated: Kadesh Barnea (Num 13-14), Korah\'s rebellion (Num 16), the bronze serpent (Num 21), Balaam (Num 22-24), Baal-Peor (Num 25). The exodus generation jeopardizes but does not finally destroy the covenant. God\'s patience persists across 40 years of failure.',
     mrefs:'Exod 19:5-6; 20:1-17; 24:7-8',
@@ -508,7 +542,7 @@ const PAIRS = [
     mlabel:'Sinai Covenant Given',
     n:'Numbers is the dark mirror of Exodus\'s Sinai covenant. The covenant given with blood in Exod 24 is tested and severely violated in Numbers. The inner Torah frame holds together the covenant given and the covenant under pressure — the full reality of Israel\'s life with God.' },
 
-  { id:'n3', book:'num', pair:'en', label:'Tabernacle Central in Camp',
+  { id:'n3', book:'num', pair:'en', label:'Tabernacle Central in Camp', cert:'textual',
     refs:'Num 1:50-54; 2:2; 3:7-8; 9:15-23',
     own:'The twelve tribes camp around the tabernacle in a precise formation — three on each side (Num 2). The Levites guard it; the cloud governs movement; when the ark moves, the camp moves (Num 9:15-23). The presence of God at the center is the camp\'s organizing reality.',
     mrefs:'Exod 25:1-9; 40:1-2; 40:33-35',
@@ -516,7 +550,7 @@ const PAIRS = [
     mlabel:'Tabernacle Constructed',
     n:'Exodus builds the tabernacle; Numbers shows it functioning as the center of Israel\'s communal and spatial life. What Exodus creates liturgically and theologically, Numbers makes into the organizing architecture of a nation on the move through the wilderness.' },
 
-  { id:'n4', book:'num', pair:'en', label:'God Leads Through — Testing',
+  { id:'n4', book:'num', pair:'en', label:'God Leads Through — Testing', cert:'textual',
     refs:'Num 9:15-23; 11:1-35; 20:10-12',
     own:'The cloud leads through 40 years of wilderness, but the people\'s response is habitual complaint: manna despised, Moses challenged, God tested, leadership questioned. "Why did you bring us out of Egypt to die in this wilderness?" appears at every crisis. The same provision meets the same ingratitude.',
     mrefs:'Exod 13:21-22; 14:21-22; 16:4-5; 19:8',
@@ -524,7 +558,7 @@ const PAIRS = [
     mlabel:'God Leads Out — Faith',
     n:'The leading of God is the constant across both books — the same cloud, the same fire, the same provision. But the trajectory reverses: Exodus moves from slavery toward covenant; Numbers moves from covenant toward chronic failure. The same God, the same people, two completely different postures.' },
 
-  { id:'n5', book:'num', pair:'en', label:'Meribah — Waters of Testing',
+  { id:'n5', book:'num', pair:'en', label:'Meribah — Waters of Testing', cert:'textual',
     refs:'Num 20:1-13; cf. Exod 17:1-7; Ps 95:8',
     own:'"There was no water for the congregation" (Num 20:2). Moses strikes the rock in anger instead of speaking to it (Num 20:10-11). God gives the water but excludes Moses from the land: "Because you did not believe in me, to uphold me as holy before the eyes of Israel" (Num 20:12). Grace given; trust broken.',
     mrefs:'Exod 14:21-29; 15:1-21',
@@ -532,7 +566,7 @@ const PAIRS = [
     mlabel:'Red Sea — Waters of Salvation',
     n:'Water is the great mirror between Exodus and Numbers. The Red Sea is salvation (Exod 14-15); Meribah is failure (Num 20). Psalm 95:8 pairs them explicitly: "Do not harden your hearts, as at Meribah, as on the day at Massah in the wilderness." Two water stories; one revealing portrait of the human heart.' },
 
-  { id:'n6', book:'num', pair:'en', label:'Manna — Resented',
+  { id:'n6', book:'num', pair:'en', label:'Manna — Resented', cert:'textual',
     refs:'Num 11:4-6; 11:31-34',
     own:'"We remember the fish we ate in Egypt for free, the cucumbers, the melons… but now there is nothing at all but this manna to look at" (Num 11:5-6). What was daily miracle becomes daily contempt. Quail comes in abundance — and with it a deadly plague (Num 11:31-34). Grace rejected becomes judgment.',
     mrefs:'Exod 16:4-5; 16:31-35; Deut 8:3',
@@ -540,83 +574,83 @@ const PAIRS = [
     mlabel:'Manna — Daily Grace Given',
     n:'Manna is Exodus\'s symbol of sustaining grace; its contempt in Numbers is the symbol of the wilderness generation\'s ingratitude. The same bread, the same God, one generation apart — revealing how quickly the human heart moves from wonder to entitlement.' },
 
-  // ── Leviticus (C — Center) ──
-  { id:'l1', book:'lev', pair:'lev', label:'Sacrificial System',
-    refs:'Lev 1–7; 17:11',
-    own:'Five offerings address every dimension of the gap between holy and common: burnt (wholly devoted), grain (dedication of produce), peace (fellowship), sin (unintentional breach), guilt (restitution). "The life of the flesh is in the blood, and I have given it for you on the altar to make atonement" (Lev 17:11). Sin introduces impurity that must be addressed through life (blood), restoring sacred space.',
+  // ── Leviticus (C — Center) — UPGRADED ──
+  { id:'l1', book:'lev', pair:'lev', label:'Presence → Space → Pollution → Cleansing', cert:'textual',
+    refs:'Exod 25:8 · Exod 40:34–35 · Lev 15:31 · Lev 16:16,30,34',
+    own:'Leviticus explains the core logic created by Exodus. God has moved into the camp. That presence creates holy space. Human life introduces pollution. Therefore cleansing must occur if the divine presence is to remain. The book\'s rituals are coordinated maintenance for covenant proximity.',
     mrefs:'',
     ml:'',
     mlabel:'',
-    n:'The sacrificial system is the Torah\'s answer to the problem Genesis raises (how can fallen humanity approach a holy God?) and Exodus intensifies (God now literally dwells in the camp, with real consequences). Lev 1-7 provides a comprehensive liturgical framework addressing the disruption of sacred space from every angle.' },
+    n:'This gives Leviticus explanatory force, not merely central placement. It is the Torah\'s operating system for divine indwelling.' },
 
-  { id:'l2', book:'lev', pair:'lev', label:'Holiness Laws',
-    refs:'Lev 17–26; 19:2; 20:7-8; 26:1-13',
-    own:'"You shall be holy, for I the LORD your God am holy" (Lev 19:2). The Holiness Code (chs. 17-26) extends the sanctuary\'s purity into all of communal life: food, sexuality, economics, speech, treatment of the vulnerable and the immigrant. Holiness is a national calling, not merely a priestly one.',
+  { id:'l2', book:'lev', pair:'lev', label:'Graded Sacred Space', cert:'textual',
+    refs:'Lev 1–7 · Lev 8–10 · Lev 16:2 · Num 1:53 · Num 3:7–8',
+    own:'Holiness is graded spatially. Access narrows as one moves inward: camp, buffer, courtyard, holy place, holy of holies. The closer to the center, the stricter the boundaries and the more dangerous unauthorized approach becomes.',
     mrefs:'',
     ml:'',
     mlabel:'',
-    n:'The Holiness Code insists that the character required for sanctuary worship must permeate everyday life — table and bed, field and court, speech and commerce. Leviticus is the Torah\'s most sustained vision of a community whose ordinary life reflects the character of the holy God who dwells at its center.' },
+    n:'This spatial logic explains why Leviticus belongs between Exodus and Numbers: Exodus constructs the center, Leviticus regulates it, Numbers shows what happens when the people rebel around it.' },
 
-  { id:'l3', book:'lev', pair:'lev', label:'Priestly Mediation',
-    refs:'Lev 8–10; Num 3:7-8',
-    own:'Aaron and his sons are ordained in a seven-day ceremony (Lev 8-9). The immediate deaths of Nadab and Abihu (Lev 10) establish the stakes with brutal clarity: access to God is not casual. It is governed, structured, and guarded. The Aaronic priesthood stands between the holy God and a sinful people — their vocation echoes Adam\'s in the garden (cf. Num 3:7-8 — serve and guard).',
+  { id:'l3', book:'lev', pair:'lev', label:'Two Kinds of Impurity', cert:'textual',
+    refs:'Lev 11–15 · Lev 18:24–30 · Lev 20:1–5',
+    own:'Leviticus distinguishes ritual impurity from moral impurity. Ritual impurity is temporary and often arises through ordinary mortal life. Moral impurity arises through covenant violation and can defile land and sanctuary even from afar.',
     mrefs:'',
     ml:'',
     mlabel:'',
-    n:'Leviticus\'s priestly legislation answers the problem of mediation. The gap between God\'s holiness and human sinfulness is real and dangerous — Nadab and Abihu\'s deaths prove it. The priest is the necessary middle figure; the boundary is not to be crossed except by divine appointment.' },
+    n:'This distinction is critical for reading the Torah accurately: not all impurity is moral guilt, but all unchecked impurity threatens sacred proximity.' },
 
-  { id:'l4', book:'lev', pair:'lev', label:'Day of Atonement',
-    refs:'Lev 16; Heb 9:7-14',
-    own:'Yom Kippur (Lev 16) — the climax of the Levitical year and the theological pinnacle of the Torah. Once a year, the high priest alone enters the Most Holy Place with blood. Two goats: one slaughtered at the altar, one sent into the wilderness carrying Israel\'s iniquities. Sin is covered; the camp is cleansed; the covenant is renewed for another year.',
+  { id:'l4', book:'lev', pair:'lev', label:'Blood Penetration and Repair Depth', cert:'textual',
+    refs:'Lev 4:3–35 · Lev 16:14–19',
+    own:'The blood ritual scales with the sinner\'s proximity to holy space. Common-person cases are handled at the outer altar; priestly or communal contamination penetrates further inward; the Day of Atonement reaches the Holy of Holies itself because it addresses the deepest accumulated pollution of the entire nation.',
     mrefs:'',
     ml:'',
     mlabel:'',
-    n:'This is the hinge of the hinge — Leviticus at the center of the Torah, and Yom Kippur at the center of Leviticus. Lev 16 answers the question the whole book has been building toward: what happens to accumulated impurity among a people who live in proximity to a holy God? The answer is elaborate, costly, and unrepeatable by human effort — once a year, blood alone resets the entire system. Hebrews 9–10 reads Lev 16 as the shadow of Christ\'s single, permanent atonement that ends the annual reset forever.' },
+    n:'Leviticus is not random ritual detail. It is a structured map of how failure damages sacred space and how repair reaches to the depth of the damage.' },
 
-  { id:'l5', book:'lev', pair:'lev', label:'Purity, Pollution, Sacred Space',
-    refs:'Lev 11–15; 15:31',
-    own:'Leviticus 11–15 maps ritual impurity across food (11), childbirth (12), skin conditions (13–14), and bodily discharges (15). These distinctions are not hygiene regulations — they chart how various conditions threaten the proximity of sacred space. "You shall keep the people of Israel separate from their uncleanness, lest they die in their uncleanness by defiling my tabernacle" (Lev 15:31). Pollution is a spatial category, not merely a moral one.',
+  { id:'l5', book:'lev', pair:'lev', label:'Day of Atonement — Annual System Reset', cert:'textual',
+    refs:'Lev 16 · Lev 16:30–34',
+    own:'Leviticus 16 is the center of the center. Blood purifies sacred space, confession names guilt, and the live goat removes sin into the wilderness. The result is not merely individual relief but the annual reset of the sanctuary system so God can continue dwelling among Israel.',
     mrefs:'',
     ml:'',
     mlabel:'',
-    n:'The central issue is not how the individual feels but whether holy presence can remain in the camp. Leviticus 11–15 creates the diagnostic vocabulary that makes chapter 16 necessary: the sanctuary accumulates the impurity the people introduce, and must be cleansed annually at Yom Kippur. Without the purity legislation, the Day of Atonement makes no sense. Without the Day of Atonement, the purity system has no resolution.' },
+    n:'This is the book\'s climax and the Torah\'s deepest answer to the problem of divine presence among a polluted people.' },
 
-  { id:'l6', book:'lev', pair:'lev', label:'Tabernacle as Renewed Eden',
-    refs:'Exod 25:8; 40:33-35; Gen 2:15; Num 3:7-8',
-    own:'The tabernacle is not a new invention — it is a portable Eden. The seven divine speeches commissioning its construction (Exod 25–31) mirror the seven days of creation. Moses completes it with וַיְכַל — the same verb used when God "finished" his work in Gen 2:2. The glory that fills the tent (Exod 40:34-35) recapitulates the divine presence that animated the garden. Priests "serve and guard" (עָבַד + שָׁמַר, Num 3:7-8) using the exact Hebrew verbs given to Adam in Eden (Gen 2:15). The tabernacle faces east, and approach moves west — back toward Eden. The cherubim on the mercy seat echo the cherubim guarding Eden\'s entrance (Gen 3:24). Every spatial and verbal signal marks the sanctuary as creation\'s center renewed in portable form.',
+  { id:'l6', book:'lev', pair:'lev', label:'Leviticus Bridges the Whole Torah', cert:'synthesis',
+    refs:'Gen 3 · Exod 25:8 · Lev 16 · Num 13–25 · Deut 30:15–20',
+    own:'Leviticus stands at the center because it interprets the movement of the whole Torah. Genesis shows failure in sacred space. Exodus creates sacred space anew. Leviticus teaches how it is maintained. Numbers shows the threat of persistent defilement and rebellion. Deuteronomy calls Israel to life so that the covenant order can endure in the land.',
     mrefs:'',
     ml:'',
     mlabel:'',
-    n:'This is the deepest structural reason Leviticus belongs at the Torah\'s center. The Torah begins with creation (Genesis), builds a portable creation (Exodus/Leviticus), and Deuteronomy\'s law collection is instructions for living in a third Eden — the land. Genesis → Exodus/Leviticus → Deuteronomy/Land is not three separate stories but one story about God\'s dwelling with humanity: lost in Genesis, reconstructed in the sanctuary, and now being established at national scale. The center of the Torah is a theology of presence, not merely a law code. Leviticus answers the question Genesis 3 raises: if God\'s dwelling with humanity was lost in Eden, can it be recovered — and if so, how? Leviticus says: through blood, through priesthood, through structured holiness — provisionally, annually, until a more permanent solution arrives.' },
+    n:'This makes Leviticus the hinge of the Pentateuch — not just structurally, but narratively and theologically.' },
 ];
 
 // ═══════ FLOW ═══════
 const FLOW = [
-  { id:'flow1', scope:'all', phase:'Phase 1', title:'Creation and Gift',
+  { id:'flow1', scope:'all', phase:'From Gift to Fall', title:'Creation and Gift',
     books:'Genesis', refs:['Gen 1–2'],
     text:'The Torah begins with a world made good, humans blessed, and life offered within sacred order.',
     detail:'Genesis 1–2 establishes the foundational conditions: a good world, image-bearers commissioned as royal stewards (Gen 1:26–28), and life structured around Sabbath — God\'s rest as the first thing declared holy. The problem the Torah must resolve is introduced immediately in Gen 3: can these image-bearers, once broken, be restored to their vocation? Every subsequent book answers that question through different angles — redemption (Exodus), holiness (Leviticus), testing (Numbers), covenant renewal (Deuteronomy).' },
-  { id:'flow2', scope:'all', phase:'Phase 2', title:'Rebellion and Promise',
+  { id:'flow2', scope:'all', phase:'From Promise to Formation', title:'Rebellion and Promise',
     books:'Genesis', refs:['Gen 3','Gen 12–17','Gen 50:24–25'],
     text:'Human rebellion fractures the gift, but God answers with promise — especially through Abraham and his seed.',
     detail:'The fall (Gen 3) introduces exile, toil, and death — but God\'s response is not abandonment. The proto-promise of Gen 3:15 (enmity between seed of woman and serpent) sets the direction. The tower of Babel (Gen 11) reaches its lowest point; then Gen 12 pivots sharply: the call of Abraham. The rest of Genesis is about a promise-bearing family that carries the seeds of cosmic restoration. Joseph\'s dying words ("God will surely visit you and bring you up," Gen 50:24–25) show that every patriarch died holding the promise without seeing it. The promise absorbs the rebellion rather than being defeated by it.' },
-  { id:'flow3', scope:'all', phase:'Phase 3', title:'Redemption and Covenant',
+  { id:'flow3', scope:'all', phase:'From Slavery to Covenant', title:'Redemption and Covenant',
     books:'Exodus', refs:['Exod 3–24'],
     text:'The promised line becomes a redeemed people. God delivers, speaks, and binds Israel to himself at Sinai.',
     detail:'Exodus answers Genesis\'s deferred promise. The enslaved descendants of Abraham are brought out by God\'s "mighty hand and outstretched arm" (Exod 6:6–8). At Sinai, liberation is formalized into covenant: Israel becomes "a kingdom of priests and a holy nation" (Exod 19:5–6). The Ten Words (Exod 20) and the Book of the Covenant (Exod 21–23) define what covenant life looks like. Moses seals it with blood (Exod 24:8). The second half of Exodus (25–40) is tabernacle construction — God drawing near to dwell with the people he has redeemed. Redemption creates proximity; proximity requires holiness.' },
-  { id:'flow4', scope:'all', phase:'Phase 4', title:'Presence and Holiness',
+  { id:'flow4', scope:'all', phase:'From Presence to Preservation', title:'Presence and Holiness',
     books:'Leviticus', refs:['Lev 1–16','Lev 19:2'],
     text:'A holy God now dwells among the redeemed people. Leviticus teaches how that presence can remain without consuming them.',
     detail:'Exodus ends with a crisis: the glory fills the tabernacle so completely that Moses cannot enter (Exod 40:35). Leviticus is the resolution. It answers: how does a sinful people approach a holy God who has moved into the camp? The answer unfolds in layers — offerings (Lev 1–7), ordained priests as mediators (Lev 8–10), purity distinctions protecting sacred space (Lev 11–15), and finally the Day of Atonement as the annual reset of the entire system (Lev 16). The Holiness Code (Lev 17–26) extends the logic outward: the character of the sanctuary must shape all of communal life. "You shall be holy, for I the LORD your God am holy" (Lev 19:2).' },
-  { id:'flow5', scope:'all', phase:'Phase 5', title:'Testing and Failure',
+  { id:'flow5', scope:'all', phase:'From Provision to Failure', title:'Testing and Failure',
     books:'Numbers', refs:['Num 11–25'],
     text:'The wilderness exposes the heart. The covenant people repeatedly distrust the God who redeemed and dwells among them.',
     detail:'Numbers reveals a hard truth: redemption does not automatically produce faithfulness. The people who saw the plagues and crossed the Red Sea complain about manna, rebel against Moses and Aaron, send faithless spies, and worship Baal at Peor. Kadesh Barnea (Num 13–14) is the pivotal failure — the exodus generation forfeits the land through unbelief. The pattern in Numbers — provision refused, leader challenged, idolatry pursued, judgment falls, grace persists — becomes the diagnostic grammar that drives Judges, Samuel, and Kings. Numbers is not a detour from the story; it is the Torah\'s unflinching portrait of what a covenant people actually looks like under pressure.' },
-  { id:'flow6', scope:'all', phase:'Phase 6', title:'Renewal and Choice',
+  { id:'flow6', scope:'all', phase:'From Failure to Renewal', title:'Renewal and Choice',
     books:'Deuteronomy', refs:['Deut 5–6','Deut 28–30'],
     text:'Moses renews the covenant, pressing Israel toward life, love, and loyalty in the land.',
     detail:'Deuteronomy is a sermon — Moses\'s extended covenant address to the new generation on the plains of Moab. It is not merely Sinai repeated; it is Sinai interpreted and applied to life in the land. The Shema (Deut 6:4–5) gives the Torah\'s ethical center: love the LORD your God with all your heart, soul, and strength. The blessings and curses of Deut 28 formalize the life-or-death stakes. Deut 30:15–20 is the climax: "I set before you today life and good, death and evil… Choose life." The Torah does not force Israel\'s choice — it presses them urgently toward the right one.' },
-  { id:'flow7', scope:'all', phase:'Phase 7', title:'Expectation Beyond Moses',
+  { id:'flow7', scope:'all', phase:'From Moses to What Comes Next', title:'Expectation Beyond Moses',
     books:'Deuteronomy', refs:['Deut 18:15','Deut 30:6','Deut 32–34'],
     text:'The Torah ends by creating expectation: the heart must be changed, the land must be entered, and the story must continue beyond Moses.',
     detail:'Deuteronomy closes with three forward-pointing signals that prevent the Torah from feeling like a finished story. First: the promise of a prophet like Moses (Deut 18:15) — and then Deut 34:10 says he hasn\'t appeared yet. The reader is launched into the Former Prophets asking: where is he? Second: the circumcised heart (Deut 30:6) — God himself will perform the inner transformation the law has always demanded but never produced. This is what Jeremiah 31 and Ezekiel 36 build toward. Third: Moses dies on Nebo, and Joshua crosses the Jordan. The Torah concludes mid-story, confident the God who began it will finish it.' },
@@ -628,34 +662,44 @@ const FLOW = [
     books:'Exodus ↔ Numbers', refs:['Exod 14–16','Num 11–20'],
     text:'The inner frame traces how redeemed life moves from deliverance into wilderness pressure.',
     detail:'The Exodus–Numbers pair is the inner frame of the chiasm, and it tells the story of the same people across two completely different postures. Exodus: newly redeemed, awe-filled, pledging "all that the LORD has spoken we will do" (Exod 24:7). Numbers: complaining about the same manna, challenging the same leadership, wanting to return to the same Egypt they fled. The water events are the sharpest mirror: Red Sea (salvation) ↔ Meribah (failure). The manna is the second: daily grace received ↔ daily grace despised. The inner frame refuses idealism about what redemption produces on its own — it takes transformed hearts (Deut 30:6), not just transformed circumstances.' },
+
+  // ── Leviticus center — UPGRADED to three items ──
   { id:'flow10', scope:'lev', phase:'Center', title:'Presence Must Be Maintained',
-    books:'Leviticus', refs:['Lev 11–16','Lev 17:11'],
-    text:'The center explains how a redeemed-but-fragile people can continue living with holy presence in their midst.',
-    detail:'Leviticus sits at the center of the chiasm not by accident but by theological logic. The Torah\'s central problem is proximity: how can a holy God dwell among a sinful people without the encounter becoming fatal? Lev 1–7 (offerings), Lev 8–10 (ordination and its stakes), Lev 11–15 (purity mapping), and Lev 16 (Day of Atonement) form a coherent argument — each layer addressing one dimension of the proximity problem. Lev 16 is the resolution the book has been building toward: annual blood atonement resets the accumulated defilement and renews the possibility of continued cohabitation. Without the center, the outer and inner frames have no explanation for how the covenant continues to function despite Israel\'s failure.' },
+    books:'Leviticus', refs:['Exod 40:34–35','Lev 11–16','Lev 16:30–34'],
+    text:'Leviticus explains how divine presence can remain among a mortal, impure, and often rebellious people.',
+    detail:'Exodus ends with glory filling the tabernacle, but Moses cannot enter. Leviticus resolves that crisis. The book maps sacred space, priestly mediation, purity, pollution, offerings, and the Day of Atonement into a coherent system of covenant maintenance. Its central logic is not merely forgiveness in abstraction, but the preservation of God\'s dwelling in the midst of Israel.' },
+  { id:'flow11', scope:'lev', phase:'Center', title:'Pollution Threatens Presence',
+    books:'Leviticus', refs:['Lev 15:31','Lev 18:24–30','Lev 20:3'],
+    text:'Human life introduces impurity, and covenant rebellion intensifies it into sanctuary-threatening defilement.',
+    detail:'Leviticus distinguishes ritual impurity from moral impurity. Ritual impurity belongs to ordinary mortal life and is managed through washing, waiting, and sacrifice. Moral impurity belongs to covenant rebellion and can defile sanctuary and land even from afar. This distinction explains why the sanctuary requires ongoing attention and why Lev 16 becomes necessary.' },
+  { id:'flow12', scope:'lev', phase:'Center', title:'The Day of Atonement Resets the System',
+    books:'Leviticus', refs:['Lev 16:14–19','Lev 16:21–22','Lev 16:30–34'],
+    text:'The annual rite purifies sacred space, names communal guilt, and removes accumulated sin so divine presence may continue.',
+    detail:'The Day of Atonement is the center of Leviticus and the climax of the Torah\'s logic of sacred proximity. Blood purifies the inner sancta, confession verbalizes Israel\'s guilt, and the live goat carries sin away into the wilderness. The result is the annual comprehensive reset of the sanctuary system.' },
 ];
 
 // ═══════ SCRIPTURE GROUPS ═══════
 const SCRIPTURE_GROUPS = [
   { id:'sg1', book:'gen', title:'Genesis — Origins, Promise, Deathbed Hope',
-    refs:['Gen 1:26–28','Gen 2:15–17','Gen 3:22–24','Gen 12:1–3,7','Gen 15:5–18','Gen 17:1–8','Gen 49','Gen 50:24–25'],
+    refs:['Gen 1:26–28','Gen 2:8–10','Gen 2:15–17','Gen 3:17–24','Gen 12:1–3,7','Gen 15:5–18','Gen 17:1–8','Gen 49','Gen 50:24–25'],
     summary:'Creation, command, exile, promise, and patriarchal faith before fulfillment.',
-    detail:'Gen 1:26–28 — image-bearers commissioned as royal stewards over creation. Gen 2:15–17 — the garden command that frames all subsequent covenant obligation. Gen 3:22–24 — exile from Eden; the problem the Torah must resolve. Gen 12:1–3,7 — the Abrahamic call: promise of land, seed, and blessing for all nations. Gen 15:5–18 — God\'s unilateral oath binding himself by covenant. Gen 17:1–8 — covenant formalized with circumcision as its sign. Gen 49 — Jacob\'s tribal blessings, the first of two great poetic oracles over the twelve. Gen 50:24–25 — Joseph\'s dying words, the whole book in miniature: "God will surely visit you."' },
+    detail:'Gen 1:26–28 — image-bearers commissioned as royal stewards over creation. Gen 2:8–10 — the garden planted, watered by rivers, the archetype of sacred space. Gen 2:15–17 — the garden command that frames all subsequent covenant obligation. Gen 3:17–24 — exile from Eden; the ground cursed, the way to the tree of life guarded by cherubim. The problem the Torah must resolve. Gen 12:1–3,7 — the Abrahamic call: promise of land, seed, and blessing for all nations. Gen 15:5–18 — God\'s unilateral oath binding himself by covenant. Gen 17:1–8 — covenant formalized with circumcision as its sign. Gen 49 — Jacob\'s tribal blessings, the first of two great poetic oracles over the twelve. Gen 50:24–25 — Joseph\'s dying words, the whole book in miniature: "God will surely visit you."' },
   { id:'sg2', book:'exod', title:'Exodus — Redemption, Covenant, Dwelling',
-    refs:['Exod 3:7–10','Exod 6:6–8','Exod 12:1–14','Exod 14:21–31','Exod 16:4–30','Exod 19:5–8','Exod 24:3–8','Exod 25:8','Exod 40:33–38'],
-    summary:'Deliverance, Sinai, manna, and the tabernacle filled with glory.',
-    detail:'Exod 3:7–10 — God hears, remembers, and acts: the ground of Israel\'s redemption is covenant fidelity. Exod 6:6–8 — the fourfold redemption formula: bring out, deliver, redeem, take as my people. Exod 12:1–14 — Passover instituted; blood as protection from the destroyer. Exod 14:21–31 — the Red Sea crossing: water as salvation, Pharaoh\'s army destroyed. Exod 16:4–30 — manna: structured, daily, Sabbath-shaped grace. Exod 19:5–8 — the Sinai proposal: "a kingdom of priests and a holy nation." Exod 24:3–8 — covenant sealed with blood: the high point of Israel\'s covenant history. Exod 25:8 — the purpose of the tabernacle: "that I may dwell in their midst." Exod 40:33–38 — glory fills the tent; Moses cannot enter. Proximity achieved; Leviticus required.' },
+    refs:['Exod 3:7–10','Exod 6:6–8','Exod 12:1–14','Exod 14:21–31','Exod 16:4–30','Exod 19:5–8','Exod 24:3–8','Exod 24:9–11','Exod 25:8','Exod 32–34','Exod 40:33–38'],
+    summary:'Deliverance, Sinai, manna, golden calf crisis, and the tabernacle filled with glory.',
+    detail:'Exod 3:7–10 — God hears, remembers, and acts: the ground of Israel\'s redemption is covenant fidelity. Exod 6:6–8 — the fourfold redemption formula: bring out, deliver, redeem, take as my people. Exod 12:1–14 — Passover instituted; blood as protection from the destroyer. Exod 14:21–31 — the Red Sea crossing: water as salvation, Pharaoh\'s army destroyed. Exod 16:4–30 — manna: structured, daily, Sabbath-shaped grace. Exod 19:5–8 — the Sinai proposal: "a kingdom of priests and a holy nation." Exod 24:3–8 — covenant sealed with blood: the high point of Israel\'s covenant history. Exod 24:9–11 — the elders eat and drink in God\'s presence on the mountain: covenant fellowship realized. Exod 25:8 — the purpose of the tabernacle: "that I may dwell in their midst." Exod 32–34 — the golden calf crisis, covenant shattered and renewed, God\'s self-revelation of mercy (34:6–7). Exod 40:33–38 — glory fills the tent; Moses cannot enter. Proximity achieved; Leviticus required.' },
   { id:'sg3', book:'lev', title:'Leviticus — Offerings, Priests, Purity, Atonement',
-    refs:['Lev 1–7','Lev 8–10','Lev 10:1–3','Lev 11–15','Lev 15:31','Lev 16:16,30,34','Lev 17:11','Lev 19:2','Lev 18:24–30'],
+    refs:['Lev 1–7','Lev 8–10','Lev 10:1–3','Lev 11–15','Lev 15:31','Lev 16:16,30,34','Lev 17:11','Lev 19:2','Lev 18:24–30','Lev 26:11–12'],
     summary:'Approach to holiness, dangers of presence, impurity mapped, and annual cleansing at the center.',
-    detail:'Lev 1–7 — five offerings address every dimension of the gap between holy and common. Lev 8–10 — priestly ordination (seven days) followed immediately by Nadab and Abihu\'s deaths (day eight). Lev 10:1–3 — "Among those who are near me I will be sanctified": holiness is not casual. Lev 11–15 — impurity mapped across food, childbirth, skin, and discharge; pollution is a spatial category. Lev 15:31 — the stakes: defiling God\'s tabernacle means death. Lev 16:16,30,34 — the Day of Atonement\'s three-part formula: atonement for sanctuary, for people, renewed annually. Lev 17:11 — "the life of the flesh is in the blood": the theology behind the entire sacrificial system. Lev 19:2 — the Holiness Code\'s keynote: be holy because I am holy. Lev 18:24–30 — the land vomits out those who defile it: holiness is not optional for covenant life.' },
+    detail:'Lev 1–7 — five offerings address every dimension of the gap between holy and common. Lev 8–10 — priestly ordination (seven days) followed immediately by Nadab and Abihu\'s deaths (day eight). Lev 10:1–3 — "Among those who are near me I will be sanctified": holiness is not casual. Lev 11–15 — impurity mapped across food, childbirth, skin, and discharge; pollution is a spatial category. Lev 15:31 — the stakes: defiling God\'s tabernacle means death. Lev 16:16,30,34 — the Day of Atonement\'s three-part formula: atonement for sanctuary, for people, renewed annually. Lev 17:11 — "the life of the flesh is in the blood": the theology behind the entire sacrificial system. Lev 19:2 — the Holiness Code\'s keynote: be holy because I am holy. Lev 18:24–30 — the land vomits out those who defile it: holiness is not optional for covenant life. Lev 26:11–12 — the covenant goal stated explicitly: "I will make my dwelling among you… and I will be your God, and you shall be my people."' },
   { id:'sg4', book:'num', title:'Numbers — Camp, Rebellion, Wilderness Pressure',
-    refs:['Num 1–2','Num 10:11–36','Num 13–14','Num 16','Num 20:1–13','Num 21:4–9','Num 25','Num 33:1–2'],
+    refs:['Num 1–2','Num 10:11–36','Num 13–14','Num 14:22–24','Num 16','Num 20:1–13','Num 21:4–9','Num 25','Num 33:1–2'],
     summary:'Camp around the sanctuary, covenant pressure, wilderness failures, and stages toward Moab.',
-    detail:'Num 1–2 — census and camp arrangement: the tabernacle at the center, tribes in four groups of three around it; God\'s presence organizes the community. Num 10:11–36 — the cloud lifts; Israel sets out. The journey begins in Sinai\'s shadow. Num 13–14 — Kadesh Barnea: the pivotal failure. Faithless spies, faithless people, the exodus generation forfeits the land. Num 16 — Korah\'s rebellion: the legitimacy of Moses and Aaron challenged from within. Num 20:1–13 — Meribah: Moses strikes the rock in anger and is excluded from the land. The great mediator shares the wilderness generation\'s consequence. Num 21:4–9 — the bronze serpent: judgment and healing through the same symbol. Num 25 — Baal-Peor: sexual idolatry at the edge of the land. Num 33:1–2 — the journey log, stage by stage: the whole wilderness in retrospect.' },
+    detail:'Num 1–2 — census and camp arrangement: the tabernacle at the center, tribes in four groups of three around it; God\'s presence organizes the community. Num 10:11–36 — the cloud lifts; Israel sets out. The journey begins in Sinai\'s shadow. Num 13–14 — Kadesh Barnea: the pivotal failure. Faithless spies, faithless people, the exodus generation forfeits the land. Num 14:22–24 — the contrast: Caleb followed the LORD fully, the others tested God ten times. Num 16 — Korah\'s rebellion: the legitimacy of Moses and Aaron challenged from within. Num 20:1–13 — Meribah: Moses strikes the rock in anger and is excluded from the land. The great mediator shares the wilderness generation\'s consequence. Num 21:4–9 — the bronze serpent: judgment and healing through the same symbol. Num 25 — Baal-Peor: sexual idolatry at the edge of the land. Num 33:1–2 — the journey log, stage by stage: the whole wilderness in retrospect.' },
   { id:'sg5', book:'deut', title:'Deuteronomy — Renewal, Life and Death, Future',
-    refs:['Deut 1:8','Deut 5:1–6','Deut 6:4–9','Deut 18:15','Deut 28:1–68','Deut 29:10–15','Deut 30:6,15–20','Deut 32–33','Deut 34:1–12'],
+    refs:['Deut 1:8','Deut 4:5–8','Deut 5:1–6','Deut 6:4–9','Deut 8:2–3','Deut 18:15','Deut 28:1–68','Deut 29:10–15','Deut 30:1–10','Deut 30:6,15–20','Deut 32–33','Deut 34:1–12'],
     summary:'Covenant renewed, Shema, blessings and curses, transformed heart, poems, and Moses on Nebo.',
-    detail:'Deut 1:8 — "the land which the LORD swore to Abraham, Isaac, and Jacob": the Abrahamic promise is still the operating engine. Deut 5:1–6 — the Decalogue restated; the covenant is personal and present: "not with our fathers but with us." Deut 6:4–9 — the Shema: love God with everything; the Torah\'s ethical center. Deut 18:15 — the prophet like Moses: a promissory gap deliberately left open. Deut 28:1–68 — blessings and curses: covenant life has real stakes, including exile if Israel breaks faith. Deut 29:10–15 — covenant extended to every generation including those not yet born. Deut 30:6 — circumcised heart: God will do internally what Torah has always required but the human heart resists. Deut 30:15–20 — the final summons: choose life. Deut 32–33 — the Song of Moses and tribal blessings of Moses, bookending Gen 49. Deut 34:1–12 — Moses on Nebo: he sees everything, enters nothing; no prophet like him has arisen since.' },
+    detail:'Deut 1:8 — "the land which the LORD swore to Abraham, Isaac, and Jacob": the Abrahamic promise is still the operating engine. Deut 4:5–8 — Israel\'s obedience will display God\'s wisdom to the nations: "what great nation has statutes and rules so righteous as all this law?" Deut 5:1–6 — the Decalogue restated; the covenant is personal and present: "not with our fathers but with us." Deut 6:4–9 — the Shema: love God with everything; the Torah\'s ethical center. Deut 8:2–3 — the wilderness interpreted: God humbled and tested Israel to teach that "man does not live by bread alone." Deut 18:15 — the prophet like Moses: a promissory gap deliberately left open. Deut 28:1–68 — blessings and curses: covenant life has real stakes, including exile if Israel breaks faith. Deut 29:10–15 — covenant extended to every generation including those not yet born. Deut 30:1–10 — the cycle of exile, repentance, and restoration; God will circumcise the heart. Deut 30:6,15–20 — the final summons: choose life. Deut 32–33 — the Song of Moses and tribal blessings of Moses, bookending Gen 49. Deut 34:1–12 — Moses on Nebo: he sees everything, enters nothing; no prophet like him has arisen since.' },
   { id:'sg6', book:'gen', title:'A · A′ — Genesis ↔ Deuteronomy Cross-References', scope:'ad',
     refs:['Gen 2–3 ↔ Deut 30:15–20','Gen 12:1–3 ↔ Deut 1:8','Gen 15:18 ↔ Deut 34:4','Gen 17:7–8 ↔ Deut 29:13','Gen 49 ↔ Deut 33','Gen 50:24–25 ↔ Deut 34:4–8'],
     summary:'Bookend parallels that make Genesis and Deuteronomy speak directly to each other across the Torah.',
@@ -664,10 +708,16 @@ const SCRIPTURE_GROUPS = [
     refs:['Exod 14 ↔ Num 20','Exod 16 ↔ Num 11','Exod 19–24 ↔ Num 13–14','Exod 25–40 ↔ Num 1–2','Exod 17 ↔ Num 20'],
     summary:'Inner-frame mirrors linking the same provision and events across two completely different postures.',
     detail:'Exod 14 ↔ Num 20 — water as salvation (Red Sea) vs. water as failure (Meribah). The same element, the same God, opposite human responses. Ps 95:8 pairs them explicitly. Exod 16 ↔ Num 11 — manna as daily grace received with wonder vs. manna despised and resented. The wilderness generation\'s trajectory compressed into two episodes. Exod 19–24 ↔ Num 13–14 — Sinai covenant given with unanimous pledge of loyalty (Exod 24:7) vs. Kadesh Barnea where the covenant is catastrophically violated through unbelief. Exod 25–40 ↔ Num 1–2 — tabernacle constructed (Exod) and tabernacle made the organizing center of camp life (Num): the same structure, static and then dynamic. Exod 17 ↔ Num 20 — water from the rock at Rephidim (obedient) and Meribah (angry): Moses\'s two water moments that bracket his wilderness ministry and determine his fate.' },
-  { id:'sg8', book:'lev', title:'C · Center — Leviticus Scripture Backbone', scope:'lev',
-    refs:['Lev 1–7','Lev 8–10','Lev 11–15','Lev 16','Lev 17–20','Lev 26'],
-    summary:'The scripture backbone of the Torah\'s theological center.',
-    detail:'Lev 1–7 — the offering system: five types address burnt, grain, peace, sin, and guilt — a complete grammar of approach to a holy God. Lev 8–10 — priestly ordination and its immediate test: Nadab and Abihu die for unauthorized fire. Aaron is silenced (Lev 10:3). Access is governed. Lev 11–15 — impurity legislation: food, childbirth, skin, discharge. Not hygiene but sacred space protection — the diagnostic vocabulary that makes Lev 16 necessary. Lev 16 — the Day of Atonement: the center of the center. Two goats, one blood, one wilderness. The high priest alone, once a year, resets the entire system. Lev 17–20 — the Holiness Code: sanctuary logic flows outward into food, sexuality, economics, speech, and care for the neighbor and stranger. Lev 26 — the covenant sanction chapter: blessings for obedience, escalating curses for rebellion, and a final promise that even in exile God will remember his covenant (Lev 26:44–45).' },
+
+  // ── Leviticus Scripture — UPGRADED ──
+  { id:'sg8', book:'lev', title:'C · Center — Leviticus Operating Logic', scope:'lev',
+    refs:['Exod 40:34–35','Lev 1–7','Lev 8–10','Lev 11–15','Lev 16','Lev 17:11','Lev 18:24–30','Lev 26:11–12'],
+    summary:'Leviticus explains how a holy God can continue dwelling among Israel through offerings, priesthood, purity boundaries, blood purification, and annual sanctuary reset.',
+    detail:'Exod 40:34–35 creates the crisis: God\'s glory fills the tabernacle and even Moses cannot enter. Lev 1–7 regulates approach through offerings. Lev 8–10 establishes priestly mediation and its dangers. Lev 11–15 maps impurity as a status problem affecting access. Lev 16 resolves accumulated pollution through the Day of Atonement. Lev 17:11 gives the blood theology behind the cleansing system. Lev 18:24–30 shows that moral impurity can defile land and sanctuary from afar. Lev 26:11–12 states the covenant goal explicitly: "I will make my dwelling among you."' },
+  { id:'sg9', book:'lev', title:'Leviticus — Sacred Space and Repair Depth', scope:'lev',
+    refs:['Lev 4:3–35','Lev 15:31','Lev 16:14–19','Num 1:53','Num 3:7–8'],
+    summary:'Sacred space is graded, pollution reaches inward, and blood application scales with the depth of contamination.',
+    detail:'Lev 4 shows that the blood ritual changes depending on who sins and how close that person stands to the center of holiness. Lev 15:31 states the danger plainly: uncleanness can defile God\'s tabernacle and bring death. Lev 16 reaches the Holy of Holies itself because it addresses the nation\'s deepest accumulated pollution. Num 1:53 and 3:7–8 show that Israel\'s camp and Levite ring are arranged to guard sacred proximity.' },
 ];
 
 // ═══════ ENGINE ═══════
@@ -690,13 +740,24 @@ function fb() {
 function clrInfo() {
   const e=document.getElementById('info');
   e.className='info empty';
-  e.querySelector('.t').textContent='Select a Torah book or parallel theme to explore';
-  e.querySelector('.b').innerHTML='';
+  e.querySelector('.t').textContent='How to Explore';
+  e.querySelector('.b').innerHTML=`
+    <div class="explore-hint">
+      <div class="explore-hint-item"><div class="ehl" style="color:var(--gold-b)">Arc</div><div class="ehd">See structural symmetry — how the five books mirror each other</div></div>
+      <div class="explore-hint-item"><div class="ehl" style="color:var(--col-ab)">Flow</div><div class="ehd">Follow the narrative movement from creation to covenant renewal</div></div>
+      <div class="explore-hint-item"><div class="ehl" style="color:var(--col-bb)">Scripture</div><div class="ehd">Study the key texts that anchor each connection</div></div>
+    </div>`;
 }
 
 function refsHtml(refsStr, color) {
   if(!refsStr) return '';
   return `<div class="refs"><span class="rl">Key Texts</span><span class="rv" style="color:${color}">${refsStr}</span></div>`;
+}
+
+function certChipHtml(certKey) {
+  if(!certKey || !CERT[certKey]) return '';
+  const c=CERT[certKey];
+  return `<span class="cert-chip ${c.cls}">${c.label}</span>`;
 }
 
 function pbHtml(letter, bookName, label, refsStr, bodyText, color) {
@@ -728,7 +789,7 @@ function showBook(bid) {
   }
   html+=pairs.map(p=>`
     <div class="pb" style="border-left-color:${book.cb}">
-      <div class="pl" style="color:${book.cb}">${p.label}</div>
+      <div class="pl" style="color:${book.cb}">${p.label}${certChipHtml(p.cert)}</div>
       ${refsHtml(p.refs, book.cb)}
       <div class="body">${p.own.substring(0,160)}${p.own.length>160?'…':''}</div>
     </div>`).join('') || `<em style="color:var(--tx-d)">No parallels in current filter.</em>`;
@@ -748,7 +809,7 @@ function showTarget(pid) {
 
   const e=document.getElementById('info');
   e.className='info';
-  e.querySelector('.t').innerHTML=pair.label+(pair.mlabel?` <span style="color:var(--tx-d);font-size:.8rem">↔ ${pair.mlabel}</span>`:'');
+  e.querySelector('.t').innerHTML=pair.label+certChipHtml(pair.cert)+(pair.mlabel?` <span style="color:var(--tx-d);font-size:.8rem">↔ ${pair.mlabel}</span>`:'');
 
   let html=pbHtml(la, book.l, pair.label, pair.refs, pair.own, book.cb);
   if(pair.ml && mirrorBook) {
@@ -832,7 +893,6 @@ function draw() {
 
   const ML=44, MR=44;
   const barY=68, barH=40;
-  // Leviticus gets 6px taller on top
   const LEV_EXTRA=6;
   const arcZone=300;
   const targetY=barY+barH+arcZone;
@@ -856,16 +916,13 @@ function draw() {
     </radialGradient>
   </defs>`;
 
-  // Lev background glow in arc zone (only when lev is in scope)
   const levBk=bkPos.find(b=>b.id==='lev');
   if(levBk && (tab==='all'||tab==='lev')) {
     v+=`<ellipse cx="${levBk.cx}" cy="${barY+barH+arcZone*.45}" rx="${bkW*1.8}" ry="${arcZone*.55}" fill="url(#levBg)"/>`;
   }
 
-  // Bar background
   v+=`<rect x="${ML}" y="${barY}" width="${W-ML-MR}" height="${barH}" rx="4" fill="#1a1d28" stroke="rgba(186,163,112,.1)" stroke-width=".5"/>`;
 
-  // Section dividers
   if(tab==='all'){
     [1,2,3,4].forEach(i=>{
       const x=ML+i*bkW;
@@ -873,21 +930,18 @@ function draw() {
     });
   }
 
-  // Chiasm letter labels above books
   bkPos.forEach(b=>{
     const active=curFb.some(x=>x.id===b.id);
     const isLev=b.id==='lev';
     v+=`<text x="${b.cx}" y="${barY-(isLev?LEV_EXTRA+10:8)}" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="${isLev?11:9.5}" fill="${active?(isLev?'rgba(200,160,224,.75)':'rgba(200,196,186,.5)'):'rgba(200,196,186,.18)'}" font-style="italic">${b.letter}</text>`;
   });
 
-  // Tab label above targets
   const tLabel=tab==='ad'?'A · Genesis  ↔  A′ · Deuteronomy'
     :tab==='en'?'B · Exodus  ↔  B′ · Numbers'
     :tab==='lev'?'C · Leviticus — Theological Center'
     :'Torah · A · B · C · B′ · A′';
   v+=`<text x="${W/2}" y="${targetY-12}" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="9" fill="rgba(186,163,112,.28)" letter-spacing=".1em">${tLabel.toUpperCase()}</text>`;
 
-  // Draw arcs
   const arcData=[];
   tPos.forEach(tgt=>{
     const src=bkPos.find(b=>b.id===tgt.book);
@@ -911,7 +965,6 @@ function draw() {
     v+=`<path class="arc-hit" data-pid="${a.pid}" data-bid="${a.bid}" d="${a.d}"/>`;
   });
 
-  // Book segments — Lev gets extended height on top
   bkPos.forEach(b=>{
     const isInTab=curFb.some(x=>x.id===b.id);
     const isLev=b.id==='lev';
@@ -920,7 +973,6 @@ function draw() {
     const segH=isLev?barH+LEV_EXTRA:barH;
     v+=`<g class="bk-seg" data-bid="${b.id}" style="cursor:pointer">`;
     if(isLev&&isInTab){
-      // Outer glow ring for Lev
       v+=`<rect x="${b.x-2}" y="${segY-2}" width="${b.w+4}" height="${segH+4}" rx="5" fill="none" stroke="rgba(200,160,224,.22)" stroke-width="1.5"/>`;
     }
     v+=`<rect x="${b.x+.5}" y="${segY+.5}" width="${b.w-1}" height="${segH-1}" rx="${isLev?5:3}" fill="${b.c}" fill-opacity="${isInTab?(isLev?.7:.55):.15}" stroke="${isLev&&isInTab?'rgba(200,160,224,.45)':'transparent'}" stroke-width="${isLev?1.5:0}"/>`;
@@ -933,7 +985,6 @@ function draw() {
     v+=`</g>`;
   });
 
-  // Target labels (rotated 52°)
   tPos.forEach(tgt=>{
     const bk=BOOKS.find(b=>b.id===tgt.book);
     v+=`<g class="tgt-g" data-pid="${tgt.id}" data-bid="${tgt.book}" style="cursor:pointer" opacity=".75">`;
@@ -966,7 +1017,6 @@ function draw() {
   });
   area.addEventListener('click',()=>{ if(locked){locked=null;hovered=null;clrInfo();applyHighlight();} });
 
-  // Legend
   const le=document.getElementById('legend'); le.innerHTML='';
   [
     {color:'var(--col-ab)',label:'A · A′ — Genesis ↔ Deuteronomy',show:tab==='all'||tab==='ad'},
