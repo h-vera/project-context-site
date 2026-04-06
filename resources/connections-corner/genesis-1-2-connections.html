@@ -3,103 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Genesis 1–2 · Intertextual Connections | Connection Corner | Project Context</title>
-<meta name="description" content="Interactive arc visualization mapping 167 intertextual connections from Genesis 1–2 across the TaNaKh and New Covenant — creation theology, image of God, temple, Sabbath, Spirit, Eden, and new creation threads.">
-<meta name="author" content="Project Context">
-<meta name="robots" content="index, follow">
-
-<!-- Page Metadata -->
-<meta name="template-version" content="5.8.1">
-<meta name="study-type" content="interactive-tool">
-<meta name="page-category" content="connection-corner">
-
-<!-- Navigation Context -->
-<meta name="nav-hub" content="resources">
-<meta name="nav-section" content="connections">
-
-<!-- Content Indicators -->
-<meta name="has-hebrew" content="true">
-<meta name="has-greek" content="true">
-<meta name="primary-language" content="hebrew">
-
-<!-- Relationship Metadata -->
-<meta name="related-book" content="genesis">
-<meta name="time-period" content="creation">
-
-<!-- Open Graph -->
-<meta property="og:title" content="Genesis 1–2 · Intertextual Connections">
-<meta property="og:description" content="Interactive visualization mapping 167 connections from Genesis 1–2 across the TaNaKh and New Covenant — trace creation theology, temple, image of God, Spirit, and new creation threads.">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://projectcontext.org/resources/connections/genesis-1-2-connections.html">
-<meta property="og:image" content="https://projectcontext.org/assets/images/connections/genesis-1-2-og.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Genesis 1–2 Intertextual Connections – Interactive Arc Visualization on Project Context">
-<meta property="og:site_name" content="Project Context">
-<meta property="og:locale" content="en_US">
-
-<!-- Twitter / X Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:site" content="@projectcontext">
-<meta name="twitter:title" content="Genesis 1–2 · Intertextual Connections">
-<meta name="twitter:description" content="Interactive arc visualization: 167 connections from Genesis 1–2 across the TaNaKh and New Covenant.">
-<meta name="twitter:image" content="https://projectcontext.org/assets/images/connections/genesis-1-2-og.jpg">
-<meta name="twitter:image:alt" content="Genesis 1–2 Intertextual Connections – Interactive Arc Visualization">
-
-<!-- Favicon & Touch Icons -->
-<link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png">
-<link rel="manifest" href="/site.webmanifest">
-<meta name="theme-color" content="#18345D">
-
-<!-- Canonical URL -->
-<link rel="canonical" href="https://projectcontext.org/resources/connections/genesis-1-2-connections.html">
-
-<!-- JSON-LD Structured Data -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "headline": "Genesis 1–2 · Intertextual Connections",
-  "description": "Interactive arc visualization mapping 167 intertextual connections from Genesis 1–2 across the TaNaKh and New Covenant.",
-  "author": {
-    "@type": "Organization",
-    "name": "Project Context",
-    "url": "https://projectcontext.org"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Project Context",
-    "url": "https://projectcontext.org",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://projectcontext.org/assets/icons/logo.png"
-    }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://projectcontext.org/resources/connections/genesis-1-2-connections.html"
-  },
-  "image": "https://projectcontext.org/assets/images/connections/genesis-1-2-og.jpg",
-  "datePublished": "2026-04-05",
-  "dateModified": "2026-04-05",
-  "about": {
-    "@type": "Thing",
-    "name": "Genesis 1–2",
-    "description": "The creation narrative and its intertextual connections across Scripture"
-  },
-  "isPartOf": {
-    "@type": "WebSite",
-    "name": "Project Context",
-    "url": "https://projectcontext.org"
-  },
-  "inLanguage": "en-US",
-  "keywords": "Genesis 1, Genesis 2, creation, intertextual connections, bible study, seminary, TaNaKh, New Covenant, temple, image of God, Sabbath, Eden"
-}
-</script>
-
+<title>Genesis 1–2 · Intertextual Connections</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
 
@@ -480,19 +384,22 @@ const NC = [
 ];
 
 // ===== ENGINE =====
+// Architecture: draw() rebuilds SVG once (tab change / catFilter change).
+// applyHighlight() mutates existing element attributes — NO innerHTML rebuild —
+// so the DOM stays stable and mouseenter/mouseleave never fire spuriously.
+
 let tab = 'tanakh';
-let locked = null;
-let hovered = null;
-let hoveredArc = null; // index into filtered connections
+let locked = null;       // { type:'source'|'target'|'arc', id, ci? }
+let hovered = null;      // same shape, transient
 let catFilter = null;
 
-function go(t) {
-  tab = t; locked = null; hovered = null; hoveredArc = null; catFilter = null;
-  document.getElementById('t-tanakh').className = t === 'tanakh' ? 'tbtn a-tanakh' : 'tbtn';
-  document.getElementById('t-nc').className = t === 'nc' ? 'tbtn a-nc' : 'tbtn';
-  clrInfo(); draw();
+// ── Derived state helpers ─────────────────────────────────────────────────────
+function activeState() {
+  const src = locked || hovered;
+  return src ? { aId: src.id, aType: src.type, aCi: src.ci ?? null } : {};
 }
 
+// ── Info panel ────────────────────────────────────────────────────────────────
 function clrInfo() {
   const e = document.getElementById('info');
   e.className = 'info empty';
@@ -507,240 +414,336 @@ function shInfo(title, count, html) {
   e.querySelector('.b').innerHTML = html;
 }
 
-function draw() {
-  const books = tab === 'tanakh' ? TANAKH_BOOKS : NC_BOOKS;
-  const conns = tab === 'tanakh' ? TANAKH : NC;
-  const accent = tab === 'tanakh' ? 'var(--tanakhB)' : 'var(--ncB)';
+function infoSrc(id) {
+  const seg = S.find(s => s.id === id);
+  const all = (tab==='tanakh'?TANAKH:NC).filter(c=>c.s===id);
+  const f = catFilter ? all.filter(c=>c.c===catFilter) : all;
+  shInfo(`Genesis ${seg.l}`, f.length,
+    `<div style="margin-bottom:3px;color:var(--tx-d);font-size:.78rem;font-style:italic">${seg.d}</div>`
+    + (f.map(c=>`<span class="h">${c.t}</span> · ${c.n}`).join('<br>')||'<em style="color:var(--tx-d)">No connections in current filter</em>'));
+}
+
+function infoTgt(id) {
+  const all = (tab==='tanakh'?TANAKH:NC).filter(c=>c.t===id);
+  const f = catFilter ? all.filter(c=>c.c===catFilter) : all;
+  shInfo(id, f.length,
+    f.map(c=>{const seg=S.find(s=>s.id===c.s);return `<span class="h">Gen ${seg?.l}</span> · ${c.n}`;}).join('<br>')
+    ||'<em style="color:var(--tx-d)">No connections in current filter</em>');
+}
+
+function infoArc(conn) {
+  if (!conn) return;
+  const seg = S.find(s=>s.id===conn.s);
+  const cat = CAT[conn.c];
+  shInfo(`Gen ${seg.l} → ${conn.t}`, 1,
+    `<div style="margin-bottom:4px"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${cat.color};margin-right:6px;vertical-align:middle"></span><span style="color:${cat.color};font-weight:600">${cat.label}</span></div>`
+    +`<div style="margin-bottom:3px;color:var(--tx-d);font-size:.78rem;font-style:italic">${seg.d}</div>${conn.n}`);
+}
+
+// ── Highlight — mutates existing DOM, no innerHTML ────────────────────────────
+function applyHighlight() {
   const area = document.getElementById('svg-area');
+  if (!area.querySelector('svg')) return;
 
-  const W = Math.max(1100, books.length * 50);
-  const ML = 44, MR = 44;
-  const barY = 58, barH = 34;
-  const arcZone = 360;
-  const targetY = barY + barH + arcZone;
-  const H = targetY + 88;
-  const segW = (W - ML - MR) / S.length;
+  const conns = tab==='tanakh'?TANAKH:NC;
+  const fc = catFilter ? conns.filter(c=>c.c===catFilter) : conns;
+  const accent = tab==='tanakh'?'var(--tanakhB)':'var(--ncB)';
+  const { aId, aType, aCi } = activeState();
+  const anyActive = aId != null || aCi != null;
 
-  const sp = S.map((s,i) => ({...s, x:ML+i*segW, cx:ML+i*segW+segW/2, w:segW}));
-  const ts = (W - ML - MR) / books.length;
-  const tp = books.map((b,i) => ({id:b, cx:ML+i*ts+ts/2}));
-
-  const aId = locked ? locked.id : (hovered ? hovered.id : null);
-  const aType = locked ? locked.type : (hovered ? hovered.type : null);
-  const fc = catFilter ? conns.filter(c => c.c === catFilter) : conns;
-
-  const sc = {}, tc = {};
-  conns.forEach(c => { sc[c.s]=(sc[c.s]||0)+1; tc[c.t]=(tc[c.t]||0)+1; });
-
-  let v = `<svg class="chart" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">`;
-  v += `<defs><filter id="gl"><feGaussianBlur stdDeviation="2" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
-
-  // Gen label
-  v += `<text x="${ML-6}" y="${barY+barH/2+1}" text-anchor="end" font-family="Cormorant Garamond,serif" font-size="12" font-weight="600" fill="var(--gold-d)" dominant-baseline="middle">Gen</text>`;
-
-  // Bar bg
-  v += `<rect x="${ML}" y="${barY}" width="${W-ML-MR}" height="${barH}" rx="4" fill="#1a1d28" stroke="rgba(186,163,112,.15)" stroke-width=".5"/>`;
-
-  // Section divider labels within the target bar (Torah vs Prophets vs Writings for TaNaKh)
-  if (tab === 'tanakh') {
-    // Find boundary indices
-    const torahEnd = books.indexOf('Deut 5');
-    const prophetsStart = books.indexOf('Isa 40');
-    const prophetsEnd = books.indexOf('1 Kgs 8');
-    const writingsStart = books.indexOf('Ps 1:3');
-
-    if (torahEnd >= 0 && prophetsStart >= 0) {
-      const torMid = (tp[0].cx + tp[torahEnd].cx) / 2;
-      v += `<text x="${torMid}" y="${targetY - 16}" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="var(--tx-d)" font-weight="600" letter-spacing=".08em">TORAH</text>`;
-    }
-    if (prophetsStart >= 0 && prophetsEnd >= 0) {
-      const prMid = (tp[prophetsStart].cx + tp[prophetsEnd].cx) / 2;
-      v += `<text x="${prMid}" y="${targetY - 16}" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="var(--tx-d)" font-weight="600" letter-spacing=".08em">NEVI'IM</text>`;
-    }
-    if (writingsStart >= 0) {
-      const kwMid = (tp[writingsStart].cx + tp[tp.length-1].cx) / 2;
-      v += `<text x="${kwMid}" y="${targetY - 16}" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="var(--tx-d)" font-weight="600" letter-spacing=".08em">KETUVIM</text>`;
-    }
-  }
-
-  // Arcs — cubic bezier ensures visible curves even when source/target align vertically
-  const arcPaths = []; // store path data for hit areas
-  fc.forEach((conn, ci) => {
-    const src = sp.find(s => s.id === conn.s);
-    const tgt = tp.find(t => t.id === conn.t);
-    if (!src || !tgt) return;
-    const x1=src.cx, y1=barY+barH, x2=tgt.cx, y2=targetY;
-    const cat = CAT[conn.c];
-    const dist = Math.abs(x2-x1);
-
-    // Cubic bezier: control points offset horizontally to always create visible bow
-    const dir = x2 > x1 ? 1 : (x2 < x1 ? -1 : (ci % 2 === 0 ? 1 : -1));
-    const minBow = 45;
-    const bow = dist < minBow * 2 ? (minBow - dist / 2) * dir : 0;
-    const cp1x = x1 + (x2 - x1) * 0.3 + bow * 0.6;
-    const cp1y = y1 + arcZone * 0.32;
-    const cp2x = x2 - (x2 - x1) * 0.3 - bow * 0.6;
-    const cp2y = y2 - arcZone * 0.32;
-
-    const pathD = `M${x1},${y1} C${cp1x},${cp1y} ${cp2x},${cp2y} ${x2},${y2}`;
-    arcPaths.push({ ci, pathD, conn });
-
-    const isArcHovered = hoveredArc === ci;
-    const isAct = isArcHovered || (aType==='source' && conn.s===aId) || (aType==='target' && conn.t===aId);
-    const anyActive = aId || hoveredArc !== null;
-    let op, sw, fl;
-    if (anyActive) { op=isAct?.88:.04; sw=isAct?3:.7; fl=isAct?' filter="url(#gl)"':''; }
-    else { op=.18; sw=1.2; fl=''; }
-
-    v += `<path class="arc" d="${pathD}" stroke="${cat.color}" stroke-width="${sw}" opacity="${op}"${fl}/>`;
+  // ── Arcs ──
+  area.querySelectorAll('.arc').forEach(el => {
+    const ci = parseInt(el.dataset.ci);
+    const conn = fc[ci];
+    if (!conn) return;
+    const isAct = (aCi === ci) ||
+                  (aType==='source' && conn.s===aId) ||
+                  (aType==='target' && conn.t===aId);
+    let op, sw;
+    if (anyActive) { op=isAct?.88:.04; sw=isAct?3:.7; }
+    else { op=.18; sw=1.2; }
+    el.setAttribute('opacity', op);
+    el.setAttribute('stroke-width', sw);
+    if (isAct && anyActive) el.setAttribute('filter','url(#gl)');
+    else el.removeAttribute('filter');
   });
 
-  // Arc hit areas (wider invisible paths for hover detection) — rendered on top
-  arcPaths.forEach(({ ci, pathD }) => {
-    v += `<path class="arc-hit" data-ci="${ci}" d="${pathD}"/>`;
-  });
-
-  // Genesis segments
-  sp.forEach(seg => {
-    const isAct = aType==='source' && aId===seg.id;
-    const isCon = aType==='target' && fc.some(c => c.s===seg.id && c.t===aId);
-    const isArcSrc = hoveredArc !== null && fc[hoveredArc] && fc[hoveredArc].s === seg.id;
+  // ── Genesis segments ──
+  area.querySelectorAll('.seg').forEach(el => {
+    const id = el.dataset.id;
+    const isAct = aType==='source' && aId===id;
+    const isCon = aType==='target' && fc.some(c=>c.s===id && c.t===aId);
+    const isArcSrc = aCi !== null && fc[aCi] && fc[aCi].s===id;
     const highlighted = isAct || isCon || isArcSrc;
-    const anyActive = aId || hoveredArc !== null;
     const dim = anyActive && !highlighted;
-    const cnt = sc[seg.id]||0;
-    const fO = dim?.2:(highlighted?1:.55);
-    const stk = highlighted?'var(--gold-b)':(isCon?'var(--gold)':'transparent');
-    const stW = highlighted?2:0;
-    const lc = highlighted?'#fff':(dim?'rgba(255,255,255,.25)':'rgba(255,255,255,.7)');
-    const fs = segW>52?10:(segW>40?9:7.5);
-
-    v += `<g class="seg" data-id="${seg.id}" style="cursor:pointer">`;
-    v += `<rect x="${seg.x+.5}" y="${barY+.5}" width="${seg.w-1}" height="${barH-1}" rx="3" fill="${seg.c}" fill-opacity="${fO}" stroke="${stk}" stroke-width="${stW}"/>`;
-    v += `<text x="${seg.cx}" y="${barY+barH/2+3.5}" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="${fs}" font-weight="600" fill="${lc}">${seg.sh}</text>`;
-    if (cnt>0 && segW>35) {
-      v += `<circle cx="${seg.x+seg.w-8}" cy="${barY+7}" r="6" fill="rgba(0,0,0,.5)" stroke="var(--gold-d)" stroke-width=".5"/>`;
-      v += `<text x="${seg.x+seg.w-8}" y="${barY+10}" text-anchor="middle" font-size="7" font-weight="600" fill="var(--gold)" font-family="DM Sans">${cnt}</text>`;
+    const rect = el.querySelector('rect');
+    const txt  = el.querySelector('text');
+    if (rect) {
+      rect.setAttribute('fill-opacity', dim?.2:(highlighted?1:.55));
+      rect.setAttribute('stroke', highlighted?'var(--gold-b)':'transparent');
+      rect.setAttribute('stroke-width', highlighted?2:0);
     }
-    v += `</g>`;
+    if (txt) txt.setAttribute('fill', highlighted?'#fff':(dim?'rgba(255,255,255,.25)':'rgba(255,255,255,.7)'));
   });
 
-  // Day labels
-  let ld = '';
-  sp.forEach(seg => {
-    if (seg.day !== ld) {
-      ld = seg.day;
-      const ds = sp.filter(s => s.day === seg.day);
-      const mx = (ds[0].x + ds[ds.length-1].x + ds[ds.length-1].w) / 2;
-      v += `<text x="${mx}" y="${barY-8}" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="9" fill="var(--tx-d)" font-style="italic">${seg.day}</text>`;
-    }
-  });
-
-  // Target labels
-  tp.forEach(tgt => {
-    const isAct = aType==='target' && aId===tgt.id;
-    const isCon = aType==='source' && fc.some(c => c.t===tgt.id && c.s===aId);
-    const isArcTgt = hoveredArc !== null && fc[hoveredArc] && fc[hoveredArc].t === tgt.id;
+  // ── Target labels ──
+  area.querySelectorAll('.tgt').forEach(el => {
+    const id = el.dataset.id;
+    const isAct = aType==='target' && aId===id;
+    const isCon = aType==='source' && fc.some(c=>c.t===id && c.s===aId);
+    const isArcTgt = aCi !== null && fc[aCi] && fc[aCi].t===id;
     const highlighted = isAct || isCon || isArcTgt;
-    const anyActive = aId || hoveredArc !== null;
     const dim = anyActive && !highlighted;
-    const cnt = tc[tgt.id]||0;
     let fc2, op;
     if (highlighted) { fc2=accent; op=1; }
     else if (dim) { fc2='var(--tx-d)'; op=.3; }
     else { fc2='var(--tx)'; op=.8; }
+    el.setAttribute('opacity', op);
+    el.querySelectorAll('text').forEach(t=>t.setAttribute('fill', fc2));
+    el.querySelectorAll('line').forEach(l=>l.setAttribute('stroke', fc2));
+  });
+}
 
-    v += `<g class="tgt" data-id="${tgt.id}" style="cursor:pointer" opacity="${op}">`;
-    v += `<line x1="${tgt.cx}" y1="${targetY}" x2="${tgt.cx}" y2="${targetY+5}" stroke="${fc2}" stroke-width="1.5"/>`;
-    if (cnt>0 && (highlighted||!anyActive)) {
-      v += `<circle cx="${tgt.cx}" cy="${targetY-6}" r="7" fill="rgba(0,0,0,.6)" stroke="${highlighted?fc2:'var(--tx-d)'}" stroke-width=".5"/>`;
-      v += `<text x="${tgt.cx}" y="${targetY-3}" text-anchor="middle" font-size="7" font-weight="600" fill="${highlighted?fc2:'var(--tx-d)'}" font-family="DM Sans">${cnt}</text>`;
+// ── Full rebuild — only on init / tab switch / catFilter change ───────────────
+function draw() {
+  const books = tab==='tanakh'?TANAKH_BOOKS:NC_BOOKS;
+  const conns = tab==='tanakh'?TANAKH:NC;
+  const accent = tab==='tanakh'?'var(--tanakhB)':'var(--ncB)';
+  const area = document.getElementById('svg-area');
+
+  const W = Math.max(1100, books.length * 50);
+  const ML=44, MR=44, barY=58, barH=34, arcZone=360;
+  const targetY = barY+barH+arcZone;
+  const H = targetY+88;
+  const segW = (W-ML-MR)/S.length;
+
+  const sp = S.map((s,i)=>({...s, x:ML+i*segW, cx:ML+i*segW+segW/2, w:segW}));
+  const ts = (W-ML-MR)/books.length;
+  const tp = books.map((b,i)=>({id:b, cx:ML+i*ts+ts/2}));
+
+  const fc = catFilter?conns.filter(c=>c.c===catFilter):conns;
+  const sc={}, tc={};
+  conns.forEach(c=>{sc[c.s]=(sc[c.s]||0)+1; tc[c.t]=(tc[c.t]||0)+1;});
+
+  let v=`<svg class="chart" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">`;
+  v+=`<defs><filter id="gl"><feGaussianBlur stdDeviation="2" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
+
+  // Gen label
+  v+=`<text x="${ML-6}" y="${barY+barH/2+1}" text-anchor="end" font-family="Cormorant Garamond,serif" font-size="12" font-weight="600" fill="var(--gold-d)" dominant-baseline="middle">Gen</text>`;
+
+  // Bar bg
+  v+=`<rect x="${ML}" y="${barY}" width="${W-ML-MR}" height="${barH}" rx="4" fill="#1a1d28" stroke="rgba(186,163,112,.15)" stroke-width=".5"/>`;
+
+  // Section labels
+  if (tab==='tanakh') {
+    const torahEnd=books.indexOf('Deut 5'), prophetsStart=books.indexOf('Isa 40');
+    const prophetsEnd=books.indexOf('1 Kgs 8'), writingsStart=books.indexOf('Ps 1:3');
+    if (torahEnd>=0&&prophetsStart>=0) {
+      const m=(tp[0].cx+tp[torahEnd].cx)/2;
+      v+=`<text x="${m}" y="${targetY-16}" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="var(--tx-d)" font-weight="600" letter-spacing=".08em">TORAH</text>`;
     }
-    v += `<text x="${tgt.cx}" y="${targetY+11}" text-anchor="start" transform="rotate(52,${tgt.cx},${targetY+11})" font-size="11" fill="${fc2}" font-family="Cormorant Garamond,serif" font-weight="${highlighted?700:400}">${tgt.id}</text>`;
-    v += `</g>`;
+    if (prophetsStart>=0&&prophetsEnd>=0) {
+      const m=(tp[prophetsStart].cx+tp[prophetsEnd].cx)/2;
+      v+=`<text x="${m}" y="${targetY-16}" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="var(--tx-d)" font-weight="600" letter-spacing=".08em">NEVI'IM</text>`;
+    }
+    if (writingsStart>=0) {
+      const m=(tp[writingsStart].cx+tp[tp.length-1].cx)/2;
+      v+=`<text x="${m}" y="${targetY-16}" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="10" fill="var(--tx-d)" font-weight="600" letter-spacing=".08em">KETUVIM</text>`;
+    }
+  }
+
+  // Arcs — render at neutral opacity; applyHighlight() will adjust
+  const arcPaths=[];
+  fc.forEach((conn,ci)=>{
+    const src=sp.find(s=>s.id===conn.s), tgt=tp.find(t=>t.id===conn.t);
+    if(!src||!tgt) return;
+    const x1=src.cx,y1=barY+barH,x2=tgt.cx,y2=targetY;
+    const cat=CAT[conn.c], dist=Math.abs(x2-x1);
+    const dir=x2>x1?1:(x2<x1?-1:(ci%2===0?1:-1));
+    const minBow=45, bow=dist<minBow*2?(minBow-dist/2)*dir:0;
+    const cp1x=x1+(x2-x1)*0.3+bow*0.6, cp1y=y1+arcZone*0.32;
+    const cp2x=x2-(x2-x1)*0.3-bow*0.6, cp2y=y2-arcZone*0.32;
+    const pathD=`M${x1},${y1} C${cp1x},${cp1y} ${cp2x},${cp2y} ${x2},${y2}`;
+    arcPaths.push({ci,pathD,conn});
+    // data-ci lets applyHighlight find this arc without rebuilding
+    v+=`<path class="arc" data-ci="${ci}" d="${pathD}" stroke="${cat.color}" stroke-width="1.2" opacity=".18"/>`;
   });
 
-  v += `</svg>`;
-  area.innerHTML = v;
+  // Arc hit areas on top
+  arcPaths.forEach(({ci,pathD})=>{
+    v+=`<path class="arc-hit" data-ci="${ci}" d="${pathD}"/>`;
+  });
 
-  // Arc hover events
-  area.querySelectorAll('.arc-hit').forEach(el => {
-    const ci = parseInt(el.dataset.ci);
-    el.addEventListener('mouseenter', () => {
-      if (!locked) { hoveredArc = ci; hovered = null; infoArc(ci); draw(); }
+  // Genesis segments — neutral state; applyHighlight adjusts
+  const fs=segW>52?10:(segW>40?9:7.5);
+  sp.forEach(seg=>{
+    const cnt=sc[seg.id]||0;
+    v+=`<g class="seg" data-id="${seg.id}" style="cursor:pointer">`;
+    v+=`<rect x="${seg.x+.5}" y="${barY+.5}" width="${seg.w-1}" height="${barH-1}" rx="3" fill="${seg.c}" fill-opacity=".55" stroke="transparent" stroke-width="0"/>`;
+    v+=`<text x="${seg.cx}" y="${barY+barH/2+3.5}" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="${fs}" font-weight="600" fill="rgba(255,255,255,.7)">${seg.sh}</text>`;
+    if(cnt>0&&segW>35){
+      v+=`<circle cx="${seg.x+seg.w-8}" cy="${barY+7}" r="6" fill="rgba(0,0,0,.5)" stroke="var(--gold-d)" stroke-width=".5"/>`;
+      v+=`<text x="${seg.x+seg.w-8}" y="${barY+10}" text-anchor="middle" font-size="7" font-weight="600" fill="var(--gold)" font-family="DM Sans">${cnt}</text>`;
+    }
+    v+=`</g>`;
+  });
+
+  // Day labels
+  let ld='';
+  sp.forEach(seg=>{
+    if(seg.day!==ld){
+      ld=seg.day;
+      const ds=sp.filter(s=>s.day===seg.day);
+      const mx=(ds[0].x+ds[ds.length-1].x+ds[ds.length-1].w)/2;
+      v+=`<text x="${mx}" y="${barY-8}" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="9" fill="var(--tx-d)" font-style="italic">${seg.day}</text>`;
+    }
+  });
+
+  // Target labels — neutral; applyHighlight adjusts
+  tp.forEach(tgt=>{
+    const cnt=tc[tgt.id]||0;
+    v+=`<g class="tgt" data-id="${tgt.id}" style="cursor:pointer" opacity=".8">`;
+    v+=`<line x1="${tgt.cx}" y1="${targetY}" x2="${tgt.cx}" y2="${targetY+5}" stroke="var(--tx)" stroke-width="1.5"/>`;
+    if(cnt>0){
+      v+=`<circle cx="${tgt.cx}" cy="${targetY-6}" r="7" fill="rgba(0,0,0,.6)" stroke="var(--tx-d)" stroke-width=".5"/>`;
+      v+=`<text x="${tgt.cx}" y="${targetY-3}" text-anchor="middle" font-size="7" font-weight="600" fill="var(--tx-d)" font-family="DM Sans">${cnt}</text>`;
+    }
+    v+=`<text x="${tgt.cx}" y="${targetY+11}" text-anchor="start" transform="rotate(52,${tgt.cx},${targetY+11})" font-size="11" fill="var(--tx)" font-family="Cormorant Garamond,serif" font-weight="400">${tgt.id}</text>`;
+    v+=`</g>`;
+  });
+
+  v+=`</svg>`;
+  area.innerHTML=v;
+
+  // ── Attach events ONCE after build ────────────────────────────────────────
+  // Arc hit areas
+  area.querySelectorAll('.arc-hit').forEach(el=>{
+    const ci=parseInt(el.dataset.ci);
+    const conn=fc[ci];
+    el.addEventListener('mouseenter',()=>{
+      if(locked) return;
+      hovered={type:'arc',id:null,ci};
+      infoArc(conn);
+      applyHighlight();
     });
-    el.addEventListener('mouseleave', () => {
-      if (!locked) { hoveredArc = null; clrInfo(); draw(); }
+    el.addEventListener('mouseleave',()=>{
+      if(locked) return;
+      hovered=null;
+      clrInfo();
+      applyHighlight();
     });
-    el.addEventListener('click', e => { e.stopPropagation(); });
+    el.addEventListener('click',e=>{
+      e.stopPropagation();
+      // clicking an arc locks/unlocks it
+      if(locked&&locked.type==='arc'&&locked.ci===ci){locked=null;clrInfo();}
+      else{locked={type:'arc',id:null,ci};infoArc(conn);}
+      hovered=null;
+      applyHighlight();
+    });
   });
 
-  // Events
-  area.querySelectorAll('.seg').forEach(el => {
-    const id = el.dataset.id;
-    el.addEventListener('mouseenter', () => { if (!locked) { hoveredArc=null; hovered={type:'source',id}; infoSrc(id); draw(); }});
-    el.addEventListener('mouseleave', () => { if (!locked) { hovered=null; clrInfo(); draw(); }});
-    el.addEventListener('click', e => { e.stopPropagation(); hoveredArc=null; if (locked&&locked.type==='source'&&locked.id===id){locked=null;clrInfo();}else{locked={type:'source',id};infoSrc(id);} draw(); });
+  // Genesis segments
+  area.querySelectorAll('.seg').forEach(el=>{
+    const id=el.dataset.id;
+    el.addEventListener('mouseenter',()=>{
+      if(locked) return;
+      hovered={type:'source',id};
+      infoSrc(id);
+      applyHighlight();
+    });
+    el.addEventListener('mouseleave',()=>{
+      if(locked) return;
+      hovered=null;
+      clrInfo();
+      applyHighlight();
+    });
+    el.addEventListener('click',e=>{
+      e.stopPropagation();
+      if(locked&&locked.type==='source'&&locked.id===id){locked=null;clrInfo();}
+      else{locked={type:'source',id};infoSrc(id);}
+      hovered=null;
+      applyHighlight();
+    });
   });
-  area.querySelectorAll('.tgt').forEach(el => {
-    const id = el.dataset.id;
-    el.addEventListener('mouseenter', () => { if (!locked) { hoveredArc=null; hovered={type:'target',id}; infoTgt(id); draw(); }});
-    el.addEventListener('mouseleave', () => { if (!locked) { hovered=null; clrInfo(); draw(); }});
-    el.addEventListener('click', e => { e.stopPropagation(); hoveredArc=null; if (locked&&locked.type==='target'&&locked.id===id){locked=null;clrInfo();}else{locked={type:'target',id};infoTgt(id);} draw(); });
-  });
-  area.addEventListener('click', () => { if (locked){locked=null;hoveredArc=null;clrInfo();draw();} });
 
-  // Legend
-  const uc = new Set(conns.map(c=>c.c));
-  const le = document.getElementById('legend');
-  le.innerHTML = '';
-  for (const [k,v2] of Object.entries(CAT)) {
-    if (!uc.has(k)) continue;
-    const d = document.createElement('div');
-    d.className = 'leg';
-    const iF = catFilter===k;
-    d.innerHTML = `<span class="dot" style="background:${v2.color};${iF?'box-shadow:0 0 6px '+v2.color:''}"></span><span style="${iF?'color:var(--tx-b)':''}">${v2.label}</span>`;
-    d.addEventListener('click', () => { catFilter=catFilter===k?null:k; draw(); });
+  // Target labels
+  area.querySelectorAll('.tgt').forEach(el=>{
+    const id=el.dataset.id;
+    el.addEventListener('mouseenter',()=>{
+      if(locked) return;
+      hovered={type:'target',id};
+      infoTgt(id);
+      applyHighlight();
+    });
+    el.addEventListener('mouseleave',()=>{
+      if(locked) return;
+      hovered=null;
+      clrInfo();
+      applyHighlight();
+    });
+    el.addEventListener('click',e=>{
+      e.stopPropagation();
+      if(locked&&locked.type==='target'&&locked.id===id){locked=null;clrInfo();}
+      else{locked={type:'target',id};infoTgt(id);}
+      hovered=null;
+      applyHighlight();
+    });
+  });
+
+  // Click on SVG background to clear lock
+  area.addEventListener('click',()=>{
+    if(locked){locked=null;hovered=null;clrInfo();applyHighlight();}
+  });
+
+  // Legend rebuild
+  const uc=new Set(conns.map(c=>c.c));
+  const le=document.getElementById('legend');
+  le.innerHTML='';
+  for(const [k,v2] of Object.entries(CAT)){
+    if(!uc.has(k)) continue;
+    const d=document.createElement('div');
+    d.className='leg';
+    const iF=catFilter===k;
+    d.innerHTML=`<span class="dot" style="background:${v2.color};${iF?'box-shadow:0 0 6px '+v2.color:''}"></span><span style="${iF?'color:var(--tx-b)':''}">${v2.label}</span>`;
+    d.addEventListener('click',()=>{ catFilter=catFilter===k?null:k; locked=null; hovered=null; clrInfo(); draw(); });
     le.appendChild(d);
+  }
+
+  // Apply any persisted locked state after rebuild
+  applyHighlight();
+  if(locked){
+    if(locked.type==='source') infoSrc(locked.id);
+    else if(locked.type==='target') infoTgt(locked.id);
+    else if(locked.type==='arc') infoArc(fc[locked.ci]);
   }
 }
 
-function infoSrc(id) {
-  const seg = S.find(s => s.id === id);
-  const conns = (tab==='tanakh'?TANAKH:NC).filter(c=>c.s===id);
-  const f = catFilter ? conns.filter(c=>c.c===catFilter) : conns;
-  const h = f.map(c=>`<span class="h">${c.t}</span> · ${c.n}`).join('<br>');
-  shInfo(`Genesis ${seg.l}`, f.length, `<div style="margin-bottom:3px;color:var(--tx-d);font-size:.78rem;font-style:italic">${seg.d}</div>${h||'<em style="color:var(--tx-d)">No connections in current filter</em>'}`);
+function go(t) {
+  tab=t; locked=null; hovered=null; catFilter=null;
+  document.getElementById('t-tanakh').className=t==='tanakh'?'tbtn a-tanakh':'tbtn';
+  document.getElementById('t-nc').className=t==='nc'?'tbtn a-nc':'tbtn';
+  clrInfo(); draw();
 }
 
-function infoTgt(id) {
-  const conns = (tab==='tanakh'?TANAKH:NC).filter(c=>c.t===id);
-  const f = catFilter ? conns.filter(c=>c.c===catFilter) : conns;
-  const h = f.map(c=>{const seg=S.find(s=>s.id===c.s);return `<span class="h">Gen ${seg?.l}</span> · ${c.n}`;}).join('<br>');
-  shInfo(id, f.length, h||'<em style="color:var(--tx-d)">No connections in current filter</em>');
-}
-
-function infoArc(ci) {
-  const allConns = tab==='tanakh'?TANAKH:NC;
-  const fc = catFilter ? allConns.filter(c=>c.c===catFilter) : allConns;
-  const c = fc[ci];
-  if (!c) return;
-  const seg = S.find(s=>s.id===c.s);
-  const cat = CAT[c.c];
-  shInfo(
-    `Gen ${seg.l} → ${c.t}`,
-    1,
-    `<div style="margin-bottom:4px"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${cat.color};margin-right:6px;vertical-align:middle"></span><span style="color:${cat.color};font-weight:600">${cat.label}</span></div><div style="margin-bottom:3px;color:var(--tx-d);font-size:.78rem;font-style:italic">${seg.d}</div>${c.n}`
-  );
-}
-
-// Touch
-document.addEventListener('touchstart', e => {
-  const sg=e.target.closest('.seg'), tg=e.target.closest('.tgt');
-  if (sg) { e.preventDefault(); const id=sg.dataset.id; if(locked&&locked.type==='source'&&locked.id===id){locked=null;clrInfo();}else{locked={type:'source',id};infoSrc(id);} draw(); }
-  else if (tg) { e.preventDefault(); const id=tg.dataset.id; if(locked&&locked.type==='target'&&locked.id===id){locked=null;clrInfo();}else{locked={type:'target',id};infoTgt(id);} draw(); }
-  else if (!e.target.closest('.leg')&&!e.target.closest('.tbtn')) { locked=null;clrInfo();draw(); }
-}, {passive:false});
+// Touch support
+document.addEventListener('touchstart',e=>{
+  const sg=e.target.closest('.seg'), tg=e.target.closest('.tgt'), ah=e.target.closest('.arc-hit');
+  if(sg){
+    e.preventDefault();
+    const id=sg.dataset.id;
+    if(locked&&locked.type==='source'&&locked.id===id){locked=null;clrInfo();}
+    else{locked={type:'source',id};infoSrc(id);}
+    hovered=null; applyHighlight();
+  } else if(tg){
+    e.preventDefault();
+    const id=tg.dataset.id;
+    if(locked&&locked.type==='target'&&locked.id===id){locked=null;clrInfo();}
+    else{locked={type:'target',id};infoTgt(id);}
+    hovered=null; applyHighlight();
+  } else if(!e.target.closest('.leg')&&!e.target.closest('.tbtn')){
+    locked=null; hovered=null; clrInfo(); applyHighlight();
+  }
+},{passive:false});
 
 draw();
 </script>
