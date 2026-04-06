@@ -2,7 +2,7 @@
  * Centralized Navigation Component
  * Path: /assets/js/nav-component.js
  * Purpose: Single source of truth for navigation across all pages
- * Version: 1.4.0 - Added centralized analytics initialization (GA4)
+ * Version: 1.4.1 - Added Connections Corner to Resources dropdown
  */
 
 import { initAnalytics } from '/assets/js/analytics.js';
@@ -55,6 +55,7 @@ class NavigationComponent {
                                 <a href="/resources/study-tools/biblical-study-resources.html">Study Tools</a>
                                 <a href="/resources/teaching-formation/teaching-formation-hub.html" class="${this.getActiveClass('teaching-formation')}">Teaching Formation</a>
                                 <a href="/resources/community-family/community-family-index.html" class="${this.getActiveClass('community-family')}">Community & Family</a>
+                                <a href="/resources/connections-corner/connections-hub.html" class="${this.getActiveClass('connections-corner')}">Connections Corner</a>
                             </div>
                         </li>
                         <li><a href="/about/" class="${this.getActiveClass('about')}">About</a></li>
@@ -114,7 +115,8 @@ class NavigationComponent {
         if (section === 'resources' && (
             currentPage.includes('resources') ||
             currentPage.includes('teaching-formation') ||
-            currentPage.includes('community-family')
+            currentPage.includes('community-family') ||
+            currentPage.includes('connections-corner')
         )) {
             return 'active';
         }
@@ -123,6 +125,9 @@ class NavigationComponent {
             return 'active';
         }
         if (section === 'community-family' && (hubType === 'community-family' || currentPage.includes('community-family'))) {
+            return 'active';
+        }
+        if (section === 'connections-corner' && (hubType === 'connections' || currentPage.includes('connections-corner'))) {
             return 'active';
         }
 
