@@ -48,6 +48,7 @@
 
 /* ── Reset & base ── */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
 body {
   font-family: 'DM Sans', sans-serif;
@@ -55,6 +56,7 @@ body {
   color: var(--ink);
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 a { color: var(--gen); text-decoration: none; }
@@ -69,8 +71,17 @@ a:hover { text-decoration: underline; }
   position: relative;
   overflow: hidden;
 }
-.page-hdr > *:not(.hb-bg):not(.hero-vignette) {
+.page-hdr > *:not(.hb-bg):not(.hb-vignette) {
   position: relative; z-index: 2;
+}
+.page-hdr::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 140px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(90,106,138,.35), transparent);
+  z-index: 3;
 }
 
 .hb-bg {
@@ -82,7 +93,7 @@ a:hover { text-decoration: underline; }
   position: absolute; inset: 0;
 }
 
-.hero-vignette {
+.hb-vignette {
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background:
     radial-gradient(ellipse 80% 70% at 50% 50%, rgba(250,248,244,.08) 0%, rgba(250,248,244,.85) 100%),
@@ -419,6 +430,58 @@ a:hover { text-decoration: underline; }
   border-top: 1px solid var(--ink-hairline);
   margin-top: 20px;
 }
+.pc-footer a { color: var(--gen); }
+
+/* ═══════════════════════════════════════════
+   SECTION HEADINGS (inside pairs pages)
+   ═══════════════════════════════════════════ */
+.section-heading {
+  max-width: 880px; margin: 32px auto 16px; padding: 0 16px;
+}
+.section-heading h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.45rem; font-weight: 700;
+  color: var(--ink);
+}
+.section-heading p {
+  font-size: .86rem; color: var(--ink-light);
+  margin-top: 4px; line-height: 1.55;
+}
+
+/* Expand / Collapse all toggle */
+.expand-all-bar {
+  max-width: 880px; margin: 0 auto 12px; padding: 0 16px;
+  display: flex; justify-content: flex-end;
+}
+.expand-all-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: .74rem; font-weight: 500;
+  color: var(--ink-light); background: none;
+  border: 1px solid var(--ink-hairline);
+  border-radius: 16px; padding: 5px 14px;
+  cursor: pointer; transition: all .2s;
+}
+.expand-all-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+/* ═══════════════════════════════════════════
+   STAT COUNTERS (top of pair pages)
+   ═══════════════════════════════════════════ */
+.stats-bar {
+  max-width: 880px; margin: 0 auto 20px; padding: 0 16px;
+  display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+}
+.stat-chip {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--white-card);
+  border: 1px solid var(--ink-hairline);
+  border-radius: 20px; padding: 6px 14px;
+  font-size: .78rem; color: var(--ink-light);
+  box-shadow: var(--shadow-sm);
+}
+.stat-chip strong { color: var(--ink); font-weight: 700; }
+.stat-chip .stat-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
 
 /* ═══════════════════════════════════════════
    ANIMATIONS
@@ -454,3 +517,84 @@ a:hover { text-decoration: underline; }
   .pair-title { font-size: 1rem; }
   .network-svg-box { padding: 8px; }
 }
+
+/* ═══════════════════════════════════════════
+   PRODUCTION ALIGNMENT — added for parity
+   ═══════════════════════════════════════════ */
+.page-hdr::after {
+  content: ''; position: absolute; bottom: 0; left: 50%;
+  transform: translateX(-50%); width: 160px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(90,106,138,.35), transparent);
+}
+
+/* Production-spec vignette (override) */
+.hb-vignette {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 70% at 50% 50%, rgba(250,248,244,.12) 0%, rgba(250,248,244,.88) 100%),
+    linear-gradient(to bottom, rgba(250,248,244,.78) 0%, rgba(250,248,244,0) 30%, rgba(250,248,244,0) 70%, rgba(250,248,244,.92) 100%);
+}
+
+/* ═══════════════════════════════════════════
+   MISSING / ENHANCED STYLES
+   ═══════════════════════════════════════════ */
+
+/* Network node hover */
+.net-node { transition: transform .2s; }
+.net-node:hover { transform: scale(1.08); }
+.net-node circle { transition: stroke-width .2s, filter .2s; }
+.net-node:hover circle { stroke-width: 3.5; filter: drop-shadow(0 0 6px rgba(45,106,79,.2)); }
+
+/* Page summary cards (top of each book page) */
+.page-summary {
+  max-width: 880px; margin: 0 auto 24px; padding: 0 16px;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+.summary-card {
+  background: var(--white-card); border-radius: var(--radius-sm);
+  border: 1px solid var(--ink-hairline); padding: 14px 16px;
+  text-align: center; transition: box-shadow .2s;
+}
+.summary-card:hover { box-shadow: var(--shadow-md); }
+.summary-card .sc-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem; font-weight: 700; line-height: 1;
+}
+.summary-card .sc-label {
+  font-size: .75rem; color: var(--ink-light); margin-top: 4px;
+  font-weight: 500; text-transform: uppercase; letter-spacing: .06em;
+}
+
+/* Where threads lead callout */
+.threads-lead {
+  background: var(--deut-bg); border: 1.5px solid var(--deut-border);
+  border-radius: var(--radius); padding: 24px 26px;
+  max-width: 880px; margin: 0 auto 36px;
+}
+.threads-lead h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem; font-weight: 700; color: var(--deut); margin-bottom: 10px;
+}
+.threads-lead p {
+  font-size: .88rem; color: var(--ink); line-height: 1.7; margin-bottom: 10px;
+}
+.threads-lead p:last-child { margin-bottom: 0; }
+.threads-lead .lead-italic {
+  color: var(--ink-light); font-style: italic;
+}
+
+/* Methodology cards */
+.method-card {
+  background: var(--white-card); border-radius: var(--radius);
+  border: 1px solid var(--ink-hairline); box-shadow: var(--shadow-sm);
+  padding: 20px 22px; margin-bottom: 14px;
+}
+.method-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; font-weight: 700; margin-bottom: 6px;
+}
+.method-card p {
+  font-size: .84rem; color: var(--ink-light); line-height: 1.65;
+}
+.method-card em { color: var(--ink); font-weight: 500; }
