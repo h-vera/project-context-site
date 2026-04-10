@@ -212,23 +212,60 @@ a:hover { text-decoration: underline; }
    HUB TILES (on hub page)
    ═══════════════════════════════════════════ */
 .hub-grid {
-  max-width: 880px; margin: 0 auto 48px; padding: 0 16px;
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
+  max-width: 900px; margin: 0 auto 48px; padding: 0 16px;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 18px;
 }
+
+/* ── Hub Tile — enhanced card with color ribbon ── */
 .hub-tile {
-  background: var(--white-card); border-radius: var(--radius);
+  background: var(--white-card); border-radius: 12px;
   border: 1px solid var(--ink-hairline); box-shadow: var(--shadow-sm);
-  padding: 22px 20px; display: flex; flex-direction: column;
-  transition: box-shadow .25s, transform .25s;
+  padding: 0; display: flex; flex-direction: column;
+  transition: box-shadow .3s ease, transform .3s ease, border-color .3s ease;
   text-decoration: none; color: inherit;
+  overflow: hidden; position: relative;
+  opacity: 0; animation: tileFadeUp .45s ease-out forwards;
 }
+.hub-tile:nth-child(1) { animation-delay: .05s; }
+.hub-tile:nth-child(2) { animation-delay: .12s; }
+.hub-tile:nth-child(3) { animation-delay: .19s; }
+.hub-tile:nth-child(4) { animation-delay: .26s; }
+.hub-tile:nth-child(5) { animation-delay: .33s; }
+
+@keyframes tileFadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Color ribbon bar at top */
+.hub-tile::before {
+  content: ''; display: block; height: 4px;
+  background: var(--tile-accent, var(--gen));
+  flex-shrink: 0;
+}
+.hub-tile[data-book="gen"]::before  { background: var(--gen); }
+.hub-tile[data-book="exod"]::before { background: var(--exod); }
+.hub-tile[data-book="lev"]::before  { background: var(--lev); }
+.hub-tile[data-book="num"]::before  { background: var(--num); }
+.hub-tile[data-book="deut"]::before { background: var(--deut); }
+
+.hub-tile .tile-inner {
+  padding: 20px 20px 18px; display: flex; flex-direction: column; flex: 1;
+}
+
 .hub-tile:hover {
-  box-shadow: var(--shadow-md); transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.09); transform: translateY(-4px);
   text-decoration: none;
 }
+.hub-tile[data-book="gen"]:hover  { border-color: var(--gen-border); }
+.hub-tile[data-book="exod"]:hover { border-color: var(--exod-border); }
+.hub-tile[data-book="lev"]:hover  { border-color: var(--lev-border); }
+.hub-tile[data-book="num"]:hover  { border-color: var(--num-border); }
+.hub-tile[data-book="deut"]:hover { border-color: var(--deut-border); }
+
 .hub-tile .tile-pair {
-  display: flex; gap: 6px; margin-bottom: 10px;
+  display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap;
 }
 .hub-tile .tile-badge {
   font-size: .68rem; font-weight: 700; letter-spacing: .04em;
@@ -236,15 +273,22 @@ a:hover { text-decoration: underline; }
 }
 .hub-tile .tile-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.12rem; font-weight: 700; color: var(--ink);
-  margin-bottom: 6px;
+  font-size: 1.15rem; font-weight: 700; color: var(--ink);
+  margin-bottom: 8px;
 }
+.hub-tile[data-book="gen"]  .tile-title { color: var(--gen); }
+.hub-tile[data-book="exod"] .tile-title { color: var(--exod); }
+.hub-tile[data-book="lev"]  .tile-title { color: var(--lev); }
+.hub-tile[data-book="num"]  .tile-title { color: var(--num); }
+.hub-tile[data-book="deut"] .tile-title { color: var(--deut); }
+
 .hub-tile .tile-desc {
-  font-size: .82rem; color: var(--ink-light); line-height: 1.55; flex: 1;
+  font-size: .82rem; color: var(--ink-light); line-height: 1.6; flex: 1;
+  min-height: 0;
 }
 .hub-tile .tile-count {
   font-size: .72rem; color: var(--ink-faint); font-weight: 500;
-  margin-top: 10px; padding-top: 8px;
+  margin-top: 12px; padding-top: 10px;
   border-top: 1px solid var(--ink-hairline);
 }
 .hub-tile .tile-status {
@@ -516,6 +560,10 @@ a:hover { text-decoration: underline; }
   .pair-header { padding: 14px 16px; gap: 8px; }
   .pair-title { font-size: 1rem; }
   .network-svg-box { padding: 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hub-tile { animation: none; opacity: 1; }
 }
 
 /* ═══════════════════════════════════════════
