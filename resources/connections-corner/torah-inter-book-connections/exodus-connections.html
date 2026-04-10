@@ -88,11 +88,12 @@ svg.chart{display:block;}.arc{fill:none;pointer-events:none;}.arc-hit{fill:none;
 <div class="summary-card"><div class="sc-num" style="color:#1d6e6e;">24</div><div class="sc-label">→ Deuteronomy</div></div>
 </div>
   <div class="tab-row" id="tab-row">
-  <button class="tbtn active" data-tab="all" onclick="setTab('all')">All (56)</button>
+  <button class="tbtn active" data-tab="all" onclick="setTab('all')">All (61)</button>
   <button class="tbtn" data-tab="Lev" onclick="setTab('Lev')">Leviticus (13)</button>
   <button class="tbtn" data-tab="Num" onclick="setTab('Num')">Numbers (19)</button>
-  <button class="tbtn" data-tab="Deut" onclick="setTab('Deut')">Deuteronomy (24)</button>
+  <button class="tbtn" data-tab="Deut" onclick="setTab('Deut')">Deuteronomy (29)</button>
 </div>
+  <div style="text-align:center;font-size:.72rem;color:var(--pc-tx-d);margin:4px 0 10px;font-style:italic;letter-spacing:.02em;">Arcs connect a source passage (top bar) to a target passage (bottom chip). Thicker arcs = more direct textual links. Colors = thematic categories shown in the legend below.</div>
   <div class="legend" id="legend"></div>
   <div class="svg-area" id="svg-area"></div>
   <div class="info empty" id="info"><div class="t">How to Explore</div><div class="b"></div></div>
@@ -153,7 +154,10 @@ const S=[{id:'exod_403335',ref:'Exod 40:33-35',sh:'40:33',d:'Tabernacle complete
 {id:'exod_205',ref:'Exod 20:5',sh:'20:5',d:'"I the LORD your God am a jealous God, visiting iniquity … to the third and fourth generation"',book:'Exod',c:'#b58040'},
 {id:'exod_2325',ref:'Exod 23:25',sh:'23:25',d:'"I will take sickness away from among you"',book:'Exod',c:'#b58040'},
 {id:'exod_3424',ref:'Exod 34:24',sh:'34:24',d:'"No one shall covet your land when you go up to appear before the LORD"',book:'Exod',c:'#b58040'},
-{id:'exod_3232',ref:'Exod 32:32',sh:'32:32',d:'Moses: "Blot me out of your book" — the one-for-many mediator offers his own life for the people after the golden calf',book:'Exod',c:'#b58040'}];
+{id:'exod_3232',ref:'Exod 32:32',sh:'32:32',d:'Moses: "Blot me out of your book" — the one-for-many mediator offers his own life for the people after the golden calf',book:'Exod',c:'#b58040'},
+{id:'exod_194',ref:'Exod 19:4',sh:'19:4',d:'"I bore you on eagles\' wings and brought you to myself"',heb:'',book:'Exod',c:'#b58040'},
+{id:'exod_20811',ref:'Exod 20:8-11',sh:'20:8',d:'Sabbath — "remember" (creation motive)',heb:'',book:'Exod',c:'#b58040'}
+];
 const T=[{id:'lev_11',ref:'Lev 1:1',sh:'1:1',d:'"The LORD called to Moses from the tent of meeting" — God speaks from the completed house',book:'Lev',c:'#a02828'},
 {id:'lev_89',ref:'Lev 8-9',sh:'8-9',d:'Ordination carried out — fire from the LORD confirms acceptance',book:'Lev',c:'#a02828'},
 {id:'lev_161415',ref:'Lev 16:14-15',sh:'16:14',d:'Blood sprinkled on the כפרת on Yom Kippur — meeting place becomes atonement place',book:'Lev',c:'#a02828'},
@@ -209,7 +213,13 @@ const T=[{id:'lev_11',ref:'Lev 1:1',sh:'1:1',d:'"The LORD called to Moses from t
 {id:'deut_59',ref:'Deut 5:9',sh:'5:9',d:'Same words repeated verbatim in Deuteronomy\'s Decalogue — generational consequence unchanged',book:'Deut',c:'#1d6e6e'},
 {id:'deut_715',ref:'Deut 7:15',sh:'7:15',d:'"The LORD will take away from you all sickness" — covenant health promise repeated',book:'Deut',c:'#1d6e6e'},
 {id:'deut_1210',ref:'Deut 12:10',sh:'12:10',d:'"He gives you rest from all your enemies" — security in the land promised',book:'Deut',c:'#1d6e6e'},
-{id:'deut_181518',ref:'Deut 18:15-18',sh:'18:15',d:'"The LORD your God will raise up for you a prophet like me" — Moses\' intercession becomes the template for the expected prophet. The mediator pattern demands a greater mediator.',book:'Deut',c:'#1d6e6e'}];
+{id:'deut_181518',ref:'Deut 18:15-18',sh:'18:15',d:'"The LORD your God will raise up for you a prophet like me" — Moses\' intercession becomes the template for the expected prophet. The mediator pattern demands a greater mediator.',book:'Deut',c:'#1d6e6e'},
+{id:'deut_321112',ref:'Deut 32:11-12',sh:'32:11',d:'"Like an eagle that stirs up its nest, hovers over its young … the LORD alone guided him" — eagle imagery bookends Sinai',book:'Deut',c:'#1d6e6e'},
+{id:'deut_76__142__2618',ref:'Deut 7:6; 14:2; 26:18',sh:'7:6',d:'"Treasured possession" (סגלה) — Sinai\'s priestly identity restated for Moab',book:'Deut',c:'#1d6e6e'},
+{id:'deut_51215',ref:'Deut 5:12-15',sh:'5:12',d:'Sabbath — "observe" (redemption motive: "you were slaves in Egypt"). Same command, different theological ground.',book:'Deut',c:'#1d6e6e'},
+{id:'deut_16117',ref:'Deut 16:1-17',sh:'16:1',d:'Festivals with centralization — "at the place the LORD will choose"',book:'Deut',c:'#1d6e6e'},
+{id:'deut_431__7910',ref:'Deut 4:31; 7:9-10',sh:'4:31',d:'"The LORD your God is a merciful God" — Exodus 34 distilled into Deuteronomic assurance and warning',book:'Deut',c:'#1d6e6e'}
+];
 const CONNS=[{s:'exod_403335',t:'lev_11',tb:'Lev',c:'temple',n:'"The LORD called to Moses from the tent of meeting" — God speaks from the completed house'},
 {s:'exod_29137',t:'lev_89',tb:'Lev',c:'priesthood',n:'Ordination carried out — fire from the LORD confirms acceptance'},
 {s:'exod_251722',t:'lev_161415',tb:'Lev',c:'priesthood',n:'Blood sprinkled on the כפרת on Yom Kippur — meeting place becomes atonement place'},
@@ -265,7 +275,13 @@ const CONNS=[{s:'exod_403335',t:'lev_11',tb:'Lev',c:'temple',n:'"The LORD called
 {s:'exod_205',t:'deut_59',tb:'Deut',c:'law',n:'Same words repeated verbatim in Deuteronomy\'s Decalogue — generational consequence unchanged'},
 {s:'exod_2325',t:'deut_715',tb:'Deut',c:'blessing',n:'"The LORD will take away from you all sickness" — covenant health promise repeated'},
 {s:'exod_3424',t:'deut_1210',tb:'Deut',c:'promise',n:'"He gives you rest from all your enemies" — security in the land promised'},
-{s:'exod_3232',t:'deut_181518',tb:'Deut',c:'covenant',n:'"The LORD your God will raise up for you a prophet like me" — Moses\' intercession becomes the template for the expected prophet. The mediator pattern demands a greater mediator.'}];
+{s:'exod_3232',t:'deut_181518',tb:'Deut',c:'covenant',n:'"The LORD your God will raise up for you a prophet like me" — Moses\' intercession becomes the template for the expected prophet. The mediator pattern demands a greater mediator.'},
+{s:'exod_194',t:'deut_321112',tb:'Deut',c:'blessing',n:'"Like an eagle that stirs up its nest, hovers over its young … the LORD alone guided him" — eagle imagery bookends the Sinai narrative'},
+{s:'exod_1956',t:'deut_76__142__2618',tb:'Deut',c:'covenant',n:'"Treasured possession" (סגלה) — Sinai\'s priestly identity restated for the plains of Moab'},
+{s:'exod_20811',t:'deut_51215',tb:'Deut',c:'worship',n:'Sabbath — "observe" (redemption motive: "you were slaves in Egypt"). Same command, different theological ground.'},
+{s:'exod_231417',t:'deut_16117',tb:'Deut',c:'worship',n:'Festivals with centralization — "at the place the LORD will choose"'},
+{s:'exod_3467',t:'deut_431__7910',tb:'Deut',c:'covenant',n:'"The LORD your God is a merciful God" — Exodus 34 distilled into Deuteronomic assurance and warning'}
+];
 const FILTER_MODE='tgt';
 const IS_MULTI_SRC=false;
 

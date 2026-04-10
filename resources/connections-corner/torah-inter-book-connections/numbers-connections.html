@@ -83,8 +83,9 @@ svg.chart{display:block;}.arc{fill:none;pointer-events:none;}.arc-hit{fill:none;
   <div class="hero-div fade-up fade-up-d4"><div class="arm"></div><div class="pip"></div><div class="arm"></div></div>
 </div>
 <div class="arc-container">
-  <div class="page-summary"><div class="summary-card"><div class="sc-num" style="color:#6a4c93;">16</div><div class="sc-label">connections</div></div></div>
+  <div class="page-summary"><div class="summary-card"><div class="sc-num" style="color:#6a4c93;">17</div><div class="sc-label">connections</div></div></div>
   
+  <div style="text-align:center;font-size:.72rem;color:var(--pc-tx-d);margin:4px 0 10px;font-style:italic;letter-spacing:.02em;">Arcs connect a source passage (top bar) to a target passage (bottom chip). Thicker arcs = more direct textual links. Colors = thematic categories shown in the legend below.</div>
   <div class="legend" id="legend"></div>
   <div class="svg-area" id="svg-area"></div>
   <div class="info empty" id="info"><div class="t">How to Explore</div><div class="b"></div></div>
@@ -110,7 +111,9 @@ const S=[{id:'num_1314',ref:'Num 13-14',sh:'13-14',d:'Kadesh Barnea — spies re
 {id:'num_923',ref:'Num 9:23',sh:'9:23',d:'"At the command of the LORD they camped, and at the command of the LORD they set out"',book:'Num',c:'#7a60a8'},
 {id:'num_2024',ref:'Num 20:24',sh:'20:24',d:'"Aaron shall be gathered to his people" — Aaron dies on Hor',book:'Num',c:'#7a60a8'},
 {id:'num_332',ref:'Num 33:2',sh:'33:2',d:'"Moses wrote down their starting places, stage by stage"',book:'Num',c:'#7a60a8'},
-{id:'num_164648',ref:'Num 16:46-48',sh:'16:46',d:'Aaron stands between the dead and the living with incense — the one-for-many mediator in action during Korah\'s plague',book:'Num',c:'#7a60a8'}];
+{id:'num_164648',ref:'Num 16:46-48',sh:'16:46',d:'Aaron stands between the dead and the living with incense — the one-for-many mediator in action during Korah\'s plague',book:'Num',c:'#7a60a8'},
+{id:'num_1421',ref:'Num 14:21',sh:'14:21',d:'"As surely as I live, all the earth will be filled with the glory of the LORD"',heb:'',book:'Num',c:'#7a60a8'}
+];
 const T=[{id:'deut_11946',ref:'Deut 1:19-46',sh:'1:19',d:'Moses retells Kadesh — "you rebelled against the command of the LORD"; the defining failure becomes the opening sermon illustration',book:'Deut',c:'#1d6e6e'},
 {id:'deut_32328__324852',ref:'Deut 3:23-28; 32:48-52',sh:'3:23',d:'Moses pleads to enter — "Enough! Do not speak to me of this matter again"; even the mediator bears the cost',book:'Deut',c:'#1d6e6e'},
 {id:'deut_434',ref:'Deut 4:3-4',sh:'4:3',d:'"Your eyes have seen what the LORD did at Baal Peor … everyone who followed Baal was destroyed" — Peor as live-fire warning',book:'Deut',c:'#1d6e6e'},
@@ -126,7 +129,9 @@ const T=[{id:'deut_11946',ref:'Deut 1:19-46',sh:'1:19',d:'Moses retells Kadesh �
 {id:'deut_133',ref:'Deut 1:33',sh:'1:33',d:'"The LORD your God went before you … to show you the way" — movement by divine command',book:'Deut',c:'#1d6e6e'},
 {id:'deut_106',ref:'Deut 10:6',sh:'10:6',d:'"Aaron died there and was buried there, and Eleazar his son ministered as priest in his place" — priestly succession',book:'Deut',c:'#1d6e6e'},
 {id:'deut_12',ref:'Deut 1:2',sh:'1:2',d:'"It is eleven days\' journey from Horeb … to Kadesh-barnea" — journey documented as witness',book:'Deut',c:'#1d6e6e'},
-{id:'deut_181518',ref:'Deut 18:15-18',sh:'18:15',d:'"A prophet like Moses" — every wilderness mediator (Moses at the calf, Aaron in the plague, Phinehas at Peor) points toward the promised prophet who will stand in the breach definitively',book:'Deut',c:'#1d6e6e'}];
+{id:'deut_181518',ref:'Deut 18:15-18',sh:'18:15',d:'"A prophet like Moses" — every wilderness mediator (Moses at the calf, Aaron in the plague, Phinehas at Peor) points toward the promised prophet who will stand in the breach definitively',book:'Deut',c:'#1d6e6e'},
+{id:'deut_468__2810',ref:'Deut 4:6-8; 28:10',sh:'4:6',d:'"All the peoples of the earth will see that you are called by the LORD\'s name" — glory-filling-earth promise becomes Israel\'s witness vocation',book:'Deut',c:'#1d6e6e'}
+];
 const CONNS=[{s:'num_1314',t:'deut_11946',tb:'Deut',c:'wilderness',n:'Moses retells Kadesh — "you rebelled against the command of the LORD"; the defining failure becomes the opening sermon illustration'},
 {s:'num_20113',t:'deut_32328__324852',tb:'Deut',c:'judgment',n:'Moses pleads to enter — "Enough! Do not speak to me of this matter again"; even the mediator bears the cost'},
 {s:'num_2519',t:'deut_434',tb:'Deut',c:'judgment',n:'"Your eyes have seen what the LORD did at Baal Peor … everyone who followed Baal was destroyed" — Peor as live-fire warning'},
@@ -142,7 +147,9 @@ const CONNS=[{s:'num_1314',t:'deut_11946',tb:'Deut',c:'wilderness',n:'Moses rete
 {s:'num_923',t:'deut_133',tb:'Deut',c:'wilderness',n:'"The LORD your God went before you … to show you the way" — movement by divine command'},
 {s:'num_2024',t:'deut_106',tb:'Deut',c:'priesthood',n:'"Aaron died there and was buried there, and Eleazar his son ministered as priest in his place" — priestly succession'},
 {s:'num_332',t:'deut_12',tb:'Deut',c:'wilderness',n:'"It is eleven days\' journey from Horeb … to Kadesh-barnea" — journey documented as witness'},
-{s:'num_164648',t:'deut_181518',tb:'Deut',c:'covenant',n:'"A prophet like Moses" — every wilderness mediator (Moses at the calf, Aaron in the plague, Phinehas at Peor) points toward the promised prophet who will stand in the breach definitively'}];
+{s:'num_164648',t:'deut_181518',tb:'Deut',c:'covenant',n:'"A prophet like Moses" — every wilderness mediator (Moses at the calf, Aaron in the plague, Phinehas at Peor) points toward the promised prophet who will stand in the breach definitively'},
+{s:'num_1421',t:'deut_468__2810',tb:'Deut',c:'blessing',n:'"All the peoples of the earth will see that you are called by the LORD\'s name" — glory-filling-earth promise becomes Israel\'s witness vocation'}
+];
 const FILTER_MODE='tgt';
 const IS_MULTI_SRC=false;
 

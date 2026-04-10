@@ -97,15 +97,16 @@ svg.chart{display:block;}.arc{fill:none;pointer-events:none;}.arc-hit{fill:none;
   <div class="page-summary"><div class="summary-card"><div class="sc-num" style="color:#b07030;">44</div><div class="sc-label">→ Exodus</div></div>
 <div class="summary-card"><div class="sc-num" style="color:#a02828;">18</div><div class="sc-label">→ Leviticus</div></div>
 <div class="summary-card"><div class="sc-num" style="color:#6a4c93;">21</div><div class="sc-label">→ Numbers</div></div>
-<div class="summary-card"><div class="sc-num" style="color:#1d6e6e;">44</div><div class="sc-label">→ Deuteronomy</div></div>
+<div class="summary-card"><div class="sc-num" style="color:#1d6e6e;">51</div><div class="sc-label">→ Deuteronomy</div></div>
 </div>
   <div class="tab-row" id="tab-row">
-  <button class="tbtn active" data-tab="all" onclick="setTab('all')">All (127)</button>
+  <button class="tbtn active" data-tab="all" onclick="setTab('all')">All (134)</button>
   <button class="tbtn" data-tab="Exod" onclick="setTab('Exod')">Exodus (44)</button>
   <button class="tbtn" data-tab="Lev" onclick="setTab('Lev')">Leviticus (18)</button>
   <button class="tbtn" data-tab="Num" onclick="setTab('Num')">Numbers (21)</button>
-  <button class="tbtn" data-tab="Deut" onclick="setTab('Deut')">Deuteronomy (44)</button>
+  <button class="tbtn" data-tab="Deut" onclick="setTab('Deut')">Deuteronomy (51)</button>
 </div>
+  <div style="text-align:center;font-size:.72rem;color:var(--pc-tx-d);margin:4px 0 10px;font-style:italic;letter-spacing:.02em;">Arcs connect a source passage (top bar) to a target passage (bottom chip). Thicker arcs = more direct textual links. Colors = thematic categories shown in the legend below.</div>
   <div class="legend" id="legend"></div>
   <div class="svg-area" id="svg-area"></div>
   <div class="info empty" id="info"><div class="t">How to Explore</div><div class="b"></div></div>
@@ -210,7 +211,9 @@ const S=[{id:'gen_12628',ref:'Gen 1:26-28',sh:'1:26',d:'Humanity as God\'s image
 {id:'gen_92027',ref:'Gen 9:20-27',sh:'9:20',d:'Noah\'s vineyard failure — garden folly replaying Eden with identical vocabulary (planted, saw, naked, covered, cursed)',heb:'וַתֵּרֶא … טוֹב … וַתִּקַּח',book:'Gen',c:'#3a8a55'},
 {id:'gen_711',ref:'Gen 7:11',sh:'7:11',d:'"The fountains of the great deep burst open and the windows of heaven were opened" — waters as instrument of both judgment and deliverance',heb:'מעינות תהום רבה',book:'Gen',c:'#3a8a55'},
 {id:'gen_217',ref:'Gen 2:17',sh:'2:17',d:'"From the tree of knowing good and bad you shall not eat" — the test of trust',heb:'עץ הדעת טוב ורע',book:'Gen',c:'#3a8a55'},
-{id:'gen_121020',ref:'Gen 12:10-20',sh:'12:10',d:'Abram\'s "Eden failure" in Egypt — presents Sarai to Pharaoh using snake vocabulary (ראה, ידע, טוב, חיה), resulting in plagues (נגע)',heb:'וינגע יהוה את־פרעה נגעים',book:'Gen',c:'#3a8a55'}];
+{id:'gen_121020',ref:'Gen 12:10-20',sh:'12:10',d:'Abram\'s "Eden failure" in Egypt — presents Sarai to Pharaoh using snake vocabulary (ראה, ידע, טוב, חיה), resulting in plagues (נגע)',heb:'וינגע יהוה את־פרעה נגעים',book:'Gen',c:'#3a8a55'},
+{id:'gen_49128',ref:'Gen 49:1-28',sh:'49:1',d:'Jacob blesses his twelve sons — deathbed tribal poetry',heb:'',book:'Gen',c:'#3a8a55'}
+];
 const T=[{id:'exod_28630__39',ref:'Exod 28:6-30; 39',sh:'28:6',d:'The High Priest as living image of God — no idol statue in the tabernacle because the priest in his radiant garments plays the role of the divine image on the cultic stage',book:'Exod',c:'#b07030'},
 {id:'exod_272021__3078',ref:'Exod 27:20-21; 30:7-8',sh:'27:20',d:'Aaron lights the menorah every evening and morning — the priest recreates God\'s Day 1 work on the cultic stage, bringing light into the sanctuary',book:'Exod',c:'#b07030'},
 {id:'exod_2830',ref:'Exod 28:30',sh:'28:30',d:'Urim and Thummim (אורים ותמים) = "lights" and "completions" — the high priest carries creation\'s beginning and end on his chest',book:'Exod',c:'#b07030'},
@@ -332,7 +335,13 @@ const T=[{id:'exod_28630__39',ref:'Exod 28:6-30; 39',sh:'28:6',d:'The High Pries
 {id:'exod_2020',ref:'Exod 20:20',sh:'20:20',d:'"God has come to test you (נסה), that the fear of him may keep you from sinning" — Sinai as the national tree of testing',book:'Exod',c:'#b07030'},
 {id:'deut_82',ref:'Deut 8:2',sh:'8:2',d:'"The LORD your God led you forty years in the wilderness to test you (נסה), to know what was in your heart" — the wilderness as a prolonged Eden test',book:'Deut',c:'#1d6e6e'},
 {id:'exod_712',ref:'Exod 7–12',sh:'7:14',d:'The ten plagues (נגעים) on Egypt — the same verb (נגע) from Gen 12:17. What Abram\'s deception triggered in miniature, the exodus unleashes at national scale.',book:'Exod',c:'#b07030'},
-{id:'deut_292328',ref:'Deut 29:23-28',sh:'29:23',d:'"The whole land a burning waste of salt and sulfur — like the destruction of Sodom" — Sodom becomes the icon of covenant judgment; what befell Canaan\'s cities will befall Israel if they abandon the covenant',book:'Deut',c:'#1d6e6e'}];
+{id:'deut_292328',ref:'Deut 29:23-28',sh:'29:23',d:'"The whole land a burning waste of salt and sulfur — like the destruction of Sodom" — Sodom becomes the icon of covenant judgment; what befell Canaan\'s cities will befall Israel if they abandon the covenant',book:'Deut',c:'#1d6e6e'},
+{id:'deut_3210',ref:'Deut 32:10',sh:'32:10',d:'"He found him in a desert land, in the waste-howling void (תהו)" — Moses\' Song uses creation language',book:'Deut',c:'#1d6e6e'},
+{id:'deut_468__261819',ref:'Deut 4:6-8; 26:18-19',sh:'4:6',d:'"What great nation has a god so near?" Israel as wisdom-witness — Abrahamic mission fulfilled through national character.',book:'Deut',c:'#1d6e6e'},
+{id:'deut_713__284_11__3016',ref:'Deut 7:13; 28:4,11; 30:16',sh:'7:13',d:'Covenant blessings: "He will love you, bless you, multiply you" — creation mandate as covenant reward',book:'Deut',c:'#1d6e6e'},
+{id:'deut_649',ref:'Deut 6:4-9',sh:'6:4',d:'The Shema: "Love the LORD … teach them diligently to your children" — Abraham\'s family mandate becomes Israel\'s liturgy',book:'Deut',c:'#1d6e6e'},
+{id:'deut_33129',ref:'Deut 33:1-29',sh:'33:1',d:'Moses blesses the twelve tribes — deathbed tribal poetry mirroring Jacob\'s',book:'Deut',c:'#1d6e6e'}
+];
 const CONNS=[{s:'gen_12628',t:'exod_28630__39',tb:'Exod',c:'image',n:'The High Priest as living image of God — no idol statue in the tabernacle because the priest in his radiant garments plays the role of the divine image on the cultic stage'},
 {s:'gen_135',t:'exod_272021__3078',tb:'Exod',c:'priesthood',n:'Aaron lights the menorah every evening and morning — the priest recreates God\'s Day 1 work on the cultic stage, bringing light into the sanctuary'},
 {s:'gen_13__21',t:'exod_2830',tb:'Exod',c:'temple',n:'Urim and Thummim (אורים ותמים) = "lights" and "completions" — the high priest carries creation\'s beginning and end on his chest'},
@@ -459,7 +468,15 @@ const CONNS=[{s:'gen_12628',t:'exod_28630__39',tb:'Exod',c:'image',n:'The High P
 {s:'gen_2212_14',t:'exod_2020',tb:'Exod',c:'covenant',n:'"God has come to test you (נסה)" — Sinai as national tree of testing. Moses uses the same verb from the Aqedah; the mountain encounter is designed to produce reverent trust, not autonomous grasping.'},
 {s:'gen_2212_14',t:'deut_82',tb:'Deut',c:'covenant',n:'"To test you (נסה), to know what was in your heart" — Moses names the entire 40-year wilderness as one sustained Aqedah. Same verb from Gen 22:1. The test: will you keep his commands or repeat Eden?'},
 {s:'gen_121020',t:'exod_712',tb:'Exod',c:'judgment',n:'Abram\'s deception triggers plagues (נגע) on Pharaoh in miniature; the exodus unleashes the same verb at national scale. Mackie: "Abram plays the snake" — same vocabulary of seeing, knowing, grasping, and curse.'},
-{s:'gen_1924',t:'deut_292328',tb:'Deut',c:'judgment',n:'"Like the destruction of Sodom and Gomorrah" — Deuteronomy makes Sodom the standing icon of covenant judgment. The sulfur and fire that fell on Canaan\'s cities becomes a warning for Israel itself.'}];
+{s:'gen_1924',t:'deut_292328',tb:'Deut',c:'judgment',n:'"Like the destruction of Sodom and Gomorrah" — Deuteronomy makes Sodom the standing icon of covenant judgment. The sulfur and fire that fell on Canaan\'s cities becomes a warning for Israel itself.'},
+{s:'gen_12',t:'deut_3210',tb:'Deut',c:'creation',n:'"He found him in a waste-howling void (תהו)" — Moses\' Song describes God finding Israel in the same primordial formlessness as Gen 1:2. The exodus is a new creation out of chaos.'},
+{s:'gen_1213',t:'deut_468__261819',tb:'Deut',c:'blessing',n:'"What great nation has a god so near?" Israel as wisdom-witness. "A people holy to the LORD" — Abrahamic mission fulfilled through national character.'},
+{s:'gen_128',t:'deut_713__284_11__3016',tb:'Deut',c:'fruitful',n:'Covenant blessings: "He will love you, bless you, multiply you" — creation mandate as covenant reward'},
+{s:'gen_1819',t:'deut_649',tb:'Deut',c:'law',n:'The Shema: "Love the LORD … teach them diligently to your children" — Abraham\'s family mandate becomes Israel\'s liturgy'},
+{s:'gen_49128',t:'deut_33129',tb:'Deut',c:'covenant',n:'Moses blesses the twelve tribes — deathbed tribal poetry mirroring Jacob\'s. The Torah opens and closes with a patriarch blessing the tribes.'},
+{s:'gen_31719_23',t:'deut_2818',tb:'Deut',c:'judgment',n:'"Cursed is the ground" (Gen 3:17) becomes "cursed is the fruit of your ground" (Deut 28:18) — cosmic curse transposed into covenant register'},
+{s:'gen_21617',t:'deut_139',tb:'Deut',c:'eden',n:'"Your children who do not yet know good or bad" — the rare Eden phrase (ידע טוב ורע) reappears; those who haven\'t grasped autonomy may enter the land'}
+];
 const FILTER_MODE='tgt';
 const IS_MULTI_SRC=false;
 
