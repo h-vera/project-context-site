@@ -125,11 +125,11 @@
     <span><span class="dot" style="background:var(--lev)"></span>Leviticus</span>
     <span><span class="dot" style="background:var(--num)"></span>Numbers</span>
     <span><span class="dot" style="background:var(--deut)"></span>Deuteronomy</span>
-    <span style="margin-left:8px; opacity:.6;">Arc thickness ∝ connection count · Click any flow to explore</span>
+    <span style="margin-left:8px; opacity:.6;">Arc thickness ∝ connection count · Click to pin details</span>
   </div>
   <div id="hub-info" style="max-width:880px;margin:12px auto 0;padding:12px 18px;background:var(--card-bg,#fff);border:1px solid var(--border,rgba(90,106,138,.16));border-radius:6px;min-height:60px;">
     <div class="hub-info-t" style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:var(--ink,#2c2826);margin-bottom:6px;">Hover or tap a book or flow arc to explore</div>
-    <div class="hub-info-b" style="font-size:.82rem;color:var(--ink-light,#8a8278);line-height:1.55;">The source bar shows each book&rsquo;s forward-reaching connections. Parallelogram chips below show where those connections land. Click any flow to navigate to the full verse-level arc diagram.</div>
+    <div class="hub-info-b" style="font-size:.82rem;color:var(--ink-light,#8a8278);line-height:1.55;">Click or tap any element to pin its details here. Click elsewhere to dismiss. The source bar shows each book&rsquo;s forward-reaching connections; parallelogram chips below show where those connections land.</div>
   </div>
 </div>
 
@@ -797,12 +797,12 @@ const FLOWS=[
   {s:'Lev',t:'Deut',n:14,page:'leviticus-connections.html'},
   {s:'Num',t:'Deut',n:16,page:'numbers-connections.html'}
 ];
-let hovered=null;
+let hovered=null,locked=false;
 
 function clrHubInfo(){
   const e=document.getElementById('hub-info');
   e.querySelector('.hub-info-t').textContent='Hover or tap a book or flow arc to explore';
-  e.querySelector('.hub-info-b').innerHTML='The source bar shows each book\u2019s forward-reaching connections. Parallelogram chips below show where those connections land. Click any flow to navigate to the full verse-level arc diagram.';
+  e.querySelector('.hub-info-b').innerHTML='Click or tap any element to pin its details here. Click elsewhere to dismiss. The source bar shows each book\u2019s forward-reaching connections; parallelogram chips below show where those connections land.';
 }
 function showHubFlow(flow){
   const src=BOOKS.find(b=>b.id===flow.s),tgt=BOOKS.find(b=>b.id===flow.t);
@@ -893,27 +893,36 @@ function drawHub(){
   });
   v+=`</svg>`;area.innerHTML=v;
 
+  function unlock(){locked=false;hovered=null;clrHubInfo();drawHub();}
+  function lock(state,showFn){
+    const same=locked&&JSON.stringify(hovered)===JSON.stringify(state);
+    if(same){unlock();return;}
+    locked=true;hovered=state;showFn();drawHub();
+  }
+
   area.querySelectorAll('.hf').forEach(el=>{
     const fi=parseInt(el.dataset.fi);
-    el.addEventListener('mouseenter',()=>{hovered={type:'flow',fi};showHubFlow(FLOWS[fi]);drawHub();});
-    el.addEventListener('mouseleave',()=>{hovered=null;clrHubInfo();drawHub();});
-    el.addEventListener('click',()=>{window.location.href=FLOWS[fi].page;});
+    el.addEventListener('mouseenter',()=>{if(locked)return;hovered={type:'flow',fi};showHubFlow(FLOWS[fi]);drawHub();});
+    el.addEventListener('mouseleave',()=>{if(locked)return;hovered=null;clrHubInfo();drawHub();});
+    el.addEventListener('click',(e)=>{e.stopPropagation();lock({type:'flow',fi},()=>showHubFlow(FLOWS[fi]));});
   });
   area.querySelectorAll('.hs').forEach(el=>{
     const id=el.dataset.id;
-    el.addEventListener('mouseenter',()=>{hovered={type:'src',id};showHubBook(id,'src');drawHub();});
-    el.addEventListener('mouseleave',()=>{hovered=null;clrHubInfo();drawHub();});
-    el.addEventListener('click',()=>{const b=BOOKS.find(x=>x.id===id);if(b?.page)window.location.href=b.page;});
+    el.addEventListener('mouseenter',()=>{if(locked)return;hovered={type:'src',id};showHubBook(id,'src');drawHub();});
+    el.addEventListener('mouseleave',()=>{if(locked)return;hovered=null;clrHubInfo();drawHub();});
+    el.addEventListener('click',(e)=>{e.stopPropagation();lock({type:'src',id},()=>showHubBook(id,'src'));});
   });
   area.querySelectorAll('.ht').forEach(el=>{
     const id=el.dataset.id;
-    el.addEventListener('mouseenter',()=>{hovered={type:'tgt',id};showHubBook(id,'tgt');drawHub();});
-    el.addEventListener('mouseleave',()=>{hovered=null;clrHubInfo();drawHub();});
-    el.addEventListener('click',()=>{if(id==='Deut')window.location.href='deuteronomy-connections.html';});
+    el.addEventListener('mouseenter',()=>{if(locked)return;hovered={type:'tgt',id};showHubBook(id,'tgt');drawHub();});
+    el.addEventListener('mouseleave',()=>{if(locked)return;hovered=null;clrHubInfo();drawHub();});
+    el.addEventListener('click',(e)=>{e.stopPropagation();lock({type:'tgt',id},()=>showHubBook(id,'tgt'));});
   });
 }
 drawHub();
 let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(drawHub,150);});
+document.addEventListener('click',()=>{if(locked){locked=false;hovered=null;clrHubInfo();drawHub();}});
+document.getElementById('hub-info').addEventListener('click',(e)=>{e.stopPropagation();});
 })();
 </script>
 <script>
