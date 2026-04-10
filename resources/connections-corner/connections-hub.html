@@ -11,7 +11,7 @@
   <meta name="template-version" content="5.8.1">
   <meta name="study-type"       content="intertextuality-hub">
   <meta name="page-category"    content="connections">
-  <meta name="connection-types" content="nt-to-tanakh, intra-ot-quotation, genesis-1-2, torah-symmetry, all-66-books">
+  <meta name="connection-types" content="nt-to-tanakh, intra-ot-quotation, genesis-1-2, torah-symmetry, torah-inter-book, all-66-books">
   <meta name="nav-hub"     content="connections">
   <meta name="nav-section" content="intertextuality">
   <meta name="has-hebrew"       content="true">
@@ -81,6 +81,14 @@
   --rose-lt:    #D4A5B8;
   --gold:       #C8A96E;
   --gold-lt:    #DBBF8A;
+
+  /* Card accent palette */
+  --acc-creation:   #7EB89A;
+  --acc-symmetry:   #B0A0D4;
+  --acc-echo:       #D4A06E;
+  --acc-interbook:  #6EA8D4;
+  --acc-nc:         #D48A8A;
+  --acc-canon:      #A0B8C8;
 }
 
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
@@ -246,50 +254,77 @@ body {
 .hub-label { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.46em; text-transform: uppercase; color: var(--rose); margin-bottom: 1rem; }
 .hub-headline { font-family: 'Playfair Display', serif; font-weight: 700; font-style: italic; font-size: clamp(2rem, 4.5vw, 3.2rem); color: var(--cream-lt); line-height: 1.2; }
 
-.hub-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.25rem; }
+.hub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.25rem; max-width: 1040px; margin: 0 auto; }
 
-.card           { grid-column: span 6; }
-.card.wide      { grid-column: span 7; }
-.card.narrow    { grid-column: span 5; }
-.card.trio      { grid-column: span 6; }
+.card           { grid-column: auto; }
+.card.wide      { grid-column: auto; }
+.card.narrow    { grid-column: auto; }
+.card.trio      { grid-column: auto; }
 
-/* Card base — unchanged from original */
+/* Card base — enhanced with ribbon + glow */
 .card {
+  --card-accent: var(--rose);
   position: relative;
-  padding: 2.2rem 2rem;
-  border: 1px solid rgba(221,213,184,0.09);
+  padding: 0;
+  border: 1px solid rgba(221,213,184,0.08);
+  border-radius: 6px;
   background: rgba(19,32,56,0.55);
   backdrop-filter: blur(5px);
   cursor: pointer;
   transition: all 0.42s cubic-bezier(0.16,1,0.3,1);
   overflow: hidden;
 }
+
+/* Top color ribbon */
 .card::before {
-  content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 2px;
-  background: linear-gradient(to bottom, var(--rose), var(--gold));
-  transform: scaleY(0); transform-origin: top;
-  transition: transform 0.42s cubic-bezier(0.16,1,0.3,1);
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--card-accent), var(--card-accent-end, var(--card-accent)));
+  opacity: 0.7;
+  transition: opacity 0.4s, height 0.4s cubic-bezier(0.16,1,0.3,1);
 }
+/* Gradient overlay on hover */
 .card::after {
   content: ''; position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(196,137,159,0.07) 0%, transparent 55%);
+  background: radial-gradient(ellipse 120% 80% at 30% 20%, rgba(196,137,159,0.06) 0%, transparent 60%);
   opacity: 0; transition: opacity 0.42s;
+  pointer-events: none;
 }
-.card:hover::before { transform: scaleY(1); }
+.card:hover::before { opacity: 1; height: 4px; }
 .card:hover::after  { opacity: 1; }
 .card:hover {
-  border-color: rgba(196,137,159,0.24);
+  border-color: color-mix(in srgb, var(--card-accent) 35%, transparent);
   background: rgba(30,48,96,0.5);
-  transform: translateY(-3px);
-  box-shadow: 0 16px 48px rgba(8,20,42,0.65);
+  transform: translateY(-5px);
+  box-shadow:
+    0 16px 48px rgba(8,20,42,0.65),
+    0 0 30px -8px color-mix(in srgb, var(--card-accent) 20%, transparent);
 }
+
+/* Left accent bar on hover */
+.card .card-accent-bar {
+  position: absolute; top: 3px; left: 0; bottom: 0; width: 0px;
+  background: linear-gradient(to bottom, var(--card-accent), transparent 85%);
+  transition: width 0.42s cubic-bezier(0.16,1,0.3,1);
+}
+.card:hover .card-accent-bar { width: 2px; }
+
+/* Card inner wrapper */
+.card-inner { position: relative; z-index: 1; padding: 2rem 2rem 1.8rem; }
+
+/* Per-card accents */
+.card[data-accent="creation"]  { --card-accent: var(--acc-creation);  --card-accent-end: #5EA87A; }
+.card[data-accent="symmetry"]  { --card-accent: var(--acc-symmetry);  --card-accent-end: #8A78C0; }
+.card[data-accent="echo"]      { --card-accent: var(--acc-echo);      --card-accent-end: #C89050; }
+.card[data-accent="interbook"] { --card-accent: var(--acc-interbook); --card-accent-end: #5090C0; }
+.card[data-accent="nc"]        { --card-accent: var(--acc-nc);        --card-accent-end: #C06A6A; }
+.card[data-accent="canon"]     { --card-accent: var(--acc-canon);     --card-accent-end: #7898B0; }
 
 /* ── Status badge — top-right ── */
 .card-status {
-  position: absolute; top: 1.1rem; right: 1.3rem; z-index: 2;
+  position: absolute; top: 1rem; right: 1.2rem; z-index: 2;
   font-family: 'Cinzel', serif; font-size: 0.48rem; font-weight: 600;
   letter-spacing: 0.18em; text-transform: uppercase;
-  padding: 0.26rem 0.62rem;
+  padding: 0.26rem 0.62rem; border-radius: 3px;
 }
 .status-live {
   color: var(--gold-lt);
@@ -307,13 +342,24 @@ body {
   background: transparent;
 }
 
-/* Card innards — unchanged from original */
-.card-glyph { font-size: 1.5rem; margin-bottom: 1.3rem; line-height: 1; position: relative; z-index: 1; }
-.card-kind { font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--rose); margin-bottom: 0.55rem; position: relative; z-index: 1; }
-.card-name { font-family: 'Playfair Display', serif; font-size: 1.22rem; font-weight: 700; color: var(--cream-lt); line-height: 1.3; margin-bottom: 0.9rem; position: relative; z-index: 1; }
-.card-body { font-size: 0.93rem; font-weight: 300; line-height: 1.7; color: rgba(221,213,184,0.62); position: relative; z-index: 1; }
+/* Card innards — enhanced */
+.card-icon {
+  width: 38px; height: 38px; border-radius: 8px; margin-bottom: 1.2rem;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(221,213,184,0.04); border: 1px solid rgba(221,213,184,0.08);
+  transition: all 0.35s;
+}
+.card-icon svg { width: 20px; height: 20px; stroke: var(--card-accent); stroke-width: 1.5; fill: none; }
+.card:hover .card-icon {
+  background: color-mix(in srgb, var(--card-accent) 10%, transparent);
+  border-color: color-mix(in srgb, var(--card-accent) 25%, transparent);
+  transform: scale(1.05);
+}
+.card-kind { font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--card-accent); margin-bottom: 0.55rem; transition: color 0.3s; }
+.card-name { font-family: 'Playfair Display', serif; font-size: 1.22rem; font-weight: 700; color: var(--cream-lt); line-height: 1.3; margin-bottom: 0.9rem; }
+.card-body { font-size: 0.93rem; font-weight: 300; line-height: 1.7; color: rgba(221,213,184,0.62); }
 
-.card-refs { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.2rem; position: relative; z-index: 1; }
+.card-refs { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.2rem; }
 .ref {
   font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.78rem;
   color: var(--gold); padding: 0.18rem 0.55rem;
@@ -323,24 +369,24 @@ body {
 .ref:hover { background: rgba(200,169,110,0.11); border-color: rgba(200,169,110,0.48); cursor: pointer; }
 
 /* Live CTA */
-.card-cta { margin-top: 1.2rem; position: relative; z-index: 1; }
+.card-cta { margin-top: 1.2rem; }
 .card-cta a {
   font-family: 'Cinzel', serif; font-size: 0.54rem; letter-spacing: 0.22em;
-  text-transform: uppercase; color: var(--gold);
-  border-bottom: 1px solid rgba(200,169,110,0.35); padding-bottom: 2px;
+  text-transform: uppercase; color: var(--card-accent);
+  border-bottom: 1px solid color-mix(in srgb, var(--card-accent) 35%, transparent); padding-bottom: 2px;
   text-decoration: none; transition: color 0.2s, border-color 0.2s;
 }
-.card-cta a:hover { color: var(--gold-lt); border-color: var(--gold); }
+.card-cta a:hover { color: var(--cream); border-color: var(--card-accent); }
 
 /* Progress bar */
-.progress-bar-wrap { margin-top: 1.4rem; position: relative; z-index: 1; }
+.progress-bar-wrap { margin-top: 1.4rem; }
 .progress-bar-label {
   font-family: 'Cinzel', serif; font-size: 0.5rem; letter-spacing: 0.22em;
   text-transform: uppercase; color: rgba(221,213,184,0.3);
   margin-bottom: 0.38rem; display: flex; justify-content: space-between;
 }
-.progress-bar-track { height: 2px; background: rgba(221,213,184,0.07); overflow: hidden; }
-.progress-bar-fill { height: 100%; background: linear-gradient(to right, var(--rose), var(--gold)); }
+.progress-bar-track { height: 2px; background: rgba(221,213,184,0.07); overflow: hidden; border-radius: 1px; }
+.progress-bar-fill { height: 100%; background: linear-gradient(to right, var(--card-accent, var(--rose)), var(--card-accent-end, var(--gold))); border-radius: 1px; }
 
 .hub-divider { width: 100%; height: 1px; background: linear-gradient(to right, transparent, rgba(221,213,184,0.12), transparent); margin: 4rem 0; }
 
@@ -354,7 +400,7 @@ body {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
-  .card, .card.wide, .card.narrow, .card.trio { grid-column: span 12 !important; }
+  .card, .card.wide, .card.narrow, .card.trio { grid-column: auto; }
   .footer-strip { flex-direction: column; gap: 1rem; text-align: center; }
   .footer-verse { text-align: center; }
 }
@@ -362,6 +408,9 @@ body {
   .hero-title { font-size: 3.2rem; }
   .chips { gap: 0.5rem; }
   .chip { font-size: 0.52rem; padding: 0.5rem 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0s !important; transition-duration: 0.1s !important; }
 }
 
 </style>
@@ -399,6 +448,7 @@ body {
     <div class="chips">
       <div class="chip">Genesis 1–2</div>
       <div class="chip">Torah Symmetry</div>
+      <div class="chip">Inter-Book</div>
       <div class="chip">Exodus 34 Echo Network</div>
       <div class="chip">NC → Tanakh</div>
       <div class="chip">All 66 Books</div>
@@ -422,94 +472,129 @@ body {
   <div class="hub-grid">
 
     <!-- 1. Genesis 1–2 — LIVE -->
-    <div class="card wide" onclick="location.href='./genesis-1-2-connections.html'" style="cursor:pointer;">
-      <span class="card-status status-live">● Live</span>
-      <div class="card-glyph">🌅</div>
-      <div class="card-kind">Deep Dive · Creation</div>
-      <div class="card-name">Genesis 1–2 Connections</div>
-      <div class="card-body">
-        The creation texts as fountainhead of all biblical theology — tracing how
-        every subsequent writer reaches back to this first word. Image of God, Sabbath,
-        cosmic temple, and new creation — the threads that run through the whole canon.
+    <div class="card wide" data-accent="creation" onclick="location.href='./genesis-1-2-connections.html'" style="cursor:pointer;">
+      <div class="card-accent-bar"></div>
+      <div class="card-inner">
+        <span class="card-status status-live">● Live</span>
+        <div class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" /></svg></div>
+        <div class="card-kind">Deep Dive · Creation</div>
+        <div class="card-name">Genesis 1–2 Connections</div>
+        <div class="card-body">
+          The creation texts as fountainhead of all biblical theology — tracing how
+          every subsequent writer reaches back to this first word. Image of God, Sabbath,
+          cosmic temple, and new creation — the threads that run through the whole canon.
+        </div>
+        <div class="card-refs">
+          <span class="ref">Image of God</span>
+          <span class="ref">Sabbath</span>
+          <span class="ref">New Creation</span>
+          <span class="ref">Cosmic Temple</span>
+          <span class="ref">Gen 1 → John 1</span>
+          <span class="ref">Gen 1 → Col 1</span>
+        </div>
+        <div class="card-cta"><a href="./genesis-1-2-connections.html">View Study →</a></div>
       </div>
-      <div class="card-refs">
-        <span class="ref">Image of God</span>
-        <span class="ref">Sabbath</span>
-        <span class="ref">New Creation</span>
-        <span class="ref">Cosmic Temple</span>
-        <span class="ref">Gen 1 → John 1</span>
-        <span class="ref">Gen 1 → Col 1</span>
-      </div>
-      <div class="card-cta"><a href="./genesis-1-2-connections.html">View Study →</a></div>
     </div>
 
     <!-- 2. Torah Symmetry — LIVE -->
-    <div class="card narrow" onclick="location.href='./torah-symmetry.html'" style="cursor:pointer;">
-      <span class="card-status status-live">● Live</span>
-      <div class="card-glyph">⚖️</div>
-      <div class="card-kind">Torah Symmetry</div>
-      <div class="card-name">Connections in the Torah</div>
-      <div class="card-body">
-        Structural echoes, chiasms, and thematic symmetry across the First Five Books —
-        the Torah as a single architecturally unified whole.
-      </div>
-      <div class="card-refs">
-        <span class="ref">Gen 1 ↔ Deut 34</span>
-        <span class="ref">Exod ↔ Num</span>
-        <span class="ref">Levitical center</span>
-      </div>
-      <div class="card-cta"><a href="./torah-symmetry.html">View Study →</a></div>
-    </div>
-
-    <!-- 3. Exodus 34 Echo Network — LIVE -->
-    <div class="card trio" onclick="location.href='./exodus-34-connections.html'" style="cursor:pointer;">
-      <span class="card-status status-live">● Live</span>
-      <div class="card-glyph">📜</div>
-      <div class="card-kind">Intra-Tanakh Quotation</div>
-      <div class="card-name">The Exodus 34 Echo Network</div>
-      <div class="card-body">
-        Twelve major reuse points across the Tanakh — prophets, psalmists, and post-exilic
-        prayers all reaching back to one divine self-disclosure on Sinai. The canon's
-        greatest irony sits at the center: two prophets, the same city, the same verse,
-        opposite halves.
-      </div>
-      <div class="card-refs">
-        <span class="ref">Exod 34 → Num 14</span>
-        <span class="ref">Exod 34 → Ps 103</span>
-        <span class="ref">Exod 34 → Joel 2</span>
-        <span class="ref">Exod 34 → Jonah 4</span>
-        <span class="ref">Exod 34 → Nah 1</span>
-        <span class="ref">Exod 34 → Neh 9</span>
-      </div>
-      <div class="card-cta"><a href="./exodus-34-connections.html">View Study →</a></div>
-    </div>
-
-    <!-- 4. NC → Tanakh — IN DEVELOPMENT -->
-    <div class="card trio">
-      <span class="card-status status-dev">In Development</span>
-      <div class="card-glyph">🔗</div>
-      <div class="card-kind">New Covenant → Tanakh</div>
-      <div class="card-name">NC Connections Back to the Tanakh</div>
-      <div class="card-body">
-        How NC writers cite, allude to, echo, and fulfill the Tanakh — from explicit
-        formulaic citations to deep structural echoes across the two-testament canon.
-      </div>
-      <div class="card-refs">
-        <span class="ref">Isa 53 → 1 Pet 2</span>
-        <span class="ref">Ps 22 → Mark 15</span>
-        <span class="ref">Jer 31 → Heb 8</span>
+    <div class="card narrow" data-accent="symmetry" onclick="location.href='./torah-symmetry.html'" style="cursor:pointer;">
+      <div class="card-accent-bar"></div>
+      <div class="card-inner">
+        <span class="card-status status-live">● Live</span>
+        <div class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v18" /><path d="M3 12h18" /><path d="M8 7l-5 5 5 5" /><path d="M16 7l5 5-5 5" /></svg></div>
+        <div class="card-kind">Torah Symmetry</div>
+        <div class="card-name">Connections in the Torah</div>
+        <div class="card-body">
+          Structural echoes, chiasms, and thematic symmetry across the First Five Books —
+          the Torah as a single architecturally unified whole.
+        </div>
+        <div class="card-refs">
+          <span class="ref">Gen 1 ↔ Deut 34</span>
+          <span class="ref">Exod ↔ Num</span>
+          <span class="ref">Levitical center</span>
+        </div>
+        <div class="card-cta"><a href="./torah-symmetry.html">View Study →</a></div>
       </div>
     </div>
 
-    <!-- 5. All 66 Books — IN DEVELOPMENT -->
-    <div class="card wide" style="grid-column: span 12;">
-      <span class="card-status status-dev">In Development</span>
-      <div class="card-glyph">📖</div>
-      <div class="card-kind">Full Canon</div>
-      <div class="card-name">All Books of the Bible</div>
-      <div class="card-body">
-        Book-by-book connection profiles across the full canon — how each book
-        quotes, anticipates, and echoes the whole.
+    <!-- 3. Torah Inter-Book Connections — LIVE -->
+    <div class="card wide" data-accent="interbook" onclick="location.href='./torah-inter-book.html'" style="cursor:pointer;">
+      <div class="card-accent-bar"></div>
+      <div class="card-inner">
+        <span class="card-status status-live">● Live</span>
+        <div class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="6" height="18" rx="1" /><rect x="10" y="3" width="6" height="18" rx="1" /><path d="M8 8h2" /><path d="M8 12h2" /><path d="M8 16h2" /><path d="M16 8h4" /><path d="M16 12h4" /><path d="M16 16h4" /></svg></div>
+        <div class="card-kind">Inter-Book Connections</div>
+        <div class="card-name">The Five Books as One</div>
+        <div class="card-body">
+          How each Torah book speaks forward into the others — Genesis into Exodus, Exodus into Leviticus,
+          all converging in Deuteronomy. ~280 connections across every book pair, traced at the verse level
+          with arc diagrams and parallelogram-chip navigation.
+        </div>
+        <div class="card-refs">
+          <span class="ref">Gen → Exod…Deut</span>
+          <span class="ref">Exod → Lev…Deut</span>
+          <span class="ref">Lev → Num…Deut</span>
+          <span class="ref">Num → Deut</span>
+          <span class="ref">Deut Capstone</span>
+        </div>
+        <div class="card-cta"><a href="./torah-inter-book.html">View Study →</a></div>
+      </div>
+    </div>
+
+    <!-- 4. Exodus 34 Echo Network — LIVE -->
+    <div class="card narrow" data-accent="echo" onclick="location.href='./exodus-34-connections.html'" style="cursor:pointer;">
+      <div class="card-accent-bar"></div>
+      <div class="card-inner">
+        <span class="card-status status-live">● Live</span>
+        <div class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /><path d="M8 13h8" /><path d="M8 17h8" /><path d="M8 9h2" /></svg></div>
+        <div class="card-kind">Intra-Tanakh Quotation</div>
+        <div class="card-name">The Exodus 34 Echo Network</div>
+        <div class="card-body">
+          Twelve major reuse points across the Tanakh — prophets, psalmists, and post-exilic
+          prayers all reaching back to one divine self-disclosure on Sinai.
+        </div>
+        <div class="card-refs">
+          <span class="ref">Exod 34 → Num 14</span>
+          <span class="ref">Exod 34 → Ps 103</span>
+          <span class="ref">Exod 34 → Joel 2</span>
+          <span class="ref">Exod 34 → Jonah 4</span>
+        </div>
+        <div class="card-cta"><a href="./exodus-34-connections.html">View Study →</a></div>
+      </div>
+    </div>
+
+    <!-- 5. NC → Tanakh — IN DEVELOPMENT -->
+    <div class="card trio" data-accent="nc">
+      <div class="card-accent-bar"></div>
+      <div class="card-inner">
+        <span class="card-status status-dev">In Development</span>
+        <div class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg></div>
+        <div class="card-kind">New Covenant → Tanakh</div>
+        <div class="card-name">NC Connections Back to the Tanakh</div>
+        <div class="card-body">
+          How NC writers cite, allude to, echo, and fulfill the Tanakh — from explicit
+          formulaic citations to deep structural echoes across the two-testament canon.
+        </div>
+        <div class="card-refs">
+          <span class="ref">Isa 53 → 1 Pet 2</span>
+          <span class="ref">Ps 22 → Mark 15</span>
+          <span class="ref">Jer 31 → Heb 8</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. All 66 Books — IN DEVELOPMENT -->
+    <div class="card" data-accent="canon">
+      <div class="card-accent-bar"></div>
+      <div class="card-inner">
+        <span class="card-status status-dev">In Development</span>
+        <div class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" /><path d="M8 7h8" /><path d="M8 11h6" /></svg></div>
+        <div class="card-kind">Full Canon</div>
+        <div class="card-name">All Books of the Bible</div>
+        <div class="card-body">
+          Book-by-book connection profiles across the full canon — how each book
+          quotes, anticipates, and echoes the whole.
+        </div>
       </div>
     </div>
 
