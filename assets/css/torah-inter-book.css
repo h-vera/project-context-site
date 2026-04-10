@@ -575,12 +575,12 @@ a:hover { text-decoration: underline; }
   background: linear-gradient(90deg, transparent, rgba(90,106,138,.35), transparent);
 }
 
-/* Production-spec vignette (override) */
+/* Production-spec vignette (override) — let herringbone breathe */
 .hb-vignette {
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background:
-    radial-gradient(ellipse 80% 70% at 50% 50%, rgba(250,248,244,.12) 0%, rgba(250,248,244,.88) 100%),
-    linear-gradient(to bottom, rgba(250,248,244,.78) 0%, rgba(250,248,244,0) 30%, rgba(250,248,244,0) 70%, rgba(250,248,244,.92) 100%);
+    radial-gradient(ellipse 80% 70% at 50% 50%, rgba(250,248,244,.02) 0%, rgba(250,248,244,.65) 100%),
+    linear-gradient(to bottom, rgba(250,248,244,.55) 0%, rgba(250,248,244,0) 25%, rgba(250,248,244,0) 75%, rgba(250,248,244,.85) 100%);
 }
 
 /* ═══════════════════════════════════════════
@@ -646,3 +646,239 @@ a:hover { text-decoration: underline; }
   font-size: .84rem; color: var(--ink-light); line-height: 1.65;
 }
 .method-card em { color: var(--ink); font-weight: 500; }
+
+/* ═══════════════════════════════════════════
+   SECTION DIVIDER — decorative break between major areas
+   ═══════════════════════════════════════════ */
+.section-divider {
+  max-width: 880px; margin: 0 auto;
+  padding: 20px 16px 28px;
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+}
+.section-divider .sd-line {
+  flex: 1; max-width: 120px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ink-hairline), transparent);
+}
+.section-divider .sd-ornament {
+  display: flex; gap: 5px;
+}
+.section-divider .sd-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--ink-faint); opacity: .5;
+}
+.section-divider .sd-dot.accent { background: var(--gen); opacity: .65; width: 5px; height: 5px; }
+
+/* ═══════════════════════════════════════════
+   SECTION HEADING — styled (replaces inline styles)
+   ═══════════════════════════════════════════ */
+.content-heading {
+  max-width: 880px; margin: 0 auto; padding: 0 16px 18px;
+}
+.content-heading h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.55rem; font-weight: 700; color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.content-heading h2::after {
+  content: '';
+  display: block; width: 48px; height: 2.5px;
+  background: linear-gradient(90deg, var(--gen), var(--exod));
+  border-radius: 2px; margin-top: 8px; opacity: .6;
+}
+.content-heading p {
+  font-size: .88rem; color: var(--ink-light); line-height: 1.6;
+  margin-top: 6px; max-width: 620px;
+}
+
+/* ═══════════════════════════════════════════
+   PROSE CARDS — "Torah as Unified Work" section
+   Differentiated from thread cards with left accent
+   ═══════════════════════════════════════════ */
+.prose-card {
+  background: var(--white-card); border-radius: var(--radius);
+  border: 1px solid var(--ink-hairline); box-shadow: var(--shadow-sm);
+  padding: 22px 24px 22px 28px; margin-bottom: 14px;
+  position: relative; overflow: hidden;
+  transition: box-shadow .25s, transform .25s;
+}
+.prose-card::before {
+  content: ''; position: absolute;
+  left: 0; top: 0; bottom: 0; width: 3.5px;
+  background: linear-gradient(180deg, var(--gen) 0%, var(--exod) 50%, var(--deut) 100%);
+  opacity: .45;
+}
+.prose-card:hover {
+  box-shadow: var(--shadow-md); transform: translateY(-1px);
+}
+.prose-card:hover::before { opacity: .75; }
+
+.prose-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.12rem; font-weight: 700; margin-bottom: 8px;
+  color: var(--ink);
+}
+.prose-card p {
+  font-size: .84rem; color: var(--ink-light); line-height: 1.65;
+}
+
+/* ═══════════════════════════════════════════
+   THREAD CARDS — enhanced with book-color accents
+   ═══════════════════════════════════════════ */
+.thread-card {
+  background: var(--white-card); border-radius: var(--radius);
+  border: 1px solid var(--ink-hairline); box-shadow: var(--shadow-sm);
+  padding: 20px 22px; margin-bottom: 14px;
+  transition: box-shadow .25s, transform .25s;
+  position: relative;
+}
+.thread-card:hover {
+  box-shadow: var(--shadow-md); transform: translateY(-1px);
+}
+.thread-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; font-weight: 700; margin-bottom: 6px;
+  color: var(--ink);
+}
+.thread-card h3::before {
+  content: ''; display: inline-block;
+  width: 8px; height: 8px; border-radius: 2px;
+  background: var(--gen); opacity: .5;
+  margin-right: 8px; vertical-align: middle;
+  transform: rotate(45deg);
+}
+
+/* Thread chain — polished chips */
+.thread-chain {
+  display: flex; flex-wrap: wrap; gap: 4px 2px;
+  align-items: center; margin-top: 12px;
+  padding: 12px 14px;
+  background: var(--parchment-deep);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(200,195,180,.35);
+}
+.thread-chip {
+  font-size: .7rem; font-weight: 600; padding: 4px 10px;
+  border-radius: 5px; white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0,0,0,.06);
+  border: 1px solid rgba(0,0,0,.04);
+  transition: transform .15s, box-shadow .15s;
+}
+.thread-chip:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0,0,0,.1);
+}
+.thread-arrow { color: var(--ink-faint); font-size: .65rem; padding: 0 2px; }
+
+/* ═══════════════════════════════════════════
+   HERO ENHANCEMENTS — more depth
+   ═══════════════════════════════════════════ */
+.page-hdr {
+  text-align: center;
+  padding: 56px 20px 40px;
+  position: relative; overflow: hidden;
+  background: linear-gradient(175deg, var(--parchment) 0%, var(--parchment-warm) 40%, var(--parchment-deep) 100%);
+}
+
+.page-hdr .subtitle {
+  font-size: .93rem; color: var(--ink-light);
+  max-width: 580px; margin: 0 auto; line-height: 1.65;
+}
+
+.eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: .78rem; font-weight: 600;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--gen); margin-bottom: 12px;
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: rgba(45,106,79,.06); border: 1px solid rgba(45,106,79,.15);
+  padding: .3rem .9rem; border-radius: 999px;
+}
+
+.hebrew-title {
+  font-size: 1.25rem; color: var(--ink-light);
+  direction: rtl; font-style: italic;
+  margin-bottom: 12px; letter-spacing: .04em;
+}
+
+/* ═══════════════════════════════════════════
+   HUB TILE ENHANCEMENTS — richer hover states
+   ═══════════════════════════════════════════ */
+.hub-tile::before {
+  content: ''; display: block; height: 4px;
+  background: var(--tile-accent, var(--gen));
+  flex-shrink: 0;
+  transition: height .25s;
+}
+.hub-tile:hover::before { height: 5px; }
+
+.hub-tile .tile-desc {
+  font-size: .82rem; color: var(--ink-light); line-height: 1.65; flex: 1;
+}
+
+/* ═══════════════════════════════════════════
+   INFO PANEL — richer styling
+   ═══════════════════════════════════════════ */
+.info-panel {
+  max-width: 780px; margin: 0 auto 28px; padding: 18px 22px;
+  background: linear-gradient(135deg, var(--white-card) 0%, var(--parchment-warm) 100%);
+  border-radius: var(--radius); border: 1px solid var(--ink-hairline);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ═══════════════════════════════════════════
+   BIBLIOGRAPHY ENHANCEMENTS
+   ═══════════════════════════════════════════ */
+.bibliography-section {
+  background: var(--white-card); border-radius: var(--radius);
+  border: 1px solid var(--ink-hairline); box-shadow: var(--shadow-sm);
+  margin-bottom: 32px; overflow: hidden;
+}
+.bibliography-section summary {
+  padding: 18px 22px; cursor: pointer; list-style: none;
+}
+.bibliography-section summary::-webkit-details-marker { display: none; }
+.bibliography-header { display: flex; align-items: center; }
+.bibliography-inner { display: flex; align-items: center; gap: 14px; width: 100%; }
+.bibliography-icon { font-size: 1.3rem; flex-shrink: 0; }
+.bibliography-text { flex: 1; }
+.bibliography-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem; font-weight: 700; color: var(--ink); margin: 0;
+}
+.bibliography-subtitle {
+  font-size: .82rem; color: var(--ink-light); line-height: 1.55; margin: 4px 0 0;
+}
+.expand-indicator {
+  color: var(--ink-faint); transition: transform .25s; flex-shrink: 0;
+}
+.bibliography-section[open] .expand-indicator { transform: rotate(180deg); }
+.bibliography-content { padding: 0 22px 22px; }
+.source-category { margin-bottom: 20px; }
+.source-category h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem; font-weight: 700; color: var(--ink);
+  padding-bottom: 8px; margin-bottom: 12px;
+  border-bottom: 1px solid var(--ink-hairline);
+}
+.source-entry {
+  padding: 10px 0; border-bottom: 1px solid rgba(216,211,200,.4);
+}
+.source-entry:last-child { border-bottom: none; }
+.source-citation { font-size: .85rem; color: var(--ink); line-height: 1.55; }
+.source-citation em { color: var(--ink-light); }
+.source-usage {
+  display: flex; flex-wrap: wrap; gap: 5px; align-items: center; margin-top: 5px;
+}
+.usage-tag {
+  font-size: .66rem; font-weight: 600; padding: 2px 8px;
+  border-radius: 3px; background: var(--gen-bg); color: var(--gen);
+}
+.usage-note {
+  font-size: .78rem; color: var(--ink-faint); line-height: 1.5;
+}
+.citation-note {
+  margin-top: 16px; padding: 14px 16px;
+  background: var(--parchment-deep); border-radius: var(--radius-sm);
+  font-size: .82rem; color: var(--ink-light); line-height: 1.55;
+}
+.citation-note p + p { margin-top: 6px; }
