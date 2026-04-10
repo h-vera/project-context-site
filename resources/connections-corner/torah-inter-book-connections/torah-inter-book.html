@@ -797,7 +797,7 @@ const FLOWS=[
   {s:'Lev',t:'Deut',n:14,page:'leviticus-connections.html'},
   {s:'Num',t:'Deut',n:16,page:'numbers-connections.html'}
 ];
-let hovered=null,locked=false;
+let hovered=null,locked=false,lockTime=0;
 
 function clrHubInfo(){
   const e=document.getElementById('hub-info');
@@ -897,32 +897,36 @@ function drawHub(){
   function lock(state,showFn){
     const same=locked&&JSON.stringify(hovered)===JSON.stringify(state);
     if(same){unlock();return;}
-    locked=true;hovered=state;showFn();drawHub();
+    locked=true;hovered=state;lockTime=Date.now();showFn();drawHub();
   }
 
   area.querySelectorAll('.hf').forEach(el=>{
     const fi=parseInt(el.dataset.fi);
     el.addEventListener('mouseenter',()=>{if(locked)return;hovered={type:'flow',fi};showHubFlow(FLOWS[fi]);drawHub();});
     el.addEventListener('mouseleave',()=>{if(locked)return;hovered=null;clrHubInfo();drawHub();});
-    el.addEventListener('click',(e)=>{e.stopPropagation();lock({type:'flow',fi},()=>showHubFlow(FLOWS[fi]));});
+    el.addEventListener('click',()=>{lock({type:'flow',fi},()=>showHubFlow(FLOWS[fi]));});
   });
   area.querySelectorAll('.hs').forEach(el=>{
     const id=el.dataset.id;
     el.addEventListener('mouseenter',()=>{if(locked)return;hovered={type:'src',id};showHubBook(id,'src');drawHub();});
     el.addEventListener('mouseleave',()=>{if(locked)return;hovered=null;clrHubInfo();drawHub();});
-    el.addEventListener('click',(e)=>{e.stopPropagation();lock({type:'src',id},()=>showHubBook(id,'src'));});
+    el.addEventListener('click',()=>{lock({type:'src',id},()=>showHubBook(id,'src'));});
   });
   area.querySelectorAll('.ht').forEach(el=>{
     const id=el.dataset.id;
     el.addEventListener('mouseenter',()=>{if(locked)return;hovered={type:'tgt',id};showHubBook(id,'tgt');drawHub();});
     el.addEventListener('mouseleave',()=>{if(locked)return;hovered=null;clrHubInfo();drawHub();});
-    el.addEventListener('click',(e)=>{e.stopPropagation();lock({type:'tgt',id},()=>showHubBook(id,'tgt'));});
+    el.addEventListener('click',()=>{lock({type:'tgt',id},()=>showHubBook(id,'tgt'));});
   });
 }
 drawHub();
 let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(drawHub,150);});
-document.addEventListener('click',()=>{if(locked){locked=false;hovered=null;clrHubInfo();drawHub();}});
-document.getElementById('hub-info').addEventListener('click',(e)=>{e.stopPropagation();});
+document.addEventListener('click',(e)=>{
+  if(!locked)return;
+  if(Date.now()-lockTime<300)return;
+  if(document.getElementById('hub-info').contains(e.target))return;
+  locked=false;hovered=null;clrHubInfo();drawHub();
+});
 })();
 </script>
 <script>
