@@ -39,7 +39,12 @@
        ================================================ */
 
     /* Hero */
+    @keyframes heroEnter {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
     .hero {
+      animation: heroEnter 0.7s ease-out both;
       background: linear-gradient(135deg,
         rgba(0,180,216,.18) 0%,
         rgba(114,9,183,.20) 45%,
@@ -288,143 +293,120 @@
       .passage-columns { grid-template-columns:1fr; }
     }
 
-    /* ── TIMELINE ITEMS — slide in from left, staggered ── */
-    @keyframes slideInLeft {
-      from { opacity: 0; transform: translateX(-24px); }
-      to   { opacity: 1; transform: translateX(0); }
-    }
+    /* ════════════════════════════════════════════════════════
+       SCROLL-TRIGGERED SUB-ELEMENT ANIMATIONS
+       Pattern: elements start hidden; when IntersectionObserver
+       adds .visible to the parent .theology-card, transitions
+       fire. This ensures animations only play when in viewport.
+       ════════════════════════════════════════════════════════ */
+
+    /* ── TIMELINE ITEMS — hidden until parent .visible ── */
     .timeline-item {
       opacity: 0;
-      animation: slideInLeft 0.55s ease-out forwards;
+      transform: translateX(-24px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
     }
-    /* Only animate when parent card is visible */
-    .theology-card.visible .timeline-item,
-    .theology-card.animate-on-scroll.visible .timeline-item {
-      animation: slideInLeft 0.55s ease-out forwards;
-    }
-    /* Stagger each item */
-    .timeline-item:nth-child(1) { animation-delay: 0.10s; }
-    .timeline-item:nth-child(2) { animation-delay: 0.22s; }
-    .timeline-item:nth-child(3) { animation-delay: 0.34s; }
-    .timeline-item:nth-child(4) { animation-delay: 0.46s; }
-    .timeline-item:nth-child(5) { animation-delay: 0.58s; }
-    .timeline-item:nth-child(6) { animation-delay: 0.70s; }
-    .timeline-item:nth-child(7) { animation-delay: 0.82s; }
+    .theology-card.visible .timeline-item { opacity: 1; transform: translateX(0); }
+    .theology-card.visible .timeline-item:nth-child(1) { transition-delay: 0.10s; }
+    .theology-card.visible .timeline-item:nth-child(2) { transition-delay: 0.22s; }
+    .theology-card.visible .timeline-item:nth-child(3) { transition-delay: 0.34s; }
+    .theology-card.visible .timeline-item:nth-child(4) { transition-delay: 0.46s; }
+    .theology-card.visible .timeline-item:nth-child(5) { transition-delay: 0.58s; }
+    .theology-card.visible .timeline-item:nth-child(6) { transition-delay: 0.70s; }
+    .theology-card.visible .timeline-item:nth-child(7) { transition-delay: 0.82s; }
 
-    /* ── PANELS inside cards — fade + lift, staggered ── */
-    @keyframes panelIn {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    /* ── PANELS, CALLOUTS, REFLECTION BOX ── */
     .theology-card .panel,
     .theology-card .callout-language,
     .theology-card .callout-warning,
     .theology-card .callout-insight,
     .theology-card .reflection-box {
       opacity: 0;
-      animation: panelIn 0.5s ease-out forwards;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
     }
-    .theology-card .panel:nth-child(1), .theology-card .callout-language { animation-delay: 0.15s; }
-    .theology-card .panel:nth-child(2)                                    { animation-delay: 0.27s; }
-    .theology-card .panel:nth-child(3)                                    { animation-delay: 0.39s; }
-    .theology-card .panel:nth-child(4)                                    { animation-delay: 0.51s; }
-    .theology-card .callout-warning                                       { animation-delay: 0.22s; }
-    .theology-card .callout-insight                                       { animation-delay: 0.30s; }
-    .theology-card .reflection-box                                        { animation-delay: 0.45s; }
-    /* animation-delay classes override nth-child defaults */
-    .animation-delay-100 { animation-delay: 0.10s !important; transition-delay: 0.10s !important; }
-    .animation-delay-200 { animation-delay: 0.20s !important; transition-delay: 0.20s !important; }
-    .animation-delay-300 { animation-delay: 0.30s !important; transition-delay: 0.30s !important; }
-    .animation-delay-400 { animation-delay: 0.40s !important; transition-delay: 0.40s !important; }
-    .animation-delay-500 { animation-delay: 0.50s !important; transition-delay: 0.50s !important; }
-    .animation-delay-600 { animation-delay: 0.60s !important; transition-delay: 0.60s !important; }
+    .theology-card.visible .panel,
+    .theology-card.visible .callout-language,
+    .theology-card.visible .callout-warning,
+    .theology-card.visible .callout-insight,
+    .theology-card.visible .reflection-box { opacity: 1; transform: translateY(0); }
 
-    /* ── THEME MINI-CARDS — pop in with stagger ── */
-    @keyframes miniCardIn {
-      from { opacity: 0; transform: translateY(20px) scale(0.97); }
-      to   { opacity: 1; transform: translateY(0) scale(1); }
-    }
+    /* Stagger via explicit delay classes on the HTML elements */
+    .theology-card.visible .animation-delay-100 { transition-delay: 0.10s; }
+    .theology-card.visible .animation-delay-200 { transition-delay: 0.20s; }
+    .theology-card.visible .animation-delay-300 { transition-delay: 0.30s; }
+    .theology-card.visible .animation-delay-400 { transition-delay: 0.40s; }
+    .theology-card.visible .animation-delay-500 { transition-delay: 0.50s; }
+    .theology-card.visible .animation-delay-600 { transition-delay: 0.60s; }
+
+    /* ── THEME MINI-CARDS ── */
     .theme-mini-card {
-      animation: miniCardIn 0.5s ease-out forwards;
+      opacity: 0;
+      transform: translateY(18px) scale(0.97);
+      transition: opacity 0.5s ease, transform 0.5s ease;
     }
-    .grid-3 .theme-mini-card:nth-child(1) { animation-delay: 0.12s; }
-    .grid-3 .theme-mini-card:nth-child(2) { animation-delay: 0.24s; }
-    .grid-3 .theme-mini-card:nth-child(3) { animation-delay: 0.36s; }
+    .theology-card.visible .theme-mini-card { opacity: 1; transform: translateY(0) scale(1); }
+    .theology-card.visible .grid-3 .theme-mini-card:nth-child(1) { transition-delay: 0.10s; }
+    .theology-card.visible .grid-3 .theme-mini-card:nth-child(2) { transition-delay: 0.22s; }
+    .theology-card.visible .grid-3 .theme-mini-card:nth-child(3) { transition-delay: 0.34s; }
 
-    /* ── SEVERITY NODES — already have animate-on-scroll,
-       add a slight horizontal slide to match the spine ── */
-    @keyframes nodeIn {
-      from { opacity: 0; transform: translateX(-16px); }
-      to   { opacity: 1; transform: translateX(0); }
-    }
+    /* ── SEVERITY NODES — each has own animate-on-scroll ── */
     .severity-node {
       opacity: 0;
-      animation: nodeIn 0.5s ease-out forwards;
+      transform: translateX(-18px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
     }
-    .severity-node.visible {
-      opacity: 1;
-    }
-    .severity-spine .severity-node:nth-child(1)  { animation-delay: 0.05s; }
-    .severity-spine .severity-node:nth-child(3)  { animation-delay: 0.15s; }
-    .severity-spine .severity-node:nth-child(5)  { animation-delay: 0.25s; }
-    .severity-spine .severity-node:nth-child(7)  { animation-delay: 0.35s; }
-    .severity-spine .severity-node:nth-child(9)  { animation-delay: 0.45s; }
+    .severity-node.visible { opacity: 1; transform: translateX(0); }
 
-    /* ── CANON BAR ROWS — slide in ── */
-    @keyframes rowIn {
-      from { opacity: 0; transform: translateX(-12px); }
-      to   { opacity: 1; transform: translateX(0); }
-    }
+    /* ── CANON BAR ROWS ── */
     .canon-row {
       opacity: 0;
-      animation: rowIn 0.45s ease-out forwards;
+      transform: translateX(-14px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
     }
-    .canon-row:nth-child(1) { animation-delay: 0.10s; }
-    .canon-row:nth-child(2) { animation-delay: 0.22s; }
-    .canon-row:nth-child(3) { animation-delay: 0.34s; }
-    .canon-row:nth-child(4) { animation-delay: 0.46s; }
-    .canon-row:nth-child(5) { animation-delay: 0.58s; }
+    .theology-card.visible .canon-row { opacity: 1; transform: translateX(0); }
+    .theology-card.visible .canon-row:nth-child(1) { transition-delay: 0.10s; }
+    .theology-card.visible .canon-row:nth-child(2) { transition-delay: 0.22s; }
+    .theology-card.visible .canon-row:nth-child(3) { transition-delay: 0.34s; }
+    .theology-card.visible .canon-row:nth-child(4) { transition-delay: 0.46s; }
+    .theology-card.visible .canon-row:nth-child(5) { transition-delay: 0.58s; }
 
-    /* ── TOOL CARDS — stagger ── */
-    @keyframes toolIn {
-      from { opacity: 0; transform: translateY(14px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    /* ── TOOL CARDS ── */
     .tool-card {
       opacity: 0;
-      animation: toolIn 0.45s ease-out forwards;
+      transform: translateY(14px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
     }
-    .tools-grid .tool-card:nth-child(1) { animation-delay: 0.10s; }
-    .tools-grid .tool-card:nth-child(2) { animation-delay: 0.22s; }
-    .tools-grid .tool-card:nth-child(3) { animation-delay: 0.34s; }
-    .tools-grid .tool-card:nth-child(4) { animation-delay: 0.46s; }
+    .theology-card.visible .tool-card { opacity: 1; transform: translateY(0); }
+    .theology-card.visible .tools-grid .tool-card:nth-child(1) { transition-delay: 0.10s; }
+    .theology-card.visible .tools-grid .tool-card:nth-child(2) { transition-delay: 0.22s; }
+    .theology-card.visible .tools-grid .tool-card:nth-child(3) { transition-delay: 0.34s; }
+    .theology-card.visible .tools-grid .tool-card:nth-child(4) { transition-delay: 0.46s; }
 
     /* ── QUESTION LIST ITEMS ── */
-    @keyframes questionIn {
-      from { opacity: 0; transform: translateX(-10px); }
-      to   { opacity: 1; transform: translateX(0); }
-    }
     .question-list li {
       opacity: 0;
-      animation: questionIn 0.4s ease-out forwards;
+      transform: translateX(-10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
     }
-    .question-list li:nth-child(1) { animation-delay: 0.10s; }
-    .question-list li:nth-child(2) { animation-delay: 0.19s; }
-    .question-list li:nth-child(3) { animation-delay: 0.28s; }
-    .question-list li:nth-child(4) { animation-delay: 0.37s; }
-    .question-list li:nth-child(5) { animation-delay: 0.46s; }
-    .question-list li:nth-child(6) { animation-delay: 0.55s; }
-    .question-list li:nth-child(7) { animation-delay: 0.64s; }
-    .question-list li:nth-child(8) { animation-delay: 0.73s; }
+    .theology-card.visible .question-list li { opacity: 1; transform: translateX(0); }
+    .theology-card.visible .question-list li:nth-child(1) { transition-delay: 0.08s; }
+    .theology-card.visible .question-list li:nth-child(2) { transition-delay: 0.16s; }
+    .theology-card.visible .question-list li:nth-child(3) { transition-delay: 0.24s; }
+    .theology-card.visible .question-list li:nth-child(4) { transition-delay: 0.32s; }
+    .theology-card.visible .question-list li:nth-child(5) { transition-delay: 0.40s; }
+    .theology-card.visible .question-list li:nth-child(6) { transition-delay: 0.48s; }
+    .theology-card.visible .question-list li:nth-child(7) { transition-delay: 0.56s; }
+    .theology-card.visible .question-list li:nth-child(8) { transition-delay: 0.64s; }
 
-    /* ── REDUCED MOTION: disable all sub-animations ── */
+    /* ── REDUCED MOTION: show everything immediately ── */
     @media (prefers-reduced-motion: reduce) {
       .timeline-item, .panel, .theme-mini-card, .severity-node,
       .canon-row, .tool-card, .question-list li,
-      .callout-language, .callout-warning, .callout-insight {
-        animation: none !important;
+      .callout-language, .callout-warning, .callout-insight, .reflection-box {
         opacity: 1 !important;
         transform: none !important;
+        transition: none !important;
       }
     }
 
@@ -666,18 +648,12 @@
       <strong>Jump to section</strong>
       <div class="study-nav-links">
         <a href="#overview">Overview</a>
-        <a href="#canon-map">Canon Map</a>
         <a href="#text-lab">Text Lab</a>
         <a href="#narrative">Journey</a>
         <a href="#severity-spectrum">Severity Scale</a>
-        <a href="#literary-context">Literary Context</a>
         <a href="#themes">Themes</a>
         <a href="#ane-context">ANE Context</a>
-        <a href="#wordplay">Word Study Grid</a>
         <a href="#biblical-theology">Biblical Theology</a>
-        <a href="#messianic">Christ Connections</a>
-        <a href="#intertext">Intertext</a>
-        <a href="#tools">Study Tools</a>
         <a href="#questions">Questions</a>
         <a href="#bibliography">Bibliography</a>
       </div>
@@ -831,93 +807,33 @@
 
     <!-- ── INTERACTIVE TEXT LAB ──────────────────────── -->
     <div class="theology-card animate-on-scroll" id="text-lab">
-      <div class="section-label">Interactive Text Lab</div>
+      <div class="section-label">Text Study</div>
       <h3>Rhetorical Severity in Action</h3>
-      <p>Move between five layers to separate what the text says from what it means — and how translation choices affect what we hear.</p>
-      <div class="tabbed-study" data-tabs="rhetorical-severity-lab">
-        <div class="tab-buttons" role="tablist" aria-label="Text study layers">
-          <button class="tab-button active" data-target="tab-text"        role="tab" aria-selected="true">Text</button>
-          <button class="tab-button"         data-target="tab-language"   role="tab" aria-selected="false">Language</button>
-          <button class="tab-button"         data-target="tab-rhetoric"   role="tab" aria-selected="false">Rhetoric</button>
-          <button class="tab-button"         data-target="tab-theology"   role="tab" aria-selected="false">Theology</button>
-          <button class="tab-button"         data-target="tab-translation" role="tab" aria-selected="false">Translation Gap</button>
+      <p>Each passage below moves through four layers — original text, lexical force, rhetorical function, and translation gap — to show how severity works at the word level.</p>
+      <div class="timeline">
+        <div class="timeline-item">
+          <strong>1 Sam 25:22 — Coarse Idiom + Retaliatory Oath (Unendorsed)</strong><br>
+          <span class="hebrew-inline">מַשְׁתִּין בְּקִיר</span> — "one who urinates against a wall." A conventional totalizing idiom for "every male," appearing 6× in annihilation contexts. <em>Rhetorical function:</em> David's honor-shame rage; not divine speech. The narrative interrupts him through Abigail. <em>Translation gap:</em> Most versions replace the idiom entirely (ESV: "a single male"), removing the earthy force that marks the text as human overreach.
         </div>
-        <div class="tab-panel-grid">
-          <div class="tab-panel active" id="tab-text" role="tabpanel">
-            <div class="passage-card">
-              <div class="passage-meta">Ezekiel 23:20 — Sexualized Covenant Exposure</div>
-              <h4>Closest-Literal Phrase</h4>
-              <div class="original-line"><span class="lang-chip">Hebrew</span> whose <span class="hebrew-inline">בָּשָׂר</span> is like the <span class="hebrew-inline">בָּשָׂר</span> of donkeys, and whose <span class="hebrew-inline">זִרְמָה</span> is like the <span class="hebrew-inline">זִרְמָה</span> of horses.</div>
-              <div class="literal-line"><span class="lang-chip">LLT-SSE</span> "She lusted after their flesh—like the flesh of donkeys—and their emission—like the emission of horses."</div>
-            </div>
-            <div class="passage-card">
-              <div class="passage-meta">1 Samuel 25:22 — Earthy Idiom + Retaliatory Oath (Unendorsed)</div>
-              <h4>Closest-Literal Phrase</h4>
-              <div class="original-line"><span class="lang-chip">Hebrew</span> "if I leave to him by morning even one <span class="hebrew-inline">מַשְׁתִּין בְּקִיר</span>."</div>
-              <div class="literal-line"><span class="lang-chip">LLT-SSE</span> "if I leave even one who urinates against a wall."</div>
-            </div>
-          </div>
-          <div class="tab-panel" id="tab-language" role="tabpanel">
-            <div class="callout-language">
-              <h4>What the words are actually doing</h4>
-              <p><strong>בָּשָׂר</strong> is lexically "flesh," not a blunt anatomical term, but in Ezek 23:20 the paired image with <strong>זִרְמָה</strong> makes the sexual meaning unmistakable. Ezekiel does not abandon euphemism; he combines it with exaggeration to produce explicit force.</p>
-              <p><strong>גִּלּוּלִים</strong> likely carries "dung-things" — a contemptuous pun embedded in the word itself. Translating it as the neutral "idols" removes the scorn.</p>
-              <p><strong>σκύβαλα</strong> in Phil 3:8 ranges from refuse to dung — stronger than many readers feel when they hear "rubbish."</p>
-              <p><strong>מַשְׁתִּין בְּקִיר</strong> is a conventional idiom for "every male," not improvised vulgarity. It appears 6× in the Hebrew Bible, always in annihilation contexts.</p>
-            </div>
-          </div>
-          <div class="tab-panel" id="tab-rhetoric" role="tabpanel">
-            <div class="callout-warning">
-              <h4>The communicative force within its cultural setting</h4>
-              <p>These expressions function as <strong>rhetorical severity</strong> — language calibrated to its cultural context:</p>
-              <ul>
-                <li><strong>David (1 Sam 25):</strong> Retaliatory oath language — honor-shame escalation expressing impulsive rage. The narrative interrupts him through Abigail. <em>This is not God's rhetoric; it is David at his worst, and Scripture lets you hear it.</em></li>
-                <li><strong>Ezekiel:</strong> Sexualized covenant exposure — designed to break through spiritual complacency in a community numbly repeating idolatrous patterns.</li>
-                <li><strong>Paul (Gal 5; Phil 3):</strong> Polemical invective protecting doctrine — severity deployed to guard the integrity of the gospel, not to vent emotion.</li>
-              </ul>
-            </div>
-          </div>
-          <div class="tab-panel" id="tab-theology" role="tabpanel">
-            <div class="callout-insight">
-              <h4>What the language reveals about God and sin</h4>
-              <p>Rhetorical severity is not about emotional release — it is about <strong>moral revelation</strong>. Biblical authors escalate language to:</p>
-              <ul>
-                <li>Expose the degrading nature of sin beneath its surface</li>
-                <li>Dismantle false objects of trust by reducing them to filth</li>
-                <li>Confront spiritual numbness where ordinary speech would fail</li>
-                <li>Reveal the true condition of the human heart</li>
-              </ul>
-              <p style="margin-top:.75rem;font-style:italic;">The goal is not to entertain or provoke reaction — it is to restore clarity where moral vision has been dulled.</p>
-            </div>
-          </div>
-          <div class="tab-panel" id="tab-translation" role="tabpanel">
-            <div class="callout-insight">
-              <h4>Where modern translations soften or obscure the original force</h4>
-              <p>Modern translations often neutralize rhetorical severity, which can mute how the original audience perceived the text:</p>
-              <ul>
-                <li><strong>גִּלּוּלִים → "idols":</strong> Removes the built-in scatological insult Ezekiel embeds in the term.</li>
-                <li><strong>σκύβαλα → "rubbish" / "garbage":</strong> Softer end of a range that includes "dung"; loses the rhetorical punch of Phil 3:8.</li>
-                <li><strong>מַשְׁתִּין בְּקִיר → "males":</strong> Most modern versions neutralize the crude idiom entirely (ESV: "a single male").</li>
-                <li><strong>מֵימֵי רַגְלֵיהֶם → "urine":</strong> The Hebrew is already euphemistic ("waters of their feet"); English translations sometimes euphemize a euphemism.</li>
-              </ul>
-              <p style="margin-top:.75rem;font-style:italic;">This map reflects rhetorical intensity — and part of that intensity is precisely what translation has smoothed away.</p>
-            </div>
-          </div>
+        <div class="timeline-item">
+          <strong>Ezek 23:20 — Sexualized Covenant Exposure</strong><br>
+          <span class="hebrew-inline">בָּשָׂר</span> ("flesh") and <span class="hebrew-inline">זִרְמָה</span> ("emission") — euphemistic terms made sexually explicit through their pairing with animal comparison. <em>Rhetorical function:</em> Divine indictment; Ezekiel does not abandon euphemism — he combines it with exaggeration to achieve explicit force, breaking through covenant numbness. <em>Translation gap:</em> Many translations soften to "lusted" without conveying the deliberate zoological degradation.
+        </div>
+        <div class="timeline-item">
+          <strong>Ezek 6; 16 — Idol Ridicule via <span class="hebrew-inline">גִּלּוּלִים</span></strong><br>
+          The word likely carries "dung-things" — a contemptuous pun embedded in the noun itself. <em>Rhetorical function:</em> Reduces idols from divine rivals to excrement; prophetic polemic targets the worship object, not just the worshipper. <em>Translation gap:</em> The neutral "idols" removes the built-in scatological insult Ezekiel encodes in the term.
+        </div>
+        <div class="timeline-item">
+          <strong>Gal 5:12 — Polemical Invective (Self-Castration Irony)</strong><br>
+          <span class="greek-inline">ἀποκόπτω</span> — "cut off / castrate." Paul escalates from circumcision to full emasculation as rhetorical irony. <em>Rhetorical function:</em> Targeted apostolic severity to protect the gospel; the severity is proportionate to the doctrinal threat. <em>Translation gap:</em> Most versions render "mutilate themselves," which retains the shock but loses the specific ironic logic of emasculation echoing pagan priest-rites.
+        </div>
+        <div class="timeline-item">
+          <strong>Phil 3:8 — Apostolic Revaluation via <span class="greek-inline">σκύβαλα</span></strong><br>
+          <span class="greek-inline">σκύβαλα</span> spans from "refuse/scraps" to "dung/excrement." Paul reduces his entire pre-Christ credential list — pedigree, zeal, legal righteousness — to this term. <em>Rhetorical function:</em> The severity is comparative, not abusive: it reveals what all human boasting looks like alongside Christ. <em>Translation gap:</em> "Rubbish" (NIV, ESV) is the softer end; the stronger end ("dung," KJV) better captures the rhetorical punch of total devaluation.
         </div>
       </div>
-      <div class="grid-3" style="margin-top:1rem;">
-        <div class="callout-language">
-          <strong>Language</strong>
-          <p style="margin:.35rem 0 0;">Source-language notes, lexical range, and semantic range.</p>
-        </div>
-        <div class="callout-warning">
-          <strong>Rhetoric</strong>
-          <p style="margin:.35rem 0 0;">Communicative force within its honor–shame cultural setting.</p>
-        </div>
-        <div class="callout-insight">
-          <strong>Theology &amp; Translation Gap</strong>
-          <p style="margin:.35rem 0 0;">What the language reveals — and what modern translations have muted.</p>
-        </div>
+      <div class="callout-language animation-delay-100" style="margin-top:1rem;">
+        <strong>Interpretive rule:</strong> Where possible, this study retains the closest lexical choice ("flesh," "emission," "waters of their feet") before moving to inferred sense ("genitals," "semen," "urine"). The original words carry the rhetoric; translations that jump immediately to inferred sense remove the layered force.
       </div>
     </div>
 
