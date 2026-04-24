@@ -284,8 +284,31 @@
       z-index:9998;
     }
 
-    /* Quick nav sidebar positioning */
-    .quick-nav-sidebar { top:140px; }
+    /* ── Quick-nav sidebar positioning ──
+       The global-v2.css rule uses top:50% + translateY(-50%) to vertical-center,
+       which with 16 dots pushes the top dots behind the live nav bar.
+       Override: pin sidebar below the nav, max-height the dot column,
+       and kill the centering transform. */
+    .quick-nav-sidebar {
+      top: 9rem;
+      transform: none;
+      max-height: calc(100vh - 12rem);
+      overflow-y: auto;
+      scrollbar-width: none;        /* Firefox */
+      -ms-overflow-style: none;     /* IE/Edge */
+    }
+    .quick-nav-sidebar::-webkit-scrollbar { display: none; }
+
+    /* ── Breadcrumb clearance for taller live nav ──
+       The live nav-component renders a taller header than --nav-height:88px
+       assumes. Push the whole main content down so everything clears it. */
+    main.content-section {
+      padding-top: 9.5rem;
+    }
+    main.content-section > .breadcrumbs:first-child {
+      margin-top: .25rem;
+      margin-bottom: .5rem;
+    }
 
     @media(max-width:768px){
       .hero { padding:1.1rem 1rem 1rem; }
