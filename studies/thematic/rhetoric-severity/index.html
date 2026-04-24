@@ -1546,19 +1546,22 @@
   <!-- Navigation inserted by nav-component.js -->
 
     <div class="quick-nav-sidebar" aria-label="Section navigation">
-    <div class="quick-nav-item" data-label="Overview"    data-target="#overview"></div>
-    <div class="quick-nav-item" data-label="Canon Map"  data-target="#canon-map"></div>
-    <div class="quick-nav-item" data-label="Text Lab"   data-target="#text-lab"></div>
-    <div class="quick-nav-item" data-label="Journey"    data-target="#narrative"></div>
-    <div class="quick-nav-item" data-label="Severity"   data-target="#severity-spectrum"></div>
-    <div class="quick-nav-item" data-label="Literary"   data-target="#literary-context"></div>
-    <div class="quick-nav-item" data-label="Themes"     data-target="#themes"></div>
-    <div class="quick-nav-item" data-label="ANE"        data-target="#ane-context"></div>
-    <div class="quick-nav-item" data-label="Word Study" data-target="#wordplay"></div>
-    <div class="quick-nav-item" data-label="Theology"   data-target="#biblical-theology"></div>
-    <div class="quick-nav-item" data-label="Messianic"  data-target="#messianic"></div>
-    <div class="quick-nav-item" data-label="Application"data-target="#application"></div>
-    <div class="quick-nav-item" data-label="Questions"  data-target="#questions"></div>
+    <div class="quick-nav-item" data-label="Overview"         data-target="#overview"></div>
+    <div class="quick-nav-item" data-label="Canon Map"        data-target="#canon-map"></div>
+    <div class="quick-nav-item" data-label="Text Lab"         data-target="#text-lab"></div>
+    <div class="quick-nav-item" data-label="Journey"          data-target="#narrative"></div>
+    <div class="quick-nav-item" data-label="Severity"         data-target="#severity-spectrum"></div>
+    <div class="quick-nav-item" data-label="Literary"         data-target="#literary-context"></div>
+    <div class="quick-nav-item" data-label="Themes"           data-target="#themes"></div>
+    <div class="quick-nav-item" data-label="ANE"              data-target="#ane-context"></div>
+    <div class="quick-nav-item" data-label="Word Study"       data-target="#wordplay"></div>
+    <div class="quick-nav-item" data-label="Translation Gap"  data-target="#translation-gap"></div>
+    <div class="quick-nav-item" data-label="Theology"         data-target="#biblical-theology"></div>
+    <div class="quick-nav-item" data-label="Messianic"        data-target="#messianic"></div>
+    <div class="quick-nav-item" data-label="Intertext"        data-target="#intertext"></div>
+    <div class="quick-nav-item" data-label="Application"      data-target="#application"></div>
+    <div class="quick-nav-item" data-label="Tools"            data-target="#tools"></div>
+    <div class="quick-nav-item" data-label="Questions"        data-target="#questions"></div>
   </div>
 
   <main id="main-content" class="content-section" role="main" aria-label="Biblical study: Rhetorical Severity in Scripture">
@@ -3366,13 +3369,65 @@
       document.addEventListener('scroll', updateProgress, { passive: true });
       updateProgress();
 
-      // ── Quick nav dots ──
+      // ── Quick nav dots: click-to-scroll ──
       document.querySelectorAll('.quick-nav-item').forEach(item => {
         item.addEventListener('click', () => {
           const target = document.querySelector(item.dataset.target);
           if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
       });
+
+      // ── Quick nav dots: scroll-position tracking ──
+      // Observes every target section and activates the matching dot
+      // as the user scrolls. Uses rootMargin to register the section
+      // when its top crosses ~30% from viewport top.
+      const navItems = document.querySelectorAll('.quick-nav-item');
+      const navTargets = [];
+      navItems.forEach(item => {
+        const sel = item.dataset.target;
+        const el = sel ? document.querySelector(sel) : null;
+        if (el) navTargets.push({ el, dot: item });
+      });
+
+      if (navTargets.length) {
+        // Map section IDs to dots for quick lookup from IO entries
+        const idToDot = new Map();
+        navTargets.forEach(({ el, dot }) => idToDot.set(el.id, dot));
+
+        // Track which sections are currently intersecting and pick
+        // the one with the largest intersectionRatio as "active"
+        const visible = new Map();
+        const setActive = () => {
+          if (visible.size === 0) return;
+          // Pick section with max ratio
+          let bestId = null, bestRatio = -1;
+          visible.forEach((ratio, id) => {
+            if (ratio > bestRatio) { bestRatio = ratio; bestId = id; }
+          });
+          navItems.forEach(i => i.classList.remove('active'));
+          const activeDot = idToDot.get(bestId);
+          if (activeDot) activeDot.classList.add('active');
+        };
+
+        const sectionObs = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            const id = entry.target.id;
+            if (entry.isIntersecting) {
+              visible.set(id, entry.intersectionRatio);
+            } else {
+              visible.delete(id);
+            }
+          });
+          setActive();
+        }, {
+          // Trigger when the section crosses the upper-middle band of viewport.
+          // -30% top / -50% bottom = the active band sits between 30% and 50% of viewport height.
+          rootMargin: '-30% 0px -50% 0px',
+          threshold: [0, 0.1, 0.25, 0.5, 0.75, 1]
+        });
+
+        navTargets.forEach(({ el }) => sectionObs.observe(el));
+      }
 
       // ── Expandable wordplay rows ──
       document.querySelectorAll('.wp-row').forEach(row => {
