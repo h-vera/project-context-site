@@ -1267,6 +1267,275 @@
       .trans-step { grid-template-columns: 1fr; }
       .trans-label { padding: .75rem 1rem; }
     }
+
+    /* ════════════════════════════════════════════════════════
+       APPLICATION CARDS — animated hover, icon rotation
+       ════════════════════════════════════════════════════════ */
+    .app-card {
+      background: #fff;
+      border: 2px solid var(--border-light);
+      border-radius: 16px;
+      padding: 1.5rem 1.65rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    .app-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .app-card.app-personal::before { background: linear-gradient(90deg, var(--accent-purple), var(--accent-rose)); }
+    .app-card.app-community::before { background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple)); }
+    .app-card:hover::before { transform: scaleX(1); }
+    .app-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px rgba(114,9,183,0.12);
+      border-color: rgba(114,9,183,0.25);
+    }
+    .app-card-head {
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      margin-bottom: 1rem;
+      padding-bottom: .75rem;
+      border-bottom: 1px dashed var(--border-light);
+    }
+    .app-card-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      transition: transform 0.4s ease;
+    }
+    .app-personal .app-card-icon {
+      background: linear-gradient(135deg, rgba(114,9,183,0.15), rgba(225,29,72,0.10));
+      color: var(--accent-purple);
+    }
+    .app-community .app-card-icon {
+      background: linear-gradient(135deg, rgba(0,180,216,0.15), rgba(114,9,183,0.10));
+      color: var(--accent-blue);
+    }
+    .app-card:hover .app-card-icon {
+      transform: rotate(-8deg) scale(1.08);
+    }
+    .app-card-head h4 {
+      margin: 0;
+      font: 800 1.1rem/1.3 system-ui,sans-serif;
+    }
+    .app-personal .app-card-head h4 { color: var(--accent-purple); }
+    .app-community .app-card-head h4 { color: var(--accent-blue); }
+    .app-items {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: .8rem;
+    }
+    .app-items li {
+      position: relative;
+      padding: .65rem .9rem .65rem 1.25rem;
+      border-left: 3px solid transparent;
+      border-radius: 0 8px 8px 0;
+      transition: all 0.25s ease;
+      font-size: .94rem;
+      line-height: 1.55;
+      color: #334155;
+    }
+    .app-items li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 50%;
+      transform: translateY(-50%);
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--border-light);
+      transition: all 0.25s ease;
+    }
+    .app-personal .app-items li:hover {
+      background: linear-gradient(90deg, rgba(114,9,183,0.05), transparent);
+      border-left-color: var(--accent-purple);
+    }
+    .app-community .app-items li:hover {
+      background: linear-gradient(90deg, rgba(0,180,216,0.05), transparent);
+      border-left-color: var(--accent-blue);
+    }
+    .app-personal .app-items li:hover::before { background: var(--accent-purple); width: 8px; height: 8px; }
+    .app-community .app-items li:hover::before { background: var(--accent-blue); width: 8px; height: 8px; }
+    .app-items li strong { color: #1a202c; }
+
+    /* ════════════════════════════════════════════════════════
+       STUDY QUESTIONS — fixed badge placement, hover lift
+       Overrides global-v2 question-list styling
+       ════════════════════════════════════════════════════════ */
+    .theology-card .question-list {
+      counter-reset: question;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+    }
+    .theology-card .question-list li {
+      counter-increment: question;
+      position: relative;
+      padding: 1rem 1.1rem 1rem 3.8rem;
+      margin: 0;
+      background: #fff;
+      border: 1.5px solid var(--border-light);
+      border-radius: 12px;
+      color: #334155;
+      line-height: 1.6;
+      font-size: .95rem;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+    .theology-card .question-list li::before {
+      content: counter(question);
+      position: absolute;
+      left: .75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-rose));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font: 800 1rem/1 system-ui,sans-serif;
+      border: none;
+      box-shadow: 0 3px 10px rgba(114,9,183,0.25);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .theology-card .question-list li:hover {
+      transform: translateX(4px);
+      border-color: rgba(114,9,183,0.30);
+      box-shadow: 0 4px 16px rgba(114,9,183,0.10);
+    }
+    .theology-card .question-list li:hover::before {
+      transform: translateY(-50%) scale(1.1) rotate(-4deg);
+      box-shadow: 0 5px 16px rgba(114,9,183,0.40);
+    }
+    .theology-card .question-list li strong { color: var(--accent-purple); font-weight: 700; }
+
+    /* ════════════════════════════════════════════════════════
+       INTERTEXT CARDS — replaces dry tables with card grid
+       Color-coded severity tags, left border, hover lift
+       ════════════════════════════════════════════════════════ */
+    .intertext-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+    .intertext-col {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+    }
+    .intertext-header {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      padding: .85rem 1.15rem;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: .02em;
+    }
+    .intertext-header.ot {
+      background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.06));
+      color: #92400e;
+      border-left: 4px solid var(--accent-gold);
+    }
+    .intertext-header.nt {
+      background: linear-gradient(135deg, rgba(114,9,183,0.12), rgba(114,9,183,0.04));
+      color: var(--accent-purple);
+      border-left: 4px solid var(--accent-purple);
+    }
+    .intertext-header-icon {
+      font-size: 1.1rem;
+    }
+    .intertext-card {
+      position: relative;
+      background: #fff;
+      border: 1.5px solid var(--border-light);
+      border-radius: 12px;
+      padding: .9rem 1.15rem;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      overflow: hidden;
+    }
+    .intertext-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--intertext-accent, var(--border-light));
+      transition: width 0.25s ease;
+    }
+    .intertext-card:hover {
+      transform: translateX(3px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      border-color: var(--intertext-accent, var(--accent-purple));
+    }
+    .intertext-card:hover::before { width: 6px; }
+    .intertext-card.c-blue   { --intertext-accent: var(--accent-blue); }
+    .intertext-card.c-gold   { --intertext-accent: var(--accent-gold); }
+    .intertext-card.c-rose   { --intertext-accent: var(--accent-rose); }
+    .intertext-card.c-purple { --intertext-accent: var(--accent-purple); }
+    .intertext-card.c-deep   { --intertext-accent: #4c0080; }
+    .intertext-ref {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      font: 700 .78rem/1 system-ui,sans-serif;
+      padding: .28rem .6rem;
+      border-radius: 6px;
+      background: var(--panel);
+      color: var(--intertext-accent, #64748b);
+      border: 1px solid var(--border-light);
+      margin-bottom: .5rem;
+      letter-spacing: .02em;
+    }
+    .intertext-ref svg { width: 11px; height: 11px; }
+    .intertext-tag {
+      display: inline-block;
+      font: 700 .66rem/1.2 system-ui,sans-serif;
+      padding: .18rem .5rem;
+      border-radius: 999px;
+      background: var(--intertext-accent, #64748b);
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-left: .4rem;
+      vertical-align: middle;
+    }
+    .intertext-card.c-gold .intertext-tag { color: #1a202c; }
+    .intertext-body {
+      font-size: .9rem;
+      line-height: 1.6;
+      color: #334155;
+      margin: 0;
+    }
+    .intertext-body em {
+      color: var(--intertext-accent, var(--accent-purple));
+      font-style: italic;
+    }
+    @media (max-width: 760px) {
+      .intertext-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 
@@ -2579,36 +2848,112 @@
     </div>
 
     <!-- ── BIBLICAL CONNECTIONS ──────────────────────── -->
-    <div class="grid-2" id="intertext">
-      <div class="theology-card">
-        <h3>Old Testament Intertext</h3>
-        <div class="table-wrapper">
-          <table>
-            <thead><tr><th>Reference</th><th>Connection &amp; Significance</th></tr></thead>
-            <tbody>
-              <tr><td>1 Sam 25:22, 34</td><td>Crude idiom marks total male-line destruction; Abigail's intervention reframes David's rage.</td></tr>
-              <tr><td>1 Kgs 14:10; 16:11; 21:21; 2 Kgs 9:8</td><td>Same "urinating against a wall" formula recurs in dynastic judgment language.</td></tr>
-              <tr><td>Isa 20:4; 36:12</td><td>Public exposure and excremental siege rhetoric depict political shame and collapse.</td></tr>
-              <tr><td>Ezek 6; 16; 23</td><td>The strongest combination of idol ridicule and explicit sexualized metaphor in the Hebrew Bible.</td></tr>
-              <tr><td>Nah 3:5–6</td><td>Nineveh's imperial pride ends in public humiliation through exposure and filth.</td></tr>
-              <tr><td>Ps 58:8; 137:9</td><td>The Psalms preserve non-scatological but morally jarring images of judgment and lament.</td></tr>
-            </tbody>
-          </table>
+    <div class="theology-card" id="intertext">
+      <h3>Canonical Intertext — Threads Across Testaments</h3>
+      <p class="note-muted" style="margin-bottom:.75rem;">Each card tags its <em>form of severity</em> so you can trace a motif (idiom · siege · shame · sexualized · polemical) across the canon.</p>
+
+      <div class="intertext-grid">
+
+        <!-- OT column -->
+        <div class="intertext-col">
+          <div class="intertext-header ot">
+            <span class="intertext-header-icon">📜</span>
+            <span>Old Testament Intertext</span>
+          </div>
+
+          <div class="intertext-card c-blue">
+            <div>
+              <span class="intertext-ref">📖 1 Sam 25:22, 34</span>
+              <span class="intertext-tag">Coarse Idiom</span>
+            </div>
+            <p class="intertext-body">Crude idiom marks total male-line destruction; <em>Abigail's intervention reframes David's rage</em>. The narrative exposes and corrects the oath rather than endorsing it.</p>
+          </div>
+
+          <div class="intertext-card c-blue">
+            <div>
+              <span class="intertext-ref">📖 1 Kgs 14:10; 16:11; 21:21; 2 Kgs 9:8</span>
+              <span class="intertext-tag">Dynastic Curse</span>
+            </div>
+            <p class="intertext-body">The same <em>"urinating against a wall"</em> formula recurs as a judgment idiom against royal houses — <em>totalizing severity</em> woven into the language of covenant lawsuit.</p>
+          </div>
+
+          <div class="intertext-card c-gold">
+            <div>
+              <span class="intertext-ref">📖 Isa 20:4; 36:12</span>
+              <span class="intertext-tag">Siege &amp; Shame</span>
+            </div>
+            <p class="intertext-body">Public exposure and excremental siege rhetoric depict political shame and collapse — <em>imperial pride reduced to bodily humiliation</em> before the watching nations.</p>
+          </div>
+
+          <div class="intertext-card c-purple">
+            <div>
+              <span class="intertext-ref">📖 Ezek 6; 16; 23</span>
+              <span class="intertext-tag">Sexualized Exposure</span>
+            </div>
+            <p class="intertext-body">The strongest combination of <em>idol ridicule</em> and <em>explicit sexualized metaphor</em> in the Hebrew Bible. Ezekiel's covenant lawsuit reaches its canonical apex here.</p>
+          </div>
+
+          <div class="intertext-card c-rose">
+            <div>
+              <span class="intertext-ref">📖 Nah 3:5–6</span>
+              <span class="intertext-tag">Public Shame</span>
+            </div>
+            <p class="intertext-body">Nineveh's imperial pride ends in <em>public humiliation</em> — exposure, filth, and staged disgrace before the nations she once terrified.</p>
+          </div>
+
+          <div class="intertext-card c-rose">
+            <div>
+              <span class="intertext-ref">📖 Ps 58:8; 137:9</span>
+              <span class="intertext-tag">Imprecatory Lament</span>
+            </div>
+            <p class="intertext-body">The Psalms preserve <em>morally jarring images of judgment and lament</em> — not casual vulgarity, not divine decree, but covenant prayer holding violence in the presence of God rather than in the world.</p>
+          </div>
         </div>
+
+        <!-- NT column -->
+        <div class="intertext-col">
+          <div class="intertext-header nt">
+            <span class="intertext-header-icon">✝️</span>
+            <span>New Testament Intertext</span>
+          </div>
+
+          <div class="intertext-card c-purple">
+            <div>
+              <span class="intertext-ref">📖 Matt 23:27</span>
+              <span class="intertext-tag">Targeted Polemic</span>
+            </div>
+            <p class="intertext-body">Jesus employs <em>impurity and death imagery</em> — "whitewashed tombs" — to expose polished hypocrisy. Forensic purity language redirected from outside to inside.</p>
+          </div>
+
+          <div class="intertext-card c-deep">
+            <div>
+              <span class="intertext-ref">📖 Gal 5:12</span>
+              <span class="intertext-tag">Apostolic Severity</span>
+            </div>
+            <p class="intertext-body">Paul escalates rhetoric in continuity with prophetic severity when <em>the gospel itself is under threat</em>. Surgical, not casual — proportionate to the doctrinal stakes.</p>
+          </div>
+
+          <div class="intertext-card c-deep">
+            <div>
+              <span class="intertext-ref">📖 Phil 3:8</span>
+              <span class="intertext-tag">Comparative Devaluation</span>
+            </div>
+            <p class="intertext-body">Paul's use of <span class="greek-inline">σκύβαλα</span> rhetorically trashes <em>religious boasting</em> in comparison with Christ. The sharpest word in the passage is aimed at Paul's own résumé.</p>
+          </div>
+
+          <div class="intertext-card c-rose">
+            <div>
+              <span class="intertext-ref">📖 Rev 3:16</span>
+              <span class="intertext-tag">Embodied Disgust</span>
+            </div>
+            <p class="intertext-body">Vomiting imagery shows the New Testament <em>retains embodied disgust as a mode of warning</em> — the prophetic severity tradition continues through Revelation's eschatological voice.</p>
+          </div>
+        </div>
+
       </div>
-      <div class="theology-card">
-        <h3>New Testament Intertext</h3>
-        <div class="table-wrapper">
-          <table>
-            <thead><tr><th>Reference</th><th>Connection &amp; Significance</th></tr></thead>
-            <tbody>
-              <tr><td>Matt 23:27</td><td>Jesus employs impurity and death imagery to expose polished hypocrisy.</td></tr>
-              <tr><td>Gal 5:12</td><td>Paul escalates rhetoric in continuity with prophetic severity when the gospel is threatened.</td></tr>
-              <tr><td>Phil 3:8</td><td>Paul's use of <span class="greek-inline">σκύβαλα</span> rhetorically trashes religious boasting in comparison with Christ.</td></tr>
-              <tr><td>Rev 3:16</td><td>Vomiting imagery shows the New Testament retains embodied disgust as a mode of warning.</td></tr>
-            </tbody>
-          </table>
-        </div>
+
+      <div class="key-insight" style="margin-top:1.5rem;">
+        <strong>Reading across the testaments:</strong> The same rhetorical severity moves from private oath (1 Sam) → royal curse formula (Kings) → siege exposure (Isaiah) → covenant indictment (Ezekiel / Nahum) → lament (Psalms) → prophetic forensic imagery (Matthew) → apostolic polemic (Galatians / Philippians) → eschatological warning (Revelation). The vocabulary changes. The purpose — <em>calibrated exposure in service of truth</em> — does not.
       </div>
     </div>
 
@@ -2646,25 +2991,34 @@
     <!-- ── APPLICATION ──────────────────────────────── -->
     <div class="theology-card" id="application">
       <h3>Application &amp; Contemporary Relevance</h3>
-      <div class="grid-2">
-        <div class="panel">
-          <h4>🙏 Personal Application</h4>
-          <ul>
+      <div class="grid-2" style="gap:1rem;">
+
+        <div class="app-card app-personal">
+          <div class="app-card-head">
+            <div class="app-card-icon">🙏</div>
+            <h4>Personal Application</h4>
+          </div>
+          <ul class="app-items">
             <li><strong>Discernment:</strong> Not every harsh biblical phrase should be imported into ordinary speech.</li>
             <li><strong>Honesty:</strong> The Psalms authorize emotionally truthful prayer before God.</li>
             <li><strong>Humility:</strong> Translation smoothness can hide the moral intensity of the text; word study matters.</li>
             <li><strong>Self-examination:</strong> Jesus' purity language pushes readers inward before it points outward.</li>
           </ul>
         </div>
-        <div class="panel">
-          <h4>⛪ Community Application</h4>
-          <ul>
+
+        <div class="app-card app-community">
+          <div class="app-card-head">
+            <div class="app-card-icon">⛪</div>
+            <h4>Community Application</h4>
+          </div>
+          <ul class="app-items">
             <li><strong>Teaching:</strong> Churches can explain these texts without embarrassment or sensationalism.</li>
             <li><strong>Pastoral care:</strong> Harsh language in Scripture should be interpreted according to purpose, audience, and covenant setting.</li>
             <li><strong>Leadership:</strong> Paul shows that firmness and pastoral protection sometimes require rhetorical sharpness.</li>
             <li><strong>Ethics:</strong> Descriptive severity does not equal open permission for abusive speech.</li>
           </ul>
         </div>
+
       </div>
       <div class="reflection-box">
         <h4>💭 Reflection Points</h4>
