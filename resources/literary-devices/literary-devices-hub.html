@@ -112,6 +112,73 @@
       .page-header-banner { animation: none; background-size: auto; }
       .page-header-banner::before { animation: none; opacity: 0; }
     }
+
+    /* ───────────────────────────────────────────────────────────
+       LANGUAGE-CONTRAST TILES (orientation panel)
+       Same gradient-drift + shimmer treatment as the hero,
+       color-matched per tile. Subtle: text stays fully readable.
+       ─────────────────────────────────────────────────────────── */
+    .lang-tile {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border, #e5e5e5);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      background-size: 200% 200%;
+      animation: heroDrift 22s ease-in-out infinite;
+    }
+    .lang-tile-survives {
+      border-left: 4px solid #4a6741;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(255,255,255,0.55) 0%, transparent 60%),
+        linear-gradient(135deg, #f4f8ee 0%, #e8efd9 60%, #dde7c4 100%);
+    }
+    .lang-tile-only {
+      border-left: 4px solid #a14a2c;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(255,255,255,0.55) 0%, transparent 60%),
+        linear-gradient(135deg, #faf0e9 0%, #f3dccd 60%, #ecc9b1 100%);
+    }
+    .lang-tile::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0; left: 0;
+      width: 25%;
+      background: linear-gradient(90deg,
+                    transparent 0%,
+                    rgba(255,255,255,0.55) 50%,
+                    transparent 100%);
+      pointer-events: none;
+      animation: heroShimmer 12s ease-in-out infinite;
+      z-index: 0;
+    }
+    .lang-tile-only::before {
+      animation-delay: 6s;  /* offset so the two tiles don't shimmer in unison */
+    }
+    .lang-tile-heading,
+    .lang-tile-body {
+      position: relative;
+      z-index: 1;
+    }
+    .lang-tile-heading {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .lang-tile-survives .lang-tile-heading { color: #2e4326; }
+    .lang-tile-only .lang-tile-heading     { color: #6e2f1a; }
+    .lang-tile-body {
+      margin: 0;
+      line-height: 1.55;
+      font-size: 0.93rem;
+      color: #2a2a2a;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .lang-tile { animation: none; background-size: auto; }
+      .lang-tile::before { animation: none; opacity: 0; }
+    }
     .page-header-kicker {
       text-transform: uppercase;
       letter-spacing: 0.16em;
@@ -622,33 +689,21 @@
         gap: 1rem;
         margin: 1.25rem 0;
       ">
-        <div style="
-          background: var(--card, #fff);
-          border: 1px solid var(--border, #e5e5e5);
-          border-left: 4px solid #4a6741;
-          border-radius: 10px;
-          padding: 1rem 1.1rem;
-        ">
-          <div style="font-weight: 700; color: #4a6741; font-size: 0.95rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.04em;">
+        <div class="lang-tile lang-tile-survives">
+          <div class="lang-tile-heading">
             ✓ Survives translation
           </div>
-          <p style="margin: 0; line-height: 1.55; font-size: 0.93rem;">
+          <p class="lang-tile-body">
             Chiasm · inclusio · ring composition · type-scenes · doublets · panel structures ·
             intertextual echoes · irony · foreshadowing · numerical patterns ·
             most narrative and rhetorical devices.
           </p>
         </div>
-        <div style="
-          background: var(--card, #fff);
-          border: 1px solid var(--border, #e5e5e5);
-          border-left: 4px solid #a14a2c;
-          border-radius: 10px;
-          padding: 1rem 1.1rem;
-        ">
-          <div style="font-weight: 700; color: #a14a2c; font-size: 0.95rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.04em;">
+        <div class="lang-tile lang-tile-only">
+          <div class="lang-tile-heading">
             ✗ Original-language only
           </div>
-          <p style="margin: 0; line-height: 1.55; font-size: 0.93rem;">
+          <p class="lang-tile-body">
             Acrostic · paronomasia (wordplay) · alliteration and assonance · onomatopoeia ·
             code-switching between Hebrew and Aramaic · gematria · the full force of Hebrew
             parallelism's terseness.
