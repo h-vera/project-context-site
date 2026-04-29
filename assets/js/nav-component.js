@@ -2,7 +2,7 @@
  * Centralized Navigation Component
  * Path: /assets/js/nav-component.js
  * Purpose: Single source of truth for navigation across all pages
- * Version: 1.4.1 - Added Connections Corner to Resources dropdown
+ * Version: 1.4.3 - Added Literary Devices to Resources dropdown; reordered by function (foundation → reference → teaching → application)
  */
 
 import { initAnalytics } from '/assets/js/analytics.js';
@@ -51,11 +51,12 @@ class NavigationComponent {
                             <a href="/resources/" class="dropdown-toggle ${this.getActiveClass('resources')}">Resources</a>
                             <div class="dropdown-content">
                                 <a href="/studies/methodology/lltse-orientation-methodology.html" class="${this.getActiveClass('methodology')}">Methodology (LLTSE)</a>
-                                <a href="/resources/discussion-guides/">Discussion Guides</a>
+                                <a href="/resources/literary-devices/literary-devices-hub.html" class="${this.getActiveClass('literary-devices')}">Literary Devices</a>
+                                <a href="/resources/connections-corner/connections-hub.html" class="${this.getActiveClass('connections-corner')}">Connections Corner</a>
                                 <a href="/resources/study-tools/biblical-study-resources.html">Study Tools</a>
+                                <a href="/resources/discussion-guides/">Discussion Guides</a>
                                 <a href="/resources/teaching-formation/teaching-formation-hub.html" class="${this.getActiveClass('teaching-formation')}">Teaching Formation</a>
                                 <a href="/resources/community-family/community-family-index.html" class="${this.getActiveClass('community-family')}">Community & Family</a>
-                                <a href="/resources/connections-corner/connections-hub.html" class="${this.getActiveClass('connections-corner')}">Connections Corner</a>
                             </div>
                         </li>
                         <li><a href="/about/" class="${this.getActiveClass('about')}">About</a></li>
@@ -116,7 +117,8 @@ class NavigationComponent {
             currentPage.includes('resources') ||
             currentPage.includes('teaching-formation') ||
             currentPage.includes('community-family') ||
-            currentPage.includes('connections-corner')
+            currentPage.includes('connections-corner') ||
+            currentPage.includes('literary-devices')
         )) {
             return 'active';
         }
@@ -128,6 +130,9 @@ class NavigationComponent {
             return 'active';
         }
         if (section === 'connections-corner' && (hubType === 'connections' || currentPage.includes('connections-corner'))) {
+            return 'active';
+        }
+        if (section === 'literary-devices' && (hubType === 'literary-devices' || currentPage.includes('literary-devices'))) {
             return 'active';
         }
 
