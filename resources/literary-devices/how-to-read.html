@@ -62,16 +62,19 @@
     }
 
     /* ═══════════════════════════════════════════════════════════
-       HERO — Project Context page-header-banner pattern
+       HERO — high-specificity, high-contrast gradient
+       Scoped to body.literary-devices-page so this beats anything in
+       global-v2.css. Wide color range from near-black to vivid violet.
        ═══════════════════════════════════════════════════════════ */
-    .page-header-banner {
-      background: radial-gradient(circle at 0% 0%, rgba(255,255,255,0.22) 0%, transparent 55%),
-                  linear-gradient(135deg, #1f1a4d 0%, #3a3563 50%, #6f60c5 100%);
-      color: #f9fafb;
+    body.literary-devices-page .page-header-banner {
+      background: radial-gradient(circle at 0% 0%, rgba(255,255,255,0.28) 0%, transparent 50%),
+                  radial-gradient(circle at 100% 100%, rgba(233,75,255,0.25) 0%, transparent 60%),
+                  linear-gradient(135deg, #15103a 0%, #2c2467 35%, #4d3da3 70%, #8158d8 100%) !important;
+      color: #f9fafb !important;
       padding: 2.75rem 2.25rem;
       border-radius: 20px;
       margin-bottom: 2.5rem;
-      box-shadow: 0 10px 30px rgba(15,23,42,0.18);
+      box-shadow: 0 10px 30px rgba(15,23,42,0.22);
       position: relative;
       overflow: hidden;
     }
@@ -147,6 +150,32 @@
        ═══════════════════════════════════════════════════════════ */
 
     /* ═══════════════════════════════════════════════════════════
+       THEOLOGY CARD HOVER — explicit, not gated by @media (hover)
+       global-v2.css only applies hover inside @media (hover:hover);
+       this adds it unconditionally with the page accent.
+       ═══════════════════════════════════════════════════════════ */
+    body.literary-devices-page .theology-card {
+      transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+    }
+    body.literary-devices-page .theology-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 32px rgba(58,53,99,0.14), 0 4px 10px rgba(15,23,42,0.06);
+      border-color: rgba(58,53,99,0.28);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       ANIMATE-ON-SCROLL — site convention is opacity:0 → .visible.
+       global-v2.css already defines the keyframes/transitions.
+       My inline IntersectionObserver below adds .visible.
+       Stagger delays so sections cascade in.
+       ═══════════════════════════════════════════════════════════ */
+    .animate-on-scroll { transition-delay: 0s; }
+    .animate-on-scroll.stagger-1 { transition-delay: 0.05s; }
+    .animate-on-scroll.stagger-2 { transition-delay: 0.10s; }
+    .animate-on-scroll.stagger-3 { transition-delay: 0.15s; }
+    .animate-on-scroll.stagger-4 { transition-delay: 0.20s; }
+
+    /* ═══════════════════════════════════════════════════════════
        READING STACK WIDGET — the centerpiece
        ═══════════════════════════════════════════════════════════ */
     .reading-stack-widget {
@@ -184,7 +213,23 @@
       border-left: 5px solid var(--level-color);
       transition: all 0.22s ease;
       position: relative;
+
+      /* Entrance — stagger on widget reveal */
+      opacity: 0;
+      transform: translateX(-12px);
+      animation: stackLevelIn 0.5s ease forwards;
     }
+    @keyframes stackLevelIn {
+      to { opacity: 1; transform: translateX(0); }
+    }
+    /* column-reverse means rendered-first sits at bottom of stack;
+       delays go from rendered-first (Canon, top) downward. Reading
+       cascades top-down which is the natural eye path. */
+    .stack-column .stack-level:nth-child(1) { animation-delay: 0.05s; }
+    .stack-column .stack-level:nth-child(2) { animation-delay: 0.13s; }
+    .stack-column .stack-level:nth-child(3) { animation-delay: 0.21s; }
+    .stack-column .stack-level:nth-child(4) { animation-delay: 0.29s; }
+    .stack-column .stack-level:nth-child(5) { animation-delay: 0.37s; }
     .stack-level:hover {
       border-color: var(--level-color);
       transform: translateX(3px);
@@ -682,7 +727,7 @@
     </section>
 
     <!-- INTRO -->
-    <div class="theology-card" id="orientation">
+    <div class="theology-card animate-on-scroll" id="orientation">
       <h2 class="section-title"><span class="section-icon">❡</span>Orientation</h2>
       <p>The biblical authors do not communicate through words alone. They communicate through patterns, scenes, structures, and echoes that span individual verses, whole books, and the canon as a whole. A repeated word may form a parallel line, appear inside a repeated scene, contribute to a larger structural design, and echo across the entire Bible. <strong>Meaning often emerges from the combination, not from any single device in isolation.</strong></p>
       <p>The Reading Stack is a framework for reading at all five levels at once — and for knowing where to look first when a passage seems opaque, repetitive, or strange. Click any level below to see what lives there.</p>
@@ -691,7 +736,7 @@
     <!-- ═══════════════════════════════════════════════════════
          THE READING STACK — INTERACTIVE WIDGET
          ═══════════════════════════════════════════════════════ -->
-    <div class="theology-card animate-on-scroll" id="reading-stack">
+    <div class="theology-card animate-on-scroll stagger-1" id="reading-stack">
       <h2 class="section-title"><span class="section-icon">❡</span>The Reading Stack</h2>
       <p style="margin-top:-0.5rem; color:var(--text-gray,#5a5a6a); font-size:0.95rem;">Five levels of literary design, from foundation to canon. Click a level to explore what lives there.</p>
 
@@ -935,7 +980,7 @@
     </div>
 
     <!-- HOW THE LEVELS WORK TOGETHER -->
-    <div class="theology-card" id="how-levels-work">
+    <div class="theology-card animate-on-scroll stagger-2" id="how-levels-work">
       <h2 class="section-title"><span class="section-icon">❡</span>How the Levels Work Together</h2>
       <p>A single passage rarely operates at one level. The most theologically dense moments in Scripture are usually places where multiple levels converge.</p>
       <p>Take the binding of Isaac (Genesis 22). At the <strong>word level</strong>, "your son, your only son, whom you love" repeats with a deliberate rhythm. At the <strong>line level</strong>, the dialogue between father and son is structured in terse parallel beats. At the <strong>scene level</strong>, Isaac falls silent after asking "Where is the lamb?" — a deliberate narrative gap held until the resurrection echo. At the <strong>structure level</strong>, the passage is the climactic test in a chiastic Abraham cycle. At the <strong>canon level</strong>, Isaac carrying wood up the mountain prefigures Christ carrying the cross. <strong>The text is doing all of this at once.</strong></p>
@@ -946,7 +991,7 @@
     </div>
 
     <!-- OBSERVATION → MEANING FRAMEWORK -->
-    <div class="theology-card" id="framework">
+    <div class="theology-card animate-on-scroll stagger-1" id="framework">
       <h2 class="section-title"><span class="section-icon">❡</span>From Observation to Meaning</h2>
       <p>At every level, careful reading moves through four stages. Skipping the middle stages — jumping straight from observation to application — is the most common interpretive mistake.</p>
 
@@ -975,7 +1020,7 @@
     </div>
 
     <!-- MEANING vs SIGNIFICANCE -->
-    <div class="theology-card" id="meaning-vs-significance">
+    <div class="theology-card animate-on-scroll stagger-2" id="meaning-vs-significance">
       <h2 class="section-title"><span class="section-icon">❡</span>Meaning vs. Significance</h2>
       <p>Two different questions, often confused. Disciplined reading keeps them distinct, then connects them in that order.</p>
 
@@ -996,7 +1041,7 @@
     </div>
 
     <!-- COMMON MISREADINGS -->
-    <div class="theology-card" id="misreadings">
+    <div class="theology-card animate-on-scroll stagger-1" id="misreadings">
       <h2 class="section-title"><span class="section-icon">❡</span>Common Misreadings</h2>
       <p>The Reading Stack helps avoid four predictable mistakes that flatten biblical literature.</p>
 
@@ -1021,7 +1066,7 @@
     </div>
 
     <!-- NEXT STEPS -->
-    <div class="theology-card" id="next-steps">
+    <div class="theology-card animate-on-scroll stagger-2" id="next-steps">
       <h2 class="section-title"><span class="section-icon">❡</span>Where to Go Next</h2>
       <p>Two routes from here, depending on whether you want breadth or depth.</p>
 
@@ -1076,9 +1121,43 @@
   <!-- Project Context Mobile Tabs & Animations -->
   <script src="/assets/js/character-page-v5-8.js" defer></script>
 
-  <!-- Reading Stack widget interactivity -->
+  <!-- Reading Stack widget interactivity + animation backstop -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
+      // ─────────────── animate-on-scroll backstop ───────────────
+      // global-v2.css defines .animate-on-scroll (opacity:0) + .animate-on-scroll.visible
+      // (opacity:1). character-page-v5-8.js is supposed to add .visible on scroll, but
+      // if it doesn't run for any reason, sections stay invisible. This backstop
+      // observer adds .visible itself, so the page always works.
+      const animateEls = document.querySelectorAll('.animate-on-scroll');
+      if (animateEls.length && 'IntersectionObserver' in window) {
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              obs.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.08, rootMargin: '0px 0px -8% 0px' });
+        animateEls.forEach(el => obs.observe(el));
+
+        // Anything already in viewport at page load → reveal immediately
+        // (avoids the classic "above-the-fold sections never trigger" bug)
+        requestAnimationFrame(() => {
+          animateEls.forEach(el => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+              el.classList.add('visible');
+              obs.unobserve(el);
+            }
+          });
+        });
+      } else {
+        // No IO support — just reveal everything
+        animateEls.forEach(el => el.classList.add('visible'));
+      }
+
+      // ─────────────── Reading Stack widget ───────────────
       const levels = document.querySelectorAll('.stack-level');
       const panels = document.querySelectorAll('.detail-panel');
 
@@ -1109,7 +1188,7 @@
         });
       });
 
-      console.log('Literary Devices: How to Read v1.0 (template 5.8.1) initialized');
+      console.log('Literary Devices: How to Read v1.1 (template 5.8.1) initialized');
     });
   </script>
 </body>
