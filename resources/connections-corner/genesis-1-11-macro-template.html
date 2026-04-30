@@ -142,6 +142,7 @@
       z-index: -2;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23b8a675' stroke-width='1.2' opacity='0.25'%3E%3Cpath d='M0,20 L20,0 L40,20 L60,0 L80,20'/%3E%3Cpath d='M0,40 L20,20 L40,40 L60,20 L80,40'/%3E%3Cpath d='M0,60 L20,40 L40,60 L60,40 L80,60'/%3E%3Cpath d='M0,80 L20,60 L40,80 L60,60 L80,80'/%3E%3C/g%3E%3C/svg%3E");
       background-size: 80px 80px;
+      animation: herringbonePan 60s linear infinite;
     }
     .hero::after {
       content: '';
@@ -165,6 +166,7 @@
       border-radius: 4px;
       border: 1px solid rgba(184,134,11,0.2);
       margin-bottom: 1.4rem;
+      animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.05s backwards, kickerGlow 4s ease-in-out 1.2s infinite;
     }
     .hero h1 {
       font-size: clamp(2.4rem, 5vw, 3.6rem);
@@ -172,6 +174,7 @@
       margin: 0 0 1.2rem;
       max-width: 22ch;
       font-weight: 600;
+      animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.18s backwards;
     }
     .hero-sub {
       font-family: 'Cormorant Garamond', Georgia, serif;
@@ -182,6 +185,7 @@
       max-width: 62ch;
       margin: 0 0 2rem;
       line-height: 1.5;
+      animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.32s backwards;
     }
     .hero-stats {
       display: flex;
@@ -190,6 +194,7 @@
       padding-top: 1.8rem;
       border-top: 1px solid var(--rule);
       max-width: 580px;
+      animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.46s backwards;
     }
     .hero-stat {
       display: flex;
@@ -202,6 +207,11 @@
       font-weight: 600;
       color: var(--ink);
       line-height: 1;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+    .hero-stat:hover .num {
+      color: var(--accent-gold);
+      transform: scale(1.08);
     }
     .hero-stat .lbl {
       font-family: 'JetBrains Mono', monospace;
@@ -332,6 +342,34 @@
       min-height: 220px;
       display: flex;
       flex-direction: column;
+      transition:
+        transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .cf-stage:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      z-index: 2;
+    }
+    .cf-stage:not(:last-child)::after {
+      content: '›';
+      position: absolute;
+      right: -0.65rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      color: var(--ink-mute);
+      opacity: 0.45;
+      animation: flowArrow 2.6s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 3;
+    }
+    .cf-stage:nth-child(2)::after { animation-delay: 0.3s; }
+    .cf-stage:nth-child(3)::after { animation-delay: 0.6s; }
+    .cf-stage:nth-child(4)::after { animation-delay: 0.9s; }
+    @media (max-width: 880px) {
+      .cf-stage:not(:last-child)::after { display: none; }
     }
     .cf-stage.creation { background: var(--phase-creation-lt); border: 1px solid rgba(45,106,79,0.3); }
     .cf-stage.test     { background: rgba(255,255,255,0.85); border: 1px dashed rgba(184,134,11,0.45); }
@@ -404,9 +442,40 @@
       border: 1px solid var(--rule);
       border-top: 4px solid var(--phase-color, var(--accent-gold));
       box-shadow: var(--shadow-sm);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      transition:
+        transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.32s ease;
+      position: relative;
+      overflow: hidden;
     }
-    .phase-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .phase-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(
+        90deg,
+        var(--phase-color) 0%,
+        rgba(255,255,255,0.85) 50%,
+        var(--phase-color) 100%
+      );
+      background-size: 200% 100%;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+    .phase-card:hover {
+      transform: translateY(-4px);
+      box-shadow:
+        0 12px 32px rgba(45,63,94,0.12),
+        0 0 0 1px color-mix(in srgb, var(--phase-color) 25%, transparent);
+      border-color: color-mix(in srgb, var(--phase-color) 40%, var(--rule));
+    }
+    .phase-card:hover::before {
+      opacity: 1;
+      animation: shimmer 2.4s ease-in-out infinite;
+    }
     .phase-card[data-phase="creation"]   { --phase-color: var(--phase-creation); }
     .phase-card[data-phase="folly"]      { --phase-color: var(--phase-folly); }
     .phase-card[data-phase="decreation"] { --phase-color: var(--phase-decreation); }
@@ -499,13 +568,54 @@
       min-width: 760px;
       height: auto;
     }
-    .arc-svg .phase-seg { cursor: default; }
-    .arc-svg .iter-chip { cursor: pointer; transition: opacity 0.2s ease; }
-    .arc-svg .iter-chip:hover { opacity: 0.85; }
-    .arc-svg .arc-line { transition: stroke-opacity 0.2s ease, stroke-width 0.2s ease; }
-    .arc-svg .iter-label { font-family: 'DM Sans', sans-serif; font-size: 9.5px; font-weight: 600; pointer-events: none; }
+    .arc-svg .phase-seg {
+      cursor: default;
+      animation: phaseBreathe 4s ease-in-out infinite;
+    }
+    .arc-svg .phase-seg:nth-child(2) { animation-delay: 0.4s; }
+    .arc-svg .phase-seg:nth-child(3) { animation-delay: 0.8s; }
+    .arc-svg .phase-seg:nth-child(4) { animation-delay: 1.2s; }
+    .arc-svg .iter-chip {
+      cursor: pointer;
+      transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+    .arc-svg .iter-chip:hover {
+      opacity: 0.92;
+      transform: translateY(-2px);
+    }
+    .arc-svg .arc-line {
+      transition:
+        stroke-opacity 0.3s ease,
+        stroke-width 0.3s ease;
+    }
+    /* Draw-in animation for arc lines when arc section is in view */
+    .reveal.is-visible .arc-svg .arc-line {
+      stroke-dasharray: 600;
+      stroke-dashoffset: 600;
+      animation: drawArc 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+    }
+    .reveal.is-visible .arc-svg .arc-line:nth-of-type(4n)   { animation-delay: 0.50s; }
+    .reveal.is-visible .arc-svg .arc-line:nth-of-type(4n+1) { animation-delay: 0.65s; }
+    .reveal.is-visible .arc-svg .arc-line:nth-of-type(4n+2) { animation-delay: 0.80s; }
+    .reveal.is-visible .arc-svg .arc-line:nth-of-type(4n+3) { animation-delay: 0.95s; }
+
+    .arc-svg .iter-label  { font-family: 'DM Sans', sans-serif; font-size: 9.5px; font-weight: 600; pointer-events: none; }
     .arc-svg .phase-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; pointer-events: none; }
     .arc-svg .phase-sublabel { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; pointer-events: none; }
+
+    /* Warrant legend chips — interactive hover for legend */
+    .warrant-tag {
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .warrant-legend .warrant-tag {
+      cursor: default;
+    }
+    .warrant-legend .warrant-tag:hover {
+      transform: translateY(-1px);
+      background: rgba(184,134,11,0.16);
+    }
 
     .arc-info-panel {
       background: var(--parchment-light);
@@ -570,6 +680,11 @@
       border-radius: 12px;
       padding: 1.4rem 1.6rem;
       box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.32s ease, transform 0.32s ease;
+    }
+    .nested-cycle:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
     }
     .nc-title {
       font-family: 'Cormorant Garamond', serif;
@@ -595,7 +710,25 @@
       font-size: 0.8rem;
       text-align: center;
       line-height: 1.3;
+      transition:
+        transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: default;
     }
+    .nc-cell:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 6px 18px rgba(45,63,94,0.15);
+      z-index: 2;
+      position: relative;
+    }
+    .reveal.is-visible .nc-bar .nc-cell {
+      animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    }
+    .reveal.is-visible .nc-bar .nc-cell:nth-child(1) { animation-delay: 0.10s; }
+    .reveal.is-visible .nc-bar .nc-cell:nth-child(2) { animation-delay: 0.18s; }
+    .reveal.is-visible .nc-bar .nc-cell:nth-child(3) { animation-delay: 0.26s; }
+    .reveal.is-visible .nc-bar .nc-cell:nth-child(4) { animation-delay: 0.34s; }
+    .reveal.is-visible .nc-bar .nc-cell:nth-child(5) { animation-delay: 0.42s; }
     .nc-cell.bookend { background: var(--phase-creation-lt); border: 1px solid rgba(45,106,79,0.3); color: var(--phase-creation); font-weight: 600; }
     .nc-cell.pivot   { background: var(--phase-decreation-lt); border: 1px solid rgba(155,44,44,0.3); color: var(--phase-decreation); font-weight: 600; }
     .nc-cell.normal  { background: var(--parchment); border: 1px solid var(--rule); color: var(--ink-soft); }
@@ -619,12 +752,26 @@
       padding: 1.4rem;
       box-shadow: var(--shadow-sm);
       position: relative;
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.32s ease, border-color 0.32s ease;
+      overflow: hidden;
+    }
+    .heb-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(45,63,94,0.12);
+      border-color: rgba(184,134,11,0.4);
     }
     .heb-card::before {
       content: '';
       position: absolute; top: 0; left: 1.4rem; right: 1.4rem;
       height: 2px;
       background: linear-gradient(to right, var(--accent-gold), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
+    }
+    .reveal.is-visible .heb-card::before { transform: scaleX(1); }
+    .heb-card:hover::before {
+      background: linear-gradient(to right, var(--accent-gold) 0%, var(--accent-gold) 60%, transparent 100%);
     }
     .heb-word {
       font-family: 'Cormorant Garamond', serif;
@@ -633,6 +780,14 @@
       color: var(--ink);
       line-height: 1;
       margin-bottom: 0.4rem;
+      transition: color 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.is-visible .heb-word {
+      animation: slideInRtl 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s backwards;
+    }
+    .heb-card:hover .heb-word {
+      color: var(--accent-gold);
+      transform: scale(1.04);
     }
     .heb-trans {
       font-style: italic;
@@ -664,27 +819,44 @@
       padding: 1rem 1.2rem;
       text-decoration: none;
       color: inherit;
-      transition: all 0.2s ease;
+      transition:
+        transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.32s ease;
       display: block;
+      position: relative;
+      overflow: hidden;
+    }
+    .xref-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--accent-gold), transparent);
+      transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .xref-card:hover {
       border-color: var(--accent-gold);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(45,63,94,0.14);
     }
+    .xref-card:hover::after { width: 100%; }
+    .xref-card .x-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 0.3rem;
+      transition: color 0.3s ease;
+    }
+    .xref-card:hover .x-title { color: var(--accent-gold); }
     .xref-card .x-kicker {
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.68rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--ink-mute);
-      margin-bottom: 0.3rem;
-    }
-    .xref-card .x-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--ink);
       margin-bottom: 0.3rem;
     }
     .xref-card .x-note {
@@ -755,10 +927,86 @@
       position: fixed;
       top: 0; left: 0;
       height: 3px;
-      background: var(--accent-gold);
+      background: linear-gradient(90deg, var(--accent-gold), #d4a93f);
+      box-shadow: 0 0 8px rgba(184,134,11,0.5), 0 0 16px rgba(184,134,11,0.25);
       width: 0%;
       z-index: 999;
       transition: width 0.1s ease;
+    }
+
+    /* ─── ANIMATION PRIMITIVES ─────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes slideInRtl {
+      from { opacity: 0; transform: translateX(-12px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes herringbonePan {
+      from { background-position: 0 0; }
+      to   { background-position: 80px 80px; }
+    }
+    @keyframes kickerGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(184,134,11,0); }
+      50%      { box-shadow: 0 0 0 4px rgba(184,134,11,0.08); }
+    }
+    @keyframes drawArc {
+      to { stroke-dashoffset: 0; }
+    }
+    @keyframes chipPulse {
+      0%, 100% { stroke-width: 1.4; }
+      50%      { stroke-width: 1.9; }
+    }
+    @keyframes phaseBreathe {
+      0%, 100% { opacity: 0.92; }
+      50%      { opacity: 1; }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    @keyframes flowArrow {
+      0%   { transform: translateX(-4px); opacity: 0.3; }
+      50%  { opacity: 1; }
+      100% { transform: translateX(4px); opacity: 0.3; }
+    }
+
+    /* Reveal-on-scroll: sections start hidden, .is-visible animates them in */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Stagger for grids — children fade-up after parent */
+    .reveal.is-visible .stagger > * {
+      animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    }
+    .reveal.is-visible .stagger > *:nth-child(1) { animation-delay: 0.05s; }
+    .reveal.is-visible .stagger > *:nth-child(2) { animation-delay: 0.13s; }
+    .reveal.is-visible .stagger > *:nth-child(3) { animation-delay: 0.21s; }
+    .reveal.is-visible .stagger > *:nth-child(4) { animation-delay: 0.29s; }
+    .reveal.is-visible .stagger > *:nth-child(5) { animation-delay: 0.37s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .reveal { opacity: 1 !important; transform: none !important; }
+      .hero::before { animation: none !important; }
     }
   </style>
 </head>
@@ -807,7 +1055,7 @@
     </details>
 
     <!-- THESIS -->
-    <section id="thesis">
+    <section id="thesis" class="reveal">
       <div class="section-kicker">§ 01 · The Thesis</div>
       <h2 class="section-title">The Template Behind the Canon</h2>
       <p class="section-lede">Genesis 1–11 introduces a recurring biblical pattern. Later authors retell Israel's story through it.</p>
@@ -825,7 +1073,7 @@
     </section>
 
     <!-- CYCLE FLOW DIAGRAM -->
-    <section id="cycle">
+    <section id="cycle" class="reveal">
       <div class="section-kicker">§ 02 · The Cycle</div>
       <h2 class="section-title">The Four-Stage Melody</h2>
       <p class="section-lede">The shape itself: Creation gives way to a sequence of tests, those tests escalate into de-creation, and out of de-creation a remnant emerges, marked by covenant.</p>
@@ -888,12 +1136,12 @@
     </section>
 
     <!-- PHASE CARDS -->
-    <section id="phases">
+    <section id="phases" class="reveal">
       <div class="section-kicker">§ 03 · The Phases</div>
       <h2 class="section-title">What Each Stage Does</h2>
       <p class="section-lede">The vocabulary, imagery, and theological work of each phase — the patterns to listen for as the melody recurs.</p>
 
-      <div class="phase-grid">
+      <div class="phase-grid stagger">
         <div class="phase-card" data-phase="creation">
           <div class="num">Phase 01</div>
           <h3>Creation &amp; Blessing</h3>
@@ -937,7 +1185,7 @@
     </section>
 
     <!-- ARC DIAGRAM -->
-    <section id="arc">
+    <section id="arc" class="reveal">
       <div class="section-kicker">§ 04 · The Recurrence</div>
       <h2 class="section-title">The Pattern Recurs</h2>
       <p class="section-lede">Each chip below is one example of the cycle traced somewhere in the canon. Hover or click a chip to see how it maps to all four phases — and to feel, visually, how often this pattern reappears.</p>
@@ -970,12 +1218,12 @@
     </section>
 
     <!-- NESTED CYCLES -->
-    <section id="nested">
+    <section id="nested" class="reveal">
       <div class="section-kicker">§ 05 · Nested Examples</div>
       <h2 class="section-title">Three Cycles Inside Genesis 1–12</h2>
       <p class="section-lede">Mackie's diagrams show the same template playing out three times in just the first eleven chapters — each time on a different scale, like rings within rings.</p>
 
-      <div class="nested-cycles">
+      <div class="nested-cycles stagger">
         <div class="nested-cycle">
           <h3 class="nc-title">Primal Cycle — Creation Out of Waters</h3>
           <div class="nc-refs">Gen 1:1 – 9:17</div>
@@ -1018,12 +1266,12 @@
     </section>
 
     <!-- HEBREW ANCHOR WORDS -->
-    <section id="hebrew">
+    <section id="hebrew" class="reveal">
       <div class="section-kicker">§ 06 · Hebrew Anchor Words</div>
       <h2 class="section-title">Two Words That Hold the Pattern</h2>
       <p class="section-lede">Mackie names two Hebrew roots that repeatedly mark the cycle's transitions, and especially the moment of re-creation.</p>
 
-      <div class="heb-vocab">
+      <div class="heb-vocab stagger">
         <div class="heb-card">
           <div class="heb-word">שֶׁבַע</div>
           <div class="heb-trans">sheva</div>
@@ -1041,12 +1289,12 @@
     </section>
 
     <!-- WHERE THIS LIVES ON THE SITE -->
-    <section id="where">
+    <section id="where" class="reveal">
       <div class="section-kicker">§ 07 · On Project Context</div>
       <h2 class="section-title">Where This Template Lives</h2>
       <p class="section-lede">Many Project Context studies are built on this template — sometimes explicitly, sometimes as the unspoken framework. These pages put the template to work.</p>
 
-      <div class="xref-grid">
+      <div class="xref-grid stagger">
         <a href="/studies/characters/noah/noah.html" class="xref-card">
           <div class="x-kicker">Character Study</div>
           <div class="x-title">Noah Suite</div>
@@ -1675,6 +1923,46 @@
         bar.style.width = pct + '%';
       }, { passive: true });
     }
+
+    // ── Reveal-on-scroll: fade-up sections as they enter viewport ─
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reveals = document.querySelectorAll('.reveal');
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      reveals.forEach(el => el.classList.add('is-visible'));
+    } else {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      reveals.forEach(el => io.observe(el));
+    }
+
+    // ── Hero stat number count-up on load ────────────────────────
+    function animateNum(el, target, duration) {
+      if (reduceMotion) { el.textContent = target; return; }
+      const start = performance.now();
+      function tick(now) {
+        const t = Math.min(1, (now - start) / duration);
+        // ease-out cubic
+        const eased = 1 - Math.pow(1 - t, 3);
+        el.textContent = Math.round(target * eased);
+        if (t < 1) requestAnimationFrame(tick);
+        else el.textContent = target;
+      }
+      requestAnimationFrame(tick);
+    }
+    document.querySelectorAll('.hero-stat .num').forEach(el => {
+      const original = el.textContent.trim();
+      const n = parseInt(original, 10);
+      if (Number.isFinite(n) && n > 0 && n <= 100) {
+        el.textContent = '0';
+        setTimeout(() => animateNum(el, n, 1200), 600);
+      }
+    });
   })();
   </script>
 </body>
