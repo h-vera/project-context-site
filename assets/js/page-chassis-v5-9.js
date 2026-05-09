@@ -1,7 +1,7 @@
 /**
  * Project Context Page Chassis — v5.9
  * Path: /assets/js/page-chassis-v5-9.js
- * Version: 5.9.0
+ * Version: 5.9.2
  *
  * Page-type-agnostic chassis used by every v5.9 template family:
  *   • biblical-character-template-v5-9.html
@@ -39,6 +39,18 @@
  *   • Mini-TOC pill bar active-link tracking (matches mobile tabs).
  *   • Reduced-motion respect — staggered timeline animations skip
  *     when prefers-reduced-motion is set.
+ *
+ * v5.9.1 changes:
+ *   • Scroll reveal system — opt-in via [data-reveal] (single element)
+ *     or [data-reveal-children] (parent triggers staggered reveal of
+ *     direct children, 80ms apart). CSS lives in global-v3.css §56.
+ *     Honors prefers-reduced-motion via the CSS @media query.
+ *
+ * v5.9.2 changes:
+ *   • Canonical .timeline.stagger-children now triggers via the same
+ *     IntersectionObserver — adds [data-revealed] when scrolled into
+ *     view, sets --reveal-stagger on each child. Replaces the earlier
+ *     on-page-load animation with hardcoded :nth-child delay rules.
  */
 
 (function () {
@@ -579,11 +591,68 @@
 
 
   // ============================================================
+  // SCROLL REVEAL — opt-in via [data-reveal] / [data-reveal-children]
+  // plus canonical .timeline.stagger-children (treated as stagger parent).
+  // ============================================================
+  //
+  // The CSS ships the hidden initial state and the reveal keyframe.
+  // This function watches three trigger patterns:
+  //   • [data-reveal]               — single element fades up
+  //   • [data-reveal-children]      — children stagger fade up
+  //   • .timeline.stagger-children  — children stagger slide in from left
+  //
+  // For both stagger patterns, we set --reveal-stagger on each direct
+  // child (80ms apart) so they animate in sequence.
+  //
+  // Reduced-motion is handled by the CSS — observer still runs (cheap)
+  // but the animation is disabled.
+  // ============================================================
+
+  function bindRevealOnScroll() {
+    const targets = $$('[data-reveal], [data-reveal-children], .timeline.stagger-children');
+    if (!targets.length) return;
+    if (typeof IntersectionObserver !== 'function') {
+      // No IO support — just reveal everything immediately.
+      targets.forEach(el => el.setAttribute('data-revealed', 'true'));
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+
+        const isStaggerParent =
+          el.hasAttribute('data-reveal-children') ||
+          el.matches('.timeline.stagger-children');
+
+        if (isStaggerParent) {
+          // Apply stagger delays to direct children
+          const kids = Array.from(el.children);
+          const step = 80; // ms between children
+          kids.forEach((kid, i) => {
+            kid.style.setProperty('--reveal-stagger', `${i * step}ms`);
+          });
+        }
+
+        el.setAttribute('data-revealed', 'true');
+        observer.unobserve(el);
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    targets.forEach(el => observer.observe(el));
+  }
+
+
+  // ============================================================
   // INITIALIZATION
   // ============================================================
 
   function init() {
-    console.info('[v5.9] Project Context page chassis initialized.');
+    console.info('[v5.9.2] Project Context page chassis initialized.');
 
     // Reading time first — body text is stable, doesn't depend on widgets
     fillReadingTime();
@@ -629,6 +698,9 @@
 
     // Anchor smooth-scroll for anything not already handled
     bindAnchorScroll();
+
+    // Scroll reveal — opt-in via [data-reveal] / [data-reveal-children]
+    bindRevealOnScroll();
 
     // Print: expand bibliography / details
     window.addEventListener('beforeprint', () => {

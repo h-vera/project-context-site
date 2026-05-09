@@ -428,3 +428,142 @@ A v5.9 character profile is excellent when:
 *Last Updated: April 2026*  
 *Template Version: 5.9.0*  
 *Documentation Version: 5.0*
+
+# v5.9 README Update Memo — Animation Section
+
+**Files affected:**
+- `biblical-character-readme-v5-9.md`
+- `thematic-study-readme-v5-9.md`
+- `multi-page-suite-readme-v5-9.md`
+
+These three README files all contain the same anti-pattern note about animation. With v3.3.2 + chassis 5.9.2, that note is no longer accurate. Replace it across all three files.
+
+---
+
+## What to find
+
+Search each README for text that looks roughly like:
+
+> **`.animate-on-scroll` as a default class.** Removed from v5.9 markup. Animation is opt-in per element. The only allowed default-animated component is `.timeline.stagger-children`, where the stagger carries semantic weight.
+
+It may be inside a numbered list of v5.9 anti-patterns, or in a "Motion / Animation" section. Wording may vary slightly between the three files.
+
+---
+
+## What to replace it with
+
+```markdown
+**Animation is opt-in via attributes, scroll-triggered by the chassis.**
+The chassis runs an IntersectionObserver that watches three trigger
+patterns and applies a `[data-revealed]` attribute when an element
+enters the viewport. Three patterns:
+
+- **`data-reveal`** — single element fades up on scroll-into-view.
+  Use sparingly: for one-off emphasis like a closing `.takeaway`.
+
+- **`data-reveal-children`** — parent stays visible; its direct
+  children fade up in sequence (80ms stagger between each). Apply
+  to the parent of any `.mini-card-grid`, `.grid-2`/`grid-3`/`grid-4`,
+  `.books-grid`, `.principles-grid`, `.pattern-chain`, `.scholar-timeline`,
+  or `.state-timeline`. Vertical timelines (`.scholar-timeline`,
+  `.state-timeline`, plus the canonical `.timeline`) automatically
+  use a slide-from-left motion instead of fade-up — items extend
+  rightward from the rail, so they should arrive from the left.
+
+- **`.timeline.stagger-children`** (canonical class, no attribute) —
+  legacy class from v5.8. Continues to work; the chassis observes
+  it on the same trigger system, replacing the earlier
+  on-page-load animation. Children animate with `fadeSlideLeft`
+  staggered 80ms apart. No `data-reveal-children` needed alongside;
+  the class alone triggers the same observer.
+
+**When to apply:** parents of grids, chains, and timelines where
+motion enacts something — sequence, progression, build, chain
+assembly. Don't blanket-apply to every block; the principle that
+killed `.animate-on-scroll` as a default class still holds. A
+useful test: would the user feel anything is *missing* if this
+parent's children appeared statically? If no, leave it.
+
+**When NOT to apply:** above-fold hero content, `.theology-card`
+parents (the cards themselves), single body paragraphs, individual
+mini-cards or grid items. Mark the parent grid, not the children.
+
+**Reduced motion** is honored automatically via a CSS
+`@media (prefers-reduced-motion: reduce)` block in `global-v3.css §56`.
+Users with reduced-motion preferences see all elements in their
+final state with no animation; the IntersectionObserver still runs
+(cheap) but the keyframes are disabled.
+
+**Where the implementation lives:**
+- CSS: `global-v3.css §56` (Scroll Reveal System) — keyframes,
+  hidden initial state, slide-left override for vertical timelines.
+- JS: `page-chassis-v5-9.js` → `bindRevealOnScroll()` —
+  IntersectionObserver, stagger CSS-variable assignment.
+
+**Versions:** Requires `global-v3.css ≥ 3.3.2` AND
+`page-chassis-v5-9.js ≥ 5.9.2`. Older chassis versions will leave
+elements hidden permanently (the CSS sets `opacity: 0` until
+`[data-revealed]` is applied). Bump cache-busting query strings
+on every CSS/chassis update so the Service Worker doesn't serve
+stale files.
+```
+
+---
+
+## Other places in the READMEs that may need updating
+
+**1. Component reference sections.** If any of the three READMEs has
+a section listing v5.9 components and what they do, look for entries
+under "timelines" or "grids" that reference the old animation behavior
+("animates on page load", "fade-slide-left on load", etc.) and reword
+them. The new behavior is "animates when scrolled into view."
+
+**2. Sample markup snippets.** Look for code samples that use any of:
+- `<div class="mini-card-grid">`
+- `<div class="grid-2">` (or `-3`, `-4`)
+- `<div class="books-grid">`
+- `<div class="principles-grid">`
+- `<div class="pattern-chain">`
+- `<div class="scholar-timeline">`
+- `<div class="state-timeline">`
+
+For each, update the snippet to include `data-reveal-children` on
+the parent div. Example:
+
+**Before:**
+```html
+<div class="mini-card-grid">
+  <div class="mini-card">…</div>
+  <div class="mini-card">…</div>
+</div>
+```
+
+**After:**
+```html
+<div class="mini-card-grid" data-reveal-children>
+  <div class="mini-card">…</div>
+  <div class="mini-card">…</div>
+</div>
+```
+
+`.timeline.stagger-children` does NOT need `data-reveal-children`
+added; the canonical class triggers the observer on its own.
+
+**3. Quick-reference tables / changelog at top of each README.**
+Add a v5.9.2 line:
+
+```markdown
+- **v5.9.2** — Scroll-reveal system unified. `.timeline.stagger-children`
+  now triggers on scroll (not page-load). Grids opt in via
+  `data-reveal-children`. See Animation section for full pattern.
+```
+
+---
+
+## Filename references — separate fix from previous compaction summary
+
+This is unrelated to the animation work, but worth doing in the same
+README pass: all three READMEs and three template files were flagged
+as referencing the old chassis filename `character-page-v5-9.js`.
+The actual filename is `page-chassis-v5-9.js`. Search-and-replace
+across all six files.

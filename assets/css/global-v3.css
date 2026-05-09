@@ -1,9 +1,10 @@
 /* ============================================================
    GLOBAL V3 STYLESHEET — Project Context
    Path: /assets/css/global-v3.css
-   Version: 3.3.1  (3.3 + slide-left reveal variant for vertical
-                    timelines, matching canonical .timeline.stagger-children
-                    motion semantics)
+   Version: 3.3.2  (3.3 + .timeline.stagger-children unified onto the
+                    same scroll-trigger system as [data-reveal-children];
+                    no more :nth-child(N) delay rules — chassis sets
+                    --reveal-stagger per child)
    Replaces: global-v2.css + mobile-tabs-v5-8.css
    Last Updated: 2026-05-09
 
@@ -969,17 +970,19 @@ body.menu-open { overflow: hidden; }
   transform: scale(1.2);
 }
 
+/* Canonical .timeline.stagger-children — same trigger system as
+   [data-reveal-children]. Items start hidden; the chassis observes
+   the timeline and applies [data-revealed] when it enters the
+   viewport, also setting --reveal-stagger on each .timeline-item.
+   See §56 for the chassis observer; works for any number of items. */
 .timeline.stagger-children .timeline-item {
-  animation: fadeSlideLeft var(--duration-slow) var(--ease-out) backwards;
+  opacity: 0;
+  transform: translateX(-30px);
+  will-change: opacity, transform;
 }
-.timeline.stagger-children .timeline-item:nth-child(1) { animation-delay: 0.05s; }
-.timeline.stagger-children .timeline-item:nth-child(2) { animation-delay: 0.10s; }
-.timeline.stagger-children .timeline-item:nth-child(3) { animation-delay: 0.15s; }
-.timeline.stagger-children .timeline-item:nth-child(4) { animation-delay: 0.20s; }
-.timeline.stagger-children .timeline-item:nth-child(5) { animation-delay: 0.25s; }
-.timeline.stagger-children .timeline-item:nth-child(6) { animation-delay: 0.30s; }
-.timeline.stagger-children .timeline-item:nth-child(7) { animation-delay: 0.35s; }
-.timeline.stagger-children .timeline-item:nth-child(8) { animation-delay: 0.40s; }
+.timeline.stagger-children[data-revealed] .timeline-item {
+  animation: fadeSlideLeft var(--duration-slow) var(--ease-out) var(--reveal-stagger, 0ms) forwards;
+}
 
 
 /* ============================================================
@@ -2684,7 +2687,8 @@ footer a:hover {
 /* Honor reduced motion: skip the animation, show final state */
 @media (prefers-reduced-motion: reduce) {
   [data-reveal],
-  [data-reveal-children] > * {
+  [data-reveal-children] > *,
+  .timeline.stagger-children .timeline-item {
     opacity: 1;
     transform: none;
     animation: none;
