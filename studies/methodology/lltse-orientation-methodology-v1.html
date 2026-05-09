@@ -307,6 +307,144 @@
       color: var(--text-muted);
       margin-top: 0.4rem;
     }
+
+    /* =====================================================
+       CONCLUSION-COMPONENT POLISH LAYER
+       Restores the hover-lift and tile/sweep/glow effects
+       documented in the Component Catalog (v1.5) but absent
+       from global-v3.css. These rules belong in global
+       eventually; living page-local until promoted.
+       ===================================================== */
+
+    /* --- Theology Card hover lift (was in v2, lost in v3) --- */
+    .theology-card {
+      transition: transform 0.25s var(--ease, ease),
+                  box-shadow 0.25s var(--ease, ease),
+                  border-color 0.25s var(--ease, ease);
+    }
+    .theology-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06),
+                  0 2px 6px rgba(15, 23, 42, 0.04);
+      border-color: color-mix(in srgb, var(--page-accent, var(--accent-purple)) 25%, var(--border));
+    }
+
+    /* --- Pattern Summary: completion-glow pulse + hover lift --- */
+    .pattern-summary {
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .pattern-summary::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: inherit;
+      background: linear-gradient(135deg,
+        color-mix(in srgb, var(--accent-magenta) 20%, transparent),
+        color-mix(in srgb, var(--accent-teal)    20%, transparent));
+      opacity: 0;
+      z-index: -1;
+      animation: lltse-summary-glow 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .pattern-summary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px color-mix(in srgb, var(--accent-teal) 18%, transparent);
+    }
+    @keyframes lltse-summary-glow {
+      0%, 100% { opacity: 0; }
+      50%      { opacity: 0.55; }
+    }
+
+    /* --- One-Line Takeaway: sweeping top bar + hover lift --- */
+    .takeaway {
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .takeaway::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg,
+        var(--accent-teal),
+        var(--accent-purple),
+        var(--accent-rose),
+        var(--accent-teal));
+      background-size: 300% 100%;
+      border-radius: var(--radius) var(--radius) 0 0;
+      animation: lltse-takeaway-sweep 5s ease-in-out infinite;
+    }
+    .takeaway:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+    @keyframes lltse-takeaway-sweep {
+      0%, 100% { background-position: 0% 50%; }
+      50%      { background-position: 100% 50%; }
+    }
+
+    /* --- Critical Distinction: animated top stripe + hover lift --- */
+    .critical-distinction {
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .critical-distinction::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg,
+        var(--accent-rose),
+        color-mix(in srgb, var(--accent-rose) 60%, var(--accent-magenta)),
+        var(--accent-rose));
+      background-size: 200% 100%;
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+      animation: lltse-critical-sweep 4s ease-in-out infinite;
+    }
+    .critical-distinction:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px color-mix(in srgb, var(--accent-rose) 18%, transparent);
+    }
+    @keyframes lltse-critical-sweep {
+      0%, 100% { background-position: 0% 50%; }
+      50%      { background-position: 100% 50%; }
+    }
+
+    /* --- Core Logic Quote: subtle hover gradient lift --- */
+    .core-logic-quote {
+      transition: transform 0.3s ease, letter-spacing 0.3s ease;
+    }
+    .core-logic-quote:hover {
+      transform: translateY(-1px);
+    }
+    .core-logic-quote:hover::before,
+    .core-logic-quote:hover::after {
+      transform: scale(1.08);
+      transition: transform 0.3s ease;
+    }
+
+    /* --- See-It card: hover lift to match the catalog's card-hover signature --- */
+    .see-it-card {
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .see-it-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    /* Honor reduced-motion: kill all the looping tile animations.
+       Hover lifts stay (they're not looping, only triggered). */
+    @media (prefers-reduced-motion: reduce) {
+      .pattern-summary::after,
+      .takeaway::after,
+      .critical-distinction::after {
+        animation: none;
+      }
+    }
   </style>
 
   <!-- Page-section config (per-page manifest read by page-chassis-v5-9.js) -->
@@ -354,7 +492,7 @@
 
     <!-- Hero (page-specific cosmic gradient) -->
     <section class="lltse-hero">
-      <div class="lltse-hero-inner">
+      <div class="lltse-hero-inner" data-reveal-children>
         <div class="hero-eyebrow">Project Context · Methodology</div>
         <h1>Literal–Literary Translation Structure Edition</h1>
         <p class="hero-subtitle">The LLTSE brings the rhythm and rhetoric of Scripture back into view by aligning <strong>literal translation</strong> with <strong>literary structure</strong>—so modern readers can hear what the original audiences heard in Hebrew, Aramaic, and Greek.</p>
@@ -399,7 +537,7 @@
          SEE IT IN ACTION — opening live demo
          (canonical v3 .see-it-card)
          ========================================== -->
-    <section class="see-it-card" id="see-it">
+    <section class="see-it-card" id="see-it" data-reveal>
       <div class="see-it-eyebrow">See it before reading about it</div>
       <h2>What LLTSE looks like, in three lines</h2>
       <p>Before any explanation: here is Psalm 23:1–3 in LLTSE form. Notice how the structure carries the meaning before any note does.</p>
@@ -421,7 +559,7 @@
     <!-- ==========================================
          WHAT IS LLTSE? (theology-card with prose)
          ========================================== -->
-    <section class="theology-card" id="what-is-lltse">
+    <section class="theology-card" id="what-is-lltse" data-reveal>
       <h2 class="section-title">
         <span class="section-icon">📖</span>
         What Is the Literal–Literary Translation Structure Edition (LLTSE)?
@@ -458,7 +596,7 @@
          CORE METHODOLOGICAL COMMITMENTS
          (theology-card + mini-card-grid)
          ========================================== -->
-    <section class="theology-card" id="commitments">
+    <section class="theology-card" id="commitments" data-reveal>
       <h2 class="section-title">
         <span class="section-icon">⚙️</span>
         Core Methodological Commitments
@@ -491,7 +629,7 @@
          TWO COMPLEMENTARY PRESENTATIONS
          (theology-card + Goat Panels + Core Logic Quote)
          ========================================== -->
-    <section class="theology-card" id="two-formats">
+    <section class="theology-card" id="two-formats" data-reveal>
       <h2 class="section-title">
         <span class="section-icon">📜</span>
         Two Complementary Presentations
@@ -521,7 +659,7 @@
       </div>
 
       <!-- Page thesis on this section — canonical Core Logic Quote (blockquote) -->
-      <blockquote class="core-logic-quote">
+      <blockquote class="core-logic-quote" data-reveal>
         These are two presentations of the same translation, formatted differently for different purposes. Structure and continuity are not opposites — the same text can be both analytically clear and aurally immersive.
       </blockquote>
     </section>
@@ -532,7 +670,7 @@
          VISUAL HIERARCHY OF THOUGHT
          (theology-card + Pattern Chain + Mini-Card Grid)
          ========================================== -->
-    <section class="theology-card" id="visual-hierarchy">
+    <section class="theology-card" id="visual-hierarchy" data-reveal>
       <h2 class="section-title">
         <span class="section-icon">🎨</span>
         Visual Hierarchy of Thought
@@ -601,7 +739,7 @@
          (Genesis 9:6 with chiasm-ladder + pivot-box.pulsing;
           1 Tim 3:16 with creedal arc SVG)
          ========================================== -->
-    <section class="theology-card" id="methodology">
+    <section class="theology-card" id="methodology" data-reveal>
       <h2 class="section-title">
         <span class="section-icon">🔬</span>
         Methodology: Hebrew and Greek in Dialogue
@@ -710,7 +848,7 @@
     <!-- ==========================================
          BEFORE & AFTER — toggles + canonical Pattern Summary
          ========================================== -->
-    <section class="theology-card" id="before-after">
+    <section class="theology-card" id="before-after" data-reveal>
       <h2 class="section-title">
         <span class="section-icon">⚖️</span>
         Before &amp; After: Paragraph vs. Structured Edition
@@ -804,7 +942,7 @@
       </article>
 
       <!-- Canonical v3 Pattern Summary -->
-      <div class="pattern-summary">
+      <div class="pattern-summary" data-reveal>
         <h4>Pattern Summary</h4>
         <p>In paragraph format, these passages read like continuous prose. In structured format, the parallel lines, subordinate clauses, and rhythmic patterns become immediately visible — restoring what ancient hearers would have recognized aurally.</p>
       </div>
@@ -816,7 +954,7 @@
          WHY INDENTATION WORKS
          (theology-card + Mini-Card Grid + Pattern Summary)
          ========================================== -->
-    <section class="theology-card" id="why-indentation">
+    <section class="theology-card" id="why-indentation" data-reveal>
       <h2 class="section-title">
         <span class="section-icon">📐</span>
         Why Indentation Works
@@ -850,7 +988,7 @@
         </div>
       </div>
 
-      <div class="pattern-summary">
+      <div class="pattern-summary" data-reveal>
         <h4>The Scholarly Consensus</h4>
         <p>Modern biblical scholarship has long recognized that Hebrew poetry works through parallelism and Greek rhetoric through careful clause arrangement. LLTSE simply makes this visible on the page, following the practice of scholars like Robert Alter, Adele Berlin, and F.W. Dobbs-Allsopp who lineate biblical texts in their academic translations.</p>
       </div>
@@ -862,7 +1000,7 @@
          DEMONSTRATED APPLICATIONS
          (theology-card + books-grid + Critical Distinction)
          ========================================== -->
-    <section class="theology-card" id="demonstrated">
+    <section class="theology-card" id="demonstrated" data-reveal>
       <h2 class="section-title">
         <span class="section-icon">📚</span>
         Demonstrated Applications
@@ -896,7 +1034,7 @@
       </div>
 
       <!-- Canonical v3 Critical Distinction (corrects a misreading) -->
-      <div class="critical-distinction">
+      <div class="critical-distinction" data-reveal>
         <h4>Don't confuse the methodology with a translation</h4>
         <p>LLTSE is the <em>presentation methodology</em>. The translation can come from any source — here we demonstrate it with both The BibleProject's translation (Ephesians) and Project Context's own translation (1 Timothy). In both cases, Project Context applies LLTSE to create the Structured Edition and Scroll Edition formats.</p>
       </div>
@@ -908,7 +1046,7 @@
          EVOLUTION & RATIONALE
          (theology-card + scholar-timeline + Pattern Summary)
          ========================================== -->
-    <section class="theology-card" id="evolution-rationale">
+    <section class="theology-card" id="evolution-rationale" data-reveal>
       <h2 class="section-title">
         <span class="section-icon">📚</span>
         Evolution &amp; Rationale
@@ -936,7 +1074,7 @@
         </div>
       </div>
 
-      <div class="pattern-summary">
+      <div class="pattern-summary" data-reveal>
         <h4>LLTSE's Contribution</h4>
         <p>We apply these established scholarly principles more comprehensively and systematically to both testaments, creating a reading edition that makes structure visible without imposing meter or arbitrary formatting.</p>
       </div>
@@ -948,7 +1086,7 @@
          PRINCIPLES OF TRANSLATION & DESIGN
          (theology-card + principles-grid + Pattern Summary)
          ========================================== -->
-    <section class="theology-card" id="principles">
+    <section class="theology-card" id="principles" data-reveal>
       <h2 class="section-title">
         <span class="section-icon">⚙️</span>
         Principles of Translation &amp; Design
@@ -980,7 +1118,7 @@
         </div>
       </div>
 
-      <div class="pattern-summary">
+      <div class="pattern-summary" data-reveal>
         <h4>Balance in Practice</h4>
         <p>LLTSE navigates the tension between formal equivalence (word-for-word) and dynamic equivalence (thought-for-thought). We preserve source structure and syntax where English allows, but prioritize clarity and natural expression where literal rendering would obscure meaning. The goal: let English readers see what Hebrew and Greek readers saw in the original literary architecture.</p>
       </div>
@@ -992,7 +1130,7 @@
          FROM SCROLL TO SCREEN
          (state-timeline + ascii-demo-grid + Goat Panels)
          ========================================== -->
-    <section class="theology-card" id="evolution-format">
+    <section class="theology-card" id="evolution-format" data-reveal>
       <h2 class="section-title">
         <span class="section-icon">📜</span>
         From Scroll to Screen: The Evolution of Format
@@ -1125,7 +1263,7 @@ He was in the beginning
          WHAT LLTSE IS NOT
          (theology-card + Mini-Card Grid with rose accent)
          ========================================== -->
-    <section class="theology-card" id="what-not">
+    <section class="theology-card" id="what-not" data-reveal>
       <h2 class="section-title">
         <span class="section-icon">⚠️</span>
         What LLTSE Is Not
@@ -1348,7 +1486,7 @@ He was in the beginning
     <!-- ==========================================
          EXPLORE THE STRUCTURED EDITIONS
          ========================================== -->
-    <section class="theology-card" id="explore-hubs" style="margin-top: 2rem;">
+    <section class="theology-card" id="explore-hubs" style="margin-top: 2rem;" data-reveal>
       <h2 class="section-title">
         <span class="section-icon">🗺️</span>
         Explore the Structured Editions
@@ -1410,6 +1548,85 @@ He was in the beginning
   </script>
 
   <script src="/assets/js/page-chassis-v5-9.js?v=5.9.1" defer></script>
+
+  <!-- ==========================================
+       Reveal-animation safety net.
+       Guarantees that every [data-reveal] / [data-reveal-children]
+       element receives [data-revealed] (and a per-child
+       --reveal-stagger) when it enters the viewport, even if
+       the chassis observer doesn't pick it up. Also force-reveals
+       any such element already on-screen at load, so above-the-fold
+       sections animate immediately instead of waiting for a scroll
+       event. No-op if the chassis already revealed it; honors
+       prefers-reduced-motion via the CSS rules in §56.
+       ========================================== -->
+  <script>
+    (function () {
+      'use strict';
+      const STAGGER_MS = 90;       // delay between cascading children
+      const KICKSTART_MS = 200;    // small wait so the chassis gets first crack
+
+      function applyStagger(parent) {
+        const kids = parent.children;
+        for (let i = 0; i < kids.length; i++) {
+          // Only set if not already set by the chassis
+          if (!kids[i].style.getPropertyValue('--reveal-stagger')) {
+            kids[i].style.setProperty('--reveal-stagger', (i * STAGGER_MS) + 'ms');
+          }
+        }
+      }
+
+      function reveal(el) {
+        if (el.hasAttribute('data-revealed')) return;
+        if (el.hasAttribute('data-reveal-children')) applyStagger(el);
+        el.setAttribute('data-revealed', '');
+      }
+
+      function isInViewport(el) {
+        const r = el.getBoundingClientRect();
+        const vh = window.innerHeight || document.documentElement.clientHeight;
+        return r.top < vh && r.bottom > 0;
+      }
+
+      function init() {
+        const targets = document.querySelectorAll('[data-reveal], [data-reveal-children]');
+        if (!targets.length) return;
+
+        // 1) Force-reveal anything currently on-screen so the hero,
+        //    see-it-card, and reading-stamp don't sit invisible.
+        targets.forEach(function (el) {
+          if (isInViewport(el)) reveal(el);
+        });
+
+        // 2) Observe everything else.
+        if (!('IntersectionObserver' in window)) {
+          targets.forEach(reveal);
+          return;
+        }
+        const io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              reveal(entry.target);
+              io.unobserve(entry.target);
+            }
+          });
+        }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
+
+        targets.forEach(function (el) {
+          if (!el.hasAttribute('data-revealed')) io.observe(el);
+        });
+      }
+
+      // Give the chassis a brief head-start, then run the safety net.
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () {
+          setTimeout(init, KICKSTART_MS);
+        });
+      } else {
+        setTimeout(init, KICKSTART_MS);
+      }
+    })();
+  </script>
 
   <!-- Page-specific: paragraph ⇄ structured demo toggles -->
   <script>
