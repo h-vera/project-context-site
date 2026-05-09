@@ -1,10 +1,11 @@
 /* ============================================================
    GLOBAL V3 STYLESHEET — Project Context
    Path: /assets/css/global-v3.css
-   Version: 3.1.0  (palette: v2 triad + magenta/indigo/teal,
-                    pure white, gradients preserved)
+   Version: 3.2.0  (mini-card gradient top bar, pivot-box pulse modifier,
+                    new components: pattern-chain, state-timeline,
+                    ascii-demo, chiasm-ladder, see-it-card)
    Replaces: global-v2.css + mobile-tabs-v5-8.css
-   Last Updated: 2026-04-29
+   Last Updated: 2026-05-09
 
    Design philosophy
    -----------------
@@ -501,7 +502,23 @@ body.menu-open { overflow: hidden; }
   border-left: 3px solid var(--page-accent);
   border-radius: var(--radius-sm);
   padding: 1.25rem;
+  position: relative;
+  overflow: hidden;
   transition: transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
+}
+
+/* Gradient top bar — scales out on hover for visual feedback */
+.mini-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--page-accent), var(--accent-rose));
+  transform: scaleX(0.4);
+  transform-origin: left;
+  transition: transform var(--duration) var(--ease);
 }
 
 @media (hover: hover) {
@@ -509,6 +526,7 @@ body.menu-open { overflow: hidden; }
     transform: translateY(-2px);
     box-shadow: var(--shadow);
   }
+  .mini-card:hover::before { transform: scaleX(1); }
 }
 
 .mini-card h4 {
@@ -2122,7 +2140,478 @@ footer a:hover {
 
 
 /* ============================================================
-   49. PRINT STYLES
+   50. PIVOT BOX — PULSING MODIFIER
+   Adds a slow radial-glow pulse to draw the eye to a chiastic
+   center or theological pivot. Static .pivot-box is unchanged.
+   Use: <div class="pivot-box pulsing">…</div>
+   ============================================================ */
+.pivot-box.pulsing {
+  animation: pivotPulse 3s ease-in-out infinite;
+}
+
+@keyframes pivotPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-magenta) 12%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--accent-magenta) 18%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pivot-box.pulsing { animation: none; }
+}
+
+
+/* ============================================================
+   51. PATTERN CHAIN (Icon Trail)
+   Use for showing a lineage, sequence, or progression of
+   discrete items connected by arrows. Examples: translation
+   chain (Hebrew→Aramaic→Greek→English), method steps,
+   covenant succession.
+
+   Markup:
+     <div class="pattern-chain">
+       <div class="pattern-item">
+         <span class="pattern-icon" aria-hidden="true">🕊️</span>
+         <div class="pattern-name">Hebrew <span lang="he">עִבְרִית</span></div>
+         <span class="pattern-tagline">Thought-rhythm</span>
+       </div>
+       <span class="pattern-arrow" aria-hidden="true">→</span>
+       <div class="pattern-item">…</div>
+     </div>
+   ============================================================ */
+.pattern-chain {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.25rem 1rem;
+  background: linear-gradient(135deg, var(--bg-2), var(--bg));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: 1.5rem 0;
+}
+
+.pattern-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.7rem 1rem;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  min-width: 110px;
+  text-align: center;
+  transition: transform var(--duration-fast) var(--ease),
+              border-color var(--duration-fast) var(--ease);
+}
+.pattern-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--page-accent);
+}
+
+.pattern-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.pattern-name {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  margin-top: 0.4rem;
+  color: var(--text);
+}
+.pattern-name [lang] {
+  display: block;
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--page-accent);
+  margin-top: 0.15rem;
+}
+
+.pattern-tagline {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 0.35rem;
+}
+
+.pattern-arrow {
+  color: var(--page-accent);
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .pattern-chain { gap: 0.4rem; padding: 0.85rem; }
+  .pattern-item { min-width: 90px; padding: 0.5rem 0.7rem; }
+  .pattern-icon { font-size: 1.3rem; }
+  .pattern-name { font-size: var(--fs-sm); }
+}
+
+
+/* ============================================================
+   52. STATE-CODED VISUAL TIMELINE
+   A vertical timeline where each item carries a moral verdict
+   ("preserved", "lost", "recovered"). Use for transmission
+   histories, degradation arcs, or any sequence with state-
+   change semantics.
+
+   The timeline rail itself shifts color from teal→rose→magenta
+   to mirror the verdicts.
+
+   Markup:
+     <div class="state-timeline">
+       <div class="state-timeline-item preserved">
+         <div class="state-header">
+           <span class="state-num">01</span>
+           <span class="state-icon" aria-hidden="true">📜</span>
+           <h4>Stage Title</h4>
+           <span class="state-verdict">Preserved</span>
+         </div>
+         <p>Description.</p>
+       </div>
+       …
+     </div>
+   ============================================================ */
+.state-timeline {
+  position: relative;
+  padding-left: 2.25rem;
+  margin: 1.75rem 0;
+}
+.state-timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.5rem;
+  top: 0.5rem; bottom: 0.5rem;
+  width: 3px;
+  background: linear-gradient(180deg,
+    var(--accent-teal)    0%,
+    var(--accent-teal)    25%,
+    var(--accent-rose)    35%,
+    var(--accent-rose)    75%,
+    var(--accent-magenta) 85%,
+    var(--accent-magenta) 100%);
+  border-radius: 2px;
+}
+
+.state-timeline-item {
+  position: relative;
+  margin-bottom: 1rem;
+  padding: 0.85rem 1rem;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-left: 3px solid var(--state-color, var(--accent-teal));
+  border-radius: var(--radius-sm);
+}
+.state-timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -1.85rem;
+  top: 1.05rem;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--state-color, var(--accent-teal));
+  border: 3px solid var(--bg);
+  box-shadow: 0 0 0 2px var(--state-color, var(--accent-teal));
+}
+
+.state-timeline-item.preserved { --state-color: var(--accent-teal); }
+.state-timeline-item.lost      { --state-color: var(--accent-rose); }
+.state-timeline-item.recovered { --state-color: var(--accent-magenta); }
+
+.state-timeline-item.recovered::before {
+  animation: statePulse 2.4s ease-in-out infinite;
+}
+@keyframes statePulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.25); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .state-timeline-item.recovered::before { animation: none; }
+}
+
+.state-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.25rem;
+}
+
+.state-num {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--state-color);
+  letter-spacing: 0.06em;
+}
+
+.state-icon { font-size: 1rem; }
+
+.state-timeline-item h4 {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.state-verdict {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.18rem 0.55rem;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--state-color) 14%, var(--bg));
+  color: var(--state-color);
+}
+
+.state-timeline-item p {
+  margin: 0.2rem 0 0;
+  color: var(--text-soft);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-base);
+}
+
+@media (max-width: 768px) {
+  .state-timeline { padding-left: 1.85rem; }
+}
+
+
+/* ============================================================
+   53. ASCII DIAGRAM BLOCK
+   For inline format demonstrations: source code, scriptio
+   continua, raw text, before/after layout comparisons. Each
+   block has a colored top stripe identifying its role.
+
+   Markup:
+     <div class="ascii-demo-grid">
+       <div class="ascii-demo continua">
+         <div class="ascii-label">Scriptio Continua</div>
+         <pre>ENARCHHENOLOGOS…</pre>
+       </div>
+       <div class="ascii-demo recovery">…</div>
+     </div>
+
+   Variants set --demo-color: .continua/.modern → rose,
+   .recovery → magenta.
+   ============================================================ */
+.ascii-demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.ascii-demo {
+  background: linear-gradient(135deg, var(--bg-2), var(--bg));
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.1rem;
+  position: relative;
+  overflow: hidden;
+}
+.ascii-demo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--demo-color, var(--accent-rose));
+}
+
+.ascii-demo.continua,
+.ascii-demo.modern   { --demo-color: var(--accent-rose); }
+.ascii-demo.recovery { --demo-color: var(--accent-magenta); }
+
+.ascii-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--demo-color, var(--accent-rose));
+  margin-bottom: 0.5rem;
+}
+
+.ascii-demo pre {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  color: var(--text);
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .ascii-demo-grid { grid-template-columns: 1fr; }
+}
+
+
+/* ============================================================
+   54. CHIASM LADDER
+   A lighter-weight chiasm display than .chiasm-structure —
+   for short, two-or-three-line chiasms shown inline within a
+   broader argument. Each row carries an A/A′/B/B′ label tag.
+
+   Markup:
+     <div class="chiasm-ladder">
+       <div class="chiasm-row">
+         <span class="chiasm-label">A</span>
+         <span>Whoever sheds the <strong>blood</strong> of <strong>man</strong>,</span>
+       </div>
+       <div class="chiasm-row">
+         <span class="chiasm-label">A′</span>
+         <span>by <strong>man</strong> shall his <strong>blood</strong> be shed;</span>
+       </div>
+     </div>
+   ============================================================ */
+.chiasm-ladder {
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1.1rem 1.3rem;
+  margin: 1rem 0;
+  font-family: var(--font-display);
+}
+
+.chiasm-row {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 0.8rem;
+  align-items: center;
+  padding: 0.35rem 0;
+  font-size: var(--fs-md);
+}
+
+.chiasm-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 800;
+  color: var(--page-accent);
+  background: color-mix(in srgb, var(--page-accent) 10%, var(--bg));
+  border-radius: 4px;
+  text-align: center;
+  padding: 0.12rem 0;
+}
+
+.chiasm-row strong { color: var(--accent-rose); }
+
+
+/* ============================================================
+   55. SEE-IT-IN-ACTION CARD
+   An opening "live demo" card. Used at the top of explainer
+   pages where the strongest argument is the artifact itself.
+   Multi-color top stripe (magenta/rose/indigo/teal) signals
+   "this is the page's thesis demonstrated."
+
+   Markup:
+     <section class="see-it-card" id="see-it">
+       <div class="see-it-eyebrow">See it before reading about it</div>
+       <h2>What it looks like, in three lines</h2>
+       <p>Lead-in.</p>
+       <div class="see-it-frame">
+         <span class="l">Line one</span>
+         <span class="l i1">Line two indented</span>
+         <span class="l i2">Line three further indented</span>
+         <span class="ref">Reference</span>
+       </div>
+       <p class="see-it-caption">Brief takeaway.</p>
+     </section>
+   ============================================================ */
+.see-it-card {
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem 2.25rem;
+  margin: 2rem 0;
+  position: relative;
+  overflow: hidden;
+}
+.see-it-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg,
+    var(--accent-magenta),
+    var(--accent-rose),
+    var(--accent-indigo),
+    var(--accent-teal));
+}
+
+.see-it-eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--page-accent);
+  margin-bottom: 0.75rem;
+}
+
+.see-it-card h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.8vw, 2.1rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 0.6rem;
+  color: var(--text);
+}
+
+.see-it-frame {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  line-height: 1.7;
+  padding: 1.5rem 1.75rem;
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--page-accent) 4%, var(--bg)),
+    var(--bg));
+  border-left: 4px solid var(--page-accent);
+  border-radius: var(--radius-sm);
+  margin: 1.25rem 0 1rem;
+}
+.see-it-frame .l  { display: block; }
+.see-it-frame .i1 { padding-left: 2rem; }
+.see-it-frame .i2 { padding-left: 4rem; opacity: 0.92; }
+.see-it-frame .ref {
+  display: block;
+  margin-top: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-style: normal;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--page-accent);
+}
+
+.see-it-caption {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: 0.5rem;
+}
+
+
+/* ============================================================
+   56. PRINT STYLES
    ============================================================ */
 @media print {
   body {
