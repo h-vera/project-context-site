@@ -1,9 +1,9 @@
 /* ============================================================
    GLOBAL V3 STYLESHEET — Project Context
    Path: /assets/css/global-v3.css
-   Version: 3.2.0  (mini-card gradient top bar, pivot-box pulse modifier,
-                    new components: pattern-chain, state-timeline,
-                    ascii-demo, chiasm-ladder, see-it-card)
+   Version: 3.3.1  (3.3 + slide-left reveal variant for vertical
+                    timelines, matching canonical .timeline.stagger-children
+                    motion semantics)
    Replaces: global-v2.css + mobile-tabs-v5-8.css
    Last Updated: 2026-05-09
 
@@ -678,7 +678,8 @@ body.menu-open { overflow: hidden; }
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1.75rem 2rem;
-  margin: 2.5rem 0;
+  margin: 2.5rem auto;
+  max-width: 800px;
   position: relative;
 }
 
@@ -2184,7 +2185,7 @@ footer a:hover {
 .pattern-chain {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   gap: 0.5rem;
   padding: 1.25rem 1rem;
@@ -2198,6 +2199,7 @@ footer a:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   padding: 0.7rem 1rem;
   background: var(--bg);
   border: 1.5px solid var(--border);
@@ -2246,6 +2248,7 @@ footer a:hover {
   color: var(--page-accent);
   font-weight: 700;
   font-size: 1.2rem;
+  align-self: center;
 }
 
 @media (max-width: 768px) {
@@ -2611,7 +2614,86 @@ footer a:hover {
 
 
 /* ============================================================
-   56. PRINT STYLES
+   56. SCROLL REVEAL SYSTEM (opt-in via attributes)
+   ============================================================
+   Per the v5.9 anti-pattern doc: animation is opt-in, not default.
+   No element gets reveal motion unless its markup explicitly
+   says so via [data-reveal] or [data-reveal-children].
+
+   Two modes:
+     1. [data-reveal] — single element fades up when scrolled into view.
+     2. [data-reveal-children] — parent stays visible; its direct
+        children fade up in sequence (stagger). Use for chains,
+        timelines, grids of like cards.
+
+   The chassis (page-chassis-v5-9.js) wires up the IntersectionObserver
+   and adds [data-revealed] when the element enters the viewport.
+
+   Reduced-motion users see no animation; elements appear instantly.
+   ============================================================ */
+
+/* Single element reveal — initial hidden state */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(20px);
+  will-change: opacity, transform;
+}
+[data-reveal][data-revealed] {
+  animation: revealUp 0.6s var(--ease-out) forwards;
+}
+
+/* Stagger reveal — children of a parent marker are hidden,
+   parent itself stays visible (acts as trigger only) */
+[data-reveal-children] > * {
+  opacity: 0;
+  transform: translateY(20px);
+  will-change: opacity, transform;
+}
+[data-reveal-children][data-revealed] > * {
+  animation: revealUp 0.6s var(--ease-out) var(--reveal-stagger, 0ms) forwards;
+}
+
+@keyframes revealUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide-left variant for vertical timelines —
+   matches the canonical .timeline.stagger-children motion semantics.
+   Items extend rightward from the rail, so they should arrive from the left. */
+.scholar-timeline[data-reveal-children] > *,
+.state-timeline[data-reveal-children] > *,
+.timeline[data-reveal-children] > * {
+  transform: translateX(-20px);
+}
+.scholar-timeline[data-reveal-children][data-revealed] > *,
+.state-timeline[data-reveal-children][data-revealed] > *,
+.timeline[data-reveal-children][data-revealed] > * {
+  animation-name: revealLeft;
+}
+
+@keyframes revealLeft {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Honor reduced motion: skip the animation, show final state */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-reveal-children] > * {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
+
+
+/* ============================================================
+   57. PRINT STYLES
    ============================================================ */
 @media print {
   body {
