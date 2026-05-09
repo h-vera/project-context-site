@@ -561,6 +561,212 @@ body.menu-open { overflow: hidden; }
   font-size: var(--fs-md);
 }
 
+/* ============================================================
+   GLOBAL-V3 PATCH — goat-panel + feature-tiles
+   ------------------------------------------------------------
+   Promotes .goat-panel from the catalog into v3, and adds a
+   companion .feature-tiles system for icon-led feature rows.
+
+   PLACEMENT
+   ---------
+   Insert after section "11. PANEL" (around line 565 of
+   global-v3.css), before "12. KEY INSIGHT BOX". Renumber the
+   sections that follow if you keep that convention strict; or
+   leave the existing numbers and let these be 11a / 11b.
+
+   COMPATIBILITY
+   -------------
+   Backward-compatible with existing pages that use:
+
+     <article class="goat-panel" style="--panel-accent: ...">
+       <h3>Title</h3>
+       <ul><li>...</li></ul>
+     </article>
+
+   Old <ul> form still renders cleanly. The new tile form is
+   purely additive: drop a .feature-tiles block in instead of
+   (or alongside) the <ul>, and tiles inherit --panel-accent
+   from the surrounding panel.
+
+   PAGE-LOCAL CLEANUP
+   ------------------
+   After this patch ships, delete the inline .goat-panel block
+   from any page that copied it locally — at minimum:
+     • lltse-orientation-methodology-v1.html (lines ~128-145)
+     • leviticus-theology.css (Yom Kippur Two-Goat section)
+   ============================================================ */
+
+
+/* ============================================================
+   11a. GOAT PANEL — paired binary-comparison container
+   ------------------------------------------------------------
+   For binary oppositions in a .grid-2: Structured/Scroll,
+   Holy/Common, OT/NT, kingdom/empire. Each panel is themed
+   via --panel-accent (set per instance); falls back to the
+   page's --page-accent if unset.
+
+   Accepts inside it, in any combination:
+     - <h3>            panel title
+     - .panel-tagline  italic one-line purpose statement
+     - <ul>            legacy bullet list
+     - .feature-tiles  new icon-led feature stack
+     - free <p>        supporting prose
+   ============================================================ */
+.goat-panel {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--panel-accent, var(--page-accent));
+  border-radius: var(--radius-sm);
+  padding: 1.5rem 1.5rem 1.25rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration) var(--ease),
+              box-shadow var(--duration) var(--ease);
+}
+
+@media (hover: hover) {
+  .goat-panel:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+}
+
+.goat-panel > h3 {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  color: var(--panel-accent, var(--page-accent));
+  margin: 0 0 0.4rem;
+  letter-spacing: -0.01em;
+  line-height: var(--lh-tight);
+}
+
+/* Italic purpose line — lifts a "designed for X" sentence up
+   out of the feature list and into a binary-contrast position. */
+.goat-panel > .panel-tagline {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--fs-md);
+  color: var(--text-soft);
+  margin: 0 0 1.1rem;
+  line-height: var(--lh-snug);
+}
+
+/* Legacy <ul> form preserved verbatim. */
+.goat-panel > ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.2rem;
+  line-height: var(--lh-base);
+}
+.goat-panel > ul > li { margin-bottom: 0.3rem; }
+
+
+/* ============================================================
+   11b. FEATURE TILES — icon-led feature rows
+   ------------------------------------------------------------
+   A vertical stack of compact feature rows: square icon plate,
+   bold lead phrase, one supporting sentence. Designed to live
+   inside .goat-panel (where it inherits --panel-accent) but
+   works standalone in any container, falling back to
+   --page-accent.
+
+   Why not a sub-grid? Inside an already-2-column .grid-2 of
+   goat-panels, a nested 2-col grid creates too many small
+   boxes. A vertical stack of horizontal tiles keeps the rhythm
+   readable and puts the bold lead phrases in a single scan
+   column down each side.
+
+   Markup:
+
+     <div class="feature-tiles">
+       <div class="feature-tile">
+         <span class="ico" aria-hidden="true">📐</span>
+         <div class="body">
+           <strong>Lead phrase</strong>
+           <p>Short supporting sentence.</p>
+         </div>
+       </div>
+       ...
+     </div>
+   ============================================================ */
+.feature-tiles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin: 0.25rem 0 0;
+}
+
+.feature-tile {
+  display: grid;
+  grid-template-columns: 2.4rem 1fr;
+  gap: 0.85rem;
+  align-items: start;
+  padding: 0.7rem 0.85rem;
+  background: color-mix(in srgb, var(--panel-accent, var(--page-accent)) 4%, transparent);
+  border: 1px solid color-mix(in srgb, var(--panel-accent, var(--page-accent)) 14%, transparent);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--duration) var(--ease),
+              background var(--duration) var(--ease),
+              transform var(--duration) var(--ease);
+}
+
+@media (hover: hover) {
+  .feature-tile:hover {
+    border-color: color-mix(in srgb, var(--panel-accent, var(--page-accent)) 32%, transparent);
+    background: color-mix(in srgb, var(--panel-accent, var(--page-accent)) 7%, transparent);
+    transform: translateX(2px);
+  }
+}
+
+.feature-tile > .ico {
+  font-size: 1.35rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--panel-accent, var(--page-accent)) 10%, var(--bg));
+  border: 1px solid color-mix(in srgb, var(--panel-accent, var(--page-accent)) 18%, transparent);
+  flex-shrink: 0;
+}
+
+.feature-tile > .body { min-width: 0; }
+
+.feature-tile strong {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--fs-base);
+  color: var(--text);
+  margin: 0 0 0.15rem;
+  line-height: var(--lh-snug);
+  letter-spacing: -0.005em;
+}
+
+.feature-tile p {
+  font-size: var(--fs-sm);
+  color: var(--text-soft);
+  margin: 0;
+  line-height: var(--lh-snug);
+}
+
+/* Mobile — feature tiles already stack inside the panel; only
+   adjustment is a slightly tighter icon plate to keep the body
+   text its full width. */
+@media (max-width: 499px) {
+  .feature-tile {
+    grid-template-columns: 2rem 1fr;
+    gap: 0.7rem;
+    padding: 0.65rem 0.75rem;
+  }
+  .feature-tile > .ico {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.15rem;
+  }
+}
+
 
 /* ============================================================
    12. KEY INSIGHT BOX
