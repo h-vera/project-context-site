@@ -1,0 +1,386 @@
+/* ============================================================
+   global-v3-polish.css — v0.1
+   ------------------------------------------------------------
+   Site-wide polish layer. Restores the hover, sweep, and
+   tile-glow animations described in the Component Catalog
+   (v1.5) but absent from global-v3.css.
+
+   USAGE: load AFTER global-v3.css, e.g.
+
+     <link rel="stylesheet" href="/assets/css/global-v3.css">
+     <link rel="stylesheet" href="/assets/css/global-v3-polish.css">
+
+   Adds zero new components. Only enriches what's already there.
+   No use of !important — relies on natural cascade order.
+
+   All keyframes are namespaced `pc-polish-*` so they cannot
+   collide with anything in global-v3.css or page-local CSS.
+
+   Reduced-motion users (prefers-reduced-motion: reduce) keep
+   hover lifts (those are intent-triggered, not looping) but
+   the looping tile animations are paused. See bottom of file.
+   ============================================================ */
+
+
+/* ============================================================
+   1. CONTENT SURFACES — hover lifts
+   The "I'm reading a card" feedback. Subtle translateY,
+   slightly larger shadow, tint the border with --page-accent
+   so each page feels themed even on hover.
+   ============================================================ */
+
+.theology-card,
+.see-it-card,
+.chiasm-card,
+.hebrew-vocab-card,
+.passage-card {
+  transition:
+    transform   0.25s var(--ease, ease),
+    box-shadow  0.25s var(--ease, ease),
+    border-color 0.25s var(--ease, ease);
+}
+
+@media (hover: hover) {
+  .theology-card:hover,
+  .see-it-card:hover,
+  .chiasm-card:hover,
+  .hebrew-vocab-card:hover,
+  .passage-card:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 6px 20px rgba(15, 23, 42, 0.06),
+      0 2px 6px  rgba(15, 23, 42, 0.04);
+    border-color: color-mix(
+      in srgb,
+      var(--page-accent, var(--accent-purple)) 25%,
+      var(--border)
+    );
+  }
+
+  /* Slightly stronger lift for the see-it-card since it's
+     framed as a featured demo */
+  .see-it-card:hover {
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  }
+}
+
+
+/* ============================================================
+   2. PATTERN SUMMARY — completion-glow pulse
+   ============================================================ */
+
+.pattern-summary {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform  0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.pattern-summary::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--accent-magenta) 22%, transparent),
+    color-mix(in srgb, var(--accent-teal)    22%, transparent)
+  );
+  opacity: 0;
+  z-index: -1;
+  pointer-events: none;
+  animation: pc-polish-summary-glow 4s ease-in-out infinite;
+}
+
+@media (hover: hover) {
+  .pattern-summary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--accent-teal) 18%, transparent);
+  }
+}
+
+@keyframes pc-polish-summary-glow {
+  0%, 100% { opacity: 0; }
+  50%      { opacity: 0.55; }
+}
+
+
+/* ============================================================
+   3. ONE-LINE TAKEAWAY — sweeping top bar
+   ============================================================ */
+
+.takeaway {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform  0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.takeaway::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--accent-teal),
+    var(--accent-purple),
+    var(--accent-rose),
+    var(--accent-teal)
+  );
+  background-size: 300% 100%;
+  border-radius: var(--radius) var(--radius) 0 0;
+  animation: pc-polish-takeaway-sweep 5s ease-in-out infinite;
+}
+
+@media (hover: hover) {
+  .takeaway:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  }
+}
+
+@keyframes pc-polish-takeaway-sweep {
+  0%, 100% { background-position: 0%   50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+
+/* ============================================================
+   4. CRITICAL DISTINCTION — animated top stripe
+   ============================================================ */
+
+.critical-distinction {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform  0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.critical-distinction::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--accent-rose),
+    color-mix(in srgb, var(--accent-rose) 60%, var(--accent-magenta)),
+    var(--accent-rose)
+  );
+  background-size: 200% 100%;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  animation: pc-polish-critical-sweep 4s ease-in-out infinite;
+}
+
+@media (hover: hover) {
+  .critical-distinction:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--accent-rose) 18%, transparent);
+  }
+}
+
+@keyframes pc-polish-critical-sweep {
+  0%, 100% { background-position: 0%   50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+
+/* ============================================================
+   5. KEY INSIGHT — breathing glow + floating lightbulb glyph
+   The catalog calls for a 💡 in the top-right corner. v3 only
+   has the gradient background, no glow, no glyph.
+   ============================================================ */
+
+.key-insight {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform  0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.key-insight::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at 80% 20%,
+    color-mix(in srgb, var(--accent-magenta) 25%, transparent),
+    transparent 60%
+  );
+  opacity: 0;
+  z-index: -1;
+  pointer-events: none;
+  animation: pc-polish-insight-breathe 5s ease-in-out infinite;
+}
+
+.key-insight::after {
+  content: '💡';
+  position: absolute;
+  top: 0.55rem;
+  right: 0.7rem;
+  font-size: 1.1rem;
+  opacity: 0.35;
+  pointer-events: none;
+  animation: pc-polish-insight-float 6s ease-in-out infinite;
+}
+
+@media (hover: hover) {
+  .key-insight:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--accent-magenta) 18%, transparent);
+  }
+  .key-insight:hover::after { opacity: 0.7; }
+}
+
+@keyframes pc-polish-insight-breathe {
+  0%, 100% { opacity: 0;    }
+  50%      { opacity: 0.55; }
+}
+@keyframes pc-polish-insight-float {
+  0%, 100% { transform: translateY(0)      rotate(0deg); }
+  50%      { transform: translateY(-3px)   rotate(-6deg); }
+}
+
+
+/* ============================================================
+   6. CORE LOGIC QUOTE — hover scale on the gradient quote glyphs
+   ============================================================ */
+
+.core-logic-quote {
+  transition: transform 0.3s ease;
+}
+
+.core-logic-quote::before,
+.core-logic-quote::after {
+  transition: transform 0.3s ease;
+}
+
+@media (hover: hover) {
+  .core-logic-quote:hover {
+    transform: translateY(-1px);
+  }
+  .core-logic-quote:hover::before,
+  .core-logic-quote:hover::after {
+    transform: scale(1.08);
+  }
+}
+
+
+/* ============================================================
+   7. STAR DIVIDER — slow twinkle (3s loop per catalog)
+   ============================================================ */
+
+.star-divider {
+  animation: pc-polish-star-twinkle 3s ease-in-out infinite;
+}
+
+@keyframes pc-polish-star-twinkle {
+  0%, 100% { opacity: 0.55; letter-spacing: 1.5em; }
+  50%      { opacity: 1;    letter-spacing: 1.7em; }
+}
+
+
+/* ============================================================
+   8. COSMIC BUTTON — ripple on hover
+   v3 already has the lift; this adds the radial ripple ::before
+   that wipes outward on hover, per catalog.
+   ============================================================ */
+
+.cosmic-button,
+.primary-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.cosmic-button::before,
+.primary-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.35) 0%,
+    transparent 60%
+  );
+  opacity: 0;
+  transform: scale(0.4);
+  transition:
+    opacity   0.4s ease,
+    transform 0.5s ease;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+@media (hover: hover) {
+  .cosmic-button:hover::before,
+  .primary-button:hover::before {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+/* ============================================================
+   9. STATE TIMELINE — non-`.recovered` items get hover feedback
+   v3 only animates `.recovered`. The other items (preserved,
+   lost) deserve hover feedback too — readers should feel them
+   when they mouse across.
+   ============================================================ */
+
+.state-timeline-item {
+  transition:
+    background  0.25s ease,
+    padding-left 0.25s ease;
+}
+
+@media (hover: hover) {
+  .state-timeline-item:hover {
+    background: color-mix(in srgb, var(--state-color, var(--accent-purple)) 6%, var(--bg));
+    padding-left: 1.75rem;
+  }
+}
+
+
+/* ============================================================
+   10. SCHOLAR TIMELINE — same hover treatment
+   Page-local in scholar pages but the rule belongs anywhere
+   the class is used.
+   ============================================================ */
+
+.scholar-timeline-item {
+  transition:
+    background  0.25s ease,
+    padding-left 0.25s ease;
+}
+
+@media (hover: hover) {
+  .scholar-timeline-item:hover {
+    background: color-mix(in srgb, var(--page-accent, var(--accent-purple)) 6%, transparent);
+    padding-left: 1.5rem;
+    border-radius: 6px;
+  }
+}
+
+
+/* ============================================================
+   11. REDUCED-MOTION GUARD
+   Hover lifts stay (intent-triggered, single transition).
+   Loop animations pause. Catalog parity, accessibility intact.
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .pattern-summary::after,
+  .takeaway::after,
+  .critical-distinction::after,
+  .key-insight::before,
+  .key-insight::after,
+  .star-divider {
+    animation: none;
+  }
+}
