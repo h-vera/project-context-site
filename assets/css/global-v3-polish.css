@@ -1,39 +1,155 @@
 /* ============================================================
-   global-v3-polish.css — v0.1
+   global-v3-polish.css — v0.2
    ------------------------------------------------------------
-   Site-wide polish layer. Restores the hover, sweep, and
-   tile-glow animations described in the Component Catalog
-   (v1.5) but absent from global-v3.css.
+   Site-wide polish layer. Lifts catalog-spec animations from
+   page-local stylesheets (leviticus-theology.css, noah pages,
+   luke-acts-levitical-arc.css) into the global cascade so any
+   new page inherits them automatically.
 
-   USAGE: load AFTER global-v3.css, e.g.
-
+   USAGE:
      <link rel="stylesheet" href="/assets/css/global-v3.css">
-     <link rel="stylesheet" href="/assets/css/global-v3-polish.css">
+     <link rel="stylesheet" href="/assets/css/global-v3-polish.css?v=0.2">
 
-   Adds zero new components. Only enriches what's already there.
-   No use of !important — relies on natural cascade order.
+   For per-page theming, add a body attribute:
+     <body data-theme="rose">                          ← single theme
+     <body data-theme="rose" data-suite-stage="2">     ← multi-page suite child
+     <body data-theme="purple">                        ← default; same as omitting
 
-   All keyframes are namespaced `pc-polish-*` so they cannot
-   collide with anything in global-v3.css or page-local CSS.
-
-   Reduced-motion users (prefers-reduced-motion: reduce) keep
-   hover lifts (those are intent-triggered, not looping) but
-   the looping tile animations are paused. See bottom of file.
+   This file:
+     - sets --page-accent and friends per data-theme value
+     - adds hover/glow/sweep animations to all content surfaces
+     - never uses !important
+     - all keyframes namespaced `pc-*` to prevent collision
+     - reduced-motion users keep hover lifts; loops pause
    ============================================================ */
 
 
 /* ============================================================
-   1. CONTENT SURFACES — hover lifts
+   A. COLOR THEME MENU
+   ------------------------------------------------------------
+   The menu. Each theme sets three vars that every accent-aware
+   component in v3 already consumes:
+
+     --page-accent        the theme's primary color
+     --page-accent-soft   tinted version (~20% opacity)
+     --page-accent-deep   darkened version (for high-contrast text)
+
+   Pick a theme by setting `data-theme` on <body>:
+
+     <body data-theme="rose">
+
+   For multi-page suites, ALSO set `data-suite-stage` (1-8) so
+   the page picks up the canonical Rainbow palette automatically:
+
+     <body data-theme="rose" data-suite-stage="2">
+
+   data-suite-stage wins when both are set — that way a child
+   page in a Rainbow suite inherits the suite's color even if
+   the author also wrote data-theme="rose" out of habit.
+   ============================================================ */
+
+/* ----- Default (purple — same as v3's no-attribute default) ----- */
+:root,
+body:not([data-theme]):not([data-suite-stage]) {
+  --page-accent:      var(--accent-purple);
+  --page-accent-soft: color-mix(in srgb, var(--accent-purple) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-purple) 80%, var(--text));
+}
+
+/* ----- Single-color themes (the six v3.1 accents) ----- */
+body[data-theme="purple"] {
+  --page-accent:      var(--accent-purple);
+  --page-accent-soft: color-mix(in srgb, var(--accent-purple) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-purple) 80%, var(--text));
+}
+body[data-theme="rose"] {
+  --page-accent:      var(--accent-rose);
+  --page-accent-soft: color-mix(in srgb, var(--accent-rose) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-rose) 80%, var(--text));
+}
+body[data-theme="blue"] {
+  --page-accent:      var(--accent-blue);
+  --page-accent-soft: color-mix(in srgb, var(--accent-blue) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-blue) 80%, var(--text));
+}
+body[data-theme="magenta"] {
+  --page-accent:      var(--accent-magenta);
+  --page-accent-soft: color-mix(in srgb, var(--accent-magenta) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-magenta) 80%, var(--text));
+}
+body[data-theme="indigo"] {
+  --page-accent:      var(--accent-indigo);
+  --page-accent-soft: color-mix(in srgb, var(--accent-indigo) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-indigo) 80%, var(--text));
+}
+body[data-theme="teal"] {
+  --page-accent:      var(--accent-teal);
+  --page-accent-soft: color-mix(in srgb, var(--accent-teal) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-teal) 80%, var(--text));
+}
+
+/* ----- Rainbow palette for 8-page suites (Noah pattern) ------------
+   Per multi-page-suite-readme-v5-9.md §"Rainbow palette":
+     1 magenta · 2 rose · 3 purple · 4 indigo · 5 blue
+     6 teal · 7 deep-violet (purple+indigo blend) · 8 muted (sources)
+   ----------------------------------------------------------------- */
+body[data-suite-stage="1"] {
+  --page-accent: var(--accent-magenta);
+  --page-accent-soft: color-mix(in srgb, var(--accent-magenta) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-magenta) 80%, var(--text));
+}
+body[data-suite-stage="2"] {
+  --page-accent: var(--accent-rose);
+  --page-accent-soft: color-mix(in srgb, var(--accent-rose) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-rose) 80%, var(--text));
+}
+body[data-suite-stage="3"] {
+  --page-accent: var(--accent-purple);
+  --page-accent-soft: color-mix(in srgb, var(--accent-purple) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-purple) 80%, var(--text));
+}
+body[data-suite-stage="4"] {
+  --page-accent: var(--accent-indigo);
+  --page-accent-soft: color-mix(in srgb, var(--accent-indigo) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-indigo) 80%, var(--text));
+}
+body[data-suite-stage="5"] {
+  --page-accent: var(--accent-blue);
+  --page-accent-soft: color-mix(in srgb, var(--accent-blue) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-blue) 80%, var(--text));
+}
+body[data-suite-stage="6"] {
+  --page-accent: var(--accent-teal);
+  --page-accent-soft: color-mix(in srgb, var(--accent-teal) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-teal) 80%, var(--text));
+}
+body[data-suite-stage="7"] {
+  --page-accent: color-mix(in srgb, var(--accent-purple) 70%, var(--accent-indigo) 30%);
+  --page-accent-soft: color-mix(in srgb, var(--accent-purple) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-purple) 90%, var(--text));
+}
+body[data-suite-stage="8"] {
+  --page-accent: var(--text-muted);
+  --page-accent-soft: color-mix(in srgb, var(--text-muted) 20%, transparent);
+  --page-accent-deep: var(--text);
+}
+
+
+/* ============================================================
+   B. CONTENT SURFACES — hover lifts
    The "I'm reading a card" feedback. Subtle translateY,
-   slightly larger shadow, tint the border with --page-accent
-   so each page feels themed even on hover.
+   slightly larger shadow, border tints toward --page-accent.
    ============================================================ */
 
 .theology-card,
 .see-it-card,
 .chiasm-card,
 .hebrew-vocab-card,
-.passage-card {
+.passage-card,
+.method-card,
+.academic-note-box,
+.nt-card,
+.tier-visual {
   transition:
     transform   0.25s var(--ease, ease),
     box-shadow  0.25s var(--ease, ease),
@@ -45,20 +161,17 @@
   .see-it-card:hover,
   .chiasm-card:hover,
   .hebrew-vocab-card:hover,
-  .passage-card:hover {
+  .passage-card:hover,
+  .method-card:hover,
+  .academic-note-box:hover,
+  .nt-card:hover,
+  .tier-visual:hover {
     transform: translateY(-2px);
     box-shadow:
       0 6px 20px rgba(15, 23, 42, 0.06),
       0 2px 6px  rgba(15, 23, 42, 0.04);
-    border-color: color-mix(
-      in srgb,
-      var(--page-accent, var(--accent-purple)) 25%,
-      var(--border)
-    );
+    border-color: color-mix(in srgb, var(--page-accent) 25%, var(--border));
   }
-
-  /* Slightly stronger lift for the see-it-card since it's
-     framed as a featured demo */
   .see-it-card:hover {
     box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
   }
@@ -66,17 +179,17 @@
 
 
 /* ============================================================
-   2. PATTERN SUMMARY — completion-glow pulse
+   C. CONCLUSION CALLOUTS — tile / sweep / glow
+   The catalog's "synthesis at the end" callouts. Each gets the
+   catalog-promised animation.
    ============================================================ */
 
+/* --- C1. Pattern Summary Box: completion glow --- */
 .pattern-summary {
   position: relative;
   overflow: hidden;
-  transition:
-    transform  0.25s ease,
-    box-shadow 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-
 .pattern-summary::after {
   content: '';
   position: absolute;
@@ -90,34 +203,25 @@
   opacity: 0;
   z-index: -1;
   pointer-events: none;
-  animation: pc-polish-summary-glow 4s ease-in-out infinite;
+  animation: pc-summary-glow 4s ease-in-out infinite;
 }
-
 @media (hover: hover) {
   .pattern-summary:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px color-mix(in srgb, var(--accent-teal) 18%, transparent);
   }
 }
-
-@keyframes pc-polish-summary-glow {
+@keyframes pc-summary-glow {
   0%, 100% { opacity: 0; }
   50%      { opacity: 0.55; }
 }
 
-
-/* ============================================================
-   3. ONE-LINE TAKEAWAY — sweeping top bar
-   ============================================================ */
-
+/* --- C2. One-Line Takeaway: sweeping top bar --- */
 .takeaway {
   position: relative;
   overflow: hidden;
-  transition:
-    transform  0.25s ease,
-    box-shadow 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-
 .takeaway::after {
   content: '';
   position: absolute;
@@ -132,34 +236,25 @@
   );
   background-size: 300% 100%;
   border-radius: var(--radius) var(--radius) 0 0;
-  animation: pc-polish-takeaway-sweep 5s ease-in-out infinite;
+  animation: pc-takeaway-sweep 5s ease-in-out infinite;
 }
-
 @media (hover: hover) {
   .takeaway:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
   }
 }
-
-@keyframes pc-polish-takeaway-sweep {
+@keyframes pc-takeaway-sweep {
   0%, 100% { background-position: 0%   50%; }
   50%      { background-position: 100% 50%; }
 }
 
-
-/* ============================================================
-   4. CRITICAL DISTINCTION — animated top stripe
-   ============================================================ */
-
+/* --- C3. Critical Distinction: animated top stripe --- */
 .critical-distinction {
   position: relative;
   overflow: hidden;
-  transition:
-    transform  0.25s ease,
-    box-shadow 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-
 .critical-distinction::after {
   content: '';
   position: absolute;
@@ -173,36 +268,25 @@
   );
   background-size: 200% 100%;
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-  animation: pc-polish-critical-sweep 4s ease-in-out infinite;
+  animation: pc-critical-sweep 4s ease-in-out infinite;
 }
-
 @media (hover: hover) {
   .critical-distinction:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 18px color-mix(in srgb, var(--accent-rose) 18%, transparent);
   }
 }
-
-@keyframes pc-polish-critical-sweep {
+@keyframes pc-critical-sweep {
   0%, 100% { background-position: 0%   50%; }
   50%      { background-position: 100% 50%; }
 }
 
-
-/* ============================================================
-   5. KEY INSIGHT — breathing glow + floating lightbulb glyph
-   The catalog calls for a 💡 in the top-right corner. v3 only
-   has the gradient background, no glow, no glyph.
-   ============================================================ */
-
+/* --- C4. Key Insight: breathing glow + lightbulb glyph --- */
 .key-insight {
   position: relative;
   overflow: hidden;
-  transition:
-    transform  0.25s ease,
-    box-shadow 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-
 .key-insight::before {
   content: '';
   position: absolute;
@@ -216,9 +300,8 @@
   opacity: 0;
   z-index: -1;
   pointer-events: none;
-  animation: pc-polish-insight-breathe 5s ease-in-out infinite;
+  animation: pc-insight-breathe 5s ease-in-out infinite;
 }
-
 .key-insight::after {
   content: '💡';
   position: absolute;
@@ -227,9 +310,8 @@
   font-size: 1.1rem;
   opacity: 0.35;
   pointer-events: none;
-  animation: pc-polish-insight-float 6s ease-in-out infinite;
+  animation: pc-insight-float 6s ease-in-out infinite;
 }
-
 @media (hover: hover) {
   .key-insight:hover {
     transform: translateY(-2px);
@@ -237,30 +319,23 @@
   }
   .key-insight:hover::after { opacity: 0.7; }
 }
-
-@keyframes pc-polish-insight-breathe {
+@keyframes pc-insight-breathe {
   0%, 100% { opacity: 0;    }
   50%      { opacity: 0.55; }
 }
-@keyframes pc-polish-insight-float {
-  0%, 100% { transform: translateY(0)      rotate(0deg); }
-  50%      { transform: translateY(-3px)   rotate(-6deg); }
+@keyframes pc-insight-float {
+  0%, 100% { transform: translateY(0)    rotate(0deg); }
+  50%      { transform: translateY(-3px) rotate(-6deg); }
 }
 
-
-/* ============================================================
-   6. CORE LOGIC QUOTE — hover scale on the gradient quote glyphs
-   ============================================================ */
-
+/* --- C5. Core Logic Quote: hover quote-glyph scale --- */
 .core-logic-quote {
   transition: transform 0.3s ease;
 }
-
 .core-logic-quote::before,
 .core-logic-quote::after {
   transition: transform 0.3s ease;
 }
-
 @media (hover: hover) {
   .core-logic-quote:hover {
     transform: translateY(-1px);
@@ -273,31 +348,179 @@
 
 
 /* ============================================================
-   7. STAR DIVIDER — slow twinkle (3s loop per catalog)
+   D. CARD TOP-BARS — hover scale-in
+   The catalog says mini-card, atlas-node, passage-card,
+   example-card all have "animated gradient top bar that
+   scales in on hover." Promoted to global here.
    ============================================================ */
 
-.star-divider {
-  animation: pc-polish-star-twinkle 3s ease-in-out infinite;
+.mini-card,
+.atlas-node,
+.passage-card,
+.example-card {
+  position: relative;
+  transition:
+    transform   0.25s ease,
+    box-shadow  0.25s ease,
+    border-color 0.25s ease;
 }
 
-@keyframes pc-polish-star-twinkle {
-  0%, 100% { opacity: 0.55; letter-spacing: 1.5em; }
-  50%      { opacity: 1;    letter-spacing: 1.7em; }
+.mini-card::before,
+.atlas-node::before,
+.passage-card::before,
+.example-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--page-accent),
+    color-mix(in srgb, var(--page-accent) 40%, var(--accent-magenta))
+  );
+  border-radius: var(--radius) var(--radius) 0 0;
+  transform: scaleX(0.6);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .mini-card:hover,
+  .atlas-node:hover,
+  .passage-card:hover,
+  .example-card:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      0 8px 24px rgba(15, 23, 42, 0.08),
+      0 2px 6px  rgba(15, 23, 42, 0.04);
+    border-color: color-mix(in srgb, var(--page-accent) 35%, var(--border));
+  }
+  .mini-card:hover::before,
+  .atlas-node:hover::before,
+  .passage-card:hover::before,
+  .example-card:hover::before {
+    transform: scaleX(1);
+  }
 }
 
 
 /* ============================================================
-   8. COSMIC BUTTON — ripple on hover
-   v3 already has the lift; this adds the radial ripple ::before
-   that wipes outward on hover, per catalog.
+   E. SHIMMER CARDS — hover wash
+   Catalog calls these "shimmer on hover" — quiet light wash
+   when the reader's attention lands. Hyperbole, ANE comparison,
+   NT card.
    ============================================================ */
 
+.hyperbole-card,
+.meso-card,
+.ane-comparison-card,
+.nt-card {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform   0.25s ease,
+    box-shadow  0.25s ease;
+}
+
+.hyperbole-card::after,
+.meso-card::after,
+.ane-comparison-card::after,
+.nt-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--page-accent) 8%, transparent),
+    transparent
+  );
+  background-size: 200% 100%;
+  background-position: 200% 0;
+  pointer-events: none;
+  transition: background-position 0.8s ease;
+}
+
+@media (hover: hover) {
+  .hyperbole-card:hover::after,
+  .meso-card:hover::after,
+  .ane-comparison-card:hover::after,
+  .nt-card:hover::after {
+    background-position: -200% 0;
+  }
+  .hyperbole-card:hover,
+  .meso-card:hover,
+  .ane-comparison-card:hover,
+  .nt-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--page-accent) 14%, transparent);
+  }
+}
+
+
+/* ============================================================
+   F. SPECIAL CALLOUTS
+   High-impact attention-grabbers. Pivot Box already pulses in
+   v3 — these are the others.
+   ============================================================ */
+
+/* --- F1. Revolutionary Inversion Box: rotating glyph + flow stripe --- */
+.revolutionary-inversion-box,
+.inversion-box {
+  position: relative;
+  overflow: hidden;
+}
+.revolutionary-inversion-box::before,
+.inversion-box::before {
+  content: '⟲';
+  position: absolute;
+  top: 0.45rem;
+  right: 0.65rem;
+  font-size: 1.6rem;
+  color: var(--page-accent);
+  opacity: 0.18;
+  pointer-events: none;
+  animation: pc-inversion-spin 8s linear infinite;
+}
+.revolutionary-inversion-box::after,
+.inversion-box::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2.5px;
+  background: linear-gradient(90deg, var(--page-accent), var(--accent-teal));
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: pc-inversion-flow 3s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes pc-inversion-spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
+@keyframes pc-inversion-flow {
+  0%, 100% { transform: scaleX(0); }
+  50%      { transform: scaleX(1); }
+}
+
+/* --- F2. Star Divider: 3s twinkle (catalog-spec) --- */
+.star-divider {
+  animation: pc-star-twinkle 3s ease-in-out infinite;
+}
+@keyframes pc-star-twinkle {
+  0%, 100% { opacity: 0.55; letter-spacing: 1.5em; }
+  50%      { opacity: 1;    letter-spacing: 1.7em; }
+}
+
+/* --- F3. Cosmic Button: ripple-on-hover (catalog-spec) --- */
 .cosmic-button,
 .primary-button {
   position: relative;
   overflow: hidden;
 }
-
 .cosmic-button::before,
 .primary-button::before {
   content: '';
@@ -310,13 +533,10 @@
   );
   opacity: 0;
   transform: scale(0.4);
-  transition:
-    opacity   0.4s ease,
-    transform 0.5s ease;
+  transition: opacity 0.4s ease, transform 0.5s ease;
   pointer-events: none;
   border-radius: inherit;
 }
-
 @media (hover: hover) {
   .cosmic-button:hover::before,
   .primary-button:hover::before {
@@ -325,43 +545,39 @@
   }
 }
 
-
-/* ============================================================
-   9. STATE TIMELINE — non-`.recovered` items get hover feedback
-   v3 only animates `.recovered`. The other items (preserved,
-   lost) deserve hover feedback too — readers should feel them
-   when they mouse across.
-   ============================================================ */
-
-.state-timeline-item {
-  transition:
-    background  0.25s ease,
-    padding-left 0.25s ease;
+/* --- F4. Workflow Thread: slide-on-hover (catalog-spec) --- */
+.workflow-covenant-thread,
+.workflow-thread {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 @media (hover: hover) {
-  .state-timeline-item:hover {
-    background: color-mix(in srgb, var(--state-color, var(--accent-purple)) 6%, var(--bg));
-    padding-left: 1.75rem;
+  .workflow-covenant-thread:hover,
+  .workflow-thread:hover {
+    transform: translateX(4px);
+    box-shadow: -3px 4px 14px color-mix(in srgb, #66bb6a 18%, transparent);
   }
 }
 
 
 /* ============================================================
-   10. SCHOLAR TIMELINE — same hover treatment
-   Page-local in scholar pages but the rule belongs anywhere
-   the class is used.
+   G. TIMELINE-STYLE COMPONENTS — hover feedback
    ============================================================ */
 
+.state-timeline-item,
 .scholar-timeline-item {
   transition:
-    background  0.25s ease,
-    padding-left 0.25s ease;
+    background    0.25s ease,
+    padding-left  0.25s ease,
+    border-radius 0.25s ease;
 }
 
 @media (hover: hover) {
+  .state-timeline-item:hover {
+    background: color-mix(in srgb, var(--state-color, var(--page-accent)) 6%, var(--bg));
+    padding-left: 1.75rem;
+  }
   .scholar-timeline-item:hover {
-    background: color-mix(in srgb, var(--page-accent, var(--accent-purple)) 6%, transparent);
+    background: color-mix(in srgb, var(--page-accent) 6%, transparent);
     padding-left: 1.5rem;
     border-radius: 6px;
   }
@@ -369,8 +585,35 @@
 
 
 /* ============================================================
-   11. REDUCED-MOTION GUARD
-   Hover lifts stay (intent-triggered, single transition).
+   H. RAINBOW STAGE TRACKER — current-dot pulse
+   Suite-aware. Per-suite tracker styling lives in the suite's
+   own CSS; the current-dot pulse is universal.
+   ============================================================ */
+
+.rainbow-stage-tracker .stage-dot.current,
+.rainbow-stage-tracker [aria-current="true"] {
+  position: relative;
+}
+.rainbow-stage-tracker .stage-dot.current::after,
+.rainbow-stage-tracker [aria-current="true"]::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  border: 2px solid var(--page-accent);
+  opacity: 0;
+  pointer-events: none;
+  animation: pc-tracker-pulse 2.5s ease-in-out infinite;
+}
+@keyframes pc-tracker-pulse {
+  0%, 100% { opacity: 0;    transform: scale(1); }
+  50%      { opacity: 0.65; transform: scale(1.15); }
+}
+
+
+/* ============================================================
+   I. REDUCED-MOTION GUARD
+   Hover lifts stay (intent-triggered, single transitions).
    Loop animations pause. Catalog parity, accessibility intact.
    ============================================================ */
 
@@ -380,7 +623,17 @@
   .critical-distinction::after,
   .key-insight::before,
   .key-insight::after,
-  .star-divider {
+  .star-divider,
+  .revolutionary-inversion-box::before,
+  .revolutionary-inversion-box::after,
+  .inversion-box::before,
+  .inversion-box::after,
+  .rainbow-stage-tracker .stage-dot.current::after,
+  .rainbow-stage-tracker [aria-current="true"]::after {
     animation: none;
+  }
+  .star-divider {
+    opacity: 1;
+    letter-spacing: 1.5em;
   }
 }
