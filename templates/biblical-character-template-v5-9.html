@@ -9,6 +9,11 @@
   v5.9.2 — data-reveal-children added to 7 grid parents; canonical
            .timeline.stagger-children now triggers via the same chassis
            observer (was: animation on page load).
+  v5.9.3 — Citation metadata read from <meta name="citation-*"> tags
+           (author/title/site/date) with graceful fallback. Bibliography
+           button opts into combined citation + bibliography copy via
+           data-copy-bibliography; clipboard now writes both text/html
+           and text/plain so <strong>/<em> survives paste into Word.
 -->
 <html lang="en">
 <head>
@@ -24,7 +29,7 @@
   <meta name="profile-type"      content="[single-page/multi-page]">
   <meta name="character-id"      content="[character-id]">
   <meta name="book-id"           content="[book-id]">
-  <meta name="template-version"  content="5.9.2">
+  <meta name="template-version"  content="5.9.3">
   <meta name="study-type"        content="character-study">
   <meta name="page-category"     content="biblical-character">
 
@@ -41,6 +46,19 @@
   <meta name="related-book"      content="[genesis/exodus/ruth/etc]">
   <meta name="time-period"       content="[patriarchal/exodus/judges/monarchy/exile/post-exile/second-temple/new-testament]">
   <meta name="canonical-order"   content="[number]">
+
+  <!-- ==========================================
+       CITATION METADATA (v5.9.3+)
+       Consumed by the chassis cite button. The bibliography button
+       reads these to build a stable, year-pinned page citation that
+       survives across reloads (vs. falling back to document.title
+       and the current year). Authors should set citation-title to
+       a clean academic short title; the <title> tag stays SEO-tuned.
+       ========================================== -->
+  <meta name="citation-author" content="Project Context">
+  <meta name="citation-title"  content="[Character Name]: A Character Study">
+  <meta name="citation-site"   content="Project Context">
+  <meta name="citation-date"   content="[YYYY]">
 
   <!-- Twitter Card -->
   <meta name="twitter:card"        content="summary_large_image">
@@ -716,8 +734,8 @@
 
       <div class="bibliography-content">
         <div class="bibliography-actions">
-          <button type="button" class="cite-button" data-cite-study>
-            <span aria-hidden="true">⎘</span> Copy Citation
+          <button type="button" class="cite-button" data-cite-study data-copy-bibliography>
+            <span aria-hidden="true">⎘</span> Copy Citation &amp; Sources
           </button>
         </div>
 

@@ -1,7 +1,7 @@
 /**
  * Project Context Page Chassis — v5.9
  * Path: /assets/js/page-chassis-v5-9.js
- * Version: 5.9.2
+ * Version: 5.9.3
  *
  * Page-type-agnostic chassis used by every v5.9 template family:
  *   • biblical-character-template-v5-9.html
@@ -51,6 +51,21 @@
  *     IntersectionObserver — adds [data-revealed] when scrolled into
  *     view, sets --reveal-stagger on each child. Replaces the earlier
  *     on-page-load animation with hardcoded :nth-child delay rules.
+ *
+ * v5.9.3 changes:
+ *   • Cite button now reads citation metadata from <meta name="citation-*">
+ *     tags (author, title, site, date) with graceful fallback to the prior
+ *     behavior (document.title + current year). Pages without the meta tags
+ *     keep working exactly as before.
+ *   • Cite button can optionally include the full bibliography in the copy
+ *     via the [data-copy-bibliography] attribute on the button. When set,
+ *     the clipboard receives the page citation followed by every entry
+ *     from .bibliography-section .source-citation, separated by blank lines.
+ *   • Rich-text clipboard write — the new behavior uses navigator.clipboard
+ *     .write() with both text/html and text/plain MIME types so that
+ *     <strong>/<em> markup inside .source-citation entries (bold author,
+ *     italic book title) survives paste into Word and Google Docs.
+ *     Falls back to writeText() and then execCommand() on older browsers.
  */
 
 (function () {
@@ -429,52 +444,183 @@
   // ============================================================
   // CITE-THIS-STUDY BUTTON
   // ============================================================
+  //
+  // Citation inputs come from <meta name="citation-*"> tags when
+  // present:
+  //   citation-author   → "Project Context" (default)
+  //   citation-title    → page <title> with site suffix stripped
+  //   citation-site     → "Project Context"
+  //   citation-date     → current year
+  //
+  // The canonical link supplies the URL. Per-button overrides:
+  //   data-cite-text          — supply the full citation string
+  //   data-cite-year          — override the year (legacy; meta wins)
+  //   data-copy-bibliography  — also append the bibliography
+  //
+  // The clipboard write is rich-text-capable: when the modern
+  // Clipboard API is available, we write both text/html and
+  // text/plain so <strong>/<em> markup inside .source-citation
+  // entries survives paste into Word and Google Docs. Older
+  // browsers degrade to plain text via writeText() and then
+  // execCommand("copy").
+  // ============================================================
+
+  /** Read a <meta name="..."> content value, falling back if absent. */
+  function meta(name, fallback) {
+    const node = document.querySelector(`meta[name="${name}"]`);
+    const value = node && node.content ? node.content.trim() : '';
+    return value || (fallback != null ? fallback : '');
+  }
+
+  /** Escape text for safe embedding in HTML output. */
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
 
   /**
-   * Build a Chicago/SBL-style citation from page metadata. The
-   * canonical link, <title>, and current year are the inputs.
-   * Authors can override the year by setting data-cite-year on the
-   * button, or supply a fully custom citation via data-cite-text.
+   * Build the Chicago/SBL-style page citation. Meta tags win; legacy
+   * data-cite-year on the button still works as a year override.
+   * A full custom override via data-cite-text short-circuits the build.
    */
-  function buildCitation(button) {
+  function buildPageCitation(button) {
     const custom = button.getAttribute('data-cite-text');
     if (custom) return custom;
 
-    const title = (document.title || 'Untitled').replace(/\s*[|–-]\s*Project Context.*$/i, '').trim();
-    const url   = (document.querySelector('link[rel="canonical"]') || {}).href || window.location.href;
-    const year  = button.getAttribute('data-cite-year') || new Date().getFullYear();
-    return `Project Context. "${title}." Project Context, ${year}. ${url}.`;
+    const titleFromDoc = (document.title || 'Untitled')
+      .replace(/\s*[|–-]\s*Project Context.*$/i, '')
+      .trim();
+    const yearFromAttr = button.getAttribute('data-cite-year');
+
+    const author = meta('citation-author', 'Project Context');
+    const title  = meta('citation-title',  titleFromDoc);
+    const site   = meta('citation-site',   'Project Context');
+    const date   = meta('citation-date',   yearFromAttr || String(new Date().getFullYear()));
+    const url    = (document.querySelector('link[rel="canonical"]') || {}).href || window.location.href;
+
+    return `${author}. "${title}." ${site}, ${date}. ${url}.`;
+  }
+
+  /**
+   * Build the plain-text bibliography block. Pulls .innerText from
+   * each .source-citation inside .bibliography-section. Returns ""
+   * when no entries are found (caller decides what to do).
+   */
+  function buildBibliographyText() {
+    const entries = $$('.bibliography-section .source-citation')
+      .map(el => (el.innerText || '').trim())
+      .filter(Boolean);
+    if (!entries.length) return '';
+    return 'Bibliography\n\n' + entries.join('\n\n');
+  }
+
+  /**
+   * Build the HTML bibliography block. Each .source-citation's
+   * innerHTML is preserved verbatim (it already contains <strong>
+   * and <em> for Chicago-style author/title formatting), wrapped
+   * in <p> tags. The heading is <h3>.
+   */
+  function buildBibliographyHTML() {
+    const entries = $$('.bibliography-section .source-citation')
+      .map(el => (el.innerHTML || '').trim())
+      .filter(Boolean);
+    if (!entries.length) return '';
+    const items = entries.map(html => `<p>${html}</p>`).join('\n');
+    return `<h3>Bibliography</h3>\n${items}`;
+  }
+
+  /**
+   * Build the plain-text export. Page citation alone, or page
+   * citation + bibliography when the button opts in.
+   */
+  function buildCitationExport(button) {
+    const pageCitation = buildPageCitation(button);
+    if (!button.hasAttribute('data-copy-bibliography')) return pageCitation;
+    const bibliography = buildBibliographyText();
+    return bibliography ? `${pageCitation}\n\n${bibliography}` : pageCitation;
+  }
+
+  /**
+   * Build the rich-text (HTML) export. The page citation is wrapped
+   * in a <p>; the bibliography section is appended when requested.
+   * Returns a complete HTML fragment ready for the clipboard.
+   */
+  function buildCitationExportHTML(button) {
+    const pageCitation = buildPageCitation(button);
+    const pagePara = `<p>${escapeHtml(pageCitation)}</p>`;
+    if (!button.hasAttribute('data-copy-bibliography')) return pagePara;
+    const bibliography = buildBibliographyHTML();
+    return bibliography ? `${pagePara}\n${bibliography}` : pagePara;
+  }
+
+  /**
+   * Write both rich-text and plain-text representations to the
+   * clipboard. Returns a promise that resolves on success and
+   * rejects when even the legacy fallback fails.
+   */
+  async function writeRichToClipboard(html, text) {
+    // Modern path — ClipboardItem with both MIME types.
+    if (navigator.clipboard && typeof navigator.clipboard.write === 'function'
+        && typeof window.ClipboardItem === 'function') {
+      try {
+        await navigator.clipboard.write([
+          new ClipboardItem({
+            'text/html':  new Blob([html], { type: 'text/html' }),
+            'text/plain': new Blob([text], { type: 'text/plain' })
+          })
+        ]);
+        return;
+      } catch (err) {
+        // Fall through to writeText.
+      }
+    }
+
+    // Plain-text path — writeText.
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+      try {
+        await navigator.clipboard.writeText(text);
+        return;
+      } catch (err) {
+        // Fall through to execCommand.
+      }
+    }
+
+    // Legacy path — hidden textarea + execCommand("copy").
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'absolute';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); }
+    finally { document.body.removeChild(ta); }
   }
 
   function bindCiteButtons() {
     const buttons = $$('[data-cite-study], .cite-button');
     buttons.forEach(btn => {
       btn.addEventListener('click', async () => {
-        const citation = buildCitation(btn);
+        const text = buildCitationExport(btn);
+        const html = buildCitationExportHTML(btn);
+        const withBib = btn.hasAttribute('data-copy-bibliography');
         const original = btn.innerHTML;
         const showCopied = () => {
           btn.classList.add('copied');
-          btn.textContent = '✓ Citation copied';
+          btn.textContent = withBib ? '✓ Citation + sources copied' : '✓ Citation copied';
           setTimeout(() => {
             btn.classList.remove('copied');
             btn.innerHTML = original;
           }, 2400);
         };
         try {
-          await navigator.clipboard.writeText(citation);
+          await writeRichToClipboard(html, text);
           showCopied();
         } catch (err) {
-          // Fallback for older browsers / insecure contexts
-          const ta = document.createElement('textarea');
-          ta.value = citation;
-          ta.setAttribute('readonly', '');
-          ta.style.position = 'absolute';
-          ta.style.left = '-9999px';
-          document.body.appendChild(ta);
-          ta.select();
-          try { document.execCommand('copy'); } catch (e) { /* noop */ }
-          document.body.removeChild(ta);
-          showCopied();
+          console.warn('[v5.9.3] Citation copy failed:', err);
         }
       });
     });
@@ -652,7 +798,7 @@
   // ============================================================
 
   function init() {
-    console.info('[v5.9.2] Project Context page chassis initialized.');
+    console.info('[v5.9.3] Project Context page chassis initialized.');
 
     // Reading time first — body text is stable, doesn't depend on widgets
     fillReadingTime();
