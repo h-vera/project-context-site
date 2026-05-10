@@ -679,3 +679,162 @@ body[data-suite-stage="8"] {
     letter-spacing: 1.5em;
   }
 }
+/* ============================================================
+   J. TILED COMPONENTS — feature-tile + goat-panel ul + mini-card
+   ------------------------------------------------------------
+   The Component Catalog v1.5 promised richer tile feedback than
+   the 4%/14% surface and 2px translateX hover from
+   global-v3.css §11b. This section delivers it:
+
+     - .feature-tile        stronger surface, lift+glow on hover,
+                            icon plate scales 1.08 on hover
+     - .goat-panel > ul     legacy <ul> form rendered as soft
+                            tiles (no HTML change required) —
+                            powers the Problem/Response panels
+     - .goat-panel          slightly heavier shadow on hover so
+                            the existing -2px lift reads
+     - .mini-card           translateY lift + accent border tint
+     - .principle-box       same lift treatment for parity
+
+   No !important. All hover behavior gated on (hover: hover);
+   loop animations are absent here, so the §I reduced-motion
+   guard already covers this section.
+   ============================================================ */
+
+
+/* --- J1. Feature tile — visible surface + richer hover -------- */
+/* Overrides §11b's transparent / 4% / 14% values so the tile is
+   visibly a tile *before* hover. Layout (display:grid +
+   grid-template-columns) is left untouched. */
+.feature-tile {
+  background: color-mix(in srgb, var(--panel-accent, var(--page-accent))  6%, var(--bg));
+  border-color: color-mix(in srgb, var(--panel-accent, var(--page-accent)) 22%, var(--border));
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  transition:
+    transform   0.25s var(--ease, ease),
+    background  0.25s var(--ease, ease),
+    border-color 0.25s var(--ease, ease),
+    box-shadow  0.25s var(--ease, ease);
+}
+
+.feature-tile > .ico {
+  transition:
+    transform   0.25s var(--ease, ease),
+    background  0.25s var(--ease, ease),
+    border-color 0.25s var(--ease, ease);
+}
+
+@media (hover: hover) {
+  .feature-tile:hover {
+    transform: translateY(-2px);
+    background:   color-mix(in srgb, var(--panel-accent, var(--page-accent)) 10%, var(--bg));
+    border-color: color-mix(in srgb, var(--panel-accent, var(--page-accent)) 40%, var(--border));
+    box-shadow:
+      0 6px 18px color-mix(in srgb, var(--panel-accent, var(--page-accent)) 16%, transparent),
+      0 1px 4px rgba(15, 23, 42, 0.04);
+  }
+  .feature-tile:hover > .ico {
+    transform: scale(1.08);
+    background:   color-mix(in srgb, var(--panel-accent, var(--page-accent)) 20%, var(--bg));
+    border-color: color-mix(in srgb, var(--panel-accent, var(--page-accent)) 38%, transparent);
+  }
+}
+
+
+/* --- J2. Goat panel — heavier shadow on hover ---------------- */
+/* §11a already gives -2px translateY; this just makes the
+   shadow read more clearly and bumps the accent rail. */
+@media (hover: hover) {
+  .goat-panel:hover {
+    border-left-width: 5px;
+    box-shadow:
+      0 8px 24px color-mix(in srgb, var(--panel-accent, var(--page-accent)) 16%, transparent),
+      0 2px  6px rgba(15, 23, 42, 0.04);
+  }
+}
+
+
+/* --- J3. Goat-panel <ul> as soft tiles ----------------------- */
+/* Panels using the legacy <ul><li> form (Problem / Response,
+   What-Worked / What-Didn't, etc.) get a tiled rhythm without
+   any HTML change. Custom dot bullet via ::before so we can
+   drop the default marker and pad the tile properly. */
+.goat-panel > ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.4rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.goat-panel > ul > li {
+  position: relative;
+  padding: 0.65rem 0.85rem 0.65rem 1.7rem;
+  margin: 0;
+  background: color-mix(in srgb, var(--panel-accent, var(--page-accent))  5%, var(--bg));
+  border: 1px solid color-mix(in srgb, var(--panel-accent, var(--page-accent)) 18%, var(--border));
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+  color: var(--text);
+  transition:
+    transform   0.25s var(--ease, ease),
+    background  0.25s var(--ease, ease),
+    border-color 0.25s var(--ease, ease),
+    box-shadow  0.25s var(--ease, ease);
+}
+.goat-panel > ul > li::before {
+  content: '';
+  position: absolute;
+  left: 0.7rem;
+  top: 1rem;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--panel-accent, var(--page-accent));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--panel-accent, var(--page-accent)) 18%, transparent);
+}
+@media (hover: hover) {
+  .goat-panel > ul > li:hover {
+    transform: translateX(3px);
+    background:   color-mix(in srgb, var(--panel-accent, var(--page-accent))  9%, var(--bg));
+    border-color: color-mix(in srgb, var(--panel-accent, var(--page-accent)) 36%, var(--border));
+    box-shadow: 0 3px 10px color-mix(in srgb, var(--panel-accent, var(--page-accent)) 14%, transparent);
+  }
+}
+
+
+/* --- J4. Mini-card — hover lift + accent border -------------- */
+.mini-card {
+  transition:
+    transform    0.25s var(--ease, ease),
+    box-shadow   0.25s var(--ease, ease),
+    border-color 0.25s var(--ease, ease);
+}
+@media (hover: hover) {
+  .mini-card:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--page-accent) 32%, var(--border));
+    box-shadow:
+      0 6px 18px color-mix(in srgb, var(--page-accent) 14%, transparent),
+      0 2px  4px rgba(15, 23, 42, 0.03);
+  }
+}
+
+
+/* --- J5. Principle box — match the rhythm -------------------- */
+.principle-box {
+  transition:
+    transform    0.25s var(--ease, ease),
+    box-shadow   0.25s var(--ease, ease),
+    border-color 0.25s var(--ease, ease);
+}
+@media (hover: hover) {
+  .principle-box:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--page-accent) 32%, var(--border));
+    box-shadow:
+      0 6px 18px color-mix(in srgb, var(--page-accent) 14%, transparent),
+      0 2px  4px rgba(15, 23, 42, 0.03);
+  }
+}
