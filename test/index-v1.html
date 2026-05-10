@@ -309,30 +309,197 @@
             opacity: 0.6;
         }
 
-        /* DIFFERENTIATOR CARDS — give the value-prop section real CTAs */
-        #features .feature-card {
+        /* DIFFERENTIATOR FAN — three overlapping cards that spread on hover.
+           Visual cue, not the page's main affordance. Borrowed pattern from
+           /about/index.html's "What We Offer" section, scaled for 3 cards. */
+        .differentiator-fan-section {
+            padding: 4rem 2rem 5rem;
+            background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%);
+            overflow: hidden;
+        }
+        .differentiator-fan-section .features-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .differentiator-fan-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            min-height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+        }
+        .differentiator-card {
+            position: absolute;
+            width: 260px;
+            height: 360px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-style: preserve-3d;
+            overflow: hidden;
+            display: block;
+        }
+        .differentiator-card:hover {
+            box-shadow: 0 20px 40px rgba(74, 95, 255, 0.25);
+            z-index: 100 !important;
+        }
+        .differentiator-card:hover .diff-card-gradient {
+            filter: brightness(1.1);
+        }
+
+        /* Resting fan positions (3 cards, slight rotation) */
+        .differentiator-fan-container:not(.expanded) .differentiator-card:nth-child(1) {
+            transform: translateX(-160px) rotate(-8deg);
+            z-index: 1;
+        }
+        .differentiator-fan-container:not(.expanded) .differentiator-card:nth-child(2) {
+            transform: translateX(0) rotate(0deg);
+            z-index: 3;
+        }
+        .differentiator-fan-container:not(.expanded) .differentiator-card:nth-child(3) {
+            transform: translateX(160px) rotate(8deg);
+            z-index: 1;
+        }
+
+        /* Expanded (hover) — cards parallel and spread out */
+        .differentiator-fan-container.expanded .differentiator-card:nth-child(1) {
+            transform: translateX(-300px) rotate(0deg);
+            z-index: 5;
+        }
+        .differentiator-fan-container.expanded .differentiator-card:nth-child(2) {
+            transform: translateX(0) rotate(0deg);
+            z-index: 5;
+        }
+        .differentiator-fan-container.expanded .differentiator-card:nth-child(3) {
+            transform: translateX(300px) rotate(0deg);
+            z-index: 5;
+        }
+
+        /* Hover lift when expanded (card-specific, preserves x-translate) */
+        .differentiator-fan-container.expanded .differentiator-card:nth-child(1):hover {
+            transform: translateX(-300px) translateY(-12px) scale(1.03);
+        }
+        .differentiator-fan-container.expanded .differentiator-card:nth-child(2):hover {
+            transform: translateX(0) translateY(-12px) scale(1.03);
+        }
+        .differentiator-fan-container.expanded .differentiator-card:nth-child(3):hover {
+            transform: translateX(300px) translateY(-12px) scale(1.03);
+        }
+
+        /* Card gradient headers (matches semantic palette from About page Venn) */
+        .differentiator-card:nth-child(1) .diff-card-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .differentiator-card:nth-child(2) .diff-card-gradient {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        .differentiator-card:nth-child(3) .diff-card-gradient {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .diff-card-gradient {
+            width: 100%;
+            height: 130px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: filter 0.3s ease;
+        }
+        .diff-card-gradient::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 0%, transparent 60%);
+        }
+        .diff-card-body {
+            padding: 1.25rem;
             display: flex;
             flex-direction: column;
+            height: calc(100% - 130px);
         }
-        #features .feature-card .feature-description {
-            flex: 1;
-            margin-bottom: 1.25rem;
-        }
-        #features .feature-card .primary-button {
-            align-self: flex-start;
-            background: linear-gradient(135deg, #5BC0D6 0%, #6A9FD9 30%, #7B6BBD 70%, #8E7BB8 100%) !important;
-            color: #ffffff !important;
+        .diff-card-type {
+            display: inline-block;
+            background: rgba(74, 95, 255, 0.1);
+            color: #4a5fff;
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
             font-weight: 600;
-            border: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(107,107,189,0.2);
-            font-size: 0.95rem;
-            padding: 0.65rem 1.35rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+            align-self: flex-start;
         }
-        #features .feature-card .primary-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(107,107,189,0.35);
-            filter: brightness(1.08);
+        .diff-card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #2a3aaa;
+            margin: 0 0 0.5rem;
+            line-height: 1.3;
+        }
+        .diff-card-description {
+            font-size: 0.85rem;
+            color: #666;
+            line-height: 1.55;
+            margin: 0 0 0.75rem;
+            flex: 1;
+        }
+        .diff-card-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(74, 95, 255, 0.1), rgba(114, 9, 183, 0.1));
+            color: #4a5fff;
+            padding: 0.3rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            align-self: flex-start;
+        }
+
+        /* Tablet — narrow the spread so cards don't clip viewport */
+        @media (max-width: 1100px) and (min-width: 769px) {
+            .differentiator-fan-container.expanded .differentiator-card:nth-child(1) {
+                transform: translateX(-220px);
+            }
+            .differentiator-fan-container.expanded .differentiator-card:nth-child(3) {
+                transform: translateX(220px);
+            }
+            .differentiator-fan-container.expanded .differentiator-card:nth-child(1):hover {
+                transform: translateX(-220px) translateY(-12px) scale(1.03);
+            }
+            .differentiator-fan-container.expanded .differentiator-card:nth-child(3):hover {
+                transform: translateX(220px) translateY(-12px) scale(1.03);
+            }
+        }
+
+        /* Mobile — stack vertically, no fan */
+        @media (max-width: 768px) {
+            .differentiator-fan-container {
+                flex-direction: column;
+                min-height: auto;
+                gap: 1.25rem;
+                padding: 0 1rem;
+            }
+            .differentiator-fan-container:not(.expanded) .differentiator-card,
+            .differentiator-fan-container.expanded .differentiator-card,
+            .differentiator-fan-container.expanded .differentiator-card:hover {
+                position: relative;
+                transform: none !important;
+                margin: 0 auto;
+                width: 100%;
+                max-width: 360px;
+                height: auto;
+                min-height: 320px;
+            }
         }
 
         /* Biblical Studies section buttons - toned down cosmic gradient */
@@ -359,20 +526,24 @@
     <a href="#main-content" class="skip-link">Skip to content</a>
 
     <!-- Navigation -->
+    <!--
+      The nav block below is generated at build time by `scripts/inline-nav.js`
+      from `assets/js/nav-component.js`. Do not edit between the markers — your
+      changes will be overwritten on next deploy. Edit nav-component.js instead.
+    -->
+    <!-- nav:start -->
     <nav id="main-nav" role="navigation" aria-label="Main navigation">
         <div class="nav-container">
             <a href="/" class="logo">
                 <div class="logo-icon">
-                    <!-- NEW cosmic nav logo -->
-                    <img src="/assets/images/color-cosmic-nav-logo.png"
-                         alt="Project Context cosmic eye logo">
+                    <img src="/assets/images/color-cosmic-nav-logo.png" alt="Project Context Logo" />
                 </div>
                 <span class="logo-text">Project Context</span>
             </a>
-            <ul class="nav-links" id="navLinks">
+            <ul class="nav-links" id="navLinks" aria-label="Main navigation">
                 <li><a href="/" class="active">Home</a></li>
                 <li class="dropdown">
-                    <a href="/studies/studies-overview.html" class="dropdown-toggle" aria-expanded="false" aria-haspopup="true">Studies</a>
+                    <a href="/studies/" class="dropdown-toggle" aria-expanded="false" aria-haspopup="true">Studies</a>
                     <div class="dropdown-content">
                         <a href="/studies/characters/characters_hub.html">Biblical Characters</a>
                         <a href="/studies/women/women-bible-hub.html">Women in the Bible</a>
@@ -402,6 +573,7 @@
             </button>
         </div>
     </nav>
+    <!-- nav:end -->
 
     <!-- Mobile Menu Overlay -->
     <div class="mobile-menu-overlay"></div>
@@ -441,55 +613,62 @@
                     </a>
                 </div>
                 <p class="hero-meta">
-                    Founded 2025 <span class="dot">·</span> Ad-free and free forever
+                    Built for curious readers <span class="dot">·</span> Orient quickly, study deeply
                 </p>
             </div>
         </section>
 
-        <!-- Differentiator Section — what makes Project Context different -->
-        <section class="features" id="features">
+        <!-- Differentiator Section — Card Fan pattern (mirrors /about/ "What We Offer") -->
+        <section class="differentiator-fan-section" id="features">
             <div class="features-container">
-                <h2 class="features-title">Built for serious readers</h2>
-                <div class="features-grid">
+                <h2 class="features-title">Curious about their context?</h2>
+
+                <div class="differentiator-fan-container" id="differentiatorFan">
 
                     <!-- Card 1: Original Languages -->
-                    <div class="feature-card">
-                        <div class="feature-icon">🔤</div>
-                        <h3 class="feature-title">Read in the original languages</h3>
-                        <p class="feature-description">
-                            Hebrew and Greek inline tooltips, transliteration, and lexical depth across every major
-                            study. The original text isn't decorative here — it's how the meaning actually works.
-                        </p>
-                        <a href="/resources/literary-devices/literary-devices-hub.html" class="primary-button">
-                            Explore Literary Devices →
-                        </a>
-                    </div>
+                    <a href="/resources/literary-devices/literary-devices-hub.html" class="differentiator-card">
+                        <div class="diff-card-gradient">
+                            <span style="position: relative; z-index: 1;">🔤</span>
+                        </div>
+                        <div class="diff-card-body">
+                            <span class="diff-card-type">Original Languages</span>
+                            <h3 class="diff-card-title">Read in Hebrew &amp; Greek</h3>
+                            <p class="diff-card-description">
+                                Inline tooltips, transliteration, and lexical depth across every major study — because the original text isn't decorative, it's how the meaning actually works.
+                            </p>
+                            <span class="diff-card-tag">Literary Devices →</span>
+                        </div>
+                    </a>
 
                     <!-- Card 2: Literary Structure -->
-                    <div class="feature-card">
-                        <div class="feature-icon">🔗</div>
-                        <h3 class="feature-title">See the structure</h3>
-                        <p class="feature-description">
-                            Chiastic mirrors, intertextual arc diagrams, and the literary architecture of the canon —
-                            visualized so you can see what the authors built, not just what they said.
-                        </p>
-                        <a href="/resources/connections-corner/connections-hub.html" class="primary-button">
-                            Open Connections Corner →
-                        </a>
-                    </div>
+                    <a href="/resources/connections-corner/connections-hub.html" class="differentiator-card">
+                        <div class="diff-card-gradient">
+                            <span style="position: relative; z-index: 1;">📐</span>
+                        </div>
+                        <div class="diff-card-body">
+                            <span class="diff-card-type">Literary Structure</span>
+                            <h3 class="diff-card-title">See the architecture</h3>
+                            <p class="diff-card-description">
+                                Chiastic mirrors, intertextual arc diagrams, and the patterns the authors built into the text — visualized so you can see what they made, not just what they said.
+                            </p>
+                            <span class="diff-card-tag">Connections Corner →</span>
+                        </div>
+                    </a>
 
-                    <!-- Card 3: Built for Teaching -->
-                    <div class="feature-card">
-                        <div class="feature-icon">🎓</div>
-                        <h3 class="feature-title">Built for teaching</h3>
-                        <p class="feature-description">
-                            Discussion guides, sermon-builder tools, and a teaching-formation pathway grounded in
-                            serious exegesis. Designed for pastors, small groups, and seminary-level lay readers.
-                        </p>
-                        <a href="/resources/teaching-formation/teaching-formation-hub.html" class="primary-button">
-                            Teaching Formation →
-                        </a>
-                    </div>
+                    <!-- Card 3: Strengthen Individuals & Communities -->
+                    <a href="/resources/teaching-formation/teaching-formation-hub.html" class="differentiator-card">
+                        <div class="diff-card-gradient">
+                            <span style="position: relative; z-index: 1;">🤝</span>
+                        </div>
+                        <div class="diff-card-body">
+                            <span class="diff-card-type">Teaching &amp; Formation</span>
+                            <h3 class="diff-card-title">Strengthen individuals and communities</h3>
+                            <p class="diff-card-description">
+                                Discussion guides, sermon-builder tools, and a teaching-formation pathway grounded in serious exegesis — for pastors, small groups, and lay readers ready to go deeper.
+                            </p>
+                            <span class="diff-card-tag">Teaching Formation →</span>
+                        </div>
+                    </a>
 
                 </div>
             </div>
@@ -813,6 +992,21 @@
             }
         });
     });
+
+    // Differentiator Card Fan — expand on hover (desktop only; mobile is stacked)
+    const differentiatorFan = document.getElementById('differentiatorFan');
+    let differentiatorTimeout;
+    if (differentiatorFan) {
+        differentiatorFan.addEventListener('mouseenter', () => {
+            clearTimeout(differentiatorTimeout);
+            differentiatorFan.classList.add('expanded');
+        });
+        differentiatorFan.addEventListener('mouseleave', () => {
+            differentiatorTimeout = setTimeout(() => {
+                differentiatorFan.classList.remove('expanded');
+            }, 300);
+        });
+    }
 
     // Back to top
     const backToTopBtn = document.querySelector('.back-to-top');
