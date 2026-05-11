@@ -812,6 +812,111 @@ body.menu-open { overflow: hidden; }
 
 
 /* ============================================================
+   13b. GUIDED PRINCIPLE BOX (cosmic gradient)
+   ------------------------------------------------------------
+   For formational guidance statements — the "this is the
+   principle to internalize" callout. Sibling to .critical-
+   distinction (rose, warning) but reads as invitation, not
+   warning. Uses the Project Context cosmic palette
+   (cyan → indigo → magenta → pink → gold) for the gradient
+   border and gradient-text heading; ✦ marker instead of ⚠.
+
+   Hover: lifts -6px and scales 1.01 (matches the About page
+   core-component-card treatment); gradient border ramps from
+   55% to 100% opacity; h4 slides right 5px.
+   ============================================================ */
+.guided-principle {
+  position: relative;
+  overflow: hidden;
+  margin: 2rem 0;
+  padding: 1.75rem 2rem;
+  background: linear-gradient(135deg,
+    color-mix(in srgb, #3EE4FF 4%, var(--bg)),
+    color-mix(in srgb, #6C4FF7 4%, var(--bg)) 35%,
+    color-mix(in srgb, #E94BFF 4%, var(--bg)) 65%,
+    color-mix(in srgb, #FF9B4A 4%, var(--bg)));
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(108, 79, 247, 0.08);
+  transition:
+    transform var(--duration) var(--ease),
+    box-shadow var(--duration) var(--ease);
+}
+
+/* Animated rainbow gradient border (mask-composite trick) */
+.guided-principle::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  padding: 2px;
+  background: linear-gradient(135deg,
+    #3EE4FF 0%, #6C4FF7 30%, #E94BFF 60%,
+    #FA4ABA 80%, #FF9B4A 100%);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+          mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.55;
+  transition: opacity var(--duration) var(--ease);
+}
+
+@media (hover: hover) {
+  .guided-principle:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow:
+      0 14px 32px rgba(108, 79, 247, 0.18),
+      0 4px 14px rgba(233, 75, 255, 0.12);
+  }
+  .guided-principle:hover::before { opacity: 1; }
+  .guided-principle:hover h4 { transform: translateX(5px); }
+}
+
+.guided-principle h4 {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  margin: 0 0 0.65rem;
+  display: inline-block;
+  background: linear-gradient(135deg,
+    #3EE4FF 0%, #6C4FF7 35%, #E94BFF 70%, #FA4ABA 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  transition: transform var(--duration) var(--ease);
+}
+
+.guided-principle h4::before {
+  content: '✦ ';
+  background: linear-gradient(135deg, #FFD700, #FA4ABA);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.guided-principle p {
+  margin: 0;
+  color: var(--text-soft);
+  line-height: 1.65;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guided-principle,
+  .guided-principle::before,
+  .guided-principle h4 {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+
+/* ============================================================
    14. CORE LOGIC QUOTE
    ============================================================ */
 .core-logic-quote {
