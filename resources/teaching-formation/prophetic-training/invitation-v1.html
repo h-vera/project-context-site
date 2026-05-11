@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<!--
+  Prophetic & Teaching Formation — Invitation (Step 1 of 7)
+  Path: /resources/teaching-formation/prophetic-training/invitation.html
+
+  v5.8.1 → 5.9.2 migration:
+    - Switched to global-v3.css + global-v3-polish.css + character-page-v5-9.js
+    - --page-accent set to magenta (formation-pathway stage 1)
+    - Stripped legacy hero/cosmic CSS now provided by v3 tokens
+    - Section <h2 class="section-title"> inside .theology-card → plain <h3>
+    - Added Reading Stamp + Mini-TOC + Star Dividers + page-section-config
+    - Pathway nav simplified to a v3-styled .pathway-nav block
+    - data-reveal-children replaces .animate-on-scroll
+    - Three repeated key-insight blockquotes converted to scripture-quote
+      (semantic match for the Luke-Acts citations)
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Invitation – Prophetic &amp; Teaching Formation | Project Context</title>
+  <meta name="description" content="An invitation to join an Acts-shaped formation group: men and women growing together in clarity, faithfulness, and courage to speak God's word for the building up of the church.">
+
+  <!-- ==========================================
+       PAGE METADATA (v5.9.2)
+       ========================================== -->
+  <meta name="template-version" content="5.9.2">
+  <meta name="page-category"    content="resources">
+  <meta name="study-type"       content="formation-pathway">
+  <meta name="pathway-step"     content="1">
+  <meta name="nav-hub"          content="resources">
+  <meta name="nav-section"      content="teaching-formation">
+  <meta name="has-hebrew"       content="false">
+  <meta name="has-greek"        content="false">
+  <meta name="primary-language" content="english">
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title"       content="Invitation – Prophetic &amp; Teaching Formation">
+  <meta property="og:description" content="A call shaped by Luke-Acts: men and women growing together to speak God's word with clarity, faithfulness, and love.">
+  <meta property="og:type"        content="article">
+  <meta property="og:url"         content="https://projectcontext.org/resources/teaching-formation/prophetic-training/invitation.html">
+
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="Invitation – Prophetic &amp; Teaching Formation">
+  <meta name="twitter:description" content="A call shaped by Luke-Acts: speak God's word with clarity, faithfulness, and love.">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://projectcontext.org/resources/teaching-formation/prophetic-training/invitation.html">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="preload" href="/assets/css/global-v3.css" as="style">
+  <link rel="stylesheet" href="/assets/css/global-v3.css">
+  <link rel="stylesheet" href="/assets/css/global-v3-polish.css?v=0.2">
+
+  <!-- ==========================================
+       PAGE ACCENT — formation-pathway stage 1 (warm entry)
+       ========================================== -->
+  <style>
+    :root { --page-accent: var(--accent-magenta); }
+
+    /* Pathway navigation — page-local component shared across child pages.
+       Sits at the bottom (and optionally top) of every formation-pathway page. */
+    .pathway-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.25rem 1.5rem;
+      margin: 2.5rem 0 1rem;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      flex-wrap: wrap;
+    }
+    .pathway-nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1rem;
+      min-height: 44px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      color: var(--text-soft);
+      font-size: var(--fs-sm);
+      font-weight: 500;
+      text-decoration: none;
+      transition: all var(--duration-fast) var(--ease);
+    }
+    .pathway-nav a:hover {
+      background: var(--gradient-primary);
+      color: var(--bg);
+      border-color: transparent;
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-purple);
+    }
+    .pathway-nav .step-indicator {
+      font-family: var(--font-mono);
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--page-accent);
+      padding: 0.4rem 0.85rem;
+      background: color-mix(in srgb, var(--page-accent) 8%, var(--bg));
+      border: 1px solid color-mix(in srgb, var(--page-accent) 22%, var(--border));
+      border-radius: var(--radius-pill);
+    }
+    @media (max-width: 600px) {
+      .pathway-nav { flex-direction: column; align-items: stretch; }
+      .pathway-nav a { justify-content: center; }
+    }
+
+    /* Pill row used in the "What This Is" section */
+    .pill-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; }
+
+    /* Decorative quoted callout for the closing hopeful note */
+    .closing-call {
+      margin: 2rem 0 1rem;
+      padding: 1.5rem 1.75rem;
+      background: linear-gradient(135deg,
+        color-mix(in srgb, var(--accent-blue) 6%, var(--bg)),
+        color-mix(in srgb, var(--accent-indigo) 6%, var(--bg)));
+      border-left: 4px solid var(--accent-blue);
+      border-radius: var(--radius-sm);
+    }
+    .closing-call strong { color: var(--accent-indigo); }
+
+    /* ==========================================
+       COSMIC HERO — page-local component (preserved from v5.8 design)
+       Cosmic Eye Logo Colors: Cyan → Blue → Indigo → Magenta → Pink → Gold
+       ========================================== */
+    .hero {
+      min-height: 52vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 1.5rem;
+      margin-top: 0;
+      position: relative;
+      background: linear-gradient(
+        135deg,
+        #001B3A 0%,
+        #3EE4FF 15%,
+        #57A9FF 30%,
+        #6C4FF7 50%,
+        #E94BFF 70%,
+        #FA4ABA 85%,
+        #FF9B4A 100%
+      );
+      color: #fff;
+      overflow: hidden;
+      margin-left: calc(-50vw + 50%);
+      margin-right: calc(-50vw + 50%);
+      width: 100vw;
+      box-shadow: 0 8px 32px rgba(62,228,255,.25);
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: -50%;
+      background:
+        radial-gradient(circle at 25% 75%, rgba(62,228,255,.16) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(250,74,186,.18) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(108,79,247,.14) 0%, transparent 60%);
+      animation: cosmicFloat 36s linear infinite;
+      pointer-events: none;
+      will-change: transform;
+    }
+    .hero::after {
+      content: '✦';
+      position: absolute;
+      font-size: 4rem;
+      color: rgba(255,255,255,.18);
+      top: 12%;
+      left: 8%;
+      animation: cosmicTwinkle 5s ease-in-out infinite;
+      text-shadow: 0 0 20px rgba(62,228,255,.6);
+      pointer-events: none;
+    }
+    @keyframes cosmicFloat {
+      0%   { transform: rotate(0deg) scale(1); }
+      50%  { transform: rotate(180deg) scale(1.12); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+    @keyframes cosmicTwinkle {
+      0%, 100% { opacity: .18; transform: scale(1) rotate(0deg); filter: blur(0); }
+      50%      { opacity: .5;  transform: scale(1.3) rotate(180deg); filter: blur(1px); }
+    }
+    .hero-content {
+      text-align: center;
+      max-width: 1000px;
+      margin: 0 auto;
+      z-index: 1;
+      position: relative;
+      width: 100%;
+    }
+    .hero-title {
+      font-size: clamp(2.4rem, 5.6vw, 4rem);
+      font-weight: 900;
+      line-height: 1.05;
+      margin: 0 0 1.25rem;
+      text-shadow: 2px 3px 8px rgba(0,0,0,.45), 0 0 20px rgba(62,228,255,.3);
+      letter-spacing: -0.02em;
+      animation: heroTitleReveal 1s ease-out;
+    }
+    .hero-subtitle {
+      font-size: clamp(1.1rem, 2.1vw, 1.45rem);
+      opacity: .97;
+      margin: 0 auto 1.75rem;
+      font-weight: 300;
+      max-width: 900px;
+      line-height: 1.65;
+      text-shadow: 1px 2px 4px rgba(0,0,0,.3);
+      animation: heroSubtitleReveal 1s ease-out .3s both;
+    }
+    @keyframes heroTitleReveal {
+      from { opacity: 0; transform: translateY(40px) scale(.95); filter: blur(4px); }
+      to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    }
+    @keyframes heroSubtitleReveal {
+      from { opacity: 0; transform: translateY(30px); filter: blur(2px); }
+      to   { opacity: .97; transform: translateY(0); filter: blur(0); }
+    }
+    .hero .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: .5rem;
+      padding: 16px 32px;
+      border-radius: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      color: #fff;
+      border: 2px solid rgba(255,255,255,.3);
+      background: rgba(255,255,255,.15);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      font-size: 1.1rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,.2);
+      transition: all .3s cubic-bezier(.4,0,.2,1);
+      animation: ctaReveal 1s ease-out .6s both;
+    }
+    @keyframes ctaReveal {
+      from { opacity: 0; transform: translateY(20px) scale(.9); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .hero .cta:hover {
+      transform: translateY(-4px) scale(1.05);
+      background: rgba(255,255,255,.22);
+      border-color: rgba(255,255,255,.5);
+      box-shadow: 0 12px 32px rgba(62,228,255,.4), 0 0 40px rgba(250,74,186,.3);
+    }
+    /* Hero sits at the very top of <main>; breadcrumbs follow full-bleed */
+    .resources-page .content-section { padding-top: 0; }
+    .hero + .breadcrumbs {
+      margin: 0 calc(-50vw + 50%);
+      width: 100vw;
+      max-width: 100vw;
+      background: var(--bg);
+      padding: .85rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    @media (max-width: 768px) {
+      .hero { min-height: 44vh; padding: 2.5rem 1rem; }
+      .hero::after { font-size: 2.5rem; left: 4%; top: 8%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero::before,
+      .hero::after,
+      .hero-title,
+      .hero-subtitle,
+      .hero .cta { animation: none !important; }
+    }
+  </style>
+</head>
+
+<body class="resources-page formation-pathway" dir="ltr">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div class="reading-progress" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100"></div>
+
+  <!-- Navigation injected by nav-component.js -->
+  <div id="nav-placeholder"></div>
+
+  <!-- Quick Navigation Sidebar (≥1400px) -->
+  <div class="quick-nav-sidebar" aria-label="Section navigation"></div>
+
+  <main id="main-content" class="content-section" role="main"
+        aria-label="Invitation to Prophetic &amp; Teaching Formation">
+
+    <!-- ==========================================
+         COSMIC HERO
+         ========================================== -->
+    <section class="hero" aria-labelledby="invitation-title">
+      <div class="hero-content">
+        <h1 id="invitation-title" class="hero-title">An Invitation to Grow as a Speaker of God's Word</h1>
+        <p class="hero-subtitle">
+          This is an invitation—not to a platform—but to a season of formation.
+          A small, Acts-shaped group where men and women grow together in clarity,
+          faithfulness, courage, and love as they learn to speak God's word in ways
+          that build up the church and bear witness to Jesus.
+        </p>
+        <a class="cta" href="./charter.html">Begin the Journey →</a>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         BREADCRUMBS (full-bleed under hero)
+         ========================================== -->
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a> ›
+      <a href="/resources/">Resources</a> ›
+      <a href="/resources/teaching-formation/">Teaching Formation</a> ›
+      <a href="./index.html">Prophetic Training Hub</a> ›
+      <span aria-current="page">Invitation</span>
+    </nav>
+
+    <!-- ==========================================
+         READING STAMP + TL;DR
+         ========================================== -->
+    <div class="reading-stamp">
+      <div class="stamp-meta">
+        <strong data-reading-time>~6 min</strong>
+        <span>read</span>
+      </div>
+      <div class="stamp-meta">
+        <span>Step</span>
+        <strong>1 of 7</strong>
+      </div>
+      <div class="stamp-tldr">
+        A call—not to a platform, but to a season of formation in a small Acts-shaped group built up around Scripture and the Spirit.
+      </div>
+    </div>
+
+    <!-- ==========================================
+         MINI-TOC PILL BAR
+         ========================================== -->
+    <nav class="mini-toc" aria-label="Section navigation">
+      <span class="mini-toc-label">Sections</span>
+      <a href="#luke-acts-invitation">Call</a>
+      <a href="#what-this-is">What It Is</a>
+      <a href="#what-to-expect">Expectations</a>
+      <a href="#who-this-is-for">Who</a>
+      <a href="#safety">Safety</a>
+      <a href="#time-commitment">Time</a>
+      <a href="#next-steps">Next</a>
+    </nav>
+
+    <!-- ==========================================
+         CORE LOGIC QUOTE — this page's thesis
+         ========================================== -->
+    <blockquote class="core-logic-quote">
+      Luke does not end the story with the empty tomb. He continues into Acts so that ordinary
+      believers, filled with the same Spirit, become witnesses themselves.
+    </blockquote>
+
+    <hr class="star-divider" aria-hidden="true">
+
+    <!-- ==========================================
+         A CALL SHAPED BY LUKE–ACTS
+         ========================================== -->
+    <section class="theology-card" id="luke-acts-invitation">
+      <h3>A Call Shaped by Luke–Acts</h3>
+
+      <p>Luke begins his Gospel with a clear purpose:</p>
+
+      <blockquote class="scripture-quote">
+        So that you may know the truth concerning the things about which you have been instructed.
+        <span class="reference">Luke 1:4</span>
+      </blockquote>
+
+      <p>
+        What follows is not merely a biography of Jesus, but a carefully investigated,
+        orderly account—rooted in eyewitness testimony—showing that the Messiah
+        <strong>must suffer</strong>, <strong>must rise</strong>, and that this message
+        <strong>must be proclaimed</strong>.
+      </p>
+
+      <p>At the close of the Gospel, Jesus makes the meaning unmistakable:</p>
+
+      <blockquote class="scripture-quote">
+        It is written, that the Messiah is to suffer and to rise from the dead on the third day,
+        and that repentance and forgiveness of sins is to be proclaimed in his name to all nations,
+        beginning from Jerusalem. You are witnesses of these things.
+        <span class="reference">Luke 24:46–48</span>
+      </blockquote>
+
+      <p>Luke does not end the story there.</p>
+
+      <p>In Acts, he continues:</p>
+
+      <blockquote class="scripture-quote">
+        You will receive power when the Holy Spirit has come upon you,
+        and you will be my witnesses in Jerusalem, in all Judea and Samaria,
+        and to the ends of the earth.
+        <span class="reference">Acts 1:8</span>
+      </blockquote>
+
+      <p>This is the spirit of this invitation.</p>
+
+      <p>
+        The same Spirit who empowered the first witnesses continues to guide,
+        form, and send the church today. This formation pathway exists for those
+        who sense that call—to bear witness to Jesus with clarity, faithfulness,
+        humility, and love in their own generation.
+      </p>
+
+      <p>
+        This invitation is for those who feel compelled to live into that mission—
+        whether through teaching, encouragement, testimony, or prophetic speech—
+        always for the purpose Scripture gives:
+      </p>
+
+      <div class="key-insight">
+        <strong>To build up the church.</strong>
+      </div>
+
+      <p class="text-muted">
+        Everything that follows on this page flows from that calling.
+      </p>
+    </section>
+
+    <hr class="star-divider" aria-hidden="true">
+
+    <!-- ==========================================
+         WHAT THIS IS
+         ========================================== -->
+    <section class="theology-card" id="what-this-is">
+      <h3>What This Is</h3>
+      <p>
+        This formation group exists for those who sense a desire—or a nudge from God—to:
+      </p>
+
+      <div class="pill-row">
+        <span class="tag">Teach Scripture more clearly</span>
+        <span class="tag">Encourage others with God's word</span>
+        <span class="tag">Share testimony faithfully</span>
+        <span class="tag">Grow in prophetic discernment</span>
+        <span class="tag">Learn how sermons in Acts actually work</span>
+      </div>
+
+      <p>
+        We will read Scripture together (especially the Book of Acts), observe how
+        proclamation happened in the early church, and practice speaking in ways
+        that are grounded, humble, and life-giving.
+      </p>
+    </section>
+
+    <hr class="star-divider" aria-hidden="true">
+
+    <!-- ==========================================
+         WHAT TO EXPECT
+         ========================================== -->
+    <section class="theology-card" id="what-to-expect">
+      <h3>What to Expect</h3>
+      <p>
+        This pathway focuses on <strong>formation, not performance</strong>.
+        We're building character and clarity, not climbing ministry ladders.
+      </p>
+
+      <div class="grid-2" data-reveal-children>
+        <div class="panel">
+          <h4>✅ Our Focus</h4>
+          <ul>
+            <li>Growing in faithfulness and clarity</li>
+            <li>Learning together in community</li>
+            <li>Building each other up with kindness</li>
+            <li>Discovering how Scripture shapes speech</li>
+            <li>Moving at a pace that serves formation</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h4>🔄 What This Isn't</h4>
+          <ul>
+            <li>A fast-track to a preaching platform</li>
+            <li>A performance or competition</li>
+            <li>A debate about church polity</li>
+            <li>Public speaking training</li>
+            <li>Pressure to speak before you're ready</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="key-insight mt-3">
+        <strong>Core principle:</strong> You participate at your own pace.
+        Growth happens through invitation, never coercion.
+      </div>
+    </section>
+
+    <hr class="star-divider" aria-hidden="true">
+
+    <!-- ==========================================
+         WHO THIS IS FOR
+         ========================================== -->
+    <section class="theology-card" id="who-this-is-for">
+      <h3>Who This Is For</h3>
+      <div class="grid-2" data-reveal-children>
+        <div class="panel">
+          <h4>You might be a fit if you:</h4>
+          <ul>
+            <li>Love Scripture and want to understand it better</li>
+            <li>Sense gifting but want formation, not attention</li>
+            <li>Are teachable and willing to receive feedback</li>
+            <li>Want to learn in community rather than alone</li>
+            <li>Desire to build others up through God's word</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h4>What you don't need:</h4>
+          <ul>
+            <li>Prior preaching experience</li>
+            <li>A theology degree</li>
+            <li>Perfect biblical knowledge</li>
+            <li>Public speaking confidence</li>
+            <li>A specific ministry title</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="key-insight mt-3">
+        You do need: humility, curiosity, and a desire to build others up.
+      </div>
+    </section>
+
+    <hr class="star-divider" aria-hidden="true">
+
+    <!-- ==========================================
+         A SAFE PLACE TO LEARN
+         ========================================== -->
+    <section class="theology-card" id="safety">
+      <h3>A Safe Place to Learn</h3>
+      <p>This group is intentionally designed to be:</p>
+
+      <div class="grid-3" data-reveal-children>
+        <div class="panel">
+          <h4>Non-shaming</h4>
+          <p>Growth without embarrassment. Mistakes are expected and welcomed as part of learning.</p>
+        </div>
+        <div class="panel">
+          <h4>Non-competitive</h4>
+          <p>No ranking or comparison. Everyone's gifts and growth trajectory are unique.</p>
+        </div>
+        <div class="panel">
+          <h4>Communal</h4>
+          <p>No one builds alone. Preparation and feedback happen together, not in isolation.</p>
+        </div>
+      </div>
+
+      <div class="critical-distinction mt-3">
+        <h4>Feedback is always given to form, not to grade</h4>
+        <p>The goal is spiritual maturity, not performance metrics.</p>
+      </div>
+    </section>
+
+    <hr class="star-divider" aria-hidden="true">
+
+    <!-- ==========================================
+         TIME COMMITMENT
+         ========================================== -->
+    <section class="theology-card" id="time-commitment">
+      <h3>What the Commitment Looks Like</h3>
+
+      <div class="grid-2" data-reveal-children>
+        <div class="panel">
+          <h4>Time Investment</h4>
+          <ul>
+            <li><strong>8 sessions</strong> over 8–10 weeks (flexible schedule)</li>
+            <li><strong>90 minutes</strong> per session</li>
+            <li><strong>30–60 minutes</strong> of preparation between sessions</li>
+            <li><strong>1–2 practice opportunities</strong> during the pathway</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h4>What You'll Do</h4>
+          <ul>
+            <li>Read Scripture passages (mostly from Acts)</li>
+            <li>Discuss observations and patterns together</li>
+            <li>Practice skills in safe, short formats</li>
+            <li>Give and receive forming feedback</li>
+            <li>Encourage others in the group</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="key-insight mt-3">
+        You will never be asked to prepare a full sermon on your own.
+        All preparation is supported by the team.
+      </div>
+    </section>
+
+    <hr class="star-divider" aria-hidden="true">
+
+    <!-- ==========================================
+         NEXT STEPS
+         ========================================== -->
+    <section class="theology-card" id="next-steps">
+      <h3>Interested?</h3>
+      <p>
+        If this invitation resonates, the next step is simply to learn more.
+        There's no pressure to commit immediately.
+      </p>
+
+      <div class="grid-3" data-reveal-children>
+        <a href="./charter.html" class="panel" style="text-decoration: none; color: inherit;">
+          <h4>📜 Read the Charter</h4>
+          <p>Understand the team's purpose, commitments, and cultural guardrails.</p>
+        </a>
+
+        <a href="./curriculum.html" class="panel" style="text-decoration: none; color: inherit;">
+          <h4>🧭 View the Sessions</h4>
+          <p>See the 8-week formation pathway and what each session covers.</p>
+        </a>
+
+        <a href="./framework.html" class="panel" style="text-decoration: none; color: inherit;">
+          <h4>🧩 Explore the Framework</h4>
+          <p>Learn the sermon structure you'll practice together.</p>
+        </a>
+      </div>
+
+      <div class="closing-call">
+        <strong>This is not about who gets to speak.</strong>
+        It's about forming people who can faithfully point others to Jesus.
+        <span style="display: block; margin-top: 0.75rem; font-size: 0.95rem; color: var(--text-muted);">
+          We focus on formation and discernment of gifts, trusting participants and their communities
+          to determine appropriate ministry contexts.
+        </span>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         BRIDGE TO NEXT (Charter)
+         ========================================== -->
+    <section class="theology-card" id="bridge">
+      <h3>Bridge Forward: The Charter</h3>
+      <p>
+        If the invitation resonates, the next document grounds it: the Charter spells out the
+        team's purpose, commitments, guardrails, and how men and women practice faithfully together.
+      </p>
+      <p>
+        <a href="./charter.html" class="cross-ref">→ Read the Charter (Step 2)</a>
+      </p>
+    </section>
+
+    <!-- ==========================================
+         ONE-LINE TAKEAWAY
+         ========================================== -->
+    <p class="takeaway">
+      You are invited—not to a platform, but to a season of formation.
+    </p>
+
+    <!-- ==========================================
+         PATHWAY NAVIGATION
+         ========================================== -->
+    <nav class="pathway-nav" aria-label="Formation pathway navigation">
+      <a href="./index.html" aria-label="Back to Prophetic Training Hub">← Back to Hub</a>
+      <div class="step-indicator">Step 1 of 7</div>
+      <a href="./charter.html" aria-label="Continue to Charter">Next: Charter →</a>
+    </nav>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Project Context. All rights reserved.</p>
+    <p class="text-muted" style="font-size: 0.9rem; margin-top: 0.5rem;">
+      Seminary-level biblical education for pastors, teachers, and serious students of Scripture.
+    </p>
+  </footer>
+
+  <!-- Back to top -->
+  <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
+
+  <!-- Mobile menu overlay -->
+  <div class="mobile-menu-overlay" aria-hidden="true"></div>
+
+  <!-- ==========================================
+       PER-PAGE SECTION CONFIG
+       ========================================== -->
+  <script id="page-section-config" type="application/json">
+  [
+    { "id": "luke-acts-invitation", "label": "Call",         "priority": 1 },
+    { "id": "what-this-is",         "label": "What It Is",   "priority": 2 },
+    { "id": "what-to-expect",       "label": "Expectations", "priority": 2 },
+    { "id": "who-this-is-for",      "label": "Who",          "priority": 2 },
+    { "id": "safety",               "label": "Safety",       "priority": 3 },
+    { "id": "time-commitment",      "label": "Time",         "priority": 3 },
+    { "id": "next-steps",           "label": "Next",         "priority": 1 },
+    { "id": "bridge",               "label": "Forward",      "priority": 4 }
+  ]
+  </script>
+
+  <!-- ==========================================
+       SCRIPTS
+       ========================================== -->
+  <script type="module">
+    import NavigationComponent from '/assets/js/nav-component.js';
+    new NavigationComponent({
+      currentPage: 'resources/teaching-formation/prophetic-training/invitation',
+      hubType: 'resources'
+    });
+  </script>
+
+  <script src="/assets/js/character-page-v5-9.js" defer></script>
+</body>
+</html>
