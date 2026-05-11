@@ -29,7 +29,7 @@
   <meta name="profile-type"      content="[single-page/multi-page]">
   <meta name="character-id"      content="[character-id]">
   <meta name="book-id"           content="[book-id]">
-  <meta name="template-version"  content="5.9.3">
+  <meta name="template-version"  content="5.9.4">
   <meta name="study-type"        content="character-study">
   <meta name="page-category"     content="biblical-character">
 
@@ -85,26 +85,40 @@
   <!-- Hebrew/Greek (preload only if used on page) -->
   <link rel="preload" href="/assets/fonts/SBL_Hebrew.woff2" as="font" type="font/woff2" crossorigin>
 
-  <!-- ==========================================
-       STYLESHEETS — v3 is one file, no more mobile-tabs.css
-       ========================================== -->
-  <link rel="preload" href="/assets/css/global-v3.css" as="style">
-  <link rel="stylesheet" href="/assets/css/global-v3.css">
+  <!-- Stylesheets -->
+  <link rel="preload"    href="/assets/css/global-v3.css?v=3.3.1" as="style">
+  <link rel="stylesheet" href="/assets/css/global-v3.css?v=3.3.1">
+  <link rel="stylesheet" href="/assets/css/global-v3-polish.css?v=0.2">
 
   <!-- ==========================================
-       PAGE ACCENT (optional override for color-coded suites)
-       Uncomment and set --page-accent to any of the six v3.1 tokens:
-       --accent-purple (default), --accent-rose, --accent-blue,
-       --accent-magenta, --accent-indigo, --accent-teal.
+       PAGE ACCENT — choose ONE approach
+       ============================================================
+       PREFERRED: set data-theme on <body> below. Activates the
+       polish.css §A theme system, which sets --page-accent,
+       --page-accent-soft, and --page-accent-deep together.
+       Values: "purple" (default), "rose", "blue", "magenta",
+       "indigo", "teal". For 8-page rainbow suites use
+       data-suite-stage="1..8" — it overrides data-theme and
+       follows the canonical Noah palette (1 magenta · 2 rose ·
+       3 purple · 4 indigo · 5 blue · 6 teal · 7 deep-violet ·
+       8 muted).
+
+       FALLBACK: uncomment the :root override below ONLY when
+       you need a single token without the soft/deep variants.
        ========================================== -->
   <!--
   <style>
     :root { --page-accent: var(--accent-rose); }
   </style>
   -->
+
+  <!-- Page-local styles (overrides allowed; load order puts these last) -->
+  <style>
+    /* Page-specific rules go here. Leave empty if not needed. */
+  </style>
 </head>
 
-<body class="character-profile [woman-profile]" dir="ltr">
+<body class="character-profile [woman-profile]" data-theme="purple" dir="ltr">
   <!-- Skip link -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
@@ -830,5 +844,62 @@
   </script>
 
   <script src="/assets/js/character-page-v5-9.js" defer></script>
+
+  <!-- ==========================================
+       REVEAL-ANIMATION SAFETY NET (v5.9.4)
+       Guarantees that every [data-reveal] / [data-reveal-children]
+       element receives [data-revealed] (and a per-child
+       --reveal-stagger) when it enters the viewport, even if
+       the chassis observer doesn't pick it up. Also force-reveals
+       any such element already on-screen at load, so above-the-fold
+       sections animate immediately instead of waiting for a scroll
+       event. No-op if the chassis already revealed it; honors
+       prefers-reduced-motion via the CSS rules in global-v3.css §56.
+       ========================================== -->
+  <script>
+    (function () {
+      'use strict';
+      const STAGGER_MS = 90;
+      const KICKSTART_MS = 200;
+
+      function applyStagger(parent) {
+        const kids = parent.children;
+        for (let i = 0; i < kids.length; i++) {
+          if (!kids[i].style.getPropertyValue('--reveal-stagger')) {
+            kids[i].style.setProperty('--reveal-stagger', (i * STAGGER_MS) + 'ms');
+          }
+        }
+      }
+      function reveal(el) {
+        if (el.hasAttribute('data-revealed')) return;
+        if (el.hasAttribute('data-reveal-children')) applyStagger(el);
+        el.setAttribute('data-revealed', '');
+      }
+      function isInViewport(el) {
+        const r = el.getBoundingClientRect();
+        const vh = window.innerHeight || document.documentElement.clientHeight;
+        return r.top < vh && r.bottom > 0;
+      }
+      function init() {
+        const targets = document.querySelectorAll('[data-reveal], [data-reveal-children]');
+        if (!targets.length) return;
+        targets.forEach(function (el) { if (isInViewport(el)) reveal(el); });
+        if (!('IntersectionObserver' in window)) { targets.forEach(reveal); return; }
+        const io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) { reveal(entry.target); io.unobserve(entry.target); }
+          });
+        }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
+        targets.forEach(function (el) {
+          if (!el.hasAttribute('data-revealed')) io.observe(el);
+        });
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () { setTimeout(init, KICKSTART_MS); });
+      } else {
+        setTimeout(init, KICKSTART_MS);
+      }
+    })();
+  </script>
 </body>
 </html>
