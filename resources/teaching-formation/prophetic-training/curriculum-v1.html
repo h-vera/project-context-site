@@ -307,8 +307,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 3.25rem 1.5rem;
-      margin-top: 0;
+      padding: 7rem 1.5rem 3.5rem;
+      margin-top: -6rem;
       position: relative;
       background: linear-gradient(
         135deg,
@@ -394,8 +394,6 @@
       from { opacity: 0; transform: translateY(30px); filter: blur(2px); }
       to   { opacity: .96; transform: translateY(0); filter: blur(0); }
     }
-    /* Hero sits at top of <main>; breadcrumbs follow full-bleed */
-    .resources-page .content-section { padding-top: 0; }
     .hero + .breadcrumbs {
       margin: 0 calc(-50vw + 50%);
       width: 100vw;
@@ -1113,5 +1111,63 @@
   </script>
 
   <script src="/assets/js/character-page-v5-9.js" defer></script>
+
+  <!-- ==========================================
+       Reveal-animation safety net.
+       Guarantees that every [data-reveal] / [data-reveal-children]
+       element receives [data-revealed] (and a per-child
+       --reveal-stagger) when it enters the viewport, even if
+       the chassis observer doesn't pick it up. Also force-reveals
+       any such element already on-screen at load, so above-the-fold
+       sections animate immediately instead of waiting for a scroll
+       event. No-op if the chassis already revealed it; honors
+       prefers-reduced-motion via the CSS rules in §56.
+       ========================================== -->
+  <script>
+    (function () {
+      'use strict';
+      const STAGGER_MS = 90;
+      const KICKSTART_MS = 200;
+
+      function applyStagger(parent) {
+        const kids = parent.children;
+        for (let i = 0; i < kids.length; i++) {
+          if (!kids[i].style.getPropertyValue('--reveal-stagger')) {
+            kids[i].style.setProperty('--reveal-stagger', (i * STAGGER_MS) + 'ms');
+          }
+        }
+      }
+      function reveal(el) {
+        if (el.hasAttribute('data-revealed')) return;
+        if (el.hasAttribute('data-reveal-children')) applyStagger(el);
+        el.setAttribute('data-revealed', '');
+      }
+      function isInViewport(el) {
+        const r = el.getBoundingClientRect();
+        const vh = window.innerHeight || document.documentElement.clientHeight;
+        return r.top < vh && r.bottom > 0;
+      }
+      function init() {
+        const targets = document.querySelectorAll('[data-reveal], [data-reveal-children]');
+        if (!targets.length) return;
+        targets.forEach(function (el) { if (isInViewport(el)) reveal(el); });
+        if (!('IntersectionObserver' in window)) { targets.forEach(reveal); return; }
+        const io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) { reveal(entry.target); io.unobserve(entry.target); }
+          });
+        }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
+        targets.forEach(function (el) {
+          if (!el.hasAttribute('data-revealed')) io.observe(el);
+        });
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () { setTimeout(init, KICKSTART_MS); });
+      } else {
+        setTimeout(init, KICKSTART_MS);
+      }
+    })();
+  </script>
 </body>
+
 </html>
