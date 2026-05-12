@@ -70,6 +70,544 @@
        .bibliography-section, .cite-button, etc.) all comes from v3.
        =========================================================== */
   <style>
+    /* ===========================================================
+       SELF-SUFFICIENT DESIGN TOKEN FALLBACKS
+       These :root values guarantee the page renders correctly
+       even if /assets/css/global-v3.css is missing or defines
+       different variable names. If global-v3.css IS present and
+       defines the same tokens, its values will cascade and win.
+       =========================================================== */
+    :root {
+      /* Layout */
+      --gutter: 24px;
+      --max-w-wide: 1180px;
+      --z-tabs: 1000;
+
+      /* Type */
+      --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+      --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+      --fs-xs: 0.72rem;
+      --fs-sm: 0.92rem;
+
+      /* Surfaces */
+      --bg: #ffffff;
+      --bg-2: #f8fafc;
+      --border: #e5e7eb;
+
+      /* Ink */
+      --text: #111827;
+      --text-soft: #374151;
+      --text-muted: #6b7280;
+
+      /* Accents — rose-themed page (matches v3 'rose' theme) */
+      --accent-rose: #db2777;
+      --accent-blue: #2563eb;
+      --accent-purple: #6d28d9;
+      --accent-gold: #b7791f;
+      --accent-teal: #0f766e;
+      --accent-magenta: #e11d48;
+      --page-accent: #db2777;
+
+      /* Gradient */
+      --gradient-primary: linear-gradient(135deg, #6d28d9 0%, #db2777 100%);
+      --gradient-blue: linear-gradient(135deg, #2563eb 0%, #0f766e 100%);
+
+      /* Radii */
+      --radius: 18px;
+      --radius-sm: 12px;
+      --radius-lg: 24px;
+      --radius-pill: 999px;
+
+      /* Shadows */
+      --shadow-sm: 0 8px 24px rgba(17, 24, 39, .08);
+      --shadow: 0 18px 45px rgba(17, 24, 39, .10);
+
+      /* Motion */
+      --duration: 0.3s;
+      --duration-fast: 0.18s;
+      --ease: cubic-bezier(.4, 0, .2, 1);
+      --ease-out: cubic-bezier(0, 0, .2, 1);
+
+      /* Apocalypse "rev-final" scoped tokens */
+      --rf-ink: #17131f;
+      --rf-muted: #675f72;
+      --rf-line: #ead7e7;
+      --rf-blue: #1d4ed8;
+      --rf-magenta: #be185d;
+      --rf-shadow: 0 24px 70px rgba(38, 21, 48, .13);
+      --rf-shadow-sm: 0 12px 34px rgba(38, 21, 48, .09);
+    }
+
+    /* ===========================================================
+       BASELINE TYPOGRAPHY + LAYOUT
+       Defensive base styles in case global-v3.css doesn't ship
+       its body/heading defaults.
+       =========================================================== */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--text);
+      background: linear-gradient(180deg, #fff 0%, #f7f3f7 42%, #f3f4f6 100%);
+      min-height: 100vh;
+    }
+    a { color: inherit; }
+    img { max-width: 100%; height: auto; }
+
+    /* Headings — clear hierarchy even without v3 typography */
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      color: var(--text);
+      line-height: 1.15;
+      margin: 0 0 .6rem;
+    }
+    h2 { font-size: clamp(1.9rem, 3.6vw, 2.8rem); font-weight: 600; letter-spacing: -.01em; }
+    h3 { font-size: 1.6rem; font-weight: 600; }
+    h4 { font-size: 1.05rem; font-weight: 600; }
+    p  { margin: 0 0 1rem; }
+    p:last-child { margin-bottom: 0; }
+
+    /* Skip link + reading progress are part of v3 chassis;
+       supply defensive fallbacks so they don't show as raw text. */
+    .skip-link { position: absolute; left: -9999px; top: auto; }
+    .skip-link:focus { left: 12px; top: 12px; background: #fff; padding: .75rem 1rem; border-radius: 10px; z-index: 10000; }
+    .reading-progress { position: fixed; top: 0; left: 0; height: 3px; width: 0%; z-index: 9999; background: var(--gradient-primary); transition: width .12s linear; }
+
+    /* Main content wrapper — v3 uses .content-section; provide fallback */
+    .content-section {
+      max-width: var(--max-w-wide);
+      margin: 0 auto;
+      padding: 36px var(--gutter) 90px;
+    }
+
+    /* Breadcrumbs */
+    .breadcrumbs {
+      font-family: var(--font-mono);
+      font-size: var(--fs-xs);
+      letter-spacing: .08em;
+      color: var(--text-muted);
+      margin-bottom: 1.6rem;
+    }
+    .breadcrumbs a { text-decoration: none; transition: color .15s ease; }
+    .breadcrumbs a:hover { color: var(--accent-rose); }
+
+    /* ===========================================================
+       v3 SHARED COMPONENT FALLBACKS
+       Defensive baselines for component classes the page assumes
+       global-v3.css already styles. If v3 styles ARE present they
+       will cascade over these.
+       =========================================================== */
+    .panel-section { display: none; }
+    .panel-section.active { display: block; animation: fadeSlideDown .32s var(--ease-out); }
+    @keyframes fadeSlideDown {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* Section title (the ◆ headers inside each panel) */
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 600;
+      color: var(--text);
+      margin: 0 0 .8rem;
+      letter-spacing: -.01em;
+      line-height: 1.1;
+    }
+    .section-icon {
+      color: var(--accent-rose);
+      margin-right: .3rem;
+      font-size: .8em;
+      vertical-align: .15em;
+    }
+    .section-subtitle {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      line-height: 1.55;
+      color: var(--text-soft);
+      max-width: 900px;
+      margin: 0 0 1.8rem;
+    }
+
+    /* Grids */
+    .grid-2 { display: grid; grid-template-columns: 1.1fr .9fr; gap: 20px; margin: 22px 0; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 22px 0; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 22px 0; }
+    @media (max-width: 900px) {
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    }
+
+    /* Cards */
+    .theology-card, .card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 26px;
+      box-shadow: var(--shadow-sm);
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+    }
+    .theology-card:hover, .card:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow);
+    }
+    .theology-card h3 { margin-top: 0; }
+    .theology-card ul, .card ul { padding-left: 1.25rem; margin: 0 0 1rem; }
+    .theology-card li, .card li { margin-bottom: .55rem; line-height: 1.55; }
+
+    /* Callout / key-insight / critical-distinction / takeaway */
+    .key-insight, .callout, .critical-distinction, .takeaway, .pattern-summary {
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin: 24px 0;
+      line-height: 1.65;
+    }
+    .key-insight {
+      background: linear-gradient(135deg, rgba(109, 40, 217, .06), rgba(219, 39, 119, .05));
+      border: 1px solid rgba(219, 39, 119, .18);
+      border-left: 4px solid var(--accent-rose);
+    }
+    .key-insight strong { color: var(--accent-rose); }
+    .callout {
+      background: linear-gradient(135deg, rgba(109, 40, 217, .05), rgba(219, 39, 119, .04));
+      border: 1px solid rgba(219, 39, 119, .15);
+    }
+    .critical-distinction {
+      background: rgba(37, 99, 235, .04);
+      border: 1px solid rgba(37, 99, 235, .18);
+      border-left: 4px solid var(--accent-blue);
+    }
+    .critical-distinction h4 { color: var(--accent-blue); margin-top: 0; font-family: var(--font-display); font-size: 1.2rem; }
+    .takeaway {
+      background: linear-gradient(135deg, #fdf2f8, #fef3c7);
+      border: 1px solid rgba(219, 39, 119, .2);
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-style: italic;
+      color: var(--text);
+      text-align: center;
+      padding: 26px 28px;
+    }
+    .pattern-summary {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--accent-rose);
+      box-shadow: var(--shadow-sm);
+    }
+    .pattern-summary h4 { margin: 0 0 .5rem; color: var(--accent-rose); font-family: var(--font-display); font-size: 1.2rem; }
+
+    /* Scripture quote / core logic quote */
+    .scripture-quote, .core-logic-quote {
+      border-left: 4px solid var(--accent-rose);
+      background: var(--bg);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 22px 26px;
+      margin: 28px 0;
+      box-shadow: var(--shadow-sm);
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.3rem;
+      line-height: 1.5;
+      color: var(--text);
+    }
+    .core-logic-quote {
+      text-align: center;
+      font-size: clamp(1.5rem, 3vw, 2.1rem);
+      max-width: 950px;
+      margin: 36px auto;
+      border-left: none;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      border-radius: 0;
+      box-shadow: none;
+      background: none;
+      padding: 24px 20px;
+      color: #3a1d5d;
+    }
+    .scripture-quote .reference {
+      display: block;
+      margin-top: .8rem;
+      font-family: var(--font-mono);
+      font-style: normal;
+      font-size: var(--fs-xs);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* Star divider */
+    .star-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 48px 0;
+      position: relative;
+    }
+    .star-divider::after {
+      content: '✦';
+      position: absolute;
+      left: 50%; top: -12px;
+      transform: translateX(-50%);
+      background: #fbf7fb;
+      color: var(--accent-rose);
+      padding: 0 16px;
+    }
+
+    /* Tags / pills */
+    .tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: var(--fs-xs);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .35rem .7rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      color: var(--text-soft);
+      background: var(--bg);
+      margin-right: .35rem;
+    }
+    .tag.primary {
+      border-color: rgba(219, 39, 119, .25);
+      background: rgba(219, 39, 119, .06);
+      color: var(--accent-rose);
+    }
+
+    /* Table */
+    .table-wrapper {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+      box-shadow: var(--shadow-sm);
+      margin: 24px 0;
+    }
+    .table-wrapper table { width: 100%; border-collapse: collapse; min-width: 720px; }
+    .table-wrapper th {
+      font-family: var(--font-mono);
+      font-size: var(--fs-xs);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      text-align: left;
+      color: var(--accent-purple);
+      background: rgba(109, 40, 217, .05);
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .table-wrapper td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      line-height: 1.55;
+    }
+    .table-wrapper tr:last-child td { border-bottom: 0; }
+    .table-wrapper tbody tr:hover td { background: rgba(219, 39, 119, .025); }
+
+    /* Reading stamp */
+    .reading-stamp {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      align-items: center;
+      padding: 18px 24px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 2rem;
+    }
+    .stamp-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-family: var(--font-mono);
+      font-size: var(--fs-xs);
+      letter-spacing: .08em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .stamp-meta strong { color: var(--text); font-size: .9rem; }
+    .complexity-level { display: flex; gap: 5px; margin-top: 4px; }
+    .complexity-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--border); }
+    .complexity-dot.filled { background: var(--accent-rose); }
+    .stamp-tldr {
+      flex: 1;
+      min-width: 280px;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.05rem;
+      line-height: 1.5;
+      color: var(--text-soft);
+      border-left: 1px solid var(--border);
+      padding-left: 24px;
+    }
+    @media (max-width: 700px) {
+      .stamp-tldr { border-left: none; border-top: 1px solid var(--border); padding-left: 0; padding-top: 14px; }
+    }
+
+    /* Bibliography sections (Mark-style accordions) */
+    .bibliography-section {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin: 14px 0;
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      transition: box-shadow .2s var(--ease);
+    }
+    .bibliography-section:hover { box-shadow: var(--shadow); }
+    .bibliography-section[open] { border-color: rgba(219, 39, 119, .25); }
+    .bibliography-summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 22px 26px;
+    }
+    .bibliography-summary::-webkit-details-marker { display: none; }
+    .bibliography-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .bibliography-header-icon {
+      width: 48px; height: 48px;
+      display: grid; place-items: center;
+      background: linear-gradient(135deg, rgba(109, 40, 217, .08), rgba(219, 39, 119, .08));
+      border: 1px solid rgba(219, 39, 119, .18);
+      border-radius: var(--radius-sm);
+      color: var(--accent-rose);
+      flex-shrink: 0;
+    }
+    .bibliography-header-text { flex: 1; min-width: 0; }
+    .bibliography-header-text h3 { margin: 0 0 4px; font-family: var(--font-display); font-size: 1.3rem; color: var(--text); }
+    .bibliography-header-text p { margin: 0; font-size: .92rem; color: var(--text-muted); line-height: 1.5; }
+    .expand-indicator {
+      color: var(--text-muted);
+      transition: transform .2s var(--ease);
+      flex-shrink: 0;
+    }
+    .bibliography-section[open] .expand-indicator { transform: rotate(180deg); }
+    .bibliography-content {
+      padding: 0 26px 26px;
+      border-top: 1px solid var(--border);
+      padding-top: 22px;
+    }
+    .source-category { margin-bottom: 1.6rem; }
+    .source-category:last-child { margin-bottom: 0; }
+    .source-category h4 {
+      font-family: var(--font-mono);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent-rose);
+      margin: 0 0 .8rem;
+      padding-bottom: .4rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .source-entry {
+      padding: 14px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+    .source-entry:last-child { border-bottom: 0; }
+    .source-citation {
+      font-size: .96rem;
+      line-height: 1.55;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .source-citation em { font-style: italic; color: var(--text-soft); }
+    .source-usage {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 8px;
+      align-items: baseline;
+      font-size: .88rem;
+    }
+    .usage-tag {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .25rem .55rem;
+      border-radius: var(--radius-pill);
+      background: rgba(109, 40, 217, .07);
+      color: var(--accent-purple);
+      border: 1px solid rgba(109, 40, 217, .15);
+    }
+    .usage-note {
+      flex: 1 1 100%;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-top: 4px;
+      font-size: .9rem;
+    }
+    .citation-note {
+      margin-top: 1.4rem;
+      padding: 14px 16px;
+      background: var(--bg-2);
+      border-radius: var(--radius-sm);
+      font-size: .85rem;
+      color: var(--text-muted);
+    }
+    .citation-note p { margin: 0 0 .5rem; line-height: 1.55; }
+    .citation-note p:last-child { margin-bottom: 0; }
+
+    /* Cite button */
+    .cite-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: var(--fs-xs);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: .65rem 1rem;
+      border-radius: var(--radius-pill);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text-soft);
+      cursor: pointer;
+      transition: all .2s var(--ease);
+    }
+    .cite-button:hover {
+      border-color: var(--accent-rose);
+      color: var(--accent-rose);
+      background: rgba(219, 39, 119, .04);
+    }
+
+    /* ===========================================================
+       SAFETY OVERRIDE — make sure reveal-children content
+       is visible even if the v3 chassis script never runs.
+       =========================================================== */
+    [data-reveal-children] { opacity: 1 !important; }
+    [data-reveal-children] > * { opacity: 1 !important; transform: none !important; }
+    .animate-on-scroll { opacity: 1 !important; transform: none !important; }
+
+    /* Back-to-top */
+    .back-to-top {
+      position: fixed;
+      right: 20px; bottom: 20px;
+      width: 44px; height: 44px;
+      border-radius: 999px;
+      background: var(--bg);
+      border: 1px solid rgba(219, 39, 119, .25);
+      box-shadow: var(--shadow-sm);
+      display: grid; place-items: center;
+      text-decoration: none;
+      color: var(--accent-rose);
+      opacity: 0;
+      pointer-events: none;
+      transition: all .2s var(--ease);
+      z-index: 100;
+    }
+    .back-to-top.visible { opacity: 1; pointer-events: auto; }
+    .back-to-top:hover { background: var(--gradient-primary); color: #fff; border-color: transparent; }
+
+    /* ===========================================================
+       PAGE-SPECIFIC: Hymns hero, tabs, diagram-board, music-staff,
+       hymn-card SVG thumbnails, sub-tab TOC inside Revelation
+       =========================================================== */
     /* --- Hero (page-local; intentionally heavier than v3 page hero) --- */
     .hymns-hero {
       position: relative;
