@@ -3568,5 +3568,56 @@
   page-section-config JSON — it's a tab UI, not a scrolling section UI.
 -->
 <script src="/assets/js/page-chassis-v5-9.js?v=5.9.3" defer></script>
+
+  <!-- ==========================================
+       PER-PAGE SECTION CONFIG
+       Drives the page-chassis mobile bottom tab strip.
+       Priority caps mobile to 7 items (5 priority-1 + 2 priority-2).
+       Mobile shown:  Overview · Phil 2 · Col 1 · Eph 1 · John 1 · Luke 1–2 · Apocalypse
+       Mobile cut:    Recognition · Hymn Gallery · 1 Tim 3 · Music · Pre-Pauline · Resources
+       (cut tabs are still reachable via the top tab strip on any device)
+       ========================================== -->
+  <script id="page-section-config" type="application/json">
+  [
+    { "id": "panel-overview",    "label": "Overview",       "priority": 1 },
+    { "id": "panel-recognition", "label": "Recognition",    "priority": 4 },
+    { "id": "panel-gallery",     "label": "Hymn Gallery",   "priority": 3 },
+    { "id": "panel-philippians", "label": "Philippians 2",  "priority": 1 },
+    { "id": "panel-timothy",     "label": "1 Timothy 3",    "priority": 3 },
+    { "id": "panel-colossians",  "label": "Colossians 1",   "priority": 1 },
+    { "id": "panel-ephesians",   "label": "Ephesians 1",    "priority": 2 },
+    { "id": "panel-john",        "label": "John 1",         "priority": 2 },
+    { "id": "panel-luke",        "label": "Luke 1\u20132", "priority": 1 },
+    { "id": "panel-revelation",  "label": "Apocalypse",     "priority": 1 },
+    { "id": "panel-music",       "label": "Music & Liturgy","priority": 4 },
+    { "id": "panel-prepauline",  "label": "Pre-Pauline",    "priority": 4 },
+    { "id": "panel-resources",   "label": "Resources",      "priority": 4 }
+  ]
+  </script>
+
+  <!-- ==========================================
+       TAB-PAGE BRIDGE for the chassis mobile strip
+       This page uses display:none/block to switch panels (not scrolling).
+       Patch mobileTabs.scrollToSection so clicks call the page's existing
+       activate(tabName) instead of scrolling to a hidden element.
+       The chassis still handles strip rendering, active-state tracking,
+       horizontal scroll-into-view, and touch handling.
+       ========================================== -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const wire = () => {
+        const mt = window.__pcChassis && window.__pcChassis.mobileTabs;
+        if (!mt) return false;
+        mt.scrollToSection = function (section) {
+          const m = section.id.match(/^panel-(.+)$/);
+          if (m && typeof activate === 'function') activate(m[1]);
+        };
+        return true;
+      };
+      if (wire()) return;
+      let tries = 0;
+      const iv = setInterval(() => { if (wire() || ++tries > 12) clearInterval(iv); }, 50);
+    });
+  </script>
 </body>
 </html>
