@@ -21,6 +21,9 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&amp;family=DM+Sans:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- global-v3 supplies the styling for the site-wide nav injected by nav-component.js.
+     Placed BEFORE the inline <style> so this page's local overrides win in any conflict. -->
+<link href="/assets/css/global-v3.css?v=3.3.1" rel="stylesheet"/>
 <style>
     :root{
       --ink:#111827;--muted:#64748b;--soft:#f8fafc;--page:#f3f4f6;--line:#e5e7eb;--white:#fff;
@@ -485,6 +488,10 @@
 <body>
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="reading-progress" id="readingProgress"></div>
+
+<!-- Navigation injected by nav-component.js (see module script near </body>) -->
+<div id="nav-placeholder"></div>
+
 <header class="hero">
 <div class="hero-inner">
 <div class="eyebrow">Project Context · New Covenant · Thematic Study</div>
@@ -3532,6 +3539,19 @@
     function activate(tab){buttons.forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));panels.forEach(p=>p.classList.toggle('active',p.id==='panel-'+tab));window.scrollTo({top:document.querySelector('.tabs').offsetTop,behavior:'smooth'});history.replaceState(null,'','#'+tab)}
     buttons.forEach(b=>b.addEventListener('click',()=>activate(b.dataset.tab)));
     window.addEventListener('load',()=>{const hash=location.hash.replace('#','');if(hash&&document.getElementById('panel-'+hash))activate(hash)});
+  </script>
+
+<!-- ==========================================
+       JAVASCRIPT
+       ========================================== -->
+
+  <!-- Navigation Component -->
+  <script type="module">
+    import NavigationComponent from '/assets/js/nav-component.js';
+    const navigation = new NavigationComponent({
+      currentPage: 'studies/new-covenant/hymns-of-the-new-covenant',
+      hubType: 'new-covenant'
+    });
   </script>
 
 <!--
