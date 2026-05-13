@@ -3619,5 +3619,133 @@
       const iv = setInterval(() => { if (wire() || ++tries > 12) clearInterval(iv); }, 50);
     });
   </script>
+
+  <!-- ==========================================
+       INLINE CITE-BUTTON HANDLER
+       Self-contained citation copy: reads <meta name="citation-*"> + the
+       .bibliography-section .source-citation entries on this page, and
+       writes rich (HTML + plain text) clipboard data.
+
+       Why inline: a deployed chassis was observed copying the full page
+       source instead of the citation. To make this page robust against
+       any version of the chassis, we clone the button after page load
+       (which strips any chassis-bound listener) and bind our own handler.
+       ========================================== -->
+  <script>
+    (function () {
+      function meta(name, fallback) {
+        const n = document.querySelector('meta[name="' + name + '"]');
+        const v = n && n.content ? n.content.trim() : '';
+        return v || fallback || '';
+      }
+      function escapeHtml(s) {
+        return String(s)
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+      function buildCitation() {
+        const title = meta('citation-title',
+          (document.title || 'Untitled')
+            .replace(/\s*[|\u2013-]\s*Project Context.*$/i, '').trim());
+        const author = meta('citation-author', 'Project Context');
+        const site   = meta('citation-site',   'Project Context');
+        const date   = meta('citation-date',   String(new Date().getFullYear()));
+        const url    = (document.querySelector('link[rel="canonical"]') || {}).href
+                       || window.location.href;
+        return author + '. "' + title + '." ' + site + ', ' + date + '. ' + url + '.';
+      }
+      function bibEntries() {
+        return Array.from(
+          document.querySelectorAll('.bibliography-section .source-citation')
+        );
+      }
+      function buildBibText() {
+        const entries = bibEntries()
+          .map(function (el) { return (el.innerText || '').trim(); })
+          .filter(Boolean);
+        if (!entries.length) return '';
+        return 'Bibliography\n\n' + entries.join('\n\n');
+      }
+      function buildBibHtml() {
+        const entries = bibEntries()
+          .map(function (el) { return (el.innerHTML || '').trim(); })
+          .filter(Boolean);
+        if (!entries.length) return '';
+        return '<h3>Bibliography</h3>\n'
+          + entries.map(function (h) { return '<p>' + h + '</p>'; }).join('\n');
+      }
+      async function writeRich(html, text) {
+        if (navigator.clipboard && navigator.clipboard.write
+            && typeof window.ClipboardItem === 'function') {
+          try {
+            await navigator.clipboard.write([new ClipboardItem({
+              'text/html':  new Blob([html], { type: 'text/html' }),
+              'text/plain': new Blob([text], { type: 'text/plain' })
+            })]);
+            return true;
+          } catch (e) { /* fall through */ }
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          try { await navigator.clipboard.writeText(text); return true; }
+          catch (e) { /* fall through */ }
+        }
+        // Last-resort: textarea + execCommand
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        let ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta);
+        return ok;
+      }
+      async function handleClick(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        const btn = e.currentTarget;
+        const cite = buildCitation();
+        const wantBib = btn.hasAttribute('data-copy-bibliography');
+        const bibText = wantBib ? buildBibText() : '';
+        const bibHtml = wantBib ? buildBibHtml() : '';
+        const text = bibText ? (cite + '\n\n' + bibText) : cite;
+        const html = bibHtml
+          ? ('<p>' + escapeHtml(cite) + '</p>\n' + bibHtml)
+          : ('<p>' + escapeHtml(cite) + '</p>');
+        const ok = await writeRich(html, text);
+        // Visual feedback
+        const lbl = btn.querySelector('.cite-button-label');
+        if (lbl) {
+          const orig = lbl.textContent;
+          lbl.textContent = ok ? 'Copied!' : 'Copy failed';
+          btn.classList.add('copied');
+          setTimeout(function () {
+            lbl.textContent = orig;
+            btn.classList.remove('copied');
+          }, 1600);
+        }
+      }
+      function takeOver() {
+        const old = document.querySelector('.cite-button[data-cite-study]');
+        if (!old) return;
+        // Clone strips any previously-attached event listeners.
+        const fresh = old.cloneNode(true);
+        old.parentNode.replaceChild(fresh, old);
+        fresh.addEventListener('click', handleClick);
+      }
+      // Wait until after the chassis has had time to bind (it runs on
+      // DOMContentLoaded); then clone the button to wipe its binding and
+      // install ours.
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () {
+          setTimeout(takeOver, 250);
+        });
+      } else {
+        setTimeout(takeOver, 250);
+      }
+    })();
+  </script>
 </body>
 </html>
