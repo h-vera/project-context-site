@@ -344,6 +344,97 @@
     .page-wrap h3{font-size:1.4rem;font-weight:600;margin-bottom:12px;line-height:1.2;color:var(--ink)}
     .page-wrap h4{font-size:1.1rem;font-weight:600;margin-bottom:8px;color:var(--ink)}
 
+    /* ── Consistent hover & color-motion layer ────────────────────────────────
+       Covers components not handled by polish.css or earlier overrides.
+       Pattern: lift cards, slide rows, pulse accents, scale pills.
+       All gated on (hover:hover); reduced-motion gets lifts only (no loops). */
+
+    /* Word cards (Greek Terms tab) — top-bar scale matching mini-card pattern */
+    .word-card{position:relative;overflow:hidden;
+      transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+    .word-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+      background:var(--grad-primary);border-radius:var(--radius) var(--radius) 0 0;
+      transform:scaleX(.5);transform-origin:left;transition:transform .4s ease;pointer-events:none}
+    @media(hover:hover){
+      .word-card:hover{transform:translateY(-2px);
+        box-shadow:0 6px 20px rgba(114,9,183,.1);border-color:rgba(114,9,183,.22)}
+      .word-card:hover::before{transform:scaleX(1)}
+    }
+
+    /* Timeline items (Luke Context tab) — translateX + dot glow */
+    .timeline-item{transition:transform .25s ease}
+    .timeline-item::before{transition:box-shadow .25s ease,background .25s ease}
+    @media(hover:hover){
+      .timeline-item:hover{transform:translateX(4px)}
+      .timeline-item:hover::before{
+        box-shadow:0 0 0 5px rgba(114,9,183,.18),0 0 12px rgba(114,9,183,.25)}
+    }
+
+    /* Contrast columns (Luke-Acts Atlas tab) — top-bar + lift */
+    .contrast-column{position:relative;overflow:hidden;
+      transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+    .contrast-column::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+      background:var(--grad-primary);border-radius:var(--radius) var(--radius) 0 0;
+      transform:scaleX(.45);transform-origin:left;transition:transform .4s ease;pointer-events:none}
+    @media(hover:hover){
+      .contrast-column:hover{transform:translateY(-2px);
+        box-shadow:0 6px 20px rgba(114,9,183,.1);border-color:rgba(114,9,183,.22)}
+      .contrast-column:hover::before{transform:scaleX(1)}
+    }
+
+    /* Atlas link card — lift + border tint */
+    .atlas-link-card{transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+    @media(hover:hover){
+      .atlas-link-card:hover{transform:translateY(-2px);
+        box-shadow:0 6px 20px rgba(114,9,183,.12);border-color:rgba(114,9,183,.35)}
+    }
+
+    /* Base callout — left border brightens + very subtle lift */
+    .callout{transition:transform .2s ease,border-left-color .2s ease}
+    @media(hover:hover){
+      .callout:hover{transform:translateY(-1px);border-left-color:var(--accent-purple)}
+    }
+
+    /* Scripture block — left border pulses + lift */
+    .scripture-block{transition:transform .2s ease,border-left-color .2s ease,
+      box-shadow .2s ease}
+    @media(hover:hover){
+      .scripture-block:hover{transform:translateY(-1px);border-left-color:var(--accent-rose);
+        box-shadow:0 4px 16px rgba(114,9,183,.08)}
+    }
+
+    /* Pills — scale + deepen per accent color */
+    .pill{transition:transform .18s ease,background .18s ease,
+      border-color .18s ease,box-shadow .18s ease}
+    @media(hover:hover){
+      .pill:hover{transform:scale(1.06);background:rgba(114,9,183,.1);
+        border-color:rgba(114,9,183,.45);box-shadow:0 2px 8px rgba(114,9,183,.15)}
+      .pill.rose:hover{background:rgba(225,29,72,.1);border-color:rgba(225,29,72,.45);
+        box-shadow:0 2px 8px rgba(225,29,72,.15)}
+      .pill.blue:hover{background:rgba(0,180,216,.1);border-color:rgba(0,180,216,.45);
+        box-shadow:0 2px 8px rgba(0,180,216,.15)}
+      .pill.gold:hover{background:rgba(212,175,55,.12);border-color:rgba(212,175,55,.5);
+        box-shadow:0 2px 8px rgba(212,175,55,.18)}
+    }
+
+    /* Source entries (Sources tab) — row slide */
+    .source-entry{transition:transform .2s ease,background .2s ease}
+    @media(hover:hover){
+      .source-entry:hover{transform:translateX(3px);
+        background:rgba(114,9,183,.025)}
+    }
+
+    /* Bibliography section summary — lift on hover */
+    .bibliography-section summary{transition:background .2s ease}
+    @media(hover:hover){
+      .bibliography-section summary:hover{background:rgba(114,9,183,.03)}
+    }
+
+    @media(prefers-reduced-motion:reduce){
+      .word-card,.timeline-item,.contrast-column,.atlas-link-card,
+      .callout,.scripture-block,.pill,.source-entry{transition:none}
+      .word-card::before,.contrast-column::before{transition:none}
+    }
     /* polish.css §C5 sets .critical-distinction { text-align: center } for its
        centered-prose callout pattern — Luke 16's version is left-aligned with a
        border-left accent, so we override that here. */
@@ -407,7 +498,7 @@
     <a href="/studies/new-covenant/luke/luke-hub.html">Gospel of Luke</a><span>›</span>
     Luke 16:19–31
   </div>
-  <div class="reading-stamp">
+  <div class="reading-stamp fade-in">
     <div class="stamp-meta"><strong>~30 min</strong> <span>read</span></div>
     <div class="stamp-meta"><span>Depth</span><span aria-label="Study depth" class="complexity-level"><span class="complexity-dot filled"></span><span class="complexity-dot filled"></span><span class="complexity-dot filled"></span><span class="complexity-dot filled"></span><span class="complexity-dot"></span></span></div>
     <div class="stamp-tldr">Luke 16 presents a prophetic reversal parable: the gate, the table, and the great chasm reveal whether covenant people truly hear Moses, the Prophets, and the kingdom announcement of Jesus.</div>
@@ -424,7 +515,7 @@
       <div class="quote-ref">Core logic — Luke 16:19–31</div>
     </div>
 
-    <div class="grid-2">
+    <div class="grid-2 fade-in">
       <div class="card fade-in">
         <div class="mini-label">Anchor Statement</div>
         <h3>The parable reverses the gate.</h3>
@@ -485,7 +576,7 @@
       <p style="margin-top:10px"><strong>20</strong> And a certain poor man, named Lazarus, had been laid at his gate, covered with sores,</p>
       <p style="margin-top:10px"><strong>21</strong> and desiring to be filled from the things falling from the table of the rich man. But even the dogs, coming, were licking his sores."</p>
     </div>
-    <div class="grid-2">
+    <div class="grid-2 fade-in">
       <div class="card fade-in">
         <div class="mini-label">Luke 16:22–24 · Death and Reversal</div>
         <p><strong>22</strong> "And it happened that the poor man died, and he was carried away by the angels to Abraham's bosom. And the rich man also died and was buried.</p>
@@ -571,7 +662,7 @@ The Scripture he possessed is the witness he refused.
     <p class="lede">Luke's Gospel repeatedly announces the reversal of human status under God's kingdom: the lowly are lifted, the proud are brought down, the poor receive good news, and the rich are warned when abundance hardens into indifference. By Luke 16, the reader has been trained to expect this — the parable is the concentrated narrative form of everything Luke has been building.</p>
     <div class="timeline fade-in">
       <div class="mini-label">Luke's Reversal Arc</div>
-      <div class="timeline-list">
+      <div class="timeline-list fade-in">
         <div class="timeline-item"><div class="timeline-ref">Luke 1:46–55, 68–79</div><div class="timeline-title">The Canticles Plant the Keywords</div><div class="timeline-note">The Magnificat announces the reversal logic: rulers brought down, lowly exalted, hungry filled, rich sent away. Then Zechariah's Benedictus plants the operative word: <em>aphesis</em> (1:77) — release, forgiveness, Jubilee. This is the same word Jesus will use at Nazareth and Peter at Pentecost. The overture seeds what the symphony will develop.</div></div>
         <div class="timeline-item"><div class="timeline-ref">Luke 4:16–21</div><div class="timeline-title">Jesus Announces Jubilee Release — the <em>Aphesis</em> Program</div><div class="timeline-note">Jesus reads Isaiah 61 and declares it fulfilled: good news to the poor (<em>ptōchoi</em>), release (<em>aphesis</em>) to captives, sight to the blind, liberty to the oppressed. Critically, "the poor" in Luke's Isaianic frame is the Hebrew <em>ʿani</em> — a broad category encompassing those of low social status, people with disabilities, women and children, ethnic outsiders, and those whose circumstances have placed them outside respectable religious circles. Lazarus fits the category entirely. Wealth is not the problem; wealth that blinds its holder to the <em>ʿani</em> at the gate is.</div></div>
         <div class="timeline-item"><div class="timeline-ref">Luke 6:20–26</div><div class="timeline-title">Blessings and Woes</div><div class="timeline-note">Blessed are the poor; woe to the rich. This is not abstract anti-wealth rhetoric — it is the kingdom reversal warning addressed to those whose abundance has produced insulation from mercy and from repentance.</div></div>
@@ -599,37 +690,37 @@ The Scripture he possessed is the witness he refused.
     <h2>Vocabulary That Keeps the Parable in Focus</h2>
     <p class="lede">The terms below are those Luke actually uses in 16:19–31. They orient the reader before the judgment language section, where the broader picture of English "hell" language and Second Temple background is addressed at greater length.</p>
     <div class="words-grid fade-in">
-      <div class="word-card">
+      <div class="word-card fade-in">
         <div class="word-greek">ᾅδης</div>
         <div class="word-transliteration">Hades</div>
         <div class="word-tag">Luke 16:23</div>
         <div class="word-body"><strong>Realm of the dead (Greek).</strong> In Greek usage, the underworld — not synonymous with "hell" in the modern English sense, and not the same word as Gehenna. The LXX uses Hades to translate the Hebrew <em>Sheol</em>. Luke uses this term as part of the parable's postmortem scene. See the Judgment Language tab for the fuller lexical picture.</div>
       </div>
-      <div class="word-card">
+      <div class="word-card fade-in">
         <div class="word-greek">κόλπος Ἀβραάμ</div>
         <div class="word-transliteration">kolpos Abraam</div>
         <div class="word-tag">Luke 16:22–23</div>
         <div class="word-body"><strong>Abraham's bosom.</strong> An image of closeness, honor, and covenant fellowship — comparable to the beloved disciple reclining in Jesus' bosom at John 13:23. Lazarus is publicly re-situated as one who truly belongs at Abraham's table. The image is drawn from Second Temple Jewish banquet imagery.</div>
       </div>
-      <div class="word-card">
+      <div class="word-card fade-in">
         <div class="word-greek">βάσανος</div>
         <div class="word-transliteration">basanos</div>
         <div class="word-tag">Luke 16:23, 28</div>
         <div class="word-body"><strong>Torment / anguish.</strong> The parable should not be domesticated. It portrays real distress and irreversible consequence. The question in the Judgment Language tab is how to frame that anguish — not whether it is real, but what genre of language Luke is deploying.</div>
       </div>
-      <div class="word-card">
+      <div class="word-card fade-in">
         <div class="word-greek">χάσμα μέγα</div>
         <div class="word-transliteration">chasma mega</div>
         <div class="word-tag">Luke 16:26</div>
         <div class="word-body"><strong>Great chasm.</strong> The "fixed" divide (perfect passive participle: it has been established) mirrors the chosen distance of the gate. The separation the rich man tolerated in life becomes, in the parable's structure, the separation he experiences in judgment.</div>
       </div>
-      <div class="word-card">
+      <div class="word-card fade-in">
         <div class="word-greek">Μωϋσῆς καὶ οἱ προφῆται</div>
         <div class="word-transliteration">Mōysēs kai hoi prophētai</div>
         <div class="word-tag">Luke 16:29, 31</div>
         <div class="word-body"><strong>Moses and the Prophets — the interpretive center.</strong> Abraham does not say the brothers need more spectacular evidence. They need to hear the Scriptures they already claim to possess and honor. This phrase names the whole Hebrew canon in shorthand (compare Luke 24:27, 44).</div>
       </div>
-      <div class="word-card">
+      <div class="word-card fade-in">
         <div class="word-greek">ἀναστῇ ἐκ νεκρῶν</div>
         <div class="word-transliteration">anastē ek nekrōn</div>
         <div class="word-tag">Luke 16:31</div>
@@ -657,8 +748,8 @@ The Scripture he possessed is the witness he refused.
     <hr class="star-divider"/>
 
     <!-- SECTION 1: THREE TERMS, ONE ENGLISH WORD -->
-    <h3 style="font-size:1.6rem;margin-bottom:10px">1. Three Greek Terms, One English Word</h3>
-    <p class="section-intro">English translations often render multiple distinct Greek (and Hebrew) concepts as a single word: "hell." This flattening is one of the most persistent sources of confusion in popular reading of the New Testament. The words behind "hell" are not interchangeable.</p>
+    <h3 class="fade-in" style="font-size:1.6rem;margin-bottom:10px">1. Three Greek Terms, One English Word</h3>
+    <p class="section-intro fade-in">English translations often render multiple distinct Greek (and Hebrew) concepts as a single word: "hell." This flattening is one of the most persistent sources of confusion in popular reading of the New Testament. The words behind "hell" are not interchangeable.</p>
 
     <div class="term-spectrum fade-in">
       <div class="term-cell sheol">
@@ -708,8 +799,8 @@ The Scripture he possessed is the witness he refused.
     <hr class="star-divider"/>
 
     <!-- SECTION 2: SECOND TEMPLE JEWISH IMAGERY -->
-    <h3 style="font-size:1.6rem;margin-bottom:10px">2. Second Temple Jewish Afterlife Imagery</h3>
-    <p class="section-intro">Luke's parable does not invent its afterlife imagery from scratch. It draws on a rich tradition of Jewish reflection on what happens to the dead — and Jesus uses that tradition rhetorically, the way all effective teachers use culturally familiar imagery to make a point.</p>
+    <h3 class="fade-in" style="font-size:1.6rem;margin-bottom:10px">2. Second Temple Jewish Afterlife Imagery</h3>
+    <p class="section-intro fade-in">Luke's parable does not invent its afterlife imagery from scratch. It draws on a rich tradition of Jewish reflection on what happens to the dead — and Jesus uses that tradition rhetorically, the way all effective teachers use culturally familiar imagery to make a point.</p>
 
     <div class="two-temple-grid fade-in">
       <div class="temple-card">
@@ -743,8 +834,8 @@ The Scripture he possessed is the witness he refused.
     <hr class="star-divider"/>
 
     <!-- SECTION 3: PROPHETIC AND PARABOLIC FRAMING -->
-    <h3 style="font-size:1.6rem;margin-bottom:10px">3. Prophetic and Parabolic Framing</h3>
-    <p class="section-intro">Luke introduces the passage with the standard parable opening: <em>Ἄνθρωπός τις</em> — "a certain man" (v. 19). This is the same formula Jesus uses throughout Luke for parables (Luke 10:30; 12:16; 14:16; 15:11; 16:1). The introduction signals a story with a point, not a first-person report.</p>
+    <h3 class="fade-in" style="font-size:1.6rem;margin-bottom:10px">3. Prophetic and Parabolic Framing</h3>
+    <p class="section-intro fade-in">Luke introduces the passage with the standard parable opening: <em>Ἄνθρωπός τις</em> — "a certain man" (v. 19). This is the same formula Jesus uses throughout Luke for parables (Luke 10:30; 12:16; 14:16; 15:11; 16:1). The introduction signals a story with a point, not a first-person report.</p>
 
     <div class="layered-argument fade-in">
       <div class="arg-step">
@@ -784,17 +875,17 @@ The Scripture he possessed is the witness he refused.
     <hr class="star-divider"/>
 
     <!-- SECTION 4: MOSES AND THE PROPHETS AS THE CLIMAX -->
-    <h3 style="font-size:1.6rem;margin-bottom:10px">4. Why the Climax Is "Moses and the Prophets"</h3>
-    <p class="section-intro">The parable's final movement — vv. 27–31 — is frequently overlooked in favor of the more visually dramatic afterlife scene. But this is Luke's real climax, and understanding it is the key to the whole passage.</p>
+    <h3 class="fade-in" style="font-size:1.6rem;margin-bottom:10px">4. Why the Climax Is "Moses and the Prophets"</h3>
+    <p class="section-intro fade-in">The parable's final movement — vv. 27–31 — is frequently overlooked in favor of the more visually dramatic afterlife scene. But this is Luke's real climax, and understanding it is the key to the whole passage.</p>
 
     <div class="grid-2 fade-in">
-      <div class="card">
+      <div class="card fade-in">
         <div class="mini-label">The Structural Pivot</div>
         <h3>Abraham redirects twice</h3>
         <p>The rich man makes two requests: first for personal relief (v. 24), which Abraham refuses. Then for a resurrection messenger to warn his brothers (v. 27–28). Abraham refuses the second request twice — once gently ("They have Moses and the Prophets," v. 29) and once as final verdict ("If they do not hear Moses and the Prophets, neither will they be persuaded if someone rises from the dead," v. 31).</p>
         <p style="margin-top:10px">The double refusal is the parable's literary structure. The afterlife scene is the <em>condition</em>; the scriptural climax is the <em>argument</em>.</p>
       </div>
-      <div class="card">
+      <div class="card fade-in">
         <div class="mini-label">What Moses and the Prophets Say</div>
         <h3>The content is care for the poor</h3>
         <p>To a first-century Jewish audience, "Moses and the Prophets" was unmistakably clear: the Torah repeatedly commands care for the poor, the stranger, the widow, and the orphan (Exod 22:21–27; Lev 19:9–10; Deut 15:7–11). The prophets are even more insistent: Isaiah calls Israel's injustice to the poor her fundamental failure (Isa 1:17; 58:6–7); Amos sees oppression of the poor as the reason for exile; Micah reduces the whole covenant to "do justice, love mercy, walk humbly" (Mic 6:8).</p>
@@ -828,8 +919,8 @@ The Scripture he possessed is the witness he refused.
     <hr class="star-divider"/>
 
     <!-- SECTION 5: THE RESURRECTION IRONY IN LUKE'S NARRATIVE -->
-    <h3 style="font-size:1.6rem;margin-bottom:10px">5. The Resurrection Irony in Luke–Acts</h3>
-    <p class="section-intro">Abraham's final line — "If they do not hear Moses and the Prophets, neither will they be persuaded if someone rises from the dead" (v. 31) — is one of the most striking prophetic-ironic moments in the Gospels. Luke lets the whole of Luke–Acts confirm it.</p>
+    <h3 class="fade-in" style="font-size:1.6rem;margin-bottom:10px">5. The Resurrection Irony in Luke–Acts</h3>
+    <p class="section-intro fade-in">Abraham's final line — "If they do not hear Moses and the Prophets, neither will they be persuaded if someone rises from the dead" (v. 31) — is one of the most striking prophetic-ironic moments in the Gospels. Luke lets the whole of Luke–Acts confirm it.</p>
 
     <div class="dark-card fade-in" style="margin:22px 0">
       <div class="mini-label">The Warning and Its Fulfillment</div>
@@ -861,8 +952,8 @@ The Scripture he possessed is the witness he refused.
     <hr class="star-divider"/>
 
     <!-- SECTION 6: WHAT THE PARABLE DOES NOT CLAIM -->
-    <h3 style="font-size:1.6rem;margin-bottom:10px">6. What the Parable Does — and Does Not — Teach</h3>
-    <p class="section-intro">Clear reading means identifying both what a passage is pressing toward and what it is not primarily establishing. Precision here protects the passage's actual force.</p>
+    <h3 class="fade-in" style="font-size:1.6rem;margin-bottom:10px">6. What the Parable Does — and Does Not — Teach</h3>
+    <p class="section-intro fade-in">Clear reading means identifying both what a passage is pressing toward and what it is not primarily establishing. Precision here protects the passage's actual force.</p>
 
     <div class="two-temple-grid fade-in">
       <div class="temple-card">
@@ -977,17 +1068,17 @@ The Scripture he possessed is the witness he refused.
     <h2>How to Explain This Without Minimizing Judgment</h2>
     <p class="lede">The goal is to avoid two equal and opposite errors: using the parable as a simplistic proof-text for a modern topographical "hell map," or softening the passage so thoroughly that Jesus' warning disappears. Good teaching holds both the serious imagery and the covenantal argument together.</p>
     <div class="grid-3 fade-in">
-      <div class="card">
+      <div class="card fade-in">
         <div class="mini-label">Say This</div>
         <h4>Judgment is real.</h4>
         <p>The parable portrays anguish, reversal, and irreversible consequence. It is designed to disturb the comfortable reader. Do not domesticate it.</p>
       </div>
-      <div class="card">
+      <div class="card fade-in">
         <div class="mini-label">Also Say This</div>
         <h4>Use precise vocabulary.</h4>
         <p>Luke uses Hades here, not Gehenna. The distinction is worth making briefly, then moving on to the parable's actual argument — not because Hades is "less serious" but because the categories are different.</p>
       </div>
-      <div class="card">
+      <div class="card fade-in">
         <div class="mini-label">Then Say This</div>
         <h4>The climax is Scripture refusal.</h4>
         <p>The final word is not "flame" but "Moses and the Prophets" and "someone who rises from the dead." The parable ends as a word about hearing — not as a floor plan.</p>
