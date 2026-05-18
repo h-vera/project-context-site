@@ -1295,13 +1295,23 @@ The Scripture he possessed is the witness he refused.
         panel.classList.toggle('is-active', active);
       });
       if (shouldScroll) {
-        const stickyTabs = document.getElementById('sticky-tabs');
-        if (stickyTabs && getComputedStyle(stickyTabs).display !== 'none') {
-          stickyTabs.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } else {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
+      /* Update chassis sidebar dots — chassis uses scroll to highlight but this
+         is a tab page, so we drive active state manually on every tab change */
+      (function updateSidebarDots() {
+        var sidebar = document.querySelector('.quick-nav-sidebar');
+        if (!sidebar) return;
+        sidebar.querySelectorAll('a, button, [data-section]').forEach(function(el) {
+          var href  = el.getAttribute('href') || '';
+          var sec   = el.dataset.section || href.replace(/^#/, '');
+          var match = sec === 'panel-' + target || sec === target;
+          el.classList.toggle('active',  match);
+          el.classList.toggle('current', match);
+          match ? el.setAttribute('aria-current','page')
+                : el.removeAttribute('aria-current');
+        });
+      })();
       revealVisible();
     }
     /* Expose globally so chassis bridge and sidebar links can call it */
@@ -1309,9 +1319,16 @@ The Scripture he possessed is the witness he refused.
 
     tabs.forEach(btn => btn.addEventListener('click', () => {
       activateTab(btn.dataset.tab);
-      /* rAF ensures browser paints new panel before reveal checks positions */
       requestAnimationFrame(revealVisible);
     }));
+
+    /* Back to tabs — scroll to hero top rather than relying on href anchor */
+    document.querySelectorAll('.panel-top-btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
 
     const initial = document.querySelector('.tab-btn.active')?.dataset.tab || tabs[0]?.dataset.tab || 'overview';
     activateTab(initial, false);
@@ -1351,9 +1368,6 @@ The Scripture he possessed is the witness he refused.
     window.addEventListener('scroll', revealVisible, { passive: true });
   });
 </script>
-
-<!-- Back to top -->
-<a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
 
 <!-- Mobile menu overlay -->
 <div class="mobile-menu-overlay"></div>
