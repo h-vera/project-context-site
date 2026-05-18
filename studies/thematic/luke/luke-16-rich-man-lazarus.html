@@ -1098,19 +1098,6 @@ The Scripture he possessed is the witness he refused.
   </section>
 </main>
 
-<script id="page-section-config" type="application/json">
-  [
-    { "id": "panel-overview",   "label": "Overview",         "priority": 1 },
-    { "id": "panel-translation","label": "Translation",       "priority": 1 },
-    { "id": "panel-structure",  "label": "Structure",         "priority": 1 },
-    { "id": "panel-context",    "label": "Luke Context",      "priority": 2 },
-    { "id": "panel-terms",      "label": "Greek Terms",       "priority": 2 },
-    { "id": "panel-judgment",   "label": "Judgment Language", "priority": 1 },
-    { "id": "panel-atlas",      "label": "Luke–Acts Atlas",   "priority": 3 },
-    { "id": "panel-teaching",   "label": "Teaching",          "priority": 3 },
-    { "id": "panel-sources",    "label": "Sources",           "priority": 4 }
-  ]
-</script>
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
@@ -1125,9 +1112,16 @@ The Scripture he possessed is the witness he refused.
         panel.classList.toggle('is-active', active);
       });
       if (shouldScroll) {
-        document.getElementById('sticky-tabs')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const stickyTabs = document.getElementById('sticky-tabs');
+        if (stickyTabs && getComputedStyle(stickyTabs).display !== 'none') {
+          stickyTabs.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       }
       revealVisible();
+      /* Keep mobile bottom strip in sync */
+      if (typeof window.__syncMobileStrip === 'function') window.__syncMobileStrip(target);
     }
 
     tabs.forEach(btn => btn.addEventListener('click', () => activateTab(btn.dataset.tab)));
@@ -1180,25 +1174,213 @@ The Scripture he possessed is the witness he refused.
   });
 </script>
 
-<!-- Page chassis: handles reading progress, back-to-top, and rich cite clipboard -->
-<script src="/assets/js/page-chassis-v5-9.js?v=5.9.3" defer></script>
+<!-- Mobile bottom tab strip (self-contained, no chassis dependency) -->
+<style>
+  #mobile-tab-strip { display: none; }
+  @media (max-width: 767px) {
+    #mobile-tab-strip {
+      display: flex;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 1100;
+      background: rgba(255,255,255,.97);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-top: 1px solid var(--border);
+      box-shadow: 0 -4px 16px rgba(0,0,0,.08);
+      padding: 0 2px env(safe-area-inset-bottom, 6px);
+    }
+    #mobile-tab-strip button {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 8px 2px 6px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--text-gray);
+      line-height: 1.15;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: color .18s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    #mobile-tab-strip button .mts-dot {
+      width: 20px; height: 3px;
+      border-radius: 2px;
+      background: var(--border);
+      transition: background .18s, width .18s;
+      flex-shrink: 0;
+    }
+    #mobile-tab-strip button.active { color: var(--accent-purple); }
+    #mobile-tab-strip button.active .mts-dot {
+      background: var(--grad-primary);
+      width: 28px;
+    }
+    .page-wrap  { padding-bottom: 76px !important; }
+    .sticky-tabs { display: none !important; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #mobile-tab-strip button,
+    #mobile-tab-strip button .mts-dot { transition: none; }
+  }
+</style>
 
-<!-- Tab-page bridge: translates chassis mobile-tab scrollToSection into tab activation -->
+<div id="mobile-tab-strip" role="tablist" aria-label="Study sections"></div>
+
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    var wire = function () {
-      var mt = window.__pcChassis && window.__pcChassis.mobileTabs;
-      if (!mt) return false;
-      mt.scrollToSection = function (section) {
-        var m = section && section.id && section.id.match(/^panel-(.+)$/);
-        if (m && typeof activateTab === 'function') activateTab(m[1]);
-      };
-      return true;
-    };
-    if (wire()) return;
-    var tries = 0;
-    var iv = setInterval(function () { if (wire() || ++tries > 12) clearInterval(iv); }, 50);
-  });
+(function () {
+  /* Priority map — mirrors what page-section-config listed.
+     Priority 1 = always shown; 2 = shown if room (≤6 total); 3+ = hidden.
+     Adjust cutoff or add IDs freely here. */
+  var PRIORITY = {
+    overview:    1,
+    translation: 1,
+    structure:   1,
+    judgment:    1,
+    context:     2,
+    terms:       2,
+    atlas:       3,
+    teaching:    3,
+    sources:     4
+  };
+  var MAX_TABS = 6; /* max buttons in the strip */
+
+  function buildStrip() {
+    var strip = document.getElementById('mobile-tab-strip');
+    if (!strip) return;
+
+    /* Collect tabs sorted by priority then source order */
+    var allBtns = Array.from(document.querySelectorAll('.tab-btn'));
+    var sorted = allBtns
+      .map(function (b) { return { btn: b, tab: b.dataset.tab, p: PRIORITY[b.dataset.tab] || 9 }; })
+      .sort(function (a, b) { return a.p - b.p; })
+      .slice(0, MAX_TABS);
+
+    sorted.forEach(function (item) {
+      var btn = document.createElement('button');
+      btn.setAttribute('role', 'tab');
+      btn.dataset.tab = item.tab;
+      btn.setAttribute('aria-controls', 'panel-' + item.tab);
+      if (item.btn.classList.contains('active')) {
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+      } else {
+        btn.setAttribute('aria-selected', 'false');
+      }
+      var dot  = document.createElement('span'); dot.className = 'mts-dot'; dot.setAttribute('aria-hidden','true');
+      var lbl  = document.createElement('span'); lbl.textContent = item.btn.textContent;
+      btn.appendChild(dot);
+      btn.appendChild(lbl);
+      btn.addEventListener('click', function () {
+        if (typeof activateTab === 'function') activateTab(item.tab);
+      });
+      strip.appendChild(btn);
+    });
+
+    /* Keep strip in sync when top tabs are clicked */
+    document.addEventListener('tabchange', function (e) { syncStrip(e.detail); });
+  }
+
+  function syncStrip(activeTab) {
+    document.querySelectorAll('#mobile-tab-strip button').forEach(function (b) {
+      var on = b.dataset.tab === activeTab;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+  }
+
+  /* Expose so activateTab can call it */
+  window.__syncMobileStrip = syncStrip;
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', buildStrip);
+  } else {
+    buildStrip();
+  }
+})();
+</script>
+
+<!-- Self-contained cite+bibliography handler (rich HTML+plain clipboard, matches chassis pattern) -->
+<script>
+(function () {
+  function meta(name, fallback) {
+    var n = document.querySelector('meta[name="' + name + '"]');
+    return (n && n.content) ? n.content.trim() : (fallback || '');
+  }
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function buildCitation() {
+    var title  = meta('citation-title',  document.title.replace(/\s*[|\u2013-].*$/, '').trim());
+    var author = meta('citation-author', 'Project Context');
+    var site   = meta('citation-site',   'Project Context');
+    var date   = meta('citation-date',   String(new Date().getFullYear()));
+    var url    = (document.querySelector('link[rel="canonical"]') || {}).href || location.href;
+    return author + '. \u201c' + title + '.\u201d ' + site + ', ' + date + '. ' + url + '.';
+  }
+  function buildBibText() {
+    var entries = Array.from(document.querySelectorAll('#panel-sources .source-citation'))
+      .map(function(el){ return (el.innerText||'').trim(); }).filter(Boolean);
+    return entries.length ? 'Bibliography\n\n' + entries.join('\n\n') : '';
+  }
+  function buildBibHtml() {
+    var entries = Array.from(document.querySelectorAll('#panel-sources .source-citation'))
+      .map(function(el){ return (el.innerHTML||'').trim(); }).filter(Boolean);
+    return entries.length ? '<h3>Bibliography</h3>\n' + entries.map(function(h){ return '<p>'+h+'</p>'; }).join('\n') : '';
+  }
+  async function writeRich(html, text) {
+    if (navigator.clipboard && navigator.clipboard.write && typeof window.ClipboardItem === 'function') {
+      try {
+        await navigator.clipboard.write([new ClipboardItem({
+          'text/html':  new Blob([html], {type:'text/html'}),
+          'text/plain': new Blob([text], {type:'text/plain'})
+        })]);
+        return true;
+      } catch(e) {}
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try { await navigator.clipboard.writeText(text); return true; } catch(e) {}
+    }
+    return false;
+  }
+  function takeOver() {
+    var btn = document.querySelector('.cite-button[data-cite-study]');
+    if (!btn) return;
+    var fresh = btn.cloneNode(true);
+    btn.parentNode.replaceChild(fresh, btn);
+    fresh.addEventListener('click', async function(e) {
+      e.preventDefault();
+      var cite   = buildCitation();
+      var btext  = buildBibText();
+      var bhtml  = buildBibHtml();
+      var text   = btext ? cite + '\n\n' + btext : cite;
+      var html   = bhtml ? '<p>' + esc(cite) + '</p>\n' + bhtml : '<p>' + esc(cite) + '</p>';
+      await writeRich(html, text);
+      var lbl = fresh.querySelector('.cite-button-label');
+      if (lbl) {
+        var orig = lbl.textContent;
+        lbl.textContent = 'Copied!';
+        fresh.classList.add('copied');
+        setTimeout(function(){ lbl.textContent = orig; fresh.classList.remove('copied'); }, 1600);
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(takeOver, 250); });
+  } else {
+    setTimeout(takeOver, 250);
+  }
+})();
 </script>
 </body>
 </html>
