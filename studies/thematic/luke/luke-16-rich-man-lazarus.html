@@ -27,9 +27,22 @@
 <link href="https://projectcontext.org/studies/new-covenant/luke/luke-16-rich-man-lazarus.html" rel="canonical"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<!-- Combined font stack: global-v3 base + Crimson Pro page override + IBM Plex Mono -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<!-- Base stylesheet: must load before inline styles so overrides cascade correctly -->
+<link rel="preload" href="/assets/css/global-v3.css?v=3.3.1" as="style"/>
+<link rel="stylesheet" href="/assets/css/global-v3.css?v=3.3.1"/>
+<link rel="stylesheet" href="/assets/css/global-v3-polish.css?v=0.2"/>
 <style>
+    /* ── Font & color overrides: Crimson Pro identity over global-v3 defaults ── */
     :root {
+      /* Fonts — override global-v3 Cormorant Garamond / DM Sans stack */
+      --font-display:'Crimson Pro',Georgia,serif;
+      --font-body:'Crimson Pro',Georgia,serif;
+      --font-mono:'IBM Plex Mono',monospace;
+      --serif:'Crimson Pro',Georgia,serif;
+      --mono:'IBM Plex Mono',monospace;
+      /* Luke 16 accent palette — differs from global-v3 defaults */
       --primary-dark:#0a0a0a; --primary-light:#fff;
       --accent-blue:#00b4d8; --accent-purple:#7209b7; --accent-rose:#e11d48; --accent-gold:#d4af37;
       --bg:#fff; --bg-soft:#fafafa; --bg-page:#f3f4f6; --panel:#f8fafc;
@@ -41,13 +54,12 @@
       --shadow-sm:0 1px 3px rgba(0,0,0,.07); --shadow-md:0 4px 16px rgba(0,0,0,.08);
       --shadow-card:0 2px 8px rgba(114,9,183,.06),0 1px 3px rgba(0,0,0,.06);
       --content:1120px; --radius:10px;
-      --serif:'Crimson Pro',Georgia,serif; --mono:'IBM Plex Mono',monospace;
     }
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
+    /* Body override: Crimson Pro font + page background (global-v3 sets different defaults) */
     body{font-family:var(--serif);background:linear-gradient(180deg,#fafafa 0%,#f3f4f6 100%);color:var(--ink);line-height:1.72;font-size:18px;min-height:100vh}
     a{color:inherit;text-decoration:none}
-    .reading-progress{position:fixed;inset:0 auto auto 0;height:3px;width:0%;z-index:9999;background:var(--grad-primary);transition:width .1s linear}
+    /* Reading progress: override color to match Luke 16 palette */
+    .reading-progress{background:var(--grad-primary)}
 
     /* HERO */
     .hero{position:relative;background:linear-gradient(180deg,#0a0a0a 0%,#140a1e 100%);color:#f0e8ff;padding:90px 24px 72px;overflow:hidden}
@@ -288,6 +300,8 @@
 
 <!-- Navigation injected by nav-component.js -->
 <div id="nav-placeholder"></div>
+<!-- Sidebar populated by chassis from page-section-config; bridge redirects clicks to activateTab() -->
+<div class="quick-nav-sidebar" aria-label="Section navigation"></div>
 
 <header class="hero">
   <div class="hero-grid"></div>
@@ -1120,9 +1134,9 @@ The Scripture he possessed is the witness he refused.
         }
       }
       revealVisible();
-      /* Keep mobile bottom strip in sync */
-      if (typeof window.__syncMobileStrip === 'function') window.__syncMobileStrip(target);
     }
+    /* Expose globally so chassis bridge and sidebar links can call it */
+    window.activateTab = activateTab;
 
     tabs.forEach(btn => btn.addEventListener('click', () => activateTab(btn.dataset.tab)));
 
@@ -1174,141 +1188,40 @@ The Scripture he possessed is the witness he refused.
   });
 </script>
 
-<!-- Mobile bottom tab strip (self-contained, no chassis dependency) -->
-<style>
-  #mobile-tab-strip { display: none; }
-  @media (max-width: 767px) {
-    #mobile-tab-strip {
-      display: flex;
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      z-index: 1100;
-      background: rgba(255,255,255,.97);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-top: 1px solid var(--border);
-      box-shadow: 0 -4px 16px rgba(0,0,0,.08);
-      padding: 0 2px env(safe-area-inset-bottom, 6px);
-    }
-    #mobile-tab-strip button {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 3px;
-      padding: 8px 2px 6px;
-      border: none;
-      background: none;
-      cursor: pointer;
-      font-family: var(--mono);
-      font-size: 9px;
-      letter-spacing: .07em;
-      text-transform: uppercase;
-      color: var(--text-gray);
-      line-height: 1.15;
-      text-align: center;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      transition: color .18s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    #mobile-tab-strip button .mts-dot {
-      width: 20px; height: 3px;
-      border-radius: 2px;
-      background: var(--border);
-      transition: background .18s, width .18s;
-      flex-shrink: 0;
-    }
-    #mobile-tab-strip button.active { color: var(--accent-purple); }
-    #mobile-tab-strip button.active .mts-dot {
-      background: var(--grad-primary);
-      width: 28px;
-    }
-    .page-wrap  { padding-bottom: 76px !important; }
-    .sticky-tabs { display: none !important; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    #mobile-tab-strip button,
-    #mobile-tab-strip button .mts-dot { transition: none; }
-  }
-</style>
+<!-- Page section config: chassis reads this to build mobile tabs + sidebar links -->
+<script id="page-section-config" type="application/json">
+[
+  { "id": "panel-overview",     "label": "Overview",          "icon": "book-open",  "priority": 1 },
+  { "id": "panel-translation",  "label": "Translation",       "icon": "languages",  "priority": 1 },
+  { "id": "panel-structure",    "label": "Structure",         "icon": "layers",     "priority": 1 },
+  { "id": "panel-judgment",     "label": "Judgment Language", "icon": "scale",      "priority": 1 },
+  { "id": "panel-context",      "label": "Luke Context",      "icon": "map",        "priority": 2 },
+  { "id": "panel-terms",        "label": "Greek Terms",       "icon": "search",     "priority": 2 },
+  { "id": "panel-atlas",        "label": "Luke–Acts Atlas",   "icon": "network",    "priority": 3 },
+  { "id": "panel-teaching",     "label": "Teaching Notes",    "icon": "lightbulb",  "priority": 3 },
+  { "id": "panel-sources",      "label": "Sources",           "icon": "bookmark",   "priority": 4 }
+]
+</script>
 
-<div id="mobile-tab-strip" role="tablist" aria-label="Study sections"></div>
-
+<!-- Chassis-to-tab bridge: intercepts chassis scrollToSection calls → activateTab() -->
 <script>
 (function () {
-  /* Priority map — mirrors what page-section-config listed.
-     Priority 1 = always shown; 2 = shown if room (≤6 total); 3+ = hidden.
-     Adjust cutoff or add IDs freely here. */
-  var PRIORITY = {
-    overview:    1,
-    translation: 1,
-    structure:   1,
-    judgment:    1,
-    context:     2,
-    terms:       2,
-    atlas:       3,
-    teaching:    3,
-    sources:     4
-  };
-  var MAX_TABS = 6; /* max buttons in the strip */
-
-  function buildStrip() {
-    var strip = document.getElementById('mobile-tab-strip');
-    if (!strip) return;
-
-    /* Collect tabs sorted by priority then source order */
-    var allBtns = Array.from(document.querySelectorAll('.tab-btn'));
-    var sorted = allBtns
-      .map(function (b) { return { btn: b, tab: b.dataset.tab, p: PRIORITY[b.dataset.tab] || 9 }; })
-      .sort(function (a, b) { return a.p - b.p; })
-      .slice(0, MAX_TABS);
-
-    sorted.forEach(function (item) {
-      var btn = document.createElement('button');
-      btn.setAttribute('role', 'tab');
-      btn.dataset.tab = item.tab;
-      btn.setAttribute('aria-controls', 'panel-' + item.tab);
-      if (item.btn.classList.contains('active')) {
-        btn.classList.add('active');
-        btn.setAttribute('aria-selected', 'true');
-      } else {
-        btn.setAttribute('aria-selected', 'false');
+  document.addEventListener('DOMContentLoaded', function () {
+    var origScroll = window.scrollToSection;
+    window.scrollToSection = function (sectionId) {
+      var tabId = (sectionId || '').replace(/^panel-/, '');
+      if (typeof window.activateTab === 'function') {
+        window.activateTab(tabId);
+      } else if (typeof origScroll === 'function') {
+        origScroll(sectionId);
       }
-      var dot  = document.createElement('span'); dot.className = 'mts-dot'; dot.setAttribute('aria-hidden','true');
-      var lbl  = document.createElement('span'); lbl.textContent = item.btn.textContent;
-      btn.appendChild(dot);
-      btn.appendChild(lbl);
-      btn.addEventListener('click', function () {
-        if (typeof activateTab === 'function') activateTab(item.tab);
-      });
-      strip.appendChild(btn);
-    });
-
-    /* Keep strip in sync when top tabs are clicked */
-    document.addEventListener('tabchange', function (e) { syncStrip(e.detail); });
-  }
-
-  function syncStrip(activeTab) {
-    document.querySelectorAll('#mobile-tab-strip button').forEach(function (b) {
-      var on = b.dataset.tab === activeTab;
-      b.classList.toggle('active', on);
-      b.setAttribute('aria-selected', on ? 'true' : 'false');
-    });
-  }
-
-  /* Expose so activateTab can call it */
-  window.__syncMobileStrip = syncStrip;
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', buildStrip);
-  } else {
-    buildStrip();
-  }
+    };
+  });
 })();
 </script>
+
+<!-- Chassis: now safe — global-v3 DOM structure is present -->
+<script src="/assets/js/page-chassis-v5-9.js?v=5.9.3" defer></script>
 
 <!-- Self-contained cite+bibliography handler (rich HTML+plain clipboard, matches chassis pattern) -->
 <script>
