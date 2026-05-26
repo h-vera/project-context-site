@@ -72,7 +72,7 @@
 .word-detail{padding:28px 30px;}
 .word-detail h3{font-family:var(--font-display);font-size:1.9rem;margin:0 0 8px;}
 .stat-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 22px;}
-.stat-chip{border:1px solid var(--border);border-radius:14px;background:#f8fafc;padding:12px;text-align:center;}
+.stat-chip{border:1px solid var(--border);border-radius:14px;background:#f8fafc;padding:12px;text-align:center;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;cursor:default;}
 .stat-chip strong{display:block;font-family:var(--font-display);font-size:1.6rem;color:var(--accent-purple);line-height:1}.stat-chip span{font-family:var(--font-mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.12em;color:#64748b}
 .feature-tiles{display:flex;flex-direction:column;gap:.65rem;margin:.75rem 0 0;}
 .feature-tile{display:grid;grid-template-columns:2.5rem 1fr;gap:.85rem;align-items:start;padding:.8rem .9rem;border:1px solid color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 16%,transparent);border-radius:14px;background:color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 5%,transparent);transition:transform .25s ease,border-color .25s ease,background .25s ease;}
@@ -436,9 +436,38 @@
   transition: border-color .3s ease, box-shadow .3s ease;
 }
 
+
+/* == Stat-chip: hover lift + entrance animation ======================== */
+@keyframes pc-stat-rise {
+  from { opacity:0; transform:translateY(12px) scale(.96); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+.stat-strip { /* parent for stagger context */ }
+.stat-strip .stat-chip {
+  animation: pc-stat-rise .5s cubic-bezier(0,0,.2,1) both;
+}
+.stat-strip .stat-chip:nth-child(1) { animation-delay: .05s; }
+.stat-strip .stat-chip:nth-child(2) { animation-delay: .15s; }
+.stat-strip .stat-chip:nth-child(3) { animation-delay: .25s; }
+
+@media(hover:hover){
+  .stat-chip:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in srgb,#7209b7 40%,#e2e8f0);
+    box-shadow: 0 8px 20px color-mix(in srgb,#7209b7 14%,transparent);
+  }
+  .stat-chip:hover strong {
+    background: linear-gradient(135deg,#7209b7,#e11d48);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+}
+
 /* -- Reduced motion guard -------------------------------------- */
 @media(prefers-reduced-motion:reduce){
-  .diagram-hint,.diagram-inspector-body{animation:none}
+  .diagram-hint,.diagram-inspector-body,.stat-strip .stat-chip{animation:none}
   .diagram-node rect,.diagram-node circle{transition:none}
   .pattern-summary,.star-divider span,.pivot-box.pulsing{animation:none}
   .takeaway::after,.key-insight::before,.key-insight::after{animation:none;opacity:0}
@@ -558,7 +587,7 @@
           <rect fill="rgba(255,255,255,.22)" stroke="rgba(255,255,255,.55)" stroke-width="1.5" x="392" y="212" width="176" height="46" rx="12"/>
           <text font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700" letter-spacing="0.18em" text-anchor="middle" x="480" y="240" fill="#e9d5ff">THRESHOLD</text>
           <!-- Gate Complex heading -->
-          <text font-size="14" font-weight="800" text-anchor="middle" x="480" y="50" fill="rgba(240,232,255,.9)" letter-spacing="0.04em">Gate Complex</text>
+          <text font-size="14" font-weight="800" text-anchor="middle" x="480" y="50" fill="#ffffff" letter-spacing="0.06em" filter="url(#glow-d1)">Gate Complex</text>
           <!-- Chamber labels — white/colored for contrast on gradient bg -->
           <text font-size="12" font-weight="700" text-anchor="middle" x="361" y="155" fill="rgba(255,255,255,.92)">guards</text>
           <text font-size="12" font-weight="700" text-anchor="middle" x="361" y="323" fill="rgba(255,255,255,.92)">trade</text>
@@ -919,7 +948,7 @@
     <summary>
       <div class="bibliography-header">
         <div class="bibliography-inner">
-          <span class="bibliography-icon" aria-hidden="true"><img src="/assets/images/icons/BP_icon-blu.png" alt="BibleProject" style="width:28px;height:28px;object-fit:contain;vertical-align:middle;filter:brightness(0) invert(1);"></span>
+          <span class="bibliography-icon" aria-hidden="true">📚</span>
           <div class="bibliography-text">
             <h3 class="bibliography-title">Bibliography &amp; Sources</h3>
             <p class="bibliography-subtitle">Academic and biblical references for this thematic word study</p>
@@ -1001,7 +1030,7 @@
       </div>
 
       <div class="source-category">
-        <h4>Secondary Contextual Sources</h4>
+        <h4><img src="/assets/images/icons/BP_icon-blu.png" alt="BibleProject" aria-hidden="true" style="width:18px;height:18px;object-fit:contain;vertical-align:middle;margin-right:6px;opacity:.85;"> Secondary Contextual Sources</h4>
 
         <div class="source-entry">
           <div class="source-citation">
