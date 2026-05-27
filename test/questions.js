@@ -895,372 +895,344 @@ const QUESTIONS_DATA = {
     {
       "u": "u5",
       "exam": true,
-      "q": "What name did God reveal to Moses at the burning bush?",
-      "a": "\"I AM\" (YHWH)",
-      "note": "YHWH is the sacred Hebrew name — \"I AM WHO I AM.\" God reveals his personal name to Moses alone."
-    },
-    {
-      "u": "u5",
-      "exam": false,
-      "q": "What choices did Moses' birth mother make to keep him safe, and why?",
-      "a": "She hid him in a basket in the Nile River; Pharaoh's daughter found and raised him as an Egyptian",
-      "note": "Moses' mother Jochebed hid him to escape Pharaoh's order to kill all Hebrew baby boys."
-    },
-    {
-      "u": "u5",
-      "exam": false,
-      "q": "Which plague finally changed Pharaoh's mind and led him to release Israel?",
-      "a": "The death of the firstborn (the 10th and final plague)",
-      "note": "The first nine plagues hardened Pharaoh. The tenth broke his resistance."
-    },
-    {
-      "u": "u5",
-      "exam": false,
-      "q": "During the first Passover, what did the Israelites put on their doorposts?",
-      "a": "The blood of an unblemished lamb so the Angel of Death would pass over them",
-      "note": "An unblemished lamb was sacrificed. Its blood on the doorposts protected the household from the plague."
-    },
-    {
-      "u": "u5",
-      "exam": false,
-      "q": "What did God provide for the Israelites to eat and drink in the desert?",
-      "a": "Manna and quail; water from a rock",
-      "note": "Manna appeared each morning (except Sabbath). Quail provided meat. Moses struck a rock to release water."
-    },
-    {
-      "u": "u5",
-      "exam": false,
-      "q": "How did Israel escape at the Red Sea, and what happened to the pursuing Egyptians?",
-      "a": "Israel crossed on dry ground; the Egyptian army was drowned",
-      "note": "God parted the sea. Like Noah's Ark and Baptism, the water represents death for some and new life for others."
-    },
-    {
-      "u": "u5",
-      "exam": false,
-      "q": "What is the Shema, and why does it matter?",
-      "a": "\"Hear, O Israel, the LORD our God, the LORD is One\" — the central declaration of faith in one God",
-      "note": "The Shema is the greatest commandment in the Torah. 1st tablet = love God; 2nd tablet = love neighbor."
-    },
-    {
-      "u": "u5",
-      "exam": false,
-      "q": "What was the Tabernacle and what was inside it?",
-      "a": "Portable tent sanctuary where God dwelt in the desert; contained the Ark, altar, lampstand, and table of bread",
-      "note": "The Tabernacle had an outer court, Holy Place, and Holy of Holies (where the Ark was kept)."
+      "q": "What choices does Moses' birth mother make to keep Moses safe, and why? What is life like as an Israelite in Egypt?",
+      "a": "She hid him in a basket in the Nile River to save him from Pharaoh's order to kill Hebrew baby boys. Life as an Israelite in Egypt meant slavery, hard labor, and oppression.",
+      "note": "Moses' mother Jochebed acted in faith. The Israelites were enslaved building cities for Pharaoh under brutal conditions."
     },
     {
       "u": "u5",
       "exam": true,
-      "q": "What three items were kept inside the Ark of the Covenant?",
-      "a": "The stone tablets + a jar of manna + Aaron's rod",
-      "note": "All three required. Tablets = the Law. Manna = God's provision. Aaron's rod = priestly authority."
+      "q": "What does God call Moses to do from the Burning Bush, and how does Moses respond? What is God's name?",
+      "a": "God calls Moses to lead Israel out of Egypt. Moses resists with excuses. God's name: 'I AM' (YHWH).",
+      "note": "Moses gives five excuses (wrong person, won't believe me, bad speaker, etc.). God answers each one. YHWH = 'I AM WHO I AM.'"
     },
     {
       "u": "u5",
       "exam": false,
-      "q": "How is Mary similar to the Ark of the Covenant? (bonus)",
-      "a": "Mary carried Jesus (the living Word/Bread of Life/High Priest) just as the Ark carried the tablets/manna/Aaron's rod",
-      "note": "The Ark carried symbols; Mary carried the reality they pointed to. This is called typology."
-    },
-    {
-      "u": "u5",
-      "exam": false,
-      "q": "Which kind of Old Testament law still applies to Christians today?",
-      "a": "Moral Law (the Ten Commandments and timeless principles of right and wrong)",
-      "note": "Ceremonial Law was fulfilled by Jesus (final sacrifice). Civil Law governed Israel as a nation-state."
+      "q": "Why does God send plagues on Egypt, and which plague finally changes Pharaoh's mind?",
+      "a": "God sends plagues to free Israel and show his power over Egypt's gods. The 10th plague — death of the firstborn — finally changed Pharaoh's mind.",
+      "note": "Each plague targeted an Egyptian deity. Pharaoh hardened his heart after each of the first nine. Only the death of his own son broke his resistance."
     },
     {
       "u": "u5",
       "exam": true,
-      "q": "Who led the Israelites into the Promised Land after Moses?",
-      "a": "Joshua; the walls of Jericho fell down after they marched around the city",
-      "note": "Moses was barred from entering due to disobedience at Meribah. Joshua, his successor, led them in."
+      "q": "Describe the Passover meal and the events of the night. How is Jesus similar to the Passover Lamb?",
+      "a": "Israelites sacrificed an unblemished lamb, put its blood on their doorposts, and ate it hurriedly. The Angel of Death passed over blood-marked homes. Jesus is the Lamb of God — sinless, sacrificed, his blood saves from sin, crucified at Passover.",
+      "note": "The Passover lamb = unblemished, killed, blood saves. Jesus = sinless, sacrificed, blood saves. Not coincidental he was crucified during Passover week."
     },
     {
-      "u": "u6",
+      "u": "u5",
+      "exam": true,
+      "q": "How do the Israelites escape and what happens to the Egyptians attempting to kill them? Compare this Biblical event occurring at the Red Sea to the Story of Noah's Ark and Baptism.",
+      "a": "God parted the Red Sea; Israel crossed on dry ground; the Egyptian army drowned. Like Noah's Ark and Baptism: water = death for the wicked and new life for the faithful.",
+      "note": "All three — Red Sea, Noah, Baptism — share the same pattern: water brings judgment on evil and salvation/new life for God's people."
+    },
+    {
+      "u": "u5",
+      "exam": true,
+      "q": "What does God provide for the Israelites to eat and drink in the desert?",
+      "a": "Manna (bread from heaven each morning), quail (meat), and water from a rock that Moses struck.",
+      "note": "Manna appeared every morning except the Sabbath. This tested Israel's trust in God to provide daily."
+    },
+    {
+      "u": "u5",
       "exam": false,
-      "q": "Define what a Judge was in the book of Judges. How many were there?",
-      "a": "A leader God raised up to rescue and lead Israel — not a courtroom judge. About 12 Judges total.",
-      "note": "Judges ruled between Joshua and Saul, a period of recurring cycles of sin and rescue."
+      "q": "List all 10 Commandments. Also, be able to write the Shema. Which Commandment in the Torah is the most important and why?",
+      "a": "1-No other gods. 2-No idols. 3-Don't misuse God's name. 4-Keep Sabbath. 5-Honor parents. 6-No murder. 7-No adultery. 8-No stealing. 9-No false witness. 10-No coveting. Shema: 'Hear O Israel, the LORD our God, the LORD is One.' Most important: love God with all your heart (Shema).",
+      "note": "Tablets 1-4 = love of God; Tablets 5-10 = love of neighbor. Jesus said the Shema is the greatest commandment."
+    },
+    {
+      "u": "u5",
+      "exam": false,
+      "q": "Describe the purpose of the Tabernacle and some of the items inside the Tabernacle (Be able to draw or label a diagram of the Tabernacle).",
+      "a": "The Tabernacle was the portable tent sanctuary where God dwelt among Israel in the desert. It had an outer court (bronze altar, laver), Holy Place (lampstand, table of showbread, incense altar), and Holy of Holies (Ark of the Covenant).",
+      "note": "The Tabernacle was the precursor to Solomon's Temple. Only priests entered the Holy Place; only the High Priest entered the Holy of Holies, once a year on Yom Kippur."
+    },
+    {
+      "u": "u5",
+      "exam": true,
+      "q": "What three items kept inside the Ark of the Covenant? Potential bonus question: How is Mary similar to the Ark of the Covenant? (Hint: Consider how the things in the Ark are similar to Jesus...)",
+      "a": "Stone tablets of the Law + a jar of manna + Aaron's rod. Bonus: Mary carried Jesus (the living Word/Bread of Life/High Priest) just as the Ark carried the tablets/manna/Aaron's rod.",
+      "note": "This typological connection is called 'Mary as the New Ark.' Each item in the Ark prefigures something about Jesus."
+    },
+    {
+      "u": "u5",
+      "exam": false,
+      "q": "Imagine you are an Israelite wandering in the desert for 40 years. Journal about how you as an average Israelite feel about this journey. Describe at least one event which occurs to the Israelites while they are wandering in the wilderness.",
+      "a": "The Israelites frequently complained, doubted God, and longed to return to Egypt. Key events: manna from heaven, water from the rock, golden calf, spies in Canaan, Korah's rebellion. God was patient but also disciplined them.",
+      "note": "Israelites complained even after miraculous deliverance. The 40-year wandering was punishment for refusing to enter Canaan after the spies' bad report."
+    },
+    {
+      "u": "u5",
+      "exam": true,
+      "q": "Describe the three kinds of Old Testament laws in the books of Exodus, Leviticus, Numbers, and Deuteronomy. Explain which kind of Old Testament Law still applies to Christians today and why the other two kinds no longer apply.",
+      "a": "Moral Law (Ten Commandments, timeless right/wrong — still applies; reflects God's character, reaffirmed by Jesus). Ceremonial Law (sacrifices, feasts, priestly duties — no longer applies; Jesus fulfilled it as the final sacrifice). Civil Law (governed Israel as a nation-state — no longer applies; the Church is not a government).",
+      "note": "This is a key short-answer question on the exam. Know all three names and the reason each does or does not apply."
+    },
+    {
+      "u": "u5",
+      "exam": true,
+      "q": "Who leads the Israelites into the Promised Land at last? What happened to the city of Jericho?",
+      "a": "Joshua led them in. God caused the walls of Jericho to fall after Israel marched around the city for seven days.",
+      "note": "Moses was barred from entering due to disobedience at Meribah. Joshua was his God-appointed successor."
     },
     {
       "u": "u6",
       "exam": true,
-      "q": "Name one of the Judges of Israel.",
-      "a": "Deborah, Samson, or Gideon (any one is correct)",
-      "note": "Know all three: Deborah (prophetess-judge in battle), Samson (supernatural strength), Gideon (defeated Midianites)."
+      "q": "When did the Judges rule Israel? Define what a Judge is, know how many there were, and be able to name/describe Deborah, Samson, and Gideon.",
+      "a": "Judges ruled between Joshua's conquest (~1200 BC) and Saul's kingship (~1050 BC). A Judge was a leader God raised up to rescue Israel — not a courtroom judge. About 12 Judges. Deborah = prophetess/judge who led in battle. Samson = supernatural strength (fell to Delilah). Gideon = defeated Midianites with 300 men.",
+      "note": "Each judge followed a cycle: Israel sins → oppression → crying out → God raises a deliverer → peace → repeat."
+    },
+    {
+      "u": "u6",
+      "exam": true,
+      "q": "Why is Ruth a model of Faith? What does she do? (Note: She is not a judge or prophet, but she lived during the time period of the Judges)",
+      "a": "Ruth, a Moabite, stayed loyal to her mother-in-law Naomi after her husband died, saying 'Where you go, I will go.' She joined God's people and showed covenant loyalty. She is an ancestor of King David.",
+      "note": "Ruth's faithfulness is remarkable because she was a foreigner (Moabite). She chose loyalty to God and Naomi over returning to her own people."
     },
     {
       "u": "u6",
       "exam": false,
-      "q": "Why is Ruth a model of faith? What does she do?",
-      "a": "Loyal Moabite; stayed with her mother-in-law Naomi; said 'Where you go, I will go'; joined God's people",
-      "note": "Ruth is not a judge or prophet. She lived during the Judges period. Her loyalty foreshadows covenant faithfulness."
+      "q": "Describe the story of Samuel's birth to Hannah and how God called him in the Tabernacle",
+      "a": "Hannah was childless and prayed desperately for a son, promising to give him to God's service. God answered; she bore Samuel and dedicated him to Eli at the Tabernacle. God called Samuel by name three times in the night while he slept near the Ark.",
+      "note": "Samuel's birth echoes other miraculous births (Sarah, Elizabeth, Mary). His call story is a model of listening to God: 'Speak, LORD, for your servant is listening.'"
     },
     {
       "u": "u6",
       "exam": false,
-      "q": "Describe the story of Samuel's birth to Hannah.",
-      "a": "Hannah prayed earnestly for a child; God answered; she dedicated Samuel to God's service at the Tabernacle under priest Eli",
-      "note": "Samuel's birth and dedication echo later birth narratives. He became Israel's greatest judge-prophet."
+      "q": "Analyze why the Israelites wanted a King and why Samuel thought that was a bad idea",
+      "a": "Israel wanted a king to be like surrounding nations — a rejection of God as their true king. Samuel warned that a king would draft their sons, take their daughters, seize their land, and tax them heavily.",
+      "note": "Samuel's warning was prophetic — every abuse he predicted happened under Israel's later kings. The desire to be 'like other nations' showed spiritual immaturity."
     },
     {
       "u": "u6",
       "exam": false,
-      "q": "Why did the Israelites want a king, and why was Samuel opposed?",
-      "a": "They wanted to be like surrounding nations (lack of faith). Samuel warned a king would draft sons, seize land, and tax heavily.",
-      "note": "Wanting a king showed distrust of God as their true king. Samuel's warning proved prophetic."
+      "q": "Describe at least three things that Saul did/said/wrote and what those choices suggest about Saul's character (what is Saul like?)",
+      "a": "(1) Offered sacrifice himself without waiting for Samuel — impatient, disobedient. (2) Spared King Agag and the best livestock against God's command — partial obedience isn't obedience. (3) Became consumed by jealousy of David, tried to kill him — insecure, unstable. Saul was talented but self-willed and ultimately rejected by God.",
+      "note": "Saul's pattern: external compliance, internal rebellion. He did what looked right rather than fully obeying God."
     },
     {
       "u": "u6",
       "exam": false,
-      "q": "Who was Israel's first king?",
-      "a": "Saul — anointed by Samuel; impulsive and disobedient, eventually rejected by God",
-      "note": "Saul started well but disobeyed God's commands and became jealous of David. He ended tragically."
+      "q": "Describe at least three things that David did/said/wrote and what those choices suggest about David's character (what is David like?)",
+      "a": "(1) Refused to kill Saul twice when he had the chance — respected God's anointed, patient. (2) Committed adultery with Bathsheba and arranged Uriah's death — capable of grave sin. (3) Wrote Psalm 51 after his sin — deeply repentant, honest before God. David was passionate, flawed, but genuinely devoted to God.",
+      "note": "David is called 'a man after God's own heart' not because he was perfect but because he repented authentically. His relationship with God was real."
     },
     {
       "u": "u6",
       "exam": false,
-      "q": "What great sin did David commit, despite being 'a man after God's own heart'?",
-      "a": "He committed adultery with Bathsheba and arranged the death of her husband Uriah",
-      "note": "David's sin with Bathsheba and Uriah shows that great faith and great sin can coexist. He repented deeply (Psalm 51)."
+      "q": "Describe at least three things that Solomon did/said/wrote and what those choices suggest about Solomon's character (what is Solomon like?)",
+      "a": "(1) Asked God for wisdom rather than riches — humble and discerning early in his reign. (2) Built Solomon's Temple — devoted to honoring God, organized, capable. (3) Took 700 wives and 300 concubines, many foreign, and followed their gods in old age — susceptible to compromise, his heart was divided. Solomon started brilliantly but ended in apostasy.",
+      "note": "Solomon's wisdom is famous, but wisdom without faithfulness fails. His fall warns against allowing relationships and comfort to draw you from God."
+    },
+    {
+      "u": "u6",
+      "exam": true,
+      "q": "Analyze the cause of the division of the Kingdom of Israel into Israel and Judah",
+      "a": "After Solomon's death, his son Rehoboam became king. The northern tribes asked him to lighten their burdens. Rehoboam rejected wise advisors and threatened to make burdens heavier. The 10 northern tribes rebelled and formed the Kingdom of Israel under Jeroboam; the 2 southern tribes remained as Judah under Rehoboam.",
+      "note": "Root cause: Rehoboam's pride and poor leadership. Long-term consequences: divided and weakened; Israel fell to Assyria in 722 BC; Judah fell to Babylon in 586 BC."
     },
     {
       "u": "u6",
       "exam": false,
-      "q": "When God offered Solomon anything, what did Solomon request?",
-      "a": "Wisdom — and God also gave him great riches. His 700 foreign wives later led him to idols.",
-      "note": "Solomon's Temple was built during his reign. His wisdom produced Proverbs, Ecclesiastes, and Song of Songs."
-    },
-    {
-      "u": "u6",
-      "exam": false,
-      "q": "Why did the kingdom split after Solomon, and who led each half?",
-      "a": "Rehoboam threatened heavier burdens — North = Israel (10 tribes, Jeroboam); South = Judah (2 tribes, Rehoboam)",
-      "note": "The 10 northern tribes rebelled under Jeroboam. This division set up the later prophets."
+      "q": "Draw a model of Solomon's Temple (What's inside?) and know why the Temple matters",
+      "a": "Temple layout: Outer Courts (priests, people) → Holy Place (golden lampstand, table of showbread, altar of incense) → Holy of Holies (Ark of the Covenant). It matters because it was God's permanent dwelling place among his people, the center of all worship.",
+      "note": "The Temple replaced the portable Tabernacle. Its destruction in 586 BC was the greatest trauma in Israelite history. Jesus later calls himself the true Temple."
     },
     {
       "u": "u7",
       "exam": false,
-      "q": "What was the primary role of a Biblical Prophet? What were their two main messages?",
-      "a": "Speak God's word; call people back to faithfulness. Two messages: (1) warning/challenge + (2) hope/restoration.",
-      "note": "Prophets were not mainly fortune-tellers. They confronted sin AND promised future restoration."
+      "q": "What are the similarities and differences between the Major and Minor prophetic books of the Bible? ALSO, list the major and minor prophets.",
+      "a": "Major Prophets: Isaiah, Jeremiah, Lamentations, Ezekiel, Daniel (longer books). Minor Prophets: Hosea, Joel, Amos, Obadiah, Jonah, Micah, Nahum, Habakkuk, Zephaniah, Haggai, Zechariah, Malachi (shorter books). The distinction is length, not importance. All prophets spoke God's word and called people back to faithfulness.",
+      "note": "'Major' and 'Minor' only refer to book length. A minor prophet's message can be just as important as a major one (e.g., Jonah teaches a profound lesson about God's mercy)."
     },
     {
       "u": "u7",
       "exam": true,
-      "q": "Which empire conquered the northern Kingdom of Israel (~722 BC)?",
-      "a": "Assyria — scattered the 10 tribes, creating the 'lost tribes of Israel'",
-      "note": "Assyria took the north in 722 BC. Babylon took the south in 586 BC. Two different empires, two events."
+      "q": "On the Babylonian Captivity: Who conquered Israel, and when? Who conquered Judah, when, where were the people of Judah taken, and what is this time period called?",
+      "a": "Assyria conquered northern Israel in ~722 BC and scattered the 10 tribes. Babylon (Nebuchadnezzar) conquered southern Judah in ~586 BC, destroyed Solomon's Temple, and exiled the people to Babylon. This is called the Babylonian Captivity.",
+      "note": "Two empires, two events. Assyria took the north; Babylon took the south. The Babylonian Captivity lasted ~586-538 BC (about 70 years, as Jeremiah predicted)."
     },
     {
       "u": "u7",
       "exam": false,
-      "q": "Which Babylonian king conquered Judah and destroyed Solomon's Temple (~586 BC)?",
-      "a": "Nebuchadnezzar of Babylon; exiled the people of Judah (Babylonian Captivity ~586-538 BC)",
-      "note": "586 BC is a key date. The Temple destruction was catastrophic. This is called the Babylonian Captivity."
+      "q": "On Isaiah: When and where did he live? What did Isaiah see/hear during his Temple vision? What was King Hezekiah's mistake? What is Isaiah's Messianic prophecy? (Chapter 53)",
+      "a": "Isaiah lived in Jerusalem in the 8th century BC, serving under Kings Uzziah, Jotham, Ahaz, and Hezekiah. Temple vision (Isaiah 6): the LORD on a throne, seraphim calling 'Holy, holy, holy,' Isaiah commissioned. Hezekiah's mistake: showed Babylonian envoys all of Israel's treasures. Isaiah 53: the Suffering Servant who bears others' sins — fulfilled in Jesus.",
+      "note": "Isaiah 53 is the most famous Messianic prophecy: 'He was pierced for our transgressions.' Written 700 years before Jesus."
     },
     {
       "u": "u7",
       "exam": false,
-      "q": "What is Isaiah's Messianic prophecy in chapter 53?",
-      "a": "The Suffering Servant who bears others' sins — a prophecy Christians see fulfilled in Jesus",
-      "note": "Isaiah 53 is the most famous Messianic prophecy, written 700 years before Jesus."
-    },
-    {
-      "u": "u7",
-      "exam": false,
-      "q": "What was King Hezekiah's mistake, according to Isaiah?",
-      "a": "He showed the Babylonian envoys all of Israel's treasures — foreshadowing the Babylonian conquest",
-      "note": "Hezekiah was a good king but this prideful move foreshadowed the conquest ~100 years later."
-    },
-    {
-      "u": "u7",
-      "exam": false,
-      "q": "What was Jeremiah's 'Way of Exile' advice to the people in Babylon?",
-      "a": "Settle down, build houses, plant gardens, seek the welfare of the city — the exile will last 70 years",
-      "note": "Jeremiah wrote a letter to the exiles. This controversial advice meant accepting the exile."
-    },
-    {
-      "u": "u7",
-      "exam": false,
-      "q": "What is the book of Lamentations about?",
-      "a": "Five poems mourning the destruction of Jerusalem; attributed to the prophet Jeremiah",
-      "note": "Lamentations is a book of honest grief before God, sitting alongside Psalms as a model of lament."
-    },
-    {
-      "u": "u7",
-      "exam": false,
-      "q": "What happened to Daniel in Babylon?",
-      "a": "Stayed faithful; interpreted dreams; was thrown in the lion's den for praying to God and was protected",
-      "note": "Daniel is an example of faithfulness under pressure. His companions survived the fiery furnace for the same reason."
-    },
-    {
-      "u": "u7",
-      "exam": false,
-      "q": "What happened to Shadrach, Meshach, and Abednego?",
-      "a": "Refused to worship Nebuchadnezzar's golden statue; were thrown in the fiery furnace and survived",
-      "note": "Their Hebrew names were Hananiah, Mishael, and Azariah. A mysterious figure appeared with them in the furnace."
-    },
-    {
-      "u": "u7",
-      "exam": false,
-      "q": "Are Elijah and Elisha major or minor prophets? Why?",
-      "a": "Neither — they are narrative prophets whose stories appear in 1 & 2 Kings; they have no books of their own",
-      "note": "Elijah is the mentor; Elisha is the student/successor. EliJAH comes before EliSHA alphabetically = Elijah first."
-    },
-    {
-      "u": "u7",
-      "exam": false,
-      "q": "What is the main lesson of the Book of Jonah?",
-      "a": "God's mercy extends to all people, even Israel's enemies — Jonah resented God's forgiveness of Nineveh",
-      "note": "Jonah is a biblical novella. Grace is for everyone, not just Israel. Jonah sulked when Nineveh repented."
+      "q": "On Ezekiel: When and where did he live? What happened during the vision Ezekiel has in Ezekiel 1? What are some of the symbolic actions that Ezekiel undertakes to teach Judah?",
+      "a": "Ezekiel lived among the Babylonian exiles in the early 6th century BC. Ezekiel 1: the chariot-throne vision (merkabah) — four living creatures, wheels within wheels, fire, and God's glory. Symbolic actions: lying on his side for 390 days (Israel's sin), eating food cooked over dung (siege conditions), shaving his head (Jerusalem's judgment).",
+      "note": "Ezekiel's visions are the most dramatic in the Bible. His symbolic actions were living prophecies — street theater meant to warn Judah."
     },
     {
       "u": "u7",
       "exam": true,
-      "q": "Who allowed the Jewish exiles to return to Jerusalem?",
-      "a": "Cyrus the Great of Persia (~538 BC) — he conquered Babylon and issued a decree permitting their return",
-      "note": "Cyrus is called God's 'anointed' in Isaiah 45 — a pagan king used by God to fulfill prophecy."
+      "q": "On Jeremiah/Lamentations: What is Jeremiah's 'Way of Exile?' What is the book of Lamentations about?",
+      "a": "Way of Exile: Jeremiah told the exiles in Babylon to settle down, build houses, plant gardens, and seek the welfare of the city — the exile will last 70 years. Lamentations: five poems mourning the destruction of Jerusalem, attributed to Jeremiah.",
+      "note": "Jeremiah's advice was unpopular — it meant accepting the exile rather than fighting it. Lamentations shows it is right to grieve honestly before God."
     },
     {
       "u": "u7",
       "exam": false,
-      "q": "What two books describe rebuilding Jerusalem after the Exile?",
-      "a": "Ezra and Nehemiah",
-      "note": "Ezra = spiritual rebuilding (restoring the Law); Nehemiah = physical rebuilding (the walls of Jerusalem)."
+      "q": "On Daniel: What is Daniel's life in Babylon like? What does he do? What happened to Daniel's companions Shadrach, Meshach, and Abednego? Why is Daniel thrown in the lion's den, and what happens next?",
+      "a": "Daniel lived faithfully in the Babylonian court, refusing to compromise his faith (diet, prayer). He interpreted dreams for the king. Shadrach, Meshach, and Abednego refused to worship Nebuchadnezzar's golden statue and survived the fiery furnace. Daniel was thrown in the lion's den for continuing to pray to God and was miraculously protected.",
+      "note": "Daniel and his companions are models of faithfulness under pressure. They show that faithfulness to God is worth the cost."
     },
     {
       "u": "u7",
       "exam": false,
-      "q": "Who is Queen Esther and what does the Feast of Purim celebrate?",
-      "a": "Jewish woman who became queen of Persia; saved her people from Haman's genocide plot; Purim celebrates her courage",
-      "note": "'For such a time as this' — she risked her life to approach the king uninvited."
+      "q": "On Elijah and Elisha: Are Elijah and Elisha major or minor prophets? Why/why not? What are at least three stories in the Bible involving Elijah, and three involving Elisha? How can you remember that Elijah was Elisha's mentor, and not get the two of them confused?",
+      "a": "Neither — they are narrative prophets in 1 & 2 Kings with no books of their own. Elijah: defeated prophets of Baal on Mount Carmel; fled to Horeb; taken to heaven in a whirlwind. Elisha: healed Naaman of leprosy; raised the Shunammite's son; fed 100 men with 20 loaves. Memory aid: EliJAH comes before EliSHA alphabetically — Elijah was first/the mentor.",
+      "note": "Elijah and Elisha are easy to confuse. Remember Elijah = the older one who goes to heaven; Elisha = the one who stays and does miracles."
+    },
+    {
+      "u": "u7",
+      "exam": true,
+      "q": "On Jonah: Is Jonah a good prophet? Why/why not? What is the moral/lesson of the book of Jonah?",
+      "a": "Jonah is a poor prophet — he runs from God's call, needs a fish to redirect him, and sulks when Nineveh actually repents. Moral: God's mercy extends to all people, even Israel's enemies. Grace is not just for Israel.",
+      "note": "Jonah is a biblical novella. Its point is partly to critique narrow nationalism — the reluctant prophet who resents God's forgiveness of the enemy."
+    },
+    {
+      "u": "u7",
+      "exam": false,
+      "q": "On the Return from Exile: What are some books written during the Babylonian Exile? Which empire conquered Babylon, and when? What's the name of the King who allows the Israelites to return to Jerusalem? What are two historical books about rebuilding after the Exile?",
+      "a": "Books from the Exile: Ezekiel, Daniel, Lamentations, some Psalms. Cyrus the Great of Persia conquered Babylon ~538 BC and issued a decree allowing the exiles to return and rebuild the Temple. Rebuilding books: Ezra (spiritual restoration) and Nehemiah (physical rebuilding of walls).",
+      "note": "Cyrus is called God's 'anointed' in Isaiah 45 — a pagan king used by God to fulfill prophecy. His decree ending the exile was a historical fact confirmed by archaeology."
+    },
+    {
+      "u": "u7",
+      "exam": true,
+      "q": "On Queen Esther: Who is Queen Esther, and what does the feast of Purim celebrate?",
+      "a": "Esther was a Jewish woman who became queen of Persia. She risked her life by approaching the king uninvited to expose Haman's plot to destroy the Jewish people. Purim celebrates her courage and the survival of the Jewish people.",
+      "note": "'For such a time as this' (Esther 4:14). Esther is a biblical novella. Purim is still celebrated today with costumes, the reading of Esther, and celebrations."
+    },
+    {
+      "u": "u7",
+      "exam": true,
+      "q": "What is the role/job of a Biblical Prophet? (What were their two main messages?)",
+      "a": "A prophet's primary role was to speak God's word and call people back to faithfulness — not mainly to predict the future. Two messages: (1) Warning/challenge — judgment for ongoing sin; (2) Hope/restoration — God would not ultimately abandon his people.",
+      "note": "Prophets were rarely popular. Their job was to confront, not comfort. Jeremiah was thrown in a cistern; Isaiah served kings who ignored him."
+    },
+    {
+      "u": "u7",
+      "exam": false,
+      "q": "Were the prophets popular in their time? Why/why not? Think of at least one specific example of a good/bad thing that happened to one of them because of their faithfulness.",
+      "a": "Almost never popular. They delivered unwelcome messages to people who didn't want to hear them. Examples: Jeremiah was thrown into a cistern and imprisoned for his preaching; Isaiah served under kings who largely ignored him; Amos was told to leave Israel by the priest Amaziah.",
+      "note": "The 'prophets' who were popular in ancient Israel were usually the false ones who told kings what they wanted to hear. True prophets paid a high price for faithfulness."
     },
     {
       "u": "u8",
       "exam": false,
-      "q": "What is 'wisdom' in the biblical sense?",
-      "a": "Skill in living rightly before God — practical intelligence for a good life",
-      "note": "Biblical wisdom is not book knowledge. It is knowing how to live well, make good choices, and fear God."
+      "q": "Name the seven books of wisdom literature and describe what each of the books of Wisdom Literature is about (structure, content, themes, etc.)",
+      "a": "1. Psalms: 150 hymns/prayers — praise, lament, thanksgiving. 2. Job: innocent suffering; God is present even in pain we don't understand. 3. Proverbs: practical wisdom for daily life; 'the fear of the LORD is the beginning of wisdom.' 4. Ecclesiastes: meaning of life; 'fear God, keep commandments.' 5. Song of Songs: marital love / God's love for Israel / Christ's love for the Church. 6. Wisdom: Deuterocanon; personifies Wisdom. 7. Sirach: Deuterocanon; practical wisdom like Proverbs.",
+      "note": "Wisdom literature asks the deep questions of human experience. It is not primarily history or prophecy but reflection on how to live a good life before God."
     },
     {
       "u": "u8",
       "exam": true,
-      "q": "According to Proverbs, what is 'the beginning of wisdom'?",
-      "a": "The fear of the LORD (Proverbs 9:10)",
-      "note": "'The fear of the LORD is the beginning of wisdom.' Fear here means reverence and awe, not terror."
-    },
-    {
-      "u": "u8",
-      "exam": false,
-      "q": "How many Psalms are there? How many are attributed to David?",
-      "a": "150 total; 73 attributed to David",
-      "note": "Psalms are poems and hymns: praise, lament, thanksgiving, royal. Know Psalm 23."
-    },
-    {
-      "u": "u8",
-      "exam": false,
-      "q": "What does the book of Job teach about suffering?",
-      "a": "God is present in suffering even when we do not understand it; suffering is not always punishment for sin",
-      "note": "Job is a biblical novella. God never tells Job WHY he suffers — his ways exceed our understanding."
-    },
-    {
-      "u": "u8",
-      "exam": false,
-      "q": "What is the central question of Ecclesiastes, and what is the answer?",
-      "a": "What is the meaning of life? Answer: 'Fear God and keep his commandments' (Ecclesiastes 12:13)",
-      "note": "'Vanity of vanities' — the Teacher finds everything empty without God."
-    },
-    {
-      "u": "u8",
-      "exam": false,
-      "q": "What are the three main interpretations of the Song of Songs?",
-      "a": "(1) Literal marital love / (2) God's love for Israel / (3) Christ's love for the Church",
-      "note": "Song of Songs is love poetry. All three readings reveal something true about love and covenant."
+      "q": "What is 'wisdom,' and what do the books of Wisdom literature in the Bible (particularly Proverbs) say is the 'beginning of wisdom?'",
+      "a": "Wisdom = skill in living rightly before God — practical intelligence for a good life, not just book knowledge. Proverbs: 'The fear of the LORD is the beginning of wisdom' (Proverbs 9:10).",
+      "note": "'Fear of the LORD' means reverence and awe, not terror. It is the starting point from which all true wisdom flows."
     },
     {
       "u": "u8",
       "exam": true,
-      "q": "How many books make up the Deuterocanon?",
-      "a": "Seven",
-      "note": "Catholic OT = 46 books. Protestant OT = 39 books. The difference = the 7 Deuterocanonical books."
-    },
-    {
-      "u": "u8",
-      "exam": false,
-      "q": "Name all seven Deuterocanonical books.",
-      "a": "Tobit, Judith, 1 Maccabees, 2 Maccabees, Wisdom, Sirach, Baruch",
-      "note": "Memory: T-J-W-S-B + 1 & 2 Maccabees. Tobit and Judith are biblical novellas."
+      "q": "What are the Psalms? How many Psalms are there, and who wrote 73 of them?",
+      "a": "The Psalms are 150 poems, hymns, and prayers used in Israelite worship — covering praise, lament, thanksgiving, trust, and royal themes. 73 are attributed to David.",
+      "note": "Know Psalm 23 ('The LORD is my shepherd'). The Psalms are still used in Jewish and Christian worship today."
     },
     {
       "u": "u8",
       "exam": true,
-      "q": "What do Protestants call the Deuterocanonical books?",
-      "a": "The Apocrypha ('hidden writings')",
-      "note": "Apocrypha means hidden or obscure writings. Protestants do not include them in the canon."
+      "q": "What lesson(s) does the Biblical novella Job teach about suffering? What is God's response to suffering, both in Job and through the rest of the Bible?",
+      "a": "Job: suffering is not always punishment for sin; God is present in suffering even when we don't understand it; God's ways exceed our understanding (answer from the whirlwind). Biblical arc: God's ultimate response to suffering is the Incarnation — Jesus enters human suffering himself.",
+      "note": "Job's friends were wrong to assume his suffering was punishment. God rebukes them, not Job. God's answer is not an explanation but a presence."
     },
     {
       "u": "u8",
       "exam": false,
-      "q": "Which two wisdom books are also part of the Deuterocanon?",
-      "a": "Wisdom (Book of Wisdom) and Sirach (Ben Sira / Ecclesiasticus)",
-      "note": "Both are wisdom literature AND Deuterocanonical. Wisdom was written in Greek; Sirach is practical like Proverbs."
+      "q": "What is the central question of the book of Ecclesiastes, and how does it (and more so, the rest of Scripture) answer that question?",
+      "a": "Central question: What is the meaning of life? ('Vanity of vanities, all is vanity.') Ecclesiastes' answer: 'Fear God and keep his commandments' (12:13). Scripture's fuller answer: life finds meaning in relationship with God, love of neighbor, and ultimately in Christ.",
+      "note": "Ecclesiastes is honest about the emptiness of pursuing pleasure, wealth, and wisdom apart from God. It arrives at its conclusion through negative examples."
     },
     {
       "u": "u8",
       "exam": false,
-      "q": "What is the book of Tobit about?",
-      "a": "Biblical novella set during the Exile; teaches that God brings good out of suffering; features the angel Raphael",
-      "note": "Tobit is in Catholic/Orthodox Bibles. A faithful exile whose prayers are answered through the angel Raphael."
-    },
-    {
-      "u": "u8",
-      "exam": false,
-      "q": "What is the book of Judith about?",
-      "a": "Biblical novella; heroic widow Judith saves Israel by beheading the Assyrian general Holofernes",
-      "note": "Judith uses her wits and faith to defeat Israel's enemy when everyone else was afraid."
-    },
-    {
-      "u": "u8",
-      "exam": false,
-      "q": "Who wrote the book of Baruch, and is Baruch a major or minor prophet?",
-      "a": "Linked to the prophet Jeremiah's scribe; written during the Babylonian Exile — neither major nor minor prophet",
-      "note": "Baruch was Jeremiah's secretary. The book is Deuterocanonical and associated with Jeremiah's circle."
-    },
-    {
-      "u": "u8",
-      "exam": false,
-      "q": "Who triggered the Maccabean Revolt and why?",
-      "a": "Antiochus IV Epiphanes (~167 BC) — desecrated the Temple, banned Jewish practice, killed Jews who obeyed the Law",
-      "note": "Antiochus set up a statue of Zeus in the Temple and forced Jews to eat pork. This triggered the revolt."
-    },
-    {
-      "u": "u8",
-      "exam": false,
-      "q": "What did the Maccabean Revolt accomplish?",
-      "a": "Expelled Seleucid forces; rededicated the Temple; restored Jewish religious practice (~165 BC)",
-      "note": "The rededication of the Temple is what Hanukkah celebrates. The revolt gave Israel a brief period of independence."
+      "q": "What are the three main interpretations of the meaning of Song of Songs? (Why is steamy marital love poetry (Song of Songs) in the Bible? What is Song of Songs really about?)",
+      "a": "Three interpretations: (1) Literal — the beauty and goodness of human marital love. (2) Allegorical — God's passionate covenant love for Israel. (3) Christological — Christ's love for the Church. It is in the Bible because all three readings reveal something true and good.",
+      "note": "Song of Songs shows that human love, when faithful and total, reflects something real about God's love. It is not embarrassing but revelatory."
     },
     {
       "u": "u8",
       "exam": true,
-      "q": "What does the nickname 'Maccabeus' mean?",
-      "a": "\"The Hammer\" (in Hebrew)",
-      "note": "Judah \"the Hammer\" Maccabee led the revolt against the Seleucid Greek Empire under Antiochus IV Epiphanes."
+      "q": "Which books of Wisdom Literature are also in the Deuterocanon?",
+      "a": "Wisdom (Book of Wisdom) and Sirach (Ben Sira / Ecclesiasticus) — both are wisdom books AND Deuterocanonical.",
+      "note": "These two appear in Catholic/Orthodox Bibles but not Protestant Bibles. Wisdom was written in Greek; Sirach is practical like Proverbs."
+    },
+    {
+      "u": "u8",
+      "exam": false,
+      "q": "What are the books of the deuterocanon called? Why are these books included in Catholic and Orthodox Scriptures but not in the Protestant canon? Give at least two reasons.",
+      "a": "The 7 books: Tobit, Judith, 1 Maccabees, 2 Maccabees, Wisdom, Sirach, Baruch. Reason 1: Catholics/Orthodox based OT on Greek Septuagint (included them); Protestants used shorter Hebrew canon (~90 AD). Reason 2: Written late (200-50 BC), some originally in Greek; Luther questioned their authority. Bonus: Catholics confirmed them at Council of Trent (1546).",
+      "note": "This is the 14% short-answer question on the exam. Know all 7 books and both reasons cold."
+    },
+    {
+      "u": "u8",
+      "exam": false,
+      "q": "Be able to recognize that Tobit and Judith are Biblical Novellas. Describe the plot and some of the key characters in the stories.",
+      "a": "Tobit: elderly faithful exile named Tobit goes blind; his son Tobiah, guided by the angel Raphael, travels to retrieve money and heals his father's blindness. Teaches: God brings good out of suffering. Judith: heroic widow Judith saves Israel by beheading the Assyrian general Holofernes in his tent. Teaches: God uses the unexpected to deliver his people.",
+      "note": "Both are biblical novellas — fictional teaching stories, not strict history. Both are in the Deuterocanon."
+    },
+    {
+      "u": "u8",
+      "exam": true,
+      "q": "Who wrote the book of Baruch? Is he a major prophet, minor prophet, or neither? Why?",
+      "a": "Baruch is linked to Jeremiah's scribe/secretary Baruch ben Neriah; written during the Babylonian Exile. He is neither a major nor a minor prophet — he does not have his own prophetic book in the Protestant canon and is classified separately.",
+      "note": "Baruch is Deuterocanonical. He is associated with Jeremiah's circle. The book reflects on the Exile and calls for repentance."
+    },
+    {
+      "u": "u8",
+      "exam": false,
+      "q": "What is the historical context of the Maccabean revolt? That is, what empire ruled Israel, and what were they doing to make life impossible for faithful Jewish people?",
+      "a": "The Seleucid Greek Empire (under Antiochus IV Epiphanes, ~167 BC) ruled Israel. Antiochus desecrated the Temple by setting up a statue of Zeus, sacrificing pigs on the altar, outlawing Jewish practice (Sabbath, circumcision, Torah), and killing Jews who obeyed the Law.",
+      "note": "Antiochus IV means 'God Manifest' — he actually claimed to be a god. His persecution was systematic and extreme, designed to erase Jewish identity."
+    },
+    {
+      "u": "u8",
+      "exam": true,
+      "q": "Who are the main figures involved in the Maccabean Revolt (described in 1 and 2 Maccabees)? What does the nickname 'maccabeus' mean?",
+      "a": "The revolt was led by the Maccabee family, especially Judah 'the Hammer' Maccabee. 'Maccabeus' means 'the Hammer' in Hebrew. His father Mattathias started the resistance; his brothers Jonathan and Simon continued it.",
+      "note": "The Maccabean Revolt (~167-160 BC) was a David-vs-Goliath story — a small band of faithful Jews defeating the world's greatest military power."
+    },
+    {
+      "u": "u8",
+      "exam": true,
+      "q": "What does the Maccabean Revolt accomplish?",
+      "a": "The revolt expelled the Seleucid Greek forces from Jerusalem, rededicated and purified the Temple (~165 BC), and restored Jewish religious practice. It briefly established Jewish independence under the Hasmonean dynasty.",
+      "note": "The rededication of the Temple is what Hanukkah celebrates. The miracle: one day's worth of oil for the Temple menorah lasted 8 days."
     },
     {
       "u": "u8",
       "exam": true,
       "q": "What does the Jewish festival of Hanukkah celebrate?",
-      "a": "The rededication of the Temple after the Maccabean Revolt; the miracle of oil lasting 8 days",
-      "note": "~165 BC. One day's worth of oil burned for 8 days. Hanukkah = Festival of Lights, 8 days."
+      "a": "The rededication of the Temple after the Maccabean Revolt (~165 BC) and the miracle of oil that lasted 8 days when there was only enough for one day.",
+      "note": "Hanukkah = Festival of Lights. Celebrated for 8 days with the lighting of the menorah (Hanukkiah). It is a relatively minor Jewish holiday elevated in modern times."
+    },
+    {
+      "u": "u8",
+      "exam": true,
+      "q": "What are the seven books of the deuterocanon called? Also, why are these books included in Catholic and Orthodox Scriptures but not in the Protestant canon? Give at least TWO reasons.",
+      "a": "Tobit, Judith, 1 Maccabees, 2 Maccabees, Wisdom, Sirach, Baruch. Reason 1: Catholics/Orthodox used the Greek Septuagint (included these books); Protestants used the shorter Hebrew canon used by rabbis after ~90 AD. Reason 2: Written late (~200-50 BC), some in Greek; Protestant reformers like Luther questioned their authority. Bonus: Catholics confirmed them at Council of Trent (1546).",
+      "note": "This is the 14% question — the highest-value single question on the exam. Name all 7 books. Give both reasons clearly."
     }
   ],
   "essays": [
     {
-      "prompt": "What are the seven books of the Deuterocanon called? Also, why are these books included in Catholic and Orthodox Scriptures but not in the Protestant canon? Give at least TWO reasons.",
-      "hint": "Start by naming all 7. Reason 1: Septuagint vs. Hebrew canon. Reason 2: written late (200-50 BC), some in Greek, Luther questioned them. Bonus: Council of Trent 1546. Aim 5-7 sentences.",
+      "prompt": "What are the seven books of the deuterocanon called? (14%) Also, why are these books included in Catholic and Orthodox Scriptures but not in the Protestant canon? Give at least TWO reasons. (4.5% Each)",
+      "hint": "Name all 7 books in your first sentence. Reason 1: Septuagint vs. Hebrew canon. Reason 2: written late (200-50 BC), some in Greek, Luther questioned them. Bonus: Council of Trent 1546. Aim 5-7 sentences.",
       "key": "Seven books: Tobit, Judith, 1 Maccabees, 2 Maccabees, Wisdom, Sirach, Baruch.\nReason 1: Catholics/Orthodox based OT on the Greek Septuagint (included these books); Protestants followed the shorter Hebrew canon used by rabbis after ~90 AD.\nReason 2: Written late (~200-50 BC), some originally in Greek; Protestant reformers like Luther questioned their authority.\nBonus: Catholics confirmed them at the Council of Trent in 1546.\nCatholic OT = 46 books. Protestant OT = 39 books."
     },
     {
@@ -1274,29 +1246,29 @@ const QUESTIONS_DATA = {
       "key": "Original Passover: unblemished lamb, blood on doorposts, Angel of Death passed over, freed Israel from Egypt.\nJesus: called 'Lamb of God,' sinless (unblemished), sacrificed, his blood saves from sin and spiritual death.\nFreedom: Passover lamb = freedom from Egyptian slavery; Jesus = freedom from slavery to sin.\nNot coincidental that Jesus was crucified during Passover week — Gospel writers make this connection intentionally."
     },
     {
-      "prompt": "What is the role/job of a Biblical Prophet? What were their two main messages? Were the prophets popular in their time? Give a specific example.",
-      "hint": "Primary role = speak God's word, call people back to faithfulness (not just predict the future). Two messages: warning/challenge + hope/restoration. Give an example of a prophet who faced rejection (Jeremiah, Isaiah, etc.).",
-      "key": "Primary role: speak God's word and call people back to faithfulness — not mainly predict the future.\nMessage 1: Warning/challenge — if people kept sinning, there would be consequences such as judgment and exile.\nMessage 2: Hope/restoration — even after judgment, God would not abandon them.\nPopularity: Almost never popular. Jeremiah was thrown into a cistern. Isaiah served kings who ignored him.\nFaithfulness despite rejection is central to their witness."
-    },
-    {
       "prompt": "How do the Israelites escape and what happens to the Egyptians attempting to kill them? Compare this Biblical event occurring at the Red Sea to the Story of Noah's Ark and Baptism.",
       "hint": "Describe the Red Sea crossing (Israel on dry ground; Egyptians drowned). Connect to Noah: water = death for the wicked + new life for the faithful. Then Baptism: passing through water = dying to old life and rising to new life.",
       "key": "Red Sea: God parted the sea; Israel crossed on dry ground; the Egyptian army drowned when the waters returned.\nNoah connection: In Noah's flood, water destroyed the wicked while saving the faithful — same pattern as the Red Sea.\nBaptism connection: Baptism uses water to symbolize passing from death (old life/sin) to new life in Christ.\nAll three: water = judgment on evil + salvation and new life for the faithful. The Church Fathers called the Red Sea a 'type' of Baptism."
     },
     {
-      "prompt": "Describe the Babylonian Captivity. Who conquered Israel and when? Who conquered Judah, when, where were the people taken, and what is this time period called? Who eventually allowed them to return and when?",
-      "hint": "722 BC: Assyria conquers north (Israel). 586 BC: Nebuchadnezzar/Babylon conquers south (Judah), destroys Temple, exiles people to Babylon. 538 BC: Cyrus the Great of Persia lets them return. Rebuilding books: Ezra and Nehemiah.",
+      "prompt": "What is the role/job of a Biblical Prophet? (What were their two main messages?) Were the prophets popular in their time? Why/why not? Think of at least one specific example of a good/bad thing that happened to one or more of them because of their faithfulness to the Word of God.",
+      "hint": "Primary role = speak God's word, call people back to faithfulness (not just predict future). Two messages: warning/challenge + hope/restoration. Give a specific example of rejection (Jeremiah in cistern, Isaiah ignored, Amos expelled).",
+      "key": "Primary role: speak God's word and call people back to faithfulness — not mainly predict the future.\nMessage 1: Warning/challenge — if people kept sinning, judgment and exile would follow.\nMessage 2: Hope/restoration — even after judgment, God would not ultimately abandon them.\nPopularity: Almost never popular. Jeremiah was thrown into a cistern for his preaching. Isaiah served kings who largely ignored him. Amos was expelled from Israel by the priest Amaziah.\nFaithfulness despite rejection is central to their witness."
+    },
+    {
+      "prompt": "On the Babylonian Captivity: Who conquered Israel, and when? Who conquered Judah, when, where were the people of Judah taken, and what is this time period called? Who eventually allowed them to return, and when?",
+      "hint": "722 BC: Assyria conquers north. 586 BC: Nebuchadnezzar/Babylon conquers south, destroys Temple, exiles to Babylon — called Babylonian Captivity. 538 BC: Cyrus the Great of Persia lets them return. Rebuilding books: Ezra and Nehemiah.",
       "key": "722 BC: Assyria conquered the northern Kingdom of Israel and scattered the 10 tribes.\n586 BC: Nebuchadnezzar of Babylon conquered Judah, destroyed Solomon's Temple, and exiled the people to Babylon. This is called the Babylonian Captivity.\n~538 BC: Cyrus the Great of Persia conquered Babylon and issued a decree allowing the exiles to return and rebuild the Temple.\nBooks about the return: Ezra (spiritual rebuilding) and Nehemiah (physical rebuilding of the walls)."
     },
     {
       "prompt": "What lesson(s) does the Biblical novella Job teach about suffering? What is God's response to suffering, both in Job and through the rest of the Bible?",
-      "hint": "Job is a biblical novella about innocent suffering. Key lessons: suffering is not always punishment; God is present even in suffering we do not understand; God does not owe us an explanation. God's ultimate response: Jesus enters human suffering himself.",
-      "key": "Job is a biblical novella about innocent suffering — Job did nothing wrong but lost everything.\nLesson 1: Suffering is not always punishment for sin — Job's friends were wrong to assume it was.\nLesson 2: God is present in suffering even when we do not understand it.\nLesson 3: God's answer from the whirlwind: 'Where were you when I laid the foundations of the earth?' His ways exceed our understanding.\nBiblical arc: God's ultimate response to suffering is Jesus — God himself enters human suffering in the Incarnation."
+      "hint": "Job is a biblical novella about innocent suffering. Lessons: suffering is not always punishment; God is present in suffering we don't understand; God's ways exceed ours. God's ultimate response: Jesus enters human suffering himself.",
+      "key": "Job is a biblical novella about innocent suffering — Job did nothing wrong but lost everything.\nLesson 1: Suffering is not always punishment for sin — Job's friends were wrong.\nLesson 2: God is present in suffering even when we do not understand it.\nLesson 3: God's answer from the whirlwind: 'Where were you when I laid the foundations of the earth?' His ways exceed our understanding.\nBiblical arc: God's ultimate response to suffering is Jesus — God himself enters human suffering in the Incarnation."
     },
     {
       "prompt": "Analyze the cause of the division of the Kingdom of Israel into Israel and Judah. What happened after Solomon's death, and what were the long-term consequences?",
-      "hint": "Solomon dies. Rehoboam becomes king. Tribes ask him to lighten their burdens. Rehoboam threatens heavier burdens. 10 northern tribes rebel under Jeroboam. Long-term: two kingdoms, different fates (Israel falls to Assyria 722 BC; Judah falls to Babylon 586 BC).",
-      "key": "After Solomon's death, his son Rehoboam became king.\nThe 10 northern tribes asked Rehoboam to lighten their heavy labor burden. Rehoboam threatened to make burdens even heavier.\nThis triggered the rebellion: 10 northern tribes formed the Kingdom of Israel under Jeroboam. The 2 southern tribes remained as the Kingdom of Judah under Rehoboam.\nLong-term consequences: Israel (north) fell to Assyria in 722 BC. Judah (south) fell to Babylon in 586 BC."
+      "hint": "Solomon dies. Rehoboam becomes king. Tribes ask him to lighten their burdens. He threatens heavier burdens. 10 tribes rebel under Jeroboam. Long-term: Israel falls to Assyria 722 BC; Judah falls to Babylon 586 BC.",
+      "key": "After Solomon's death, his son Rehoboam became king.\nThe 10 northern tribes asked Rehoboam to lighten their heavy labor burden. Rehoboam threatened to make burdens even heavier.\nThis triggered the rebellion: 10 tribes formed the Kingdom of Israel under Jeroboam; 2 southern tribes remained as the Kingdom of Judah under Rehoboam.\nLong-term consequences: Israel (north) fell to Assyria in 722 BC. Judah (south) fell to Babylon in 586 BC."
     }
   ]
 };
