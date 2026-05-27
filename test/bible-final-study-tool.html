@@ -138,7 +138,7 @@ body{font-family:'Helvetica Neue',Arial,sans-serif;background:#f8f9fc;color:#1a1
 </div>
 <div class="tabs">
   <button class="tab-btn active" onclick="showTab('mc',this)">Multiple Choice<span class="tab-pts">89 questions</span></button>
-  <button class="tab-btn" onclick="showTab('fr',this)">Free Response<span class="tab-pts">48 questions</span></button>
+  <button class="tab-btn" onclick="showTab('fr',this)">Free Response<span class="tab-pts">52 questions</span></button>
   <button class="tab-btn" onclick="showTab('essay',this)">Essay Practice<span class="tab-pts">8 prompts</span></button>
   <button class="tab-btn" onclick="showTab('review',this)">Quick Review<span class="tab-pts">Facts &amp; outlines</span></button>
 </div>
@@ -186,7 +186,7 @@ body{font-family:'Helvetica Neue',Arial,sans-serif;background:#f8f9fc;color:#1a1
 <!-- FREE RESPONSE -->
 <div id="panel-fr" class="panel">
   <div class="mode-bar" id="mode-bar">
-    <button class="mode-btn active" onclick="setMode('exam',this)">&#x1F4DD; Exam (25)</button>
+    <button class="mode-btn active" onclick="setMode('exam',this)">&#x1F4DD; Exam (11)</button>
     <button class="mode-btn" onclick="setMode('all',this)">All (52)</button>
     <button class="mode-btn" onclick="setMode('u5',this)">Unit 5</button>
     <button class="mode-btn" onclick="setMode('u6',this)">Unit 6</button>
@@ -201,7 +201,7 @@ body{font-family:'Helvetica Neue',Arial,sans-serif;background:#f8f9fc;color:#1a1
     <div class="question-card">
       <div class="q-num" id="q-num">Question 1</div>
       <div class="q-text" id="q-text"></div>
-      <div class="mic-wrap"><input class="answer-input" type="text" id="answer-input" placeholder="Type or tap 🎤 to speak your answer&#x2026;" autocomplete="off"/><button class="mic-btn" id="fr-mic-btn" title="Voice input" onclick="toggleVoice('answer-input','fr-mic-btn')">🎤</button></div>
+      <div class="mic-wrap" style="align-items:flex-start"><textarea class="answer-input" id="answer-input" placeholder="Type or tap 🎤 to speak your answer&#x2026;" rows="4" style="resize:vertical;min-height:90px;max-height:400px;line-height:1.6;padding:.65rem .85rem" oninput="autoResize(this)"></textarea><button class="mic-btn" id="fr-mic-btn" title="Voice input" onclick="toggleVoice('answer-input','fr-mic-btn')" style="margin-top:2px">🎤</button></div>
     </div>
     <div class="btn-row" id="btn-reveal-row">
       <button class="btn btn-primary" onclick="revealAnswer()">Reveal Answer</button>
@@ -271,7 +271,7 @@ body{font-family:'Helvetica Neue',Arial,sans-serif;background:#f8f9fc;color:#1a1
   <div class="essay-workspace" id="essay-workspace">
     <div class="essay-prompt-box"><div class="prompt-label">Your Prompt</div><div id="essay-prompt-text"></div></div>
     <div class="essay-hint" id="essay-hint"></div>
-    <div class="essay-mic-wrap"><textarea class="essay-textarea" id="essay-textarea" placeholder="Write or tap 🎤 to speak your paragraph&#x2026;"></textarea><button class="mic-btn" id="essay-mic-btn" title="Voice input" onclick="toggleVoice('essay-textarea','essay-mic-btn')">🎤</button></div>
+    <div class="essay-mic-wrap"><textarea class="essay-textarea" id="essay-textarea" placeholder="Write or tap 🎤 to speak your paragraph&#x2026;" style="min-height:220px;max-height:600px" oninput="autoResize(this)"></textarea><button class="mic-btn" id="essay-mic-btn" title="Voice input" onclick="toggleVoice('essay-textarea','essay-mic-btn')">🎤</button></div>
     <div class="btn-row" style="margin-top:.7rem">
       <button class="btn btn-primary" onclick="submitEssay()">Get AI Feedback</button>
       <button class="btn btn-outline" onclick="backToEssaySelect()">&#x2190; Choose Different Prompt</button>
@@ -718,7 +718,7 @@ function setMode(mode,btn){
 function restartFR(){frScore=0;curQ=0;frWrong=[];frRightSet=new Set();frWrongSet=new Set();frSkipSet=new Set();document.getElementById('fr-question-area').style.display='block';document.getElementById('fr-complete').style.display='none';document.getElementById('score-display').textContent='Score: 0 / '+frActiveQ.length;loadQ(0);}
 function restartMissed(){if(!frWrong.length){restartFR();return;}const missed=frWrong.map(i=>frActiveQ[i]);frScore=0;curQ=0;frWrong=[];frRightSet=new Set();frWrongSet=new Set();frSkipSet=new Set();frActiveQ=missed;document.getElementById('fr-question-area').style.display='block';document.getElementById('fr-complete').style.display='none';document.getElementById('score-display').textContent='Score: 0 / '+frActiveQ.length;loadQ(0);}
 
-document.getElementById('answer-input').addEventListener('keydown',e=>{if(e.key==='Enter')revealAnswer();});
+document.getElementById('answer-input').addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))revealAnswer();});
 loadQ(0);
 document.getElementById('score-display').textContent='Score: 0 / '+frActiveQ.length;
 
@@ -804,7 +804,7 @@ function toggleVoice(inputId, btnId) {
     }
     if (finalAdd) voiceFinalText += finalAdd;
     const el = document.getElementById(voiceTargetId);
-    if (el) el.value = voiceFinalText + interim;
+    if (el) { el.value = voiceFinalText + interim; autoResize(el); }
   };
 
   voiceRecognition.onerror = function(e) {
@@ -822,6 +822,13 @@ function toggleVoice(inputId, btnId) {
   voiceListening = true;
   const btn = document.getElementById(btnId);
   if (btn) { btn.textContent = '🔴'; btn.classList.add('listening'); }
+}
+
+
+// ── Auto-resize textareas ───────────────────────────────────────────────
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight + 2, 500) + 'px';
 }
 
 </script>
