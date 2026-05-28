@@ -751,7 +751,7 @@ async function submitEssay(){
   try{
     // ── Proxy URL: paste your Lambda Function URL below ──────────────────
     const LAMBDA_URL = 'https://2dmanrmzl4bja2p7hl45d5dvqa0kzkop.lambda-url.us-east-2.on.aws/';
-    const r=await fetch(LAMBDA_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system:sysMsg,messages:[{role:'user',content:'Prompt: '+d.prompt+'\n\nStudent answer:\n'+text}]})});
+    const r=await fetch(LAMBDA_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens:1000,system:sysMsg,messages:[{role:'user',content:'Prompt: '+d.prompt+'\n\nStudent answer:\n'+text}]})});
     const res=await r.json();
     fc.textContent=res.content&&res.content[0]?res.content[0].text:'Could not get feedback. Try again.';
     document.getElementById('try-again-row').style.display='flex';
