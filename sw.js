@@ -92,6 +92,9 @@ self.addEventListener('fetch', (event) => {
     
     // Skip non-HTTP requests
     if (!request.url.startsWith('http')) return;
+
+    // Skip external requests — let Lambda and other external URLs pass through
+    if (!url.hostname.includes('projectcontext.org')) return;
     
     // Handle API/data requests
     if (url.pathname.includes('/assets/data/')) {
