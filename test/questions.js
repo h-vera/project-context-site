@@ -895,6 +895,20 @@ const QUESTIONS_DATA = {
     {
       "u": "u5",
       "exam": true,
+      "q": "List all Ten Commandments.",
+      "a": "1. No other gods before me\n2. No idols or graven images\n3. Do not misuse God’s name\n4. Keep the Sabbath holy\n5. Honor your father and mother\n6. Do not murder\n7. Do not commit adultery\n8. Do not steal\n9. Do not give false testimony\n10. Do not covet",
+      "note": "Tablets 1–4 = love of God. Tablets 5–10 = love of neighbor."
+    },
+    {
+      "u": "u5",
+      "exam": true,
+      "q": "Write the Shema. Why is it the most important commandment in the Torah?",
+      "a": "“Hear, O Israel, the LORD our God, the LORD is One.” It is the central declaration of faith in one God — the foundation of everything else in the Torah.",
+      "note": "Jesus called this the greatest commandment. It summarizes the entire first tablet: love God with all your heart, soul, and strength."
+    },
+    {
+      "u": "u5",
+      "exam": true,
       "q": "What choices does Moses' birth mother make to keep Moses safe, and why? What is life like as an Israelite in Egypt?",
       "a": "She hid him in a basket in the Nile River to save him from Pharaoh's order to kill Hebrew baby boys. Life as an Israelite in Egypt meant slavery, hard labor, and oppression.",
       "note": "Moses' mother Jochebed acted in faith. The Israelites were enslaved building cities for Pharaoh under brutal conditions."
