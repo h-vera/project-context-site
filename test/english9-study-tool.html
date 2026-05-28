@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English 9 Final — Study Tool</title>
+<script src="english9-questions.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Helvetica Neue',Arial,sans-serif;background:#f5f7fb;color:#1a1a2e;min-height:100vh}
+.header{background:linear-gradient(135deg,#1e3a8a 0%,#0f766e 100%);color:#fff;padding:1.1rem 1.5rem;display:flex;align-items:center;justify-content:space-between}
+.header-title{font-size:1rem;font-weight:700;letter-spacing:.02em}
+.header-sub{font-size:.73rem;color:rgba(255,255,255,.75);margin-top:2px}
+.timer{font-size:.82rem;color:rgba(255,255,255,.7)}.timer span{color:#fff;font-weight:700}
+.tabs{display:flex;background:#fff;border-bottom:1px solid #e5e7ef;overflow-x:auto}
+.tab-btn{flex:1;min-width:100px;padding:.8rem .6rem;border:none;background:none;cursor:pointer;font-size:.72rem;color:#888;letter-spacing:.03em;text-transform:uppercase;font-weight:500;border-bottom:3px solid transparent;margin-bottom:-1px;transition:all .15s;white-space:nowrap}
+.tab-btn:hover{color:#1e3a8a;background:#f0f4ff}
+.tab-btn.active{color:#1e3a8a;border-bottom-color:#1e3a8a}
+.tab-pts{display:block;font-size:.63rem;color:#bbb;margin-top:2px;font-weight:normal;text-transform:none;letter-spacing:0}
+.tab-btn.active .tab-pts{color:#4f7acb}
+.panel{display:none;padding:1.5rem;max-width:720px;margin:0 auto}
+.panel.active{display:block}
+.mode-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.75rem}
+.mode-btn{padding:.38rem .85rem;border-radius:20px;border:1.5px solid #e5e7ef;background:#fff;cursor:pointer;font-size:.73rem;font-weight:600;color:#667;transition:all .15s;font-family:inherit}
+.mode-btn:hover{border-color:#1e3a8a;color:#1e3a8a}
+.mode-btn.active{background:linear-gradient(135deg,#1e3a8a,#0f766e);border-color:transparent;color:#fff}
+.progress-row{display:flex;align-items:center;gap:10px;margin-bottom:1.1rem;font-size:.78rem;color:#777}
+.fr-dots{display:flex;gap:4px;flex-wrap:wrap;max-width:480px}
+.fr-dot{width:9px;height:9px;border-radius:50%;background:#e0e2ea;transition:background .2s;flex-shrink:0;cursor:pointer}
+.fr-dot:hover{opacity:.7}
+.fr-dot.done-right{background:#16a34a}.fr-dot.done-wrong{background:#dc2626}
+.fr-dot.done-skip{background:#94a3b8}.fr-dot.current{background:#1e3a8a}
+.score-badge{margin-left:auto;background:linear-gradient(135deg,#1e3a8a,#0f766e);color:#fff;padding:3px 11px;border-radius:20px;font-size:.74rem;font-weight:700;white-space:nowrap}
+.reset-link{font-size:.68rem;color:#94a3b8;cursor:pointer;text-decoration:underline;white-space:nowrap;flex-shrink:0}
+.reset-link:hover{color:#dc2626}
+.question-card{background:#fff;border:1px solid #e5e7ef;border-radius:8px;padding:1.5rem;margin-bottom:1rem;border-top:3px solid #1e3a8a}
+.q-num{font-size:.67rem;text-transform:uppercase;letter-spacing:.09em;color:#1e3a8a;margin-bottom:.5rem;font-weight:700;display:flex;align-items:center;gap:8px}
+.exam-badge{background:linear-gradient(135deg,#1e3a8a,#0f766e);color:#fff;font-size:.6rem;padding:2px 7px;border-radius:10px;font-weight:700}
+.q-text{font-size:1rem;line-height:1.65;margin-bottom:1.1rem;color:#1a1a2e}
+.answer-input{width:100%;border:1.5px solid #e5e7ef;border-radius:5px;padding:.6rem .85rem;font-size:.92rem;background:#f8fafc;outline:none;transition:border-color .2s;font-family:inherit}
+.answer-input:focus{border-color:#1e3a8a}
+.reveal-area{margin-top:1rem;display:none}
+.correct-answer{background:#eff6ff;border:1px solid #93c5fd;border-radius:6px;padding:.85rem 1rem;margin-bottom:.65rem}
+.correct-answer .label{font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;color:#1e3a8a;margin-bottom:4px;font-weight:700}
+.correct-answer .ans{font-size:.93rem;line-height:1.5;font-weight:600;color:#1e3a8a;white-space:pre-wrap}
+.note-text{font-size:.79rem;color:#555;font-style:italic;margin-bottom:.7rem;line-height:1.55}
+.mc-option{display:flex;align-items:flex-start;gap:10px;padding:.65rem .9rem;border:1.5px solid #e5e7ef;border-radius:6px;cursor:pointer;margin-bottom:7px;transition:all .15s;user-select:none}
+.mc-option:hover{border-color:#1e3a8a;background:#f0f4ff}
+.mc-option.selected{border-color:#1e3a8a;background:#f0f4ff}
+.mc-option.correct{border-color:#16a34a;background:#f0fdf4;pointer-events:none}
+.mc-option.incorrect{border-color:#dc2626;background:#fff5f5;pointer-events:none}
+.mc-option.revealed{border-color:#16a34a;background:#f0fdf4;pointer-events:none}
+.opt-letter{font-weight:800;font-size:.78rem;color:#1e3a8a;min-width:18px;padding-top:1px;flex-shrink:0}
+.mc-option.correct .opt-letter{color:#16a34a}
+.mc-option.incorrect .opt-letter{color:#dc2626}
+.mc-option.revealed .opt-letter{color:#16a34a}
+.opt-text{font-size:.9rem;line-height:1.5;color:#1a1a2e}
+.mc-feedback{margin-top:.75rem;padding:.7rem 1rem;border-radius:6px;font-size:.86rem;font-weight:600;display:none}
+.mc-feedback.right{background:#f0fdf4;border:1px solid #86efac;color:#166534}
+.mc-feedback.wrong{background:#fff5f5;border:1px solid #fca5a5;color:#991b1b}
+.mc-exp-box{display:none;margin-top:.65rem;background:#f8fafc;border:1px solid #e5e7ef;border-left:3px solid #0f766e;border-radius:0 6px 6px 0;padding:.75rem 1rem}
+.mc-exp-label{font-size:.63rem;text-transform:uppercase;letter-spacing:.08em;color:#0f766e;margin-bottom:4px;font-weight:700}
+.mc-exp-text{font-size:.84rem;line-height:1.65;color:#374151}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:.5rem 1.15rem;border-radius:5px;border:1.5px solid;cursor:pointer;font-family:inherit;font-size:.8rem;font-weight:600;transition:all .13s}
+.btn-primary{background:linear-gradient(135deg,#1e3a8a,#0f766e);border-color:transparent;color:#fff}
+.btn-primary:hover{opacity:.88}
+.btn-correct{background:#16a34a;border-color:#16a34a;color:#fff}.btn-correct:hover{background:#15803d}
+.btn-wrong{background:#dc2626;border-color:#dc2626;color:#fff}.btn-wrong:hover{background:#b91c1c}
+.btn-outline{background:transparent;border-color:#d1d5db;color:#374151}
+.btn-outline:hover{border-color:#1e3a8a;color:#1e3a8a}
+.fr-complete{text-align:center;padding:2.5rem 1rem}
+.big-score{font-size:3.5rem;font-weight:800;background:linear-gradient(135deg,#1e3a8a,#0f766e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:.4rem}
+.big-label{font-size:.88rem;color:#666;margin-bottom:1.25rem}
+.result-note{font-size:.88rem;line-height:1.65;color:#374151;max-width:400px;margin:0 auto 1.5rem}
+.essay-intro{background:#eff6ff;border:1px solid #93c5fd;border-radius:7px;padding:.9rem 1.1rem;margin-bottom:1rem;font-size:.8rem;color:#1e40af;line-height:1.6}
+.essay-intro strong{color:#1e3a8a}
+.essay-group-label{font-size:.67rem;text-transform:uppercase;letter-spacing:.09em;color:#1e3a8a;font-weight:700;margin:1rem 0 .5rem}
+.essay-option{background:#fff;border:1.5px solid #e5e7ef;border-radius:7px;padding:.9rem 1.1rem;cursor:pointer;transition:all .15s;margin-bottom:.55rem}
+.essay-option:hover{border-color:#1e3a8a;background:#f0f4ff}
+.essay-option .pts{font-size:.67rem;color:#1e3a8a;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;font-weight:700}
+.essay-option .q-text{font-size:.88rem;line-height:1.5;color:#1a1a2e;margin-bottom:0}
+.essay-workspace{display:none}
+.essay-prompt-box{background:#eff6ff;border:1px solid #93c5fd;border-radius:7px;padding:.9rem 1.1rem;margin-bottom:.85rem;font-size:.92rem;line-height:1.6}
+.prompt-label{font-size:.67rem;text-transform:uppercase;letter-spacing:.08em;color:#1e3a8a;margin-bottom:5px;font-weight:700}
+.essay-textarea{width:100%;min-height:155px;border:1.5px solid #e5e7ef;border-radius:5px;padding:.8rem .9rem;font-family:inherit;font-size:.92rem;line-height:1.65;background:#fff;outline:none;resize:vertical;transition:border-color .2s}
+.essay-textarea:focus{border-color:#1e3a8a}
+.essay-hint{font-size:.78rem;color:#1e40af;margin-bottom:.65rem;line-height:1.55;background:#f0f4ff;border-left:3px solid #3b82f6;padding:.5rem .75rem;border-radius:0 4px 4px 0}
+.feedback-box{display:none;margin-top:1rem;background:#fff;border:1px solid #e5e7ef;border-radius:7px;padding:1.1rem;border-top:3px solid #0f766e}
+.fb-label{font-size:.67rem;text-transform:uppercase;letter-spacing:.08em;color:#0f766e;margin-bottom:.7rem;font-weight:700}
+.feedback-content{font-size:.88rem;line-height:1.75;color:#1a1a2e;white-space:pre-wrap}
+.loading-pulse{display:flex;gap:6px;align-items:center}
+.pulse-dot{width:7px;height:7px;border-radius:50%;background:#1e3a8a;animation:pulse 1.2s ease-in-out infinite}
+.pulse-dot:nth-child(2){animation-delay:.2s}.pulse-dot:nth-child(3){animation-delay:.4s}
+@keyframes pulse{0%,80%,100%{opacity:.25;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:translateX(0)}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.unit-section{margin-bottom:2rem;padding-left:1rem;border-left:4px solid #ccc}
+.unit-section.lt{border-left-color:#1e3a8a}
+.unit-section.night{border-left-color:#0f766e}
+.unit-section.rj{border-left-color:#9333ea}
+.unit-section.themes{border-left-color:#d97706}
+.unit-section.ue{border-left:none;padding-left:0}
+.unit-title{display:flex;align-items:center;gap:10px;margin-bottom:.85rem;font-size:.67rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700;padding:.45rem .75rem;border-radius:5px;color:#fff;animation:fadeDown .4s ease both}
+.unit-section.lt .unit-title{background:linear-gradient(135deg,#1e3a8a,#2563eb)}
+.unit-section.night .unit-title{background:linear-gradient(135deg,#065f46,#0f766e)}
+.unit-section.rj .unit-title{background:linear-gradient(135deg,#6b21a8,#9333ea)}
+.unit-section.themes .unit-title{background:linear-gradient(135deg,#b45309,#d97706)}
+.unit-section.ue .unit-title{background:linear-gradient(135deg,#1e3a8a,#0f766e);border-radius:5px;margin-bottom:1rem}
+.fact-grid{display:flex;flex-direction:column;gap:4px}
+.fact-item{background:#fff;border:1px solid #e9eaf0;border-radius:5px;padding:.55rem .9rem;display:flex;gap:.85rem;align-items:flex-start;font-size:.86rem;line-height:1.5;opacity:0;animation:slideIn .4s ease forwards}
+.fact-item .fi-q{color:#777;flex:0 0 225px;font-style:italic}
+.fact-item .fi-a{color:#1a1a2e;font-weight:500;flex:1}
+.lt .fact-item.hi{background:#eff6ff;border-color:#93c5fd}.lt .fact-item.hi .fi-a{color:#1e40af}
+.night .fact-item.hi{background:#ecfdf5;border-color:#6ee7b7}.night .fact-item.hi .fi-a{color:#065f46}
+.rj .fact-item.hi{background:#faf5ff;border-color:#d8b4fe}.rj .fact-item.hi .fi-a{color:#6b21a8}
+.themes .fact-item.hi{background:#fffbeb;border-color:#fde68a}.themes .fact-item.hi .fi-a{color:#92400e}
+.essay-outline{background:#fff;border:1px solid #e5e7ef;border-radius:7px;padding:1.1rem 1.25rem;margin-bottom:.65rem;opacity:0;animation:slideIn .4s ease forwards}
+.essay-outline h4{font-size:.74rem;text-transform:uppercase;letter-spacing:.05em;background:linear-gradient(135deg,#1e3a8a,#0f766e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.75rem;font-weight:700}
+.outline-step{font-size:.86rem;line-height:1.65;padding:.28rem 0;border-bottom:1px solid #f3f4f6}
+.outline-step:last-child{border-bottom:none}
+.sn{display:inline-block;width:22px;background:linear-gradient(135deg,#1e3a8a,#0f766e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:.72rem;font-weight:800}
+.mic-btn{padding:.45rem .75rem;border-radius:5px;border:1.5px solid #93c5fd;background:#eff6ff;cursor:pointer;font-size:1rem;transition:all .2s;flex-shrink:0;line-height:1}
+.mic-btn.listening{background:#dc2626;border-color:#dc2626;animation:micPulse .8s ease-in-out infinite}
+.mic-wrap{display:flex;gap:8px;align-items:center;width:100%}
+.mic-wrap .answer-input{flex:1}
+.essay-mic-wrap{position:relative}
+.essay-mic-wrap .mic-btn{position:absolute;bottom:10px;right:10px;z-index:2;font-size:.85rem;padding:.3rem .6rem}
+@keyframes micPulse{0%,100%{opacity:1}50%{opacity:.5}}
+@media(max-width:600px){.fact-item{flex-direction:column;gap:2px}.fact-item .fi-q{flex:none;width:auto}}
+</style>
+</head>
+<body>
+<div class="header">
+  <div>
+    <div class="header-title">English 9 — Final Exam Study Tool</div>
+    <div class="header-sub">Night &middot; Romeo &amp; Juliet &middot; Literary Terms &mdash; Goodman, Freshman English</div>
+  </div>
+  <div class="timer">Session: <span id="timer-display">0:00</span></div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('mc',this)">Multiple Choice<span class="tab-pts">82 questions</span></button>
+  <button class="tab-btn" onclick="showTab('fr',this)">Free Response<span class="tab-pts">35 questions</span></button>
+  <button class="tab-btn" onclick="showTab('essay',this)">Essay Practice<span class="tab-pts">5 prompts</span></button>
+  <button class="tab-btn" onclick="showTab('review',this)">Quick Review<span class="tab-pts">Facts &amp; outlines</span></button>
+</div>
+
+<!-- MULTIPLE CHOICE -->
+<div id="panel-mc" class="panel active">
+  <div class="mode-bar" id="mc-mode-bar">
+    <button class="mode-btn active" onclick="setMCMode('all',this)">All (82)</button>
+    <button class="mode-btn" onclick="setMCMode('exam',this)">&#x2605; Exam (35)</button>
+    <button class="mode-btn" onclick="setMCMode('lt',this)">Lit Terms</button>
+    <button class="mode-btn" onclick="setMCMode('night',this)">Night</button>
+    <button class="mode-btn" onclick="setMCMode('rj',this)">Romeo &amp; Juliet</button>
+  </div>
+  <div class="progress-row">
+    <div class="fr-dots" id="mc-dots"></div>
+    <div class="score-badge" id="mc-score">Score: 0 / 0</div>
+    <span class="reset-link" onclick="confirmResetMC()" title="Clear saved progress">&#x21BA; Reset</span>
+  </div>
+  <div id="mc-question-area">
+    <div class="question-card" style="border-top-color:#0f766e">
+      <div class="q-num" id="mc-num">Question 1</div>
+      <div class="q-text" id="mc-text"></div>
+      <div id="mc-options"></div>
+      <div class="mc-feedback" id="mc-feedback"></div>
+      <div class="mc-exp-box" id="mc-exp-box">
+        <div class="mc-exp-label">Why this is correct</div>
+        <div class="mc-exp-text" id="mc-exp-text"></div>
+      </div>
+    </div>
+    <div class="btn-row" id="mc-check-row">
+      <button class="btn btn-primary" onclick="checkMC()">Check Answer</button>
+      <button class="btn btn-outline" onclick="skipMC()">Skip</button>
+    </div>
+    <div class="btn-row" id="mc-next-row" style="display:none;margin-top:.75rem">
+      <button class="btn btn-outline" onclick="nextMC()">Next Question &#x2192;</button>
+    </div>
+  </div>
+  <div class="fr-complete" id="mc-complete" style="display:none">
+    <div class="big-score" id="mc-final-score">&#x2014;</div>
+    <div class="big-label" id="mc-final-label">correct</div>
+    <div class="result-note" id="mc-result-note"></div>
+    <div class="btn-row" style="justify-content:center;gap:10px">
+      <button class="btn btn-primary" onclick="restartMC()">Try Again</button>
+      <button class="btn btn-outline" id="mc-missed-btn" onclick="restartMCMissed()">Drill Missed Only</button>
+    </div>
+  </div>
+</div>
+
+<!-- FREE RESPONSE -->
+<div id="panel-fr" class="panel">
+  <div class="mode-bar" id="mode-bar">
+    <button class="mode-btn active" onclick="setFRMode('exam',this)">&#x1F4DD; Exam Priority</button>
+    <button class="mode-btn" onclick="setFRMode('all',this)">All (35)</button>
+    <button class="mode-btn" onclick="setFRMode('lt',this)">Lit Terms</button>
+    <button class="mode-btn" onclick="setFRMode('night',this)">Night</button>
+    <button class="mode-btn" onclick="setFRMode('rj',this)">R &amp; J</button>
+    <button class="mode-btn" onclick="setFRMode('gen',this)">Essay / Themes</button>
+  </div>
+  <div class="progress-row">
+    <div class="fr-dots" id="fr-dots"></div>
+    <div class="score-badge" id="score-display">Score: 0 / 0</div>
+    <span class="reset-link" onclick="confirmResetFR()" title="Clear saved progress">&#x21BA; Reset</span>
+  </div>
+  <div id="fr-question-area">
+    <div class="question-card">
+      <div class="q-num" id="q-num">Question 1</div>
+      <div class="q-text" id="q-text"></div>
+      <div class="mic-wrap" style="align-items:flex-start">
+        <textarea class="answer-input" id="answer-input" placeholder="Type or tap 🎤 to speak your answer…" rows="4" style="resize:vertical;min-height:90px;max-height:400px;line-height:1.6;padding:.65rem .85rem" oninput="autoResize(this)"></textarea>
+        <button class="mic-btn" id="fr-mic-btn" title="Voice input" onclick="toggleVoice('answer-input','fr-mic-btn')" style="margin-top:2px">🎤</button>
+      </div>
+    </div>
+    <div class="btn-row" id="btn-reveal-row">
+      <button class="btn btn-primary" onclick="revealAnswer()">Reveal Answer</button>
+      <button class="btn btn-outline" onclick="skipQuestion()">Skip</button>
+    </div>
+    <div class="reveal-area" id="reveal-area">
+      <div class="correct-answer">
+        <div class="label">Correct Answer</div>
+        <div class="ans" id="correct-ans"></div>
+      </div>
+      <div class="note-text" id="note-text"></div>
+      <div class="btn-row">
+        <button class="btn btn-correct" onclick="markFRAnswer(true)">&#x2713; Got it right</button>
+        <button class="btn btn-wrong" onclick="markFRAnswer(false)">&#x2717; Got it wrong</button>
+      </div>
+    </div>
+  </div>
+  <div class="fr-complete" id="fr-complete" style="display:none">
+    <div class="big-score" id="final-score">&#x2014;</div>
+    <div class="big-label" id="final-label">out of questions correct</div>
+    <div class="result-note" id="result-note"></div>
+    <div class="btn-row" style="justify-content:center;gap:10px">
+      <button class="btn btn-primary" onclick="restartFR()">Try Again</button>
+      <button class="btn btn-outline" id="drill-missed-btn" onclick="restartFRMissed()">Drill Missed Only</button>
+    </div>
+  </div>
+</div>
+
+<!-- ESSAY PRACTICE -->
+<div id="panel-essay" class="panel">
+  <div class="essay-intro"><strong>How to use:</strong> Pick a prompt, write your full paragraph or essay response, then submit for AI feedback. Questions marked <strong>&#x2605; ON EXAM</strong> match the confirmed final essay format.</div>
+  <div id="essay-select-area"><!-- filled by buildEssayCards() --></div>
+  <div class="essay-workspace" id="essay-workspace">
+    <div class="essay-prompt-box"><div class="prompt-label">Your Prompt</div><div id="essay-prompt-text"></div></div>
+    <div class="essay-hint" id="essay-hint"></div>
+    <div class="essay-mic-wrap">
+      <textarea class="essay-textarea" id="essay-textarea" placeholder="Write or tap 🎤 to speak your response…" style="min-height:220px;max-height:600px" oninput="autoResize(this)"></textarea>
+      <button class="mic-btn" id="essay-mic-btn" title="Voice input" onclick="toggleVoice('essay-textarea','essay-mic-btn')">🎤</button>
+    </div>
+    <div class="btn-row" style="margin-top:.7rem">
+      <button class="btn btn-primary" onclick="submitEssay()">Get AI Feedback</button>
+      <button class="btn btn-outline" onclick="backToEssaySelect()">&#x2190; Choose Different Prompt</button>
+    </div>
+    <div class="feedback-box" id="feedback-box">
+      <div class="fb-label">AI Feedback</div>
+      <div class="feedback-content" id="feedback-content"></div>
+    </div>
+    <div class="btn-row" id="try-again-row" style="display:none;margin-top:1rem">
+      <button class="btn btn-primary" onclick="tryAgain()">Try This One Again</button>
+      <button class="btn btn-outline" onclick="backToEssaySelect()">Practice Another Prompt</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK REVIEW -->
+<div id="panel-review" class="panel">
+  <div class="unit-section lt">
+    <div class="unit-title">Literary Terms — 23 to Know</div>
+    <div class="fact-grid">
+      <div class="fact-item hi" style="animation-delay:.05s"><span class="fi-q">Imagery</span><span class="fi-a">Language appealing to the senses (sight, sound, smell, taste, touch). Night example: smoke and flames from the crematoria.</span></div>
+      <div class="fact-item" style="animation-delay:.08s"><span class="fi-q">Theme</span><span class="fi-a">The central message or lesson of a text.</span></div>
+      <div class="fact-item" style="animation-delay:.11s"><span class="fi-q">Tone</span><span class="fi-a">The AUTHOR'S attitude toward the subject. Wiesel's tone: somber, reflective. Tone = writer's feeling.</span></div>
+      <div class="fact-item" style="animation-delay:.14s"><span class="fi-q">Mood</span><span class="fi-a">The feeling experienced by the READER. Night's mood: grief, dread, despair. Mood = reader's feeling.</span></div>
+      <div class="fact-item hi" style="animation-delay:.17s"><span class="fi-q">Simile</span><span class="fi-a">Comparison using "like" or "as." Example: "Her eyes shone like stars."</span></div>
+      <div class="fact-item hi" style="animation-delay:.20s"><span class="fi-q">Metaphor</span><span class="fi-a">Direct comparison WITHOUT "like" or "as." R&amp;J example: "Juliet is the sun."</span></div>
+      <div class="fact-item" style="animation-delay:.23s"><span class="fi-q">Personification</span><span class="fi-a">Giving human qualities to something nonhuman. Example: "The night whispered their secrets."</span></div>
+      <div class="fact-item hi" style="animation-delay:.26s"><span class="fi-q">Foreshadowing</span><span class="fi-a">Hints or clues about what will happen later. R&amp;J: "These violent delights have violent ends."</span></div>
+      <div class="fact-item" style="animation-delay:.29s"><span class="fi-q">Flashback</span><span class="fi-a">A scene that interrupts the present to show something from the past.</span></div>
+      <div class="fact-item hi" style="animation-delay:.32s"><span class="fi-q">Soliloquy</span><span class="fi-a">Character speaks thoughts aloud, often alone on stage. Reveals inner feelings. Used in R&amp;J.</span></div>
+      <div class="fact-item hi" style="animation-delay:.35s"><span class="fi-q">Dramatic Irony</span><span class="fi-a">AUDIENCE knows something CHARACTERS don't. R&amp;J: We know Juliet is alive; Romeo doesn't.</span></div>
+      <div class="fact-item" style="animation-delay:.38s"><span class="fi-q">Narrative</span><span class="fi-a">A story or account of events.</span></div>
+      <div class="fact-item hi" style="animation-delay:.41s"><span class="fi-q">Memoir</span><span class="fi-a">NONFICTION account based on personal experience and memory. Night is a memoir.</span></div>
+      <div class="fact-item" style="animation-delay:.44s"><span class="fi-q">Stereotype</span><span class="fi-a">An oversimplified belief about a group of people.</span></div>
+      <div class="fact-item" style="animation-delay:.47s"><span class="fi-q">Oxymoron</span><span class="fi-a">Two contradictory words together. Example: "sweet sorrow" (R&amp;J).</span></div>
+      <div class="fact-item hi" style="animation-delay:.50s"><span class="fi-q">Symbol vs. Motif</span><span class="fi-a">Symbol = one image representing a bigger idea. Motif = a REPEATED pattern across the whole text. "Night" is a motif; the corpse in the mirror is a symbol.</span></div>
+      <div class="fact-item" style="animation-delay:.53s"><span class="fi-q">Allegory</span><span class="fi-a">A story with both a literal meaning AND a deeper symbolic meaning.</span></div>
+      <div class="fact-item" style="animation-delay:.56s"><span class="fi-q">Internal vs. External Conflict</span><span class="fi-a">Internal = struggle inside a character's mind. External = struggle against a person, society, or nature.</span></div>
+      <div class="fact-item" style="animation-delay:.59s"><span class="fi-q">Protagonist vs. Antagonist</span><span class="fi-a">Protagonist = central character. Antagonist = opposing character or force.</span></div>
+      <div class="fact-item" style="animation-delay:.62s"><span class="fi-q">Denotation vs. Connotation</span><span class="fi-a">Denotation = literal dictionary meaning. Connotation = emotional/cultural association beyond the definition.</span></div>
+      <div class="fact-item" style="animation-delay:.65s"><span class="fi-q">Characterization</span><span class="fi-a">How an author reveals personality: actions, words, thoughts, appearance, others' reactions.</span></div>
+      <div class="fact-item" style="animation-delay:.68s"><span class="fi-q">Subtext</span><span class="fi-a">Hidden or underlying meaning beneath what a character says. Key in Act 4 of R&amp;J (Juliet and Paris scene).</span></div>
+      <div class="fact-item hi" style="animation-delay:.71s"><span class="fi-q">Iambic Pentameter</span><span class="fi-a">10 syllables per line, alternating unstressed/stressed: da-DUM × 5. Used in Romeo and Juliet.</span></div>
+      <div class="fact-item" style="animation-delay:.74s"><span class="fi-q">Parts of Plot</span><span class="fi-a">1. Exposition → 2. Rising Action → 3. Climax → 4. Falling Action → 5. Resolution</span></div>
+    </div>
+  </div>
+  <div class="unit-section night">
+    <div class="unit-title">Night — Key Facts &amp; Passages</div>
+    <div class="fact-grid">
+      <div class="fact-item hi" style="animation-delay:.05s"><span class="fi-q">Genre</span><span class="fi-a">Memoir — nonfiction account of Elie Wiesel's personal Holocaust experience</span></div>
+      <div class="fact-item hi" style="animation-delay:.09s"><span class="fi-q">Moishe the Beadle</span><span class="fi-a">Elie's spiritual mentor; deported early; returns to warn community; no one believes him → ignored warnings theme</span></div>
+      <div class="fact-item" style="animation-delay:.13s"><span class="fi-q">Mrs. Schächter</span><span class="fi-a">Screams about fire on the cattle car → ignored; her visions of the crematorium prove true → foreshadowing + ignored warnings</span></div>
+      <div class="fact-item hi" style="animation-delay:.17s"><span class="fi-q">"Night" symbolizes</span><span class="fi-a">Suffering, spiritual darkness, silence of God, loss of innocence, death, trauma</span></div>
+      <div class="fact-item hi" style="animation-delay:.21s"><span class="fi-q">"Never shall I forget"</span><span class="fi-a">After arriving at Birkenau — permanently shatters Elie's faith and identity; structured as an anti-prayer</span></div>
+      <div class="fact-item" style="animation-delay:.25s"><span class="fi-q">"Silent sky"</span><span class="fi-a">Suggests God is not responding to the prisoners' suffering → Elie's crisis of faith</span></div>
+      <div class="fact-item" style="animation-delay:.29s"><span class="fi-q">Ch. 5 — Yom Kippur</span><span class="fi-a">Elie refuses to fast: his father urges him to eat to preserve strength; Elie also sees it as silent protest against God</span></div>
+      <div class="fact-item" style="animation-delay:.33s"><span class="fi-q">Ch. 5 — Selection</span><span class="fi-a">Elie runs fast during SS doctor exam to appear healthy and avoid being selected for liquidation</span></div>
+      <div class="fact-item" style="animation-delay:.37s"><span class="fi-q">Ch. 5 — Hospital Irony</span><span class="fi-a">Elie and father leave hospital during evacuation to survive → hospital is liberated by Russians shortly after (situational irony)</span></div>
+      <div class="fact-item" style="animation-delay:.41s"><span class="fi-q">Father's inheritance</span><span class="fi-a">A spoon and a knife — all that remains to pass down</span></div>
+      <div class="fact-item hi" style="animation-delay:.45s"><span class="fi-q">Hitler irony quote</span><span class="fi-a">"I've got more faith in Hitler than in anyone else" — literary device = IRONY</span></div>
+      <div class="fact-item" style="animation-delay:.49s"><span class="fi-q">Juliek's violin</span><span class="fi-a">Plays Beethoven after the death march → symbolizes rebellion: creating beauty in a place of death</span></div>
+      <div class="fact-item" style="animation-delay:.53s"><span class="fi-q">Bread on train</span><span class="fi-a">Dehumanization: men trample each other; compared to beasts of prey; son kills father for bread</span></div>
+      <div class="fact-item" style="animation-delay:.57s"><span class="fi-q">Rabbi Eliahu's son</span><span class="fi-a">Abandons his father; Elie realizes he might do the same → moral horror and self-awareness</span></div>
+      <div class="fact-item" style="animation-delay:.61s"><span class="fi-q">Survivors to Buchenwald</span><span class="fi-a">12 out of approximately 100 prisoners survive the journey</span></div>
+      <div class="fact-item hi" style="animation-delay:.65s"><span class="fi-q">Elie's father's death</span><span class="fi-a">Taken from bunk at night. Elie does not weep. Dreams about soup afterward — total emotional depletion.</span></div>
+      <div class="fact-item hi" style="animation-delay:.69s"><span class="fi-q">Final mirror passage</span><span class="fi-a">Elie sees a "corpse" = spiritual death, loss of innocence, faith, and former identity. Uses "he/his" not "I/my" to show psychological separation.</span></div>
+      <div class="fact-item" style="animation-delay:.73s"><span class="fi-q">"Black flame" metaphor</span><span class="fi-a">Represents the hell of the Holocaust: destructive force, literal fire, soot from the crematoria</span></div>
+      <div class="fact-item" style="animation-delay:.77s"><span class="fi-q">Wiesel's purpose</span><span class="fi-a">Bear witness; ensure the Holocaust is never forgotten; warn against indifference to suffering</span></div>
+      <div class="fact-item" style="animation-delay:.81s"><span class="fi-q">"Cargo"</span><span class="fi-a">Refers to the prisoners — dehumanization: treating human beings as objects, not people</span></div>
+    </div>
+  </div>
+  <div class="unit-section rj">
+    <div class="unit-title">Romeo &amp; Juliet — Act by Act</div>
+    <div class="fact-grid">
+      <div class="fact-item hi" style="animation-delay:.05s"><span class="fi-q">Act 1 Overview</span><span class="fi-a">Family feud established. Romeo lovesick over Rosaline. Capulet party. Romeo and Juliet meet and fall in love. Both horrified to learn they are enemies.</span></div>
+      <div class="fact-item" style="animation-delay:.09s"><span class="fi-q">Romeo</span><span class="fi-a">Montague; emotional, impulsive; first loves Rosaline, then Juliet</span></div>
+      <div class="fact-item" style="animation-delay:.13s"><span class="fi-q">Juliet</span><span class="fi-a">Capulet; 13, almost 14 years old; cautious and thoughtful in the balcony scene; grows bolder as the play progresses</span></div>
+      <div class="fact-item" style="animation-delay:.17s"><span class="fi-q">Mercutio</span><span class="fi-a">Romeo's close friend; hotheaded, witty; neither Montague nor Capulet; killed by Tybalt in Act 3</span></div>
+      <div class="fact-item" style="animation-delay:.21s"><span class="fi-q">Tybalt</span><span class="fi-a">Juliet's cousin; Capulet; aggressive and violent; kills Mercutio; killed by Romeo</span></div>
+      <div class="fact-item" style="animation-delay:.25s"><span class="fi-q">Friar Lawrence</span><span class="fi-a">Marries Romeo and Juliet; gives Juliet the potion; sends the critical letter that never arrives</span></div>
+      <div class="fact-item hi" style="animation-delay:.29s"><span class="fi-q">Act 2 — Balcony Scene</span><span class="fi-a">Juliet is cautious: "If thy bent of love be honorable, thy purpose marriage…" They plan to marry in secret. Dramatic irony: audience knows their families are enemies.</span></div>
+      <div class="fact-item" style="animation-delay:.33s"><span class="fi-q">Why Friar agrees</span><span class="fi-a">He hopes the marriage will end the feud between the families — a peace motive, not just love</span></div>
+      <div class="fact-item" style="animation-delay:.37s"><span class="fi-q">"These violent delights…"</span><span class="fi-a">Friar Lawrence warns Romeo that intense passion leads to destruction — foreshadowing of the ending</span></div>
+      <div class="fact-item hi" style="animation-delay:.41s"><span class="fi-q">Act 3 — Climax</span><span class="fi-a">Romeo refuses to fight Tybalt (loves him as Juliet's cousin). Mercutio fights Tybalt and is killed. Romeo kills Tybalt. Romeo is BANISHED from Verona.</span></div>
+      <div class="fact-item" style="animation-delay:.45s"><span class="fi-q">Night/Day symbolism</span><span class="fi-a">Night = safety and love for Romeo and Juliet. Day = danger and violence from the feud.</span></div>
+      <div class="fact-item" style="animation-delay:.49s"><span class="fi-q">Act 4 — Friar's Plan</span><span class="fi-a">Juliet drinks potion → appears dead. Family places her in the tomb. Friar sends letter to Romeo. Romeo is to come rescue her.</span></div>
+      <div class="fact-item" style="animation-delay:.53s"><span class="fi-q">Act 4 — Subtext</span><span class="fi-a">Juliet speaks to Paris with hidden meaning — she plans to fake death, not accept the marriage. Her words have double meaning.</span></div>
+      <div class="fact-item hi" style="animation-delay:.57s"><span class="fi-q">Act 5 — The Chain of Failure</span><span class="fi-a">Friar John quarantined → letter never reaches Romeo. Balthasar tells Romeo "Juliet is dead." Romeo buys poison. Rushes to tomb. Kills Paris. Dies next to Juliet. She wakes, sees Romeo dead, takes his dagger. Both dead. Feud ends.</span></div>
+      <div class="fact-item" style="animation-delay:.61s"><span class="fi-q">Key Quotes</span><span class="fi-a">"What's in a name?" (identity); "These violent delights have violent ends" (foreshadowing); "A plague o' both your houses!" (Mercutio dying); "O happy dagger!" (irony)</span></div>
+      <div class="fact-item hi" style="animation-delay:.65s"><span class="fi-q">Dramatic Irony (Acts 4–5)</span><span class="fi-a">WE know Juliet is alive. Romeo does NOT. He kills himself believing she is dead. This gap = the tragedy.</span></div>
+      <div class="fact-item" style="animation-delay:.69s"><span class="fi-q">Fate vs. Free Will</span><span class="fi-a">Both at work: "star-crossed" fate + Romeo's impulsive choices + Friar's failed plan + chance quarantine = tragedy</span></div>
+      <div class="fact-item" style="animation-delay:.73s"><span class="fi-q">Shakespeare's language</span><span class="fi-a">Early Modern English. Iambic pentameter for noble characters. Prose for common characters.</span></div>
+    </div>
+  </div>
+  <div class="unit-section themes">
+    <div class="unit-title">Cross-Text Themes — Both Night &amp; R&amp;J</div>
+    <div class="fact-grid">
+      <div class="fact-item hi" style="animation-delay:.05s"><span class="fi-q">Family Separation</span><span class="fi-a">Night: Elie separated from mother, sister; loses father. R&amp;J: Romeo and Juliet separated by family hatred.</span></div>
+      <div class="fact-item hi" style="animation-delay:.10s"><span class="fi-q">Failed Communication</span><span class="fi-a">Night: Moishe and Mrs. Schächter's warnings ignored. R&amp;J: Friar's letter never reaches Romeo.</span></div>
+      <div class="fact-item hi" style="animation-delay:.15s"><span class="fi-q">Loss of Innocence</span><span class="fi-a">Night: Elie loses faith, identity, childhood. R&amp;J: Young love destroyed by adult conflict and hatred.</span></div>
+      <div class="fact-item" style="animation-delay:.20s"><span class="fi-q">Choices and Consequences</span><span class="fi-a">Night: survival choices forced by cruelty. R&amp;J: impulsive choices (Romeo killing Tybalt) lead directly to tragedy.</span></div>
+      <div class="fact-item" style="animation-delay:.25s"><span class="fi-q">Death and Identity</span><span class="fi-a">Night: Elie sees a corpse in the mirror — his identity is gone. R&amp;J: the lovers' identities destroyed by the feud.</span></div>
+      <div class="fact-item hi" style="animation-delay:.30s"><span class="fi-q">Essay Thesis Idea</span><span class="fi-a">Both texts show that hatred — whether systemic (the Holocaust) or social (a family feud) — creates conditions where tragedy destroys the innocent along with the guilty.</span></div>
+    </div>
+  </div>
+  <div class="unit-section ue">
+    <div class="unit-title">Essay Outlines &amp; Writing Tips</div>
+    <div class="essay-outline" style="animation-delay:.05s">
+      <h4>Main Essay — Night + R&amp;J (Hatred, Communication, Choices)</h4>
+      <div class="outline-step"><span class="sn">1.</span> INTRO: Name both texts + authors. Give context. Thesis: "Both Night and Romeo and Juliet show how hatred, silence, and impulsive choices lead to devastating consequences for innocent people."</div>
+      <div class="outline-step"><span class="sn">2.</span> NIGHT BODY: Ignored warnings (Moishe, Mrs. Schächter) → dehumanization (bread scene, cattle cars) → loss of faith ("Never shall I forget") → family separation → mirror passage (spiritual death)</div>
+      <div class="outline-step"><span class="sn">3.</span> R&amp;J BODY: Family feud as root cause → secrecy and its consequences → Romeo's impulsive choice to kill Tybalt → failed letter (Friar John quarantined) → both lovers die</div>
+      <div class="outline-step"><span class="sn">4.</span> CONCLUSION: Restate thesis. Larger lesson: indifference and hatred do not stay contained — they destroy the innocent. Connect both texts to human responsibility.</div>
+    </div>
+    <div class="essay-outline" style="animation-delay:.15s">
+      <h4>Strong Analytical Verbs — Use These, Not "Shows" or "Proves"</h4>
+      <div class="outline-step"><span class="sn">✓</span> reveals &nbsp; suggests &nbsp; emphasizes &nbsp; symbolizes &nbsp; foreshadows &nbsp; demonstrates &nbsp; reinforces &nbsp; contrasts &nbsp; illustrates &nbsp; underscores</div>
+      <div class="outline-step"><span class="sn">✗</span> DO NOT just retell the plot. After every sentence ask: "What does this SHOW about theme or character?"</div>
+    </div>
+    <div class="essay-outline" style="animation-delay:.25s">
+      <h4>Night Symbolism — 3 to Know Cold</h4>
+      <div class="outline-step"><span class="sn">1.</span> "Night"/darkness = suffering, silence of God, loss of innocence — appears at every major moment of horror</div>
+      <div class="outline-step"><span class="sn">2.</span> "Never shall I forget" = Elie's faith permanently broken; structured as an anti-prayer</div>
+      <div class="outline-step"><span class="sn">3.</span> Final mirror = corpse = spiritual death; "he/his" not "I/my" = psychological separation from former self</div>
+    </div>
+    <div class="essay-outline" style="animation-delay:.35s">
+      <h4>R&amp;J Fate vs. Free Will — Evidence for Both</h4>
+      <div class="outline-step"><span class="sn">Fate:</span> "star-crossed lovers" (Prologue); Friar John quarantined by accident; timing always slightly off</div>
+      <div class="outline-step"><span class="sn">Free:</span> Romeo kills Tybalt (Act 3); buys poison without confirming news (Act 5); Juliet takes dagger; Friar's risky plan</div>
+      <div class="outline-step"><span class="sn">Both:</span> Unjust system (feud) + impulsive choices + bad luck = inevitable tragedy. Shakespeare's warning.</div>
+    </div>
+    <div class="essay-outline" style="animation-delay:.45s">
+      <h4>MLA Essay Checklist</h4>
+      <div class="outline-step"><span class="sn">✓</span> Introduction with a clear thesis statement</div>
+      <div class="outline-step"><span class="sn">✓</span> Text evidence — specific quotes or details from the texts</div>
+      <div class="outline-step"><span class="sn">✓</span> Explanation of each quote — WHY does it matter for the theme?</div>
+      <div class="outline-step"><span class="sn">✓</span> Parenthetical citations if required</div>
+      <div class="outline-step"><span class="sn">✓</span> Analysis, not summary — what does the evidence SHOW?</div>
+      <div class="outline-step"><span class="sn">✓</span> Conclusion that restates thesis and explains the larger lesson</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// DATA & STORAGE
+// ═══════════════════════════════════════════════════════════════════════════
+const allMC = QUESTIONS_DATA.mc;
+const allFR = QUESTIONS_DATA.fr;
+const essayData = QUESTIONS_DATA.essays;
+const STORE_KEY = 'eng9_progress_v2';
+
+function getSaved() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch { return {}; }
+}
+function saveResult(type, qText, status) {
+  const d = getSaved();
+  if (!d[type]) d[type] = {};
+  d[type][qText] = status;
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(d)); } catch {}
+}
+function clearSaved(type) {
+  const d = getSaved();
+  delete d[type];
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(d)); } catch {}
+}
+
+// ── Timer ────────────────────────────────────────────────────────────────────
+let sec = 0;
+setInterval(() => {
+  sec++;
+  const m = Math.floor(sec / 60), s = sec % 60;
+  document.getElementById('timer-display').textContent = m + ':' + (s < 10 ? '0' : '') + s;
+}, 1000);
+
+// ── Tab switch ───────────────────────────────────────────────────────────────
+function showTab(name, btn) {
+  ['mc','fr','essay','review'].forEach(t => document.getElementById('panel-' + t).classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── Shuffle ──────────────────────────────────────────────────────────────────
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// MULTIPLE CHOICE — status-based tracking (no Set inflation)
+// ═══════════════════════════════════════════════════════════════════════════
+let mcPool = [], mcIdx = 0, mcScore = 0;
+let mcStatus = {}; // poolIndex → 'correct' | 'wrong' | 'skipped'
+let mcSelected = -1;
+let mcCurrentOptions = [];
+let mcMissedIndices = []; // pool indices where status !== 'correct'
+
+function buildMCPool(mode) {
+  if (mode === 'all') return shuffle([...allMC]);
+  if (mode === 'exam') return shuffle(allMC.filter(q => q.exam));
+  return shuffle(allMC.filter(q => q.unit === mode));
+}
+
+function applyMCSaved() {
+  const saved = (getSaved().mc || {});
+  mcStatus = {}; mcScore = 0; mcMissedIndices = [];
+  mcPool.forEach((q, i) => {
+    const s = saved[q.q];
+    if (s) { mcStatus[i] = s; if (s === 'correct') mcScore++; else mcMissedIndices.push(i); }
+  });
+}
+
+// Update status without double-counting
+function setMCStatus(poolIdx, newStatus) {
+  const prev = mcStatus[poolIdx];
+  if (prev === newStatus) return; // no change
+  if (prev === 'correct') mcScore--;
+  if (newStatus === 'correct') mcScore++;
+  mcStatus[poolIdx] = newStatus;
+  // Update missed list
+  mcMissedIndices = mcMissedIndices.filter(i => i !== poolIdx);
+  if (newStatus !== 'correct') mcMissedIndices.push(poolIdx);
+}
+
+function setMCMode(mode, btn) {
+  document.querySelectorAll('#mc-mode-bar .mode-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  mcPool = buildMCPool(mode);
+  mcIdx = 0; mcSelected = -1;
+  applyMCSaved();
+  document.getElementById('mc-question-area').style.display = 'block';
+  document.getElementById('mc-complete').style.display = 'none';
+  updateMCScore();
+  loadMC(0);
+}
+
+function updateMCScore() {
+  document.getElementById('mc-score').textContent = 'Score: ' + mcScore + ' / ' + mcPool.length;
+}
+
+function buildMCDots() {
+  const c = document.getElementById('mc-dots'); c.innerHTML = '';
+  if (mcPool.length <= 32) {
+    mcPool.forEach((_, i) => {
+      const d = document.createElement('div');
+      const s = mcStatus[i];
+      d.className = 'fr-dot' + (i === mcIdx ? ' current' : s === 'correct' ? ' done-right' : s === 'wrong' ? ' done-wrong' : s === 'skipped' ? ' done-skip' : '');
+      d.id = 'mcdot-' + i; d.title = 'Q' + (i + 1);
+      d.onclick = (function(idx) { return function() { jumpMC(idx); }; })(i);
+      c.appendChild(d);
+    });
+  } else {
+    const lbl = document.createElement('span');
+    lbl.style.cssText = 'font-size:.78rem;color:#667';
+    lbl.textContent = (mcIdx + 1) + ' / ' + mcPool.length;
+    const prev = document.createElement('button');
+    prev.className = 'btn btn-outline'; prev.style.cssText = 'padding:2px 10px;font-size:.75rem';
+    prev.textContent = '← Prev'; prev.onclick = () => { if (mcIdx > 0) jumpMC(mcIdx - 1); };
+    const next = document.createElement('button');
+    next.className = 'btn btn-outline'; next.style.cssText = 'padding:2px 10px;font-size:.75rem';
+    next.textContent = 'Next →'; next.onclick = () => { if (mcIdx < mcPool.length - 1) jumpMC(mcIdx + 1); };
+    c.appendChild(prev); c.appendChild(lbl); c.appendChild(next);
+  }
+}
+
+function loadMC(i) {
+  const q = mcPool[i];
+  document.getElementById('mc-num').textContent = 'Question ' + (i + 1) + ' of ' + mcPool.length + (q.exam ? ' ★' : '');
+  document.getElementById('mc-text').textContent = q.q;
+  const opts = shuffle([q.correct, ...q.wrong]);
+  mcCurrentOptions = opts;
+  const letters = ['A','B','C','D'];
+  const container = document.getElementById('mc-options'); container.innerHTML = '';
+  opts.forEach((opt, j) => {
+    const div = document.createElement('div');
+    div.className = 'mc-option'; div.id = 'mcopt-' + j;
+    div.innerHTML = '<span class="opt-letter">' + letters[j] + '</span><span class="opt-text">' + opt + '</span>';
+    div.onclick = () => selectMCOption(j);
+    container.appendChild(div);
+  });
+  document.getElementById('mc-feedback').style.display = 'none';
+  document.getElementById('mc-exp-box').style.display = 'none';
+  document.getElementById('mc-check-row').style.display = 'flex';
+  document.getElementById('mc-next-row').style.display = 'none';
+  mcSelected = -1;
+  buildMCDots();
+}
+
+function selectMCOption(j) {
+  mcSelected = j;
+  document.querySelectorAll('.mc-option').forEach((el, k) => el.classList.toggle('selected', k === j));
+}
+
+function checkMC() {
+  if (mcSelected === -1) { alert('Pick an answer first!'); return; }
+  const q = mcPool[mcIdx];
+  const isCorrect = mcCurrentOptions[mcSelected] === q.correct;
+  document.querySelectorAll('.mc-option').forEach((el, k) => {
+    const isRight = mcCurrentOptions[k] === q.correct;
+    if (isRight) el.classList.add(k === mcSelected ? 'correct' : 'revealed');
+    else if (k === mcSelected) el.classList.add('incorrect');
+  });
+  const fb = document.getElementById('mc-feedback');
+  fb.className = 'mc-feedback ' + (isCorrect ? 'right' : 'wrong');
+  fb.textContent = isCorrect ? 'Correct!' : 'Incorrect — the correct answer is highlighted in green.';
+  fb.style.display = 'block';
+  // Show explanation if available
+  if (q.exp) {
+    document.getElementById('mc-exp-text').textContent = q.exp;
+    document.getElementById('mc-exp-box').style.display = 'block';
+  }
+  const newStatus = isCorrect ? 'correct' : 'wrong';
+  setMCStatus(mcIdx, newStatus);
+  saveResult('mc', q.q, newStatus);
+  updateMCScore();
+  buildMCDots();
+  document.getElementById('mc-check-row').style.display = 'none';
+  document.getElementById('mc-next-row').style.display = 'flex';
+  mcSelected = -1;
+}
+
+function skipMC() {
+  const q = mcPool[mcIdx];
+  setMCStatus(mcIdx, 'skipped');
+  saveResult('mc', q.q, 'skipped');
+  buildMCDots(); updateMCScore();
+  mcIdx++;
+  if (mcIdx < mcPool.length) loadMC(mcIdx); else showMCDone();
+}
+
+function nextMC() {
+  mcIdx++;
+  if (mcIdx < mcPool.length) loadMC(mcIdx); else showMCDone();
+}
+
+function jumpMC(i) {
+  mcIdx = i; mcSelected = -1;
+  document.getElementById('mc-question-area').style.display = 'block';
+  document.getElementById('mc-complete').style.display = 'none';
+  loadMC(i);
+}
+
+function showMCDone() {
+  document.getElementById('mc-question-area').style.display = 'none';
+  document.getElementById('mc-complete').style.display = 'block';
+  document.getElementById('mc-final-score').textContent = mcScore + '/' + mcPool.length;
+  document.getElementById('mc-final-label').textContent = 'out of ' + mcPool.length + ' correct';
+  const pct = Math.round(mcScore / mcPool.length * 100);
+  document.getElementById('mc-result-note').textContent = pct === 100 ? 'Perfect score!' : pct >= 80 ? 'Great work! Review the ' + mcMissedIndices.length + ' you missed.' : 'Keep drilling — use "Missed Only" to focus on the gaps.';
+  document.getElementById('mc-missed-btn').style.display = mcMissedIndices.length > 0 ? 'inline-block' : 'none';
+}
+
+function restartMC() {
+  mcPool = shuffle(mcPool); mcIdx = 0; mcSelected = -1;
+  applyMCSaved();
+  document.getElementById('mc-question-area').style.display = 'block';
+  document.getElementById('mc-complete').style.display = 'none';
+  updateMCScore(); loadMC(0);
+}
+
+function restartMCMissed() {
+  if (!mcMissedIndices.length) { restartMC(); return; }
+  const missed = mcMissedIndices.map(i => mcPool[i]);
+  mcPool = shuffle(missed); mcIdx = 0; mcSelected = -1;
+  applyMCSaved();
+  document.getElementById('mc-question-area').style.display = 'block';
+  document.getElementById('mc-complete').style.display = 'none';
+  updateMCScore(); loadMC(0);
+}
+
+function confirmResetMC() {
+  if (!confirm('Clear all saved MC progress and scores?')) return;
+  clearSaved('mc');
+  mcPool = shuffle(mcPool); mcIdx = 0;
+  mcStatus = {}; mcScore = 0; mcMissedIndices = [];
+  document.getElementById('mc-question-area').style.display = 'block';
+  document.getElementById('mc-complete').style.display = 'none';
+  updateMCScore(); loadMC(0);
+}
+
+// ── Init MC ──────────────────────────────────────────────────────────────────
+mcPool = buildMCPool('all');
+applyMCSaved();
+updateMCScore();
+loadMC(0);
+
+// ═══════════════════════════════════════════════════════════════════════════
+// FREE RESPONSE — status-based tracking
+// ═══════════════════════════════════════════════════════════════════════════
+const frPools = {
+  exam: allFR.filter(q => q.exam),
+  all: allFR,
+  lt: allFR.filter(q => q.u === 'lt'),
+  night: allFR.filter(q => q.u === 'night'),
+  rj: allFR.filter(q => q.u === 'rj'),
+  gen: allFR.filter(q => q.u === 'gen')
+};
+let frActiveQ = [...frPools.exam];
+let frIdx = 0, frScore = 0;
+let frStatus = {}; // poolIndex → 'correct' | 'wrong' | 'skipped'
+let frMissedIndices = [];
+
+function applyFRSaved() {
+  const saved = (getSaved().fr || {});
+  frStatus = {}; frScore = 0; frMissedIndices = [];
+  frActiveQ.forEach((q, i) => {
+    const s = saved[q.q];
+    if (s) { frStatus[i] = s; if (s === 'correct') frScore++; else frMissedIndices.push(i); }
+  });
+}
+
+function setFRStatus(poolIdx, newStatus) {
+  const prev = frStatus[poolIdx];
+  if (prev === newStatus) return;
+  if (prev === 'correct') frScore--;
+  if (newStatus === 'correct') frScore++;
+  frStatus[poolIdx] = newStatus;
+  frMissedIndices = frMissedIndices.filter(i => i !== poolIdx);
+  if (newStatus !== 'correct') frMissedIndices.push(poolIdx);
+}
+
+function updateFRScore() {
+  document.getElementById('score-display').textContent = 'Score: ' + frScore + ' / ' + frActiveQ.length;
+}
+
+function buildFRDots() {
+  const c = document.getElementById('fr-dots'); c.innerHTML = '';
+  frActiveQ.forEach((_, i) => {
+    const d = document.createElement('div');
+    const s = frStatus[i];
+    d.className = 'fr-dot' + (i === frIdx ? ' current' : s === 'correct' ? ' done-right' : s === 'wrong' ? ' done-wrong' : s === 'skipped' ? ' done-skip' : '');
+    d.id = 'frdot-' + i; d.title = 'Q' + (i + 1);
+    d.onclick = (function(idx) { return function() { jumpFR(idx); }; })(i);
+    c.appendChild(d);
+  });
+}
+
+function loadFR(i) {
+  const q = frActiveQ[i];
+  const numEl = document.getElementById('q-num');
+  numEl.innerHTML = 'Question ' + (i + 1) + ' of ' + frActiveQ.length + (q.exam ? ' <span class="exam-badge">EXAM PRIORITY</span>' : '');
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('answer-input').value = '';
+  document.getElementById('correct-ans').textContent = q.a;
+  document.getElementById('note-text').textContent = q.note || '';
+  document.getElementById('reveal-area').style.display = 'none';
+  document.getElementById('btn-reveal-row').style.display = 'flex';
+  document.getElementById('answer-input').focus();
+  buildFRDots();
+}
+
+function revealAnswer() {
+  document.getElementById('reveal-area').style.display = 'block';
+  document.getElementById('btn-reveal-row').style.display = 'none';
+}
+
+function markFRAnswer(ok) {
+  const q = frActiveQ[frIdx];
+  const newStatus = ok ? 'correct' : 'wrong';
+  setFRStatus(frIdx, newStatus);
+  saveResult('fr', q.q, newStatus);
+  const dot = document.getElementById('frdot-' + frIdx);
+  if (dot) dot.className = 'fr-dot ' + (ok ? 'done-right' : 'done-wrong');
+  updateFRScore();
+  frIdx++;
+  if (frIdx < frActiveQ.length) loadFR(frIdx); else showFRDone();
+}
+
+function skipQuestion() {
+  const q = frActiveQ[frIdx];
+  setFRStatus(frIdx, 'skipped');
+  saveResult('fr', q.q, 'skipped');
+  const dot = document.getElementById('frdot-' + frIdx);
+  if (dot) dot.className = 'fr-dot done-skip';
+  frIdx++;
+  if (frIdx < frActiveQ.length) loadFR(frIdx); else showFRDone();
+}
+
+function jumpFR(i) {
+  frIdx = i;
+  document.getElementById('fr-question-area').style.display = 'block';
+  document.getElementById('fr-complete').style.display = 'none';
+  loadFR(i);
+}
+
+function showFRDone() {
+  document.getElementById('fr-question-area').style.display = 'none';
+  document.getElementById('fr-complete').style.display = 'block';
+  document.getElementById('final-score').textContent = frScore + '/' + frActiveQ.length;
+  document.getElementById('final-label').textContent = 'out of ' + frActiveQ.length + ' correct';
+  const pct = Math.round(frScore / frActiveQ.length * 100);
+  document.getElementById('result-note').textContent = pct === 100 ? 'Perfect! Every answer locked in.' : pct >= 80 ? 'Strong run! Drill the ' + frMissedIndices.length + ' you missed.' : 'Good progress. Use Drill Missed Only to focus on the gaps.';
+  document.getElementById('drill-missed-btn').style.display = frMissedIndices.length > 0 ? 'inline-block' : 'none';
+}
+
+function setFRMode(mode, btn) {
+  document.querySelectorAll('#mode-bar .mode-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  frActiveQ = [...frPools[mode]];
+  frIdx = 0;
+  applyFRSaved();
+  document.getElementById('fr-question-area').style.display = 'block';
+  document.getElementById('fr-complete').style.display = 'none';
+  updateFRScore(); loadFR(0);
+}
+
+function restartFR() {
+  frIdx = 0;
+  document.getElementById('fr-question-area').style.display = 'block';
+  document.getElementById('fr-complete').style.display = 'none';
+  loadFR(0);
+}
+
+function restartFRMissed() {
+  if (!frMissedIndices.length) { restartFR(); return; }
+  frActiveQ = frMissedIndices.map(i => frActiveQ[i]);
+  frIdx = 0; applyFRSaved();
+  document.getElementById('fr-question-area').style.display = 'block';
+  document.getElementById('fr-complete').style.display = 'none';
+  updateFRScore(); loadFR(0);
+}
+
+function confirmResetFR() {
+  if (!confirm('Clear all saved FR progress and scores?')) return;
+  clearSaved('fr');
+  frStatus = {}; frScore = 0; frMissedIndices = []; frIdx = 0;
+  document.getElementById('fr-question-area').style.display = 'block';
+  document.getElementById('fr-complete').style.display = 'none';
+  updateFRScore(); loadFR(0);
+}
+
+document.getElementById('answer-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) revealAnswer();
+});
+
+// ── Init FR ──────────────────────────────────────────────────────────────────
+applyFRSaved();
+updateFRScore();
+loadFR(0);
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ESSAY — generated from QUESTIONS_DATA.essays (single source of truth)
+// ═══════════════════════════════════════════════════════════════════════════
+let selEssay = null;
+
+function buildEssayCards() {
+  const area = document.getElementById('essay-select-area');
+  area.innerHTML = '';
+  let starredDone = false, practiceDone = false;
+  essayData.forEach((essay, i) => {
+    if (essay.starred && !starredDone) {
+      const lbl = document.createElement('div');
+      lbl.className = 'essay-group-label';
+      lbl.textContent = '★ Confirmed on Final Exam';
+      area.appendChild(lbl);
+      starredDone = true;
+    }
+    if (!essay.starred && !practiceDone) {
+      const lbl = document.createElement('div');
+      lbl.className = 'essay-group-label';
+      lbl.textContent = 'Additional Practice';
+      area.appendChild(lbl);
+      practiceDone = true;
+    }
+    const div = document.createElement('div');
+    div.className = 'essay-option';
+    div.innerHTML = '<div class="pts">' + (essay.tag || '') + '</div><div class="q-text">' + essay.prompt + '</div>';
+    div.onclick = () => selectEssay(i);
+    area.appendChild(div);
+  });
+}
+
+function selectEssay(i) {
+  selEssay = i;
+  document.getElementById('essay-select-area').style.display = 'none';
+  document.getElementById('essay-workspace').style.display = 'block';
+  document.getElementById('essay-prompt-text').textContent = essayData[i].prompt;
+  document.getElementById('essay-hint').textContent = 'Tip: ' + essayData[i].hint;
+  document.getElementById('essay-textarea').value = '';
+  document.getElementById('feedback-box').style.display = 'none';
+  document.getElementById('try-again-row').style.display = 'none';
+}
+function backToEssaySelect() {
+  document.getElementById('essay-select-area').style.display = 'block';
+  document.getElementById('essay-workspace').style.display = 'none';
+}
+function tryAgain() {
+  document.getElementById('essay-textarea').value = '';
+  document.getElementById('feedback-box').style.display = 'none';
+  document.getElementById('try-again-row').style.display = 'none';
+  document.getElementById('essay-textarea').focus();
+}
+
+async function submitEssay() {
+  const text = document.getElementById('essay-textarea').value.trim();
+  if (!text || text.length < 15) { alert('Write your response first!'); return; }
+  const fb = document.getElementById('feedback-box'), fc = document.getElementById('feedback-content');
+  fb.style.display = 'block';
+  fc.innerHTML = '<div class="loading-pulse"><div class="pulse-dot"></div><div class="pulse-dot"></div><div class="pulse-dot"></div></div>';
+  document.getElementById('try-again-row').style.display = 'none';
+  const d = essayData[selEssay];
+  const sysMsg = 'You are an encouraging English teacher giving feedback to a 9th-grade student studying for their final exam on Night by Elie Wiesel and Romeo and Juliet by Shakespeare.\n\nAnswer key for this prompt:\n' + d.key + '\n\nFormat EXACTLY like this (plain text only):\nSCORE: X/10\n\nWhat you did well:\n- [specific strength referencing a text, character, or literary term]\n- [another specific strength]\n\nWhat to add or strengthen:\n- [specific missing element — quote, literary term, character name, or theme]\n- [another improvement if needed]\n\nOne tip: [one short, encouraging, actionable sentence]\n\nUnder 180 words. Be specific about characters, quotes, literary devices, and themes.';
+  try {
+    const LAMBDA_URL = 'https://2dmanrmzl4bja2p7hl45d5dvqa0kzkop.lambda-url.us-east-2.on.aws/';
+    const r = await fetch(LAMBDA_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ max_tokens: 1000, system: sysMsg, messages: [{ role: 'user', content: 'Prompt: ' + d.prompt + '\n\nStudent response:\n' + text }] }) });
+    const res = await r.json();
+    fc.textContent = res.content && res.content[0] ? res.content[0].text : 'Could not get feedback. Try again.';
+    document.getElementById('try-again-row').style.display = 'flex';
+  } catch (e) { fc.textContent = 'Network error — please try again.'; }
+}
+
+// ── Init essay cards ─────────────────────────────────────────────────────────
+buildEssayCards();
+
+// ═══════════════════════════════════════════════════════════════════════════
+// VOICE INPUT
+// ═══════════════════════════════════════════════════════════════════════════
+let voiceRecognition = null, voiceListening = false, voiceTargetId = null, voiceBtnId = null, voiceFinalText = '';
+
+function toggleVoice(inputId, btnId) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { alert('Voice input requires Chrome or Edge.'); return; }
+  if (voiceListening) {
+    voiceRecognition.stop(); voiceListening = false;
+    const oldBtn = document.getElementById(voiceBtnId);
+    if (oldBtn) { oldBtn.textContent = '🎤'; oldBtn.classList.remove('listening'); }
+    if (voiceTargetId === inputId) return;
+  }
+  voiceTargetId = inputId; voiceBtnId = btnId;
+  voiceFinalText = document.getElementById(inputId).value;
+  if (!voiceRecognition) {
+    voiceRecognition = new SR();
+    voiceRecognition.continuous = true; voiceRecognition.interimResults = true; voiceRecognition.lang = 'en-US';
+  }
+  voiceRecognition.onresult = e => {
+    let interim = '', finalAdd = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) finalAdd += e.results[i][0].transcript;
+      else interim += e.results[i][0].transcript;
+    }
+    if (finalAdd) voiceFinalText += finalAdd;
+    const el = document.getElementById(voiceTargetId);
+    if (el) { el.value = voiceFinalText + interim; autoResize(el); }
+  };
+  voiceRecognition.onerror = e => {
+    voiceListening = false;
+    const btn = document.getElementById(voiceBtnId);
+    if (btn) { btn.textContent = '🎤'; btn.classList.remove('listening'); }
+    if (e.error !== 'no-speech') console.warn('Speech error:', e.error);
+  };
+  voiceRecognition.onend = () => { if (voiceListening) voiceRecognition.start(); };
+  voiceRecognition.start(); voiceListening = true;
+  const btn = document.getElementById(btnId);
+  if (btn) { btn.textContent = '🔴'; btn.classList.add('listening'); }
+}
+
+function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight + 2, 500) + 'px'; }
+</script>
+</body>
+</html>
