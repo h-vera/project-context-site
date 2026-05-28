@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Bible Final — Flashcards</title>
+<script src="questions.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Helvetica Neue',Arial,sans-serif;background:#f8f9fc;color:#1a1a2a;min-height:100vh;display:flex;flex-direction:column}
+
+.header{background:linear-gradient(135deg,#7209b7,#e11d48);color:#fff;padding:1rem 1.25rem;text-align:center}
+.header h1{font-size:1.1rem;font-weight:700}
+.header p{font-size:.75rem;color:rgba(255,255,255,.8);margin-top:3px}
+
+/* Mode tabs */
+.mode-tabs{display:flex;background:#fff;border-bottom:2px solid #e5e7ef}
+.mode-tab{flex:1;padding:.9rem;border:none;background:none;font-size:.85rem;font-weight:600;color:#888;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;font-family:inherit;text-transform:uppercase;letter-spacing:.04em}
+.mode-tab.active{color:#7209b7;border-bottom-color:#7209b7}
+
+/* Unit filter */
+.unit-bar{display:flex;gap:8px;padding:.75rem 1rem;overflow-x:auto;background:#fff;border-bottom:1px solid #e5e7ef;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.unit-bar::-webkit-scrollbar{display:none}
+.unit-btn{flex-shrink:0;padding:.4rem 1rem;border-radius:20px;border:1.5px solid #e5e7ef;background:#fff;font-size:.78rem;font-weight:600;color:#667;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.unit-btn.active{background:linear-gradient(135deg,#7209b7,#e11d48);border-color:transparent;color:#fff}
+
+/* Progress */
+.progress-bar{padding:.6rem 1.25rem;display:flex;align-items:center;justify-content:space-between;background:#fff;border-bottom:1px solid #f0f0f5}
+.progress-text{font-size:.8rem;color:#888;font-weight:500}
+.progress-track{flex:1;margin:0 12px;height:4px;background:#e5e7ef;border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#7209b7,#e11d48);border-radius:2px;transition:width .3s}
+.shuffle-btn{font-size:.75rem;color:#7209b7;font-weight:600;background:none;border:none;cursor:pointer;padding:4px 8px;font-family:inherit}
+
+/* Card area */
+.card-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.25rem;min-height:0}
+.card-wrap{width:100%;max-width:500px;perspective:1200px;cursor:pointer}
+.card-inner{position:relative;width:100%;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.4,0,.2,1)}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-face{width:100%;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:16px;padding:2rem 1.5rem;min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 4px 24px rgba(114,9,183,.12)}
+.card-front{background:#fff;border:2px solid #e5e7ef;border-top:5px solid #7209b7}
+.card-back{background:linear-gradient(135deg,#faf5ff,#fff5f8);border:2px solid #d8b4fe;position:absolute;top:0;left:0;transform:rotateY(180deg)}
+.card-label{font-size:.67rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:1rem}
+.card-front .card-label{color:#7209b7}
+.card-back .card-label{color:#e11d48}
+.card-question{font-size:1.05rem;line-height:1.65;color:#1a1a2a;font-weight:500}
+.card-answer{font-size:1rem;line-height:1.65;color:#3b0764;font-weight:600}
+.card-note{font-size:.78rem;color:#888;font-style:italic;margin-top:.85rem;line-height:1.5}
+.tap-hint{font-size:.73rem;color:#bbb;margin-top:1.5rem;display:flex;align-items:center;gap:5px}
+.tap-hint span{font-size:.9rem}
+
+/* Nav */
+.nav-row{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem 1.5rem;max-width:500px;width:100%;margin:0 auto}
+.nav-btn{width:56px;height:56px;border-radius:50%;border:2px solid #e5e7ef;background:#fff;font-size:1.4rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;color:#7209b7;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.nav-btn:active{transform:scale(.93);background:#f3e8ff}
+.nav-btn:disabled{color:#ccc;cursor:default;box-shadow:none}
+.center-info{text-align:center}
+.known-btn{padding:.55rem 1.5rem;border-radius:24px;border:none;background:linear-gradient(135deg,#7209b7,#e11d48);color:#fff;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 2px 12px rgba(114,9,183,.3);transition:all .15s}
+.known-btn:active{transform:scale(.96);opacity:.88}
+.score-display{font-size:.72rem;color:#888;margin-top:5px}
+
+/* Done screen */
+.done-screen{display:none;flex:1;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center}
+.done-score{font-size:4rem;font-weight:800;background:linear-gradient(135deg,#7209b7,#e11d48);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.done-label{font-size:.9rem;color:#666;margin:.5rem 0 1.5rem}
+.done-note{font-size:.88rem;color:#444;line-height:1.6;max-width:320px;margin-bottom:2rem}
+.restart-btn{padding:.7rem 2rem;border-radius:24px;border:none;background:linear-gradient(135deg,#7209b7,#e11d48);color:#fff;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:.75rem;width:100%;max-width:280px}
+.missed-btn{padding:.7rem 2rem;border-radius:24px;border:1.5px solid #d1d5db;background:#fff;color:#374151;font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit;width:100%;max-width:280px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Bible Final &#x2014; Flashcards</h1>
+  <p>Tap card to reveal answer</p>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab active" onclick="setMode('fr',this)">Free Response</button>
+  <button class="mode-tab" onclick="setMode('mc',this)">Multiple Choice</button>
+</div>
+
+<div class="unit-bar" id="unit-bar">
+  <button class="unit-btn active" onclick="setUnit('all',this)">All</button>
+  <button class="unit-btn" onclick="setUnit('u5',this)">Unit 5</button>
+  <button class="unit-btn" onclick="setUnit('u6',this)">Unit 6</button>
+  <button class="unit-btn" onclick="setUnit('u7',this)">Unit 7</button>
+  <button class="unit-btn" onclick="setUnit('u8',this)">Unit 8</button>
+</div>
+
+<div class="progress-bar">
+  <span class="progress-text" id="prog-text">1 of 0</span>
+  <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+  <button class="shuffle-btn" onclick="shuffleDeck()">&#x1F500; Shuffle</button>
+</div>
+
+<div class="card-area" id="card-area">
+  <div class="card-wrap" onclick="flipCard()">
+    <div class="card-inner" id="card-inner">
+      <div class="card-face card-front">
+        <div class="card-label">Question</div>
+        <div class="card-question" id="card-q">Loading...</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="card-label">Answer</div>
+        <div class="card-answer" id="card-a"></div>
+        <div class="card-note" id="card-note"></div>
+      </div>
+    </div>
+  </div>
+  <div class="tap-hint" id="tap-hint"><span>&#x1F447;</span> Tap card to flip</div>
+</div>
+
+<div class="nav-row">
+  <button class="nav-btn" id="prev-btn" onclick="prevCard()">&#x2190;</button>
+  <div class="center-info">
+    <button class="known-btn" onclick="markKnown()">&#x2713; Got it</button>
+    <div class="score-display" id="score-disp">Known: 0</div>
+  </div>
+  <button class="nav-btn" id="next-btn" onclick="nextCard()">&#x2192;</button>
+</div>
+
+<div class="done-screen" id="done-screen">
+  <div class="done-score" id="done-score">0/0</div>
+  <div class="done-label">cards known</div>
+  <div class="done-note" id="done-note"></div>
+  <button class="restart-btn" onclick="restart()">Try Again &#x2013; All Cards</button>
+  <button class="missed-btn" id="missed-btn" onclick="drillMissed()">Drill Missed Only</button>
+</div>
+
+<script>
+let mode = 'fr';
+let unit = 'all';
+let deck = [];
+let idx = 0;
+let known = 0;
+let missed = [];
+let flipped = false;
+
+function buildDeck() {
+  const fr = QUESTIONS_DATA.fr;
+  const mc = QUESTIONS_DATA.mc;
+  let raw = [];
+  if (mode === 'fr') {
+    raw = unit === 'all' ? fr : fr.filter(q => q.u === unit);
+    deck = raw.map(q => ({ q: q.q, a: q.a, note: q.note || '' }));
+  } else {
+    raw = unit === 'all' ? mc : mc.filter(q => q.unit === unit);
+    deck = raw.map(q => ({ q: q.q, a: q.correct, note: '' }));
+  }
+  idx = 0; known = 0; missed = []; flipped = false;
+  updateCard();
+  updateProgress();
+  document.getElementById('score-disp').textContent = 'Known: 0';
+  document.getElementById('card-area').style.display = 'flex';
+  document.getElementById('done-screen').style.display = 'none';
+  document.getElementById('done-screen').style.flexDirection = 'column';
+}
+
+function updateCard() {
+  if (!deck.length) return;
+  const card = deck[idx];
+  document.getElementById('card-q').textContent = card.q;
+  document.getElementById('card-a').textContent = card.a;
+  document.getElementById('card-note').textContent = card.note;
+  document.getElementById('card-note').style.display = card.note ? 'block' : 'none';
+  document.getElementById('card-inner').classList.remove('flipped');
+  flipped = false;
+  document.getElementById('tap-hint').style.display = 'flex';
+  document.getElementById('prev-btn').disabled = idx === 0;
+  document.getElementById('next-btn').disabled = idx === deck.length - 1;
+}
+
+function updateProgress() {
+  const pct = deck.length ? Math.round((idx / deck.length) * 100) : 0;
+  document.getElementById('prog-text').textContent = (idx + 1) + ' of ' + deck.length;
+  document.getElementById('prog-fill').style.width = pct + '%';
+}
+
+function flipCard() {
+  flipped = !flipped;
+  document.getElementById('card-inner').classList.toggle('flipped', flipped);
+  if (flipped) document.getElementById('tap-hint').style.display = 'none';
+}
+
+function nextCard() {
+  if (idx < deck.length - 1) { idx++; updateCard(); updateProgress(); }
+  else showDone();
+}
+
+function prevCard() {
+  if (idx > 0) { idx--; updateCard(); updateProgress(); }
+}
+
+function markKnown() {
+  known++;
+  document.getElementById('score-disp').textContent = 'Known: ' + known;
+  if (idx < deck.length - 1) { idx++; updateCard(); updateProgress(); }
+  else showDone();
+}
+
+function showDone() {
+  document.getElementById('card-area').style.display = 'none';
+  document.getElementById('done-screen').style.display = 'flex';
+  document.getElementById('done-score').textContent = known + '/' + deck.length;
+  const pct = Math.round(known / deck.length * 100);
+  document.getElementById('done-note').textContent =
+    pct === 100 ? 'Perfect! Every card locked in.' :
+    pct >= 80 ? 'Great run! Drill the ones you missed.' :
+    'Keep going — use Drill Missed Only to focus.';
+  document.getElementById('missed-btn').style.display =
+    missed.length > 0 ? 'block' : 'none';
+}
+
+function restart() {
+  buildDeck();
+}
+
+function drillMissed() {
+  if (!missed.length) { restart(); return; }
+  deck = missed.slice();
+  missed = []; idx = 0; known = 0; flipped = false;
+  updateCard(); updateProgress();
+  document.getElementById('score-disp').textContent = 'Known: 0';
+  document.getElementById('card-area').style.display = 'flex';
+  document.getElementById('done-screen').style.display = 'none';
+}
+
+function shuffleDeck() {
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  idx = 0; known = 0; missed = []; flipped = false;
+  updateCard(); updateProgress();
+  document.getElementById('score-disp').textContent = 'Known: 0';
+}
+
+function setMode(m, btn) {
+  mode = m;
+  document.querySelectorAll('.mode-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  // Show/hide NT unit button for MC
+  const ntBtn = document.getElementById('nt-btn');
+  if (ntBtn) ntBtn.style.display = m === 'mc' ? 'block' : 'none';
+  buildDeck();
+}
+
+function setUnit(u, btn) {
+  unit = u;
+  document.querySelectorAll('.unit-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildDeck();
+}
+
+// Add NT button for MC mode
+const bar = document.getElementById('unit-bar');
+const ntBtn = document.createElement('button');
+ntBtn.className = 'unit-btn';
+ntBtn.id = 'nt-btn';
+ntBtn.style.display = 'none';
+ntBtn.textContent = 'NT';
+ntBtn.onclick = function() { setUnit('nt', this); };
+bar.appendChild(ntBtn);
+
+// Init
+buildDeck();
+
+// Keyboard support
+document.addEventListener('keydown', e => {
+  if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flipCard(); }
+  if (e.key === 'ArrowRight') nextCard();
+  if (e.key === 'ArrowLeft') prevCard();
+  if (e.key === 'g' || e.key === 'G') markKnown();
+});
+
+// Swipe support
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, {passive:true});
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 60) {
+    if (dx < 0) nextCard();
+    else prevCard();
+  }
+}, {passive:true});
+</script>
+</body>
+</html>
