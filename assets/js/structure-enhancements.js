@@ -518,4 +518,5 @@ document.addEventListener('DOMContentLoaded', function() {
         enhanceLongChapters: enhanceLongChapters,
         enhanceHebrewText: enhanceHebrewText
     };
+
 });
