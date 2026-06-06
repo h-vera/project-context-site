@@ -65,9 +65,19 @@
       position: relative; overflow: hidden; isolation: isolate;
       margin: 0.5rem 0 2rem; padding: clamp(2.25rem, 5vw, 4rem) clamp(1.5rem, 4vw, 3.25rem);
       border-radius: var(--radius-lg, 22px);
-      background: radial-gradient(125% 145% at 12% 8%, #312e81 0%, #1e1b4b 34%, #0b1020 66%, #020409 100%);
       color: #fff;
+      /* dark cosmic base + a drifting aurora band (screen-blended so it only
+         adds light); the aurora's slow pan is the visible gradient animation */
+      background:
+        linear-gradient(115deg,
+          rgba(99,102,241,0) 0%, rgba(99,102,241,.50) 22%, rgba(20,184,166,.30) 42%,
+          rgba(124,58,237,.48) 60%, rgba(56,189,248,.34) 80%, rgba(99,102,241,0) 100%),
+        radial-gradient(125% 145% at 12% 8%, #312e81 0%, #1e1b4b 34%, #0b1020 66%, #020409 100%);
+      background-size: 280% 280%, 100% 100%;
+      background-position: 0% 50%, 0% 0%;
+      background-blend-mode: screen, normal;
       box-shadow: 0 24px 60px -28px rgba(2,6,23,.85), inset 0 0 0 1px rgba(129,140,248,.16);
+      animation: cr-aurora 18s ease-in-out infinite alternate;
     }
     /* drifting starfield */
     .cr-hero::before {
@@ -92,6 +102,7 @@
     }
     @keyframes cr-drift { from { transform: translate3d(0,0,0); } to { transform: translate3d(0,-90px,0); } }
     @keyframes cr-glow  { from { opacity: .5; transform: translateX(0); } to { opacity: .9; transform: translateX(18px); } }
+    @keyframes cr-aurora { from { background-position: 0% 50%, 0% 0%; } to { background-position: 100% 50%, 0% 0%; } }
     .cr-hero-inner { position: relative; z-index: 1; }
     .cr-kicker {
       font-family: var(--font-mono); font-size: var(--fs-xs, .78rem);
@@ -122,7 +133,7 @@
       padding: .32rem .82rem; backdrop-filter: blur(2px);
     }
     @media (prefers-reduced-motion: reduce) {
-      .cr-hero::before, .cr-hero::after { animation: none; }
+      .cr-hero, .cr-hero::before, .cr-hero::after { animation: none; }
     }
 
     /* ---- FIGURE / SVG ---- */
@@ -220,7 +231,7 @@
       background: none; font: inherit; text-align: left; cursor: pointer; display: block;
     }
     .flip-inner {
-      position: relative; width: 100%; height: 100%; border-radius: 16px;
+      display: block; position: relative; width: 100%; height: 100%; border-radius: 16px;
       transition: transform .7s cubic-bezier(.2,.7,.2,1); transform-style: preserve-3d;
     }
     .flip:hover .flip-inner,
@@ -314,6 +325,133 @@
       .ov-head { display: none; }
       .ov-row { grid-template-columns: 1fr; gap: .22rem; }
       .ov-type { order: 3; }
+    }
+
+    /* ============================================================
+       VISUAL POLISH PASS (page-local; safe to promote to polish)
+       ============================================================ */
+
+    /* Flip cards — strip Safari's native button chrome. Without this
+       the <button> keeps -webkit-appearance:push-button and collapses
+       the card into a small rounded chip (the "IN" pills you saw). */
+    .flip { -webkit-appearance: none; appearance: none; }
+
+    /* All figure SVGs — accent outline + lift on hover (outline avoids
+       layout shift). Text is made non-interactive so panel/box hovers
+       register across the whole shape. */
+    .cr-figure { transition: transform .3s var(--ease, ease); }
+    .cr-figure svg {
+      border-radius: 18px; outline: 2px solid transparent; outline-offset: 3px;
+      transition: outline-color .3s var(--ease, ease), box-shadow .3s var(--ease, ease);
+    }
+    .cr-figure text { pointer-events: none; }
+    @media (hover: hover) {
+      .cr-figure:hover { transform: translateY(-2px); }
+      .cr-figure:hover svg {
+        outline-color: color-mix(in srgb, var(--page-accent, #4f46e5) 55%, transparent);
+        box-shadow: 0 14px 34px -16px rgba(15, 23, 42, .42);
+      }
+    }
+
+    /* Creation by combat / word — per-panel frame thickens on hover */
+    .cr-panel .cr-frame {
+      stroke: transparent; stroke-width: 0;
+      transition: stroke .25s var(--ease, ease), stroke-width .25s var(--ease, ease);
+    }
+    .cr-panel { transition: filter .25s var(--ease, ease); }
+    @media (hover: hover) {
+      .cr-panel:hover .cr-frame { stroke: var(--cr-f, #6366f1); stroke-width: 4; }
+      .cr-panel:hover { filter: drop-shadow(0 10px 20px rgba(15, 23, 42, .28)); }
+    }
+
+    /* Eden's waters — a bright forward current (left → right: Genesis to
+       Revelation) plus a fainter, slower return echo (right → left: the
+       end answering the beginning). */
+    .wax-pulse, .wax-echo { fill: none; stroke-linecap: round; stroke-dasharray: 20 1200; }
+    .wax-pulse {
+      stroke: #ffffff; stroke-width: 7; opacity: .75;
+      animation: pc-water-flow 4.4s linear infinite;
+    }
+    .wax-echo {
+      stroke: #e0e7ff; stroke-width: 4; opacity: .42;
+      animation: pc-water-echo 7s linear infinite;
+    }
+    @keyframes pc-water-flow { to { stroke-dashoffset: -1180; } }
+    @keyframes pc-water-echo { to { stroke-dashoffset:  1180; } }
+
+    /* Daniel inversion — boxes respond to hover; descent arrows breathe */
+    .dan-box { transition: stroke-width .25s var(--ease, ease), stroke .25s var(--ease, ease); }
+    @media (hover: hover) { .dan-box:hover { stroke-width: 4; } }
+    .dan-arrows { animation: pc-dan-pulse 2.6s ease-in-out infinite; }
+    @keyframes pc-dan-pulse { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
+
+    /* Study Questions — per-question color coding (echoes the retell-card
+       palette), robust summary layout, accent rail, animated open + markers */
+    .qa-pill summary { display: block; position: relative; padding-right: 2.75rem; }
+    .qa-pill summary::after {
+      position: absolute; right: 1.15rem; top: .95rem;
+      background: none; -webkit-text-fill-color: var(--q, var(--page-accent, #4f46e5));
+      color: var(--q, var(--page-accent, #4f46e5));
+    }
+    .qa-pill summary strong { color: var(--q, var(--page-accent, #4f46e5)); }
+    .qa-pill {
+      border-left: 3px solid color-mix(in srgb, var(--q, var(--page-accent, #4f46e5)) 38%, var(--border, #e2e8f0));
+      transition: border-color .25s var(--ease, ease), transform .2s var(--ease, ease), box-shadow .25s var(--ease, ease);
+    }
+    .qa-pill[open] { border-left-color: var(--q, var(--page-accent, #4f46e5)); }
+    @media (hover: hover) {
+      .qa-pill:hover {
+        border-left-color: var(--q, var(--page-accent, #4f46e5));
+        transform: translateX(3px);
+        box-shadow: -3px 6px 16px -8px color-mix(in srgb, var(--q, var(--page-accent, #4f46e5)) 45%, transparent);
+      }
+    }
+    .qa-pill[open] .qa-body { animation: pc-qa-open .34s var(--ease, ease-out); }
+    @keyframes pc-qa-open { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Dual-lens visual — replaces the warning-styled critical-distinction
+       for "Two perspectives, not two accounts" */
+    .dual-lens {
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch;
+      gap: 1rem; margin: 1.75rem 0;
+    }
+    .lens {
+      position: relative; overflow: hidden;
+      background: var(--bg, #fff); border: 1px solid var(--border, #e2e8f0);
+      border-radius: var(--radius, 14px); padding: 1.4rem 1.5rem;
+      box-shadow: var(--shadow-sm, 0 1px 2px rgba(15,23,42,.05));
+      transition: transform .25s var(--ease, ease), box-shadow .25s var(--ease, ease), border-color .25s var(--ease, ease);
+    }
+    .lens::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--lens-accent, #4f46e5); transform: scaleX(.5); transform-origin: left;
+      transition: transform .4s var(--ease, ease);
+    }
+    @media (hover: hover) {
+      .lens:hover { transform: translateY(-3px); box-shadow: 0 12px 26px -14px rgba(15,23,42,.3);
+        border-color: color-mix(in srgb, var(--lens-accent, #4f46e5) 40%, var(--border, #e2e8f0)); }
+      .lens:hover::before { transform: scaleX(1); }
+    }
+    .lens-eyebrow {
+      font-family: var(--font-mono); font-size: .66rem; letter-spacing: .12em;
+      text-transform: uppercase; font-weight: 700; color: var(--lens-accent, #4f46e5); margin-bottom: .35rem;
+    }
+    .lens-title { font-family: var(--font-display); font-size: var(--fs-lg, 1.25rem); font-weight: 700; margin: 0 0 .4rem; color: var(--text, #0f172a); }
+    .lens p { margin: 0; font-size: var(--fs-sm, .9rem); line-height: 1.55; color: var(--text-soft, #334155); max-width: none; }
+    .lens-join {
+      align-self: center; display: flex; flex-direction: column; align-items: center; gap: .25rem;
+      font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--text-muted, #64748b); text-align: center; white-space: nowrap;
+    }
+    .lens-join .lens-eq { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--page-accent, #4f46e5); line-height: 1; }
+    @media (max-width: 680px) {
+      .dual-lens { grid-template-columns: 1fr; }
+      .lens-join { flex-direction: row; gap: .5rem; padding: .15rem 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .wax-pulse, .wax-echo, .dan-arrows, .qa-pill[open] .qa-body { animation: none; }
+      .cr-figure, .cr-figure svg, .cr-panel, .lens, .qa-pill { transition: none; }
     }
   </style>
 </head>
@@ -422,10 +560,20 @@
         but about <em>identity</em>: Genesis 1 an account of cosmic identity, Genesis 2 an account
         of human identity. The ancient question was never "how did matter come to be?" but "who is
         God, who are we, and what is this world <em>for</em>?" That identity question is exactly the
-        one every later retelling keeps re-asking. It also means the modern creation-versus-evolution
-        debate is largely anachronistic here: Genesis bypasses a question its authors were never
-        asking, and reading it as ancient readers would — as good tourists, leaving our own
-        cosmology at the door — lets its real claims come back into focus.
+        one every later retelling keeps re-asking.
+      </p>
+
+      <div class="key-insight">
+        <strong>Read it like its first audience:</strong> set the modern origins debate aside and
+        ask the questions Genesis is actually answering — who God is, who we are, and what the world
+        is <em>for</em>. Leave your own cosmology at the door, the way a good guest does, and the
+        text's real claims come back into focus.
+      </div>
+
+      <p>
+        Read that way, the modern creation-versus-evolution debate turns out to be largely
+        anachronistic here: Genesis bypasses a question its authors were never asking, and answers
+        instead the one they were.
       </p>
       <p>
         And the question has a direction. If Genesis 1 builds the world as a kind of cosmic
@@ -440,15 +588,24 @@
       </p>
     </section>
 
-    <div class="critical-distinction">
-      <h4>Two perspectives, not two accounts</h4>
-      <p>
-        Genesis 1 and Genesis 2 are not a contradiction or a chronological sequence — a first
-        creation followed by a second. They tell the same reality from two angles: Genesis 1
-        orders the whole <em>cosmos</em> across seven days, while Genesis 2 zooms in on the
-        <em>human</em> in a single day in a garden. Cosmic identity, then human identity.
-      </p>
+    <div class="dual-lens" role="group" aria-label="Two perspectives, not two accounts">
+      <div class="lens" style="--lens-accent:#4338ca;">
+        <span class="lens-eyebrow">Genesis 1 · the wide shot</span>
+        <h4 class="lens-title">Cosmic identity</h4>
+        <p>Orders the whole <em>cosmos</em> across seven days — light, waters, lands, lights, creatures, humankind, rest.</p>
+      </div>
+      <div class="lens-join" aria-hidden="true">
+        <span>same reality</span>
+        <span class="lens-eq">=</span>
+        <span>two angles</span>
+      </div>
+      <div class="lens" style="--lens-accent:#0369a1;">
+        <span class="lens-eyebrow">Genesis 2 · the close-up</span>
+        <h4 class="lens-title">Human identity</h4>
+        <p>Zooms in on the <em>human</em> in a single day in a garden — formed, breathed into, placed, given vocation.</p>
+      </div>
     </div>
+    <p class="cr-cap" style="text-align:center; margin:-.5rem auto 0;">Not a contradiction, and not a sequence of two creations — one beginning told from two angles: cosmic identity, then human identity.</p>
 
     <blockquote class="core-logic-quote">
       The biblical authors rarely ask how the world was made; they ask what it means
@@ -563,7 +720,8 @@
 
       <figure class="cr-figure">
         <svg viewBox="0 0 840 360" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" role="img" aria-label="Two ways to make a world: creation by combat versus creation by word">
-          <rect x="20" y="20" width="380" height="320" rx="18" fill="#1e293b"/>
+          <g class="cr-panel" style="--cr-f:#f87171;">
+          <rect class="cr-frame" x="20" y="20" width="380" height="320" rx="18" fill="#1e293b"/>
           <text x="210" y="58" text-anchor="middle" font-size="18" font-weight="700" fill="#fca5a5">Creation by combat</text>
           <path d="M90 250 C 70 210, 130 200, 150 180 C 175 156, 130 132, 165 118 C 195 106, 230 120, 250 150" fill="none" stroke="#f87171" stroke-width="9" stroke-linecap="round"/>
           <path d="M250 150 l 26 -10 l -8 22 z" fill="#f87171"/>
@@ -573,12 +731,14 @@
           <path d="M50 286 q 20 -16 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0" fill="none" stroke="#64748b" stroke-width="4"/>
           <path d="M50 306 q 20 -16 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0" fill="none" stroke="#475569" stroke-width="4"/>
           <text x="210" y="332" text-anchor="middle" font-size="12.5" fill="#cbd5e1">A god splits the sea-monster; its body becomes the world.</text>
+          </g>
 
           <line x1="420" y1="44" x2="420" y2="316" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="7 8"/>
           <circle cx="420" cy="180" r="24" fill="#fff" stroke="#94a3b8" stroke-width="2"/>
           <text x="420" y="186" text-anchor="middle" font-size="15" font-weight="700" fill="#475569" font-style="italic">vs</text>
 
-          <rect x="440" y="20" width="380" height="320" rx="18" fill="#eef2ff"/>
+          <g class="cr-panel" style="--cr-f:#6366f1;">
+          <rect class="cr-frame" x="440" y="20" width="380" height="320" rx="18" fill="#eef2ff"/>
           <text x="630" y="58" text-anchor="middle" font-size="18" font-weight="700" fill="#4f46e5">Creation by word</text>
           <circle cx="630" cy="150" r="20" fill="#fbbf24"/>
           <g stroke="#818cf8" stroke-width="3" stroke-linecap="round">
@@ -595,6 +755,7 @@
           <line x1="470" y1="286" x2="790" y2="286" stroke="#93c5fd" stroke-width="4" stroke-linecap="round"/>
           <line x1="470" y1="304" x2="790" y2="304" stroke="#bfdbfe" stroke-width="4" stroke-linecap="round"/>
           <text x="630" y="332" text-anchor="middle" font-size="12.5" fill="#475569">God simply speaks; the deep and its creatures obey.</text>
+          </g>
         </svg>
         <figcaption class="cr-cap">Israel's neighbors told creation as a war won against the sea. Genesis keeps the old imagery but changes the engine: God needs no battle — he speaks, and the deep obeys.</figcaption>
       </figure>
@@ -640,6 +801,8 @@
           <rect x="0" y="90" width="920" height="250" rx="24" fill="#f8fafc"/>
           <path d="M70 216 C160 132 245 294 335 208 S520 116 612 212 S782 310 850 204" fill="none" stroke="url(#waterFlow)" stroke-width="18" stroke-linecap="round" opacity=".85"/>
           <path d="M70 244 C160 160 245 322 335 236 S520 144 612 240 S782 338 850 232" fill="none" stroke="#bfdbfe" stroke-width="8" stroke-linecap="round" opacity=".75"/>
+          <path class="wax-pulse" d="M70 216 C160 132 245 294 335 208 S520 116 612 212 S782 310 850 204"/>
+          <path class="wax-echo" d="M70 216 C160 132 245 294 335 208 S520 116 612 212 S782 310 850 204"/>
           <g filter="url(#softShadow)">
             <g transform="translate(38,118)"><rect width="140" height="122" rx="16" fill="#fff" stroke="#cbd5e1"/><circle cx="70" cy="44" r="26" fill="#1e1b4b" opacity=".92"/><path d="M43 56 q27 -28 54 0" fill="none" stroke="#93c5fd" stroke-width="5" stroke-linecap="round"/><text x="70" y="88" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700" fill="#1e1b4b">GEN 1</text><text x="70" y="106" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" fill="#334155">chaos waters ordered</text></g>
             <g transform="translate(205,118)"><rect width="140" height="122" rx="16" fill="#fff" stroke="#cbd5e1"/><circle cx="70" cy="44" r="26" fill="#00b4d8" opacity=".92"/><path d="M57 34 q13 -16 26 0 q-7 12 -26 0" fill="#dff9ff"/><text x="70" y="88" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700" fill="#0369a1">GEN 2</text><text x="70" y="106" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" fill="#334155">spring waters garden</text></g>
@@ -1035,16 +1198,16 @@
           <line x1="410" y1="74" x2="410" y2="392" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="7 8"/>
 
           <g>
-            <rect x="45" y="78"  width="320" height="52" rx="12" fill="#eef2ff" stroke="#c7d2fe" stroke-width="2"/>
+            <rect class="dan-box" x="45" y="78"  width="320" height="52" rx="12" fill="#eef2ff" stroke="#c7d2fe" stroke-width="2"/>
             <text x="205" y="110" text-anchor="middle" font-size="14.5" font-weight="600" fill="#312e81">God speaks order into the dark</text>
-            <rect x="45" y="162" width="320" height="52" rx="12" fill="#eef2ff" stroke="#c7d2fe" stroke-width="2"/>
+            <rect class="dan-box" x="45" y="162" width="320" height="52" rx="12" fill="#eef2ff" stroke="#c7d2fe" stroke-width="2"/>
             <text x="205" y="194" text-anchor="middle" font-size="14.5" font-weight="600" fill="#312e81">Sky, land and seas are filled</text>
-            <rect x="45" y="246" width="320" height="52" rx="12" fill="#eef2ff" stroke="#c7d2fe" stroke-width="2"/>
+            <rect class="dan-box" x="45" y="246" width="320" height="52" rx="12" fill="#eef2ff" stroke="#c7d2fe" stroke-width="2"/>
             <text x="205" y="278" text-anchor="middle" font-size="14.5" font-weight="600" fill="#312e81">Creatures swarm after their kinds</text>
-            <rect x="45" y="330" width="320" height="56" rx="12" fill="#e0e7ff" stroke="#a5b4fc" stroke-width="2.5"/>
+            <rect class="dan-box" x="45" y="330" width="320" height="56" rx="12" fill="#e0e7ff" stroke="#a5b4fc" stroke-width="2.5"/>
             <text x="205" y="356" text-anchor="middle" font-size="14.5" font-weight="700" fill="#3730a3">Humanity rules as God's image</text>
             <text x="205" y="374" text-anchor="middle" font-size="11.5" fill="#4f46e5">given dominion over the creatures</text>
-            <g fill="#818cf8">
+            <g class="dan-arrows" fill="#818cf8">
               <polygon points="205,146 213,132 197,132"/>
               <polygon points="205,230 213,216 197,216"/>
               <polygon points="205,314 213,300 197,300"/>
@@ -1052,16 +1215,16 @@
           </g>
 
           <g>
-            <rect x="455" y="330" width="320" height="56" rx="12" fill="#fef2f2" stroke="#fecaca" stroke-width="2"/>
+            <rect class="dan-box" x="455" y="330" width="320" height="56" rx="12" fill="#fef2f2" stroke="#fecaca" stroke-width="2"/>
             <text x="615" y="356" text-anchor="middle" font-size="14.5" font-weight="600" fill="#7f1d1d">The great sea churns in chaos</text>
             <text x="615" y="374" text-anchor="middle" font-size="11.5" fill="#b91c1c">the deep that creation had tamed</text>
-            <rect x="455" y="246" width="320" height="52" rx="12" fill="#fef2f2" stroke="#fecaca" stroke-width="2"/>
+            <rect class="dan-box" x="455" y="246" width="320" height="52" rx="12" fill="#fef2f2" stroke="#fecaca" stroke-width="2"/>
             <text x="615" y="278" text-anchor="middle" font-size="14.5" font-weight="600" fill="#7f1d1d">Four beasts rise from the sea</text>
-            <rect x="455" y="162" width="320" height="52" rx="12" fill="#fef2f2" stroke="#fecaca" stroke-width="2"/>
+            <rect class="dan-box" x="455" y="162" width="320" height="52" rx="12" fill="#fef2f2" stroke="#fecaca" stroke-width="2"/>
             <text x="615" y="194" text-anchor="middle" font-size="14.5" font-weight="600" fill="#7f1d1d">The beasts seize the rule</text>
-            <rect x="455" y="78"  width="320" height="52" rx="12" fill="#fee2e2" stroke="#fca5a5" stroke-width="2.5"/>
+            <rect class="dan-box" x="455" y="78"  width="320" height="52" rx="12" fill="#fee2e2" stroke="#fca5a5" stroke-width="2.5"/>
             <text x="615" y="110" text-anchor="middle" font-size="14.5" font-weight="700" fill="#991b1b">The holy ones are trampled</text>
-            <g fill="#ef4444">
+            <g class="dan-arrows" fill="#ef4444">
               <polygon points="615,300 623,314 607,314"/>
               <polygon points="615,216 623,230 607,230"/>
               <polygon points="615,132 623,146 607,146"/>
@@ -1399,7 +1562,7 @@
 
       <h4>The Genesis ⇄ Revelation Bookends</h4>
       <p class="cr-note" style="margin: .25rem 0 0;">Tap or hover a card to turn from <strong>Genesis 1–3</strong> to its fulfillment in <strong>Revelation 21–22</strong>.</p>
-      <div class="flip-grid">
+      <div class="flip-grid" data-reveal-children>
 
         <button type="button" class="flip" aria-pressed="false">
           <span class="flip-inner">
@@ -1536,32 +1699,32 @@
     <!-- ========== 9 · STUDY QUESTIONS ========== -->
     <section class="theology-card" id="questions">
       <h3>Study Questions</h3>
-      <div class="qa-pills">
-        <details class="qa-pill">
+      <div class="qa-pills" data-reveal-children>
+        <details class="qa-pill" style="--q:#4f46e5;">
           <summary><strong>Backdrop:</strong> How does knowing the ancient Near Eastern creation stories change the way you read Genesis 1–2 — and what is Genesis quietly arguing <em>against</em>?</summary>
           <div class="qa-body">Compare creation-by-combat with creation-by-word, the sea-as-rival-god with the sea-as-creature, and humans-as-slaves with humans-as-image. Genesis shares the furniture but changes the God.</div>
         </details>
-        <details class="qa-pill">
+        <details class="qa-pill" style="--q:#00b4d8;">
           <summary><strong>Observation:</strong> Pick two retellings — say Psalm 8 and Daniel 7. What part of Genesis 1–2 does each reach for, and why <em>that</em> part?</summary>
           <div class="qa-body">Psalm 8 worships under an open sky; Daniel 7 resists empire. The Genesis material each selects is chosen to answer its own moment.</div>
         </details>
-        <details class="qa-pill">
+        <details class="qa-pill" style="--q:#7209b7;">
           <summary><strong>Genre:</strong> How does the genre of a retelling — hymn, lament, wisdom dialogue, apocalypse, Gospel prologue — shape which facet of creation it can show?</summary>
           <div class="qa-body">A hymn can voice wonder a legal text cannot; an apocalypse can stage cosmic reversal a proverb cannot. Form and content travel together.</div>
         </details>
-        <details class="qa-pill">
+        <details class="qa-pill" style="--q:#38bdf8;">
           <summary><strong>Exile:</strong> Why does "new creation" language emerge so strongly in Isaiah 40–66 rather than earlier?</summary>
           <div class="qa-body">Consider when a people most need to hear that God can make all things new. Creation theology often surfaces precisely where the present feels like collapse.</div>
         </details>
-        <details class="qa-pill">
+        <details class="qa-pill" style="--q:#475569;">
           <summary><strong>Inversion:</strong> Daniel 7 reverses creation order. Where else does "de-creation" signal judgment, and how does that deepen the meaning of restoration?</summary>
           <div class="qa-body">Look at the flood, the plagues, and prophetic "un-creation" oracles. If sin un-makes the world, salvation must re-make it — which is exactly Revelation's claim.</div>
         </details>
-        <details class="qa-pill">
+        <details class="qa-pill" style="--q:#ec4899;">
           <summary><strong>Christology:</strong> The New Testament applies creation and Wisdom language to Jesus. Is this a new idea, or the natural endpoint of the Old Testament's own retelling habit?</summary>
           <div class="qa-body">Weigh the Second Temple bridge. The apostles may be less inventing a category than naming where the existing stream was already flowing.</div>
         </details>
-        <details class="qa-pill">
+        <details class="qa-pill" style="--q:#14b8a6;">
           <summary><strong>Application:</strong> If Genesis 1–2 is a template for answering each generation's questions, what question is <em>your</em> generation bringing to it?</summary>
           <div class="qa-body">Name the pressure your moment feels — ecological, technological, political, personal — and ask what facet of creation Genesis might bring to light for it.</div>
         </details>
