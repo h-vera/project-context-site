@@ -69,33 +69,64 @@
     }
 
     /* Required-sections list: name + plain-language gloss */
-    .req-list {
-      list-style: none;
-      margin: 1.25rem 0 0;
-      padding: 0;
-      display: grid;
-      gap: 0.6rem;
+    /* ---- Animated standards rows (modeled on the creation-reframed
+       .wax-row / .ov-row components: accent rail, top-bar scale-in,
+       hover slide, staggered fade-in entrance) ---- */
+    .std-list { display: grid; gap: 0.6rem; margin: 1.25rem 0 0; }
+    .std-head {
+      display: grid; grid-template-columns: 232px 1fr; gap: 1.4rem;
+      padding: 0.1rem 1.25rem 0.15rem;
     }
-    .req-list li {
-      display: grid;
-      grid-template-columns: minmax(9rem, 12rem) 1fr;
-      gap: 0.5rem 1.25rem;
-      align-items: baseline;
-      padding: 0.65rem 0.9rem;
-      border-left: 3px solid color-mix(in srgb, var(--page-accent, #4f46e5) 55%, transparent);
-      background: color-mix(in srgb, var(--page-accent, #4f46e5) 5%, transparent);
-      border-radius: 0 8px 8px 0;
+    .std-head span {
+      font-family: var(--font-mono, monospace); font-size: 0.66rem;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted, #64748b);
     }
-    .req-list li strong {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.18rem;
-      font-weight: 700;
+    .std-row {
+      --rail: var(--page-accent, #4f46e5);
+      position: relative; display: grid; grid-template-columns: 232px 1fr;
+      gap: 0.25rem 1.4rem; align-items: baseline;
+      background: var(--bg, #fff); border: 1px solid var(--border, #e2e8f0);
+      border-left: 4px solid var(--rail); border-radius: var(--radius, 14px);
+      padding: 0.9rem 1.25rem; box-shadow: var(--shadow-sm, 0 1px 2px rgba(15,23,42,.05));
+      overflow: hidden;
+      transition: transform .25s var(--ease, ease), box-shadow .25s var(--ease, ease), border-color .25s var(--ease, ease);
+    }
+    .std-row::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--rail), color-mix(in srgb, var(--rail) 30%, transparent));
+      transform: scaleX(.3); transform-origin: left; transition: transform .4s var(--ease, ease);
+    }
+    .std-label {
+      font-family: var(--font-display, 'Cormorant Garamond', Georgia, serif); font-weight: 700;
+      font-size: var(--fs-md, 1.1rem); line-height: 1.2;
       color: var(--page-accent-deep, var(--page-accent, #3730a3));
-      line-height: 1.25;
     }
-    .req-list li span { color: var(--text-soft); line-height: 1.55; }
+    .std-body { margin: 0; font-size: var(--fs-sm, .92rem); line-height: 1.55; color: var(--text-soft, #334155); max-width: none; }
+
+    /* Opacity-only staggered entrance — overrides the global reveal's
+       translate animation so the element's transform stays free for the
+       hover slide below. (Scoped tighter than global §56 to win.) */
+    .std-list[data-reveal-children] > .std-row { transform: none; opacity: 0; }
+    .std-list[data-reveal-children][data-revealed] > .std-row {
+      animation: stdRowIn .5s var(--ease-out, ease) var(--reveal-stagger, 0ms) forwards;
+    }
+    @keyframes stdRowIn { from { opacity: 0; } to { opacity: 1; } }
+    @media (hover: hover) {
+      .std-list[data-reveal-children] > .std-row:hover {
+        transform: translateX(5px);
+        box-shadow: 0 10px 26px -12px rgba(15,23,42,.28);
+        border-color: color-mix(in srgb, var(--rail) 45%, var(--border, #e2e8f0));
+      }
+      .std-list[data-reveal-children] > .std-row:hover::before { transform: scaleX(1); }
+    }
     @media (max-width: 640px) {
-      .req-list li { grid-template-columns: 1fr; gap: 0.25rem; }
+      .std-head { display: none; }
+      .std-row { grid-template-columns: 1fr; gap: 0.3rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .std-list[data-reveal-children] > .std-row,
+      .std-list[data-reveal-children][data-revealed] > .std-row { opacity: 1; animation: none; }
+      .std-row, .std-row::before { transition: none; }
     }
 
     /* Earned-depth optional list */
@@ -124,16 +155,6 @@
       background: var(--page-accent, #4f46e5);
     }
 
-    /* Standard-bar table tweaks (reuses .table-wrapper from global) */
-    .standard-table th:first-child { width: 32%; white-space: nowrap; }
-    .standard-table td strong { color: var(--page-accent-deep, var(--page-accent, #3730a3)); }
-
-    /* Table life: staggered row fade-in on scroll (rows kept transform-free
-       for table-row reliability) + gentle accent tint on hover */
-    .standard-table tbody[data-reveal-children] > tr { transform: none; }
-    .standard-table tbody tr { transition: background var(--duration-fast, 180ms) var(--ease, ease); }
-    .standard-table tbody tr:hover { background: var(--page-accent-soft); }
-    .standard-table tbody tr:hover td:first-child strong { color: var(--page-accent-deep, var(--page-accent)); }
   </style>
 </head>
 
@@ -245,18 +266,19 @@
       <h3>What Every Character Study Must Answer</h3>
       <p>For a character study, these are required — no exceptions. They're the questions every profile has to answer before it can call itself complete:</p>
 
-      <ul class="req-list">
-        <li><strong>Overview</strong><span>Who they are, where they appear, and why they matter.</span></li>
-        <li><strong>Narrative Journey</strong><span>The arc of their story, with key Hebrew or Greek at the pivotal moments.</span></li>
-        <li><strong>Literary Context</strong><span>Where they sit in the book, and how the author shapes them.</span></li>
-        <li><strong>Themes</strong><span>The major theological ideas their story carries.</span></li>
-        <li><strong>Ancient Near Eastern Context</strong><span>The world they lived in — and how Scripture both echoes and counters it.</span></li>
-        <li><strong>Biblical Theology</strong><span>How their story fits the larger creation, fall, and redemption pattern.</span></li>
-        <li><strong>Messianic Trajectory</strong><span>How their story leans toward Christ, with specific New Testament connections.</span></li>
-        <li><strong>Application</strong><span>What it means for personal life and for the community.</span></li>
-        <li><strong>Study Questions</strong><span>Real prompts for discussion and teaching, not filler.</span></li>
-        <li><strong>Bibliography</strong><span>The academic sources the whole study rests on.</span></li>
-      </ul>
+      <div class="std-head" aria-hidden="true"><span>Required section</span><span>What it answers</span></div>
+      <div class="std-list" data-reveal-children>
+        <div class="std-row"><span class="std-label">Overview</span><p class="std-body">Who they are, where they appear, and why they matter.</p></div>
+        <div class="std-row"><span class="std-label">Narrative Journey</span><p class="std-body">The arc of their story, with key Hebrew or Greek at the pivotal moments.</p></div>
+        <div class="std-row"><span class="std-label">Literary Context</span><p class="std-body">Where they sit in the book, and how the author shapes them.</p></div>
+        <div class="std-row"><span class="std-label">Themes</span><p class="std-body">The major theological ideas their story carries.</p></div>
+        <div class="std-row"><span class="std-label">Ancient Near Eastern Context</span><p class="std-body">The world they lived in — and how Scripture both echoes and counters it.</p></div>
+        <div class="std-row"><span class="std-label">Biblical Theology</span><p class="std-body">How their story fits the larger creation, fall, and redemption pattern.</p></div>
+        <div class="std-row"><span class="std-label">Messianic Trajectory</span><p class="std-body">How their story leans toward Christ, with specific New Testament connections.</p></div>
+        <div class="std-row"><span class="std-label">Application</span><p class="std-body">What it means for personal life and for the community.</p></div>
+        <div class="std-row"><span class="std-label">Study Questions</span><p class="std-body">Real prompts for discussion and teaching, not filler.</p></div>
+        <div class="std-row"><span class="std-label">Bibliography</span><p class="std-body">The academic sources the whole study rests on.</p></div>
+      </div>
 
       <div class="key-insight">
         <strong>Book and thematic studies have their own required backbone</strong> — a clear thesis, the anchor texts the argument rests on, and a synthesis that ties it together. The form differs; the principle is the same: a fixed set of things every study must deliver.
@@ -270,20 +292,14 @@
       <h3>Optional Sections — and When Each Applies</h3>
       <p>Beyond the required core, a study can add optional sections for greater depth. Each one has a specific trigger, and it's added only when the text actually meets that criterion — never to fill space. Here's every optional section and exactly what has to be true for it to appear:</p>
 
-      <div class="table-wrapper">
-        <table class="standard-table">
-          <thead>
-            <tr><th>Optional section</th><th>Included only when…</th></tr>
-          </thead>
-          <tbody data-reveal-children>
-            <tr><td><strong>Eden Connections</strong></td><td>The figure shows clear creation, fall, and new-creation parallels — New Adam/Eve typology, garden imagery, or advancement of the seed promise.</td></tr>
-            <tr><td><strong>Hebrew / Greek Wordplay</strong></td><td>At least three significant linguistic patterns are present in the figure's narrative.</td></tr>
-            <tr><td><strong>Covenant Context</strong></td><td>The figure is an active party to a covenant — an international treaty, clan alliance, marriage covenant, or a personal covenant with God.</td></tr>
-            <tr><td><strong>Unique Aspects</strong></td><td>The figure has five or more genuinely distinctive features — a "first," an "only," something unprecedented in Scripture.</td></tr>
-            <tr><td><strong>Second Temple Background</strong></td><td>The New Testament draws on Jewish interpretive tradition not found in the Old Testament itself — for example, Jude citing 1 Enoch, or Paul's reading of Sarah and Hagar in Galatians.</td></tr>
-            <tr><td><strong>Songs</strong></td><td>The figure has a song in the text: Miriam, Deborah, Hannah, or Mary.</td></tr>
-          </tbody>
-        </table>
+      <div class="std-head" aria-hidden="true"><span>Optional section</span><span>Included only when…</span></div>
+      <div class="std-list" data-reveal-children>
+        <div class="std-row"><span class="std-label">Eden Connections</span><p class="std-body">The figure shows clear creation, fall, and new-creation parallels — New Adam/Eve typology, garden imagery, or advancement of the seed promise.</p></div>
+        <div class="std-row"><span class="std-label">Hebrew / Greek Wordplay</span><p class="std-body">At least three significant linguistic patterns are present in the figure's narrative.</p></div>
+        <div class="std-row"><span class="std-label">Covenant Context</span><p class="std-body">The figure is an active party to a covenant — an international treaty, clan alliance, marriage covenant, or a personal covenant with God.</p></div>
+        <div class="std-row"><span class="std-label">Unique Aspects</span><p class="std-body">The figure has five or more genuinely distinctive features — a "first," an "only," something unprecedented in Scripture.</p></div>
+        <div class="std-row"><span class="std-label">Second Temple Background</span><p class="std-body">The New Testament draws on Jewish interpretive tradition not found in the Old Testament itself — for example, Jude citing 1 Enoch, or Paul's reading of Sarah and Hagar in Galatians.</p></div>
+        <div class="std-row"><span class="std-label">Songs</span><p class="std-body">The figure has a song in the text: Miriam, Deborah, Hannah, or Mary.</p></div>
       </div>
 
       <div class="key-insight">
@@ -303,20 +319,14 @@
       <h3>The Content Bar</h3>
       <p>These are the non-negotiables — the things that make a study scholarship rather than opinion:</p>
 
-      <div class="table-wrapper">
-        <table class="standard-table">
-          <thead>
-            <tr><th>Standard</th><th>What it requires</th></tr>
-          </thead>
-          <tbody data-reveal-children>
-            <tr><td><strong>Sources</strong></td><td>A minimum by depth — 15+ academic sources for a major figure, 10+ for a moderate one, 5+ for a minor one.</td></tr>
-            <tr><td><strong>Citations</strong></td><td>Chicago format, with each source tagged to the sections it actually supports — so you can find the scholarship behind any claim.</td></tr>
-            <tr><td><strong>Traceability</strong></td><td>Every substantive claim ties back to a cited source, not to a hunch.</td></tr>
-            <tr><td><strong>Original languages</strong></td><td>Hebrew leads for Old Testament figures, Greek for New Testament — shown in its own script, used because it matters, not for decoration.</td></tr>
-            <tr><td><strong>Cross-references</strong></td><td>Every link resolves to a page that actually exists before the study publishes.</td></tr>
-            <tr><td><strong>Completeness</strong></td><td>No placeholder text and no boilerplate sentences. The figure speaks, not the template.</td></tr>
-          </tbody>
-        </table>
+      <div class="std-head" aria-hidden="true"><span>Standard</span><span>What it requires</span></div>
+      <div class="std-list" data-reveal-children>
+        <div class="std-row"><span class="std-label">Sources</span><p class="std-body">A minimum by depth — 15+ academic sources for a major figure, 10+ for a moderate one, 5+ for a minor one.</p></div>
+        <div class="std-row"><span class="std-label">Citations</span><p class="std-body">Chicago format, with each source tagged to the sections it actually supports — so you can find the scholarship behind any claim.</p></div>
+        <div class="std-row"><span class="std-label">Traceability</span><p class="std-body">Every substantive claim ties back to a cited source, not to a hunch.</p></div>
+        <div class="std-row"><span class="std-label">Original languages</span><p class="std-body">Hebrew leads for Old Testament figures, Greek for New Testament — shown in its own script, used because it matters, not for decoration.</p></div>
+        <div class="std-row"><span class="std-label">Cross-references</span><p class="std-body">Every link resolves to a page that actually exists before the study publishes.</p></div>
+        <div class="std-row"><span class="std-label">Completeness</span><p class="std-body">No placeholder text and no boilerplate sentences. The figure speaks, not the template.</p></div>
       </div>
 
       <div class="key-insight">
@@ -350,7 +360,7 @@
       <h3>Before Anything Publishes</h3>
       <p>Every page passes a checklist before it goes live. A plain-language version of it:</p>
 
-      <ul class="standards-check">
+      <ul class="standards-check" data-reveal-children>
         <li><span class="ck" aria-hidden="true">✓</span> All required sections present and substantial — no gaps, no filler.</li>
         <li><span class="ck" aria-hidden="true">✓</span> Sources meet the minimum for the study's depth.</li>
         <li><span class="ck" aria-hidden="true">✓</span> Hebrew and Greek in the right place, and done right.</li>
