@@ -259,37 +259,11 @@ body[data-suite-stage="8"] {
   50%      { background-position: 100% 50%; }
 }
 
-/* --- C3. Critical Distinction: animated top stripe --- */
-.critical-distinction {
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-.critical-distinction::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(
-    90deg,
-    var(--accent-rose),
-    color-mix(in srgb, var(--accent-rose) 60%, var(--accent-magenta)),
-    var(--accent-rose)
-  );
-  background-size: 200% 100%;
-  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-  animation: pc-critical-sweep 4s ease-in-out infinite;
-}
-@media (hover: hover) {
-  .critical-distinction:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px color-mix(in srgb, var(--accent-rose) 18%, transparent);
-  }
-}
-@keyframes pc-critical-sweep {
-  0%, 100% { background-position: 0%   50%; }
-  50%      { background-position: 100% 50%; }
-}
+/* --- C3. Critical Distinction — now a calm clarification --- */
+/* The rose warning treatment (looping top-stripe sweep, rose hover,
+   ⚠ glyph) was retired: it read as an alarm, not a guided note. The
+   calm cool-indigo styling — soft tint, thin static top accent, and a
+   gentle hover — now lives in global-v3.css §13. Nothing to add here. */
 
 /* --- C4. Key Insight: breathing glow + lightbulb glyph --- */
 .key-insight {
@@ -357,32 +331,19 @@ body[data-suite-stage="8"] {
 }
 
 
-/* --- C5. Centering polish for critical-distinction --- */
-/* The body is short enough that centered prose reinforces the
-   "stop and notice" callout role. Paired with C3's hover sweep. */
-.critical-distinction {
-  text-align: center;
-}
-.critical-distinction p {
-  margin: 0 auto;
-  max-width: 60ch;
-}
+/* --- C5. (retired) critical-distinction centering --- */
+/* Centered prose suited the old "stop and notice" alarm; the calm
+   clarification reads better left-aligned, like the surrounding body.
+   Intentionally left at default alignment. */
 
-/* --- C6. Glyph micro-animations on punchline callouts --- */
-/* ⚠ on .critical-distinction tilts -12° on hover (finger-wag).
-   ⤳ on .takeaway scales 1.15× on hover (extending the gesture).
-   Loop animations from C2/C3 keep running underneath. */
-.critical-distinction h4::before {
-  display: inline-block;
-  transition: transform 0.25s var(--ease, ease);
-}
+/* --- C6. Glyph micro-animation on the takeaway --- */
+/* ⤳ on .takeaway scales 1.15× on hover (extending the gesture).
+   (The old .critical-distinction ⚠ finger-wag was removed along with
+   the warning glyph.) */
 .takeaway::before {
   transition: transform 0.25s var(--ease, ease);
 }
 @media (hover: hover) {
-  .critical-distinction:hover h4::before {
-    transform: rotate(-12deg);
-  }
   .takeaway:hover::before {
     transform: scale(1.15);
   }
@@ -662,7 +623,6 @@ body[data-suite-stage="8"] {
 @media (prefers-reduced-motion: reduce) {
   .pattern-summary::after,
   .takeaway::after,
-  .critical-distinction::after,
   .key-insight::before,
   .key-insight::after,
   .star-divider,
@@ -837,4 +797,151 @@ body[data-suite-stage="8"] {
       0 6px 18px color-mix(in srgb, var(--page-accent) 14%, transparent),
       0 2px  4px rgba(15, 23, 42, 0.03);
   }
+}
+
+/* ============================================================
+   K. STANDARDS ROW LIST  (+ reveal/hover reconciliation)
+   ------------------------------------------------------------
+   A lively alternative to a <table>: label/value rows with an
+   accent rail, a top-bar that scales in on hover, a hover slide,
+   and a staggered fade-in entrance. Promoted from the Authoring
+   Standards page so any page can use it. Theme per row with
+   --rail (defaults to --page-accent).
+
+     <div class="std-head" aria-hidden="true">
+       <span>Label</span><span>Value</span>
+     </div>
+     <div class="std-list" data-reveal-children>
+       <div class="std-row">
+         <span class="std-label">…</span><p class="std-body">…</p>
+       </div>
+     </div>
+   ============================================================ */
+.std-list { display: grid; gap: 0.6rem; margin: 1.25rem 0 0; }
+
+.std-head {
+  display: grid;
+  grid-template-columns: 232px 1fr;
+  gap: 1.4rem;
+  padding: 0.1rem 1.25rem 0.15rem;
+}
+.std-head span {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.std-row {
+  --rail: var(--page-accent);
+  position: relative;
+  display: grid;
+  grid-template-columns: 232px 1fr;
+  gap: 0.25rem 1.4rem;
+  align-items: baseline;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--rail);
+  border-radius: var(--radius);
+  padding: 0.9rem 1.25rem;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition:
+    transform    0.25s var(--ease, ease),
+    box-shadow   0.25s var(--ease, ease),
+    border-color 0.25s var(--ease, ease);
+}
+.std-row::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg,
+    var(--rail),
+    color-mix(in srgb, var(--rail) 30%, transparent));
+  transform: scaleX(0.3);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease, ease);
+}
+.std-label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-md);
+  line-height: 1.2;
+  color: var(--page-accent-deep, var(--page-accent));
+}
+.std-body {
+  margin: 0;
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  color: var(--text-soft);
+  max-width: none;
+}
+@media (max-width: 640px) {
+  .std-head { display: none; }
+  .std-row { grid-template-columns: 1fr; gap: 0.3rem; }
+}
+
+/* ------------------------------------------------------------
+   Reveal <-> hover reconciliation
+   ------------------------------------------------------------
+   Global §56 reveals stagger-children with `revealUp`, which
+   animates `transform` and fills `forwards`. A forwards-filled
+   animation OUTRANKS a later `:hover { transform }`, so any hover
+   slide on a revealed row is silently suppressed once it scrolls
+   in.
+
+   Fix (same idiom global §56 already uses for timeline rows via
+   `animation-name: revealLeft`): for row/card components whose
+   hover uses transform, (a) neutralise the global resting
+   translateY, and (b) swap the revealed animation to an
+   opacity-only fade so `transform` is never owned by the
+   animation and stays free for :hover. The entrance becomes a
+   staggered fade rather than a slide-up — a deliberate trade so
+   the hover motion works. Existing rainbow rows (.wax-row,
+   .ov-row, .retell) are included so they benefit too.
+   ------------------------------------------------------------ */
+[data-reveal-children] > .std-row,
+[data-reveal-children] > .wax-row,
+[data-reveal-children] > .ov-row,
+[data-reveal-children] > .retell {
+  transform: none;
+}
+[data-reveal-children][data-revealed] > .std-row,
+[data-reveal-children][data-revealed] > .wax-row,
+[data-reveal-children][data-revealed] > .ov-row,
+[data-reveal-children][data-revealed] > .retell {
+  animation-name: pc-reveal-fade;
+}
+@keyframes pc-reveal-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* std-row hover — generic rule sits after the resting override
+   above (equal specificity, later source = wins on hover); the
+   scoped pair is belt-and-suspenders for the data-reveal case. */
+@media (hover: hover) {
+  .std-row:hover,
+  .std-list[data-reveal-children] > .std-row:hover {
+    transform: translateX(5px);
+    box-shadow: 0 10px 26px -12px rgba(15, 23, 42, 0.28);
+    border-color: color-mix(in srgb, var(--rail) 45%, var(--border));
+  }
+  .std-row:hover::before,
+  .std-list[data-reveal-children] > .std-row:hover::before {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal-children][data-revealed] > .std-row,
+  [data-reveal-children][data-revealed] > .wax-row,
+  [data-reveal-children][data-revealed] > .ov-row,
+  [data-reveal-children][data-revealed] > .retell {
+    animation: none;
+    opacity: 1;
+  }
+  .std-row, .std-row::before { transition: none; }
 }
