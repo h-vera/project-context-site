@@ -50,8 +50,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
   <!-- Base Stylesheets -->
-  <link rel="preload" href="/assets/css/global-v3.css?v=3.3.1" as="style" />
-  <link rel="stylesheet" href="/assets/css/global-v3.css?v=3.3.1" />
+  <link rel="preload" href="/assets/css/global-v3.css?v=3.3.2" as="style" />
+  <link rel="stylesheet" href="/assets/css/global-v3.css?v=3.3.2" />
   <link rel="stylesheet" href="/assets/css/global-v3-polish.css?v=0.2" />
 
   <style>
@@ -89,6 +89,11 @@
     .staccato li::before{content:'›';position:absolute;left:0;color:var(--accent-blue);font-weight:700}
     .staccato li b{color:var(--text);font-weight:600}
     @media(max-width:560px){.staccato{columns:1}}
+  </style>
+  <style>
+    /* render fixes — center diagram captions + footer text (page-local, wins over global p clamp) */
+    .dgm-cap{margin-left:auto;margin-right:auto;text-align:center}
+    footer p{max-width:none}
   </style>
 </head>
 <body class="book-commentary" data-theme="blue" dir="ltr">
@@ -417,5 +422,17 @@
       if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',function(){setTimeout(init,K);});}else{setTimeout(init,K);}
     })();
   </script>
+  <script>
+    (function () {
+      'use strict';
+      const STAGGER_MS = 90, KICKSTART_MS = 200;
+      function applyStagger(p){const k=p.children;for(let i=0;i<k.length;i++){if(!k[i].style.getPropertyValue('--reveal-stagger'))k[i].style.setProperty('--reveal-stagger',(i*STAGGER_MS)+'ms');}}
+      function reveal(el){if(el.hasAttribute('data-revealed'))return;if(el.hasAttribute('data-reveal-children'))applyStagger(el);el.setAttribute('data-revealed','');}
+      function inView(el){const r=el.getBoundingClientRect();const vh=window.innerHeight||document.documentElement.clientHeight;return r.top<vh&&r.bottom>0;}
+      function init(){const t=document.querySelectorAll('[data-reveal],[data-reveal-children]');if(!t.length)return;t.forEach(function(el){if(inView(el))reveal(el);});if(!('IntersectionObserver'in window)){t.forEach(reveal);return;}const io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){reveal(e.target);io.unobserve(e.target);}});},{rootMargin:'0px 0px -10% 0px',threshold:0.05});t.forEach(function(el){if(!el.hasAttribute('data-revealed'))io.observe(el);});}
+      if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',function(){setTimeout(init,KICKSTART_MS);});}else{setTimeout(init,KICKSTART_MS);}
+    })();
+  </script>
+
 </body>
 </html>

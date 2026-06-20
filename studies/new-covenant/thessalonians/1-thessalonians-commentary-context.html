@@ -43,7 +43,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="/assets/css/global-v3.css?v=3.3.1" />
+  <link rel="stylesheet" href="/assets/css/global-v3.css?v=3.3.2" />
   <link rel="stylesheet" href="/assets/css/global-v3-polish.css?v=0.2" />
 
   <style>
@@ -374,6 +374,11 @@
     .svg-frame{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem 1rem .75rem;margin:1.5rem 0;box-shadow:var(--shadow-sm);overflow-x:auto}
     .svg-frame svg{display:block;margin:0 auto;min-width:520px;max-width:720px;width:100%;height:auto}
     .dgm-cap{font-size:var(--fs-sm);color:var(--text-muted);font-style:italic;margin-top:.85rem;text-align:center}
+  </style>
+  <style>
+    /* render fixes — center diagram captions + footer text (page-local, wins over global p clamp) */
+    .dgm-cap{margin-left:auto;margin-right:auto;text-align:center}
+    footer p{max-width:none}
   </style>
 </head>
 <body class="book-commentary-context thess-context-enhanced" data-theme="blue" dir="ltr">
@@ -718,5 +723,17 @@
       if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',function(){setTimeout(init,K);});}else{setTimeout(init,K);}
     })();
   </script>
+  <script>
+    (function () {
+      'use strict';
+      const STAGGER_MS = 90, KICKSTART_MS = 200;
+      function applyStagger(p){const k=p.children;for(let i=0;i<k.length;i++){if(!k[i].style.getPropertyValue('--reveal-stagger'))k[i].style.setProperty('--reveal-stagger',(i*STAGGER_MS)+'ms');}}
+      function reveal(el){if(el.hasAttribute('data-revealed'))return;if(el.hasAttribute('data-reveal-children'))applyStagger(el);el.setAttribute('data-revealed','');}
+      function inView(el){const r=el.getBoundingClientRect();const vh=window.innerHeight||document.documentElement.clientHeight;return r.top<vh&&r.bottom>0;}
+      function init(){const t=document.querySelectorAll('[data-reveal],[data-reveal-children]');if(!t.length)return;t.forEach(function(el){if(inView(el))reveal(el);});if(!('IntersectionObserver'in window)){t.forEach(reveal);return;}const io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){reveal(e.target);io.unobserve(e.target);}});},{rootMargin:'0px 0px -10% 0px',threshold:0.05});t.forEach(function(el){if(!el.hasAttribute('data-revealed'))io.observe(el);});}
+      if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',function(){setTimeout(init,KICKSTART_MS);});}else{setTimeout(init,KICKSTART_MS);}
+    })();
+  </script>
+
 </body>
 </html>
