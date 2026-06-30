@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#7c1d2b">
+<title>AP Human Geo · Unit 1 Flashcards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --maroon:#7c1d2b;
+    --maroon-deep:#5c1320;
+    --navy:#1f2a44;
+    --navy-soft:#33405f;
+    --paper:#f6f1e8;
+    --paper-2:#efe7d8;
+    --card:#ffffff;
+    --ink:#23201c;
+    --muted:#6f6a62;
+    --line:#e2d8c6;
+    --gold:#b8862f;
+    --green:#2f7d5b;
+    --green-soft:#e7f1eb;
+    --shadow:0 14px 34px -16px rgba(40,25,20,.5);
+    --r:20px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    color:var(--ink);
+    background:var(--paper);
+    /* faint topographic / isoline texture — a nod to the cartography unit */
+    background-image:
+      repeating-radial-gradient(circle at 18% 12%, transparent 0 34px, rgba(124,29,43,.035) 34px 35px, transparent 35px 70px),
+      repeating-radial-gradient(circle at 88% 78%, transparent 0 40px, rgba(31,42,68,.035) 40px 41px, transparent 41px 82px);
+    background-attachment:fixed;
+    -webkit-font-smoothing:antialiased;
+    display:flex;flex-direction:column;
+    min-height:100dvh;
+    overflow-x:hidden;
+  }
+
+  /* ---------- HEADER ---------- */
+  header{
+    background:linear-gradient(120deg,var(--maroon),var(--maroon-deep));
+    color:#fdf6ee;
+    padding:calc(env(safe-area-inset-top) + 14px) 18px 14px;
+    box-shadow:var(--shadow);
+    position:relative;z-index:5;
+  }
+  .eyebrow{
+    font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;
+    opacity:.8;font-weight:600;margin-bottom:3px;
+  }
+  header h1{
+    font-family:'Fraunces',serif;font-weight:600;font-size:1.34rem;line-height:1.1;
+    letter-spacing:-.01em;
+  }
+  header h1 span{font-style:italic;opacity:.92}
+
+  /* ---------- DECK CHIPS ---------- */
+  .decks{
+    display:flex;gap:8px;overflow-x:auto;padding:12px 14px 12px;
+    scrollbar-width:none;background:var(--paper-2);
+    border-bottom:1px solid var(--line);
+    position:sticky;top:0;z-index:4;
+  }
+  .decks::-webkit-scrollbar{display:none}
+  .chip{
+    flex:0 0 auto;border:1px solid var(--line);background:#fff;color:var(--navy);
+    font-family:'Inter';font-size:.82rem;font-weight:600;
+    padding:9px 14px;border-radius:999px;cursor:pointer;white-space:nowrap;
+    transition:.15s;display:flex;align-items:center;gap:6px;
+  }
+  .chip .star{color:var(--gold);font-size:.78rem}
+  .chip .ct{color:var(--muted);font-weight:500;font-size:.74rem}
+  .chip.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .chip.active .ct{color:#c7cfe0}
+  .chip.active .star{color:#ffd66b}
+
+  /* ---------- STAGE ---------- */
+  main{flex:1;display:flex;flex-direction:column;padding:16px 16px 0;min-height:0}
+  .meta{
+    display:flex;justify-content:space-between;align-items:baseline;
+    margin-bottom:10px;
+  }
+  .meta .pos{font-size:.82rem;color:var(--muted);font-weight:600}
+  .meta .pos b{color:var(--maroon)}
+  .meta .known{font-size:.82rem;color:var(--green);font-weight:600}
+  .bar{height:5px;background:var(--paper-2);border-radius:999px;overflow:hidden;margin-bottom:16px;border:1px solid var(--line)}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--maroon),var(--gold));width:0;transition:width .3s}
+
+  /* ---------- CARD ---------- */
+  .scene{flex:1;perspective:1600px;min-height:0;display:flex}
+  .card{
+    flex:1;position:relative;transform-style:preserve-3d;
+    transition:transform .5s cubic-bezier(.4,.15,.2,1);cursor:pointer;
+    min-height:0;
+  }
+  .card.flipped{transform:rotateY(180deg)}
+  .face{
+    position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);
+    border:1px solid var(--line);
+    display:flex;flex-direction:column;overflow:hidden;
+  }
+  .face::before{ /* top accent rule */
+    content:"";position:absolute;top:0;left:0;right:0;height:5px;
+    background:linear-gradient(90deg,var(--maroon),var(--gold));
+  }
+
+  /* FRONT */
+  .front{align-items:center;justify-content:center;text-align:center;padding:30px 24px}
+  .front .kicker{
+    font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--maroon);
+    font-weight:700;margin-bottom:14px;
+  }
+  .front .term{
+    font-family:'Fraunces',serif;font-weight:600;color:var(--navy);
+    font-size:clamp(1.7rem,7.5vw,2.6rem);line-height:1.08;letter-spacing:-.01em;
+  }
+  .front .sub{margin-top:10px;font-size:.92rem;color:var(--muted);font-weight:500}
+  .front .tap{
+    position:absolute;bottom:20px;left:0;right:0;text-align:center;
+    font-size:.74rem;color:var(--muted);letter-spacing:.04em;
+  }
+  .front .tap span{display:inline-block;animation:nudge 1.8s ease-in-out infinite}
+  @keyframes nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
+
+  /* BACK */
+  .back{transform:rotateY(180deg);padding:22px 20px 18px;overflow-y:auto}
+  .back .bterm{
+    font-family:'Fraunces',serif;font-weight:600;color:var(--maroon);
+    font-size:1.15rem;margin-bottom:4px;line-height:1.15;
+  }
+  .back .bsub{font-size:.78rem;color:var(--muted);margin-bottom:14px;font-weight:500}
+  .col{margin-bottom:13px}
+  .col:last-child{margin-bottom:0}
+  .col .lbl{
+    font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--navy);font-weight:700;display:inline-block;
+    background:var(--paper-2);padding:3px 8px;border-radius:6px;margin-bottom:6px;
+    border:1px solid var(--line);
+  }
+  .col .val{font-size:.97rem;line-height:1.42;color:var(--ink)}
+  .single .val{font-size:1.04rem;line-height:1.5}
+
+  /* reference / hook card */
+  .face.info::before{background:linear-gradient(90deg,var(--gold),var(--maroon))}
+  .front.info .kicker{color:var(--gold)}
+  .front.info .term{color:var(--maroon);font-size:clamp(1.5rem,6.5vw,2.2rem)}
+  .infonote{font-size:1.04rem;line-height:1.55;color:var(--ink)}
+  .infonote b{color:var(--maroon)}
+  .infonote i,.infonote i{font-style:italic;color:var(--navy)}
+
+  /* ---------- CONTROLS ---------- */
+  .controls{
+    padding:14px 16px calc(env(safe-area-inset-bottom) + 16px);
+    display:flex;flex-direction:column;gap:10px;
+  }
+  .row{display:flex;gap:10px}
+  button.act{
+    flex:1;border:none;border-radius:14px;padding:15px 10px;cursor:pointer;
+    font-family:'Inter';font-weight:600;font-size:.98rem;transition:.15s;
+    display:flex;align-items:center;justify-content:center;gap:7px;
+  }
+  button.act:active{transform:scale(.97)}
+  .nav{background:#fff;color:var(--navy);border:1px solid var(--line);flex:0 0 58px;font-size:1.3rem;padding:14px 0}
+  .nav:disabled{opacity:.35;cursor:default}
+  .got{background:var(--green);color:#fff}
+  .got.is-known{background:var(--green-soft);color:var(--green);border:1px solid var(--green)}
+  .ghost{background:transparent;color:var(--maroon);border:1px solid var(--line);flex:1;font-size:.86rem;padding:12px}
+  .ghost:active{background:var(--paper-2)}
+
+  /* ---------- DONE ---------- */
+
+  .done[hidden]{display:none}
+  .done{
+    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:30px 24px;
+  }
+  .done .big{font-family:'Fraunces',serif;font-size:2rem;color:var(--navy);margin-bottom:8px}
+  .done p{color:var(--muted);font-size:.95rem;margin-bottom:20px;max-width:300px;line-height:1.45}
+  .done .pill{display:inline-block;background:var(--green-soft);color:var(--green);font-weight:700;padding:7px 16px;border-radius:999px;margin-bottom:24px;border:1px solid var(--green)}
+  .done .btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+  .done button{border-radius:12px;padding:13px 20px;font-weight:600;font-size:.92rem;cursor:pointer;border:1px solid var(--line);font-family:'Inter'}
+  .done .primary{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+  .done .secondary{background:#fff;color:var(--navy)}
+
+  @media (min-width:640px){
+    main,.controls{max-width:620px;margin-left:auto;margin-right:auto;width:100%}
+    .decks{justify-content:center}
+    body{background-attachment:fixed}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .card{transition:none}
+    .front .tap span{animation:none}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">St. John's College High School · AP Human Geography</div>
+  <h1>Unit 1 — <span>Maps, Place &amp; Migration</span></h1>
+</header>
+
+<nav class="decks" id="decks"></nav>
+
+<main id="stage">
+  <div class="meta">
+    <div class="pos" id="pos"></div>
+    <div class="known" id="knownct"></div>
+  </div>
+  <div class="bar"><i id="barfill"></i></div>
+  <div class="scene" id="scene">
+    <div class="card" id="card" role="button" tabindex="0" aria-label="Flashcard — tap to flip">
+      <div class="face front" id="front"></div>
+      <div class="face back" id="back"></div>
+    </div>
+    <div class="done" id="done" hidden></div>
+  </div>
+</main>
+
+<div class="controls" id="controls">
+  <div class="row">
+    <button class="act nav" id="prev" aria-label="Previous card">‹</button>
+    <button class="act got" id="got">Got it ✓</button>
+    <button class="act nav" id="next" aria-label="Next card">›</button>
+  </div>
+  <div class="row">
+    <button class="act ghost" id="shuffle">⤮ Shuffle deck</button>
+    <button class="act ghost" id="reset">↺ Reset progress</button>
+  </div>
+</div>
+
+<script>
+/* ====================== DATA ====================== */
+const DECKS = [
+  {
+    key:'themap', name:'Thematic Maps', focus:true, kicker:'Thematic Map',
+    note:'<b>Class hook:</b> the DC Wards activity = choropleth (darker shading = higher density). On the gallery walk, identify the map type from visual clues only.',
+    cols:['Looks like','Best for','Watch out for'],
+    cards:[
+      {term:'Choropleth', vals:['Regions shaded by intensity (darker = more).','Rate / ratio data by area: density, income, % of population.','Hides variation inside each region.']},
+      {term:'Isoline', vals:['Lines connecting equal values (like topographic contours).','Continuous data: temperature, elevation, rainfall.','Hard to read precisely between the lines.']},
+      {term:'Graduated Symbol', vals:['Circles sized by data value at specific locations.','Absolute counts at points: city population, earthquake magnitude.','Symbols overlap in dense areas.']},
+      {term:'Dot Density', vals:['Each dot = a fixed quantity. Clustering shows concentration.','Distribution of populations or events across a large area.','Dot placement within an area is only approximate.']},
+      {term:'Cartogram', vals:['Areas resized based on the data, not actual land area.','Data where population weight matters more than geography: votes, GDP.','Familiar shapes are distorted; places are hard to identify.']},
+    ]
+  },
+  {
+    key:'themes', name:'Five Themes', focus:true, kicker:'Theme of Geography',
+    note:'<b>GIS connection:</b> the Cholera activity = manual GIS — collect field data → plot on a base map → find the spatial cluster. Dr. Snow did this in 1854 (Broad Street pump). Geographic <i>relationship</i> matters, not just the presence of a landmark.',
+    cols:['Key Question','Class Connection'],
+    cards:[
+      {term:'Location', vals:['Where is it? Absolute (coordinates) vs. Relative (near Georgetown).','House placards = absolute location. "2 miles north of SJC" = relative.']},
+      {term:'Place', vals:['What is it like? Physical + Human characteristics.','Cholera activity landmarks (Burger Shack, hospital) = human characteristics.']},
+      {term:'Human–Environment Interaction', vals:['How do humans and the environment shape each other?','Cholera: contaminated food source (human-built) → disease outbreak. The central theme of the activity.']},
+      {term:'Movement', vals:['How do people, goods, and ideas move across space?','All six migration case studies. Routes, barriers, and flows are the geographic story.']},
+      {term:'Regions', vals:['Formal (uniform trait) / Functional (hub + network) / Perceptual (shared identity, fuzzy edges).','The South = a perceptual region. The Atlantic article shows why no single line works.']},
+    ]
+  },
+  {
+    key:'proj', name:'Map Projections', kicker:'Projection',
+    cols:['Preserves / Distorts','Best for'],
+    cards:[
+      {term:'Mercator', vals:['Shape & direction. Distorts area near the poles — Greenland looks the size of Africa.','Navigation; plotting compass routes.']},
+      {term:'Peters', vals:['Area (accurate sizes). Distorts shape — countries near the poles look stretched.','Comparing continent sizes; equity maps.']},
+      {term:'Robinson', vals:['Neither perfectly — a visual compromise with no extreme distortion anywhere.','General reference world maps.']},
+      {term:'Azimuthal', vals:['Direction from one central point. Distortion grows toward the edges.','Air routes; maps centered on one city.']},
+      {term:'Interrupted', vals:['Land shape and area. Oceans are "cut."','Ocean current maps; land-focused analysis.']},
+    ]
+  },
+  {
+    key:'migr', name:'Migration Cases', kicker:'Migration Case Study',
+    note:'<b>Thesis hook:</b> contrasting cases (Syria vs. Ukraine, Chinese Exclusion) show that reception is often a <i>policy choice</i>, not just geography.',
+    cols:['Push','Pull','Reception','Key Concept'],
+    cards:[
+      {term:'Great Migration', sub:'1910–1970 · USA Internal', vals:['Jim Crow, racial violence, sharecropping.','Industrial jobs (Chicago, Detroit, NY); social freedom.','Opportunity — but also discrimination, redlining, and housing segregation in the North.','Voluntary vs. forced debate: no law forced departure, but staying was dangerous. Distance decay: migrants followed rail lines.']},
+      {term:'Irish Famine', sub:'1845–1852 · Ireland → USA / Canada', vals:['Potato blight, mass starvation, colonial neglect.','Land and industrial work in the U.S. and Canada.','Hostile: "No Irish Need Apply," nativist movements.','Does NOT qualify as refugee (1951 Convention): famine = environmental / economic, not persecution. → Eco-refugee.']},
+      {term:'Chinese Diaspora', sub:'1820s–present · China → USA, Asia', vals:['Poverty and lack of opportunity in rural China.','Gold Rush, railroad wages, economic opportunity.','Chinese Exclusion Act (1882): first U.S. law banning a nationality. Rock Springs Massacre (1885).','Pull factors reversed by policy. Legal barriers = border control by race and nationality.']},
+      {term:'Dust Bowl', sub:'1930–1940 · USA Internal', vals:['Drought, topsoil erosion, the Great Depression.','Agricultural work in California.','Hostile: "Okies," illegal state border blockades, poverty wages.','Does NOT qualify as refugee: no persecution, no international border crossed. Eco-refugee gap in the 1951 Convention.']},
+      {term:'Syrian Refugees', sub:'2011–present · Syria → Turkey, Europe', vals:['Civil war, government persecution, bombing of civilian areas.','Safety, legal protection, family networks.','Razor-wire fences (Hungary), EU–Turkey Deal, anti-Muslim rhetoric in U.S. (cap: 110,000 → 18,000).','DOES qualify: state persecution, forced flight, outside country of nationality. Refoulement: Greece pushed back boats illegally.']},
+      {term:'Ukrainian Displacement', sub:'2022–present · Ukraine → Poland, Germany', vals:['Russian invasion, destruction of civilian infrastructure.','Open borders, fast-tracked legal status, housing, school enrollment.','Welcoming: no fences, no pushbacks. Poland accepted 3M+ Ukrainians after refusing Syrian refugees in 2015.','Contrast with Syria reveals barriers are POLICY CHOICES. European politicians cited race / religion / "civilization" explicitly.']},
+    ]
+  },
+  {
+    key:'south', name:'Where the South Begins', kicker:'Boundary Method',
+    note:'<b>Short-answer task:</b> name TWO methods → cite ONE specific piece of evidence each → explain what it tells us about <b>formal vs. perceptual</b> regions.',
+    cols:['Key Evidence'],
+    cards:[
+      {term:'Surveys & Census', vals:['Mason–Dixon Line still lists MD and DC as "Southern" — but few would call Baltimore Southern today. Historical definitions become outdated.']},
+      {term:'Roads', vals:['U.S. Route 40 is argued as a more accurate border: food, architecture, music, and town layout differ noticeably on either side.']},
+      {term:'Rivers', vals:['Rappahannock divides metro Northern VA from rural Southern VA. The Potomac was the literal USA / CSA border.']},
+      {term:'Religion', vals:['South is overwhelmingly Baptist; northern border states mix Catholic, Methodist, Presbyterian. Baptist Line ≈ Ohio River.']},
+      {term:'Language', vals:['The pin–pen merger ("pen" pronounced "pin") maps closely onto Southern identity and tracks the Baptist / Potomac border.']},
+      {term:'Food', vals:['McDonald\'s Sweet Tea Line (2004) produced a surprisingly accurate Southern boundary — below Richmond, even.']},
+    ]
+  },
+  {
+    key:'vocab', name:'Key Vocabulary', kicker:'Term',
+    cols:['Definition'],
+    cards:[
+      {term:'Push factor', vals:['Drives people OUT of a place.']},
+      {term:'Pull factor', vals:['Attracts people IN to a place.']},
+      {term:'Voluntary migration', vals:['A choice — even if constrained.']},
+      {term:'Forced migration', vals:['No real alternative.']},
+      {term:'Refugee (1951)', vals:['Persecution based on race, religion, nationality, or political opinion.']},
+      {term:'IDP', vals:['Internally Displaced Person — displaced, but stays in-country.']},
+      {term:'Eco-refugee', vals:['Environmental displacement — NOT covered by the 1951 Convention.']},
+      {term:'Refoulement', vals:['The illegal forced return of refugees.']},
+      {term:'Distance decay', vals:['Most migrants move short distances.']},
+    ]
+  },
+  {
+    key:'thesis', name:'Thesis Builder', kicker:'Migration Thesis',
+    note:'One sentence: a <b>claim</b> + a <b>line of reasoning</b>.',
+    cols:['How it works'],
+    cards:[
+      {term:'Counter + Claim formula', vals:['Although [counter-argument], [main argument] — as seen through [reason 1] and [reason 2].']},
+      {term:'Strong example', vals:['"Although geographic proximity shapes where migrants can flee, reception is primarily determined by racial and religious identity — as seen in the exclusion of Chinese workers under the 1882 Chinese Exclusion Act and Europe\'s welcoming of Ukrainian refugees while militarizing its borders against Syrians."']},
+    ]
+  },
+];
+
+/* ---- turn each deck note into a single reference card at the END ---- */
+const NOTE_TITLES={themap:'Class hook',themes:'GIS connection',migr:'Why it matters',south:'Short-answer task',thesis:'How a thesis works'};
+DECKS.forEach(d=>{
+  d._n = d.cards.length;                       // real term count (excludes the note card)
+  if(d.note){ d.cards.push({info:true, term:NOTE_TITLES[d.key]||'Remember', body:d.note}); }
+});
+
+/* ====================== STATE ====================== */
+let di = 0;           // deck index
+let order = [];       // card index order for current deck
+let ci = 0;           // position in order
+let flipped = false;
+const known = {};     // known[deckKey] = Set of card indexes
+DECKS.forEach(d => known[d.key] = new Set());
+
+/* ====================== ELEMENTS ====================== */
+const $ = id => document.getElementById(id);
+const deckBar = $('decks'), card = $('card'), front = $('front'), back = $('back');
+const posEl = $('pos'), knownEl = $('knownct'), barFill = $('barfill');
+const stage = $('stage'), controls = $('controls');
+
+/* ====================== BUILD DECK CHIPS ====================== */
+DECKS.forEach((d,i)=>{
+  const b=document.createElement('button');
+  b.className='chip'+(i===0?' active':'');
+  b.dataset.i=i;
+  b.innerHTML=(d.focus?'<span class="star">★</span>':'')+d.name+' <span class="ct">'+d._n+'</span>';
+  b.onclick=()=>selectDeck(i);
+  deckBar.appendChild(b);
+});
+
+function selectDeck(i){
+  di=i; flipped=false;
+  buildOrder();
+  document.querySelectorAll('.chip').forEach((c,k)=>c.classList.toggle('active',k===i));
+  // scroll active chip into view
+  deckBar.children[i].scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});
+  render();
+}
+
+function buildOrder(){
+  order = DECKS[di].cards.map((_,k)=>k);
+  ci=0;
+}
+
+/* ====================== RENDER ====================== */
+function render(){
+  const deck=DECKS[di];
+  controls.style.display='flex';
+
+  const total=deck._n;
+  const kc=known[deck.key].size;
+
+  // all done?
+  if(order.length===0){ renderDone(); return; }
+
+  card.style.display='block';
+  $('done').hidden=true;
+
+  const idx=order[ci];
+  const c=deck.cards[idx];
+
+  if(c.info){
+    // ---- reference / hook card ----
+    front.className='face front info';
+    back.className='face back info';
+    front.innerHTML=
+      '<div class="kicker">Reference card</div>'+
+      '<div class="term">'+c.term+'</div>'+
+      '<div class="tap"><span>tap to reveal ↻</span></div>';
+    back.innerHTML='<div class="bterm">'+c.term+'</div><div class="infonote">'+c.body+'</div>';
+  }else{
+    // ---- normal term card ----
+    front.className='face front';
+    front.innerHTML=
+      '<div class="kicker">'+deck.kicker+'</div>'+
+      '<div class="term">'+c.term+'</div>'+
+      (c.sub?'<div class="sub">'+c.sub+'</div>':'')+
+      '<div class="tap"><span>tap to reveal ↻</span></div>';
+    const single = deck.cols.length===1;
+    let cols='';
+    deck.cols.forEach((lbl,k)=>{
+      cols+='<div class="col"><span class="lbl">'+lbl+'</span><div class="val">'+c.vals[k]+'</div></div>';
+    });
+    back.className='face back'+(single?' single':'');
+    back.innerHTML='<div class="bterm">'+c.term+'</div>'+(c.sub?'<div class="bsub">'+c.sub+'</div>':'')+cols;
+  }
+
+  card.classList.toggle('flipped',flipped);
+
+  // meta + progress (counts only real term cards)
+  posEl.innerHTML='Card <b>'+(ci+1)+'</b> of '+order.length+(c.info?' · reference':'');
+  knownEl.textContent = kc? kc+' / '+total+' known' : '';
+  barFill.style.width=(kc/total*100)+'%';
+
+  // got button — reference cards say "Noted", don't count toward known
+  const gotBtn=$('got');
+  if(c.info){
+    gotBtn.disabled=false;
+    gotBtn.classList.remove('is-known');
+    gotBtn.textContent='Noted ✓';
+  }else{
+    gotBtn.disabled=false;
+    if(known[deck.key].has(idx)){gotBtn.classList.add('is-known');gotBtn.textContent='Known ✓';}
+    else{gotBtn.classList.remove('is-known');gotBtn.textContent='Got it ✓';}
+  }
+
+  $('prev').disabled = ci===0;
+  $('next').disabled = ci===order.length-1;
+}
+
+function renderDone(){
+  const deck=DECKS[di];
+  card.style.display='none';
+  const done=$('done');
+  done.hidden=false;
+  posEl.innerHTML=''; knownEl.textContent=deck._n+' / '+deck._n+' known'; barFill.style.width='100%';
+  done.innerHTML=
+    '<div class="big">Deck cleared 🎉</div>'+
+    '<div class="pill">All '+deck._n+' marked known</div>'+
+    '<p>Nice work on <b>'+deck.name+'</b>. Reset to run it again, or jump to another deck up top.</p>'+
+    '<div class="btns"><button class="primary" id="again">↺ Run it again</button>'+
+    '<button class="secondary" id="nextdeck">Next deck →</button></div>';
+  $('again').onclick=resetDeck;
+  $('nextdeck').onclick=nextDeck;
+}
+
+/* ====================== ACTIONS ====================== */
+function flip(){ flipped=!flipped; card.classList.toggle('flipped',flipped); }
+function next(){ if(ci<order.length-1){ci++;flipped=false;render();} }
+function prev(){ if(ci>0){ci--;flipped=false;render();} }
+
+function markKnown(){
+  const deck=DECKS[di];
+  const idx=order[ci];
+  if(!deck.cards[idx].info) known[deck.key].add(idx);  // reference cards don't count
+  order.splice(ci,1);
+  if(ci>=order.length) ci=order.length-1;
+  if(ci<0) ci=0;
+  flipped=false;
+  render();
+}
+
+function shuffle(){
+  const deck=DECKS[di];
+  let norm=order.filter(i=>!deck.cards[i].info);
+  let info=order.filter(i=>deck.cards[i].info);   // keep reference card pinned last
+  for(let i=norm.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[norm[i],norm[j]]=[norm[j],norm[i]];}
+  order=norm.concat(info);
+  ci=0;flipped=false;render();
+}
+
+function resetDeck(){
+  known[DECKS[di].key].clear();
+  buildOrder();flipped=false;render();
+}
+function nextDeck(){ selectDeck((di+1)%DECKS.length); }
+
+/* ====================== BIND ====================== */
+card.addEventListener('click',flip);
+card.addEventListener('keydown',e=>{ if(e.key===' '||e.key==='Enter'){e.preventDefault();flip();}});
+
+$('prev').onclick=prev;
+$('next').onclick=next;
+$('got').onclick=()=>{ if(order.length) markKnown(); };
+$('shuffle').onclick=()=>{ if(order.length) shuffle(); };
+$('reset').onclick=resetDeck;
+
+/* keyboard */
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'){next();}
+  else if(e.key==='ArrowLeft'){prev();}
+  else if(e.key==='g'||e.key==='G'){ if(order.length) markKnown(); }
+});
+
+/* swipe */
+let sx=0,sy=0;
+stage.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
+stage.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)>55 && Math.abs(dx)>Math.abs(dy)){ dx<0?next():prev(); }
+},{passive:true});
+
+/* go */
+buildOrder();
+render();
+</script>
+</body>
+</html>
