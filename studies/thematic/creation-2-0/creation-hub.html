@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  Path: /studies/thematic/creation-2-0/creation-hub.html
+  CHANGELOG — Creation 2.0 Hub
+  ============================================================
+  2026-07-05  v1.1 (template 5.9.4)
+    • Rebuilt against production catalog after CSS/template audit:
+      – Recurring cycle now uses §51 .pattern-chain (was hand-rolled
+        .cycle-strip, which bypassed the polish layer).
+      – In-dev convention switched to site-standard .resource-status
+        pills (live / coming-soon, per mark-hub) — was invented
+        .dev-badge. Dim stays on filter (not opacity) because §56
+        revealUp ends at opacity:1 with fill-mode forwards.
+      – Hero brought to suite-hub convention: hero-pretitle,
+        original-language line (בְּרֵאשִׁית → καινὴ κτίσις),
+        stat-item / stat-number / stat-label naming.
+      – Rev 21:1 epigraph as §18 .scripture-quote; framework payoff
+        line as §12 .key-insight (both polish-enhanced).
+    • has-hebrew / has-greek → true; SBL Hebrew preload added.
+  2026-07-05  v1.0 (template 5.9.4)
+    • First build. Suite hub for the nine-movement Creation 2.0
+      biblical theology. Sections: why · timeline · movements ·
+      patterns · lens · takeaway · bibliography. Signature timeline
+      merges movement map + anchor texts; nodes deep-link to spokes.
+    • All nine spokes + interactive river marked in development.
+      To ship a spoke: remove .in-dev from its card/node and flip
+      its .resource-status pill from coming-soon to live.
+  ============================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Creation 2.0 — God's Plan to Make All Things New | Project Context</title>
+  <meta name="description" content="Creation 2.0 is a Project Context suite reading the Bible as one creation-to-new-creation story in nine movements: Eden, de-creation, covenant, exodus, kingdom, exile, Christ, Spirit, and the New Jerusalem.">
+  <meta name="author" content="Project Context">
+  <meta name="study-type" content="multi-page-suite">
+  <meta name="template-version" content="5.9.4">
+  <meta name="page-category" content="study-hub">
+  <meta name="nav-hub" content="thematic-studies">
+  <meta name="nav-section" content="biblical-theology">
+  <meta name="has-hebrew" content="true">
+  <meta name="has-greek" content="true">
+  <meta name="related-topics" content="creation,new creation,eden,de-creation,exile,covenant,exodus,kingdom,ezekiel,christology,pneumatology,revelation,temple">
+
+  <meta name="citation-author" content="Project Context">
+  <meta name="citation-title" content="Creation 2.0: God's Plan to Make All Things New">
+  <meta name="citation-site" content="Project Context">
+  <meta name="citation-date" content="2026">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Creation 2.0 — God's Plan to Make All Things New">
+  <meta name="twitter:description" content="A nine-movement biblical theology: Creation → De-Creation → Re-Creation → New Creation.">
+
+  <meta property="og:title" content="Creation 2.0 — God's Plan to Make All Things New">
+  <meta property="og:description" content="Read the Bible as one story moving from a garden to a garden-city.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://projectcontext.org/studies/thematic/creation-2-0/creation-hub.html">
+  <meta property="og:image" content="https://projectcontext.org/assets/images/thematic/creation-2-0-og.jpg">
+
+  <link rel="canonical" href="https://projectcontext.org/studies/thematic/creation-2-0/creation-hub.html">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Hebrew (hero language line) -->
+  <link rel="preload" href="/assets/fonts/SBL_Hebrew.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="preload" href="/assets/css/global-v3.css?v=3.3.2" as="style">
+  <link rel="stylesheet" href="/assets/css/global-v3.css?v=3.3.2">
+  <link rel="stylesheet" href="/assets/css/global-v3-polish.css?v=0.2">
+
+  <!-- ==========================================
+       PAGE-LOCAL CSS
+       Only components global-v3/polish do not provide: the hero
+       (heroes are page-local site-wide), the timeline river, the
+       movement-card internals, resource-status pills (site hub
+       convention, rebased onto v3 tokens), framework contrast,
+       and the pattern table. Everything else is catalog.
+       ========================================== -->
+  <style>
+    /* ── Hero (suite-hub convention: pretitle / language line /
+          title / subtitle / stats) ── */
+    .creation-hero {
+      min-height: 48vh;
+      display: grid;
+      place-items: center;
+      padding: clamp(3rem, 7vw, 5rem) var(--gutter);
+      margin: 4.5rem 0 0;
+      background:
+        radial-gradient(circle at 18% 82%, color-mix(in srgb, var(--accent-teal) 28%, transparent), transparent 45%),
+        radial-gradient(circle at 82% 18%, color-mix(in srgb, var(--accent-rose) 22%, transparent), transparent 48%),
+        linear-gradient(135deg, #06121f 0%, #111827 35%, #312e81 70%, #0f172a 100%);
+      color: white;
+      overflow: hidden;
+      position: relative;
+    }
+    .creation-hero::before {
+      content: '';
+      position: absolute;
+      inset: -30%;
+      background:
+        radial-gradient(circle, rgba(255,255,255,.10) 1px, transparent 1px),
+        linear-gradient(120deg, transparent 0%, rgba(255,255,255,.08) 48%, transparent 55%);
+      background-size: 36px 36px, 100% 100%;
+      animation: pc-creation-drift 36s linear infinite;
+      opacity: .55;
+    }
+    @keyframes pc-creation-drift { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .creation-hero::before { animation: none; } }
+    .hero-content { position: relative; z-index: 1; text-align: center; max-width: 920px; }
+    .hero-pretitle {
+      font-family: var(--font-mono);
+      font-size: var(--fs-xs);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      opacity: .82;
+      margin-bottom: .9rem;
+    }
+    .hero-lang {
+      font-size: clamp(1.15rem, 2.6vw, 1.5rem);
+      color: rgba(255,255,255,.85);
+      margin-bottom: .5rem;
+      display: flex; justify-content: center; align-items: baseline; gap: .8rem; flex-wrap: wrap;
+    }
+    .hero-lang .arrow { color: var(--accent-teal); font-weight: 700; }
+    .hero-lang .translit {
+      display: block; flex-basis: 100%;
+      font-family: var(--font-mono); font-size: var(--fs-xs);
+      letter-spacing: .12em; text-transform: uppercase; opacity: .6; margin-top: .2rem;
+    }
+    .hero-title {
+      color: white;
+      font-size: clamp(3rem, 8vw, 5.8rem);
+      margin: 0 0 .65rem;
+      letter-spacing: -.04em;
+    }
+    .hero-subtitle {
+      max-width: 760px;
+      margin: 0 auto 2rem;
+      font-size: clamp(1.05rem, 2.3vw, 1.35rem);
+      line-height: 1.65;
+      color: rgba(255,255,255,.88);
+    }
+    .hero-stats { display:flex; justify-content:center; gap: clamp(1.25rem, 4vw, 3rem); flex-wrap: wrap; }
+    .stat-item { min-width: 110px; }
+    .stat-number { color:white; font-family: var(--font-display); font-size: 2.3rem; line-height: 1; font-weight: 700; }
+    .stat-label { font-family: var(--font-mono); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing:.12em; opacity:.75; margin-top:.35rem; }
+
+    /* ── Resource status pills (site hub convention — mark-hub —
+          rebased onto v3 tokens). Flip coming-soon → live per
+          spoke as it ships. ── */
+    .resource-status {
+      display:inline-block; padding:.25rem .75rem; border-radius: var(--radius-pill);
+      font-family: var(--font-mono); font-size:.68rem; font-weight:600;
+      text-transform:uppercase; letter-spacing:.08em; color:#fff;
+      vertical-align: middle;
+    }
+    .resource-status.live        { background: var(--accent-blue); }
+    .resource-status.coming-soon { background: var(--text-muted); }
+
+    /* Dim via filter, not opacity: the §56 revealUp keyframe ends at
+       opacity:1 with fill-mode forwards, which would override an
+       opacity rule on reveal-animated children. filter survives. */
+    .in-dev { filter: grayscale(.35) opacity(.6); }
+    .in-dev .read-more { pointer-events:none; color: var(--text-muted); }
+
+    /* ── Framework contrast (Why section) ── */
+    .framework-contrast {
+      display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin:1.25rem 0;
+    }
+    @media (max-width: 720px) { .framework-contrast { grid-template-columns: 1fr; } }
+    .framework-line {
+      padding: 1rem 1.1rem; border-radius: var(--radius-sm);
+      background: var(--bg-2); border: 1px solid var(--border);
+      font-family: var(--font-mono); font-size: var(--fs-sm); line-height: 1.8;
+    }
+    .framework-line strong { display:block; font-family: var(--font-body); font-size: var(--fs-sm); text-transform: uppercase; letter-spacing:.08em; color: var(--text-muted); margin-bottom:.4rem; }
+    .framework-line.expanded { border-left: 3px solid var(--page-accent); }
+
+    /* ── Signature timeline: The Story in One Timeline ── */
+    .creation-river { list-style:none; margin:1.5rem 0 0; padding:0; position:relative; }
+    .creation-river::before {
+      content:''; position:absolute; left:1rem; top:.6rem; bottom:.6rem; width:3px;
+      background: linear-gradient(180deg, var(--accent-teal), var(--accent-blue), var(--accent-purple), var(--accent-rose));
+      border-radius: var(--radius-pill);
+    }
+    .creation-river li { position:relative; padding:0 0 1.35rem 3rem; margin:0; }
+    .creation-river li::before {
+      content:''; position:absolute; left:.52rem; top:.3rem; width:1rem; height:1rem;
+      border-radius:50%; background:var(--bg); border:3px solid var(--page-accent);
+    }
+    .creation-river a.node-title {
+      display:inline-block; font-family:var(--font-display); font-size:var(--fs-md);
+      font-weight:700; text-decoration:none; color: var(--text); margin-right:.5rem;
+    }
+    .creation-river a.node-title:hover { color: var(--page-accent-deep); }
+    .creation-river .node-anchor {
+      display:block; font-family:var(--font-mono); font-size:var(--fs-xs);
+      text-transform:uppercase; letter-spacing:.1em; color:var(--page-accent-deep); margin:.15rem 0 .2rem;
+    }
+    .creation-river .node-gloss { display:block; color:var(--text-muted); font-size:var(--fs-sm); }
+
+    /* ── Movement cards (internals; .mini-card shell is catalog) ── */
+    .movement-number {
+      display:inline-flex; align-items:center; justify-content:center;
+      width: 2rem; height: 2rem; margin-right:.35rem;
+      border-radius: 50%; background: var(--page-accent-soft); color: var(--page-accent-deep);
+      font-family: var(--font-mono); font-size: var(--fs-xs); font-weight: 700;
+    }
+    .movement-card { display:flex; flex-direction:column; }
+    .movement-head { display:flex; justify-content:space-between; align-items:flex-start; gap:.75rem; }
+    .movement-head h4 { margin:0; }
+    .movement-card .meta-line { font-family: var(--font-mono); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing:.1em; color: var(--text-muted); margin:.25rem 0 .8rem; }
+    .movement-card p { margin-bottom:.85rem; }
+    .movement-card ul { margin-top:.85rem; }
+    .movement-card li { font-size: var(--fs-sm); }
+    .movement-card .big-idea {
+      margin:.9rem 0 0; padding:.85rem; border-radius:var(--radius-sm);
+      background:var(--bg-2); border-left:3px solid var(--page-accent);
+      font-size:var(--fs-sm); color:var(--text-soft);
+    }
+    .movement-card .big-idea strong { display:block; margin-bottom:.2rem; }
+    .movement-card .read-more { margin-top:auto; }
+    .read-more { display:inline-flex; margin-top: .9rem; font-weight: 700; font-size: var(--fs-sm); }
+
+    /* ── Pattern table ── */
+    .pattern-table { width:100%; border-collapse:collapse; margin:1rem 0; overflow:hidden; border-radius:var(--radius-sm); }
+    .pattern-table th, .pattern-table td { border:1px solid var(--border); padding:.75rem .9rem; vertical-align:top; }
+    .pattern-table th { background:var(--bg-2); text-align:left; font-family:var(--font-mono); font-size:var(--fs-xs); text-transform:uppercase; letter-spacing:.1em; color:var(--text-muted); }
+    @media (max-width: 720px) { .pattern-table { display:block; overflow-x:auto; } }
+  </style>
+</head>
+<body class="thematic-study" data-theme="teal" dir="ltr">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div class="reading-progress"></div>
+
+  <!-- Navigation injected by nav-component.js (module script near </body>) -->
+  <div id="nav-placeholder"></div>
+
+  <!-- Desktop quick-nav dots (chassis-populated from section config, ≥1400px) -->
+  <div class="quick-nav-sidebar" aria-label="Section navigation"></div>
+
+  <!-- ==========================================
+       HERO — suite-hub convention
+       ========================================== -->
+  <header class="creation-hero" role="banner">
+    <div class="hero-content">
+      <div class="hero-pretitle">Project Context · Study Suite · Biblical Theology</div>
+      <div class="hero-lang">
+        <span class="hebrew" lang="he" dir="rtl">בְּרֵאשִׁית</span>
+        <span class="arrow" aria-hidden="true">→</span>
+        <span class="greek" lang="grc">καινὴ κτίσις</span>
+        <span class="translit">bereshit — "in the beginning" · kainē ktisis — "new creation"</span>
+      </div>
+      <h1 class="hero-title">Creation 2.0</h1>
+      <p class="hero-subtitle">The Bible is not the story of getting back to Eden — it is the story of God bringing creation to its intended completion through Jesus Christ.</p>
+      <div class="hero-stats" aria-label="Study summary">
+        <div class="stat-item"><div class="stat-number">9</div><div class="stat-label">Movements</div></div>
+        <div class="stat-item"><div class="stat-number">66</div><div class="stat-label">Books in View</div></div>
+        <div class="stat-item"><div class="stat-number">1</div><div class="stat-label">Unified Story</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" class="content-section" role="main" aria-label="Creation 2.0 suite hub">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a> ›
+      <a href="/studies/">Studies</a> ›
+      <a href="/studies/thematic/">Thematic Studies</a> ›
+      Creation 2.0
+    </nav>
+
+    <div class="reading-stamp">
+      <div class="stamp-meta"><strong data-reading-time>~14 min</strong><span>read</span></div>
+      <div class="stamp-meta"><span>Depth</span><div class="complexity-level" aria-label="Study depth"><div class="complexity-dot filled"></div><div class="complexity-dot filled"></div><div class="complexity-dot filled"></div><div class="complexity-dot filled"></div><div class="complexity-dot"></div></div></div>
+      <div class="stamp-tldr">Creation → De-Creation → Re-Creation → New Creation: nine movements from a garden to a garden-city.</div>
+    </div>
+
+    <h2 class="section-title" id="study-title"><span class="section-icon">◆</span>Creation 2.0 <span class="section-subtitle">God's Plan to Make All Things New</span></h2>
+
+    <nav class="mini-toc" aria-label="Section navigation">
+      <span class="mini-toc-label">Sections</span>
+      <a href="#why">Why Creation 2.0</a>
+      <a href="#timeline">Timeline</a>
+      <a href="#movements">Nine Movements</a>
+      <a href="#patterns">Patterns</a>
+      <a href="#lens">Reading Lens</a>
+      <a href="#bibliography">Sources</a>
+    </nav>
+
+    <!-- ==========================================
+         SECTION 1 · WHY CREATION 2.0?
+         ========================================== -->
+    <section class="theology-card" id="why">
+      <h3>Why Creation 2.0?</h3>
+      <blockquote class="scripture-quote">
+        Then I saw a new heaven and a new earth, for the first heaven and the first earth had passed away…
+        <span class="reference">Revelation 21:1</span>
+      </blockquote>
+      <p>For many Christians, the Bible is summarized as <strong>Creation → Fall → Redemption</strong>. That summary captures an essential truth — the problem of sin and the necessity of rescue — but it is incomplete, and it can make redemption sound like a repair job: God fixing damage to get things back to the way they were.</p>
+      <p>Scripture tells a larger story. It begins in a garden but ends in a city. It begins with two people but culminates in a redeemed multitude. It begins with creation and concludes with an entirely renewed cosmos. The Bible is not merely about recovering what was lost in Eden; it is about God accomplishing what Eden anticipated from the very beginning.</p>
+      <div class="framework-contrast">
+        <div class="framework-line">
+          <strong>The familiar summary</strong>
+          Creation → Fall → Redemption → Restoration
+        </div>
+        <div class="framework-line expanded">
+          <strong>The Creation 2.0 reading</strong>
+          Creation → De-Creation → Re-Creation → New Creation
+        </div>
+      </div>
+      <div class="key-insight">
+        <strong>The subtle difference changes how almost every book of Scripture is read.</strong>
+        Again and again the Bible shows the same pattern: God begins a creation project, humanity is tested, humanity fails, exile follows — and God begins again. Each new beginning advances the story until Jesus arrives as the faithful human, the true image of God, the last Adam, and the firstborn of the New Creation.
+      </div>
+    </section>
+
+    <blockquote class="core-logic-quote">Eden was never the finish line. Eden was the beginning of the vocation; the New Jerusalem is creation brought to completion.</blockquote>
+
+    <hr class="star-divider" aria-hidden="true">
+
+    <!-- ==========================================
+         SECTION 2 · THE STORY IN ONE TIMELINE
+         Signature graphic. Merges the movement map
+         and the anchor texts: node = movement +
+         anchor text + gloss, deep-linked to spoke.
+         data-reveal-children: downstream stagger is
+         the point of the graphic — the river flows.
+         ========================================== -->
+    <section class="theology-card" id="timeline">
+      <h3>The Story in One Timeline</h3>
+      <p>The Creation 2.0 framework is not imposed from outside the Bible. It follows Scripture's own repeated images — garden, river, mountain, temple, priesthood, kingdom, exile, Spirit, resurrection, new creation — through nine movements. Each node below opens that movement's full study.</p>
+      <ol class="creation-river" data-reveal-children>
+        <li class="in-dev">
+          <a class="node-title" href="creation.html">1 · Creation</a><span class="resource-status coming-soon">Coming Soon</span>
+          <span class="node-anchor">Genesis 1–2</span>
+          <span class="node-gloss">God orders creation, places humanity in sacred space, and gives the image-bearing vocation.</span>
+        </li>
+        <li class="in-dev">
+          <a class="node-title" href="creation-broken.html">2 · Creation Broken</a><span class="resource-status coming-soon">Coming Soon</span>
+          <span class="node-anchor">Genesis 3–11</span>
+          <span class="node-gloss">Creation unravels through exile, violence, flood, and Babel.</span>
+        </li>
+        <li class="in-dev">
+          <a class="node-title" href="creation-through-covenant.html">3 · Creation Through Covenant</a><span class="resource-status coming-soon">Coming Soon</span>
+          <span class="node-anchor">Genesis 12; 15; 17</span>
+          <span class="node-gloss">Abraham receives creation-scale promises: land, offspring, blessing, and nations.</span>
+        </li>
+        <li class="in-dev">
+          <a class="node-title" href="creation-through-exodus.html">4 · Creation Through Exodus</a><span class="resource-status coming-soon">Coming Soon</span>
+          <span class="node-anchor">Exodus 14–40</span>
+          <span class="node-gloss">Waters divide, Israel is formed, covenant is given, and the Tabernacle becomes Eden-like space.</span>
+        </li>
+        <li class="in-dev">
+          <a class="node-title" href="creation-through-kingdom.html">5 · Creation Through Kingdom</a><span class="resource-status coming-soon">Coming Soon</span>
+          <span class="node-anchor">2 Samuel 7; 1 Kings 6–8</span>
+          <span class="node-gloss">The Davidic covenant and Temple focus creation hope in king, city, and sanctuary.</span>
+        </li>
+        <li class="in-dev">
+          <a class="node-title" href="creation-through-exile.html">6 · Creation Through Exile</a><span class="resource-status coming-soon">Coming Soon</span>
+          <span class="node-anchor">Isaiah 65; Ezekiel 36–37; 47</span>
+          <span class="node-gloss">The prophets promise new creation: new heart, new Spirit, resurrection life, and a river from God's presence.</span>
+        </li>
+        <li class="in-dev">
+          <a class="node-title" href="creation-through-christ.html">7 · Creation Through Christ</a><span class="resource-status coming-soon">Coming Soon</span>
+          <span class="node-anchor">John 1; John 20; Colossians 1</span>
+          <span class="node-gloss">Christ is the agent of creation and the inaugurator of new creation.</span>
+        </li>
+        <li class="in-dev">
+          <a class="node-title" href="creation-through-the-spirit.html">8 · Creation Through the Spirit</a><span class="resource-status coming-soon">Coming Soon</span>
+          <span class="node-anchor">Acts 2; 2 Corinthians 5; Ephesians 2</span>
+          <span class="node-gloss">The Spirit forms a new humanity and a living Temple from Jews and Gentiles.</span>
+        </li>
+        <li class="in-dev">
+          <a class="node-title" href="creation-completed.html">9 · Creation Completed</a><span class="resource-status coming-soon">Coming Soon</span>
+          <span class="node-anchor">Revelation 21–22</span>
+          <span class="node-gloss">The garden-city arrives: God dwells with humanity, the curse is removed, and creation reaches its goal.</span>
+        </li>
+      </ol>
+      <div class="pattern-summary"><strong>Pattern Summary:</strong> The same images keep returning with greater scope. Eden becomes Tabernacle, Temple, Christ, church, and finally New Jerusalem. The story expands without losing its original DNA.</div>
+
+      <!-- Interactive river teaser — the suite's iceberg-equivalent.
+           Standalone page outside the chassis; segments deep-link to
+           spokes. Remove .in-dev + flip pill to live when built. -->
+      <div class="panel in-dev" style="margin-top:1.25rem;">
+        <h4>The Biblical River <span class="resource-status coming-soon">Coming Soon</span></h4>
+        <p>An interactive visualization of the whole story as one river: a spring emerging from Eden, widening through Abraham, Exodus, Kingdom, Exile, Christ, and the Church, and emptying into the River of Life in Revelation 22. Click anywhere along the river to jump to that movement.</p>
+        <a class="read-more" href="creation-river-interactive.html">Explore the River →</a>
+      </div>
+    </section>
+
+    <hr class="star-divider" aria-hidden="true">
+
+    <!-- ==========================================
+         SECTION 3 · NINE MOVEMENTS
+         One card per spoke. To ship a spoke: remove
+         .in-dev from its card and flip the pill to
+         <span class="resource-status live">Live</span>.
+         ========================================== -->
+    <section id="movements">
+      <h3 class="section-title"><span class="section-icon">✦</span>Nine Movements</h3>
+      <p class="section-subtitle">Each movement is an entry point into the larger study. The hub gives readers enough theological orientation to understand the whole story; the movement pages develop the texts, details, and arguments.</p>
+      <div class="mini-card-grid" data-reveal-children>
+        <article class="mini-card movement-card in-dev">
+          <div class="movement-head"><h4><span class="movement-number">1</span>Creation</h4><span class="resource-status coming-soon">Coming Soon</span></div>
+          <div class="meta-line">Genesis 1–2 · God's Original Design</div>
+          <p>The Bible opens not with humanity's failure but with God's intentional design. Creation is ordered, blessed, fruitful, and declared good. Humanity is placed within that world as God's image, not merely to exist in creation but to represent God's rule within it.</p>
+          <p>Adam and Eve receive a royal-priestly vocation: rule over creation, cultivate and guard sacred space, be fruitful, multiply, and extend Eden's life-giving order outward. Eden is the beginning of the mission, not the whole destination.</p>
+          <ul><li>Image of God</li><li>Eden as garden-temple</li><li>Royal-priestly vocation</li><li>Sabbath rest as creation's goal</li></ul>
+          <div class="big-idea"><strong>Big Idea:</strong> Creation is good, but it is commissioned. Humanity is made to extend God's presence, wisdom, and order throughout the earth.</div>
+          <a class="read-more" href="creation.html">Read Creation →</a>
+        </article>
+
+        <article class="mini-card movement-card in-dev">
+          <div class="movement-head"><h4><span class="movement-number">2</span>Creation Broken</h4><span class="resource-status coming-soon">Coming Soon</span></div>
+          <div class="meta-line">Genesis 3–11 · The Unraveling of God's World</div>
+          <p>Sin is not only moral failure; it is anti-creation. Adam and Eve grasp wisdom apart from God, and the result is exile from sacred space. The ground is cursed, human relationships fracture, and death enters the story.</p>
+          <p>Genesis 3–11 shows creation progressively unraveling: Cain murders Abel, violence fills the earth, the Flood returns the world to watery chaos, and Babel attempts unity without God. The image-bearers who were meant to extend Eden instead multiply disorder.</p>
+          <ul><li>Exile from presence</li><li>Curse and death</li><li>Flood as de-creation</li><li>Babel and scattering</li></ul>
+          <div class="big-idea"><strong>Big Idea:</strong> The problem is deeper than individual sin. Creation itself is being pulled away from its God-given purpose.</div>
+          <a class="read-more" href="creation-broken.html">Read Creation Broken →</a>
+        </article>
+
+        <article class="mini-card movement-card in-dev">
+          <div class="movement-head"><h4><span class="movement-number">3</span>Creation Through Covenant</h4><span class="resource-status coming-soon">Coming Soon</span></div>
+          <div class="meta-line">Genesis 12–50 · Beginning Again with Abraham</div>
+          <p>God does not abandon the creation project. He narrows the focus to one family so that blessing can ultimately widen to all families of the earth. Abraham's call is not a side story; it is God's creation strategy after Babel.</p>
+          <p>The promises of land, seed, blessing, and nations echo Eden's original vocation. Land anticipates renewed sacred space. Seed carries the hope of a faithful human line. Blessing reverses curse. The nations remain the horizon of God's purpose.</p>
+          <ul><li>Land as renewed Eden</li><li>Seed promise</li><li>Blessing replacing curse</li><li>Nations as the goal</li></ul>
+          <div class="big-idea"><strong>Big Idea:</strong> Covenant is the means by which God begins to restore creation through a chosen family for the sake of the whole world.</div>
+          <a class="read-more" href="creation-through-covenant.html">Read Covenant →</a>
+        </article>
+
+        <article class="mini-card movement-card in-dev">
+          <div class="movement-head"><h4><span class="movement-number">4</span>Creation Through Exodus</h4><span class="resource-status coming-soon">Coming Soon</span></div>
+          <div class="meta-line">Exodus–Deuteronomy · Forming God's New Humanity</div>
+          <p>The Exodus is narrated as a new-creation event. Waters divide, a people emerge, God defeats the powers of chaos, and Israel is brought to the mountain to receive covenant identity. The liberated slaves become God's treasured people.</p>
+          <p>The Tabernacle then becomes an Eden-like sanctuary: divine presence, priestly service, sacred boundaries, lampstand-tree imagery, cherubim, gold, and ordered space. Israel is called to become a kingdom of priests and a holy nation before the watching world.</p>
+          <ul><li>Waters divided</li><li>Covenant people formed</li><li>Kingdom of priests</li><li>Tabernacle as Eden</li></ul>
+          <div class="big-idea"><strong>Big Idea:</strong> Exodus shows God creating a people who can live with Him, mediate His presence, and display His order among the nations.</div>
+          <a class="read-more" href="creation-through-exodus.html">Read Exodus →</a>
+        </article>
+
+        <article class="mini-card movement-card in-dev">
+          <div class="movement-head"><h4><span class="movement-number">5</span>Creation Through Kingdom</h4><span class="resource-status coming-soon">Coming Soon</span></div>
+          <div class="meta-line">Joshua–Kings · God's Rule on Earth</div>
+          <p>Entering the land offers another chance for creation to flourish. The land becomes a large-scale Eden setting where God's people are meant to practice justice, worship, rest, and covenant faithfulness under God's rule.</p>
+          <p>David's throne and Solomon's Temple bring the creation project into royal and liturgical form. Jerusalem becomes a symbolic center of God's reign, and the Temple becomes a renewed Eden where heaven and earth meet. Yet the monarchy also exposes the failure of human rule when kings turn from wisdom to idolatry.</p>
+          <ul><li>Land and rest</li><li>Davidic kingship</li><li>Jerusalem as sacred center</li><li>Temple as Eden</li></ul>
+          <div class="big-idea"><strong>Big Idea:</strong> Kingdom reveals the beauty of God's rule on earth—and the inability of even Israel's greatest kings to complete the creation vocation.</div>
+          <a class="read-more" href="creation-through-kingdom.html">Read Kingdom →</a>
+        </article>
+
+        <article class="mini-card movement-card in-dev">
+          <div class="movement-head"><h4><span class="movement-number">6</span>Creation Through Exile</h4><span class="resource-status coming-soon">Coming Soon</span></div>
+          <div class="meta-line">Prophets · Hope for New Creation</div>
+          <p>Exile looks like Eden lost again: the people are removed from the land, the Temple is defiled and destroyed, and God's glory departs. But the prophets refuse to treat exile as the end of God's creation story.</p>
+          <p>Isaiah, Jeremiah, Ezekiel, and the Twelve announce something greater than political return. God will give a new heart, pour out His Spirit, raise dry bones, restore shepherding, renew the land, and bring forth new heavens and a new earth. Restoration becomes recreation — Ezekiel in particular reads as Genesis rewritten in exile.</p>
+          <ul><li>New covenant</li><li>New heart and Spirit</li><li>Dry bones raised</li><li>River from the Temple</li></ul>
+          <div class="big-idea"><strong>Big Idea:</strong> The prophets reveal that God's answer to exile is not merely return from Babylon but the promise of a transformed creation.</div>
+          <a class="read-more" href="creation-through-exile.html">Read Exile →</a>
+        </article>
+
+        <article class="mini-card movement-card in-dev">
+          <div class="movement-head"><h4><span class="movement-number">7</span>Creation Through Christ</h4><span class="resource-status coming-soon">Coming Soon</span></div>
+          <div class="meta-line">Gospels · The True Beginning</div>
+          <p>Jesus gathers every creation pattern into Himself. John begins with "In the beginning." Luke traces Jesus back to Adam. Matthew presents Him as David's son and a new Moses. Mark announces the kingdom arriving in power.</p>
+          <p>Jesus succeeds where Adam, Israel, Moses, David, and the Temple system could not. He resists temptation, calms chaotic waters, heals broken bodies, forgives sin, embodies God's presence, bears the curse, and rises in a garden on the first day of the week.</p>
+          <ul><li>Last Adam</li><li>True Israel</li><li>Greater David</li><li>Resurrection as new creation</li></ul>
+          <div class="big-idea"><strong>Big Idea:</strong> Christ is not only the rescuer of individuals; He is the faithful human through whom creation's destiny is finally secured.</div>
+          <a class="read-more" href="creation-through-christ.html">Read Christ →</a>
+        </article>
+
+        <article class="mini-card movement-card in-dev">
+          <div class="movement-head"><h4><span class="movement-number">8</span>Creation Through the Spirit</h4><span class="resource-status coming-soon">Coming Soon</span></div>
+          <div class="meta-line">Acts–Epistles · The Church as Firstfruits</div>
+          <p>Pentecost is another Genesis moment: God's breath fills a new humanity. The nations once scattered at Babel begin to hear the mighty works of God, and the Spirit forms a people who carry the presence of God into the world.</p>
+          <p>The church becomes God's living Temple, a Jew-and-Gentile new humanity, and the firstfruits of the renewed world. Paul can therefore speak of believers as new creation: not because final renewal has fully arrived, but because the future has begun in Christ and the Spirit.</p>
+          <ul><li>Pentecost and Babel reversed</li><li>Living Temple</li><li>One new humanity</li><li>Firstfruits of renewal</li></ul>
+          <div class="big-idea"><strong>Big Idea:</strong> The Spirit makes the future visible in the present by forming communities that embody new creation ahead of time.</div>
+          <a class="read-more" href="creation-through-the-spirit.html">Read Spirit →</a>
+        </article>
+
+        <article class="mini-card movement-card in-dev">
+          <div class="movement-head"><h4><span class="movement-number">9</span>Creation Completed</h4><span class="resource-status coming-soon">Coming Soon</span></div>
+          <div class="meta-line">Revelation 21–22 · Heaven and Earth United</div>
+          <p>The Bible ends where it began, but transformed. The Tree of Life returns, the river of life flows from God's throne, the curse is removed, and God dwells with humanity. Creation is no longer threatened by exile, death, or corruption.</p>
+          <p>Yet the ending is not simply Eden reset. It is a garden-city. The nations bring their glory, redeemed humanity reigns, and heaven and earth are permanently united. The original vocation has matured into completion.</p>
+          <ul><li>New Jerusalem</li><li>Tree and river restored</li><li>No more curse</li><li>God with humanity forever</li></ul>
+          <div class="big-idea"><strong>Big Idea:</strong> Creation 2.0 is Eden fulfilled: not a return to the prototype, but creation brought to its intended goal in Christ.</div>
+          <a class="read-more" href="creation-completed.html">Read Completion →</a>
+        </article>
+      </div>
+    </section>
+
+    <hr class="star-divider" aria-hidden="true">
+
+    <!-- ==========================================
+         SECTION 4 · PATTERNS YOU'LL NOTICE
+         Recurring cycle = §51 pattern-chain (catalog).
+         ========================================== -->
+    <section class="theology-card" id="patterns">
+      <h3>Patterns You'll Notice</h3>
+      <p>Once readers learn the Creation 2.0 map, the Bible stops feeling like isolated stories and starts reading as literary architecture. Every major movement repeats the same cycle:</p>
+      <div class="pattern-chain" aria-label="The recurring creation cycle">
+        <div class="pattern-item">
+          <span class="pattern-icon" aria-hidden="true">⛰️</span>
+          <div class="pattern-name">Sacred Space</div>
+          <span class="pattern-tagline">Eden · Tabernacle · Temple</span>
+        </div>
+        <span class="pattern-arrow" aria-hidden="true">→</span>
+        <div class="pattern-item">
+          <span class="pattern-icon" aria-hidden="true">👤</span>
+          <div class="pattern-name">Image of God</div>
+          <span class="pattern-tagline">A human to bear it</span>
+        </div>
+        <span class="pattern-arrow" aria-hidden="true">→</span>
+        <div class="pattern-item">
+          <span class="pattern-icon" aria-hidden="true">🌈</span>
+          <div class="pattern-name">Covenant</div>
+          <span class="pattern-tagline">Promise binds the story</span>
+        </div>
+        <span class="pattern-arrow" aria-hidden="true">→</span>
+        <div class="pattern-item">
+          <span class="pattern-icon" aria-hidden="true">🕯️</span>
+          <div class="pattern-name">Priesthood</div>
+          <span class="pattern-tagline">Mediating presence</span>
+        </div>
+        <span class="pattern-arrow" aria-hidden="true">→</span>
+        <div class="pattern-item">
+          <span class="pattern-icon" aria-hidden="true">👑</span>
+          <div class="pattern-name">Kingdom</div>
+          <span class="pattern-tagline">Rule under God</span>
+        </div>
+        <span class="pattern-arrow" aria-hidden="true">→</span>
+        <div class="pattern-item">
+          <span class="pattern-icon" aria-hidden="true">🏜️</span>
+          <div class="pattern-name">Exile</div>
+          <span class="pattern-tagline">Cast from presence</span>
+        </div>
+        <span class="pattern-arrow" aria-hidden="true">→</span>
+        <div class="pattern-item">
+          <span class="pattern-icon" aria-hidden="true">🛤️</span>
+          <div class="pattern-name">Return</div>
+          <span class="pattern-tagline">Gathered again</span>
+        </div>
+        <span class="pattern-arrow" aria-hidden="true">→</span>
+        <div class="pattern-item">
+          <span class="pattern-icon" aria-hidden="true">🌅</span>
+          <div class="pattern-name">New Beginning</div>
+          <span class="pattern-tagline">Creation starts over</span>
+        </div>
+      </div>
+      <p>And the images that open the story in Genesis return at its completion in Revelation — always with greater scope:</p>
+      <table class="pattern-table">
+        <thead><tr><th>Pattern</th><th>Genesis Beginning</th><th>Revelation Completion</th></tr></thead>
+        <tbody>
+          <tr><td>Garden</td><td>Eden as sacred space</td><td>New Jerusalem as garden-city</td></tr>
+          <tr><td>Tree</td><td>Tree of Life guarded</td><td>Tree of Life open for the nations</td></tr>
+          <tr><td>River</td><td>River flows from Eden</td><td>River of life flows from God's throne</td></tr>
+          <tr><td>Presence</td><td>God walks in the garden</td><td>God dwells with humanity forever</td></tr>
+          <tr><td>Image</td><td>Adam and Eve commissioned</td><td>Redeemed humanity reigns with Christ</td></tr>
+          <tr><td>Curse</td><td>Ground, pain, death, exile</td><td>No more curse, death, mourning, or pain</td></tr>
+        </tbody>
+      </table>
+      <div class="grid-2">
+        <div class="panel"><h4>Not merely rescue from earth</h4><p>The biblical hope is not escape from creation but the renewal of creation. Bodies, land, justice, worship, community, and nations all matter because God intends to dwell with humanity in a healed world.</p></div>
+        <div class="panel"><h4>Not merely return to Eden</h4><p>Revelation does not depict Eden reset to zero. The story matures into a city, with nations, kings, culture, worship, and creation healed under God's reign.</p></div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 5 · READING THE BIBLE THROUGH CREATION
+         ========================================== -->
+    <section class="theology-card" id="lens">
+      <h3>Reading the Bible Through Creation</h3>
+      <p>Creation 2.0 gives readers a set of questions to bring to every passage. Instead of asking only <em>"What happened?"</em> we begin asking how each story participates in the larger creation drama.</p>
+      <div class="qa-pills">
+        <details class="qa-pill"><summary>How does this passage advance creation?</summary><p>Where does the text move God's creation project forward — through blessing, covenant, presence, fruitfulness, or renewed vocation?</p></details>
+        <details class="qa-pill"><summary>How does it reverse de-creation?</summary><p>Look for curse undone, chaos ordered, exile ended, death overcome, scattered people gathered.</p></details>
+        <details class="qa-pill"><summary>What Eden imagery appears?</summary><p>Gardens, trees, rivers, mountains, priestly guarding, sacred space, gold and gems, fruitfulness, and God's walking presence.</p></details>
+        <details class="qa-pill"><summary>What exile imagery appears?</summary><p>Eastward movement, expulsion from sacred space, wilderness, Babylon, scattered nations, departed glory.</p></details>
+        <details class="qa-pill"><summary>How does this point to Christ?</summary><p>Every partial Adam, priest, king, prophet, temple, and covenant anticipates the One who fulfills the vocation.</p></details>
+        <details class="qa-pill"><summary>How does this anticipate New Creation?</summary><p>Healing, resurrection, Spirit, gathered nations, restored worship, justice, and the removal of curse.</p></details>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 6 · THE BIG TAKEAWAY
+         ========================================== -->
+    <p class="takeaway">The Bible does not begin in a garden and end in another garden. It begins in a garden and ends in a garden-city. God's purpose was never simply to restore Eden — it was to complete creation.</p>
+
+    <details class="bibliography-section" id="bibliography" open>
+      <summary>
+        <div class="bibliography-header">
+          <div class="bibliography-inner"><div class="bibliography-icon">📚</div><div class="bibliography-text"><h3 class="bibliography-title">Bibliography</h3><p class="bibliography-subtitle">Selected sources for the overarching Creation 2.0 framework.</p></div></div>
+          <span class="expand-indicator">⌄</span>
+        </div>
+      </summary>
+      <div class="bibliography-content">
+        <button class="cite-button" data-cite-study data-copy-bibliography aria-label="Copy citation to clipboard">Cite this study</button>
+        <div class="source-category"><h4>Biblical Theology &amp; New Creation</h4>
+          <ol>
+            <li>Beale, G. K. <em>The Temple and the Church's Mission</em>. Downers Grove: IVP Academic, 2004.</li>
+            <li>Middleton, J. Richard. <em>A New Heaven and a New Earth: Reclaiming Biblical Eschatology</em>. Grand Rapids: Baker Academic, 2014.</li>
+            <li>Wright, N. T. <em>Surprised by Hope</em>. New York: HarperOne, 2008.</li>
+            <li>Alexander, T. Desmond. <em>From Eden to the New Jerusalem</em>. Grand Rapids: Kregel, 2008.</li>
+          </ol>
+        </div>
+        <div class="source-category"><h4>Eden, Temple, and Canonical Patterns</h4>
+          <ol>
+            <li>Walton, John H. <em>The Lost World of Genesis One</em>. Downers Grove: IVP Academic, 2009.</li>
+            <li>Morales, L. Michael. <em>Who Shall Ascend the Mountain of the Lord?</em> Downers Grove: IVP Academic, 2015.</li>
+            <li>Hays, J. Daniel. <em>The Temple and the Tabernacle</em>. Grand Rapids: Baker Books, 2016.</li>
+          </ol>
+        </div>
+      </div>
+    </details>
+  </main>
+
+  <!-- Back to top -->
+  <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
+
+  <!-- Mobile menu overlay -->
+  <div class="mobile-menu-overlay"></div>
+
+  <!-- ==========================================
+       PER-PAGE SECTION CONFIG (raw array — chassis
+       validates ids against the DOM on load).
+       Mobile cap is 7: all six render.
+       ========================================== -->
+  <script id="page-section-config" type="application/json">
+  [
+    { "id": "why",          "label": "Why 2.0",    "priority": 1 },
+    { "id": "timeline",     "label": "Timeline",   "priority": 1 },
+    { "id": "movements",    "label": "Movements",  "priority": 1 },
+    { "id": "patterns",     "label": "Patterns",   "priority": 2 },
+    { "id": "lens",         "label": "Lens",       "priority": 2 },
+    { "id": "bibliography", "label": "Sources",    "priority": 3 }
+  ]
+  </script>
+
+  <script type="module">
+    import NavigationComponent from '/assets/js/nav-component.js';
+    new NavigationComponent({ currentPage: 'studies/thematic/creation-2-0/creation-hub', hubType: 'thematic-studies' });
+  </script>
+
+  <!-- Page chassis: reading progress, back-to-top, mobile tab strip,
+       quick-nav dots, active-section tracking, reading-time fill,
+       cite-this-study, [data-reveal] system -->
+  <script src="/assets/js/page-chassis-v5-9.js?v=5.9.3" defer></script>
+
+  <!-- ==========================================
+       REVEAL-ANIMATION SAFETY NET (v5.9.4)
+       Guarantees that every [data-reveal] / [data-reveal-children]
+       element receives [data-revealed] (and a per-child
+       --reveal-stagger) when it enters the viewport, even if
+       the chassis observer doesn't pick it up. Also force-reveals
+       any such element already on-screen at load, so above-the-fold
+       sections animate immediately instead of waiting for a scroll
+       event. No-op if the chassis already revealed it; honors
+       prefers-reduced-motion via the CSS rules in global-v3.css §56.
+       ========================================== -->
+  <script>
+    (function () {
+      'use strict';
+      const STAGGER_MS = 90;
+      const KICKSTART_MS = 200;
+
+      function applyStagger(parent) {
+        const kids = parent.children;
+        for (let i = 0; i < kids.length; i++) {
+          if (!kids[i].style.getPropertyValue('--reveal-stagger')) {
+            kids[i].style.setProperty('--reveal-stagger', (i * STAGGER_MS) + 'ms');
+          }
+        }
+      }
+      function reveal(el) {
+        if (el.hasAttribute('data-revealed')) return;
+        if (el.hasAttribute('data-reveal-children')) applyStagger(el);
+        el.setAttribute('data-revealed', '');
+      }
+      function isInViewport(el) {
+        const r = el.getBoundingClientRect();
+        const vh = window.innerHeight || document.documentElement.clientHeight;
+        return r.top < vh && r.bottom > 0;
+      }
+      function init() {
+        const targets = document.querySelectorAll('[data-reveal], [data-reveal-children]');
+        if (!targets.length) return;
+        targets.forEach(function (el) { if (isInViewport(el)) reveal(el); });
+        if (!('IntersectionObserver' in window)) { targets.forEach(reveal); return; }
+        const io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) { reveal(entry.target); io.unobserve(entry.target); }
+          });
+        }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
+        targets.forEach(function (el) {
+          if (!el.hasAttribute('data-revealed')) io.observe(el);
+        });
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () { setTimeout(init, KICKSTART_MS); });
+      } else {
+        setTimeout(init, KICKSTART_MS);
+      }
+    })();
+  </script>
+</body>
+</html>
