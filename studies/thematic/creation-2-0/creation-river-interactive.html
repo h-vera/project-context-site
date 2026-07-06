@@ -4,6 +4,16 @@
   CHANGELOG — Creation 2.0 · The Biblical River (Interactive)
   Path: /studies/thematic/creation-2-0/creation-river-interactive.html
   ============================================================
+  2026-07-05  v1.2
+    • Geometry/theology pass (Tier 3): the four rivers of Eden
+      branch near the spring (Gen 2:10–14); the Zion stream joins
+      at Movement 5 (Ps 46:4); Ezekiel's temple trickle joins at
+      Movement 6 (Ezek 47); Babylon marked on the Euphrates with
+      the exile-on-Eden's-old-river insight (Ps 137:1; Jer 29:7).
+    • The healing of the sea: the delta renders brackish until
+      Movement 9 is reached or the flow is reversed, then heals
+      (Ezek 47:8) — opacity transition, reduced-motion safe.
+    • All landmarks carry hover/focus tooltips.
   2026-07-05  v1.1
     • Iceberg-pattern adoptions: cursor tooltips on hover/focus,
       pillbar interaction hints, Walk-the-River auto-tour (4s/step,
@@ -194,6 +204,18 @@
     .is-embed .river-controls { margin-top:.75rem; }
     .is-embed .river-wrap { margin-top:.75rem; margin-bottom:1rem; }
     .is-embed .river-card { top:.75rem; }
+
+    /* ── v1.2: tributaries, Babylon marker, sea healing ── */
+    .trib { fill:none; stroke:var(--accent-teal); stroke-linecap:round; opacity:.45; }
+    .trib.join { stroke:var(--accent-blue); }
+    .trib-label { font-family:'DM Sans',sans-serif; font-size:12px; fill:var(--text-muted); }
+    .trib-hit { cursor:help; }
+    .babylon-glyph { fill:#1f2937; stroke:var(--accent-magenta); stroke-width:2; cursor:help; }
+    .babylon-label { font-family:'DM Sans',sans-serif; font-size:12.5px; font-weight:600; fill:var(--text); }
+    .sea-murk { fill:#4a5a52; opacity:.92; transition: opacity 1.4s ease; }
+    .sea-healed .sea-murk { opacity:0; }
+    .sea-status { font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; }
+    @media (prefers-reduced-motion: reduce) { .sea-murk { transition:none; } }
   </style>
 </head>
 <body class="thematic-study" data-theme="teal" dir="ltr">
@@ -282,6 +304,39 @@
             <circle r="3"   fill="#eab308" opacity=".65"><animateMotion dur="9s" begin="6s" keyPoints="1;0" keyTimes="0;1" calcMode="linear" repeatCount="indefinite"><mpath href="#riverline"/></animateMotion></circle>
           </g>
 
+          <!-- v1.2: the four rivers of Eden (Gen 2:10-14) -->
+          <g id="four-rivers" class="trib-hit" tabindex="0" role="img" aria-label="The four rivers of Eden: Pishon, Gihon, Hiddekel, and Euphrates (Genesis 2:10-14)">
+            <path class="trib" stroke-width="3.5" d="M338,142 C300,150 250,158 190,172"/>
+            <path class="trib" stroke-width="3.5" d="M340,158 C310,175 280,190 245,212"/>
+            <path class="trib" stroke-width="3.5" d="M342,150 C390,158 440,166 500,180"/>
+            <path class="trib" stroke-width="3.5" d="M344,166 C385,185 420,200 460,224"/>
+            <text class="trib-label" x="182" y="168" text-anchor="end">Pishon</text>
+            <text class="trib-label" x="238" y="228" text-anchor="end">Gihon</text>
+            <text class="trib-label" x="508" y="176" text-anchor="start">Hiddekel (Tigris)</text>
+            <text class="trib-label" x="468" y="240" text-anchor="start">Euphrates →</text>
+          </g>
+
+          <!-- v1.2: the Zion stream joins at the Kingdom (Ps 46:4) -->
+          <g id="zion-stream" class="trib-hit" tabindex="0" role="img" aria-label="The Zion stream: a river whose streams make glad the city of God, Psalm 46:4">
+            <path class="trib join" stroke-width="4" d="M150,928 C205,942 255,958 296,974"/>
+            <text class="trib-label" x="144" y="922" text-anchor="start">the Zion stream · Ps 46:4</text>
+          </g>
+
+          <!-- v1.2: Ezekiel's temple trickle joins at the Exile (Ezek 47) -->
+          <g id="temple-trickle" class="trib-hit" tabindex="0" role="img" aria-label="Ezekiel's temple trickle: water from under the threshold, Ezekiel 47">
+            <path class="trib join" stroke-width="2" d="M598,1112 C545,1122 500,1132 468,1142"/>
+            <path class="trib join" stroke-width="5" d="M468,1142 C452,1148 440,1154 434,1158"/>
+            <text class="trib-label" x="604" y="1106" text-anchor="start">the temple trickle · Ezek 47</text>
+          </g>
+
+          <!-- v1.2: Babylon on the Euphrates (exile lands on Eden's old river) -->
+          <g id="babylon" class="trib-hit" tabindex="0" role="img" aria-label="Babylon: built on the Euphrates, one of Eden's four rivers">
+            <path class="trib" stroke-width="2.5" stroke-dasharray="3 6" d="M376,1088 C420,1078 460,1072 500,1070"/>
+            <rect class="babylon-glyph" x="500" y="1054" width="26" height="26" rx="3" transform="rotate(45 513 1067)"/>
+            <text class="babylon-label" x="536" y="1064" text-anchor="start">Babylon</text>
+            <text class="trib-label" x="536" y="1080" text-anchor="start">on the Euphrates · Ps 137:1</text>
+          </g>
+
           <!-- Endpoints -->
           <g class="endpoint">
             <circle cx="360" cy="80" r="10" fill="var(--accent-teal)"/>
@@ -290,9 +345,11 @@
           </g>
           <g class="endpoint">
             <ellipse class="sea" cx="360" cy="1935" rx="200" ry="70"/>
+            <ellipse class="sea-murk" cx="360" cy="1935" rx="200" ry="70"/>
             <text x="360" y="1925" text-anchor="middle" class="slabel" style="font-size:17px;font-weight:700;fill:#fff;">The River of Life</text>
             <text x="360" y="1946" text-anchor="middle" class="legend-note" style="fill:rgba(255,255,255,.9);">Revelation 22:1–2 — from the throne, healing the nations</text>
             <text x="360" y="1966" text-anchor="middle" class="legend-note" style="fill:rgba(255,255,255,.75);">“…and the waters of the sea are healed” (Ezekiel 47:8)</text>
+            <text id="sea-status" class="sea-status" x="360" y="1990" text-anchor="middle" style="fill:rgba(255,255,255,.65);">· the sea waits · reach Movement 9, or send the nations home ·</text>
           </g>
 
           <!-- Stations (injected by JS from DATA for label/handlers consistency) -->
@@ -422,6 +479,7 @@
       Array.prototype.forEach.call(stations.children, function (s) { s.classList.remove('active'); });
       g.classList.add('active');
       if (updateHash !== false) history.replaceState(null, '', '#m' + d.n);
+      currentN = d.n; refreshSea();
       card.kicker.textContent = 'Movement ' + d.n + ' of 9';
       card.icon.textContent = d.icon;
       card.name.textContent = d.name;
@@ -455,6 +513,7 @@
       btnDown.setAttribute('aria-pressed', String(!isUp));
       btnUp.setAttribute('aria-pressed', String(isUp));
       caption.innerHTML = isUp ? CAP_UP : CAP_DOWN;
+      flowUp = isUp; refreshSea();
     }
     btnDown.addEventListener('click', function () { setFlow('down'); });
     btnUp.addEventListener('click', function () { setFlow('up'); });
@@ -484,6 +543,47 @@
       if (m) selectByN(+m[1], false);
     }
     window.addEventListener('hashchange', applyHash);
+
+    /* ── v1.2: tributary + landmark tooltips ── */
+    var LANDMARKS = {
+      'four-rivers': { icon:'\ud83c\udf0a', name:'The Four Rivers of Eden', anchor:'Genesis 2:10–14',
+        note:'One river leaves Eden and becomes four — Pishon, Gihon, Hiddekel, Euphrates — carrying the water of life out to the known world. Eden\u2019s geography runs outward.' },
+      'zion-stream': { icon:'\u26f0\ufe0f', name:'The Zion Stream', anchor:'Psalm 46:4; 36:8–9',
+        note:'\u201cThere is a river whose streams make glad the city of God\u201d — but Jerusalem has no river. The psalmists are seeing Eden: the temple mount sung as the garden-mountain, the fountain of life.' },
+      'temple-trickle': { icon:'\ud83c\udfdb\ufe0f', name:'The Temple Trickle', anchor:'Ezekiel 47:1–12',
+        note:'Water seeps from under the threshold — ankle-deep, knee-deep, waist-deep, then a river that cannot be crossed. No tributaries feed it; its source is the presence itself.' },
+      'babylon': { icon:'\ud83d\uddfc', name:'Babylon — on Eden\u2019s Old River', anchor:'Genesis 2:14; Psalm 137:1; Jeremiah 29:7',
+        note:'Exile lands Israel on the Euphrates — one of Eden\u2019s own four rivers. \u201cBy the rivers of Babylon we sat and wept\u201d … and there the prophets tell Israel to seek the city\u2019s peace: become the water of life for Babylon.' }
+    };
+    Object.keys(LANDMARKS).forEach(function (id) {
+      var node = document.getElementById(id);
+      if (!node) return;
+      var d = LANDMARKS[id];
+      function tipHTML(x, y) {
+        tip.innerHTML = '<span class="t-name">' + d.icon + ' ' + d.name + '</span><span class="t-anchor">' + d.anchor + '</span><div style="margin-top:.35rem;">' + d.note + '</div>';
+        tip.style.display = 'block';
+        var pad = 14, w = tip.offsetWidth, hh = tip.offsetHeight;
+        tip.style.left = Math.min(x + pad, window.innerWidth - w - 8) + 'px';
+        tip.style.top = ((y - hh - pad > 8) ? y - hh - pad : y + pad) + 'px';
+      }
+      node.addEventListener('mousemove', function (ev) { tipHTML(ev.clientX, ev.clientY); });
+      node.addEventListener('mouseenter', function (ev) { tipHTML(ev.clientX, ev.clientY); });
+      node.addEventListener('mouseleave', hideTip);
+      node.addEventListener('focus', function () { var r = node.getBoundingClientRect(); tipHTML(r.right, r.top); });
+      node.addEventListener('blur', hideTip);
+    });
+
+    /* ── v1.2: the healing of the sea (Ezek 47:8) ── */
+    var svgRoot = document.querySelector('.river-svg');
+    var seaStatus = document.getElementById('sea-status');
+    var currentN = 0, flowUp = false;
+    function refreshSea() {
+      var healed = (currentN === 9) || flowUp;
+      svgRoot.classList.toggle('sea-healed', healed);
+      seaStatus.textContent = healed
+        ? '\u00b7 the waters of the sea are healed \u00b7'
+        : '\u00b7 the sea waits \u00b7 reach Movement 9, or send the nations home \u00b7';
+    }
 
     /* ── v1.1: Walk the River tour + Reset ── */
     var btnWalk = document.getElementById('btn-walk');
@@ -522,6 +622,7 @@
       card.gloss.textContent = INTRO.gloss;
       card.word.hidden = true; card.link.hidden = true;
       if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+      currentN = 0; refreshSea();
     });
 
     /* Reduced motion: remove SMIL particles entirely (CSS handles dashes) */
@@ -532,11 +633,13 @@
         btnDown.setAttribute('aria-pressed', String(!isUp));
         btnUp.setAttribute('aria-pressed', String(isUp));
         caption.innerHTML = isUp ? CAP_UP : CAP_DOWN;
+        flowUp = isUp; refreshSea();
       };
       btnDown.addEventListener('click', function () { setFlow('down'); });
       btnUp.addEventListener('click', function () { setFlow('up'); });
     }
     applyHash();
+    refreshSea();
   })();
   </script>
 </body>
