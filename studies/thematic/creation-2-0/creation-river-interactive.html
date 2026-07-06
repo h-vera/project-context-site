@@ -4,6 +4,15 @@
   CHANGELOG — Creation 2.0 · The Biblical River (Interactive)
   Path: /studies/thematic/creation-2-0/creation-river-interactive.html
   ============================================================
+  2026-07-05  v1.1
+    • Iceberg-pattern adoptions: cursor tooltips on hover/focus,
+      pillbar interaction hints, Walk-the-River auto-tour (4s/step,
+      stops on manual interaction) + Reset.
+    • URL hash deep links (#m1–#m9): selection updates the hash;
+      load/hashchange restores it — spoke Map pills now land
+      pre-selected.
+    • Embed mode (?embed=1 or in-iframe): hides hero, breadcrumbs,
+      nav, and back-band; skips nav-component; tightens spacing.
   2026-07-05  v1.0
     • First build. Standalone interactive story map (iceberg
       pattern: outside the page chassis — no section config, no
@@ -147,6 +156,44 @@
     .legend-note { font-family:'DM Sans',sans-serif; font-size: 12.5px; fill: var(--text-muted); }
 
     .back-band { text-align:center; margin: 0 0 3rem; }
+
+    /* ── v1.1: pillbar (iceberg pattern, tokens) ── */
+    .pillbar { display:flex; gap:.6rem; flex-wrap:wrap; justify-content:center; }
+    .pillbar .pill {
+      display:inline-flex; align-items:center; gap:.45rem;
+      background:var(--bg-2); border:1px solid var(--border); border-radius:var(--radius-pill);
+      padding:.4rem .8rem; font-size:var(--fs-xs); color:var(--text-muted);
+    }
+    .pillbar .dot { width:.5rem; height:.5rem; border-radius:50%; background:var(--page-accent); }
+
+    /* ── v1.1: tour buttons ── */
+    .tour-btns { display:inline-flex; gap:.5rem; }
+    .tour-btns button {
+      appearance:none; cursor:pointer; border:1px solid var(--border); background:var(--bg-2);
+      border-radius:var(--radius-pill); padding:.55rem .95rem;
+      font-family:var(--font-mono); font-size:var(--fs-xs); font-weight:600;
+      letter-spacing:.06em; text-transform:uppercase; color:var(--text-muted);
+    }
+    .tour-btns button:hover { color:var(--page-accent-deep); border-color:var(--page-accent); }
+    .tour-btns button.walking { background:var(--page-accent); border-color:var(--page-accent); color:#fff; }
+
+    /* ── v1.1: cursor tooltip (iceberg pattern) ── */
+    .river-tip {
+      position:fixed; z-index:50; pointer-events:none; display:none; max-width:260px;
+      background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-sm);
+      box-shadow:var(--shadow-sm, 0 6px 18px rgba(0,0,0,.14));
+      padding:.55rem .75rem; font-size:var(--fs-sm);
+    }
+    .river-tip .t-name { font-weight:700; display:block; }
+    .river-tip .t-anchor { font-family:var(--font-mono); font-size:var(--fs-xs);
+      text-transform:uppercase; letter-spacing:.08em; color:var(--text-muted); }
+
+    /* ── v1.1: embed mode ── */
+    .is-embed .river-hero, .is-embed .breadcrumbs, .is-embed .back-band,
+    .is-embed #nav-placeholder, .is-embed .mobile-menu-overlay, .is-embed .skip-link { display:none; }
+    .is-embed .river-controls { margin-top:.75rem; }
+    .is-embed .river-wrap { margin-top:.75rem; margin-bottom:1rem; }
+    .is-embed .river-card { top:.75rem; }
   </style>
 </head>
 <body class="thematic-study" data-theme="teal" dir="ltr">
@@ -172,6 +219,15 @@
       <div class="flow-toggle" role="group" aria-label="Flow direction">
         <button type="button" id="btn-down" aria-pressed="true">⬇ Downstream · Eden outward</button>
         <button type="button" id="btn-up" aria-pressed="false">⬆ Upstream · Nations return</button>
+      </div>
+      <div class="tour-btns">
+        <button type="button" id="btn-walk">▶ Walk the River</button>
+        <button type="button" id="btn-reset">↺ Reset</button>
+      </div>
+      <div class="pillbar" aria-hidden="true">
+        <div class="pill"><span class="dot"></span><strong>Hover</strong>&nbsp;a station for a preview</div>
+        <div class="pill"><span class="dot"></span><strong>Tap</strong>&nbsp;to open the movement card</div>
+        <div class="pill"><span class="dot"></span><strong>Flip</strong>&nbsp;the flow to send the nations home</div>
       </div>
       <p class="flow-caption" id="flow-caption">From one spring, four rivers: Eden's water flows <em>out</em> to enrich the nations (Genesis 2:10) — and keeps widening as the creation project grows.</p>
     </div>
@@ -257,13 +313,21 @@
     <div class="back-band">
       <a href="creation-hub.html" class="cosmic-button">← Return to Creation 2.0 Hub</a>
     </div>
+    <div class="river-tip" id="river-tip" role="presentation"></div>
   </main>
 
   <div class="mobile-menu-overlay"></div>
 
+  <script>
+    window.__riverEmbed = new URLSearchParams(location.search).has('embed') ||
+      (function(){ try { return window.self !== window.top; } catch (e) { return true; } })();
+    if (window.__riverEmbed) document.documentElement.classList.add('is-embed'), document.addEventListener('DOMContentLoaded', function(){ document.body.classList.add('is-embed'); });
+  </script>
   <script type="module">
-    import NavigationComponent from '/assets/js/nav-component.js';
-    new NavigationComponent({ currentPage: 'studies/thematic/creation-2-0/creation-river-interactive', hubType: 'thematic-studies' });
+    if (!window.__riverEmbed) {
+      const { default: NavigationComponent } = await import('/assets/js/nav-component.js');
+      new NavigationComponent({ currentPage: 'studies/thematic/creation-2-0/creation-river-interactive', hubType: 'thematic-studies' });
+    }
   </script>
 
   <script>
@@ -329,10 +393,17 @@
       var anchorAttr = d.side === 'l' ? 'end' : 'start';
       g.appendChild(el('text', { 'class':'slabel', x:lx, y:d.y - 2, 'text-anchor':anchorAttr }, d.n + ' · ' + d.name));
       g.appendChild(el('text', { 'class':'snum', x:lx, y:d.y + 16, 'text-anchor':anchorAttr }, d.anchor));
-      g.addEventListener('click', function () { select(d, g); });
+      g.addEventListener('click', function () { if (typeof stopTour === 'function') stopTour(); select(d, g); hideTip(); });
       g.addEventListener('keydown', function (ev) {
-        if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); select(d, g); }
+        if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); if (typeof stopTour === 'function') stopTour(); select(d, g); hideTip(); }
       });
+      g.addEventListener('mousemove', function (ev) { showTip(d, ev.clientX, ev.clientY); });
+      g.addEventListener('mouseenter', function (ev) { showTip(d, ev.clientX, ev.clientY); });
+      g.addEventListener('mouseleave', hideTip);
+      g.addEventListener('focus', function () {
+        var r = g.getBoundingClientRect(); showTip(d, r.right, r.top);
+      });
+      g.addEventListener('blur', hideTip);
       stations.appendChild(g);
     });
 
@@ -347,9 +418,10 @@
       root: document.getElementById('river-card')
     };
 
-    function select(d, g) {
+    function select(d, g, updateHash) {
       Array.prototype.forEach.call(stations.children, function (s) { s.classList.remove('active'); });
       g.classList.add('active');
+      if (updateHash !== false) history.replaceState(null, '', '#m' + d.n);
       card.kicker.textContent = 'Movement ' + d.n + ' of 9';
       card.icon.textContent = d.icon;
       card.name.textContent = d.name;
@@ -387,6 +459,71 @@
     btnDown.addEventListener('click', function () { setFlow('down'); });
     btnUp.addEventListener('click', function () { setFlow('up'); });
 
+    /* ── v1.1: cursor tooltip ── */
+    var tip = document.getElementById('river-tip');
+    function showTip(d, x, y) {
+      tip.innerHTML = '<span class="t-name">' + d.icon + ' ' + d.n + ' · ' + d.name + '</span><span class="t-anchor">' + d.anchor + '</span>';
+      tip.style.display = 'block';
+      var pad = 14, w = tip.offsetWidth, hh = tip.offsetHeight;
+      var left = Math.min(x + pad, window.innerWidth - w - 8);
+      var top = (y - hh - pad > 8) ? y - hh - pad : y + pad;
+      tip.style.left = left + 'px'; tip.style.top = top + 'px';
+    }
+    function hideTip() { tip.style.display = 'none'; }
+    window.addEventListener('scroll', hideTip, { passive: true });
+    window.addEventListener('resize', hideTip, { passive: true });
+
+    /* ── v1.1: hash deep links (#m1..#m9) ── */
+    function selectByN(n, updateHash) {
+      var d = DATA[n - 1];
+      var g = stations.querySelector('[data-n="' + n + '"]');
+      if (d && g) select(d, g, updateHash);
+    }
+    function applyHash() {
+      var m = /^#m([1-9])$/.exec(location.hash);
+      if (m) selectByN(+m[1], false);
+    }
+    window.addEventListener('hashchange', applyHash);
+
+    /* ── v1.1: Walk the River tour + Reset ── */
+    var btnWalk = document.getElementById('btn-walk');
+    var btnReset = document.getElementById('btn-reset');
+    var tourTimer = null, tourIdx = 0;
+    var INTRO = {
+      kicker:'The Biblical River', icon:'\ud83c\udf0a', name:'Choose a station',
+      anchor:'Genesis 2:10 → Revelation 22:1',
+      gloss:'Tap any numbered station on the river to see that movement of the story — its anchor texts, its featured word, and a link to the full study. Or flip the flow and watch the nations stream home.'
+    };
+    function stopTour() {
+      if (tourTimer) { clearInterval(tourTimer); tourTimer = null; }
+      btnWalk.classList.remove('walking');
+      btnWalk.textContent = '\u25b6 Walk the River';
+    }
+    btnWalk.addEventListener('click', function () {
+      if (tourTimer) { stopTour(); return; }
+      btnWalk.classList.add('walking');
+      btnWalk.textContent = '\u25a0 Stop';
+      tourIdx = 0;
+      selectByN(1, true);
+      tourIdx = 1;
+      tourTimer = setInterval(function () {
+        if (tourIdx >= DATA.length) { stopTour(); return; }
+        selectByN(tourIdx + 1, true);
+        tourIdx++;
+      }, 4000);
+    });
+    btnReset.addEventListener('click', function () {
+      stopTour();
+      Array.prototype.forEach.call(stations.children, function (s) { s.classList.remove('active'); });
+      card.kicker.textContent = INTRO.kicker;
+      card.icon.textContent = INTRO.icon;
+      card.name.textContent = INTRO.name;
+      card.anchor.textContent = INTRO.anchor;
+      card.gloss.textContent = INTRO.gloss;
+      card.word.hidden = true; card.link.hidden = true;
+      if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    });
+
     /* Reduced motion: remove SMIL particles entirely (CSS handles dashes) */
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       down.remove(); up.remove();
@@ -399,6 +536,7 @@
       btnDown.addEventListener('click', function () { setFlow('down'); });
       btnUp.addEventListener('click', function () { setFlow('up'); });
     }
+    applyHash();
   })();
   </script>
 </body>
