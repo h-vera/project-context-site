@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  CHANGELOG — Creation 2.0 · The Biblical River (Interactive)
+  Path: /studies/thematic/creation-2-0/creation-river-interactive.html
+  ============================================================
+  2026-07-05  v1.0
+    • First build. Standalone interactive story map (iceberg
+      pattern: outside the page chassis — no section config, no
+      chassis script, no data-reveal). Global-v3 tokens + nav only.
+    • One river, two directions: downstream (Eden's spring widening
+      through nine movements into the River of Life) and upstream
+      (the nations streaming back to the mountain-city — Isa 2:2,
+      nahar-as-verb, per "Rivers Flowing Upward").
+    • Nine clickable stations deep-link to the movement pages; each
+      carries its featured Hebrew/Greek anchor word.
+    • SMIL particles honor prefers-reduced-motion (removed via JS);
+      dash-flow animation disabled via media query.
+  ============================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Biblical River — Interactive Story Map | Creation 2.0 | Project Context</title>
+  <meta name="description" content="An interactive map of the whole biblical story as one river: a spring emerging from Eden, widening through covenant, exodus, kingdom, exile, Christ, and the church, emptying into the River of Life — while the nations stream back upstream.">
+  <meta name="author" content="Project Context">
+  <meta name="study-type" content="interactive-visual">
+  <meta name="template-version" content="5.9.4">
+  <meta name="page-category" content="interactive">
+  <meta name="nav-hub" content="thematic-studies">
+  <meta name="nav-section" content="biblical-theology">
+  <meta name="has-hebrew" content="true">
+  <meta name="has-greek" content="true">
+
+  <meta name="citation-author" content="Project Context">
+  <meta name="citation-title" content="The Biblical River: Creation 2.0 Interactive Story Map">
+  <meta name="citation-site" content="Project Context">
+  <meta name="citation-date" content="2026">
+
+  <meta property="og:title" content="The Biblical River — Creation 2.0 Story Map">
+  <meta property="og:description" content="One river, two directions: Eden's spring flows out through the whole story, and the nations stream back up to the city.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://projectcontext.org/studies/thematic/creation-2-0/creation-river-interactive.html">
+  <link rel="canonical" href="https://projectcontext.org/studies/thematic/creation-2-0/creation-river-interactive.html">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="preload" href="/assets/fonts/SBL_Hebrew.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/assets/css/global-v3.css?v=3.3.2">
+  <link rel="stylesheet" href="/assets/css/global-v3-polish.css?v=0.2">
+
+  <style>
+    /* ── Header band ── */
+    .river-hero {
+      margin: 4.5rem 0 0;
+      padding: clamp(2.2rem, 5vw, 3.5rem) var(--gutter);
+      text-align: center; color: white;
+      background:
+        radial-gradient(circle at 15% 85%, color-mix(in srgb, var(--accent-teal) 30%, transparent), transparent 45%),
+        radial-gradient(circle at 85% 15%, color-mix(in srgb, var(--accent-blue) 22%, transparent), transparent 48%),
+        linear-gradient(160deg, #06121f 0%, #0b2530 55%, #14434d 100%);
+    }
+    .river-hero .page-kicker { display:block; font-family:var(--font-mono); font-size:var(--fs-xs); letter-spacing:.18em; text-transform:uppercase; opacity:.8; margin-bottom:.7rem; }
+    .river-hero h1 { color:white; font-size: clamp(2.2rem, 5.5vw, 3.6rem); margin:0 0 .45rem; letter-spacing:-.03em; }
+    .river-hero .subtitle { color:rgba(255,255,255,.85); max-width:760px; margin:0 auto; font-size:clamp(.98rem,2vw,1.15rem); }
+
+    /* ── Layout ── */
+    .river-wrap {
+      display:grid; grid-template-columns: minmax(0,1fr) 340px;
+      gap: 1.5rem; align-items:start;
+      max-width: 1120px; margin: 1.5rem auto 3rem; padding: 0 var(--gutter);
+    }
+    @media (max-width: 900px) { .river-wrap { grid-template-columns: 1fr; } }
+
+    .river-stage { background: var(--bg-2); border:1px solid var(--border); border-radius: var(--radius-md, 14px); padding: .75rem; }
+    .river-svg { width:100%; height:auto; display:block; }
+
+    /* ── Controls ── */
+    .river-controls {
+      display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center; align-items:center;
+      margin: 1.25rem auto .25rem; padding: 0 var(--gutter); max-width: 1120px;
+    }
+    .flow-toggle {
+      display:inline-flex; border:1px solid var(--border); border-radius: var(--radius-pill); overflow:hidden; background: var(--bg-2);
+    }
+    .flow-toggle button {
+      appearance:none; border:0; background:transparent; cursor:pointer;
+      font-family: var(--font-mono); font-size: var(--fs-xs); font-weight:600;
+      letter-spacing:.06em; text-transform:uppercase;
+      padding:.55rem .95rem; color: var(--text-muted);
+    }
+    .flow-toggle button[aria-pressed="true"] { background: var(--page-accent); color:#fff; }
+    .flow-caption {
+      flex-basis:100%; text-align:center; font-size: var(--fs-sm); color: var(--text-muted);
+      max-width: 760px; margin: .35rem auto 0;
+    }
+    .flow-caption .hebrew-inline { font-size: 1.05em; }
+
+    /* ── Detail card ── */
+    .river-card {
+      position: sticky; top: 5.5rem;
+      background: var(--bg); border:1px solid var(--border); border-radius: var(--radius-md, 14px);
+      padding: 1.25rem; box-shadow: var(--shadow-sm, 0 4px 16px rgba(0,0,0,.06));
+    }
+    @media (max-width: 900px) { .river-card { position: static; order:-1; } }
+    .river-card .card-kicker { font-family:var(--font-mono); font-size:var(--fs-xs); text-transform:uppercase; letter-spacing:.12em; color:var(--page-accent-deep); }
+    .river-card h2 { font-size:1.5rem; margin:.3rem 0 .15rem; display:flex; align-items:center; gap:.5rem; }
+    .river-card .card-anchor { font-family:var(--font-mono); font-size:var(--fs-xs); text-transform:uppercase; letter-spacing:.1em; color:var(--text-muted); margin-bottom:.7rem; }
+    .river-card .card-gloss { font-size:var(--fs-sm); color:var(--text-soft); margin-bottom:.85rem; }
+    .river-card .card-word {
+      background: var(--bg-2); border-left:3px solid var(--page-accent); border-radius: var(--radius-sm);
+      padding:.7rem .85rem; font-size: var(--fs-sm); margin-bottom: .95rem;
+    }
+    .river-card .card-word .w { font-weight:700; }
+    .river-card .card-link { display:inline-flex; font-weight:700; font-size:var(--fs-sm); }
+    .river-card .card-link[hidden] { display:none; }
+
+    /* ── SVG pieces ── */
+    .seg { fill:none; stroke-linecap:round; }
+    .riverline { fill:none; stroke:none; }
+    .flowdash {
+      fill:none; stroke: rgba(255,255,255,.55); stroke-linecap:round;
+      stroke-dasharray: 2 26; animation: flowdown 3.2s linear infinite;
+      pointer-events:none; mix-blend-mode: screen;
+    }
+    .flowdash.up { animation-name: flowup; stroke: #eab308; }
+    @keyframes flowdown { to { stroke-dashoffset: -280; } }
+    @keyframes flowup   { to { stroke-dashoffset:  280; } }
+    @media (prefers-reduced-motion: reduce) { .flowdash { animation: none; } }
+
+    .station { cursor:pointer; }
+    .station circle.halo { fill: var(--bg); stroke-width:3; transition: r .15s ease; }
+    .station:hover circle.halo, .station:focus-visible circle.halo { r: 26; }
+    .station:focus-visible { outline: 3px solid var(--page-accent); outline-offset: 3px; border-radius: 50%; }
+    .station.active circle.halo { stroke-width:5; }
+    .station text.icon { font-size: 20px; text-anchor: middle; dominant-baseline: central; pointer-events:none; }
+    .station text.slabel {
+      font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; fill: var(--text);
+      pointer-events:none;
+    }
+    .station text.snum { font-family:'JetBrains Mono', monospace; font-size: 11px; fill: var(--text-muted); pointer-events:none; }
+    .endpoint text { pointer-events:none; }
+    .sea { fill: url(#seaGrad); opacity:.9; }
+    .legend-note { font-family:'DM Sans',sans-serif; font-size: 12.5px; fill: var(--text-muted); }
+
+    .back-band { text-align:center; margin: 0 0 3rem; }
+  </style>
+</head>
+<body class="thematic-study" data-theme="teal" dir="ltr">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div id="nav-placeholder"></div>
+
+  <header class="river-hero" role="banner">
+    <span class="page-kicker">Creation 2.0 · Interactive Story Map</span>
+    <h1>The Biblical River</h1>
+    <p class="subtitle">One river, two directions. A spring rises in Eden and widens through the whole story into the River of Life — and the nations stream back up to the mountain-city. Tap any station to explore that movement.</p>
+  </header>
+
+  <main id="main-content" role="main" aria-label="The Biblical River interactive map">
+    <nav class="breadcrumbs" aria-label="Breadcrumb" style="max-width:1120px;margin:1rem auto 0;padding:0 var(--gutter);">
+      <a href="/">Home</a> ›
+      <a href="/studies/">Studies</a> ›
+      <a href="/studies/thematic/">Thematic Studies</a> ›
+      <a href="creation-hub.html">Creation 2.0</a> ›
+      The Biblical River
+    </nav>
+
+    <div class="river-controls">
+      <div class="flow-toggle" role="group" aria-label="Flow direction">
+        <button type="button" id="btn-down" aria-pressed="true">⬇ Downstream · Eden outward</button>
+        <button type="button" id="btn-up" aria-pressed="false">⬆ Upstream · Nations return</button>
+      </div>
+      <p class="flow-caption" id="flow-caption">From one spring, four rivers: Eden's water flows <em>out</em> to enrich the nations (Genesis 2:10) — and keeps widening as the creation project grows.</p>
+    </div>
+
+    <div class="river-wrap">
+      <div class="river-stage">
+        <svg class="river-svg" viewBox="0 0 720 2040" xmlns="http://www.w3.org/2000/svg" aria-labelledby="riverTitle" role="group">
+          <title id="riverTitle">The biblical story drawn as a river from Eden to the New Jerusalem, with nine clickable movement stations</title>
+          <defs>
+            <radialGradient id="seaGrad" cx="50%" cy="40%" r="70%">
+              <stop offset="0%" stop-color="var(--accent-teal)" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="var(--accent-blue)" stop-opacity=".55"/>
+            </radialGradient>
+          </defs>
+
+          <!-- Continuous centerline (motion path + dash overlay) -->
+          <path id="riverline" class="riverline" d="M360,80 C340,150 310,190 300,260
+            C290,330 400,360 430,440
+            C455,510 315,540 290,620
+            C268,690 405,720 430,800
+            C452,870 322,900 300,980
+            C280,1050 405,1080 430,1160
+            C452,1230 322,1260 300,1340
+            C280,1410 405,1440 430,1520
+            C450,1585 372,1620 355,1700
+            C345,1755 358,1810 360,1880" />
+
+          <!-- Widening segments (drawn base → each uses its movement accent) -->
+          <path class="seg" stroke="var(--accent-teal)"    stroke-width="8"  d="M360,80 C340,150 310,190 300,260"/>
+          <path class="seg" stroke="var(--accent-rose)"    stroke-width="13" d="M300,260 C290,330 400,360 430,440"/>
+          <path class="seg" stroke="var(--accent-indigo)"  stroke-width="18" d="M430,440 C455,510 315,540 290,620"/>
+          <path class="seg" stroke="var(--accent-blue)"    stroke-width="24" d="M290,620 C268,690 405,720 430,800"/>
+          <path class="seg" stroke="var(--accent-purple)"  stroke-width="30" d="M430,800 C452,870 322,900 300,980"/>
+          <path class="seg" stroke="var(--accent-magenta)" stroke-width="36" d="M300,980 C280,1050 405,1080 430,1160"/>
+          <path class="seg" stroke="var(--accent-purple)"  stroke-width="43" d="M430,1160 C452,1230 322,1260 300,1340"/>
+          <path class="seg" stroke="var(--accent-rose)"    stroke-width="50" d="M300,1340 C280,1410 405,1440 430,1520"/>
+          <path class="seg" stroke="var(--accent-teal)"    stroke-width="58" d="M430,1520 C450,1585 372,1620 355,1700"/>
+          <path class="seg" stroke="var(--accent-teal)"    stroke-width="66" d="M355,1700 C345,1755 358,1810 360,1880"/>
+
+          <!-- Animated flow overlay -->
+          <use href="#riverline" class="flowdash" id="dash" stroke-width="5"/>
+
+          <!-- Flow particles (SMIL); removed by JS under prefers-reduced-motion -->
+          <g id="particles-down">
+            <circle r="4.5" fill="#ffffff" opacity=".9"><animateMotion dur="9s"  repeatCount="indefinite"><mpath href="#riverline"/></animateMotion></circle>
+            <circle r="3.5" fill="#ffffff" opacity=".75"><animateMotion dur="9s" begin="3s" repeatCount="indefinite"><mpath href="#riverline"/></animateMotion></circle>
+            <circle r="3"   fill="#ffffff" opacity=".6"><animateMotion dur="9s" begin="6s" repeatCount="indefinite"><mpath href="#riverline"/></animateMotion></circle>
+          </g>
+          <g id="particles-up" style="display:none">
+            <circle r="4.5" fill="#eab308" opacity=".95"><animateMotion dur="9s" keyPoints="1;0" keyTimes="0;1" calcMode="linear" repeatCount="indefinite"><mpath href="#riverline"/></animateMotion></circle>
+            <circle r="3.5" fill="#eab308" opacity=".8"><animateMotion dur="9s" begin="3s" keyPoints="1;0" keyTimes="0;1" calcMode="linear" repeatCount="indefinite"><mpath href="#riverline"/></animateMotion></circle>
+            <circle r="3"   fill="#eab308" opacity=".65"><animateMotion dur="9s" begin="6s" keyPoints="1;0" keyTimes="0;1" calcMode="linear" repeatCount="indefinite"><mpath href="#riverline"/></animateMotion></circle>
+          </g>
+
+          <!-- Endpoints -->
+          <g class="endpoint">
+            <circle cx="360" cy="80" r="10" fill="var(--accent-teal)"/>
+            <text x="360" y="46" text-anchor="middle" class="slabel" style="font-size:16px;font-weight:700;">The Spring of Eden</text>
+            <text x="360" y="62" text-anchor="middle" class="legend-note">Genesis 2:10 — a river went out from Eden</text>
+          </g>
+          <g class="endpoint">
+            <ellipse class="sea" cx="360" cy="1935" rx="200" ry="70"/>
+            <text x="360" y="1925" text-anchor="middle" class="slabel" style="font-size:17px;font-weight:700;fill:#fff;">The River of Life</text>
+            <text x="360" y="1946" text-anchor="middle" class="legend-note" style="fill:rgba(255,255,255,.9);">Revelation 22:1–2 — from the throne, healing the nations</text>
+            <text x="360" y="1966" text-anchor="middle" class="legend-note" style="fill:rgba(255,255,255,.75);">“…and the waters of the sea are healed” (Ezekiel 47:8)</text>
+          </g>
+
+          <!-- Stations (injected by JS from DATA for label/handlers consistency) -->
+          <g id="stations"></g>
+        </svg>
+      </div>
+
+      <aside class="river-card" id="river-card" aria-live="polite">
+        <span class="card-kicker" id="card-kicker">The Biblical River</span>
+        <h2 id="card-title"><span id="card-icon" aria-hidden="true">🌊</span> <span id="card-name">Choose a station</span></h2>
+        <div class="card-anchor" id="card-anchor">Genesis 2:10 → Revelation 22:1</div>
+        <p class="card-gloss" id="card-gloss">Tap any numbered station on the river to see that movement of the story — its anchor texts, its featured word, and a link to the full study. Or flip the flow and watch the nations stream home.</p>
+        <div class="card-word" id="card-word" hidden></div>
+        <a class="card-link" id="card-link" href="creation-hub.html" hidden>Read the Movement →</a>
+      </aside>
+    </div>
+
+    <div class="back-band">
+      <a href="creation-hub.html" class="cosmic-button">← Return to Creation 2.0 Hub</a>
+    </div>
+  </main>
+
+  <div class="mobile-menu-overlay"></div>
+
+  <script type="module">
+    import NavigationComponent from '/assets/js/nav-component.js';
+    new NavigationComponent({ currentPage: 'studies/thematic/creation-2-0/creation-river-interactive', hubType: 'thematic-studies' });
+  </script>
+
+  <script>
+  (function () {
+    'use strict';
+
+    var DATA = [
+      { n:1, x:300, y:260,  side:'l', icon:'🌱', name:'Creation', anchor:'Genesis 1–2',
+        gloss:'God orders creation, plants Eden as heaven-on-earth, and commissions humanity to extend it.',
+        word:'<span class="w">צֶלֶם</span> (tselem) — "image": humanity as God\u2019s living statue, installed to represent His rule.',
+        href:'creation.html' },
+      { n:2, x:430, y:440,  side:'r', icon:'🌪', name:'Creation Broken', anchor:'Genesis 3–11',
+        gloss:'The test failed, exile runs eastward, the waters return, and Babel rises where Eden should have grown.',
+        word:'<span class="w">מִקֶּדֶם</span> (miqqedem) — "eastward": the Bible\u2019s compass-bearing for exile from presence.',
+        href:'creation-broken.html' },
+      { n:3, x:290, y:620,  side:'l', icon:'🌈', name:'Creation Through Covenant', anchor:'Genesis 12; 15; 17',
+        gloss:'God restarts the project through one family, so blessing can reach every family scattered at Babel.',
+        word:'<span class="w">בָּרַךְ</span> (barakh) — "bless": five blessings set against Genesis 1–11\u2019s five curses.',
+        href:'creation-through-covenant.html' },
+      { n:4, x:430, y:800,  side:'r', icon:'🌊', name:'Creation Through Exodus', anchor:'Exodus 14–40',
+        gloss:'Waters split onto dry land, a nation of priests is formed, and a portable Eden rises in the camp.',
+        word:'<span class="w">יַבָּשָׁה</span> (yabbashah) — "dry land": day three\u2019s noun, reused verbatim at the sea.',
+        href:'creation-through-exodus.html' },
+      { n:5, x:300, y:980,  side:'l', icon:'👑', name:'Creation Through Kingdom', anchor:'2 Samuel 7; 1 Kings 6–8',
+        gloss:'The traveling Eden puts down roots: covenant king, mountain city, and a temple carved as a garden.',
+        word:'<span class="w">בַּיִת</span> (bayit) — "house": David offers God a house; God builds David a house.',
+        href:'creation-through-kingdom.html' },
+      { n:6, x:430, y:1160, side:'r', icon:'🔥', name:'Creation Through Exile', anchor:'Ezekiel 36–37; 47',
+        gloss:'The glory departs eastward — and in Babylon the prophets promise new heart, new Spirit, new creation.',
+        word:'<span class="w">לֵב</span> (lev) — "heart": stone exchanged for flesh, the cure no covenant renewal offered.',
+        href:'creation-through-exile.html' },
+      { n:7, x:300, y:1340, side:'l', icon:'✝️', name:'Creation Through Christ', anchor:'John 1; 20; Colossians 1',
+        gloss:'Every wire converges: the true image passes the test, bears the curse, and rises on day one in a garden.',
+        word:'<span class="w">ἐσκήνωσεν</span> (eskēnōsen) — "tabernacled": Exodus 40 glory-language for a person (John 1:14).',
+        href:'creation-through-christ.html' },
+      { n:8, x:430, y:1520, side:'r', icon:'🕊️', name:'Creation Through the Spirit', anchor:'Acts 2; Ephesians 2',
+        gloss:'The fire falls in many flames; Babel reverses; the temple becomes a people spreading toward the nations.',
+        word:'<span class="w">πνεῦμα</span> (pneuma) — "Spirit/wind/breath": Genesis 1:2\u2019s ruach, poured out on all flesh.',
+        href:'creation-through-the-spirit.html' },
+      { n:9, x:355, y:1700, side:'l', icon:'🏙️', name:'Creation Completed', anchor:'Revelation 21–22',
+        gloss:'The garden-city descends, God dwells with humanity, and the river runs from the throne — home at last.',
+        word:'<span class="w">καινός</span> (kainos) — "new": "Behold, I am making all things new" (Rev 21:5).',
+        href:'creation-completed.html' }
+    ];
+
+    var SVGNS = 'http://www.w3.org/2000/svg';
+    var stations = document.getElementById('stations');
+
+    function el(name, attrs, text) {
+      var e = document.createElementNS(SVGNS, name);
+      for (var k in attrs) e.setAttribute(k, attrs[k]);
+      if (text) e.textContent = text;
+      return e;
+    }
+
+    DATA.forEach(function (d) {
+      var g = el('g', { 'class':'station', tabindex:'0', role:'button',
+        'aria-label':'Movement ' + d.n + ': ' + d.name + '. ' + d.anchor, 'data-n': d.n });
+      var halo = el('circle', { 'class':'halo', cx:d.x, cy:d.y, r:22, stroke:'var(--page-accent)' });
+      g.appendChild(halo);
+      g.appendChild(el('text', { 'class':'icon', x:d.x, y:d.y }, d.icon));
+      var lx = d.side === 'l' ? d.x - 40 : d.x + 40;
+      var anchorAttr = d.side === 'l' ? 'end' : 'start';
+      g.appendChild(el('text', { 'class':'slabel', x:lx, y:d.y - 2, 'text-anchor':anchorAttr }, d.n + ' · ' + d.name));
+      g.appendChild(el('text', { 'class':'snum', x:lx, y:d.y + 16, 'text-anchor':anchorAttr }, d.anchor));
+      g.addEventListener('click', function () { select(d, g); });
+      g.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); select(d, g); }
+      });
+      stations.appendChild(g);
+    });
+
+    var card = {
+      kicker: document.getElementById('card-kicker'),
+      icon: document.getElementById('card-icon'),
+      name: document.getElementById('card-name'),
+      anchor: document.getElementById('card-anchor'),
+      gloss: document.getElementById('card-gloss'),
+      word: document.getElementById('card-word'),
+      link: document.getElementById('card-link'),
+      root: document.getElementById('river-card')
+    };
+
+    function select(d, g) {
+      Array.prototype.forEach.call(stations.children, function (s) { s.classList.remove('active'); });
+      g.classList.add('active');
+      card.kicker.textContent = 'Movement ' + d.n + ' of 9';
+      card.icon.textContent = d.icon;
+      card.name.textContent = d.name;
+      card.anchor.textContent = d.anchor;
+      card.gloss.textContent = d.gloss;
+      card.word.innerHTML = '<strong>Featured word:</strong> ' + d.word;
+      card.word.hidden = false;
+      card.link.href = d.href;
+      card.link.hidden = false;
+      if (window.matchMedia('(max-width: 900px)').matches) {
+        card.root.scrollIntoView({ behavior:'smooth', block:'nearest' });
+      }
+    }
+
+    /* Flow direction toggle */
+    var dash = document.getElementById('dash');
+    var down = document.getElementById('particles-down');
+    var up = document.getElementById('particles-up');
+    var btnDown = document.getElementById('btn-down');
+    var btnUp = document.getElementById('btn-up');
+    var caption = document.getElementById('flow-caption');
+
+    var CAP_DOWN = 'From one spring, four rivers: Eden\u2019s water flows <em>out</em> to enrich the nations (Genesis 2:10) \u2014 and keeps widening as the creation project grows.';
+    var CAP_UP = 'The prophets reverse the flow: "all nations will <em>stream</em> to it" (Isaiah 2:2) \u2014 in Hebrew the verb is built from the noun for river (<span class="hebrew-inline" lang="he" dir="rtl">\u05e0\u05b8\u05d4\u05b7\u05e8</span>). The many rivers humanity became run home to the new Eden, uphill, drawn by the source.';
+
+    function setFlow(dir) {
+      var isUp = dir === 'up';
+      dash.classList.toggle('up', isUp);
+      down.style.display = isUp ? 'none' : '';
+      up.style.display = isUp ? '' : 'none';
+      btnDown.setAttribute('aria-pressed', String(!isUp));
+      btnUp.setAttribute('aria-pressed', String(isUp));
+      caption.innerHTML = isUp ? CAP_UP : CAP_DOWN;
+    }
+    btnDown.addEventListener('click', function () { setFlow('down'); });
+    btnUp.addEventListener('click', function () { setFlow('up'); });
+
+    /* Reduced motion: remove SMIL particles entirely (CSS handles dashes) */
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      down.remove(); up.remove();
+      setFlow = function (dir) {
+        var isUp = dir === 'up';
+        btnDown.setAttribute('aria-pressed', String(!isUp));
+        btnUp.setAttribute('aria-pressed', String(isUp));
+        caption.innerHTML = isUp ? CAP_UP : CAP_DOWN;
+      };
+      btnDown.addEventListener('click', function () { setFlow('down'); });
+      btnUp.addEventListener('click', function () { setFlow('up'); });
+    }
+  })();
+  </script>
+</body>
+</html>
