@@ -227,6 +227,34 @@
     }
     .creation-river .node-gloss { display:block; color:var(--text-muted); font-size:var(--fs-sm); }
 
+    /* ── Timeline hover (scoped to .creation-river only) ──
+       Padding shift instead of transform on the li: the §56
+       revealUp fill-mode holds transform on revealed items, so a
+       transform transition there would silently no-op. The dot is
+       absolutely positioned, so it stays anchored on the rail
+       while the text glides right — same behavior as catalog §23. */
+    .creation-river li {
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      transition: background var(--duration-fast) var(--ease),
+                  padding-left var(--duration-fast) var(--ease);
+    }
+    .creation-river li:hover { background: var(--bg-2); padding-left: 3.4rem; }
+    .creation-river li::before {
+      transition: transform var(--duration-fast) var(--ease),
+                  background var(--duration-fast) var(--ease),
+                  box-shadow var(--duration-fast) var(--ease);
+    }
+    .creation-river li:hover::before {
+      transform: scale(1.25);
+      background: var(--page-accent);
+      box-shadow: 0 0 0 4px var(--page-accent-soft);
+    }
+    .creation-river li:hover a.node-title { color: var(--page-accent-deep); }
+    @media (prefers-reduced-motion: reduce) {
+      .creation-river li, .creation-river li::before { transition: none; }
+      .creation-river li:hover::before { transform: none; }
+    }
+
     /* ── Movement cards (internals; .mini-card shell is catalog) ── */
     .movement-number {
       display:inline-flex; align-items:center; justify-content:center;
