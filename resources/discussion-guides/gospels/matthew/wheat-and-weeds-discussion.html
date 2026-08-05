@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>The Kingdom That Waits | Wheat &amp; Weeds | Discussion Guide</title>
-  <meta name="description" content="A 20-minute interactive discussion guide on the parable of the wheat and the weeds (Matthew 13:24–30, 36–43) with speaker cues and small-group discussion." />
+  <meta name="description" content="A 30-minute interactive discussion guide on the parable of the wheat and the weeds (Matthew 13:24–30, 36–43) with speaker cues and group discussion." />
   <link rel="canonical" href="https://projectcontext.org/resources/discussion-guides/gospels/matthew/wheat-and-weeds-discussion.html" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="Project Context" />
@@ -16,16 +16,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet" />
   <style>
     :root{
-      --ink:#1e293b;          /* slate 800 */
-      --ink-soft:#475569;     /* slate 600 */
-      --paper:#ffffff;
-      --field:#f8fafc;        /* slate 50 */
-      --line:#e2e8f0;         /* slate 200 */
-      --wheat:#7209b7;        /* Project Context brand purple — primary accent */
-      --wheat-soft:#f3e8ff;   /* purple 100 */
-      --barn:#f59e0b;         /* amber jewel accent, sparingly */
-      --note:#f5f3ff;         /* violet 50 for speaker notes */
-      --note-edge:#6d28d9;    /* plum */
+      --ink:#1e293b; --ink-soft:#475569; --paper:#ffffff; --field:#f8fafc; --line:#e2e8f0;
+      --wheat:#7209b7; --wheat-soft:#f3e8ff; --barn:#f59e0b;
+      --note:#f5f3ff; --note-edge:#6d28d9;
+      --s2:#b45309; --s2-soft:#fff7ed; --s2-ink:#7c2d12;
     }
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
@@ -37,46 +31,91 @@
     }
     .wrap{max-width:680px; margin:0 auto; padding:1.25rem 1.1rem 4rem}
 
+    /* ---------- Back to top (matches global-v3 .back-to-top) ---------- */
+    .back-to-top{
+      position:fixed; bottom:1.5rem; right:1.5rem;
+      width:48px; height:48px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(135deg, #7209b7, #6d28d9); color:#fff;
+      text-decoration:none; font-size:1.4rem; font-weight:700;
+      opacity:0; visibility:hidden; transition:all .25s cubic-bezier(.4,0,.2,1);
+      box-shadow:0 4px 20px rgba(114,9,183,.3); z-index:60;
+    }
+    .back-to-top.visible{opacity:1; visibility:visible}
+    .back-to-top:hover{transform:translateY(-3px) scale(1.05); box-shadow:0 8px 24px rgba(114,9,183,.4)}
+    @media (max-width:768px){
+      .back-to-top{bottom:calc(6.5rem + env(safe-area-inset-bottom)); right:1rem; width:3rem; height:3rem; z-index:1001}
+      body.has-mobile-tabs .back-to-top{bottom:calc(7.25rem + env(safe-area-inset-bottom))}
+    }
+
+    /* ---------- Section jump bar (matches global-v3 .mini-toc) ---------- */
+    .mini-toc{
+      display:flex; gap:.5rem; flex-wrap:wrap; align-items:center;
+      padding:1rem 1.1rem; margin:2rem 0 0;
+      background:var(--field); border:1px solid var(--line); border-radius:14px;
+    }
+    .mini-toc-label{
+      font-size:.7rem; text-transform:uppercase; letter-spacing:.15em;
+      color:var(--ink-soft); font-weight:700; margin-right:.4rem;
+    }
+    .mini-toc a{
+      display:inline-flex; align-items:center; padding:.35rem .85rem;
+      background:#fff; border:1px solid var(--line); border-radius:999px;
+      font-size:.84rem; color:var(--ink-soft); font-weight:600; text-decoration:none;
+      transition:all .15s ease;
+    }
+    .mini-toc a:hover{background:linear-gradient(135deg, #7209b7, #6d28d9); color:#fff; border-color:transparent}
+    .mini-toc a.grp{border-style:dashed}
+    @media (max-width:768px){ .mini-toc{display:none} }
+
+    /* ---------- Mobile section tabs (matches global-v3 .mobile-section-tabs) ---------- */
+    .mobile-section-tabs{
+      display:none; position:fixed; bottom:0; left:0; right:0;
+      background:rgba(255,255,255,.96); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+      border-top:1px solid var(--line); z-index:1000;
+      transform:translateY(100%); transition:transform .25s cubic-bezier(.4,0,.2,1);
+      padding-bottom:env(safe-area-inset-bottom);
+    }
+    .mobile-section-tabs.slide-in{transform:translateY(0)}
+    @media (max-width:768px){
+      .mobile-section-tabs.active{display:block}
+      body.has-mobile-tabs{padding-bottom:64px}
+    }
+    .tabs-container{
+      display:flex; gap:.25rem; overflow-x:auto; -webkit-overflow-scrolling:touch;
+      padding:.5rem .75rem; scrollbar-width:none;
+    }
+    .tabs-container::-webkit-scrollbar{display:none}
+    .tab-item{
+      flex-shrink:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding:.4rem .85rem; min-height:48px;
+      background:transparent; border:1px solid transparent; border-radius:999px;
+      font-family:inherit; font-size:.75rem; font-weight:500; color:var(--ink-soft);
+      cursor:pointer; transition:all .15s ease; white-space:nowrap;
+    }
+    .tab-item.active{background:linear-gradient(135deg, #7209b7, #6d28d9); color:#fff; border-color:transparent}
+
     /* ---------- Header ---------- */
     header.hero{border-bottom:3px solid var(--wheat); padding:0.5rem 0 1.4rem; margin-bottom:1.5rem}
     .eyebrow{letter-spacing:.14em; text-transform:uppercase; font-size:.75rem; font-weight:700; color:var(--wheat)}
-    h1{
-      font-family:"Cormorant Garamond", Georgia, serif; font-weight:700;
-      font-size:clamp(2.1rem, 7vw, 2.9rem); line-height:1.12; margin:.35rem 0 .4rem;
-    }
+    h1{font-family:"Cormorant Garamond", Georgia, serif; font-weight:700; font-size:clamp(2.1rem, 7vw, 2.9rem); line-height:1.12; margin:.35rem 0 .4rem}
     .scripture-ref{color:var(--ink-soft); font-size:1rem; margin:0 0 .9rem}
     .meta{display:flex; flex-wrap:wrap; gap:.5rem}
-    .chip{
-      display:inline-flex; align-items:center; gap:.35rem;
-      background:var(--field); border:1px solid var(--line); border-radius:999px;
-      padding:.28rem .75rem; font-size:.85rem; color:var(--ink-soft); font-weight:600;
-    }
-    .big-idea{
-      margin:.9rem 0 0; padding:.75rem 1rem; border-radius:12px;
-      background:linear-gradient(135deg, #7209b7, #6d28d9); color:#fff;
-      font-size:.98rem; font-weight:600; line-height:1.55;
-    }
+    .chip{display:inline-flex; align-items:center; gap:.35rem; background:var(--field); border:1px solid var(--line); border-radius:999px; padding:.28rem .75rem; font-size:.85rem; color:var(--ink-soft); font-weight:600}
+    .big-idea{margin:.9rem 0 0; padding:.75rem 1rem; border-radius:12px; background:linear-gradient(135deg, #7209b7, #6d28d9); color:#fff; font-size:.98rem; font-weight:600; line-height:1.55}
     .big-idea .label{display:block; font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; opacity:.85; margin-bottom:.15rem}
 
     /* ---------- Sections ---------- */
     section{margin:0 0 1.4rem; border:1px solid var(--line); border-radius:14px; padding:1.15rem 1.1rem; background:var(--paper)}
     section.groupwork{background:var(--field)}
     .sec-head{display:flex; align-items:baseline; justify-content:space-between; gap:.6rem; flex-wrap:wrap; margin-bottom:.45rem}
-    h2{
-      font-family:"Cormorant Garamond", Georgia, serif; font-weight:700;
-      font-size:1.55rem; line-height:1.2; margin:0;
-    }
+    h2{font-family:"Cormorant Garamond", Georgia, serif; font-weight:700; font-size:1.55rem; line-height:1.2; margin:0}
     .timing{white-space:nowrap; font-size:.8rem; font-weight:700; color:var(--wheat); background:var(--wheat-soft); border-radius:999px; padding:.2rem .7rem}
     .who{font-size:.85rem; color:var(--ink-soft); font-weight:600; margin:0 0 .7rem}
     p{margin:.6rem 0}
 
     /* ---------- Scripture ---------- */
-    .scripture{
-      background:var(--field); border-left:4px solid var(--wheat);
-      border-radius:0 12px 12px 0; padding:1rem 1.1rem; margin:.8rem 0;
-      font-size:1.08rem; line-height:1.85;
-    }
-    .scripture .vs{color:var(--wheat); font-weight:700; font-size:.72em; vertical-align:super; margin-right:.15rem}
+    .scripture{background:var(--field); border-left:4px solid var(--wheat); border-radius:0 12px 12px 0; padding:1rem 1.1rem; margin:.8rem 0; font-size:1.08rem; line-height:1.85}
     .scripture .stz{margin:0 0 .85rem}
     .scripture .stz:last-of-type{margin-bottom:0}
     .scripture .ln{display:block; margin:.12rem 0}
@@ -87,53 +126,45 @@
 
     /* ---------- Questions ---------- */
     .q{display:flex; gap:.7rem; align-items:flex-start; margin:.9rem 0}
-    .q .badge{
-      flex:none; width:34px; height:34px; border-radius:50%;
-      background:var(--wheat); color:#fff; font-weight:700; font-size:.95rem;
-      display:flex; align-items:center; justify-content:center; margin-top:.15rem;
-    }
+    .q .badge{flex:none; width:34px; height:34px; border-radius:50%; background:var(--wheat); color:#fff; font-weight:700; font-size:.95rem; display:flex; align-items:center; justify-content:center; margin-top:.15rem}
     .q .badge.take{background:var(--barn); color:#3b0764}
     .q p{margin:0; font-weight:600}
     .q .follow{display:block; font-weight:400; color:var(--ink-soft); font-size:.95rem; margin-top:.25rem}
 
-    /* ---------- Key insight ---------- */
-    .key-insight{
-      background:var(--wheat-soft); border:1px solid #ddd6fe; border-radius:12px;
-      padding:.9rem 1rem; margin:.9rem 0; font-weight:600;
-    }
+    .key-insight{background:var(--wheat-soft); border:1px solid #ddd6fe; border-radius:12px; padding:.9rem 1rem; margin:.9rem 0; font-weight:600}
 
-    /* ---------- Speaker layer: run sheet + cues ---------- */
-    .runsheet{
-      background:var(--note); border:1px solid #ddd6fe; border-radius:12px;
-      padding:.8rem .9rem; margin:0 0 1.5rem; color:#3b0764;
-    }
+    /* ---------- Speaker layer ---------- */
+    .runsheet{background:var(--note); border:1px solid #ddd6fe; border-radius:12px; padding:.8rem .9rem; margin:0 0 1.5rem; color:#3b0764}
     .rs-title{font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; font-weight:700; color:#6d28d9; margin-bottom:.4rem}
-    .rs-row{
-      display:grid; grid-template-columns:26px 1fr auto; gap:.55rem; align-items:center;
-      padding:.34rem .1rem; border-top:1px dashed #ddd6fe; font-size:.92rem; font-weight:600;
-    }
+    .rs-row{display:grid; grid-template-columns:26px 1fr auto; gap:.55rem; align-items:center; padding:.34rem .1rem; border-top:1px dashed #ddd6fe; font-size:.92rem; font-weight:600}
     .rs-row:first-of-type{border-top:none}
     .rs-row .rs-min{color:#6d28d9; font-size:.8rem; font-weight:700; white-space:nowrap}
-    .rs-row.grp{color:#92400e}
-    .rs-foot{font-size:.8rem; font-weight:400; color:#6d28d9; margin:.55rem 0 0; line-height:1.5}
+    .rs-foot{font-size:.82rem; font-weight:400; color:#6d28d9; margin:.6rem 0 0; line-height:1.55}
 
-    .cue{
-      display:flex; gap:.55rem; align-items:flex-start;
-      background:var(--note); border-left:3px solid var(--note-edge); border-radius:0 9px 9px 0;
-      padding:.5rem .8rem; margin:.45rem 0; font-size:.93rem; line-height:1.55; color:#4c1d95;
-    }
+    /* Cues — colored by speaker so each of you can scan for your own lines */
+    .cue{display:flex; gap:.55rem; align-items:flex-start; border-left:3px solid var(--note-edge); border-radius:0 9px 9px 0; padding:.55rem .8rem; margin:.5rem 0; font-size:.93rem; line-height:1.6; background:var(--note); color:#4c1d95}
     .cue p{margin:0}
+    .cue p + p{margin-top:.45rem}
     .cue b{color:#3b0764}
-    .cue.hold{border-left-style:dashed; background:#faf9ff}
-    .cue .aside{color:#6d28d9; font-weight:400}
+    .cue.s2c{background:var(--s2-soft); border-left-color:var(--s2); color:var(--s2-ink)}
+    .cue.s2c b{color:#7c2d12}
+    .cue.hold{border-left-style:dashed}
+    .cue .say{display:block; font-style:italic}
+    .cue .lbl{display:inline-block; font-size:.63rem; letter-spacing:.08em; text-transform:uppercase; font-weight:800; background:#6d28d9; color:#fff; border-radius:999px; padding:.1rem .5rem; margin-right:.35rem; vertical-align:.08em}
+    .cue.s2c .lbl{background:var(--s2)}
+    .cue.hold .lbl{background:#fff; color:#6d28d9; border:1px solid #c4b5fd}
 
-    details.prep{
-      background:var(--note); border:1px solid #ddd6fe; border-radius:12px;
-      padding:.7rem .9rem; margin:0 0 1.5rem; font-size:.93rem; color:#4c1d95;
+    .pause{
+      display:flex; align-items:center; gap:.55rem; margin:.9rem 0;
+      border:1.5px dashed var(--barn); background:#fffbeb; border-radius:10px;
+      padding:.55rem .8rem; font-size:.9rem; font-weight:700; color:#78350f;
     }
+    .pause em{font-weight:400; font-style:italic}
+
+    details.prep{background:var(--note); border:1px solid #ddd6fe; border-radius:12px; padding:.7rem .9rem; margin:0 0 1.5rem; font-size:.93rem; color:#4c1d95}
     details.prep > summary{cursor:pointer; font-weight:700; color:#3b0764; font-size:.95rem}
     details.prep > summary::marker{color:#6d28d9}
-    details.prep p{margin:.6rem 0 0; line-height:1.6}
+    details.prep p{margin:.65rem 0 0; line-height:1.6}
     details.prep p strong{color:#3b0764}
 
     /* ---------- Matthew map ---------- */
@@ -147,32 +178,25 @@
     .mrow.hl{background:linear-gradient(135deg, #7209b7, #6d28d9); color:#fff; font-weight:600}
     .mrow.hl .mc{color:#e9d5ff}
 
-    /* ---------- Decoder table (signature) ---------- */
+    /* ---------- Decoder table ---------- */
     .decoder{width:100%; border-collapse:collapse; margin:.9rem 0; font-size:.98rem}
-    .decoder th{
-      text-align:left; font-size:.75rem; letter-spacing:.1em; text-transform:uppercase;
-      color:var(--ink-soft); border-bottom:2px solid var(--wheat); padding:.4rem .5rem;
-    }
+    .decoder th{text-align:left; font-size:.75rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); border-bottom:2px solid var(--wheat); padding:.4rem .5rem}
     .decoder td{border-bottom:1px solid var(--line); padding:.55rem .5rem; vertical-align:top}
     .decoder td:first-child{font-weight:700; width:44%}
     .decoder tr.missing td{background:var(--wheat-soft); font-weight:700}
     .decoder tr.missing td:last-child{color:var(--wheat)}
 
     /* ---------- Speaker badges ---------- */
-    .spk{
-      display:inline-flex; flex:none; width:28px; height:28px; border-radius:50%;
-      color:#fff; font-weight:700; font-size:.95rem; line-height:1;
-      font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      align-items:center; justify-content:center;
-      vertical-align:-.28em; margin-right:.45rem;
-    }
+    .spk{display:inline-flex; flex:none; width:28px; height:28px; border-radius:50%; color:#fff; font-weight:700; font-size:.82rem; line-height:1; font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; align-items:center; justify-content:center; vertical-align:-.28em; margin-right:.45rem}
     .spk.s1{background:var(--wheat)}
-    .spk.s2{background:#b45309}
-    .spk.sm{width:22px; height:22px; font-size:.78rem; margin:.1rem .1rem 0 0}
+    .spk.s2{background:var(--s2)}
+    .spk.sm{width:22px; height:22px; font-size:.68rem; margin:.15rem .1rem 0 0}
     .spk + .spk{margin-left:-.15rem}
     body.participant-view .spk{display:none}
     body.participant-view .cue,
+    body.participant-view .pause,
     body.participant-view .runsheet,
+    body.participant-view .sonly,
     body.participant-view details.prep{display:none}
 
     /* ---------- Going Deeper ---------- */
@@ -216,75 +240,97 @@
     .hlk p{margin:0; font-size:.92rem; line-height:1.55}
     .credits{font-size:.8rem; color:var(--ink-soft); margin-top:1.1rem; border-top:1px solid var(--line); padding-top:.7rem}
 
-    /* ---------- Toggle ---------- */
     .view-toggle{
-      display:block; margin:2rem auto 0;
+      display:block; margin:1.5rem auto 0;
       background:var(--ink); color:#fff; border:none; border-radius:999px;
       padding:.7rem 1.15rem; font-size:.9rem; font-weight:700; cursor:pointer;
       box-shadow:0 4px 14px rgba(15,23,42,.25);
     }
     .view-toggle:focus-visible, a:focus-visible{outline:3px solid var(--barn); outline-offset:2px}
+
     @media print{
-      .view-toggle{display:none}
+      .view-toggle, .back-to-top, .mini-toc, .mobile-section-tabs{display:none}
       section{break-inside:avoid}
     }
-
-    footer{
-      text-align:center; color:var(--ink-soft); font-size:.85rem;
-      margin-top:2.4rem; padding-top:1.4rem; border-top:1px solid var(--line);
-    }
+    footer{text-align:center; color:var(--ink-soft); font-size:.85rem; margin-top:2.4rem; padding-top:1.4rem; border-top:1px solid var(--line)}
     footer .ref{font-weight:600}
   </style>
 </head>
 <body class="participant-view">
-<div class="wrap">
+<div class="wrap" id="top">
+
+  <script id="page-section-config" type="application/json">
+  [
+    { "id":"opener",      "label":"Opener",    "priority":1 },
+    { "id":"matthew",     "label":"Matthew",   "priority":1 },
+    { "id":"parable",     "label":"Parable",   "priority":1 },
+    { "id":"imposter",    "label":"Imposter",  "priority":2 },
+    { "id":"players",     "label":"Q2–3",      "priority":1 },
+    { "id":"explanation", "label":"Explained", "priority":2 },
+    { "id":"key",         "label":"The Key",   "priority":1 },
+    { "id":"groups",      "label":"Groups",    "priority":1 },
+    { "id":"close",       "label":"Close",     "priority":1 },
+    { "id":"deeper",      "label":"Deeper",    "priority":2 }
+  ]
+  </script>
+
 
   <header class="hero">
     <div class="eyebrow">Discussion Guide · Gospels · Matthew 13</div>
     <h1>The Kingdom That Waits</h1>
     <p class="scripture-ref">The Parable of the Wheat &amp; the Weeds · Matthew 13:24–30, 36–43</p>
     <div class="meta">
-      <span class="chip">⏱️ ~20 min</span>
+      <span class="chip">⏱️ ~30 min</span>
       <span class="chip">💭 5 questions</span>
     </div>
     <div class="big-idea">
-      <span class="label">Big Idea</span>
-      The Kingdom has already arrived in Jesus — yet God has deliberately chosen a season of patient mercy before the final harvest.
+      <span class="label">The question we're answering</span>
+      If God says his Kingdom is already here and he is with us — how do we make sense of the fact that there is still so much evil, all the time?
     </div>
   </header>
 
   <div class="runsheet">
-    <div class="rs-title">Run of show · two speakers</div>
-    <div class="rs-row"><span class="spk s1 sm">1</span><span>Fooled by a fake — opener</span><span class="rs-min">2 min</span></div>
-    <div class="rs-row"><span class="spk s1 sm">1</span><span>Where we are in Matthew — the map</span><span class="rs-min">2 min</span></div>
-    <div class="rs-row"><span class="spk s1 sm">1</span><span>Read 13:24–30 · then Q1 to the room</span><span class="rs-min">4 min</span></div>
-    <div class="rs-row grp"><span class="spk s2 sm">2</span><span>Small groups · Q2, Q3</span><span class="rs-min">5 min</span></div>
-    <div class="rs-row"><span class="spk s1 sm">1</span><span>Read 13:36–43 → hand to 2 for the key</span><span class="rs-min">4 min</span></div>
-    <div class="rs-row grp"><span class="spk s2 sm">2</span><span>Small groups · Q4, Q5</span><span class="rs-min">4 min</span></div>
-    <div class="rs-row"><span class="spk s2 sm">2</span><span>Next step → hand to 1 to pray</span><span class="rs-min">2 min</span></div>
-    <p class="rs-foot"><strong>Speaker 1</strong> owns the question — opener, both readings, the map, the closing prayer. <strong>Speaker 2</strong> owns the answer and the room — both group rounds, the key after the second reading, the next step. Four handoffs, all marked in the section headings.</p>
+    <div class="rs-title">Run of show · Speaker 1 = Henry · Speaker 2 = Holli</div>
+    <div class="rs-row"><span class="spk s2 sm">2</span><span>Welcome + "fooled by a fake" opener</span><span class="rs-min">3 min</span></div>
+    <div class="rs-row"><span class="spk s1 sm">1</span><span>Where we are in Matthew → <em>pause, hand to Holli</em></span><span class="rs-min">4 min</span></div>
+    <div class="rs-row"><span class="spk s1 sm">1</span><span>Read 13:24–30</span><span class="rs-min">2 min</span></div>
+    <div class="rs-row"><span class="spk s2 sm">2</span><span>The imposter weed → Q1 to the room (rhetorical)</span><span class="rs-min">3 min</span></div>
+    <div class="rs-row"><span class="spk s2 sm">2</span><span>Q2 + Q3 — write a minute, then whole room</span><span class="rs-min">5 min</span></div>
+    <div class="rs-row"><span class="spk s1 sm">1</span><span>Read 13:36–43</span><span class="rs-min">2 min</span></div>
+    <div class="rs-row"><span class="spk s2 sm">2</span><span>The key, the servants, God's patience</span><span class="rs-min">6 min</span></div>
+    <div class="rs-row"><span class="spk s1 sm">1</span><span>Small groups · Q4 + Q5 <em>(only group round)</em></span><span class="rs-min">4 min</span></div>
+    <div class="rs-row"><span class="spk s2 sm">2</span><span>Land it on trust → <em>hand to Henry to pray</em></span><span class="rs-min">3 min</span></div>
+    <p class="rs-foot"><strong>The pattern:</strong> Henry sets up and reads; Holli teaches it out and works the room; Henry fills in what she missed. Every handoff has a marked pause — Henry says <em>"anything I missed, or context you want to add?"</em> and Holli picks it up. Only <strong>one</strong> small-group round, near the end, with the personal questions — no regathering mid-session.</p>
   </div>
 
   <details class="prep">
-    <summary>Prep read — before the night (not for live use)</summary>
-    <p><strong>Keep the opener anchored to the story, not to philosophy.</strong> The issue in chapters 11–12 isn't abstract evil-in-the-world — it's the Kingdom meeting <em>resistance</em>: dismissal, the Beelzebul charge, a murder plot, while Jesus does nothing about the resisters. John asks his question from Herod's prison. The parable answers origin in one flat line — "An enemy did this" — and spends its weight on <em>timing</em> (why no separation yet) and <em>agency</em> (whose job the sorting is). Jesus himself widens the frame: "the field is the world."</p>
-    <p><strong>The identity claim is the scandal.</strong> The sower is Jesus himself — the Son of Man sending <em>his</em> angels, gathering <em>his</em> kingdom (Daniel 7). "Shine like the sun" echoes Daniel 12:3. The patience surprises; the claim offends. One verse after the discourse, Nazareth answers it: "Isn't this the carpenter's son?" (13:54–57).</p>
-    <p><strong>Don't settle for their "yes."</strong> Jesus didn't (13:51–52) — he turned understanding into vocation, then walked into a town that knew everything about him and trusted nothing. Tonight's real question isn't "did they understand the parable." It's <strong>"will we trust the Master with his field?"</strong> The closing charge is a trust test, not a comprehension test.</p>
-    <p><strong>Guardrail for the whole night.</strong> Jesus explains seven elements and stops. Resist assigning meanings to details he leaves alone — the story turns on authority, timing, and the protection of the wheat, not on plant species.</p>
+    <summary>Prep read — before you walk in (not for live use)</summary>
+    <p><strong>Frame it as discovery, not as something they should already know.</strong> Most people have never heard that the Bible has a literary design. Saying "Matthew is five speeches" flat makes people feel behind. Saying "what I've loved discovering these last few years is…" makes it a gift. Same content, opposite effect.</p>
+    <p><strong>Don't answer Q1.</strong> It's rhetorical — the tension the parable exists to resolve. Let it hang.</p>
+    <p><strong>The identity claim is the scandal.</strong> The sower is Jesus himself — the Son of Man sending <em>his</em> angels, gathering <em>his</em> kingdom (Daniel 7). "Shine like the sun" echoes Daniel 12:3. Nazareth answers the claim one verse later: "Isn't this the carpenter's son?" (13:54–57).</p>
+    <p><strong>Guardrail.</strong> Jesus explains seven elements and stops. Don't assign meanings to details he leaves alone. The story turns on authority, timing, and protecting the wheat.</p>
+    <p><strong>Optional if you get the time:</strong> real-or-fake images on screen for the opener, hands up for each one. Livelier than waiting for someone to volunteer a story.</p>
   </details>
 
   <!-- 1 · OPENER -->
-  <section>
-    <div class="sec-head"><h2><span class="spk s1">1</span>Fooled by a Fake</h2><span class="timing">~2 min</span></div>
-    <p class="who">Whole group · popcorn-style, quick answers</p>
-    <p><strong>Have you ever been fooled by a convincing fake?</strong> A knockoff product, a counterfeit bill, a plant you swore was real, an email that looked legit. How long did it take you to find out?</p>
-    <div class="cue"><span class="spk s1 sm">1</span><p><b>Three or four answers, fast — no commentary.</b> <span class="aside">Don't explain the connection to tonight's text yet. It pays off after the reading.</span></p></div>
+  <section id="opener">
+    <div class="sec-head"><h2><span class="spk s2">2</span>Fooled by a Fake</h2><span class="timing">~3 min</span></div>
+    <p class="who">Whole group · quick, light, popcorn answers</p>
+    <p><strong>Have you ever been fooled by a convincing fake?</strong> A knockoff, a counterfeit bill, a plant you swore was real, an email that looked completely legit. How long did it take you to find out?</p>
+    <div class="cue s2c"><span class="spk s2 sm">2</span><div>
+      <p><span class="lbl">Welcome</span>Introduce yourselves — married 24 years, first time teaching together — and name where we are: the church has been in the parables all summer, and tonight is the wheat and the weeds.</p>
+      <p><span class="lbl">Then</span>Three or four answers, fast, no commentary. <b>Don't explain why you're asking.</b> It pays off after the reading, and the surprise is the point.</p>
+    </div></div>
   </section>
 
   <!-- 2 · ORIENTATION -->
-  <section>
-    <div class="sec-head"><h2><span class="spk s1">1</span>Where We Are in Matthew</h2><span class="timing">~2 min</span></div>
+  <section id="matthew">
+    <div class="sec-head"><h2><span class="spk s1">1</span>Where We Are in Matthew</h2><span class="timing">~4 min</span></div>
     <p class="who">Whole group · point at the map as you go</p>
+    <div class="cue"><span class="spk s1 sm">1</span><div>
+      <p><span class="lbl">Open</span>Land the frame before the map goes up.</p>
+      <p class="say">"Tonight we're in Matthew 13. But before we read, I want to give you a little context — because this parable isn't standing on its own. What I've loved discovering these last few years is that the writers of the Bible built these books with real purpose. Nothing is an accident."</p>
+    </div></div>
     <div class="mmap">
       <div class="mrow dim"><span class="mc">1–4</span><span>The King Arrives</span></div>
       <div class="mrow"><span class="mc">5–7</span><span>Kingdom Announced<span class="sp-tag">Speech 1</span></span></div>
@@ -299,17 +345,29 @@
       <div class="mrow dim"><span class="mc">26–28</span><span>The King Crucified &amp; Risen</span></div>
       <p style="margin:.45rem .4rem 0; font-size:.76rem; color:var(--ink-soft)">Matthew alternates story and speech — five speeches, five scrolls of Moses.</p>
     </div>
-    <div class="cue"><span class="spk s1 sm">1</span><p><b>Five speeches, five scrolls of Moses — Jesus as the new Moses.</b> <span class="aside">He announces the Kingdom (5–7), sends the Twelve to extend it (10), and the responses split three ways in 11–12: John questions from prison, towns shrug, leaders start planning his death.</span></p></div>
-    <div class="cue"><span class="spk s1 sm">1</span><p><b>Speech 3 sits dead center — the way Leviticus sits at the center of the Torah.</b> <span class="aside">Leviticus asks how a holy God can dwell among an impure people. Matthew 13 asks how the Kingdom can be present in a mixed field. Same kind of answer: patient presence, separation deferred.</span></p></div>
-    <div class="cue hold"><span class="spk s1 sm">1</span><p><b>Wave down the map, don't teach it.</b> <span class="aside">"Speech four, how this new family lives together. Speech five, the final warning. And the whole book ends at a cross." Ten seconds — the cross line pays off later.</span></p></div>
-    <p><strong>Chapters 11 and 12 have been building one question.</strong> John the Baptist had announced a Messiah with a winnowing fork in his hand — wheat gathered, chaff burned (3:12). Now, from prison, John sends word: "Are you the one — or should we expect someone else?" (11:3) Chapter 13 is Jesus' answer, and tonight we're taking the second parable in it.</p>
+    <div class="cue"><span class="spk s1 sm">1</span><div>
+      <p><span class="lbl">The map</span>Story, teaching, story, teaching — five times. Five speeches, mirroring the five scrolls of Moses. Matthew is showing us Jesus as the new Moses: the one on the hillside giving the Sermon on the Mount is the new lawgiver.</p>
+      <p><span class="lbl">The center</span><b>This is the part worth slowing down for.</b> Speech three sits dead center — the way Leviticus sits at the center of the Torah. Leviticus wrestles with how a holy God can live among an impure people. Matthew 13 wrestles with how the Kingdom can be present in a mixed field. Same question, same kind of answer.</p>
+      <p><span class="lbl">Payoff</span>Don't go into Yom Kippur — one line is enough: <span class="say">"Every part of the Bible connects to another part on purpose, and all of it is telling the story of Jesus."</span></p>
+    </div></div>
+    <div class="cue hold"><span class="spk s1 sm">1</span><div>
+      <p><span class="lbl">Skip</span><b>Don't teach the bookends or the mirroring of Genesis–Deuteronomy tonight.</b> It's real, it's in Going Deeper, and it loses the room. Gesture at the rest of the map in ten seconds and move on.</p>
+    </div></div>
+    <div class="cue"><span class="spk s1 sm">1</span><div>
+      <p><span class="lbl">Set up ch. 13</span>Now bring them to the question the parable answers.</p>
+      <p class="say">"As you go through Matthew, Jesus gets a really mixed response. He's teaching that the Kingdom of heaven is here — and some people follow him, some people want to kill him, and some have no idea what to make of him. All of that builds to one question. John the Baptist had announced Jesus as the Messiah with a winnowing fork in his hand — the wheat gathered, the chaff burned. He expected God to show up and set things right immediately. And now John is sitting in prison, and he sends word: 'Are you the one, or should we expect someone else?' Jesus answers John directly. But he also answers everybody — in eight stories, in chapter 13. Tonight we're taking the second one."</p>
+    </div></div>
+    <div class="pause"><span class="spk s1 sm">1</span><span>PAUSE — <em>"Holli, anything I missed, or context you want to add here?"</em></span></div>
   </section>
 
-  <!-- 3 · READ + Q1 -->
-  <section>
-    <div class="sec-head"><h2><span class="spk s1">1</span>Hear the Parable</h2><span class="timing">~4 min</span></div>
-    <p class="who">Whole group · read aloud, then one question to the room</p>
-    <div class="cue"><span class="spk s1 sm">1</span><p><b>Read it yourself — the line breaks are the pauses.</b> <span class="aside">One line of setup first: "Jesus has just told the parable of the sower — same lakeside, same crowd. This is the very next story."</span></p></div>
+  <!-- 3 · READ -->
+  <section id="parable">
+    <div class="sec-head"><h2><span class="spk s1">1</span>Hear the Parable</h2><span class="timing">~2 min</span></div>
+    <p class="who">Whole group · read aloud, follow along on the page</p>
+    <div class="cue"><span class="spk s1 sm">1</span><div>
+      <p><span class="lbl">Setup</span>One line: <span class="say">"Jesus has just told the parable of the sower — the four soils, how different hearts receive his message. Same lakeside, same crowd. This is the very next story."</span></p>
+      <p><span class="lbl">Read</span>Read it yourself, unhurried — the line breaks are the pauses. <b>Then stop and hand to Holli.</b> Don't add a single word of explanation.</p>
+    </div></div>
     <div class="scripture">
       <div class="stz">
         <span class="ln">Another parable he set before them, saying:</span>
@@ -359,39 +417,61 @@
       </div>
       <cite>Matthew 13:24–30 · LLT-SSE</cite>
     </div>
-    <p><strong>The weed is an imposter.</strong> Darnel — Greek <em>zizania</em> — looks so nearly identical to young wheat that by the time you can tell them apart, the roots have grown together. Sabotaging a field this way was a recognized crime in the Roman world.</p>
-    <div class="cue"><span class="spk s1 sm">1</span><p><b>Tie it back to the opener:</b> <span class="aside">"Mid-season, darnel fools everyone — that's the fake you can't spot yet." Then pose Q1.</span></p></div>
-    <div class="q"><span class="badge">1</span>
-      <p>If God's Kingdom has really arrived in Jesus, why is it meeting this much resistance — and why does he let those who oppose it still stand?
-        <span class="follow">To the whole room. Two or three answers.</span>
-      </p>
-    </div>
-    <div class="cue hold"><span class="spk s1 sm">1</span><p><b>Do not resolve it.</b> <span class="aside">The parable is Jesus' answer, and the groups are about to work on it. Take answers, then hand to Speaker 2.</span></p></div>
   </section>
 
-  <!-- 4 · SMALL GROUPS ROUND 1 -->
-  <section class="groupwork">
-    <div class="sec-head"><h2><span class="spk s2">2</span>Small Groups · Round 1</h2><span class="timing">~5 min</span></div>
-    <p class="who">Groups of 3–4 · pick a timekeeper</p>
-    <div class="q"><span class="badge">2</span>
-      <p>Before any explanation — what is Jesus claiming by telling this story? Who is the sower? Who is the master?
-        <span class="follow">Commit to a guess. Jesus gives his own answer in a few minutes.</span>
+  <!-- 4 · THE IMPOSTER + Q1 -->
+  <section id="imposter">
+    <div class="sec-head"><h2><span class="spk s2">2</span>An Imposter in the Field</h2><span class="timing">~3 min</span></div>
+    <p class="who">Whole group · Holli teaches it out, Henry fills in</p>
+    <div class="cue s2c"><span class="spk s2 sm">2</span><div>
+      <p><span class="lbl">World</span>Put them in the field before you explain anything.</p>
+      <p class="say">"Think about this in an agrarian world. You didn't eat if you didn't farm — your field was your food and your wealth. Sabotaging someone's field like this was a recognized crime under Roman law. So this isn't a minor prank. This is an attack on a family's survival."</p>
+      <p><span class="lbl">The weed</span>The weed here is an imposter — it looks like the real thing and isn't. Historians think it's <em>zizania</em>, also called darnel or tares.</p>
+      <p><span class="lbl">Hand to Henry</span>He has the detail that makes it land — young, they're indistinguishable; grown, the wheat droops from the weight of its own grain and the darnel stands up straight, because there's nothing in it.</p>
+    </div></div>
+    <div class="cue"><span class="spk s1 sm">1</span><div>
+      <p><span class="lbl">Add</span>Darnel got bundled and burned as household fuel — that's ordinary harvest practice. <b>So "bundle it and burn it" is agriculture before it's anything else.</b> It's the part of the crop that can't feed anyone.</p>
+    </div></div>
+    <div class="cue s2c"><span class="spk s2 sm">2</span><div>
+      <p><span class="lbl">Tie back</span>Now close the loop with the opener, then pose Q1 and <b>leave it standing.</b></p>
+      <p class="say">"So — back to where we started. Can you always tell what's fake and what's real? In the middle of the season, you can't. Not with these. You don't know which is which until the very end. So hold that, and hold this question:"</p>
+    </div></div>
+    <div class="q"><span class="badge">1</span>
+      <p>If God's Kingdom has really arrived in Jesus, why is it meeting so much resistance — and why does he let those who oppose it still stand?
+        <span class="follow">Sit with this one. We're not answering it yet.</span>
       </p>
+    </div>
+    <div class="cue s2c hold"><span class="spk s2 sm">2</span><div>
+      <p><span class="lbl">Hold</span><b>Rhetorical — don't take answers.</b> This is the ache the parable exists to address. Let the silence do the work, then move straight into the next question.</p>
+    </div></div>
+  </section>
+
+  <!-- 5 · Q2 + Q3 WHOLE ROOM -->
+  <section id="players" class="groupwork">
+    <div class="sec-head"><h2><span class="spk s2">2</span>Who Are the Players?</h2><span class="timing">~5 min</span></div>
+    <p class="who">Take a minute on your own to write, then we'll talk as a room</p>
+    <div class="q"><span class="badge">2</span>
+      <p>What is Jesus claiming by telling this story?</p>
     </div>
     <div class="q"><span class="badge">3</span>
-      <p>The servants' plan — pull the weeds <em>now</em> — sounds completely reasonable. Why does the master refuse? What is he protecting?
-        <span class="follow">And if you'd spent your whole life waiting for God to come fix the world, how would "let both grow together" land on you?</span>
+      <p>Who is the sower? Who is the master? Who is the good seed, and who are the weeds?
+        <span class="follow">Write down your best guess before anyone says it out loud.</span>
       </p>
     </div>
-    <div class="cue"><span class="spk s2 sm">2</span><p><b>Circulate, don't teach.</b> <span class="aside">One-minute warning at four. On regather, take one phrase per question — not a speech.</span></p></div>
-    <div class="cue"><span class="spk s2 sm">2</span><p><b>Don't confirm or correct the Q2 guesses.</b> <span class="aside">Note them aloud and let Jesus answer them in the next section.</span></p></div>
-    <div class="cue"><span class="spk s2 sm">2</span><p><b>Land it:</b> "The servants focus on removing weeds. The owner focuses on protecting wheat. Those are not always the same thing."</p></div>
+    <div class="cue s2c"><span class="spk s2 sm">2</span><div>
+      <p><span class="lbl">Run it</span>One quiet minute to write, then open the floor. <b>Writing first means everyone commits before the confident voices go.</b></p>
+      <p><span class="lbl">Collect</span>Take guesses on the sower and the master out loud. <b>Don't confirm or correct any of them.</b> Say you're holding the answers — because Jesus gives his own in about two minutes, and it's better coming from him.</p>
+    </div></div>
+    <div class="pause"><span class="spk s2 sm">2</span><span>PAUSE — <em>hand back to Henry for the second reading</em></span></div>
   </section>
 
-  <!-- 5 · THE KEY -->
-  <section>
-    <div class="sec-head"><h2><span class="spk s1">1</span><span class="spk s2">2</span>Jesus Makes It Clear</h2><span class="timing">~4 min</span></div>
-    <p class="who">Whole group · Speaker 1 reads, Speaker 2 walks the key</p>
+  <!-- 6 · THE EXPLANATION -->
+  <section id="explanation">
+    <div class="sec-head"><h2><span class="spk s1">1</span>Jesus Makes It Clear</h2><span class="timing">~2 min</span></div>
+    <p class="who">Whole group · read aloud, then hand to Holli</p>
+    <div class="cue"><span class="spk s1 sm">1</span><div>
+      <p><span class="lbl">Setup</span><span class="say">"The crowd hears the story and that's all they get. But the disciples follow him inside and ask. Watch what happens when someone asks."</span></p>
+    </div></div>
     <div class="scripture">
       <div class="stz">
         <span class="ln">Then, leaving the crowds,</span>
@@ -447,7 +527,12 @@
       </div>
       <cite>Matthew 13:36–43 · LLT-SSE</cite>
     </div>
-    <div class="cue"><span class="spk s2 sm">2</span><p><b>Start with their guesses.</b> <span class="aside">Call back what the groups said about the sower, then let Jesus' own key answer them.</span></p></div>
+  </section>
+
+  <!-- 7 · THE KEY -->
+  <section id="key">
+    <div class="sec-head"><h2><span class="spk s2">2</span>The Key — and the One Missing Piece</h2><span class="timing">~6 min</span></div>
+    <p class="who">Whole group · the key is on your page</p>
     <table class="decoder">
       <thead><tr><th>In the story</th><th>Jesus says it means</th></tr></thead>
       <tbody>
@@ -461,15 +546,28 @@
         <tr class="missing"><td>The servants</td><td>Told to let both grow until the harvest (v. 29–30)</td></tr>
       </tbody>
     </table>
-    <div class="key-insight">👀 Every symbol gets an explanation — except the servants.<br />They are never given the separation; that belongs to the angels, at the end of the age. Their only instruction: <strong>"Let both grow together."</strong> The sorting was never ours.</div>
-    <div class="cue"><span class="spk s2 sm">2</span><p><b>Four things to land, one sentence each:</b> <span class="aside">the Kingdom has already begun · the harvest is certain, so delay is not denial · God's patience is what protects the wheat · the timing and the reapers are his to appoint.</span></p></div>
-    <p>Jesus lives his own parable. The King does not remove his enemies — he dies for them. The harvest will come; this season is a gift of mercy.</p>
+    <div class="cue s2c"><span class="spk s2 sm">2</span><div>
+      <p><span class="lbl">Ask</span><span class="say">"Take a minute and look at the key on your page. Is any of that different from what you expected?"</span> <b>Let them react before you teach.</b> The one that usually lands: the field is the <em>world</em>, not the church.</p>
+      <p><span class="lbl">If it comes up</span>"Sons of the evil one" — those not submitted to God's word, the ones who become stumbling blocks to others. And if someone asks what makes us the good seed instead: <b>it isn't understanding. It's trust.</b> You can understand every word of this and still decide to be lord of your own life.</p>
+    </div></div>
+    <div class="cue s2c"><span class="spk s2 sm">2</span><div>
+      <p><span class="lbl">The turn</span>This is the teaching point. Deliver it as something you noticed, not as a conclusion handed down.</p>
+      <p class="say">"Here's what I find so interesting. Every single symbol gets an explanation — except one. The servants. They're the ones who asked to go pull the weeds, and they are never given that job. The sorting belongs to the angels, at the end of the age. The servants get one instruction: let both grow. The sorting was never ours."</p>
+    </div></div>
+    <div class="key-insight">👀 Every symbol gets an explanation — except the servants. Their only instruction: <strong>"Let both grow together."</strong> The sorting was never ours.</div>
+    <div class="cue s2c"><span class="spk s2 sm">2</span><div>
+      <p><span class="lbl">Land it</span>Four things, one sentence each: the Kingdom is here now · the harvest is certain, so delay is not denial · God's patience is what <em>protects the wheat</em> · the timing and the reapers are his to appoint.</p>
+      <p><span class="lbl">Make it real</span><span class="say">"So why does God allow this? The boss who's a jerk. The person who stole from you. The thing that shouldn't have happened. We think God should just deal with it. And what Jesus is saying here is that pulling out the weeds would tear up your roots too. His patience isn't him ignoring evil — it's him protecting you, and giving somebody else time."</span></p>
+      <p><span class="lbl">Paul</span>The example that makes it undeniable: <b>Paul was a weed.</b> Anyone looking at him would have said so — he said it himself, the worst of sinners. If God had pulled him when he was a weed, the church loses one of the tallest stalks in the field. He fed and protected more disciples than almost anyone.</p>
+    </div></div>
+    <p class="sonly">The servants focus on removing weeds. The owner focuses on protecting wheat. Those are not always the same thing. Jesus lives his own parable — the King does not remove his enemies; he dies for them.</p>
+    <div class="pause"><span class="spk s2 sm">2</span><span>PAUSE — <em>"Henry, anything to add before we go to groups?"</em></span></div>
   </section>
 
-  <!-- 6 · SMALL GROUPS ROUND 2 -->
-  <section class="groupwork">
-    <div class="sec-head"><h2><span class="spk s2">2</span>Small Groups · Round 2</h2><span class="timing">~4 min</span></div>
-    <p class="who">Same groups, or pairs if you're short on time</p>
+  <!-- 8 · SMALL GROUPS -->
+  <section id="groups" class="groupwork">
+    <div class="sec-head"><h2><span class="spk s1">1</span>Small Groups</h2><span class="timing">~4 min</span></div>
+    <p class="who">Groups of 3–4 · the only group round tonight</p>
     <div class="q"><span class="badge">4</span>
       <p>Where are you most tempted to do the sorting yourself — writing someone off as a "weed," or deciding a situation is beyond God?</p>
     </div>
@@ -478,26 +576,33 @@
         <span class="follow">One concrete thing — a word withheld, a prayer started, a door left open.</span>
       </p>
     </div>
-    <div class="cue"><span class="spk s2 sm">2</span><p><b>Nudge if they stall:</b> "Mid-season, darnel and wheat are indistinguishable. The church's greatest missionary spent years looking exactly like a weed. His name was Saul."</p></div>
-    <div class="cue hold"><span class="spk s2 sm">2</span><p><b>Don't let this become a weed-identification committee.</b> <span class="aside">No naming neighbors, political opponents, denominations, or struggling believers. And patience isn't passivity — the "no" concerns the <em>final uprooting</em>, not discernment, protecting the vulnerable, honest confrontation, civil justice, or wise boundaries.</span></p></div>
+    <div class="cue"><span class="spk s1 sm">1</span><div>
+      <p><span class="lbl">Run it</span>Circulate, don't teach. One-minute warning at three. <b>No share-out round</b> — go straight into the close when time is up.</p>
+      <p><span class="lbl">Guardrail</span>Don't let this become a weed-identification committee. No naming neighbors, politicians, denominations, or struggling believers. And patience isn't passivity — the "no" is about the <em>final uprooting</em>, not about discernment, protecting the vulnerable, honest confrontation, or wise boundaries.</p>
+    </div></div>
   </section>
 
-  <!-- 7 · CLOSE -->
-  <section>
-    <div class="sec-head"><h2><span class="spk s2">2</span><span class="spk s1">1</span>One Next Step</h2><span class="timing">~2 min</span></div>
+  <!-- 9 · CLOSE -->
+  <section id="close">
+    <div class="sec-head"><h2><span class="spk s2">2</span><span class="spk s1">1</span>Will We Trust the Master?</h2><span class="timing">~3 min</span></div>
     <p class="who">Whole group · close in prayer</p>
-    <p>We live between two moments: the Kingdom has already come in Jesus, and the harvest has not yet come. So we don't lose hope when we see evil, and we don't take God's place as judge. The master knows his field better than his servants do — and he isn't finished with it, or with us.</p>
+    <p class="sonly">We live between two moments: the Kingdom has already come in Jesus, and the harvest has not yet come. So we don't lose hope when we see evil, and we don't take God's place as judge. The master knows his field better than his servants do — and he isn't finished with it, or with us.</p>
+    <div class="key-insight">🌾 The harvest will reveal what has been growing all along. <strong>What will that harvest reveal about me?</strong></div>
+    <div class="cue s2c"><span class="spk s2 sm">2</span><div>
+      <p><span class="lbl">Land it</span>End on trust, not comprehension.</p>
+      <p class="say">"Jesus says it every time: the one who has ears, let him hear. So here's the question I'm walking out with. When I see a situation I don't understand — will I trust the Master with his own field? Not passively. It doesn't mean I stop having discernment, or stop protecting people. It means that whatever I decide and whatever I do, I'm doing it because I trust him with his field, his character, his patience, and his timing."</p>
+    </div></div>
     <div class="q"><span class="badge take">→</span>
       <p>This week: name one person you've quietly filed under "weed," and pray for them by name — that God's patient mercy would draw them, and that he would replace your judgment with faithful love.
-        <span class="follow">This is Jesus' own command in this same Gospel: "pray for those who persecute you" (5:44).</span>
+        <span class="follow">Jesus' own command, in this same Gospel: "pray for those who persecute you" (5:44).</span>
       </p>
     </div>
-    <div class="key-insight">🌾 The harvest will reveal what's been growing all along. Which will it reveal me to be? "The one who has ears — let him hear." (13:43)</div>
-    <div class="cue"><span class="spk s2 sm">2</span><p><b>Let the reflection sit a beat, give the next step, then hand off.</b> <span class="aside">End on trust, not comprehension: "will we trust the Master with his field?"</span></p></div>
-    <div class="cue"><span class="spk s1 sm">1</span><p><b>Pray.</b> <span class="aside">"Father, thank You that Your Kingdom has already begun through Jesus. Help us trust Your timing when we see evil around us and face things we cannot fix. Keep us from taking Your place as judge. Make us faithful and fruitful while we wait, and teach us the patience and mercy that Jesus showed. Thank You that the harvest belongs to You, and that You will one day make all things right. In Jesus' name, amen."</span></p></div>
+    <div class="cue"><span class="spk s1 sm">1</span><div>
+      <p><span class="lbl">Pray</span>"Father, thank You that Your Kingdom has already begun through Jesus. Help us trust Your timing when we see evil around us and face things we cannot fix. Keep us from taking Your place as judge. Make us faithful and fruitful while we wait, and teach us the patience and mercy that Jesus showed. Thank You that the harvest belongs to You, and that You will one day make all things right. In Jesus' name, amen."</p>
+    </div></div>
   </section>
 
-  <details class="deeper">
+  <details class="deeper" id="deeper">
     <summary>Going Deeper · Matthew's Literary Design</summary>
     <p style="color:var(--ink-soft); font-size:.95rem; margin:.7rem 0 .3rem">For readers who want the full architecture: Matthew's five speeches form a symmetry with chapter 13 at the center — like Leviticus at the center of the Torah — framed by mirrored bookends.</p>
     <div class="structure">
@@ -621,6 +726,20 @@
     <p class="credits">Drawing on the BibleProject Gospel of Matthew overview and "How to Read the Parables" podcast series, and Tim Mackie's literary design of Matthew (BibleProject Classroom · Rise of the Messiah).</p>
   </details>
 
+  <nav class="mini-toc" aria-label="Section navigation">
+    <span class="mini-toc-label">Jump to</span>
+    <a href="#opener">1 · Opener</a>
+    <a href="#matthew">2 · Matthew</a>
+    <a href="#parable">3 · Read 13:24–30</a>
+    <a href="#imposter">4 · Imposter + Q1</a>
+    <a href="#players" class="grp">5 · Q2 + Q3</a>
+    <a href="#explanation">6 · Read 13:36–43</a>
+    <a href="#key">7 · The Key</a>
+    <a href="#groups" class="grp">8 · Small Groups</a>
+    <a href="#close">9 · Close</a>
+    <a href="#deeper">Going Deeper</a>
+  </nav>
+
   <button class="view-toggle" id="viewToggle" aria-pressed="true">Show speaker notes</button>
 
   <footer>
@@ -630,7 +749,10 @@
   </footer>
 </div>
 
+<a href="#top" class="back-to-top" id="backToTop" aria-label="Back to top">↑</a>
+
 <script>
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const btn = document.getElementById('viewToggle');
   function setView(view){
     const participant = view === 'participant';
@@ -640,6 +762,111 @@
   }
   btn.addEventListener('click', () => {
     setView(document.body.classList.contains('participant-view') ? 'speaker' : 'participant');
+  });
+
+  // Back to top — visible after 300px, same threshold as the site chassis
+  const backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    const y = document.body.scrollTop || document.documentElement.scrollTop;
+    backToTop.classList.toggle('visible', y > 300);
+  }, {passive:true});
+  backToTop.addEventListener('click', e => {
+    e.preventDefault();
+    window.scrollTo({top:0, behavior: reduceMotion ? 'auto' : 'smooth'});
+  });
+
+  // ---------- Mobile section tabs (mirrors page-chassis-v5-9 behavior) ----------
+  const cfg = JSON.parse(document.getElementById('page-section-config').textContent);
+  const sections = cfg
+    .map(c => ({...c, element: document.getElementById(c.id)}))
+    .filter(s => s.element);
+
+  function trimToMobileLimit(list, max = 7){
+    if (list.length <= max) return list.slice();
+    const must = list.filter(s => s.priority === 1);
+    const rest = list.filter(s => s.priority !== 1).sort((a,b) => a.priority - b.priority);
+    const survivors = must.concat(rest.slice(0, Math.max(0, max - must.length)));
+    survivors.sort((a,b) => cfg.findIndex(c => c.id === a.id) - cfg.findIndex(c => c.id === b.id));
+    return survivors;
+  }
+
+  const shown = trimToMobileLimit(sections, 7);
+  const nav = document.createElement('nav');
+  nav.className = 'mobile-section-tabs';
+  nav.setAttribute('role','navigation');
+  nav.setAttribute('aria-label','Section navigation');
+  const container = document.createElement('div');
+  container.className = 'tabs-container';
+
+  shown.forEach((section, i) => {
+    const tab = document.createElement('button');
+    tab.className = 'tab-item';
+    tab.type = 'button';
+    tab.setAttribute('data-target', '#' + section.id);
+    tab.setAttribute('role','tab');
+    tab.setAttribute('aria-label', section.label + ' section');
+    tab.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+    if (i === 0) tab.classList.add('active');
+    const label = document.createElement('span');
+    label.className = 'tab-label-only';
+    label.textContent = section.label;
+    tab.appendChild(label);
+    section.tab = tab;
+    container.appendChild(tab);
+  });
+
+  nav.appendChild(container);
+  document.body.appendChild(nav);
+  document.body.classList.add('has-mobile-tabs');
+  requestAnimationFrame(() => {
+    nav.classList.add('active');
+    setTimeout(() => nav.classList.add('slide-in'), 40);
+  });
+
+  function ensureVisible(tab){
+    const c = container, left = tab.offsetLeft, right = left + tab.offsetWidth;
+    if (left < c.scrollLeft) c.scrollTo({left: left - 20, behavior:'smooth'});
+    else if (right > c.scrollLeft + c.offsetWidth) c.scrollTo({left: right - c.offsetWidth + 20, behavior:'smooth'});
+  }
+  function setActiveTab(tab){
+    shown.forEach(s => { if(!s.tab) return; s.tab.classList.remove('active'); s.tab.setAttribute('aria-selected','false'); });
+    tab.classList.add('active');
+    tab.setAttribute('aria-selected','true');
+    ensureVisible(tab);
+  }
+  container.addEventListener('click', e => {
+    const tab = e.target.closest('.tab-item');
+    if (!tab) return;
+    const section = shown.find(s => s.id === tab.getAttribute('data-target').slice(1));
+    if (!section) return;
+    if (section.id === 'deeper') section.element.open = true;
+    const top = section.element.getBoundingClientRect().top + window.pageYOffset - 20;
+    window.scrollTo({top, behavior: reduceMotion ? 'auto' : 'smooth'});
+    setActiveTab(tab);
+  });
+  container.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    const tabs = [...container.querySelectorAll('.tab-item')];
+    const i = tabs.indexOf(document.activeElement);
+    if (i === -1) return;
+    tabs[e.key === 'ArrowLeft' ? Math.max(0, i-1) : Math.min(tabs.length-1, i+1)].focus();
+  });
+
+  // Scrollspy — highlight the tab for the section currently in view
+  if ('IntersectionObserver' in window){
+    const io = new IntersectionObserver(entries => {
+      const visible = entries.filter(e => e.isIntersecting)
+        .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      const section = shown.find(s => s.element === visible.target);
+      if (section && section.tab) setActiveTab(section.tab);
+    }, {rootMargin: '-20% 0px -60% 0px', threshold: [0, .25, .5]});
+    shown.forEach(s => io.observe(s.element));
+  }
+
+  // Opening Going Deeper from the jump bar should expand it
+  document.querySelector('.mini-toc a[href="#deeper"]').addEventListener('click', () => {
+    document.getElementById('deeper').open = true;
   });
 
   // Print: open all collapsed sections, restore after
