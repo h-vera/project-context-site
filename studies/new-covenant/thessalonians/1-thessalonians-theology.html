@@ -34,7 +34,7 @@
   <meta name="citation-author" content="Project Context" />
   <meta name="citation-title" content="1 Thessalonians: Theology" />
   <meta name="citation-site" content="Project Context" />
-  <meta name="citation-date" content="2026" />
+  <meta name="citation-date" content="2025" />
 
   <!-- Twitter / Open Graph -->
   <meta name="twitter:card" content="summary_large_image" />
@@ -56,7 +56,7 @@
   <!-- Base stylesheets -->
   <link rel="preload" href="/assets/css/global-v3.css?v=3.3.2" as="style" />
   <link rel="stylesheet" href="/assets/css/global-v3.css?v=3.3.2" />
-  <link rel="stylesheet" href="/assets/css/global-v3-polish.css?v=0.2" />
+  <link rel="stylesheet" href="/assets/css/global-v3-polish.css?v=0.3" />
 
   <style>
     /* ── Page-local layer: hero + theology diagrams not supplied by v3 ── */
@@ -72,11 +72,12 @@
       --page-accent-deep:var(--theo-gold-deep);
     }
 
-    /* Win the accent cascade: polish.css sets --page-accent on
-       body[data-theme=…] (specificity 0,1,1), which outranks :root
-       (0,1,0). Re-declare the gold tokens on the body class so the
-       links, breadcrumb, mini-toc, focus rings and page-nav accents
-       match the gold diagrams instead of falling back to blue. */
+    /* Accent cascade. As of polish.css v0.3, body[data-theme="gold"]
+       is a real theme and sets these tokens globally — this block is
+       now a fallback that keeps the page correct if it ships ahead of
+       the stylesheet. Same specificity (0,1,1) and declared later, so
+       the two agree; links, breadcrumb, mini-toc, focus rings and
+       page-nav accents match the gold diagrams either way. */
     body.book-theology{
       --page-accent:var(--theo-gold);
       --page-accent-soft:color-mix(in srgb,var(--theo-gold) 20%,transparent);
@@ -158,6 +159,11 @@
 <body class="book-theology" data-theme="gold" dir="ltr">
   <a href="#main-content" class="skip-link">Skip to main content</a>
   <div class="reading-progress" id="readingProgress"></div>
+
+  <!-- Navigation injected by nav-component.js -->
+  <div id="nav-placeholder"></div>
+
+  <!-- Quick-nav sidebar (desktop ≥1400px) — populated by the chassis -->
   <div class="quick-nav-sidebar" aria-label="Section navigation"></div>
 
   <script id="page-section-config" type="application/json">
@@ -279,16 +285,18 @@
 
       <h3>Already / Not Yet</h3>
       <p>The same tension reads straight across the letter: everything the church already holds in Christ has a counterpart it still awaits. Living faithfully means holding both columns at once.</p>
-      <table class="virtue-table">
-        <thead><tr><th>Already — true now in Christ</th><th>Not yet — still awaited</th></tr></thead>
-        <tbody>
-          <tr><td>Jesus is raised and reigns as Lord</td><td>The dead in Christ are raised (4:13–18)</td></tr>
-          <tr><td>The Spirit is given and at work (1:5–6)</td><td>Creation is renewed</td></tr>
-          <tr><td>The kingdom has begun (2:12)</td><td>The kingdom is revealed in glory (4:15–17)</td></tr>
-          <tr><td>Believers are rescued from the coming wrath (1:10)</td><td>Evil is finally judged (5:9)</td></tr>
-          <tr><td>The church is already God's family</td><td>The whole person is kept blameless (5:23–24)</td></tr>
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <table class="virtue-table">
+          <thead><tr><th>Already — true now in Christ</th><th>Not yet — still awaited</th></tr></thead>
+          <tbody>
+            <tr><td>Jesus is raised and reigns as Lord</td><td>The dead in Christ are raised (4:13–18)</td></tr>
+            <tr><td>The Spirit is given and at work (1:5–6)</td><td>Creation is renewed</td></tr>
+            <tr><td>The kingdom has begun (2:12)</td><td>The kingdom is revealed in glory (4:15–17)</td></tr>
+            <tr><td>Believers are rescued from the coming wrath (1:10)</td><td>Evil is finally judged (5:9)</td></tr>
+            <tr><td>The church is already God's family</td><td>The whole person is kept blameless (5:23–24)</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <section id="god" class="study-section reveal" data-reveal>
@@ -334,15 +342,17 @@
         <p class="dgm-cap">The return of Jesus is not an appendix to Paul's gospel. It is the public unveiling of the King who already reigns.</p>
       </div>
 
-      <table class="virtue-table">
-        <thead><tr><th>Title / Image</th><th>Reference</th><th>Theological Weight</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Lord</strong></td><td>1:1; 2:12; throughout</td><td>Jesus is the true ruler whose authority reorders public and private allegiance.</td></tr>
-          <tr><td><strong>Son from Heaven</strong></td><td>1:10</td><td>The risen Jesus is God's appointed deliverer and the one whose return the church awaits.</td></tr>
-          <tr><td><strong>Savior from Wrath</strong></td><td>1:10; 5:9</td><td>Salvation is not only forgiveness in the present but rescue through the coming day of God's justice.</td></tr>
-          <tr><td><strong>Coming King</strong></td><td>1:10; 2:19; 3:13; 4:15; 5:23</td><td>Every major movement of the letter bends toward the Parousia, the royal arrival of Jesus.</td></tr>
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <table class="virtue-table">
+          <thead><tr><th>Title / Image</th><th>Reference</th><th>Theological Weight</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Lord</strong></td><td>1:1; 2:12; throughout</td><td>Jesus is the true ruler whose authority reorders public and private allegiance.</td></tr>
+            <tr><td><strong>Son from Heaven</strong></td><td>1:10</td><td>The risen Jesus is God's appointed deliverer and the one whose return the church awaits.</td></tr>
+            <tr><td><strong>Savior from Wrath</strong></td><td>1:10; 5:9</td><td>Salvation is not only forgiveness in the present but rescue through the coming day of God's justice.</td></tr>
+            <tr><td><strong>Coming King</strong></td><td>1:10; 2:19; 3:13; 4:15; 5:23</td><td>Every major movement of the letter bends toward the Parousia, the royal arrival of Jesus.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <section id="spirit" class="study-section reveal" data-reveal>
@@ -408,14 +418,16 @@
         </svg>
       </div>
 
-      <table class="virtue-table">
-        <thead><tr><th>Virtue</th><th>Textual Shape</th><th>Theological Meaning</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Faith</strong></td><td>Turning from idols to the living God</td><td>Allegiance is transferred from the old order to the Creator and His Son.</td></tr>
-          <tr><td><strong>Love</strong></td><td>Labor, affection, encouragement, mutual care</td><td>The church becomes a new family whose life contradicts rivalry and social isolation.</td></tr>
-          <tr><td><strong>Hope</strong></td><td>Waiting for the Son from heaven</td><td>The future return of Jesus empowers present endurance and holiness.</td></tr>
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <table class="virtue-table">
+          <thead><tr><th>Virtue</th><th>Textual Shape</th><th>Theological Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Faith</strong></td><td>Turning from idols to the living God</td><td>Allegiance is transferred from the old order to the Creator and His Son.</td></tr>
+            <tr><td><strong>Love</strong></td><td>Labor, affection, encouragement, mutual care</td><td>The church becomes a new family whose life contradicts rivalry and social isolation.</td></tr>
+            <tr><td><strong>Hope</strong></td><td>Waiting for the Son from heaven</td><td>The future return of Jesus empowers present endurance and holiness.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <section id="imitation" class="study-section reveal" data-reveal>
@@ -439,14 +451,16 @@
         <p class="dgm-cap">Imitation here is not generic mimicry. What is handed on is a cruciform pattern: receiving the word under affliction, with joy.</p>
       </div>
 
-      <table class="virtue-table">
-        <thead><tr><th>Link in the Chain</th><th>Reference</th><th>What Is Imitated</th></tr></thead>
-        <tbody>
-          <tr><td><strong>The Lord &amp; the Apostles</strong></td><td>1:6</td><td>Receiving the word in much affliction with the joy of the Holy Spirit — the original cruciform pattern.</td></tr>
-          <tr><td><strong>The Thessalonians</strong></td><td>1:6–7</td><td>They reproduce that pattern so faithfully they become a <em>typos</em> (example) to every believer in their region.</td></tr>
-          <tr><td><strong>The Churches of Judea</strong></td><td>2:14</td><td>The Thessalonians also imitate the Judean churches — specifically in suffering the same opposition from their own countrymen.</td></tr>
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <table class="virtue-table">
+          <thead><tr><th>Link in the Chain</th><th>Reference</th><th>What Is Imitated</th></tr></thead>
+          <tbody>
+            <tr><td><strong>The Lord &amp; the Apostles</strong></td><td>1:6</td><td>Receiving the word in much affliction with the joy of the Holy Spirit — the original cruciform pattern.</td></tr>
+            <tr><td><strong>The Thessalonians</strong></td><td>1:6–7</td><td>They reproduce that pattern so faithfully they become a <em>typos</em> (example) to every believer in their region.</td></tr>
+            <tr><td><strong>The Churches of Judea</strong></td><td>2:14</td><td>The Thessalonians also imitate the Judean churches — specifically in suffering the same opposition from their own countrymen.</td></tr>
+          </tbody>
+        </table>
+      </div>
 
       <div class="grid-2" data-reveal-children>
         <div class="compare-panel warning"><div class="head">Not Imitation Of</div><div class="body"><ul><li>style, technique, or personality</li><li>success or social standing</li><li>mere doctrinal agreement</li></ul></div></div>
@@ -563,14 +577,16 @@
       <p>The Thessalonians' suffering does not mean God has forgotten them. It means they have been drawn into the pattern of the Messiah. The story of Jesus becomes the shape of the church's own life: rejection now, vindication at His appearing.</p>
       <p>This reframes affliction at the root: the church's suffering is not evidence that the kingdom has failed — it is evidence that the kingdom has arrived in a world still hostile to it. The collision is exactly what should be expected in the gap between the resurrection and the return.</p>
 
-      <table class="virtue-table">
-        <thead><tr><th>Jesus</th><th>Paul</th><th>The Thessalonians</th></tr></thead>
-        <tbody>
-          <tr><td>Rejected by leaders</td><td>Rejected by his own people</td><td>Rejected by neighbors and households</td></tr>
-          <tr><td>Suffers faithfully</td><td>Endures persecution and separation</td><td>Endure affliction with joy from the Spirit</td></tr>
-          <tr><td>Raised and exalted</td><td>Finds joy in the church's endurance</td><td>Will be vindicated at Christ's coming</td></tr>
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <table class="virtue-table">
+          <thead><tr><th>Jesus</th><th>Paul</th><th>The Thessalonians</th></tr></thead>
+          <tbody>
+            <tr><td>Rejected by leaders</td><td>Rejected by his own people</td><td>Rejected by neighbors and households</td></tr>
+            <tr><td>Suffers faithfully</td><td>Endures persecution and separation</td><td>Endure affliction with joy from the Spirit</td></tr>
+            <tr><td>Raised and exalted</td><td>Finds joy in the church's endurance</td><td>Will be vindicated at Christ's coming</td></tr>
+          </tbody>
+        </table>
+      </div>
       <div class="theology-lead"><h3>The Pattern of the Messiah</h3><p>The church does not overcome the world by imitating Rome's power. It overcomes by imitating the crucified and risen King: patient endurance, costly love, holy life, and hope fixed on God's final act of justice.</p></div>
     </section>
 
@@ -668,7 +684,7 @@
   <div class="mobile-menu-overlay"></div>
 
   <footer>
-    <p>&copy; 2026 <a href="/">Project Context</a> — 1 Thessalonians Theology</p>
+    <p>&copy; 2025 <a href="/">Project Context</a> — 1 Thessalonians Theology</p>
     <p><a href="/studies/new-covenant/thessalonians/thessalonians-hub.html">← Back to Thessalonians</a></p>
   </footer>
 
