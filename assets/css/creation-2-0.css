@@ -1,0 +1,376 @@
+/* ============================================================
+   creation-2-0.css — v1.0
+   Path: /assets/css/creation-2-0.css
+   ------------------------------------------------------------
+   Series layer for the Creation 2.0 suite (9 movements + hub +
+   river). Holds only what the series needs and global-v3 does
+   not provide: the spoke hero, the suite arc tracker, prev/next
+   page nav, resource-status pills, the comparison table, and
+   the Story So Far footer.
+
+   LOAD ORDER — this file goes third, after the polish layer,
+   because it consumes --page-accent / --page-accent-deep which
+   polish sets from body[data-theme]:
+
+     <link rel="stylesheet" href="/assets/css/global-v3.css?v=3.3.2">
+     <link rel="stylesheet" href="/assets/css/global-v3-polish.css?v=0.3">
+     <link rel="stylesheet" href="/assets/css/creation-2-0.css?v=1.0">
+
+   PER-PAGE CONTRACT — each spoke sets its own hero gradient in a
+   small :root block and nothing else. Two stops plus the theme:
+
+     <body class="thematic-study" data-theme="teal" data-suite-stage="1">
+     :root { --hero-mid: #111827; --hero-end: #312e81; }
+
+   The glow colour is derived from --page-accent automatically, so
+   data-theme drives both the accent system and the hero wash.
+   Values currently in production:
+
+     Movement 1  Creation     teal     #111827 / #312e81
+     Movement 2  Broken       rose     #1f1420 / #3b1d2e
+     Movement 3  Covenant     indigo   #1c1917 / #3b2a1d
+     Movement 4  Exodus       blue     #0f1f33 / #1e3a5f
+     Movement 5  Kingdom      purple   #1e1533 / #3b2a5f
+     Movement 6  Exile        magenta  #26101f / #4a1d3f
+     Movement 7  Christ       purple   #1a1230 / #2e1a52
+     Movement 8  Spirit       rose     #241019 / #52182e
+     Movement 9  Completed    teal     #0c2230 / #14434d
+   ============================================================ */
+
+
+/* ------------------------------------------------------------
+   1. SPOKE HERO
+   Full-bleed dark wash at the top of each movement page. The
+   radial glow reads from --page-accent so it tracks data-theme;
+   the two linear stops are the only per-page values.
+
+   Markup:
+     <header class="spoke-hero">
+       <span class="page-kicker">Movement 5 · Creation 2.0</span>
+       <span class="hero-hebrew" lang="he">וַהֲקִימֹתִי…</span>
+       <h1>Creation Through Kingdom</h1>
+       <p class="subtitle">God's Rule on Earth · Samuel–Kings</p>
+     </header>
+   ------------------------------------------------------------ */
+.spoke-hero {
+  --hero-start: #06121f;
+  --hero-mid:   #1e1533;   /* per-page override */
+  --hero-end:   #3b2a5f;   /* per-page override */
+
+  margin: 4.5rem 0 0;
+  padding: clamp(2.5rem, 6vw, 4rem) var(--gutter);
+  text-align: center;
+  color: #fff;
+  background:
+    radial-gradient(circle at 20% 80%,
+      color-mix(in srgb, var(--page-accent) 26%, transparent), transparent 45%),
+    linear-gradient(135deg,
+      var(--hero-start) 0%, var(--hero-mid) 45%, var(--hero-end) 100%);
+}
+
+/* Movement 9 closes the arc, so it carries a second glow. Opt in
+   with class="spoke-hero is-finale" rather than a bespoke rule. */
+.spoke-hero.is-finale {
+  background:
+    radial-gradient(circle at 20% 80%,
+      color-mix(in srgb, var(--page-accent) 30%, transparent), transparent 45%),
+    radial-gradient(circle at 80% 20%,
+      color-mix(in srgb, var(--accent-blue) 20%, transparent), transparent 48%),
+    linear-gradient(135deg,
+      var(--hero-start) 0%, var(--hero-mid) 45%, var(--hero-end) 100%);
+}
+
+.spoke-hero .page-kicker {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  opacity: .8;
+  margin-bottom: .75rem;
+}
+
+.spoke-hero h1 {
+  color: #fff;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  margin: 0 0 .5rem;
+  letter-spacing: -.03em;
+}
+
+.spoke-hero .subtitle {
+  color: rgba(255, 255, 255, .85);
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* One rule for both scripts — Hebrew on OT movements, Greek on
+   Christ / Spirit / Completed. Previously two near-identical
+   declarations that drifted between pages. */
+.spoke-hero .hero-hebrew,
+.spoke-hero .hero-greek {
+  display: block;
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  color: rgba(255, 255, 255, .9);
+  margin-bottom: .4rem;
+}
+
+
+/* ------------------------------------------------------------
+   2. SUITE ARC TRACKER
+   Nine-stage breadcrumb showing position in the movement arc.
+   Rainbow-tracker convention from the Noah suite, on v3 tokens.
+   ------------------------------------------------------------ */
+.suite-tracker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .4rem;
+  margin: 1.5rem auto;
+  padding: .85rem 1rem;
+  max-width: var(--max-w-content);   /* was var(--content-max, 900px) — undefined token */
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.suite-tracker .tracker-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--text-muted);
+  margin-right: .35rem;
+}
+
+.suite-tracker .stage {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  font-weight: 600;
+  padding: .25rem .6rem;
+  border-radius: var(--radius-pill);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.suite-tracker .stage.current {
+  background: var(--page-accent);
+  border-color: var(--page-accent);
+  color: #fff;
+}
+
+.suite-tracker .arrow {
+  color: var(--page-accent);
+  font-weight: 700;
+  font-size: .75rem;
+}
+
+/* Linked stages read as navigable; dashed border distinguishes
+   them from the plain markers. Was missing on the Exile page. */
+.suite-tracker a.stage {
+  text-decoration: none;
+  border-style: dashed;
+}
+
+.suite-tracker a.stage:hover,
+.suite-tracker a.stage:focus-visible {
+  color: var(--page-accent-deep);
+  border-color: var(--page-accent);
+}
+
+
+/* ------------------------------------------------------------
+   3. PREV / NEXT PAGE NAV
+   ------------------------------------------------------------ */
+.page-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 2.5rem 0 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.page-nav a {
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  text-decoration: none;
+}
+
+.page-nav .nav-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--text-muted);
+}
+
+
+/* ------------------------------------------------------------
+   4. RESOURCE STATUS
+   Marks a link to a page that is not yet published. Remove both
+   the .in-dev class and the pill when the target goes live.
+   ------------------------------------------------------------ */
+.in-dev {
+  filter: grayscale(.35) opacity(.6);
+}
+
+.resource-status {
+  display: inline-block;
+  padding: .2rem .6rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: .62rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: #fff;
+  vertical-align: middle;
+  margin-left: .4rem;
+}
+
+.resource-status.coming-soon { background: var(--text-muted); }
+.resource-status.live        { background: var(--page-accent); }
+
+
+/* ------------------------------------------------------------
+   5. PATTERN TABLE
+   Two-column comparison grids (Genesis 1 ⇄ the movement's text).
+
+   Mobile: wrap the table in global-v3's .table-wrapper —
+     <div class="table-wrapper"><table class="pattern-table">…</table></div>
+   The previous page-local rule used `display:block; overflow-x:auto`
+   directly on the <table>, which drops the table box model and
+   collapses border-collapse borders on narrow screens. The
+   fallback below keeps unwrapped tables scrollable without
+   breaking their borders.
+   ------------------------------------------------------------ */
+.pattern-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+}
+
+.pattern-table th,
+.pattern-table td {
+  border: 1px solid var(--border);
+  padding: .75rem .9rem;
+  vertical-align: top;
+}
+
+.pattern-table th {
+  background: var(--bg-2);
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--text-muted);
+}
+
+/* Fallback for a .pattern-table with no .table-wrapper parent. */
+@media (max-width: 720px) {
+  .pattern-table:not(.table-wrapper > *) {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+
+/* ------------------------------------------------------------
+   6. STORY SO FAR
+   Nine-item arc checklist in the page footer. Mark completed
+   movements .done and the present one .current; leave the rest
+   bare. Currently on four pages — belongs on all nine.
+
+   Markup:
+     <nav class="story-so-far" aria-label="Series progress">
+       <span class="ssf-label">The story so far</span>
+       <ol>
+         <li class="done"><a href="creation.html">Creation</a></li>
+         <li class="current">Creation Broken</li>
+         <li><a href="creation-through-covenant.html">Covenant</a></li>
+         …
+       </ol>
+     </nav>
+   ------------------------------------------------------------ */
+.story-so-far {
+  margin: 2.5rem 0 1.25rem;
+  padding: 1.1rem 1.4rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.story-so-far .ssf-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: .7rem;
+}
+
+.story-so-far ol {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem .95rem;
+  margin: 0;
+  padding: 0;
+}
+
+.story-so-far li {
+  font-size: .9rem;
+  opacity: .75;
+}
+
+.story-so-far li::before { content: "\2610\00a0\00a0"; opacity: .6; }
+
+.story-so-far li.done            { opacity: 1; }
+.story-so-far li.done::before    { content: "\2713\00a0\00a0"; color: var(--page-accent); }
+
+.story-so-far li.current         { font-weight: 700; opacity: 1; }
+.story-so-far li.current::before { content: "\25B6\00a0\00a0"; color: var(--page-accent); }
+
+.story-so-far a { color: inherit; text-decoration: none; }
+.story-so-far a:hover,
+.story-so-far a:focus-visible { text-decoration: underline; }
+
+
+/* ------------------------------------------------------------
+   7. ACCESSIBILITY FLOOR
+   ------------------------------------------------------------ */
+.page-nav a:focus-visible,
+.story-so-far a:focus-visible,
+.suite-tracker a:focus-visible {
+  outline: 2px solid var(--page-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media print {
+  .spoke-hero {
+    background: none;
+    color: inherit;
+    padding: 1rem 0;
+    border-bottom: 2px solid currentColor;
+  }
+  .spoke-hero h1 { color: inherit; }
+  .spoke-hero .subtitle,
+  .spoke-hero .hero-hebrew,
+  .spoke-hero .hero-greek { color: inherit; }
+  .suite-tracker,
+  .page-nav { display: none; }
+}
+
+/* ============================================================
+   END creation-2-0.css
+   ============================================================ */
