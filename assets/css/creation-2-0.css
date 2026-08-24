@@ -1,5 +1,5 @@
 /* ============================================================
-   creation-2-0.css — v1.1
+   creation-2-0.css — v1.2
    Path: /assets/css/creation-2-0.css
    ------------------------------------------------------------
    Series layer for the Creation 2.0 suite (9 movements + hub +
@@ -14,6 +14,13 @@
    page-local. If a hero looks wrong, look here first.
 
    CHANGELOG
+     v1.2  2026-08-24
+       - Touch tap targets raised above the WCAG 2.5.8 24px floor
+         under (pointer: coarse). .page-nav a and .story-so-far a
+         had no padding at all and were ~21px; the arc tracker
+         pills were marginal. Desktop density is unchanged.
+       - .pattern-table gains a row hover, wrapped in
+         (hover: hover) so it cannot stick on touch.
      v1.1  2026-08-24
        - FIX: the three --hero-* defaults were declared on
          .spoke-hero itself. A property declared directly on an
@@ -33,7 +40,7 @@
 
      <link rel="stylesheet" href="/assets/css/global-v3.css?v=3.3.2">
      <link rel="stylesheet" href="/assets/css/global-v3-polish.css?v=0.3">
-     <link rel="stylesheet" href="/assets/css/creation-2-0.css?v=1.1">
+     <link rel="stylesheet" href="/assets/css/creation-2-0.css?v=1.2">
 
    PER-PAGE CONTRACT — each spoke sets its own hero gradient in a
    small :root block and nothing else. Two stops plus the theme:
@@ -342,6 +349,18 @@
   color: var(--text-muted);
 }
 
+/* Row hover. Desktop-only by construction — wrapped in
+   (hover: hover) so touch devices, which would otherwise latch the
+   hover state on tap and leave a row stuck highlighted, skip it. */
+@media (hover: hover) {
+  .pattern-table tbody tr {
+    transition: background-color 0.2s var(--ease, ease);
+  }
+  .pattern-table tbody tr:hover {
+    background: color-mix(in srgb, var(--page-accent) 6%, transparent);
+  }
+}
+
 /* Fallback for a .pattern-table with no .table-wrapper parent. */
 @media (max-width: 720px) {
   .pattern-table:not(.table-wrapper > *) {
@@ -417,6 +436,24 @@
 /* ------------------------------------------------------------
    7. ACCESSIBILITY FLOOR
    ------------------------------------------------------------ */
+
+/* Touch tap targets. The suite's navigation — prev/next, the Story
+   So Far list, and the arc tracker — is built from compact text
+   links sized for a mouse. .page-nav a and .story-so-far a carry no
+   padding at all, so their hit area is just the text box (~21px),
+   under the 24px minimum in WCAG 2.5.8. Scoped to (pointer: coarse)
+   so the desktop layout keeps its density and only touch devices
+   get the larger targets. */
+@media (pointer: coarse) {
+  .suite-tracker      { gap: .5rem; }
+  .suite-tracker .stage { padding: .5rem .75rem; }
+
+  .page-nav a         { display: inline-block; padding: .7rem .25rem; }
+
+  .story-so-far ol    { gap: .5rem 1.1rem; }
+  .story-so-far li    { font-size: .95rem; }
+  .story-so-far a     { display: inline-block; padding: .5rem .2rem; }
+}
 .page-nav a:focus-visible,
 .story-so-far a:focus-visible,
 .suite-tracker a:focus-visible {
