@@ -1,5 +1,5 @@
 /* ============================================================
-   creation-2-0.css — v1.0
+   creation-2-0.css — v1.1
    Path: /assets/css/creation-2-0.css
    ------------------------------------------------------------
    Series layer for the Creation 2.0 suite (9 movements + hub +
@@ -8,19 +8,47 @@
    page nav, resource-status pills, the comparison table, and
    the Story So Far footer.
 
+   NOTE: neither global-v3.css nor the polish layer defines any
+   hero component. The spoke hero is owned entirely by this file;
+   the hub's .creation-hero and the river's .river-hero are
+   page-local. If a hero looks wrong, look here first.
+
+   CHANGELOG
+     v1.1  2026-08-24
+       - FIX: the three --hero-* defaults were declared on
+         .spoke-hero itself. A property declared directly on an
+         element beats one inherited from :root, so every page's
+         documented :root override was being discarded and all
+         nine movements rendered in the Movement 5 purple below.
+         Defaults moved to :root; the contract now works as
+         written and no page markup needed to change.
+       - Spoke hero gains the drifting texture layer previously
+         only present on the hub, with reduced-motion and print
+         guards.
+     v1.0  Initial series layer.
+
    LOAD ORDER — this file goes third, after the polish layer,
    because it consumes --page-accent / --page-accent-deep which
    polish sets from body[data-theme]:
 
      <link rel="stylesheet" href="/assets/css/global-v3.css?v=3.3.2">
      <link rel="stylesheet" href="/assets/css/global-v3-polish.css?v=0.3">
-     <link rel="stylesheet" href="/assets/css/creation-2-0.css?v=1.0">
+     <link rel="stylesheet" href="/assets/css/creation-2-0.css?v=1.1">
 
    PER-PAGE CONTRACT — each spoke sets its own hero gradient in a
    small :root block and nothing else. Two stops plus the theme:
 
-     <body class="thematic-study" data-theme="teal" data-suite-stage="1">
+     <body class="thematic-study" data-theme="teal">
      :root { --hero-mid: #111827; --hero-end: #312e81; }
+
+   The page-local <style> must come after this stylesheet in the
+   head. Scoping the override to .spoke-hero instead of :root also
+   works and is equally valid.
+
+   Do NOT set data-suite-stage on these pages. The polish layer
+   gives it precedence over data-theme and maps stages 1-8 to the
+   Rainbow palette, which would override every movement's assigned
+   accent colour.
 
    The glow colour is derived from --page-accent automatically, so
    data-theme drives both the accent system and the hero wash.
@@ -52,10 +80,20 @@
        <p class="subtitle">God's Rule on Earth · Samuel–Kings</p>
      </header>
    ------------------------------------------------------------ */
-.spoke-hero {
+/* Per-page hero stops. These live on :root, NOT on .spoke-hero.
+   A custom property declared directly on an element always beats
+   one inherited from an ancestor, so defaults sitting on
+   .spoke-hero would silently swallow every page's :root override
+   and render all nine movements in these same colours. */
+:root {
   --hero-start: #06121f;
-  --hero-mid:   #1e1533;   /* per-page override */
-  --hero-end:   #3b2a5f;   /* per-page override */
+  --hero-mid:   #1e1533;   /* per-page override — see contract above */
+  --hero-end:   #3b2a5f;   /* per-page override — see contract above */
+}
+
+.spoke-hero {
+  position: relative;
+  overflow: hidden;
 
   margin: 4.5rem 0 0;
   padding: clamp(2.5rem, 6vw, 4rem) var(--gutter);
@@ -78,6 +116,37 @@
       color-mix(in srgb, var(--accent-blue) 20%, transparent), transparent 48%),
     linear-gradient(135deg,
       var(--hero-start) 0%, var(--hero-mid) 45%, var(--hero-end) 100%);
+}
+
+/* Drifting texture layer. Ports the hub's .creation-hero::before
+   into the series layer so hub and spokes share one motion
+   language instead of the hub being the only animated hero.
+   Keyframe is pc-* namespaced per the polish-layer convention. */
+.spoke-hero::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  pointer-events: none;
+  opacity: .5;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, .10) 1px, transparent 1px),
+    linear-gradient(120deg,
+      transparent 0%, rgba(255, 255, 255, .08) 48%, transparent 55%);
+  background-size: 36px 36px, 100% 100%;
+  animation: pc-spoke-drift 36s linear infinite;
+}
+
+/* Hero content sits above the drift layer. The spoke markup has no
+   wrapper element, so this targets the direct children. */
+.spoke-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes pc-spoke-drift { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .spoke-hero::before { animation: none; }
 }
 
 .spoke-hero .page-kicker {
@@ -363,6 +432,7 @@
     padding: 1rem 0;
     border-bottom: 2px solid currentColor;
   }
+  .spoke-hero::before { display: none; }
   .spoke-hero h1 { color: inherit; }
   .spoke-hero .subtitle,
   .spoke-hero .hero-hebrew,
