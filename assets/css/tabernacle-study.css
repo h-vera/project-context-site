@@ -1,4 +1,4 @@
-/* Tabernacle thematic study — page-local layer for the Project Context v5.9 template (v1.3).
+/* Tabernacle thematic study — page-local layer for the Project Context v5.9 template (v1.4).
    Loads after global-v3.css and global-v3-polish.css and only adds page-specific rules.
    Site navigation is injected by nav-component.js and styled by the global layer; nothing here touches it. */
 .tabernacle-study { --diagram-bg:#10182a; --diagram-line:#303b54; --diagram-ink:#eef2ff; color-scheme:light; }
@@ -28,12 +28,15 @@
 .tabernacle-study .hero-legend-link:hover { text-decoration-color:currentColor; }
 .tabernacle-study .hero-legend-link span { margin-left:.3rem; }
 /* One orchestrated moment on load: the gray route draws in from the gate and stops at the altar, then the red route continues to the mercy seat; each legend line fades in as its route completes. */
-.tabernacle-study .hero-route { clip-path:inset(0 0 0 100%);animation:tb-hero-draw .85s cubic-bezier(.22,.61,.36,1) .35s forwards; }
-.tabernacle-study .hero-route-red { animation-duration:1.25s;animation-delay:1.05s; }
+.tabernacle-study .hero-route { clip-path:inset(0 0 0 100%);animation:tb-hero-gray 7s cubic-bezier(.22,.61,.36,1) .35s infinite; }
+.tabernacle-study .hero-route-red { animation-name:tb-hero-red; }
+.tabernacle-study .hero-figure[data-offscreen] .hero-route { animation-play-state:paused; }
 .tabernacle-study .hero-legend-item { opacity:0;animation:tb-hero-fade .45s ease-out forwards; }
 .tabernacle-study .hero-legend-item[data-route="gray"] { animation-delay:1.05s; }
 .tabernacle-study .hero-legend-item[data-route="red"] { animation-delay:2.2s; }
-@keyframes tb-hero-draw { to { clip-path:inset(0 0 0 0); } }
+/* One 7 s cycle: gray draws (0.35–1.2 s), red follows (1.4–2.7 s), both hold, fade together, reset. Legend lines fade in once and stay. */
+@keyframes tb-hero-gray { 0% { clip-path:inset(0 0 0 100%);opacity:1; } 12% { clip-path:inset(0 0 0 0);opacity:1; } 88% { clip-path:inset(0 0 0 0);opacity:1; } 96% { clip-path:inset(0 0 0 0);opacity:0; } 96.1%,100% { clip-path:inset(0 0 0 100%);opacity:0; } }
+@keyframes tb-hero-red { 0%,15% { clip-path:inset(0 0 0 100%);opacity:1; } 34% { clip-path:inset(0 0 0 0);opacity:1; } 88% { clip-path:inset(0 0 0 0);opacity:1; } 96% { clip-path:inset(0 0 0 0);opacity:0; } 96.1%,100% { clip-path:inset(0 0 0 100%);opacity:0; } }
 @keyframes tb-hero-fade { to { opacity:1; } }
 .tabernacle-study .print-button { font:600 .88rem/1.4 var(--font-body);padding:.7rem 1.1rem;min-height:44px;color:var(--text-soft);background:transparent;border:1px solid var(--border);border-radius:var(--radius-pill);cursor:pointer; }
 .tabernacle-study .print-button:hover { color:var(--accent-purple);border-color:var(--accent-purple); }
@@ -115,7 +118,6 @@
 .tabernacle-study .reference-table th:first-child { width:23%; }
 .tabernacle-study .reference-table td:last-child { width:26%; }
 .tabernacle-study .reference-table tbody th { font-size:.89rem;font-weight:600; }
-.tabernacle-study .reference-table .table-group th { background:color-mix(in srgb,var(--accent-purple) 5%,var(--bg));color:var(--accent-purple);font-family:var(--font-body);font-size:.86rem;letter-spacing:.005em;padding:1rem; }
 .tabernacle-study .comparison-table th:first-child { width:17%; }
 .tabernacle-study .comparison-table td { width:20.75%; }
 .tabernacle-study .reference-tools { display:flex;flex-wrap:wrap;gap:.9rem;align-items:end;padding:1.1rem;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius); }
@@ -192,12 +194,12 @@ body.tabernacle-study.viewer-open { overflow:hidden; }
 }
 @media (prefers-reduced-motion:reduce) {
  .tabernacle-study .study-panel,.tabernacle-study .step-card,.tabernacle-study .see-it-card { transition:none; }
- .tabernacle-study .hero-route { animation:none;clip-path:none; }
+ .tabernacle-study .hero-route { animation:none;clip-path:none;opacity:1; }
  .tabernacle-study .hero-legend-item { animation:none;opacity:1; }
 }
 @media print {
  .tabernacle-study .study-hero { padding-bottom:1rem; }
- .tabernacle-study .hero-route { animation:none !important;clip-path:none !important; }
+ .tabernacle-study .hero-route { animation:none !important;clip-path:none !important;opacity:1 !important; }
  .tabernacle-study .hero-legend-item { animation:none !important;opacity:1 !important; }
  .tabernacle-study .hero-legend-link { display:none !important; }
  .tabernacle-study #study-title { font-size:36pt; }
@@ -260,6 +262,30 @@ body.tabernacle-study.viewer-open { overflow:hidden; }
 .tabernacle-study .reference-table td:last-child a:hover { text-decoration-color: var(--accent-purple); }
 .tabernacle-study .source-category h4 { font-family: var(--font-display); font-size: var(--fs-lg); margin: 1.6rem 0 .6rem; }
 .tabernacle-study .takeaway { margin-top: 3rem; }
+/* Catalog callouts (global-v3 §12/§13/§15) laid out side by side: no outer margins inside a grid */
+.tabernacle-study .callout-grid { align-items:start; }
+.tabernacle-study .callout-grid > .key-insight,.tabernacle-study .callout-grid > .pattern-summary,.tabernacle-study .callout-grid > .critical-distinction { margin:0;font-size:.93rem;line-height:1.75; }
+.tabernacle-study .callout-grid > .pattern-summary p,.tabernacle-study .callout-grid > .critical-distinction p { margin:0; }
+.tabernacle-study .callout-grid > .pattern-summary h4,.tabernacle-study .callout-grid > .critical-distinction h4 { font-size:1.15rem;margin-bottom:.5rem; }
+.tabernacle-study .key-insight { font-size:.95rem;line-height:1.75; }
+.tabernacle-study .order-of-day { margin:.75rem 0 0;padding-left:1.75rem;list-style:none; }
+.tabernacle-study .order-of-day .timeline-item { padding:.55rem 0 .55rem 1.1rem;margin-bottom:.15rem;font-size:.9rem;line-height:1.55; }
+.tabernacle-study .order-of-day .timeline-item::before { left:-2.15rem;top:.85rem;width:10px;height:10px; }
+.tabernacle-study .order-of-day .timeline-item strong { color:var(--text); }
+.tabernacle-study .star-divider { margin:3.5rem 0 0; }
+/* Reference table: subject bands, alternating rows and search highlights so a 59-row table scans */
+.tabernacle-study .reference-table .table-group th { border-left:4px solid var(--ref-band,var(--accent-purple));background:color-mix(in srgb,var(--ref-band,var(--accent-purple)) 9%,var(--bg));color:color-mix(in srgb,var(--ref-band,var(--accent-purple)) 70%,var(--text));font-family:var(--font-body);font-size:.86rem;letter-spacing:.005em;padding:.9rem 1rem; }
+.tabernacle-study .reference-table tr[data-ref-group] > th { border-left:4px solid color-mix(in srgb,var(--ref-band,var(--accent-purple)) 55%,transparent); }
+.tabernacle-study .reference-table tr[data-ref-heading="A"],.tabernacle-study .reference-table tr[data-ref-group="A"] { --ref-band:#0369a1; }
+.tabernacle-study .reference-table tr[data-ref-heading="B"],.tabernacle-study .reference-table tr[data-ref-group="B"] { --ref-band:#ba891d; }
+.tabernacle-study .reference-table tr[data-ref-heading="C"],.tabernacle-study .reference-table tr[data-ref-group="C"] { --ref-band:#0f766e; }
+.tabernacle-study .reference-table tr[data-ref-heading="D"],.tabernacle-study .reference-table tr[data-ref-group="D"] { --ref-band:#64748b; }
+.tabernacle-study .reference-table tr[data-ref-heading="E"],.tabernacle-study .reference-table tr[data-ref-group="E"] { --ref-band:#e11d48; }
+.tabernacle-study .reference-table tr[data-ref-heading="F"],.tabernacle-study .reference-table tr[data-ref-group="F"] { --ref-band:#4338ca; }
+.tabernacle-study .reference-table tr[data-ref-heading="G"],.tabernacle-study .reference-table tr[data-ref-group="G"] { --ref-band:#15803d; }
+.tabernacle-study .reference-table tr.alt { background:color-mix(in srgb,var(--ref-band,var(--accent-purple)) 3%,var(--bg)); }
+.tabernacle-study .reference-table tbody tr:hover { background:color-mix(in srgb,var(--ref-band,var(--accent-purple)) 8%,var(--bg)); }
+.tabernacle-study .reference-table mark { background:#fde68a;color:#3a2e05;border-radius:3px;padding:0 .12em; }
 .tabernacle-study .related-studies { margin-top: 2.5rem; }
 @media (max-width:1000px) {
  .tabernacle-study .study-grid.grid-3.visual-grid > :last-child:nth-child(odd) { grid-column:auto; }

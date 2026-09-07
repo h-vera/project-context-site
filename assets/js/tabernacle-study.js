@@ -4,6 +4,7 @@
  * this file adds the station highlighter, route toggles, the diagram viewer, the reference filter and print state.
  * A minimal fallback (progress bar, reading time, citation copy) covers local previews where the chassis is absent.
  * v1.2 — site navigation is injected by nav-component.js; the v1.1 local menu fallback has been removed.
+ * v1.3 — hero route animation pauses while off-screen; reference filter highlights matches and re-stripes rows.
  */
 (() => {
   'use strict';
@@ -21,6 +22,12 @@
 
   function init() {
     $$('[data-print]').forEach(btn => btn.addEventListener('click', () => window.print()));
+
+    // The hero routes loop (CSS). Pause the loop while the figure is off-screen so it costs nothing mid-page.
+    const heroFigure = $('.hero-figure');
+    if (heroFigure && 'IntersectionObserver' in window) {
+      new IntersectionObserver(entries => entries.forEach(en => { if (en.isIntersecting) heroFigure.removeAttribute('data-offscreen'); else heroFigure.setAttribute('data-offscreen', ''); }), { threshold: 0.05 }).observe(heroFigure);
+    }
 
     // Give the chassis's quick-nav dots accessible names and route its mobile tab strip through
     // the same header-offset scroll used for in-page links. The chassis may initialise after this
@@ -124,15 +131,34 @@
     // Reference table filter (client-side only; the table is complete without it).
     const search = $('#reference-search'), group = $('#reference-group'), rows = $$('[data-ref-group]'), heads = $$('[data-ref-heading]');
     const normalize = t => t.toLocaleLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '');
-    rows.forEach(row => row.__search = normalize(row.textContent));
+    rows.forEach(row => { row.__search = normalize(row.textContent); row.__html = row.innerHTML; });
+    const escapeRe = t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    // Wrap query matches in <mark> inside text nodes only, so links and markup stay intact.
+    function highlight(row, words) {
+      row.innerHTML = row.__html;
+      if (!words.length) return;
+      const re = new RegExp('(' + words.map(escapeRe).join('|') + ')', 'gi');
+      const walker = document.createTreeWalker(row, NodeFilter.SHOW_TEXT);
+      const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach(node => {
+        if (!re.test(node.nodeValue)) return; re.lastIndex = 0;
+        const frag = document.createDocumentFragment(); let last = 0, m;
+        while ((m = re.exec(node.nodeValue))) { frag.appendChild(document.createTextNode(node.nodeValue.slice(last, m.index))); const mark = document.createElement('mark'); mark.textContent = m[0]; frag.appendChild(mark); last = m.index + m[0].length; }
+        frag.appendChild(document.createTextNode(node.nodeValue.slice(last))); node.parentNode.replaceChild(frag, node);
+      });
+    }
     function filterReferences() {
-      const words = normalize(search?.value || '').trim().split(/\s+/).filter(Boolean), category = group?.value || 'all'; let count = 0;
-      rows.forEach(row => { const show = (category === 'all' || row.dataset.refGroup === category) && words.every(word => row.__search.includes(word)); row.hidden = !show; if (show) count++; });
+      const words = normalize(search?.value || '').trim().split(/\s+/).filter(Boolean), category = group?.value || 'all'; let count = 0; const seen = {};
+      rows.forEach(row => {
+        const show = (category === 'all' || row.dataset.refGroup === category) && words.every(word => row.__search.includes(word));
+        row.hidden = !show; highlight(row, show ? words : []);
+        const g = row.dataset.refGroup; seen[g] = seen[g] || 0; row.classList.toggle('alt', show && seen[g] % 2 === 1); if (show) { seen[g]++; count++; }
+      });
       heads.forEach(row => row.hidden = !rows.some(r => !r.hidden && r.dataset.refGroup === row.dataset.refHeading));
       $('#reference-count').textContent = count === rows.length ? `${count} reference entries` : `${count} of ${rows.length} reference entries`;
       $('#reference-empty').hidden = count !== 0;
     }
-    $$('[data-js-control]').forEach(el => el.hidden = false); search?.addEventListener('input', filterReferences); group?.addEventListener('change', filterReferences);
+    $$('[data-js-control]').forEach(el => el.hidden = false); search?.addEventListener('input', filterReferences); group?.addEventListener('change', filterReferences); filterReferences();
     $('#reference-reset')?.addEventListener('click', () => { search.value = ''; group.value = 'all'; filterReferences(); search.focus(); });
 
     // Print: expand everything (the chassis also expands <details>), then restore the reader's state.
@@ -144,7 +170,7 @@
 
     // Resolve deep links once the DOM and chassis have settled.
     if (location.hash) { setTimeout(() => { let id; try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; } safeScroll(document.getElementById(id)); }, 150); }
-    window.__tabernacleStudy = { chooseStep, filterReferences, setScale, version: '1.2' };
+    window.__tabernacleStudy = { chooseStep, filterReferences, setScale, version: '1.3' };
   }
 
   // Fallback for previews where /assets/js/page-chassis-v5-9.js is not loaded. No-ops on the live site.
