@@ -1,4 +1,4 @@
-/* Tabernacle thematic study — page-local layer for the Project Context v5.9 template (v1.4).
+/* Tabernacle thematic study — page-local layer for the Project Context v5.9 template (v1.8).
    Loads after global-v3.css and global-v3-polish.css and only adds page-specific rules.
    Site navigation is injected by nav-component.js and styled by the global layer; nothing here touches it. */
 .tabernacle-study { --diagram-bg:#10182a; --diagram-line:#303b54; --diagram-ink:#eef2ff; color-scheme:light; }
@@ -70,6 +70,7 @@
 .tabernacle-study [data-tone="rose"] { --panel-accent:#e11d48;--tone-ink:#be123c; }
 .tabernacle-study [data-tone="slate"] { --panel-accent:#64748b;--tone-ink:#334155; }
 .tabernacle-study [data-tone="purple"] { --panel-accent:#7209b7;--tone-ink:#7209b7; }
+.tabernacle-study [data-tone="indigo"] { --panel-accent:#4f46e5;--tone-ink:#4338ca; }
 .tabernacle-study .tone-text { color:var(--tone-ink,var(--text)); }
 .tabernacle-study .study-panel { background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;line-height:1.7; }
 .tabernacle-study .study-panel.mini-card,.tabernacle-study .step-card { border-left-color:var(--panel-accent,var(--page-accent)); }
@@ -195,6 +196,7 @@ body.tabernacle-study.viewer-open { overflow:hidden; }
 @media (prefers-reduced-motion:reduce) {
  .tabernacle-study .study-panel,.tabernacle-study .step-card,.tabernacle-study .see-it-card { transition:none; }
  .tabernacle-study .hero-route { animation:none;clip-path:none;opacity:1; }
+ .tabernacle-study .zone-card,.tabernacle-study .term-card,.tabernacle-study .tier-cell,.tabernacle-study .furniture-card { transition:none; }
  .tabernacle-study .hero-legend-item { animation:none;opacity:1; }
 }
 @media print {
@@ -222,7 +224,9 @@ body.tabernacle-study.viewer-open { overflow:hidden; }
  .tabernacle-study th,.tabernacle-study td { padding:.5rem;overflow-wrap:anywhere; }
  .tabernacle-study thead { display:table-header-group; }
  .tabernacle-study tr { break-inside:avoid; }
- .tabernacle-study .mini-card { break-inside:avoid; }
+ .tabernacle-study .mini-card,.tabernacle-study .zone-card,.tabernacle-study .term-card,.tabernacle-study .tier-cell,.tabernacle-study .furniture-card { break-inside:avoid; }
+ .tabernacle-study .term-grid,.tabernacle-study .furniture-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+ .tabernacle-study .step-badge { print-color-adjust:exact;-webkit-print-color-adjust:exact; }
   .tabernacle-study [data-visibility] { opacity:1 !important; }
  .tabernacle-study a[href^="http"]::after { content:none; }
  .tabernacle-study .bibliography-section { border:0; }
@@ -244,7 +248,88 @@ body.tabernacle-study.viewer-open { overflow:hidden; }
 .tabernacle-study .tb-layout-12{width:18px;height:18px;border-radius:50%;background:var(--bg-2);display:inline-flex;align-items:center;justify-content:center;color:#1e293b}
 .tabernacle-study .tb-layout-13{margin-top:4px}
 .tabernacle-study .tb-layout-14{display:inline-block;letter-spacing:0.08em;text-transform:uppercase;padding:2px 8px;border-radius:999px;border:1px solid var(--border);margin-bottom:6px}
-.tabernacle-study .tb-layout-15{letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px}/* Diagrams are intrinsic-height panels, not stretched dark columns. */
+.tabernacle-study .tb-layout-15{letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px}
+/* ============================================================
+   v1.5 — tiles after the Luke–Acts Levitical Arc and Leviticus Theology pages:
+   numbered step badges, zone cards, vocabulary cards, the three-tier map and furniture cards.
+   ============================================================ */
+/* Step badges: the station number floats above each card, echoing the markers in Diagram 01 */
+.tabernacle-study .step-card { overflow:visible;padding-top:1.5rem;margin-top:.5rem; }
+.tabernacle-study .step-badge { position:absolute;top:-14px;left:1rem;min-width:30px;height:30px;padding:0 .55rem;border-radius:999px;display:inline-grid;place-items:center;font:800 .82rem/1 var(--font-body);color:#fff;background:var(--panel-accent,var(--accent-purple));box-shadow:0 2px 8px rgba(15,23,42,.18);z-index:1; }
+.tabernacle-study .step-card[data-tone="slate"] .step-badge { background:#94a3b8;color:#0f172a; }
+.tabernacle-study .step-card.selected .step-badge { outline:2px solid #fff;outline-offset:1px; }
+
+/* Zone cards (floor plan): coloured rail, tier numeral, Hebrew name and access tag */
+.tabernacle-study .zone-grid { align-items:stretch; }
+.tabernacle-study .zone-card { display:flex;gap:1rem;padding:1.35rem 1.35rem 1.1rem;border-radius:14px;background:var(--bg);border:1px solid var(--border);border-left:5px solid var(--panel-accent,var(--accent-purple));box-shadow:0 4px 14px rgba(15,23,42,.06);transition:transform .2s var(--ease,ease),box-shadow .2s var(--ease,ease); }
+@media (hover:hover) { .tabernacle-study .zone-card:hover { transform:translateY(-2px);box-shadow:0 8px 22px rgba(15,23,42,.1); } }
+.tabernacle-study .zone-glyph { flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--panel-accent,var(--accent-purple));color:#fff;font:800 .95rem/1 var(--font-display);letter-spacing:.02em; }
+.tabernacle-study .zone-card[data-tone="gold"] .zone-glyph { color:#1e293b; }
+.tabernacle-study .zone-body { flex:1;min-width:0; }
+.tabernacle-study .zone-title { display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;font:700 1.1rem/1.35 var(--font-display);color:var(--text);margin:0 0 .45rem; }
+.tabernacle-study .zone-hebrew { font-size:1.05rem;font-weight:700;color:var(--panel-accent,var(--accent-purple)); }
+.tabernacle-study .zone-tag { font:700 .66rem/1.4 var(--font-body);text-transform:uppercase;letter-spacing:.05em;color:var(--tone-ink,var(--text-muted));background:color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 12%,var(--bg));padding:.15rem .5rem;border-radius:6px; }
+.tabernacle-study .zone-body p { margin:0 0 .5rem;font-size:.92rem;line-height:1.7; }
+.tabernacle-study .zone-body p:last-child { margin-bottom:0; }
+
+/* Vocabulary cards (key terms): big Hebrew, italic transliteration, coloured gloss, reference chip */
+.tabernacle-study .term-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.25rem;margin:1.5rem 0; }
+.tabernacle-study .term-card { background:linear-gradient(160deg,color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 7%,var(--bg)),var(--bg) 62%);border:2px solid color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 32%,var(--border));border-radius:var(--radius-lg);padding:1.6rem 1.25rem 1.35rem;text-align:center;box-shadow:0 4px 12px rgba(15,23,42,.05);transition:transform .3s var(--ease,ease),box-shadow .3s var(--ease,ease); }
+@media (hover:hover) { .tabernacle-study .term-card:hover { transform:translateY(-6px);box-shadow:0 12px 28px color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 18%,transparent); } }
+.tabernacle-study .term-hebrew { font-size:2.5rem;line-height:1.2;font-weight:700;color:var(--text);margin-bottom:.35rem;text-align:center; }
+.tabernacle-study .term-translit { font-family:var(--font-display);font-style:italic;font-size:1.08rem;color:var(--text-muted); }
+.tabernacle-study .term-gloss { font-size:.76rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--tone-ink,var(--accent-purple));margin:.35rem 0 .8rem; }
+.tabernacle-study .term-desc { font-size:.9rem;line-height:1.65;color:var(--text-soft);margin:0 0 .9rem; }
+.tabernacle-study .term-ref { display:inline-block;font:600 .72rem/1.4 var(--font-mono);letter-spacing:.02em;padding:.3rem .6rem;border-radius:6px;background:color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 9%,var(--bg));color:var(--tone-ink,var(--accent-purple)); }
+
+/* Three tiers, three places: a 3 × 3 map with row labels; collapses to labelled tiles on narrow screens */
+.tabernacle-study .tier-grid { display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr));gap:.75rem .9rem;align-items:stretch;margin:1.5rem 0; }
+.tabernacle-study .tier-head { text-align:center;padding:.6rem .5rem .55rem;border-bottom:3px solid var(--panel-accent,var(--accent-purple));display:flex;flex-direction:column;gap:.1rem; }
+.tabernacle-study .tier-place { font:700 1.1rem/1.2 var(--font-display);color:var(--tone-ink,var(--text)); }
+.tabernacle-study .tier-ref { font:500 .68rem/1.4 var(--font-mono);letter-spacing:.04em;color:var(--text-muted); }
+.tabernacle-study .tier-label { display:flex;align-items:center;justify-content:flex-end;padding-right:.35rem;font:600 .66rem/1.4 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted); }
+.tabernacle-study .tier-label span { writing-mode:vertical-rl;transform:rotate(180deg); }
+.tabernacle-study .tier-cell { position:relative;background:var(--bg);border:1px solid var(--border);border-top:4px solid var(--panel-accent,var(--accent-purple));border-radius:10px;padding:.9rem 1rem 1rem;font-size:.88rem;line-height:1.6;color:var(--text-soft);transition:transform .25s var(--ease,ease),box-shadow .25s var(--ease,ease); }
+.tabernacle-study .tier-cell strong { display:block;font:700 1rem/1.3 var(--font-display);color:var(--text);margin-bottom:.35rem; }
+.tabernacle-study .tier-cell-place { display:none; }
+@media (hover:hover) { .tabernacle-study .tier-cell:hover { transform:translateY(-3px);box-shadow:0 8px 20px color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 16%,transparent); } }
+@media (max-width:820px) {
+ .tabernacle-study .tier-grid { grid-template-columns:minmax(0,1fr);gap:.75rem; }
+ .tabernacle-study .tier-corner,.tabernacle-study .tier-head,.tabernacle-study .tier-label { display:none; }
+ .tabernacle-study .tier-cell-place { display:block;font:600 .64rem/1.4 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--tone-ink,var(--text-muted));margin-bottom:.35rem; }
+}
+
+/* Furniture cards: icon plate, title with Hebrew term, then Text vs Reading kept visibly apart */
+.tabernacle-study .furniture-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.25rem;margin:1.5rem 0; }
+.tabernacle-study .furniture-card { position:relative;overflow:hidden;background:var(--bg);border:2px solid var(--border);border-radius:14px;padding:1.4rem 1.35rem 1.2rem;box-shadow:0 4px 12px rgba(15,23,42,.05);transition:transform .3s var(--ease,ease),box-shadow .3s var(--ease,ease),border-color .3s var(--ease,ease); }
+.tabernacle-study .furniture-card::before { content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--panel-accent,var(--accent-purple)),color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 35%,var(--accent-magenta)));transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease,ease); }
+@media (hover:hover) {
+ .tabernacle-study .furniture-card:hover { transform:translateY(-4px);border-color:color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 45%,var(--border));box-shadow:0 8px 24px color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 15%,transparent); }
+ .tabernacle-study .furniture-card:hover::before { transform:scaleX(1); }
+}
+.tabernacle-study .furniture-head { display:flex;align-items:center;gap:.8rem;margin-bottom:.8rem; }
+/* Each card opens with a measured drawing of the piece (Diagrams 16–22), bled to the card edges under the top bar */
+.tabernacle-study .furniture-card::before { z-index:1; }
+.tabernacle-study .furniture-card > .study-figure { margin:-1.4rem -1.35rem 1.1rem;border:0;border-bottom:1px solid var(--diagram-line);border-radius:12px 12px 0 0; }
+.tabernacle-study .furniture-card > .study-figure .diagram-viewport { border-radius:0; }
+.tabernacle-study .furniture-title { font:700 1.12rem/1.3 var(--font-display);margin:0;color:var(--text); }
+.tabernacle-study .furniture-title .term { display:block;font:italic 400 .9rem/1.4 var(--font-display);color:var(--text-muted);margin-top:.1rem; }
+.tabernacle-study .furniture-fact,.tabernacle-study .furniture-reading { font-size:.9rem;line-height:1.65;margin:0 0 .7rem;color:var(--text-soft); }
+.tabernacle-study .furniture-fact .badge,.tabernacle-study .furniture-reading .badge { margin-right:.5rem;vertical-align:baseline; }
+.tabernacle-study .furniture-reading { margin-bottom:0;padding:.75rem .9rem;border-radius:8px;border-left:3px solid var(--panel-accent,var(--accent-purple));background:linear-gradient(135deg,color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 7%,var(--bg)),color-mix(in srgb,#d4af37 6%,var(--bg))); }
+/* A lone seventh card spans the row and lays its Text and Reading side by side */
+@media (min-width:1001px) {
+ .tabernacle-study .furniture-grid > .furniture-card:last-child:nth-child(3n+1) { grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);grid-template-areas:"fig head" "fig fact" "fig reading";column-gap:1.5rem;row-gap:.6rem;align-items:start; }
+ .tabernacle-study .furniture-grid > .furniture-card:last-child:nth-child(3n+1) > .study-figure { grid-area:fig;margin:0;border:1px solid var(--diagram-line);border-radius:var(--radius);align-self:start; }
+ .tabernacle-study .furniture-grid > .furniture-card:last-child:nth-child(3n+1) > .study-figure .diagram-viewport { border-radius:var(--radius) var(--radius) 0 0; }
+ .tabernacle-study .furniture-grid > .furniture-card:last-child:nth-child(3n+1) .furniture-head { grid-area:head;margin-bottom:0; }
+ .tabernacle-study .furniture-grid > .furniture-card:last-child:nth-child(3n+1) .furniture-fact { grid-area:fact;margin:0; }
+ .tabernacle-study .furniture-grid > .furniture-card:last-child:nth-child(3n+1) .furniture-reading { grid-area:reading; }
+}
+.tabernacle-study .content-note { margin:1.75rem 0 0;padding:1rem 1.2rem;border-radius:var(--radius-sm);background:var(--bg-2);border:1px solid var(--border);font-size:.86rem;line-height:1.7;color:var(--text-soft); }
+.tabernacle-study .content-note a { text-decoration:underline;text-underline-offset:.2em; }
+
+/* Diagrams are intrinsic-height panels, not stretched dark columns. */
 .tabernacle-study .visual-grid { align-items:start; }
 @media (min-width:769px) {
  .tabernacle-study #inside-the-holy-of-holies .visual-grid > .study-figure { position:sticky;top:104px; }
@@ -287,6 +372,9 @@ body.tabernacle-study.viewer-open { overflow:hidden; }
 .tabernacle-study .reference-table tbody tr:hover { background:color-mix(in srgb,var(--ref-band,var(--accent-purple)) 8%,var(--bg)); }
 .tabernacle-study .reference-table mark { background:#fde68a;color:#3a2e05;border-radius:3px;padding:0 .12em; }
 .tabernacle-study .related-studies { margin-top: 2.5rem; }
+/* Global p { max-width: --max-w-prose } leaves footer lines flush left inside the centred footer; let them centre */
+.tabernacle-study footer p { max-width:none;margin-left:auto;margin-right:auto; }
+.tabernacle-study footer .text-muted { font-size:.9rem;margin-top:.5rem; }
 @media (max-width:1000px) {
  .tabernacle-study .study-grid.grid-3.visual-grid > :last-child:nth-child(odd) { grid-column:auto; }
 }
