@@ -1,4 +1,4 @@
-/* Tabernacle thematic study — page-local layer for the Project Context v5.9 template (v1.13).
+/* Tabernacle thematic study — page-local layer for the Project Context v5.9 template (v1.14).
    Loads after global-v3.css and global-v3-polish.css and only adds page-specific rules.
    Site navigation is injected by nav-component.js and styled by the global layer; nothing here touches it. */
 .tabernacle-study { --diagram-bg:#10182a; --diagram-line:#303b54; --diagram-ink:#eef2ff; color-scheme:light; }
@@ -220,7 +220,7 @@ body.tabernacle-study.viewer-open { overflow:hidden; }
  .tabernacle-study .evidence-item { display:block; }
  .tabernacle-study .table-wrapper { overflow:visible; }
  .tabernacle-study .reference-table,.tabernacle-study .comparison-table { min-width:0;width:100%;font-size:8.5pt;table-layout:fixed; }
- .tabernacle-study .comparison-table thead { print-color-adjust:exact;-webkit-print-color-adjust:exact; }
+ .tabernacle-study .comparison-table thead,.tabernacle-study .reference-table thead,.tabernacle-study .reference-table .table-group th { print-color-adjust:exact;-webkit-print-color-adjust:exact; }
  .tabernacle-study th,.tabernacle-study td { padding:.5rem;overflow-wrap:anywhere; }
  .tabernacle-study thead { display:table-header-group; }
  .tabernacle-study tr { break-inside:avoid; }
@@ -395,8 +395,7 @@ body.tabernacle-study.viewer-open { overflow:hidden; }
  .tabernacle-study .comparison-table tbody td::before { content:attr(data-label);display:block;font:700 .64rem/1.4 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--row-accent,var(--accent-purple));margin-bottom:.35rem; }
  .tabernacle-study .comparison-table tbody tr:last-child td:last-child { border-bottom:0; }
 }
-.tabernacle-study .reference-table td:last-child a { text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--accent-purple) 40%, transparent); text-underline-offset: .2em; }
-.tabernacle-study .reference-table td:last-child a:hover { text-decoration-color: var(--accent-purple); }
+.tabernacle-study .reference-table td:last-child a { text-decoration: underline; text-underline-offset: .2em; }
 .tabernacle-study .source-category h4 { font-family: var(--font-display); font-size: var(--fs-lg); margin: 1.6rem 0 .6rem; }
 .tabernacle-study .source-category h4 .bp-icon { width:1.2em;height:1.2em;object-fit:contain;vertical-align:middle;margin-right:.25rem; }
 .tabernacle-study .takeaway { margin-top: 3rem; }
@@ -411,18 +410,26 @@ body.tabernacle-study.viewer-open { overflow:hidden; }
 .tabernacle-study .order-of-day .timeline-item::before { left:-2.15rem;top:.85rem;width:10px;height:10px; }
 .tabernacle-study .order-of-day .timeline-item strong { color:var(--text); }
 .tabernacle-study .star-divider { margin:3.5rem 0 0; }
-/* Reference table: subject bands, alternating rows and search highlights so a 59-row table scans */
-.tabernacle-study .reference-table .table-group th { border-left:4px solid var(--ref-band,var(--accent-purple));background:color-mix(in srgb,var(--ref-band,var(--accent-purple)) 9%,var(--bg));color:color-mix(in srgb,var(--ref-band,var(--accent-purple)) 70%,var(--text));font-family:var(--font-body);font-size:.86rem;letter-spacing:.005em;padding:.9rem 1rem; }
-.tabernacle-study .reference-table tr[data-ref-group] > th { border-left:4px solid color-mix(in srgb,var(--ref-band,var(--accent-purple)) 55%,transparent); }
-.tabernacle-study .reference-table tr[data-ref-heading="A"],.tabernacle-study .reference-table tr[data-ref-group="A"] { --ref-band:#0369a1; }
-.tabernacle-study .reference-table tr[data-ref-heading="B"],.tabernacle-study .reference-table tr[data-ref-group="B"] { --ref-band:#ba891d; }
-.tabernacle-study .reference-table tr[data-ref-heading="C"],.tabernacle-study .reference-table tr[data-ref-group="C"] { --ref-band:#0f766e; }
-.tabernacle-study .reference-table tr[data-ref-heading="D"],.tabernacle-study .reference-table tr[data-ref-group="D"] { --ref-band:#64748b; }
-.tabernacle-study .reference-table tr[data-ref-heading="E"],.tabernacle-study .reference-table tr[data-ref-group="E"] { --ref-band:#e11d48; }
-.tabernacle-study .reference-table tr[data-ref-heading="F"],.tabernacle-study .reference-table tr[data-ref-group="F"] { --ref-band:#4338ca; }
-.tabernacle-study .reference-table tr[data-ref-heading="G"],.tabernacle-study .reference-table tr[data-ref-group="G"] { --ref-band:#15803d; }
-.tabernacle-study .reference-table tr.alt { background:color-mix(in srgb,var(--ref-band,var(--accent-purple)) 3%,var(--bg)); }
-.tabernacle-study .reference-table tbody tr:hover { background:color-mix(in srgb,var(--ref-band,var(--accent-purple)) 8%,var(--bg)); }
+/* Reference table: the same card and gradient header as the comparison table, with one vibrant band per subject
+   from the global-v3 / polish accent set (plus green for Eden). Headings, rules, stripes and hover all take the band. */
+.tabernacle-study .reference-table { border-collapse:separate;border-spacing:0;border:0;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(15,23,42,.08);background:var(--bg); }
+.tabernacle-study .reference-table thead { background:linear-gradient(135deg,#7209b7 0%,#dc2626 100%);box-shadow:0 2px 8px rgba(114,9,183,.3); }
+.tabernacle-study .reference-table thead th { background:transparent;color:#fff;font:800 .95rem/1.3 var(--font-body);padding:1.05rem 1rem;text-align:left;border:0;position:relative;text-shadow:0 1px 3px rgba(0,0,0,.35);letter-spacing:.02em; }
+.tabernacle-study .reference-table thead th:not(:last-child)::after { content:'';position:absolute;right:0;top:25%;height:50%;width:1px;background:rgba(255,255,255,.4); }
+.tabernacle-study .reference-table tbody th,.tabernacle-study .reference-table tbody td { border:0;border-bottom:1px solid var(--border);background:transparent;transition:background .25s var(--ease,ease); }
+.tabernacle-study .reference-table tr[data-ref-heading="A"],.tabernacle-study .reference-table tr[data-ref-group="A"] { --ref-band:var(--accent-blue,#00b4d8); }
+.tabernacle-study .reference-table tr[data-ref-heading="B"],.tabernacle-study .reference-table tr[data-ref-group="B"] { --ref-band:var(--accent-magenta,#ec4899); }
+.tabernacle-study .reference-table tr[data-ref-heading="C"],.tabernacle-study .reference-table tr[data-ref-group="C"] { --ref-band:var(--accent-teal,#14b8a6); }
+.tabernacle-study .reference-table tr[data-ref-heading="D"],.tabernacle-study .reference-table tr[data-ref-group="D"] { --ref-band:var(--accent-indigo,#4f46e5); }
+.tabernacle-study .reference-table tr[data-ref-heading="E"],.tabernacle-study .reference-table tr[data-ref-group="E"] { --ref-band:var(--accent-rose,#e11d48); }
+.tabernacle-study .reference-table tr[data-ref-heading="F"],.tabernacle-study .reference-table tr[data-ref-group="F"] { --ref-band:var(--accent-purple,#7209b7); }
+.tabernacle-study .reference-table tr[data-ref-heading="G"],.tabernacle-study .reference-table tr[data-ref-group="G"] { --ref-band:#16a34a; }
+.tabernacle-study .reference-table .table-group th { border-left:5px solid var(--ref-band,var(--accent-purple));background:linear-gradient(90deg,color-mix(in srgb,var(--ref-band,var(--accent-purple)) 16%,var(--bg)),color-mix(in srgb,var(--ref-band,var(--accent-purple)) 5%,var(--bg)));color:color-mix(in srgb,var(--ref-band,var(--accent-purple)) 62%,var(--text));font:800 .78rem/1.4 var(--font-body);letter-spacing:.08em;text-transform:uppercase;padding:.85rem 1rem; }
+.tabernacle-study .reference-table tr[data-ref-group] > th { border-left:4px solid color-mix(in srgb,var(--ref-band,var(--accent-purple)) 60%,transparent);color:var(--text); }
+.tabernacle-study .reference-table tr.alt > th,.tabernacle-study .reference-table tr.alt > td { background:color-mix(in srgb,var(--ref-band,var(--accent-purple)) 4%,var(--bg)); }
+@media (hover:hover) { .tabernacle-study .reference-table tbody tr[data-ref-group]:hover > th,.tabernacle-study .reference-table tbody tr[data-ref-group]:hover > td { background:color-mix(in srgb,var(--ref-band,var(--accent-purple)) 11%,var(--bg)); } }
+.tabernacle-study .reference-table td:last-child a { color:color-mix(in srgb,var(--ref-band,var(--accent-purple)) 70%,var(--text));text-decoration-color:color-mix(in srgb,var(--ref-band,var(--accent-purple)) 45%,transparent); }
+.tabernacle-study .reference-table td:last-child a:hover { text-decoration-color:currentColor; }
 .tabernacle-study .reference-table mark { background:#fde68a;color:#3a2e05;border-radius:3px;padding:0 .12em; }
 /* Related-studies bar: self-contained (no global pathway component on the site) */
 .tabernacle-study .related-studies { display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:2.5rem;padding:1rem 1.35rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-2); }
