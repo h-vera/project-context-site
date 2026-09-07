@@ -1,4 +1,4 @@
-/* Tabernacle thematic study — page-local layer for the Project Context v5.9 template (v1.11).
+/* Tabernacle thematic study — page-local layer for the Project Context v5.9 template (v1.13).
    Loads after global-v3.css and global-v3-polish.css and only adds page-specific rules.
    Site navigation is injected by nav-component.js and styled by the global layer; nothing here touches it. */
 .tabernacle-study { --diagram-bg:#10182a; --diagram-line:#303b54; --diagram-ink:#eef2ff; color-scheme:light; }
@@ -220,6 +220,7 @@ body.tabernacle-study.viewer-open { overflow:hidden; }
  .tabernacle-study .evidence-item { display:block; }
  .tabernacle-study .table-wrapper { overflow:visible; }
  .tabernacle-study .reference-table,.tabernacle-study .comparison-table { min-width:0;width:100%;font-size:8.5pt;table-layout:fixed; }
+ .tabernacle-study .comparison-table thead { print-color-adjust:exact;-webkit-print-color-adjust:exact; }
  .tabernacle-study th,.tabernacle-study td { padding:.5rem;overflow-wrap:anywhere; }
  .tabernacle-study thead { display:table-header-group; }
  .tabernacle-study tr { break-inside:avoid; }
@@ -259,6 +260,9 @@ body.tabernacle-study.viewer-open { overflow:hidden; }
 :where([data-reveal-children])[data-revealed] > * { opacity:1;transform:none; }
 @keyframes tbRevealUp { from { opacity:0;transform:translateY(20px); } to { opacity:1;transform:translateY(0); } }
 /* Step badges: the station number floats above each card, echoing the markers in Diagram 01 */
+.tabernacle-study .step-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+@media (max-width:1000px) { .tabernacle-study .step-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:640px) { .tabernacle-study .step-grid { grid-template-columns:minmax(0,1fr); } }
 .tabernacle-study .step-card { overflow:visible;padding-top:1.5rem;margin-top:.5rem; }
 .tabernacle-study .step-badge { position:absolute;top:-14px;left:1rem;min-width:30px;height:30px;padding:0 .55rem;border-radius:999px;display:inline-grid;place-items:center;font:800 .82rem/1 var(--font-body);color:#fff;background:var(--panel-accent,var(--accent-purple));box-shadow:0 2px 8px rgba(15,23,42,.18);z-index:1; }
 .tabernacle-study .step-card[data-tone="slate"] .step-badge { background:#94a3b8;color:#0f172a; }
@@ -275,9 +279,7 @@ body.tabernacle-study.viewer-open { overflow:hidden; }
  .tabernacle-study .zone-card:hover::before { transform:scaleX(1); }
  .tabernacle-study .zone-card:hover .zone-glyph { transform:scale(1.1);box-shadow:0 4px 12px color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 40%,transparent); }
  .tabernacle-study .tier-cell:hover strong { color:var(--tone-ink,var(--text)); }
- .tabernacle-study .term-card:hover .term-hebrew { transform:scale(1.04); }
 }
-.tabernacle-study .term-hebrew { transition:transform .3s var(--ease,ease); }
 .tabernacle-study .tier-cell strong { transition:color .3s var(--ease,ease); }
 .tabernacle-study .zone-glyph { flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--panel-accent,var(--accent-purple));color:#fff;font:800 .95rem/1 var(--font-display);letter-spacing:.02em; }
 .tabernacle-study .zone-card[data-tone="gold"] .zone-glyph { color:#1e293b; }
@@ -288,16 +290,23 @@ body.tabernacle-study.viewer-open { overflow:hidden; }
 .tabernacle-study .zone-body p { margin:0 0 .5rem;font-size:.92rem;line-height:1.7; }
 .tabernacle-study .zone-body p:last-child { margin-bottom:0; }
 
-/* Vocabulary cards (key terms): big Hebrew, italic transliteration, coloured gloss, reference chip */
-.tabernacle-study .term-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.25rem;margin:1.5rem 0; }
-.tabernacle-study .term-card { background:linear-gradient(160deg,color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 7%,var(--bg)),var(--bg) 62%);border:2px solid color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 32%,var(--border));border-radius:var(--radius-lg);padding:1.6rem 1.25rem 1.35rem;text-align:center;box-shadow:0 4px 12px rgba(15,23,42,.05);transition:transform .3s var(--ease,ease),box-shadow .3s var(--ease,ease); }
-@media (hover:hover) { .tabernacle-study .term-card:hover { transform:translateY(-6px);box-shadow:0 12px 28px color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 18%,transparent); } }
-.tabernacle-study .term-hebrew { font-size:2.5rem;line-height:1.2;font-weight:700;color:var(--text);margin-bottom:.35rem;text-align:center; }
-.tabernacle-study .term-translit { font-family:var(--font-display);font-style:italic;font-size:1.08rem;color:var(--text-muted); }
-.tabernacle-study .term-gloss { font-size:.76rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--tone-ink,var(--accent-purple));margin:.35rem 0 .8rem; }
-.tabernacle-study .term-desc { font-size:.9rem;line-height:1.65;color:var(--text-soft);margin:0 0 .9rem; }
-.tabernacle-study .term-ref { display:inline-block;font:600 .72rem/1.4 var(--font-mono);letter-spacing:.02em;padding:.3rem .6rem;border-radius:6px;background:color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 9%,var(--bg));color:var(--tone-ink,var(--accent-purple)); }
-
+/* Vocabulary cards (key terms), after the clause cards on the hymns page: numbered, accent-topped, left-aligned word
+   with a hover response, an italic transliteration line, a category pill, the note, and a reference chip */
+.tabernacle-study .term-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin:1.5rem 0; }
+.tabernacle-study .term-card { position:relative;overflow:hidden;background:var(--bg);border:1px solid var(--border);border-top:3px solid var(--panel-accent,var(--accent-purple));border-radius:16px;padding:1.15rem 1.25rem 1.2rem;box-shadow:0 4px 12px rgba(15,23,42,.05);transition:transform .3s var(--ease,ease),box-shadow .3s var(--ease,ease),border-color .3s var(--ease,ease); }
+.tabernacle-study .term-num { position:absolute;top:.85rem;right:.85rem;width:30px;height:30px;border-radius:999px;display:grid;place-items:center;font:700 .72rem/1 var(--font-mono);color:var(--tone-ink,var(--accent-purple));background:var(--bg);border:1.5px solid color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 40%,transparent);transition:background .3s var(--ease,ease),color .3s var(--ease,ease),border-color .3s var(--ease,ease); }
+.tabernacle-study .term-hebrew { font-size:2.1rem;line-height:1.2;font-weight:700;color:var(--text);margin:.35rem 2.4rem .15rem 0;text-align:right;transform-origin:right center;transition:color .3s var(--ease,ease),transform .3s var(--ease,ease); }
+.tabernacle-study .term-translit { font-family:var(--font-display);font-size:1.06rem;line-height:1.35;color:var(--text-soft);margin-bottom:.6rem; }
+.tabernacle-study .term-translit em { font-style:italic;color:var(--text); }
+.tabernacle-study .term-cat { display:inline-block;font:600 .62rem/1.4 var(--font-mono);letter-spacing:.18em;text-transform:uppercase;padding:.2rem .55rem;border-radius:999px;margin-bottom:.65rem;color:var(--tone-ink,var(--accent-purple));background:color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 9%,var(--bg));border:1px solid color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 30%,transparent); }
+.tabernacle-study .term-desc { font-size:.9rem;line-height:1.6;color:var(--text-soft);margin:0 0 .8rem; }
+.tabernacle-study .term-ref { display:inline-block;font:600 .7rem/1.4 var(--font-mono);letter-spacing:.02em;padding:.28rem .55rem;border-radius:6px;background:color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 8%,var(--bg));color:var(--tone-ink,var(--accent-purple)); }
+@media (hover:hover) {
+ .tabernacle-study .term-card:hover { transform:translateY(-5px);box-shadow:0 18px 40px color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 16%,rgba(17,24,39,.08));border-color:color-mix(in srgb,var(--panel-accent,var(--accent-purple)) 35%,var(--border)); }
+ .tabernacle-study .term-card:hover .term-hebrew { color:var(--tone-ink,var(--accent-purple));transform:scale(1.04); }
+ .tabernacle-study .term-card:hover .term-num { background:var(--panel-accent,var(--accent-purple));color:#fff;border-color:transparent; }
+ .tabernacle-study .term-card[data-tone="gold"]:hover .term-num { color:#1e293b; }
+}
 /* Three tiers, three places: a 3 × 3 map with row labels; collapses to labelled tiles on narrow screens */
 .tabernacle-study .tier-grid { display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr));gap:.75rem .9rem;align-items:stretch;margin:1.5rem 0; }
 .tabernacle-study .tier-head { text-align:center;padding:.6rem .5rem .55rem;border-bottom:3px solid var(--panel-accent,var(--accent-purple));display:flex;flex-direction:column;gap:.1rem; }
@@ -358,7 +367,34 @@ body.tabernacle-study.viewer-open { overflow:hidden; }
 .tabernacle-study .core-logic-quote { margin: 2rem 0 0; }
 .tabernacle-study .key-insight { margin: 1.4rem 0 0; font-size: .93rem; line-height: 1.75; }
 .tabernacle-study .study-panel .study-figure { margin-bottom: .35rem; }
-.tabernacle-study .comparison-table td, .tabernacle-study .comparison-table th { vertical-align: top; }
+/* Comparison table: the card-with-gradient-header treatment from the Genesis double-revelation tables.
+   Rows carry their rite's accent: slate for the ordinary offering, rose for the Day of Atonement. */
+.tabernacle-study .comparison-table { border-collapse:separate;border-spacing:0;border:0;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(15,23,42,.08);background:var(--bg); }
+.tabernacle-study .comparison-table tr[data-rite="individual"] { --row-accent:#64748b; }
+.tabernacle-study .comparison-table tr[data-rite="atonement"] { --row-accent:#e11d48; }
+.tabernacle-study .comparison-table thead { background:linear-gradient(135deg,#7209b7 0%,#dc2626 100%);box-shadow:0 2px 8px rgba(114,9,183,.3); }
+.tabernacle-study .comparison-table thead th { background:transparent;color:#fff;font:800 .98rem/1.3 var(--font-body);padding:1.15rem 1.1rem;text-align:left;border:0;position:relative;text-shadow:0 1px 3px rgba(0,0,0,.35);letter-spacing:.02em; }
+.tabernacle-study .comparison-table thead th:not(:last-child)::after { content:'';position:absolute;right:0;top:25%;height:50%;width:1px;background:rgba(255,255,255,.4); }
+.tabernacle-study .comparison-table tbody th,.tabernacle-study .comparison-table tbody td { padding:1.15rem 1rem;border:0;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.7;color:var(--text-soft);background:transparent;transition:background .3s var(--ease,ease); }
+.tabernacle-study .comparison-table tbody tr:last-child th,.tabernacle-study .comparison-table tbody tr:last-child td { border-bottom:0; }
+.tabernacle-study .comparison-table tbody th { color:var(--text);border-left:4px solid var(--row-accent,var(--accent-purple));background:linear-gradient(90deg,color-mix(in srgb,var(--row-accent,var(--accent-purple)) 6%,transparent),transparent); }
+.tabernacle-study .comparison-table tr[data-rite="atonement"] td { background:color-mix(in srgb,#e11d48 3%,var(--bg)); }
+@media (hover:hover) {
+ .tabernacle-study .comparison-table tbody tr:hover th { background:linear-gradient(90deg,color-mix(in srgb,var(--row-accent,var(--accent-purple)) 12%,transparent),color-mix(in srgb,var(--row-accent,var(--accent-purple)) 4%,transparent)); }
+ .tabernacle-study .comparison-table tbody tr:hover td { background:linear-gradient(90deg,rgba(114,9,183,.05),rgba(220,38,38,.05)); }
+}
+@media (max-width:768px) {
+ .tabernacle-study .comparison-table { min-width:0;display:block;box-shadow:none;background:transparent;border-radius:0; }
+ .tabernacle-study .comparison-table thead { display:none; }
+ .tabernacle-study .comparison-table tbody,.tabernacle-study .comparison-table tbody tr,.tabernacle-study .comparison-table tbody th,.tabernacle-study .comparison-table tbody td { display:block;width:auto; }
+ .tabernacle-study .comparison-table caption { display:block;width:auto;margin-bottom:.75rem; }
+ .tabernacle-study .comparison-table tbody th:first-child,.tabernacle-study .comparison-table tbody td[data-label] { width:auto; }
+ .tabernacle-study .comparison-table tbody tr { margin:0 0 1.25rem;border:1px solid var(--border);border-left:4px solid var(--row-accent,var(--accent-purple));border-radius:12px;overflow:hidden;box-shadow:0 4px 14px rgba(15,23,42,.06);background:var(--bg); }
+ .tabernacle-study .comparison-table tbody th { border-left:0;border-bottom:1px solid var(--border);padding:1rem 1rem .85rem; }
+ .tabernacle-study .comparison-table tbody td { padding:.85rem 1rem 1rem;border-bottom:1px solid var(--border); }
+ .tabernacle-study .comparison-table tbody td::before { content:attr(data-label);display:block;font:700 .64rem/1.4 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--row-accent,var(--accent-purple));margin-bottom:.35rem; }
+ .tabernacle-study .comparison-table tbody tr:last-child td:last-child { border-bottom:0; }
+}
 .tabernacle-study .reference-table td:last-child a { text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--accent-purple) 40%, transparent); text-underline-offset: .2em; }
 .tabernacle-study .reference-table td:last-child a:hover { text-decoration-color: var(--accent-purple); }
 .tabernacle-study .source-category h4 { font-family: var(--font-display); font-size: var(--fs-lg); margin: 1.6rem 0 .6rem; }
