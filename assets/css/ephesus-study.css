@@ -1,0 +1,591 @@
+/* ============================================================
+   EPHESUS ACROSS THE NEW TESTAMENT — page layer (v3.0)
+   Path: /assets/css/ephesus-study.css
+   Loads after global-v3.css (3.3.2) and global-v3-polish.css (0.3).
+   Adds the visual layer the global system leaves to pages:
+   cosmic hero with a diagram figure, numbered section headings,
+   diagram figures, atlas node cards, paired flow tracks, a
+   vocabulary contrast grid, a three-movement progression, a
+   people × records presence grid, a hearing/seeing pair, and an
+   evidence/reconstruction pair. Everything reads the v3 tokens;
+   never uses !important; no body-content gradients.
+   ============================================================ */
+
+.ephesus-study {
+  --eph-ink-deep: #1e1b4b;
+  --eph-indigo-wash: color-mix(in srgb, var(--accent-indigo) 7%, transparent);
+  --eph-magenta-wash: color-mix(in srgb, var(--accent-magenta) 7%, transparent);
+  --eph-teal-wash: color-mix(in srgb, var(--accent-teal) 8%, transparent);
+  --eph-gold: #b8860b;
+}
+
+/* ------------------------------------------------------------
+   1. COSMIC HERO — deep space + halo ring, indigo/magenta tints
+   ------------------------------------------------------------ */
+.ephesus-study .study-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg, 24px);
+  padding: clamp(2.5rem, 5vw, 4rem) clamp(1.25rem, 4vw, 3rem) clamp(2rem, 4vw, 3rem);
+  margin: 0.5rem 0 2rem;
+  color: rgba(255, 255, 255, 0.92);
+  background:
+    radial-gradient(1100px 620px at 50% -12%, rgba(99, 102, 241, 0.32), transparent 55%),
+    radial-gradient(800px 560px at 22% 18%, rgba(236, 72, 153, 0.18), transparent 55%),
+    radial-gradient(800px 600px at 80% 22%, rgba(0, 180, 216, 0.12), transparent 60%),
+    linear-gradient(180deg, #0b0a1f 0%, #0a0b1c 45%, #06060f 100%);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.15fr);
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  align-items: center;
+}
+.ephesus-study .study-hero::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  background:
+    radial-gradient(360px 280px at 50% 30%, rgba(255, 255, 255, 0.18), rgba(199, 210, 254, 0.12) 30%, rgba(99, 102, 241, 0.10) 55%, transparent 72%);
+  filter: blur(12px);
+  opacity: 0.9;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+.ephesus-study .study-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 28% 40%, transparent 0 170px, rgba(236, 72, 153, 0.18) 176px, rgba(236, 72, 153, 0.05) 195px, transparent 214px),
+    radial-gradient(1px 1px at 12% 22%, rgba(255, 255, 255, 0.35) 0 1px, transparent 2px),
+    radial-gradient(1px 1px at 38% 12%, rgba(255, 255, 255, 0.28) 0 1px, transparent 2px),
+    radial-gradient(1px 1px at 68% 16%, rgba(255, 255, 255, 0.30) 0 1px, transparent 2px),
+    radial-gradient(1px 1px at 86% 30%, rgba(255, 255, 255, 0.26) 0 1px, transparent 2px),
+    radial-gradient(1px 1px at 22% 78%, rgba(255, 255, 255, 0.20) 0 1px, transparent 2px),
+    radial-gradient(1px 1px at 74% 84%, rgba(255, 255, 255, 0.18) 0 1px, transparent 2px);
+  opacity: 0.85;
+  pointer-events: none;
+}
+.ephesus-study .hero-main,
+.ephesus-study .hero-figure,
+.ephesus-study .hero-copy { position: relative; z-index: 1; }
+.ephesus-study .study-eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(199, 210, 254, 0.9);
+  margin: 0 0 1rem;
+}
+.ephesus-study .study-hero h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 5.2vw, 4.2rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  margin: 0 0 1rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(199, 210, 254, 0.95) 55%, rgba(251, 207, 232, 0.9));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.ephesus-study .study-hero .hero-subtitle {
+  display: block;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  letter-spacing: 0;
+  margin-top: 0.6rem;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.8);
+}
+.ephesus-study .hero-greek {
+  font-family: var(--font-greek);
+  font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+  color: rgba(251, 207, 232, 0.92);
+  margin: 0 0 1.25rem;
+}
+.ephesus-study .hero-greek .gloss {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  color: rgba(255, 255, 255, 0.62);
+  margin-top: 0.25rem;
+}
+.ephesus-study .study-hero .character-type-badge { margin: 0.25rem 0 1.25rem; }
+.ephesus-study .hero-intro {
+  font-size: var(--fs-md);
+  line-height: var(--lh-normal, 1.6);
+  color: rgba(255, 255, 255, 0.84);
+  max-width: 58ch;
+  margin: 0 0 1.25rem;
+}
+.ephesus-study .hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+.ephesus-study .study-hero .secondary-button {
+  border-color: rgba(255, 255, 255, 0.45);
+  color: #fff;
+}
+.ephesus-study .print-button {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  min-height: 44px;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.82);
+  cursor: pointer;
+}
+.ephesus-study .print-button:hover { color: #fff; border-color: #fff; }
+.ephesus-study .study-hero a:focus-visible,
+.ephesus-study .print-button:focus-visible { outline: 3px solid #c7d2fe; outline-offset: 3px; }
+.ephesus-study .hero-figure {
+  margin: 0;
+  grid-row: 1 / span 2;
+  grid-column: 2;
+}
+.ephesus-study .hero-figure .diagram-viewport {
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.35rem;
+}
+.ephesus-study .hero-legend {
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.2rem 1rem;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.72);
+}
+.ephesus-study .hero-legend li { display: flex; gap: 0.45rem; align-items: baseline; }
+.ephesus-study .hero-legend .route-num {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  padding: 0.05rem 0.4rem;
+}
+@media (max-width: 900px) {
+  .ephesus-study .study-hero { grid-template-columns: 1fr; }
+  .ephesus-study .hero-figure { grid-row: auto; grid-column: auto; }
+  .ephesus-study .hero-legend { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ephesus-study .study-hero::before { animation: ephBloom 12s ease-in-out infinite; }
+}
+@keyframes ephBloom {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.9; }
+  50% { transform: translate3d(0, -8px, 0) scale(1.02); opacity: 0.82; }
+}
+
+/* ------------------------------------------------------------
+   2. STUDY SECTIONS — numbered headings (Tabernacle convention)
+   ------------------------------------------------------------ */
+.ephesus-study .study-section { margin: 2.5rem 0; scroll-margin-top: 90px; }
+.ephesus-study .section-heading { margin-bottom: 1.25rem; }
+.ephesus-study .section-number {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--page-accent);
+  margin: 0 0 0.35rem;
+}
+.ephesus-study .section-heading .section-title { margin-bottom: 0.5rem; }
+.ephesus-study .study-section h3 {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  margin: 1.75rem 0 0.6rem;
+  letter-spacing: -0.01em;
+}
+.ephesus-study .study-section > p { max-width: 70ch; }
+
+/* ------------------------------------------------------------
+   3. DIAGRAM FIGURES — light board, caption with figure label
+   ------------------------------------------------------------ */
+.ephesus-study .diagram-wrap {
+  margin: 1.5rem 0 1.75rem;
+  padding: 0.75rem;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg, 20px);
+}
+.ephesus-study .diagram-viewport { width: 100%; }
+.ephesus-study .diagram-viewport svg { display: block; width: 100%; height: auto; }
+.ephesus-study .diagram-caption {
+  margin: 0.6rem 0.35rem 0.1rem;
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--text-soft);
+}
+.ephesus-study .figure-label {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--page-accent);
+  margin-right: 0.6rem;
+}
+@media (max-width: 700px) {
+  .ephesus-study .wide-diagram { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .ephesus-study .wide-diagram svg { min-width: 680px; }
+  .ephesus-study .wide-diagram::after {
+    content: "Scroll sideways to see the whole diagram";
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 0.35rem 0.25rem 0;
+  }
+}
+
+/* ------------------------------------------------------------
+   4. ATLAS NODE CARDS — two passages compared point by point
+   ------------------------------------------------------------ */
+.ephesus-study .atlas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(400px, 100%), 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0 1.5rem;
+}
+.ephesus-study .atlas-node {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.2rem 1rem;
+  transition: transform var(--duration-fast, 0.2s) var(--ease, ease), border-color var(--duration-fast, 0.2s) var(--ease, ease), box-shadow var(--duration-fast, 0.2s) var(--ease, ease);
+}
+.ephesus-study .atlas-node::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-indigo), var(--accent-magenta));
+  transform: scaleX(0.35);
+  transform-origin: left;
+  transition: transform var(--duration, 0.3s) var(--ease, ease);
+}
+@media (hover: hover) {
+  .ephesus-study .atlas-node:hover { transform: translateY(-3px); border-color: var(--page-accent); box-shadow: var(--shadow); }
+  .ephesus-study .atlas-node:hover::before { transform: scaleX(1); }
+}
+.ephesus-study .atlas-node__pair {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 0.75rem;
+}
+.ephesus-study .atlas-node__cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.ephesus-study .atlas-col {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.75rem;
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  color: var(--text-soft);
+}
+.ephesus-study .atlas-col__head {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+}
+.ephesus-study .atlas-col.acts .atlas-col__head { color: var(--accent-teal); }
+.ephesus-study .atlas-col.timothy .atlas-col__head { color: var(--accent-indigo); }
+.ephesus-study .atlas-node__verdict {
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-sm);
+  background: var(--eph-indigo-wash);
+  border-left: 3px solid var(--accent-indigo);
+}
+.ephesus-study .atlas-node__verdict strong { color: var(--accent-indigo); }
+.ephesus-study .atlas-node__verdict.none { background: var(--bg-2); border-left-color: var(--border); color: var(--text-muted); }
+@media (max-width: 480px) { .ephesus-study .atlas-node__cols { grid-template-columns: 1fr; } }
+
+/* ------------------------------------------------------------
+   5. PAIRED FLOW TRACKS — two parallel accounts, three stages each
+   ------------------------------------------------------------ */
+.ephesus-study .flow-tracks {
+  display: grid;
+  gap: 1rem;
+  margin: 1.25rem 0 1.5rem;
+}
+.ephesus-study .flow-track {
+  display: grid;
+  grid-template-columns: 8.5rem repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  align-items: stretch;
+}
+.ephesus-study .flow-track__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 700;
+  line-height: 1.25;
+  padding: 0.75rem 0.5rem 0.75rem 0;
+  align-self: center;
+}
+.ephesus-study .flow-track__title small {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+.ephesus-study .flow-step {
+  position: relative;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 0.85rem 0.75rem 0.9rem;
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  color: var(--text-soft);
+}
+.ephesus-study .flow-step strong {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+.ephesus-study .flow-step + .flow-step::before {
+  content: "→";
+  position: absolute;
+  left: -0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--page-accent);
+  font-weight: 700;
+  background: var(--bg);
+}
+.ephesus-study .flow-track.track-a .flow-step { border-color: color-mix(in srgb, var(--accent-teal) 45%, var(--border)); }
+.ephesus-study .flow-track.track-b .flow-step { border-color: color-mix(in srgb, var(--accent-indigo) 45%, var(--border)); }
+.ephesus-study .flow-track.track-a .flow-step strong { color: var(--accent-teal); }
+.ephesus-study .flow-track.track-b .flow-step strong { color: var(--accent-indigo); }
+@media (max-width: 760px) {
+  .ephesus-study .flow-track { grid-template-columns: 1fr; }
+  .ephesus-study .flow-step + .flow-step::before { content: "↓"; left: 1rem; top: -0.9rem; transform: none; }
+}
+
+/* ------------------------------------------------------------
+   6. VOCABULARY CONTRAST GRID — a closed lexical system
+   ------------------------------------------------------------ */
+.ephesus-study .vocab-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0 1.5rem;
+}
+.ephesus-study .vocab-col {
+  border-radius: var(--radius);
+  padding: 1.1rem 1.25rem 1rem;
+  border: 1.5px solid var(--border);
+}
+.ephesus-study .vocab-col.healthy { background: var(--eph-teal-wash); border-color: color-mix(in srgb, var(--accent-teal) 40%, var(--border)); }
+.ephesus-study .vocab-col.sick { background: color-mix(in srgb, var(--accent-rose) 6%, transparent); border-color: color-mix(in srgb, var(--accent-rose) 35%, var(--border)); }
+.ephesus-study .vocab-col__head {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0 0 0.6rem;
+}
+.ephesus-study .vocab-col.healthy .vocab-col__head { color: var(--accent-teal); }
+.ephesus-study .vocab-col.sick .vocab-col__head { color: var(--accent-rose); }
+.ephesus-study .vocab-term {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.6rem;
+  margin: 0.55rem 0;
+}
+.ephesus-study .vocab-term .greek { font-size: var(--fs-lg); font-weight: 600; }
+.ephesus-study .vocab-col.sick .vocab-term .greek { color: var(--accent-rose); }
+.ephesus-study .vocab-col.healthy .vocab-term .greek { color: color-mix(in srgb, var(--accent-teal) 80%, var(--text)); }
+.ephesus-study .vocab-term .gloss { font-size: var(--fs-sm); color: var(--text-soft); }
+.ephesus-study .vocab-term .refs { flex-basis: 100%; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); }
+@media (max-width: 640px) { .ephesus-study .vocab-grid { grid-template-columns: 1fr; } }
+
+/* ------------------------------------------------------------
+   7. MOVEMENTS — a three-stage progression with arrows
+   ------------------------------------------------------------ */
+.ephesus-study .movements {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin: 1.25rem 0 1.5rem;
+  flex-wrap: wrap;
+}
+.ephesus-study .movement {
+  flex: 1 1 200px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-top: 4px solid var(--page-accent);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+  min-width: 0;
+}
+.ephesus-study .movement:nth-child(3) { border-top-color: var(--accent-magenta); }
+.ephesus-study .movement:nth-child(5) { border-top-color: var(--accent-teal); }
+.ephesus-study .movement__ref {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin: 0 0 0.2rem;
+}
+.ephesus-study .movement__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  margin: 0 0 0.4rem;
+}
+.ephesus-study .movement p { margin: 0; font-size: var(--fs-sm); line-height: 1.5; color: var(--text-soft); }
+.ephesus-study .movement__arrow {
+  flex: 0 0 auto;
+  align-self: center;
+  padding: 0 0.5rem;
+  color: var(--page-accent);
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+@media (max-width: 700px) {
+  .ephesus-study .movements { flex-direction: column; }
+  .ephesus-study .movement__arrow { transform: rotate(90deg); padding: 0.25rem 0; text-align: center; }
+}
+
+/* ------------------------------------------------------------
+   8. PRESENCE GRID — people × records
+   ------------------------------------------------------------ */
+.ephesus-study .presence-grid { margin: 1.25rem 0 0.75rem; }
+.ephesus-study .presence-grid table { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 640px; }
+.ephesus-study .presence-grid th,
+.ephesus-study .presence-grid td { padding: 0.45rem 0.4rem; text-align: center; border-bottom: 1px solid var(--border); font-size: var(--fs-sm); }
+.ephesus-study .presence-grid th { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); vertical-align: bottom; background: transparent; }
+.ephesus-study .presence-grid th[scope="row"],
+.ephesus-study .presence-grid td:first-child { text-align: left; font-family: var(--font-display); font-size: var(--fs-md); font-weight: 600; text-transform: none; letter-spacing: 0; color: var(--text); white-space: nowrap; }
+.ephesus-study .presence-grid .dot,
+.ephesus-study .presence-legend .dot {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--page-accent);
+  box-shadow: 0 0 0 3px var(--eph-indigo-wash);
+}
+.ephesus-study .presence-grid .dot.soft,
+.ephesus-study .presence-legend .dot.soft { background: var(--bg); border: 2px solid var(--text-subtle, #94a3b8); box-shadow: none; }
+.ephesus-study .presence-grid .ref { display: block; font-family: var(--font-mono); font-size: 0.62rem; color: var(--text-muted); margin-top: 0.15rem; white-space: nowrap; }
+.ephesus-study .presence-legend { font-size: var(--fs-sm); color: var(--text-muted); display: flex; gap: 0.5rem 1.5rem; flex-wrap: wrap; align-items: center; margin: 0.5rem 0 0; max-width: none; }
+.ephesus-study .presence-legend .dot { margin-right: 0.35rem; vertical-align: middle; }
+
+/* ------------------------------------------------------------
+   9. HEAR / SEE PAIR and EVIDENCE / RECONSTRUCTION PAIR
+   ------------------------------------------------------------ */
+.ephesus-study .pair-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0 1.5rem;
+}
+.ephesus-study .pair-col {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.15rem;
+  background: var(--bg);
+}
+.ephesus-study .pair-col__head {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0 0 0.6rem;
+}
+.ephesus-study .pair-col.hears { border-color: color-mix(in srgb, var(--accent-teal) 45%, var(--border)); }
+.ephesus-study .pair-col.sees { border-color: color-mix(in srgb, var(--accent-magenta) 45%, var(--border)); }
+.ephesus-study .pair-col.hears .pair-col__head { color: var(--accent-teal); }
+.ephesus-study .pair-col.sees .pair-col__head { color: var(--accent-magenta); }
+.ephesus-study .pair-col.stated { border-color: color-mix(in srgb, var(--accent-indigo) 45%, var(--border)); }
+.ephesus-study .pair-col.stated .pair-col__head { color: var(--accent-indigo); }
+.ephesus-study .pair-col.reconstructed { border-style: dashed; }
+.ephesus-study .pair-item { padding: 0.55rem 0; border-top: 1px solid var(--border); font-size: var(--fs-sm); line-height: 1.5; color: var(--text-soft); }
+.ephesus-study .pair-item:first-of-type { border-top: 0; padding-top: 0; }
+.ephesus-study .pair-item strong { display: block; font-family: var(--font-display); font-size: var(--fs-md); font-weight: 700; color: var(--text); }
+.ephesus-study .pair-item .ref { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted); }
+.ephesus-study .pair-bridge {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-style: italic;
+  color: var(--text-soft);
+  padding: 0.25rem 0 0;
+}
+@media (max-width: 640px) { .ephesus-study .pair-grid { grid-template-columns: 1fr; } }
+
+/* ------------------------------------------------------------
+   10. Confession clauses inside the global pivot box; bilingual
+       lines inside scripture quotes; people table; BP icon
+   ------------------------------------------------------------ */
+.ephesus-study .pivot-box .clause { display: block; margin: 0.45rem 0; }
+.ephesus-study .pivot-box .clause .greek { display: block; font-style: normal; font-size: var(--fs-lg); }
+.ephesus-study .pivot-box .clause .clause-en { display: block; font-size: var(--fs-sm); color: var(--text-muted); }
+.ephesus-study .scripture-quote .line { display: block; margin: 0.3rem 0; }
+.ephesus-study .scripture-quote .line .greek { font-style: normal; }
+.ephesus-study .scripture-quote .line .clause-en { display: block; font-size: var(--fs-sm); font-style: normal; color: var(--text-muted); }
+.ephesus-study .people-table td:first-child { white-space: nowrap; font-weight: 600; }
+.ephesus-study .bp-icon { width: 1.2em; height: 1.2em; object-fit: contain; vertical-align: middle; margin-right: 0.3rem; }
+.ephesus-study .eyebrow { font-family: var(--font-mono); font-size: var(--fs-xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 0.35rem; }
+
+/* ------------------------------------------------------------
+   11. PRINT + REDUCED MOTION
+   ------------------------------------------------------------ */
+@media print {
+  .ephesus-study .study-hero { background: #fff; color: #000; box-shadow: none; border: 1px solid #ccc; display: block; }
+  .ephesus-study .study-hero h1 { -webkit-text-fill-color: #000; color: #000; background: none; }
+  .ephesus-study .study-hero .hero-subtitle, .ephesus-study .hero-intro, .ephesus-study .hero-greek, .ephesus-study .hero-legend, .ephesus-study .study-eyebrow { color: #000; -webkit-text-fill-color: #000; }
+  .ephesus-study .hero-actions, .ephesus-study .print-button { display: none; }
+  .ephesus-study .diagram-wrap, .ephesus-study .atlas-node, .ephesus-study .flow-track, .ephesus-study .vocab-col, .ephesus-study .movement, .ephesus-study .pair-col { break-inside: avoid; }
+  .ephesus-study .wide-diagram { overflow: visible; }
+  .ephesus-study .wide-diagram svg { min-width: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ephesus-study .study-hero::before { animation: none; }
+  .ephesus-study .atlas-node, .ephesus-study .atlas-node::before { transition: none; }
+}
