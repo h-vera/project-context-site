@@ -1,0 +1,556 @@
+/* Ephesus Across the New Testament — page-local layer for the Project Context v5.9 template (v1.2).
+   Loads after global-v3.css and global-v3-polish.css and only adds page-specific rules.
+   Site navigation is injected by nav-component.js and styled by the global layer; nothing here touches it.
+   Color logic follows the 1 Timothy print edition: indigo for the credal register of the page,
+   magenta reserved for the 3:16 confession alone. */
+
+.ephesus-study {
+  --eph-indigo: var(--accent-indigo, #4338ca);
+  --eph-indigo-deep: #2a1e8f;
+  --eph-indigo-ink: #1e1b4b;
+  --eph-indigo-wash: rgba(67, 56, 202, 0.07);
+  --eph-magenta: var(--accent-magenta, #b5179e);
+  --eph-magenta-wash: rgba(181, 23, 158, 0.06);
+  --eph-gold: var(--accent-gold, #b8860b);
+  --eph-rail: rgba(67, 56, 202, 0.28);
+  --page-accent: var(--eph-indigo);
+}
+
+/* ─── Hero ─────────────────────────────────────────────────────────────── */
+.ephesus-study .study-hero {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  background:
+    radial-gradient(120% 80% at 85% 15%, rgba(181, 23, 158, 0.28), transparent 55%),
+    radial-gradient(90% 70% at 10% 90%, rgba(99, 102, 241, 0.35), transparent 60%),
+    linear-gradient(160deg, #15113f 0%, var(--eph-indigo-deep) 55%, #1e1b4b 100%);
+  padding: clamp(4.5rem, 9vw, 7.5rem) 1.25rem clamp(3rem, 6vw, 4.5rem);
+}
+.ephesus-study .study-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+}
+.ephesus-study .study-hero-inner {
+  max-width: 68rem;
+  margin: 0 auto;
+}
+.ephesus-study .hero-eyebrow {
+  margin: 0 0 1.6rem;
+  font: 500 0.82rem/1.4 var(--font-body, 'DM Sans', system-ui, sans-serif);
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.72);
+}
+.ephesus-study .hero-greek {
+  margin: 0 0 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.ephesus-study .hero-greek .greek {
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.2rem, 2.3vw, 1.6rem);
+  line-height: 1.3;
+  color: #e0e7ff;
+}
+.ephesus-study .hero-greek-gloss {
+  font: 400 0.9rem/1.5 var(--font-body, 'DM Sans', system-ui, sans-serif);
+  color: rgba(255, 255, 255, 0.7);
+}
+.ephesus-study .study-hero h1 {
+  margin: 0 0 1rem;
+  font: 600 clamp(2.4rem, 5.6vw, 4.4rem)/1.02 var(--font-display, 'Cormorant Garamond', Georgia, serif);
+  letter-spacing: -0.01em;
+  color: #fff;
+  max-width: 20ch;
+}
+.ephesus-study .hero-sub {
+  margin: 0 0 1.75rem;
+  max-width: 62ch;
+  font: 300 clamp(1.05rem, 1.6vw, 1.25rem)/1.55 var(--font-body, 'DM Sans', system-ui, sans-serif);
+  color: rgba(255, 255, 255, 0.86);
+}
+.ephesus-study .hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0 0 1.75rem;
+}
+.ephesus-study .hbadge {
+  display: inline-block;
+  padding: 0.38rem 0.85rem;
+  border-radius: var(--radius-pill, 999px);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  font: 500 0.8rem/1.3 var(--font-body, 'DM Sans', system-ui, sans-serif);
+  color: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.06);
+}
+.ephesus-study .hbadge.accent {
+  background: rgba(224, 231, 255, 0.92);
+  border-color: transparent;
+  color: var(--eph-indigo-ink);
+}
+.ephesus-study .study-hero .hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+.ephesus-study .study-hero .primary-button {
+  background: #fff;
+  color: var(--eph-indigo-ink);
+}
+.ephesus-study .study-hero .secondary-button {
+  border-color: rgba(255, 255, 255, 0.55);
+  color: #fff;
+}
+.ephesus-study .study-hero .hero-actions span { font-size: 1.05rem; margin-left: 0.4rem; }
+.ephesus-study .print-button {
+  font: 600 0.88rem/1.4 var(--font-body, 'DM Sans', system-ui, sans-serif);
+  padding: 0.7rem 1.1rem;
+  min-height: 44px;
+  color: rgba(255, 255, 255, 0.82);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: var(--radius-pill, 999px);
+  cursor: pointer;
+}
+.ephesus-study .print-button:hover { color: #fff; border-color: #fff; }
+.ephesus-study .print-button:focus-visible,
+.ephesus-study .study-hero a:focus-visible { outline: 3px solid #c7d2fe; outline-offset: 3px; }
+
+/* ─── Greek and verse figure ───────────────────────────────────────────── */
+/* Greek keeps the site's global .greek face (the display face has no Greek glyphs); this layer only sizes and colours it. */
+.ephesus-study .verse-figure {
+  margin: 1.75rem 0 2rem;
+  padding: 1.35rem 1.5rem 1.2rem;
+  border-left: 3px solid var(--eph-indigo);
+  background: var(--eph-indigo-wash);
+  border-radius: 0 var(--radius, 14px) var(--radius, 14px) 0;
+}
+.ephesus-study .verse-figure blockquote {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  line-height: 1.45;
+  color: var(--eph-indigo-ink);
+}
+.ephesus-study .verse-figure figcaption {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-soft, #475569);
+}
+
+/* ─── Witness rail (the page's signature) ──────────────────────────────── */
+.ephesus-study .witness-rail {
+  list-style: none;
+  margin: 2.25rem 0 0.75rem;
+  padding: 0;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0 1rem;
+  counter-reset: witness;
+}
+.ephesus-study .witness-rail::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 2.05rem;
+  height: 2px;
+  background: linear-gradient(90deg, var(--eph-rail), var(--eph-indigo) 50%, var(--eph-rail));
+}
+.ephesus-study .witness {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-top: 3.4rem;
+  counter-increment: witness;
+}
+.ephesus-study .witness::before {
+  content: counter(witness);
+  position: absolute;
+  left: 0;
+  top: 1.3rem;
+  width: 1.55rem;
+  height: 1.55rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border: 2px solid var(--eph-indigo);
+  color: var(--eph-indigo);
+  font: 600 0.78rem/1 var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  z-index: 1;
+}
+.ephesus-study .witness:nth-child(6)::before {
+  background: var(--eph-indigo);
+  color: #fff;
+}
+.ephesus-study .witness-date {
+  font: 500 0.74rem/1.3 var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  color: var(--eph-indigo);
+}
+.ephesus-study .witness-date small {
+  font-size: 0.68rem;
+  color: var(--text-muted, #64748b);
+  margin-left: 0.25rem;
+}
+.ephesus-study .witness-text {
+  font: 600 1.15rem/1.2 var(--font-display, 'Cormorant Garamond', Georgia, serif);
+  color: var(--text, #1e293b);
+}
+.ephesus-study .witness-note {
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--text-soft, #475569);
+}
+.ephesus-study .rail-caption {
+  font-size: 0.85rem;
+  color: var(--text-muted, #64748b);
+  margin: 0.75rem 0 2rem;
+}
+@media (max-width: 900px) {
+  .ephesus-study .witness-rail {
+    grid-template-columns: 1fr;
+    gap: 1.4rem;
+    padding-left: 2.4rem;
+  }
+  .ephesus-study .witness-rail::before {
+    left: 0.72rem;
+    right: auto;
+    top: 0.4rem;
+    bottom: 0.4rem;
+    width: 2px;
+    height: auto;
+    background: linear-gradient(180deg, var(--eph-rail), var(--eph-indigo) 50%, var(--eph-rail));
+  }
+  .ephesus-study .witness { padding-top: 0; }
+  .ephesus-study .witness::before { left: -2.4rem; top: 0; }
+}
+
+/* ─── Refrain: what this snapshot reveals about Jesus ──────────────────── */
+.ephesus-study .christ-reveal {
+  margin-top: 2rem;
+  border-left: 3px solid var(--eph-indigo);
+}
+.ephesus-study .christ-reveal .reveal-label {
+  margin: 0 0 0.35rem;
+  font: 600 0.78rem/1.3 var(--font-body, 'DM Sans', system-ui, sans-serif);
+  color: var(--eph-indigo);
+}
+.ephesus-study .christ-reveal p:last-child {
+  margin: 0;
+  font: 400 1.25rem/1.45 var(--font-display, 'Cormorant Garamond', Georgia, serif);
+  color: var(--text, #1e293b);
+}
+
+/* ─── Tables ───────────────────────────────────────────────────────────── */
+.ephesus-study .table-wrapper { margin: 1.5rem 0; }
+.ephesus-study .parallels-table { min-width: 720px; }
+.ephesus-study .synthesis-table { min-width: 640px; }
+.ephesus-study .parallels-table td:last-child {
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+.ephesus-study .parallels-table td:last-child .greek { color: var(--eph-indigo-ink); }
+.ephesus-study .shared-none {
+  font-size: 0.82rem;
+  color: var(--text-muted, #64748b);
+  font-style: italic;
+}
+.ephesus-study .synthesis-table td:first-child {
+  font-family: var(--font-display, 'Cormorant Garamond', Georgia, serif);
+  font-size: 1.08rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ─── Lexeme cards ─────────────────────────────────────────────────────── */
+.ephesus-study .lexicon {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.1rem;
+  margin: 1.5rem 0 1.75rem;
+}
+.ephesus-study .lexeme {
+  padding: 1.15rem 1.25rem 1rem;
+  border: 1px solid var(--border, #e2e8f0);
+  border-top: 3px solid var(--eph-indigo);
+  border-radius: var(--radius, 14px);
+  background: #fff;
+}
+.ephesus-study .lexeme p { margin: 0 0 0.5rem; }
+.ephesus-study .lexeme-term .greek {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--eph-indigo-ink);
+}
+.ephesus-study .lexeme-gloss {
+  font-size: 0.9rem;
+  color: var(--text-soft, #475569);
+  font-style: italic;
+}
+.ephesus-study .lexeme-body {
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+.ephesus-study .lexeme-refs {
+  margin-bottom: 0;
+  font: 500 0.72rem/1.5 var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  color: var(--text-muted, #64748b);
+}
+
+/* ─── The 3:16 confession (magenta reserved here alone) ────────────────── */
+.ephesus-study .hymn-block {
+  margin: 1.75rem 0 1.5rem;
+  padding: 1.5rem clamp(1.1rem, 3vw, 2rem) 1.25rem;
+  border: 1px solid rgba(181, 23, 158, 0.25);
+  border-radius: var(--radius-lg, 20px);
+  background:
+    linear-gradient(180deg, var(--eph-magenta-wash), transparent 70%),
+    #fff;
+}
+.ephesus-study .hymn-heading {
+  margin: 0 0 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.ephesus-study .hymn-heading .greek {
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  font-weight: 600;
+  color: var(--eph-magenta);
+}
+.ephesus-study .hymn-heading-gloss {
+  font-size: 0.85rem;
+  color: var(--text-soft, #475569);
+}
+.ephesus-study .couplets {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.9rem;
+}
+.ephesus-study .couplet {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 1.5rem;
+  padding: 0.85rem 0;
+  border-top: 1px solid rgba(181, 23, 158, 0.18);
+}
+.ephesus-study .couplet:first-child { border-top: 0; padding-top: 0; }
+.ephesus-study .clause {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.ephesus-study .clause .greek {
+  font-size: 1.28rem;
+  line-height: 1.35;
+  color: var(--eph-indigo-ink);
+}
+.ephesus-study .clause-en {
+  font-size: 0.9rem;
+  color: var(--text-soft, #475569);
+}
+.ephesus-study .hymn-block figcaption {
+  margin-top: 1.1rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-soft, #475569);
+}
+@media (max-width: 560px) {
+  .ephesus-study .couplet { grid-template-columns: 1fr; gap: 0.6rem; }
+}
+
+/* ─── Love line ────────────────────────────────────────────────────────── */
+.ephesus-study .love-thread {
+  list-style: none;
+  margin: 1.25rem 0 2rem;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+.ephesus-study .love-thread li {
+  position: relative;
+  padding: 0.95rem 1rem 0.9rem;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: var(--radius, 14px);
+  background: var(--bg-2, #f8fafc);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.ephesus-study .love-thread li + li::before {
+  content: "→";
+  position: absolute;
+  left: -0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--eph-indigo);
+  font-size: 1rem;
+  background: #fff;
+  line-height: 1;
+}
+.ephesus-study .thread-ref {
+  font: 500 0.74rem/1.3 var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  color: var(--eph-indigo);
+}
+.ephesus-study .thread-text {
+  font: 400 1.05rem/1.35 var(--font-display, 'Cormorant Garamond', Georgia, serif);
+  color: var(--text, #1e293b);
+}
+@media (max-width: 760px) {
+  .ephesus-study .love-thread { grid-template-columns: 1fr; }
+  .ephesus-study .love-thread li + li::before {
+    content: "↓";
+    left: 1.1rem;
+    top: -0.95rem;
+    transform: none;
+  }
+}
+
+/* ─── Reading plan and notes ───────────────────────────────────────────── */
+.ephesus-study .reading-cards h4 { margin-bottom: 0.35rem; }
+.ephesus-study .reading-cards p { margin: 0; font-size: 0.92rem; line-height: 1.55; }
+.ephesus-study .reading-note,
+.ephesus-study .bibliography-note { font-size: 0.85rem; margin-top: 1.25rem; }
+
+/* ─── Print ────────────────────────────────────────────────────────────── */
+@media print {
+  .ephesus-study .hero-actions,
+  .ephesus-study .hero-badges,
+  .ephesus-study .related-studies,
+  .ephesus-study .back-to-top,
+  .ephesus-study .mobile-menu-overlay,
+  .ephesus-study .quick-nav-sidebar,
+  .ephesus-study .mobile-section-tabs,
+  .ephesus-study .mini-toc,
+  .ephesus-study .bibliography-actions { display: none !important; }
+  .ephesus-study .study-hero { background: #fff; color: #000; padding: 1.5rem 0; }
+  .ephesus-study .study-hero h1,
+  .ephesus-study .hero-sub,
+  .ephesus-study .hero-eyebrow,
+  .ephesus-study .hero-greek .greek,
+  .ephesus-study .hero-greek-gloss { color: #000; }
+  .ephesus-study .witness-rail { grid-template-columns: 1fr; padding-left: 2.4rem; }
+  .ephesus-study .witness-rail::before { display: none; }
+  .ephesus-study .witness { padding-top: 0; break-inside: avoid; }
+  .ephesus-study .witness::before { left: -2.4rem; top: 0; }
+  .ephesus-study .lexeme,
+  .ephesus-study .hymn-block,
+  .ephesus-study .love-thread li,
+  .ephesus-study .christ-reveal { break-inside: avoid; }
+  .ephesus-study .love-thread { grid-template-columns: 1fr 1fr; }
+  .ephesus-study [data-reveal],
+  .ephesus-study [data-reveal-children],
+  .ephesus-study [data-reveal-children] > * { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ephesus-study * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
+
+/* ─── v1.1 additions ───────────────────────────────────────────────────── */
+/* Design ladder (a proposed symmetry in Ephesians 1–3) */
+.ephesus-study .design-ladder {
+  list-style: none;
+  margin: 1.25rem 0 0.5rem;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+.ephesus-study .design-ladder li {
+  display: grid;
+  grid-template-columns: 2.4rem 5.5rem 1fr;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.55rem 0.9rem;
+  border-left: 3px solid var(--eph-rail);
+  background: transparent;
+}
+.ephesus-study .design-ladder li::before {
+  content: attr(data-rung);
+  font: 600 0.82rem/1 var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  color: var(--eph-indigo);
+}
+.ephesus-study .design-ladder li:nth-child(2), .ephesus-study .design-ladder li:nth-child(6) { margin-left: 1.25rem; }
+.ephesus-study .design-ladder li:nth-child(3), .ephesus-study .design-ladder li:nth-child(5) { margin-left: 2.5rem; }
+.ephesus-study .design-ladder li.rung-center {
+  margin-left: 3.75rem;
+  border-left-color: var(--eph-indigo);
+  background: var(--eph-indigo-wash);
+  border-radius: 0 var(--radius-sm, 8px) var(--radius-sm, 8px) 0;
+}
+.ephesus-study .design-ladder li.rung-center .rung-text { font-weight: 600; color: var(--eph-indigo-ink); }
+.ephesus-study .rung-ref {
+  font: 500 0.74rem/1.4 var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  color: var(--text-muted, #64748b);
+}
+.ephesus-study .rung-text { font-size: 0.95rem; line-height: 1.45; }
+@media (max-width: 560px) {
+  .ephesus-study .design-ladder li { grid-template-columns: 2rem 1fr; }
+  .ephesus-study .design-ladder .rung-ref { grid-column: 2; }
+  .ephesus-study .design-ladder .rung-text { grid-column: 2; }
+  .ephesus-study .design-ladder li:nth-child(2), .ephesus-study .design-ladder li:nth-child(6),
+  .ephesus-study .design-ladder li:nth-child(3), .ephesus-study .design-ladder li:nth-child(5),
+  .ephesus-study .design-ladder li.rung-center { margin-left: 0; }
+}
+
+/* The faithful saying of 2 Timothy 2:11–13 (indigo register, not the magenta reserved for 3:16) */
+.ephesus-study .saying-block {
+  margin: 1.75rem 0 1.5rem;
+  padding: 1.5rem clamp(1.1rem, 3vw, 2rem) 1.25rem;
+  border: 1px solid rgba(67, 56, 202, 0.22);
+  border-radius: var(--radius-lg, 20px);
+  background: linear-gradient(180deg, var(--eph-indigo-wash), transparent 70%), #fff;
+}
+.ephesus-study .saying-block .hymn-heading .greek { color: var(--eph-indigo); }
+.ephesus-study .saying-lines { display: grid; gap: 0.7rem; }
+.ephesus-study .saying-lines .clause {
+  padding-top: 0.6rem;
+  border-top: 1px solid rgba(67, 56, 202, 0.14);
+}
+.ephesus-study .saying-lines .clause:first-child { border-top: 0; padding-top: 0; }
+.ephesus-study .saying-block figcaption {
+  margin-top: 1.1rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-soft, #475569);
+}
+
+/* Movements table, through lines, BP icon */
+.ephesus-study .movements-table { min-width: 560px; }
+.ephesus-study .movements-table td:first-child {
+  font: 500 0.8rem/1.5 var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  white-space: nowrap;
+}
+.ephesus-study .through-lines h4 { margin-bottom: 0.35rem; }
+.ephesus-study .through-lines p { margin: 0; font-size: 0.92rem; line-height: 1.55; }
+.ephesus-study .bp-icon {
+  width: 1.2em;
+  height: 1.2em;
+  object-fit: contain;
+  vertical-align: middle;
+  margin-right: 0.3rem;
+}
+@media print {
+  .ephesus-study .design-ladder li, .ephesus-study .saying-block { break-inside: avoid; }
+}
+
+/* ─── v1.2: people table ───────────────────────────────────────────────── */
+.ephesus-study .people-table { min-width: 720px; }
+.ephesus-study .people-table td:first-child {
+  font-family: var(--font-display, 'Cormorant Garamond', Georgia, serif);
+  font-size: 1.06rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ephesus-study .people-table td:last-child { font-size: 0.9rem; color: var(--text-soft, #475569); }
