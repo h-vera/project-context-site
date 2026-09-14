@@ -1,5 +1,5 @@
 /* ============================================================
-   EPHESUS ACROSS THE NEW TESTAMENT — page layer (v3.0)
+   EPHESUS ACROSS THE NEW TESTAMENT — page layer (v4.0)
    Path: /assets/css/ephesus-study.css
    Loads after global-v3.css (3.3.2) and global-v3-polish.css (0.3).
    Adds the visual layer the global system leaves to pages:
@@ -8,7 +8,7 @@
    vocabulary contrast grid, a three-movement progression, a
    people × records presence grid, a hearing/seeing pair, and an
    evidence/reconstruction pair. Everything reads the v3 tokens;
-   never uses !important; no body-content gradients.
+   Page-scoped additions; [hidden] is enforced for accessible controls.
    ============================================================ */
 
 .ephesus-study {
@@ -589,3 +589,167 @@
   .ephesus-study .study-hero::before { animation: none; }
   .ephesus-study .atlas-node, .ephesus-study .atlas-node::before { transition: none; }
 }
+/* ============================================================
+   12. REVISION 4.0 — full-width connections explorer + reading notes
+   Page-scoped additions only. Shared site navigation is unchanged.
+   ============================================================ */
+.ephesus-study [hidden] { display:none !important; }
+.ephesus-study .study-hero { display:block; padding:clamp(2rem,4vw,3rem); margin-bottom:1.65rem; }
+.ephesus-study .hero-main { max-width:900px; }
+.ephesus-study .hero-copy { max-width:880px; }
+.ephesus-study .hero-intro { max-width:78ch; line-height:1.75; }
+.ephesus-study .study-hero h1 { font-size:clamp(2.7rem,5.4vw,4.6rem); max-width:18ch; }
+.ephesus-study .study-hero .hero-subtitle { font-size:clamp(1.4rem,2.4vw,1.9rem); line-height:1.4; }
+.ephesus-study .connections-explorer { --route-color:#4f46e5; display:block; margin:0; background:#fff; border:1px solid #d9e1ec; border-radius:22px; overflow:hidden; box-shadow:0 10px 36px rgba(15,23,42,.06); scroll-margin-top:90px; color:#0f172a; }
+.ephesus-study .connections-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; padding:1.5rem 1.6rem 0; }
+.ephesus-study .connections-heading .eyebrow { font-size:.67rem; color:#4f46e5; margin:0 0 .4rem; letter-spacing:.14em; }
+.ephesus-study #connections-heading { font:600 clamp(1.55rem,2.4vw,2rem)/1.2 var(--font-display,Georgia,serif); color:#0f172a; margin:0; max-width:none; }
+.ephesus-study .map-version { font:600 .58rem/1.5 var(--font-mono,monospace); letter-spacing:.09em; color:#64748b; white-space:nowrap; padding:.25rem .5rem; border:1px solid #e2e8f0; border-radius:20px; }
+.ephesus-study .connections-instruction { font-size:.87rem; line-height:1.6; margin:.6rem 1.6rem 1.15rem; color:#475569; max-width:none; }
+.ephesus-study .connections-layout { display:grid; grid-template-columns:minmax(0,2.2fr) minmax(275px,1fr); gap:0; align-items:stretch; border-top:1px solid #e2e8f0; }
+.ephesus-study .connections-map-column { min-width:0; padding:.5rem .8rem 1rem; background:#fff; }
+.ephesus-study .network-viewport { overflow-x:auto; scrollbar-width:thin; scrollbar-color:#c1c9d8 #f8fafc; max-width:100%; border-radius:14px; overscroll-behavior-inline:contain; }
+.ephesus-study .network-viewport:focus-visible { outline:3px solid #a5b4fc; outline-offset:-3px; }
+.ephesus-study .network-viewport svg { display:block; width:100%; height:auto; min-width:620px; max-width:none; }
+.ephesus-study .network-board { fill:#fff; stroke:none; }
+.ephesus-study .network-regions { pointer-events:none; }
+.ephesus-study .region-aegean { fill:#06b6d4; fill-opacity:.14; stroke:#0891b2; stroke-opacity:.26; stroke-width:1.3; }
+.ephesus-study .region-asia { fill:#eab308; fill-opacity:.13; stroke:#a16207; stroke-opacity:.27; stroke-width:1.3; }
+.ephesus-study .region-label { font:700 17px var(--font-mono,monospace); letter-spacing:.2em; }
+.ephesus-study .sea-label { fill:#0e7490; }
+.ephesus-study .asia-label { fill:#8c620e; }
+.ephesus-study .region-sub { font:500 13px var(--font-body,system-ui,sans-serif); fill:#85652a; }
+.ephesus-study .map-schematic { font:600 10.5px var(--font-mono,monospace); fill:#64748b; letter-spacing:.12em; }
+.ephesus-study .network-route { transition:opacity .16s ease; pointer-events:none; }
+.ephesus-study .route-halo { stroke:#fff; stroke-width:7; fill:none; stroke-linecap:round; stroke-linejoin:round; opacity:.85; }
+.ephesus-study .route-line { stroke:var(--route-color,#4f46e5); stroke-width:2.4; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.ephesus-study .connections-explorer.has-selection .network-route { opacity:.17; }
+.ephesus-study .connections-explorer.has-selection .network-route.is-active { opacity:1; }
+.ephesus-study .network-route.is-active .route-halo { stroke-width:9; opacity:1; }
+.ephesus-study .network-route.is-active .route-line { stroke-width:3.8; }
+.ephesus-study .network-place { pointer-events:none; }
+.ephesus-study .place-halo { fill:#4f46e5; opacity:0; transition:opacity .16s ease; }
+.ephesus-study .place-central .place-halo { opacity:.13; }
+.ephesus-study .place-dot { fill:#fff; stroke:#475569; stroke-width:2.2; }
+.ephesus-study .place-central .place-dot { fill:#4f46e5; stroke:#fff; stroke-width:3; }
+.ephesus-study .place-label { font:650 16px var(--font-body,system-ui,sans-serif); fill:#243248; paint-order:stroke; stroke:rgba(255,255,255,.93); stroke-width:4; stroke-linejoin:round; }
+.ephesus-study .place-central .place-label { font-size:21px; fill:#312e81; }
+.ephesus-study .network-place.is-active .place-halo { opacity:.15; }
+.ephesus-study .network-place.is-active .place-dot { stroke:#4f46e5; stroke-width:3; }
+.ephesus-study .network-place.is-active .place-label { fill:#312e81; }
+.ephesus-study .network-marker { cursor:pointer; outline:none; }
+.ephesus-study .marker-target { fill:transparent; pointer-events:all; }
+.ephesus-study .marker-disc { fill:var(--route-color,#4f46e5); stroke:#fff; stroke-width:2.5; }
+.ephesus-study .marker-focus { stroke:var(--route-color,#4f46e5); stroke-width:2; fill:#fff; fill-opacity:.75; opacity:0; pointer-events:none; }
+.ephesus-study .marker-number { font:700 14px var(--font-mono,monospace); fill:#fff; pointer-events:none; }
+.ephesus-study .network-marker[aria-pressed="true"] .marker-focus { opacity:1; }
+.ephesus-study .network-marker:focus-visible .marker-focus { opacity:1; stroke:#111827; stroke-width:3; stroke-dasharray:3 2; }
+.ephesus-study .network-controls { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:.4rem; padding:.2rem .15rem .55rem; }
+.ephesus-study .network-button { display:inline-flex; align-items:center; justify-content:center; min-width:42px; min-height:44px; padding:.4rem .65rem; border-radius:10px; border:1px solid #cbd5e1; background:#fff; color:#334155; font:600 .81rem/1 var(--font-mono,monospace); cursor:pointer; transition:background .15s ease,box-shadow .15s ease; }
+.ephesus-study .network-button.overview-button { font-family:var(--font-body,system-ui,sans-serif); min-width:92px; }
+.ephesus-study .network-button[aria-pressed="true"] { background:var(--route-color,#4f46e5); border-color:var(--route-color,#4f46e5); color:#fff; box-shadow:0 2px 8px rgba(49,46,129,.2); }
+.ephesus-study .network-button:focus-visible { outline:3px solid #a5b4fc; outline-offset:3px; }
+@media (hover:hover) { .ephesus-study .network-button:hover { box-shadow:0 0 0 2px #c7d2fe; } }
+.ephesus-study .network-key { display:flex; flex-wrap:wrap; justify-content:center; gap:.25rem .9rem; padding:0 .3rem; font-size:.65rem; color:#526277; margin:.5rem 0 0; line-height:1.7; max-width:none; }
+.ephesus-study .network-key span { display:inline-flex; align-items:center; gap:.4rem; }
+.ephesus-study .line-example { display:inline-block; width:22px; height:0; border-top:2px solid #64748b; }
+.ephesus-study .line-example.dashed { border-top-style:dashed; }
+.ephesus-study .line-example.dotted { border-top-style:dotted; }
+.ephesus-study .map-small-note { font-size:.66rem; line-height:1.55; color:#64748b; margin:.5rem auto 0; max-width:66ch; text-align:center; }
+.ephesus-study .connection-panel { padding:1.45rem 1.5rem; border-left:1px solid #e2e8f0; background:#f7f9fd; min-height:470px; align-self:stretch; overflow-wrap:anywhere; }
+.ephesus-study .connection-panel h3,.ephesus-study .connection-directory h3 { font:600 1.48rem/1.17 var(--font-display,Georgia,serif); color:#0f172a; margin:.65rem 0 .6rem; }
+.ephesus-study .connection-kicker { font:600 .65rem/1.6 var(--font-mono,monospace); letter-spacing:.11em; color:var(--route-color,#4f46e5); }
+.ephesus-study .connection-panel p,.ephesus-study .connection-directory p { font-size:.87rem; line-height:1.65; margin:.8rem 0; max-width:none; color:#334155; }
+.ephesus-study p.connection-places { font-weight:650; font-size:.85rem; margin:.2rem 0 .75rem; color:#1e293b; }
+.ephesus-study .connection-kind { display:inline-block; padding:.25rem .55rem; border-radius:6px; color:#475569; background:#e9eef6; font:600 .63rem/1.5 var(--font-body,system-ui,sans-serif); }
+.ephesus-study .connection-people strong { display:block; font:700 .65rem/1.6 var(--font-mono,monospace); text-transform:uppercase; color:#64748b; letter-spacing:.07em; margin-bottom:.12rem; }
+.ephesus-study p.connection-note { font-size:.76rem; line-height:1.65; border-left:2px solid #cbd5e1; padding-left:.75rem; color:#5b6576; }
+.ephesus-study .connection-source a { color:#4338ca; font-size:.77rem; text-decoration:underline; text-underline-offset:.18em; }
+.ephesus-study .connection-link { display:inline-flex; gap:.4rem; align-items:center; font:650 .78rem/1.6 var(--font-body,system-ui,sans-serif); color:#4338ca; text-decoration:none; padding:.35rem 0; margin-top:.35rem; }
+.ephesus-study .connection-link:hover { text-decoration:underline; text-underline-offset:.15em; }
+.ephesus-study .connection-link:focus-visible,.ephesus-study .connection-source a:focus-visible { outline:3px solid #a5b4fc; outline-offset:3px; }
+.ephesus-study .connection-directory { border-top:1px solid #e2e8f0; padding:.8rem 1.6rem; background:#fff; }
+.ephesus-study .connection-directory summary { cursor:pointer; font:600 .78rem/1.6 var(--font-body,system-ui,sans-serif); color:#475569; padding:.2rem 0; }
+.ephesus-study .connection-directory ol { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); list-style:none; gap:1rem; margin:1rem 0; padding:0; }
+.ephesus-study .connection-directory li { margin:0; padding:1.1rem 1.2rem; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; }
+.ephesus-study .connection-directory h3 { font-size:1.25rem; }
+.ephesus-study .map-caption { font-size:.68rem; line-height:1.65; color:#64748b; border-top:1px solid #e2e8f0; margin:0; padding:.7rem 1.6rem; }
+.ephesus-study .edition-line { font:500 .65rem/1.6 var(--font-mono,monospace); color:var(--text-muted,#64748b); margin:1rem 0 1.8rem; }
+.ephesus-study .editorial-note { background:var(--bg-2,#f8fafc); border:1px solid var(--border,#e2e8f0); border-left:3px solid #a5b4fc; border-radius:12px; margin:1.3rem 0; scroll-margin-top:100px; }
+.ephesus-study .editorial-note > summary { cursor:pointer; padding:.95rem 1.15rem; font:650 .94rem/1.5 var(--font-body,system-ui,sans-serif); color:#34336d; }
+.ephesus-study .editorial-note > summary:focus-visible,.ephesus-study .connection-directory summary:focus-visible { outline:3px solid #a5b4fc; outline-offset:2px; border-radius:6px; }
+.ephesus-study .editorial-note > summary::marker { color:#6366f1; }
+.ephesus-study .editorial-note[open] > summary { border-bottom:1px solid var(--border,#e2e8f0); }
+.ephesus-study .note-body { padding:1.15rem 1.3rem 1.25rem; }
+.ephesus-study .note-body > :first-child { margin-top:0; }
+.ephesus-study .note-body > :last-child { margin-bottom:0; }
+.ephesus-study .note-body p { font-size:.93rem; line-height:1.8; max-width:80ch; }
+.ephesus-study .note-body h4 { font-size:1.15rem; margin:1.5rem 0 .5rem; }
+.ephesus-study .note-source,.ephesus-study .note-body .note-source { color:#64748b; font-size:.8rem; }
+.ephesus-study .note-reference { display:inline; font-size:.8rem; text-decoration:underline; text-underline-offset:.18em; }
+.ephesus-study .snapshot-orientation { padding:1rem 1.15rem; background:#f1f5fd; border-left:3px solid #818cf8; border-radius:0 10px 10px 0; font-size:.92rem; }
+.ephesus-study .snapshot-summary { width:100%; min-width:600px; }
+.ephesus-study .snapshot-summary th:first-child { width:21%; }
+.ephesus-study .snapshot-summary th { vertical-align:top; }
+.ephesus-study .people-table td:first-child { white-space:normal; min-width:145px; }
+.ephesus-study .time-stage .b { font-size:13px; }
+.ephesus-study .time-stage .h { font-size:18px; }
+.ephesus-study .time-stage .s { font-size:12px; }
+.ephesus-study .grid-2,.ephesus-study .grid-3,.ephesus-study .mini-card-grid { min-width:0; }
+.ephesus-study .grid-2 > *,.ephesus-study .grid-3 > *,.ephesus-study .mini-card-grid > * { min-width:0; }
+@media (max-width:1080px) {
+ .ephesus-study .connections-layout { grid-template-columns:minmax(0,1fr); }
+ .ephesus-study .network-viewport svg { min-width:620px; }
+ .ephesus-study .connection-panel { border-left:0; border-top:1px solid #e2e8f0; min-height:295px; }
+ .ephesus-study .connection-panel .connection-content { display:grid; grid-template-columns:minmax(220px,.8fr) minmax(0,1.25fr); column-gap:2rem; align-items:start; }
+ .ephesus-study .connection-panel .connection-content > .connection-kicker,.ephesus-study .connection-panel .connection-content > h3,.ephesus-study .connection-panel .connection-content > .connection-places,.ephesus-study .connection-panel .connection-content > .connection-kind,.ephesus-study .connection-panel .connection-content > .connection-people { grid-column:1; }
+ .ephesus-study .connection-panel .connection-content > p:not([class]) { grid-column:2; grid-row:1 / span 3; margin-top:0; }
+ .ephesus-study .connection-panel .connection-content > .connection-note { grid-column:2; grid-row:4 / span 2; }
+ .ephesus-study .connection-panel .connection-content > .connection-source { grid-column:1; }
+ .ephesus-study .connection-panel .connection-content > .connection-link { grid-column:2; }
+ .ephesus-study .connection-panel .connection-overview { max-width:76ch; }
+}
+@media (max-width:640px) {
+ .ephesus-study .content-section { padding-inline:1rem; }
+ .ephesus-study .study-hero { padding:1.75rem 1.35rem; border-radius:18px; }
+ .ephesus-study .study-hero h1 { font-size:2.75rem; }
+ .ephesus-study .connections-heading { padding:1.2rem 1.1rem 0; }
+ .ephesus-study .map-version { display:none; }
+ .ephesus-study .connections-instruction { margin:.65rem 1.1rem 1rem; font-size:.82rem; }
+ .ephesus-study .connections-map-column { padding:.35rem .5rem .85rem; }
+ .ephesus-study .network-controls { gap:.35rem; padding-top:.55rem; }
+ .ephesus-study .network-button { min-width:44px; }
+ .ephesus-study .network-viewport { border-bottom:1px solid #e2e8f0; }
+ .ephesus-study .connection-panel { padding:1.25rem; min-height:390px; }
+ .ephesus-study .connection-panel .connection-content { display:block; }
+ .ephesus-study .connection-panel p { font-size:.87rem; }
+ .ephesus-study .connection-panel p.connection-note { font-size:.77rem; }
+ .ephesus-study .connection-directory { padding:.8rem 1rem; }
+ .ephesus-study .connection-directory ol { grid-template-columns:minmax(0,1fr); }
+ .ephesus-study .map-caption { padding:.7rem 1rem; }
+ .ephesus-study .note-body { padding:1rem; }
+ .ephesus-study .snapshot-summary { min-width:590px; }
+}
+@media (prefers-reduced-motion:reduce) {
+ .ephesus-study .network-route,.ephesus-study .place-halo,.ephesus-study .network-button { transition:none; }
+}
+@media print {
+ .ephesus-study .network-controls,.ephesus-study .connection-panel,.ephesus-study .connections-instruction,.ephesus-study .map-version { display:none !important; }
+ .ephesus-study .connections-layout { display:block; }
+ .ephesus-study .network-viewport { overflow:visible; }
+ .ephesus-study .network-viewport svg { min-width:0; max-width:100%; }
+ .ephesus-study .connections-explorer.has-selection .network-route { opacity:1; }
+ .ephesus-study .marker-focus { opacity:0; }
+ .ephesus-study .connection-directory ol { display:block; }
+ .ephesus-study .connection-directory li { break-inside:avoid; margin-bottom:.75rem; }
+ .ephesus-study .connection-directory,.ephesus-study .editorial-note { break-inside:auto; }
+ .ephesus-study .connections-explorer { overflow:visible; box-shadow:none; }
+ .ephesus-study .editorial-note > summary { break-after:avoid; }
+ .ephesus-study .connection-link { display:none; }
+ .ephesus-study .note-body { display:block; }
+}
+
+/* Horizontal-map instruction appears only where the canvas is scrollable. */
+.ephesus-study .network-mobile-help {display:none;}
+@media(max-width:640px){.ephesus-study .network-mobile-help {display:block;font-size:.69rem;line-height:1.6;color:#64748b;padding:.45rem .5rem .1rem;margin:0;}}
+@media print{.ephesus-study .network-mobile-help{display:none;}}
