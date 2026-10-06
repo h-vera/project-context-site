@@ -1884,3 +1884,353 @@ const GEO_DATA = {
   for (const [id, m] of Object.entries({"2-8-e":"Vertical angles are congruent, so their measures are equal. Substitute to get 2x + 10 = 50. Subtract 10 from both sides to get 2x = 40, then divide both sides by 2 to get x = 20.","2-8-f":"The linear pairs give m∠1 + m∠2 = 180° and m∠2 + m∠3 = 180° by the Supplement Theorem. Both sums equal 180°, so they equal each other. Subtract m∠2 from both sides to get m∠1 = m∠3. Therefore ∠1 ≅ ∠3 by the definition of congruent angles."})) t.questions.find(q => q.id === id).model = m;
   t.questions.push(...[{"id":"2-8-w","prompt":"Ray BD is inside ∠ABC. m∠ABC = 110° and m∠ABD = 59°. Find m∠DBC and name the postulate you use.","key":"51°. The Angle Addition Postulate gives 59 + m∠DBC = 110. Subtract 59 from both sides.","model":"51°. The Angle Addition Postulate gives 59 + m∠DBC = 110. Subtract 59 from both sides.","expectedTerms":["Angle Addition Postulate"],"hint":"Say what the given relationship tells you. Then connect that action to a reason in the Reason Finder.","visual":"","visualText":""},{"id":"2-8-x","prompt":"∠A and ∠B are both right angles. Why are they congruent?","key":"All right angles are congruent. Both have measure 90°. Accept Right Angle Congruence Theorem or equivalent theorem wording.","model":"All right angles are congruent. Both have measure 90°. Accept Right Angle Congruence Theorem or equivalent theorem wording.","expectedTerms":["All right angles are congruent"],"hint":"Say what the given relationship tells you. Then connect that action to a reason in the Reason Finder.","visual":"","visualText":""},{"id":"2-8-y","prompt":"∠A is complementary to ∠C. ∠B is complementary to ∠D. Given ∠C ≅ ∠D, what follows about ∠A and ∠B? Name the theorem.","key":"∠A ≅ ∠B by the Congruent Complements Theorem. Complements of congruent angles are congruent.","model":"∠A ≅ ∠B by the Congruent Complements Theorem. Complements of congruent angles are congruent.","expectedTerms":["Congruent Complements Theorem"],"hint":"Say what the given relationship tells you. Then connect that action to a reason in the Reason Finder.","visual":"","visualText":""},{"id":"2-8-z","prompt":"∠A is supplementary to ∠C. ∠B is supplementary to ∠D. Given ∠C ≅ ∠D, what follows about ∠A and ∠B? Name the theorem.","key":"∠A ≅ ∠B by the Congruent Supplements Theorem. Supplements of congruent angles are congruent.","model":"∠A ≅ ∠B by the Congruent Supplements Theorem. Supplements of congruent angles are congruent.","expectedTerms":["Congruent Supplements Theorem"],"hint":"Say what the given relationship tells you. Then connect that action to a reason in the Reason Finder.","visual":"","visualText":""},{"id":"2-8-aa","prompt":"Given m∠A = m∠B, which reason lets you write ∠A ≅ ∠B?","key":"Definition of congruent angles. Equal angle measures mean congruent angles.","model":"Definition of congruent angles. Equal angle measures mean congruent angles.","expectedTerms":["Definition of congruent angles"],"hint":"Say what the given relationship tells you. Then connect that action to a reason in the Reason Finder.","visual":"","visualText":""},{"id":"2-8-ab","prompt":"Name the property: ∠A ≅ ∠A.","key":"Reflexive Property of Congruence. An angle is congruent to itself.","model":"Reflexive Property of Congruence. An angle is congruent to itself.","expectedTerms":["Reflexive Property of Congruence"],"hint":"Say what the given relationship tells you. Then connect that action to a reason in the Reason Finder.","visual":"","visualText":""},{"id":"2-8-ac","prompt":"Name the property: if ∠A ≅ ∠B, then ∠B ≅ ∠A.","key":"Symmetric Property of Congruence. The order of the angle names is reversed.","model":"Symmetric Property of Congruence. The order of the angle names is reversed.","expectedTerms":["Symmetric Property of Congruence"],"hint":"Say what the given relationship tells you. Then connect that action to a reason in the Reason Finder.","visual":"","visualText":""},{"id":"2-8-u","prompt":"Name the property: if ∠A ≅ ∠B and ∠B ≅ ∠C, then ∠A ≅ ∠C.","key":"Transitive Property of Congruence. Both are linked through ∠B.","model":"Transitive Property of Congruence. Both are linked through ∠B.","expectedTerms":["Transitive Property of Congruence"],"hint":"Say what the given relationship tells you. Then connect that action to a reason in the Reason Finder.","visual":"","visualText":""},{"id":"2-8-v","prompt":"In an angle proof, m∠1 + 40 = 180 becomes m∠1 = 140. Name the property and explain the action.","key":"Subtraction Property of Equality. Subtract 40 from both sides, then simplify.","model":"Subtraction Property of Equality. Subtract 40 from both sides, then simplify.","expectedTerms":["Subtraction Property of Equality"],"hint":"Say what the given relationship tells you. Then connect that action to a reason in the Reason Finder.","visual":"","visualText":""}]);
 })();
+
+/* ===== Match the teacher's notes (October 6): Definitions, Postulates, Theorems and the Reasons Bank =====
+   1. Every reason uses the exact name on the teacher's sheet, plus the line from her notes ("notes").
+   2. New reason: Definition of an Angle Bisector.
+   3. The Reason Finder gets a second view laid out like the teacher's Reasons Bank (reasonBank).
+   4. Older names in questions, proofs and answer keys are switched to the teacher's names. */
+(() => {
+  const D = GEO_DATA, R = D.reasons;
+  R.defbisect = {name: 'Definition of an Angle Bisector', short: 'Def. of ∠ bisector', did: 'The bisector ray cuts the angle into two equal parts, so the two parts are congruent.'};
+  // id: [name on the teacher's sheet, short form, the line from her notes]
+  const SHEET = {
+    add: ['Addition Property', 'Add. Prop.', 'If a = b, then a + c = b + c'],
+    sub: ['Subtraction Property', 'Subt. Prop.', 'If a = b, then a − c = b − c'],
+    mult: ['Multiplication Property', 'Mult. Prop.', 'If a = b, then ac = bc'],
+    div: ['Division Property', 'Div. Prop.', 'If a = b, then a ÷ c = b ÷ c, where c ≠ 0'],
+    dist: ['Distributive Property', 'Dist. Prop.', 'a(b + c) = ab + ac'],
+    subst: ['Substitution Property', 'Subst.', 'If a = b, then a can be replaced by b in any expression or equation.'],
+    refl: ['Reflexive Property', 'Refl. Prop.', 'For any real number a, a = a'],
+    sym: ['Symmetric Property', 'Sym. Prop.', 'If a = b, then b = a'],
+    trans: ['Transitive Property', 'Trans. Prop.', 'If a = b and b = c, then a = c'],
+    reflcong: ['Reflexive Property of Congruence', 'Refl. Prop. of ≅', 'AB ≅ AB. An angle works too: ∠A ≅ ∠A'],
+    symcong: ['Symmetric Property of Congruence', 'Sym. Prop. of ≅', 'If AB ≅ CD, then CD ≅ AB'],
+    transcong: ['Transitive Property of Congruence', 'Trans. Prop. of ≅', 'If AB ≅ CD and CD ≅ EF, then AB ≅ EF'],
+    defcong: ['Definition of Congruence', 'Def. of ≅', 'm∠A = m∠B ↔ ∠A ≅ ∠B. Segments too: AB = CD ↔ AB ≅ CD'],
+    defright: ['Definition of a Right Angle', 'Def. of rt. ∠', 'm∠A = 90° ↔ ∠A is a right angle'],
+    defcomp: ['Definition of Complementary Angles', 'Def. of compl. ∠s', 'Complementary ↔ the sum is 90°'],
+    defsupp: ['Definition of Supplementary Angles', 'Def. of suppl. ∠s', 'Supplementary ↔ the sum is 180°'],
+    defbisect: ['Definition of an Angle Bisector', 'Def. of ∠ bisector', 'An angle bisector divides an angle into two equal parts.'],
+    defperp: ['Definition of Perpendicular', 'Def. of ⊥', 'Perpendicular lines form right angles.'],
+    angadd: ['Angle Addition Postulate', '∠ Add. Post.', 'm∠ABD + m∠DBC = m∠ABC'],
+    vert: ['Vertical Angles Theorem', 'Vert. ∠s Thm.', 'Vertical angles → congruent'],
+    compl: ['Complement Theorem', 'Compl. Thm.', 'Form a right angle → complementary'],
+    suppl: ['Linear Pair (Supplement) Theorem', 'Linear Pair Thm.', 'Form a linear pair → supplementary'],
+    congcomp: ['Congruent Complements Theorem', '≅ Compl. Thm.', 'If two angles are complementary to the same angle, then they are congruent. It also works when they are complementary to two congruent angles.'],
+    congsupp: ['Congruent Supplements Theorem', '≅ Suppl. Thm.', 'If two angles are supplementary to the same angle, then they are congruent. It also works when they are supplementary to two congruent angles.'],
+    segadd: ['Segment Addition Postulate', 'Seg. Add. Post.', 'If B is between A and C, then AB + BC = AC'],
+    midpt: ['Definition of Midpoint', 'Def. of midpoint', 'If M is the midpoint of AB, then AM ≅ MB']
+  };
+  for (const [id, [name, short, notes]] of Object.entries(SHEET)) Object.assign(R[id], {name, short, notes});
+  // Plain-words lines that now say "it works both ways", like the arrows (↔) on her sheet.
+  Object.assign(R.defcong, {did: 'I switched between ≅ and =. It works both ways: congruent angles have equal measures, and equal measures mean congruent angles. Segments work the same way.'});
+  Object.assign(R.defright, {did: 'I switched between the words right angle and the number 90. It works both ways.'});
+  Object.assign(R.defcomp, {did: 'I switched between the word complementary and the sum 90. It works both ways.'});
+  Object.assign(R.defsupp, {did: 'I switched between the word supplementary and the sum 180. It works both ways.'});
+  Object.assign(R.defperp, {did: 'The lines are perpendicular, so the angles they make are right angles. It works both ways: lines that make a right angle are perpendicular.'});
+  Object.assign(R.suppl, {did: 'Two angles sit side by side on a straight line (a linear pair), so they are supplementary: they add to 180.'});
+  Object.assign(R.compl, {did: 'Two angles sit side by side and fill a right angle, so they are complementary: they add to 90.'});
+  Object.assign(R.refl, {did: 'Something is equal to itself: a = a, or m∠1 = m∠1.'});
+  Object.assign(R.transcong, {did: 'If ∠A ≅ ∠B and ∠B ≅ ∠C, then ∠A ≅ ∠C. The middle angle connects them. It is the Transitive Property, used with ≅.'});
+  D.reasonMixups.defbisect = ['midpt', 'angadd'];
+
+  // Plain-words Reason Finder: what she did, then the name.
+  D.reasonFinder = [
+    {title: 'It came from the problem', ids: ['given']},
+    {title: 'I looked at an angle picture', ids: ['suppl', 'compl', 'vert', 'angadd', 'congsupp', 'congcomp']},
+    {title: 'The problem says bisects or perpendicular', ids: ['defbisect', 'defperp']},
+    {title: 'I switched between words and numbers', ids: ['defcong', 'defright', 'defcomp', 'defsupp']},
+    {title: 'I did algebra', ids: ['subst', 'add', 'sub', 'mult', 'div', 'dist']},
+    {title: 'I linked equal things (=)', ids: ['refl', 'sym', 'trans']},
+    {title: 'I linked congruent things (≅)', ids: ['reflcong', 'symcong', 'transcong']},
+    {title: 'I looked at a segment picture', ids: ['segadd', 'midpt']},
+    {title: 'I used an if-then rule', ids: ['detach', 'syllog', 'matchthen'], lesson: '2-4'}
+  ];
+  // The same reasons, laid out like the teacher's Reasons Bank.
+  D.reasonBank = [
+    {title: 'Properties of Equality', ids: ['add', 'sub', 'mult', 'div', 'dist', 'subst', 'refl', 'sym', 'trans']},
+    {title: 'Properties of Congruence', ids: ['reflcong', 'symcong', 'transcong']},
+    {title: 'Definitions', ids: ['defcong', 'defright', 'defcomp', 'defsupp', 'defbisect', 'defperp']},
+    {title: 'Postulates', ids: ['angadd']},
+    {title: 'Theorems', ids: ['vert', 'compl', 'suppl', 'congcomp', 'congsupp']},
+    {title: 'Also in your notes', ids: ['segadd', 'midpt']}
+  ];
+
+  // Older names in every question, proof, model answer and answer key become the teacher's names.
+  const SWAPS = [
+    [/\bSupplement Theorem\b/g, 'Linear Pair Theorem'],
+    [/\b[Dd]efinition of congruent (?:angles|segments)\b/g, 'Definition of Congruence'],
+    [/\b[Dd]efinition of (?:a )?right angle\b/g, 'Definition of a Right Angle'],
+    [/\b[Dd]efinition of supplementary angles\b/g, 'Definition of Supplementary Angles'],
+    [/\b[Dd]efinition of complementary angles\b/g, 'Definition of Complementary Angles'],
+    [/\b[Dd]efinition of perpendicular lines\b/g, 'Definition of Perpendicular'],
+    [/\b[Dd]efinition of midpoint\b/g, 'Definition of Midpoint'],
+    [/\b(Addition|Subtraction|Multiplication|Division) Property of Equality\b/g, '$1 Property'],
+    [/\b([Bb])y Substitution\b(?! Property)/g, '$1y the Substitution Property'],
+    [/\(Substitution\)/g, '(Substitution Property)']
+  ];
+  const swap = s => SWAPS.reduce((t, [re, to]) => t.replace(re, to), s);
+  const walk = o => { for (const k of Object.keys(o)) { const v = o[k]; if (typeof v === 'string') o[k] = swap(v); else if (v && typeof v === 'object') walk(v); } };
+  // Runs now, and again at the end of part 3 so the new problems get the same names.
+  D._teacherNames = () => { walk(D.topics); walk(D.workshop); };
+  D._teacherNames();
+})();
+
+/* ===== Teacher's notes, part 2: proofs use only reasons from the Reasons Bank, plus angle bisector practice ===== */
+(() => {
+  const D = GEO_DATA, W = id => D.workshop.find(w => w.id === id);
+  const esc = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const f = n => Math.round(n * 10) / 10;
+  const pt = (cx, cy, deg, r) => [cx + r * Math.cos(deg * Math.PI / 180), cy - r * Math.sin(deg * Math.PI / 180)];
+  const head = (x, y, deg) => { const a = pt(x, y, deg + 158, 15), b = pt(x, y, deg + 202, 15); return `<path d="M${f(x)} ${f(y)}L${f(a[0])} ${f(a[1])}L${f(b[0])} ${f(b[1])}Z" fill="#334155"/>`; };
+  const ray = (cx, cy, deg, len) => { const a = pt(cx, cy, deg, len); return `<line x1="${f(cx)}" y1="${f(cy)}" x2="${f(a[0])}" y2="${f(a[1])}" stroke="#334155" stroke-width="3.5"/>${head(a[0], a[1], deg)}`; };
+  const text = (x, y, t, size = 21, fill = '#172638', weight = 700) => `<text x="${f(x)}" y="${f(y)}" text-anchor="middle" dominant-baseline="middle" font-size="${size}" font-weight="${weight}" fill="${fill}">${esc(t)}</text>`;
+  const at = (cx, cy, deg, r, t, size, fill) => { const p = pt(cx, cy, deg, r); return text(p[0], p[1], t, size, fill); };
+  const dot = (x, y) => `<circle cx="${f(x)}" cy="${f(y)}" r="5.5" fill="#172638"/>`;
+  const svg = (desc, body, h = 260) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 ${h}" role="img" aria-label="${esc(desc)}"><title>${esc(desc)}</title>${body}</svg>`;
+  const note = (h, t = 'Diagram not to scale') => text(300, h - 14, t, 15, '#475569', 400);
+  // Rays from one vertex, each with a point on it and its letter past the arrow.
+  const rays = (cx, cy, list) => list.map(([n, d, len]) => { const p = pt(cx, cy, d, len - 45), q = pt(cx, cy, d, len + 22); return ray(cx, cy, d, len) + dot(p[0], p[1]) + text(q[0], q[1], n, 20); }).join('') + dot(cx, cy);
+  const findFrame = 'First, I see that ___, so ___ (reason: ___). Next, I plug in the expressions: ___ (Substitution). Then I solve: ___ (reason for each move). So the angles are ___ (Substitution).';
+  const proofFrame = 'We are given ___. By ___, ___. Since ___, ___ by ___. So ___ by ___.';
+  const src = 'New practice problem';
+
+  // Congruent linear pair: the right-angle theorems are not on her Reasons Bank, so the proof uses bank reasons only.
+  Object.assign(W('w-28-right-pair'), {
+    prompt: 'Given: ∠1 and ∠2 form a linear pair, and ∠1 ≅ ∠2. Prove: ∠1 and ∠2 are right angles.',
+    steps: [
+      {id: 'a', s: '∠1 and ∠2 form a linear pair, and ∠1 ≅ ∠2', r: 'given', did: 'These two facts are stated in the problem.', needs: []},
+      {id: 'b', s: '∠1 and ∠2 are supplementary', r: 'suppl', did: '∠1 and ∠2 sit side by side on a straight line (a linear pair), so they are supplementary.', needs: ['a']},
+      {id: 'b-sum', s: 'm∠1 + m∠2 = 180', r: 'defsupp', did: 'I switched the word supplementary to the sum 180.', needs: ['b'], opts: ['defsupp', 'defcomp', 'angadd']},
+      {id: 'c', s: 'm∠1 = m∠2', r: 'defcong', did: 'Congruent angles have equal measures, so I switched ≅ to =.', needs: ['a']},
+      {id: 'd', s: 'm∠1 + m∠1 = 180', r: 'subst', did: 'I replaced m∠2 with m∠1, because they are equal.', needs: ['b-sum', 'c']},
+      {id: 'e', s: '2(m∠1) = 180', r: 'subst', did: 'I combined like terms: m∠1 + m∠1 = 2(m∠1).', needs: ['d'], opts: ['subst', 'add', 'mult']},
+      {id: 'f', s: 'm∠1 = 90', r: 'div', did: 'I divided both sides by 2.', needs: ['e']},
+      {id: 'g', s: 'm∠2 = 90', r: 'subst', did: 'm∠2 = m∠1, and m∠1 = 90, so I replaced m∠1 with 90. The Transitive Property also works here.', needs: ['c', 'f'], acceptedReasons: ['subst', 'trans'], opts: ['subst', 'add', 'vert']},
+      {id: 'h', s: '∠1 and ∠2 are right angles', r: 'defright', did: 'An angle that measures 90 is a right angle.', needs: ['f', 'g']}
+    ],
+    check: '90 + 90 = 180, so the two angles still make a straight line.',
+    explainPrompt: 'Explain why ∠1 and ∠2 are right angles. Say each step in order and name its reason.',
+    frame: proofFrame,
+    model: '∠1 and ∠2 form a linear pair, so they are supplementary by the Linear Pair Theorem, and m∠1 + m∠2 = 180 by the Definition of Supplementary Angles. They are congruent, so m∠1 = m∠2 by the Definition of Congruence. By Substitution, m∠1 + m∠1 = 180, so 2(m∠1) = 180. By the Division Property, m∠1 = 90. By Substitution, m∠2 = 90. An angle that measures 90 is a right angle, so both are right angles by the Definition of a Right Angle.',
+    key: 'Steps: Given; ∠1 and ∠2 are supplementary (Linear Pair Theorem); m∠1 + m∠2 = 180 (Definition of Supplementary Angles; accept the Linear Pair Theorem giving the sum directly); m∠1 = m∠2 (Definition of Congruence); m∠1 + m∠1 = 180 and 2(m∠1) = 180 (Substitution); m∠1 = 90 (Division Property); m∠2 = 90 (Substitution or Transitive Property); right angles (Definition of a Right Angle). The textbook theorem "two congruent angles that form a linear pair are right angles" is not on her teacher\'s Reasons Bank: accept it if used correctly, but the bank route above is preferred.',
+    hl: {a: '1 2', b: '1|2', 'b-sum': '1|2', c: '1 2', d: '1', e: '1', f: '1', g: '2', h: '1 2'}
+  });
+
+  // Vertical angles proof: the Definition of linear pair is not on her Reasons Bank, so the linear pairs go straight to the Linear Pair Theorem.
+  Object.assign(W('w-n-vertproof'), {
+    steps: [
+      {id: 'a', s: '∠1 and ∠3 are vertical angles', r: 'given', did: 'It is the Given line of the problem.', needs: []},
+      {id: 'b', s: '∠1 and ∠2 are supplementary, and ∠2 and ∠3 are supplementary', r: 'suppl', did: 'In the picture, ∠1 and ∠2 sit side by side on a straight line (a linear pair). So do ∠2 and ∠3. A linear pair is supplementary.', needs: ['a']},
+      {id: 'c', s: '∠1 ≅ ∠3', r: 'congsupp', did: '∠1 and ∠3 are both supplementary to the same angle, ∠2, so they are congruent.', needs: ['b'], opts: ['congsupp', 'congcomp', 'suppl']}
+    ],
+    prompt: 'Given: ∠1 and ∠3 are vertical angles. Prove: ∠1 ≅ ∠3. Do not use the Vertical Angles Theorem: this proof shows why it is true.',
+    hl: {a: '1 3', b: '1|2|3', c: '1 3'},
+    model: 'We are given that ∠1 and ∠3 are vertical angles. In the picture, ∠1 and ∠2 form a linear pair, and so do ∠2 and ∠3. So each pair is supplementary by the Linear Pair Theorem. ∠1 and ∠3 are both supplementary to ∠2, so ∠1 ≅ ∠3 by the Congruent Supplements Theorem.',
+    key: 'Chain: Given; Linear Pair Theorem (both pairs are supplementary); Congruent Supplements Theorem. Also accept an extra line saying the angles form linear pairs (the book calls it the Definition of linear pair; it is not on her teacher\'s Reasons Bank). Also valid: m∠1 + m∠2 = 180 and m∠2 + m∠3 = 180, then Substitution and the Subtraction Property give m∠1 = m∠3, then the Definition of Congruence. Do not accept the Vertical Angles Theorem as the reason for the last step, because that theorem is what is being proved.'
+  });
+
+  // Angle bisector practice (Definition of an Angle Bisector is on her Reasons Bank).
+  D.workshop.push(
+  {
+    id: 'w-n-bisect-num', group: 'find', lesson: '2-8', source: src,
+    title: 'An angle bisector, no x',
+    prompt: 'Ray BD bisects ∠ABC. m∠ABD = 35. Find m∠DBC and m∠ABC. Name the reason for each step.',
+    visual: svg('Angle ABC with vertex B. Ray BD is inside it and bisects it. The top part, angle ABD, measures 35 degrees.',
+      rays(200, 225, [['A', 70, 190], ['D', 35, 250], ['C', 0, 290]]) + text(200, 252, 'B', 20) + at(200, 225, 52.5, 115, '35°', 19) + note(285), 285),
+    visualText: 'Ray BD is inside ∠ABC. The problem says BD bisects ∠ABC. Only ∠ABD has a number: 35.',
+    steps: [
+      {id: 'a', s: '∠ABD ≅ ∠DBC', r: 'defbisect', did: 'Ray BD bisects ∠ABC, so it cuts the angle into two equal parts.', needs: []},
+      {id: 'b', s: 'm∠ABD = m∠DBC', r: 'defcong', did: 'Congruent angles have equal measures, so I switched ≅ to =.', needs: ['a']},
+      {id: 'c', s: 'm∠DBC = 35', r: 'subst', did: 'I replaced m∠ABD with 35. The Transitive Property also works here.', needs: ['b'], acceptedReasons: ['subst', 'trans'], opts: ['subst', 'add', 'vert']},
+      {id: 'd', s: 'm∠ABD + m∠DBC = m∠ABC', r: 'angadd', did: 'The two parts make the whole angle, so part + part = whole.', needs: []},
+      {id: 'e', s: 'm∠ABC = 35 + 35 = 70', r: 'subst', did: 'I plugged in 35 for each part and added.', needs: ['c', 'd']}
+    ],
+    check: '35 + 35 = 70, and half of 70 is 35.',
+    explainPrompt: 'Explain how you found m∠DBC and m∠ABC. Say each step in order and name its reason.',
+    frame: 'Ray BD bisects ∠ABC, so ___ (reason: ___). So m∠DBC = ___ (reason: ___). Then m∠ABD + m∠DBC = m∠ABC (reason: ___), so m∠ABC = ___.',
+    model: 'Ray BD bisects ∠ABC, so ∠ABD ≅ ∠DBC by the Definition of an Angle Bisector. Congruent angles have equal measures, so m∠ABD = m∠DBC by the Definition of Congruence. By Substitution, m∠DBC = 35. By the Angle Addition Postulate, m∠ABD + m∠DBC = m∠ABC. By Substitution, m∠ABC = 35 + 35 = 70.',
+    key: 'Values: m∠DBC = 35, m∠ABC = 70. Key reasons: Definition of an Angle Bisector (two equal parts), Definition of Congruence (≅ to =), Angle Addition Postulate (part + part = whole), Substitution. Accept the Transitive Property for m∠DBC = 35. Accept "half of 70 is 35" reasoning if the bisector is named.',
+    angles: {ABD: [200, 225, 35, 70, 82], DBC: [200, 225, 0, 35, 82], ABC: [200, 225, 0, 70, 55]},
+    hl: {a: 'ABD DBC', b: 'ABD DBC', c: 'DBC', d: 'ABD|DBC', e: 'ABC'}
+  },
+  {
+    id: 'w-n-bisect-x', group: 'find', lesson: '2-8', source: src,
+    title: 'An angle bisector, with x',
+    prompt: 'Ray BD bisects ∠ABC. m∠ABD = 3x + 6 and m∠DBC = 5x − 10. Find x, m∠ABD and m∠DBC. Name the reason for each step.',
+    visual: svg('Angle ABC with vertex B. Ray BD bisects it. The top part, angle ABD, is 3x plus 6. The bottom part, angle DBC, is 5x minus 10.',
+      rays(170, 225, [['A', 80, 190], ['D', 40, 260], ['C', 0, 320]]) + text(170, 252, 'B', 20) + at(170, 225, 58, 135, '(3x + 6)°', 17) + at(170, 225, 20, 160, '(5x − 10)°', 17) + note(285), 285),
+    visualText: 'Ray BD is inside ∠ABC. The problem says BD bisects ∠ABC.',
+    steps: [
+      {id: 'a', s: '∠ABD ≅ ∠DBC', r: 'defbisect', did: 'Ray BD bisects ∠ABC, so it cuts the angle into two equal parts.', needs: []},
+      {id: 'b', s: 'm∠ABD = m∠DBC', r: 'defcong', did: 'Congruent angles have equal measures, so I switched ≅ to =.', needs: ['a']},
+      {id: 'c', s: '3x + 6 = 5x − 10', r: 'subst', did: 'I plugged in the two expressions.', needs: ['b'], opts: ['subst', 'add', 'sub']},
+      {id: 'd', s: '6 = 2x − 10', r: 'sub', did: 'I subtracted 3x from both sides.', needs: ['c']},
+      {id: 'e', s: '16 = 2x', r: 'add', did: 'I added 10 to both sides.', needs: ['d']},
+      {id: 'f', s: '8 = x', r: 'div', did: 'I divided both sides by 2.', needs: ['e']},
+      {id: 'g', s: 'm∠ABD = 3(8) + 6 = 30', r: 'subst', did: 'I plugged 8 in for x.', needs: ['f']},
+      {id: 'h', s: 'm∠DBC = 5(8) − 10 = 30', r: 'subst', did: 'I plugged 8 in for x.', needs: ['f']}
+    ],
+    check: 'Both parts are 30. A bisector makes two equal parts, so they should match.',
+    explainPrompt: 'Explain how you found x, m∠ABD and m∠DBC. Say each step in order and name its reason.',
+    frame: findFrame,
+    model: 'Ray BD bisects ∠ABC, so ∠ABD ≅ ∠DBC by the Definition of an Angle Bisector, and m∠ABD = m∠DBC by the Definition of Congruence. By Substitution, 3x + 6 = 5x − 10. By the Subtraction Property, 6 = 2x − 10. By the Addition Property, 16 = 2x. By the Division Property, x = 8. By Substitution, m∠ABD = 30 and m∠DBC = 30.',
+    key: 'Values: x = 8, m∠ABD = 30, m∠DBC = 30. Key reasons: Definition of an Angle Bisector, Definition of Congruence, then Substitution, Subtraction Property, Addition Property, Division Property, Substitution. Accept other valid solving orders (for example subtracting 5x first, which gives −2x + 6 = −10).',
+    angles: {ABD: [170, 225, 40, 80, 92], DBC: [170, 225, 0, 40, 100]},
+    hl: {a: 'ABD DBC', b: 'ABD DBC', g: 'ABD', h: 'DBC'},
+    expr: {ABD: '3x + 6', DBC: '5x − 10'}
+  },
+  {
+    id: 'w-28-two-bisectors', group: 'proof', lesson: '2-8', source: src,
+    title: 'Two bisectors in a row',
+    prompt: 'Given: Ray VX bisects ∠WVY. Ray VY bisects ∠XVZ. Prove: ∠WVX ≅ ∠YVZ.',
+    visual: svg('Four rays start at point V. From left to right they are VW, VX, VY and VZ.',
+      rays(300, 232, [['W', 160, 185], ['X', 120, 185], ['Y', 80, 185], ['Z', 40, 185]]) + text(300, 258, 'V', 20) + note(292), 292),
+    visualText: 'Four rays start at V, in this order from left to right: W, X, Y, Z. ∠WVY is made of ∠WVX and ∠XVY. ∠XVZ is made of ∠XVY and ∠YVZ.',
+    steps: [
+      {id: 'a', s: 'Ray VX bisects ∠WVY, and ray VY bisects ∠XVZ', r: 'given', did: 'These facts are stated in the problem.', needs: []},
+      {id: 'b', s: '∠WVX ≅ ∠XVY', r: 'defbisect', did: 'Ray VX cuts ∠WVY into two equal parts.', needs: ['a']},
+      {id: 'c', s: '∠XVY ≅ ∠YVZ', r: 'defbisect', did: 'Ray VY cuts ∠XVZ into two equal parts.', needs: ['a']},
+      {id: 'd', s: '∠WVX ≅ ∠YVZ', r: 'transcong', did: '∠WVX ≅ ∠XVY and ∠XVY ≅ ∠YVZ. The middle angle, ∠XVY, connects them.', needs: ['b', 'c']}
+    ],
+    check: 'Each statement uses only the Given line or statements above it.',
+    explainPrompt: 'Explain why ∠WVX ≅ ∠YVZ. Say each step in order and name its reason.',
+    frame: proofFrame,
+    model: 'Ray VX bisects ∠WVY, so ∠WVX ≅ ∠XVY by the Definition of an Angle Bisector. Ray VY bisects ∠XVZ, so ∠XVY ≅ ∠YVZ by the Definition of an Angle Bisector. Both ∠WVX and ∠YVZ are congruent to ∠XVY, so ∠WVX ≅ ∠YVZ by the Transitive Property of Congruence.',
+    key: 'Steps: Given; ∠WVX ≅ ∠XVY (Definition of an Angle Bisector); ∠XVY ≅ ∠YVZ (Definition of an Angle Bisector); ∠WVX ≅ ∠YVZ (Transitive Property of Congruence; her Reasons Bank also lists it as Transitive Property under Properties of Congruence, so accept "Transitive Property"). Also accept a route through equal measures: Definition of Congruence, Transitive Property or Substitution, then Definition of Congruence.',
+    angles: {WVX: [300, 232, 120, 160, 78], XVY: [300, 232, 80, 120, 78], YVZ: [300, 232, 40, 80, 78]},
+    hl: {a: 'WVX|XVY|YVZ', b: 'WVX XVY', c: 'XVY YVZ', d: 'WVX YVZ'}
+  });
+
+  // Equal measures turned into an equation: the Transitive Property is not shown as a wrong choice.
+  for (const [w, s] of [['w-28-12', 'c'], ['w-n-congsupp', 'd']]) W(w).steps.find(x => x.id === s).opts = ['subst', 'add', 'sub'];
+  // Book #15: the sum line after "supplementary" does not offer the Linear Pair Theorem as a trap, and step c uses her teacher's name.
+  Object.assign(W('w-28-15').steps.find(x => x.id === 'd'), {opts: ['defsupp', 'defcomp', 'angadd']});
+  Object.assign(W('w-28-15').steps.find(x => x.id === 'c'), {did: '∠4 and ∠5 sit side by side on the straight line (a linear pair), so they are supplementary. The answer key in your book writes "Def. of linear pairs" here. Your teacher\'s Reasons Bank calls it the Linear Pair (Supplement) Theorem.'});
+
+  // Answer keys: a right angle from perpendicular lines is the Definition of Perpendicular on her sheet.
+  for (const w of D.workshop) w.key = w.key
+    .replace('(also accept perpendicular lines form four right angles)', '(also accept the Definition of Perpendicular: perpendicular lines form right angles)')
+    .replace('because perpendicular lines form four right angles', 'by the Definition of Perpendicular');
+
+  // Reasons that are not on her Reasons Bank are folded into the bank reason that does the same job.
+  const ALIAS = {defcongseg: 'defcong', perp: 'defperp', deflinear: 'suppl', rightcong: 'defright', congrightsupp: 'defright'};
+  const fold = list => [...new Set(list.map(o => ALIAS[o] || o))];
+  for (const w of D.workshop) for (const s of w.steps) {
+    if (ALIAS[s.r]) s.r = ALIAS[s.r];
+    if (s.opts) s.opts = fold(s.opts);
+    if (s.acceptedReasons) s.acceptedReasons = fold(s.acceptedReasons);
+  }
+  for (const id of Object.keys(ALIAS)) { delete D.reasons[id]; delete D.reasonMixups[id]; }
+  for (const [k, list] of Object.entries(D.reasonMixups)) D.reasonMixups[k] = fold(list).filter(o => o !== k);
+
+  // Easiest first: no algebra, then algebra, then the longer proofs.
+  const order = ['w-n-x64', 'w-sg-40', 'w-n-comp', 'w-n-angadd', 'w-n-bisect-num', 'w-28-11', 'w-28-12', 'w-n-bisect-x', 'w-28-13', 'w-pt-12',
+    'w-n-equal', 'w-n-suppdef', 'w-n-congsupp', 'w-28-congruent-supplements', 'w-28-congruent-complements', 'w-28-two-bisectors', 'w-n-vertproof',
+    'w-28-right-pair', 'w-28-14', 'w-28-15', 'w-28-gp3', 'w-sg-43', 'w-pt-8', 'w-26-7', 'w-pt-7'];
+  const rank = w => { const i = order.indexOf(w.id); return i < 0 ? order.length : i; };
+  D.workshop.sort((a, b) => rank(a) - rank(b));
+})();
+
+/* ===== Teacher's notes, part 3: Lesson 2-8 rules, guided steps and practice questions use the Reasons Bank ===== */
+(() => {
+  const D = GEO_DATA, T = D.topics.find(x => x.id === '2-8');
+  const esc = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const f = n => Math.round(n * 10) / 10;
+  const pt = (cx, cy, deg, r) => [cx + r * Math.cos(deg * Math.PI / 180), cy - r * Math.sin(deg * Math.PI / 180)];
+  const head = (x, y, deg) => { const a = pt(x, y, deg + 158, 15), b = pt(x, y, deg + 202, 15); return `<path d="M${f(x)} ${f(y)}L${f(a[0])} ${f(a[1])}L${f(b[0])} ${f(b[1])}Z" fill="#334155"/>`; };
+  const ray = (cx, cy, deg, len) => { const a = pt(cx, cy, deg, len); return `<line x1="${f(cx)}" y1="${f(cy)}" x2="${f(a[0])}" y2="${f(a[1])}" stroke="#334155" stroke-width="3.5"/>${head(a[0], a[1], deg)}`; };
+  const text = (x, y, t, size = 21, fill = '#172638', weight = 700) => `<text x="${f(x)}" y="${f(y)}" text-anchor="middle" dominant-baseline="middle" font-size="${size}" font-weight="${weight}" fill="${fill}">${esc(t)}</text>`;
+  const at = (cx, cy, deg, r, t, size, fill) => { const p = pt(cx, cy, deg, r); return text(p[0], p[1], t, size, fill); };
+  const dot = (x, y) => `<circle cx="${f(x)}" cy="${f(y)}" r="5.5" fill="#172638"/>`;
+  const svg = (desc, body, h = 260) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 ${h}" role="img" aria-label="${esc(desc)}"><title>${esc(desc)}</title>${body}</svg>`;
+  const note = (h, t = 'Diagram not to scale') => text(300, h - 14, t, 15, '#475569', 400);
+  const rays = (cx, cy, list) => list.map(([n, d, len]) => { const p = pt(cx, cy, d, len - 45), q = pt(cx, cy, d, len + 22); return ray(cx, cy, d, len) + dot(p[0], p[1]) + text(q[0], q[1], n, 20); }).join('') + dot(cx, cy);
+
+  T.rule = [
+    ...T.rule.slice(0, 4),
+    'Reason names from the picture: neighbors on a straight line → <b>Linear Pair (Supplement) Theorem</b>; neighbors that fill a right angle → <b>Complement Theorem</b>; across from each other in an X → <b>Vertical Angles Theorem</b>; small angles that make a bigger one → <b>Angle Addition Postulate</b>.',
+    '<b>Definition of an Angle Bisector:</b> a bisector divides an angle into two equal parts. So the two parts are congruent, and each part is half of the whole angle.',
+    '<b>Definition of Perpendicular:</b> perpendicular lines form right angles. <b>Definition of a Right Angle:</b> a right angle measures 90°, and a 90° angle is a right angle.',
+    '<b>Congruent Supplements / Congruent Complements Theorems:</b> angles supplementary (or complementary) to the same angle, or to congruent angles, are congruent.',
+    '<b>Definition of Congruence</b> works both ways: ∠A ≅ ∠B means m∠A = m∠B, and m∠A = m∠B means ∠A ≅ ∠B.',
+    '<b>Properties of Congruence:</b> Reflexive (∠A ≅ ∠A), Symmetric (if ∠A ≅ ∠B, then ∠B ≅ ∠A) and Transitive (if ∠A ≅ ∠B and ∠B ≅ ∠C, then ∠A ≅ ∠C).',
+    'Use the names on your teacher’s Reasons Bank. Use only the labels and marks in the picture. Do not guess a measure from how an angle looks.'
+  ];
+
+  const g = T.guided.find(x => /form a linear pair\. Which reason/.test(x.prompt));
+  if (g) Object.assign(g, {options: ['Linear Pair (Supplement) Theorem', 'Complement Theorem', 'Vertical Angles Theorem'], why: 'Neighbors on a straight line add to 180. That is the Linear Pair (Supplement) Theorem.'});
+  T.guided.push({prompt: 'Ray BD bisects ∠ABC. What does the Definition of an Angle Bisector let you write?', options: ['∠ABD ≅ ∠DBC', 'm∠ABD + m∠DBC = 90', '∠ABD ≅ ∠ABC'], correct: 0, why: 'A bisector divides an angle into two equal parts, so the two parts are congruent.'});
+
+  const Q = id => T.questions.find(q => q.id === id);
+  Object.assign(Q('2-8-q'), {
+    prompt: 'Two lines are perpendicular. How many right angles do they form? What does each angle measure? Name the definitions you use.',
+    key: 'Four right angles (Definition of Perpendicular: perpendicular lines form right angles). Each measures 90 (Definition of a Right Angle).',
+    model: 'They form four right angles by the Definition of Perpendicular. Each one measures 90 by the Definition of a Right Angle.',
+    expectedTerms: ['Definition of Perpendicular', 'Definition of a Right Angle']});
+  Object.assign(Q('2-8-r'), {
+    key: 'Each is 90. m∠1 + m∠2 = 180 by the Linear Pair Theorem. m∠1 = m∠2 by the Definition of Congruence. So 2(m∠1) = 180, and m∠1 = 90 by the Division Property. Each angle is a right angle by the Definition of a Right Angle. Accept 180 ÷ 2 = 90 with a correct explanation.',
+    model: 'Each angle is 90. They add to 180 because they form a linear pair (Linear Pair Theorem). They are equal (Definition of Congruence). So each one is 180 ÷ 2 = 90.'});
+  Object.assign(Q('2-8-x'), {
+    prompt: '∠A and ∠B are both right angles. Explain why ∠A ≅ ∠B, using reasons from your Reasons Bank.',
+    hint: 'Change right angle to 90 for each angle. Then compare the two measures.',
+    key: 'm∠A = 90 and m∠B = 90 by the Definition of a Right Angle. So m∠A = m∠B by Substitution (or the Transitive Property). So ∠A ≅ ∠B by the Definition of Congruence. The textbook calls this the Right Angle Congruence Theorem; it is not on her teacher\'s Reasons Bank, so accept it but show the bank route.',
+    model: 'Both are right angles, so m∠A = 90 and m∠B = 90 by the Definition of a Right Angle. The measures are equal, so m∠A = m∠B by Substitution. Equal measures mean congruent angles, so ∠A ≅ ∠B by the Definition of Congruence.',
+    expectedTerms: ['Definition of a Right Angle', 'Definition of Congruence']});
+
+  const q = (id, prompt, hint, key, model, terms, extra = {}) => ({id, prompt, hint, key, model, expectedTerms: terms, visual: '', visualText: '', ...extra});
+  const bisect = (top, bottom, desc, whole = '') => svg(desc, rays(170, 225, [['A', 80, 190], ['D', 40, 260], ['C', 0, 320]]) + text(170, 252, 'B', 20) +
+    (top ? at(170, 225, 58, 135, top, 17) : '') + (bottom ? at(170, 225, 20, 160, bottom, 17) : '') + (whole ? text(92, 62, whole, 18) : '') + note(285), 285);
+  T.questions.push(
+    q('2-8-ad', 'Name the reason: ray BD bisects ∠ABC, so ∠ABD ≅ ∠DBC.', 'The word bisects is in the problem.',
+      'Definition of an Angle Bisector. A bisector divides an angle into two equal parts.',
+      'Definition of an Angle Bisector. A bisector cuts an angle into two equal parts, so the parts are congruent.', ['Definition of an Angle Bisector']),
+    q('2-8-ae', 'Ray BD bisects ∠ABC, and m∠ABC = 84. Find m∠ABD. Name the definition you use.', 'A bisector cuts the angle into two equal parts.',
+      '42. By the Definition of an Angle Bisector, the two parts are equal, so each part is half of 84: 84 ÷ 2 = 42. Also accept m∠ABD + m∠DBC = 84 (Angle Addition Postulate) with equal parts, so 2(m∠ABD) = 84.',
+      '42. Ray BD bisects ∠ABC, so the two parts are equal by the Definition of an Angle Bisector. Each part is half of 84, and 84 ÷ 2 = 42.', ['Definition of an Angle Bisector'],
+      {setup: {prompt: 'What does the bisector tell you?', options: ['The two parts are equal', 'The two parts add to 90', 'The two parts add to 180'], correct: 0, explain: 'A bisector divides an angle into two equal parts. The two equal parts make the 84° angle.', equation: 'm∠ABD + m∠ABD = 84'},
+       visual: bisect('?', '', 'Angle ABC with vertex B. Ray BD bisects it. The whole angle ABC measures 84 degrees. The top part, angle ABD, is marked with a question mark.', 'm∠ABC = 84°'),
+       visualText: 'Ray BD splits ∠ABC into a top part, ∠ABD, and a bottom part, ∠DBC. The whole angle is 84°.'}),
+    q('2-8-af', 'Ray BD bisects ∠ABC. m∠ABD = 2x + 10 and m∠DBC = 4x − 20. Find x and m∠ABC. Name the definition you use.', 'The two parts are equal. Then add the two parts to get the whole angle.',
+      'x = 15 and m∠ABC = 80. Definition of an Angle Bisector (and Definition of Congruence): 2x + 10 = 4x − 20. Subtract 2x: 10 = 2x − 20. Add 20: 30 = 2x. Divide by 2: x = 15. Each part is 2(15) + 10 = 40. Angle Addition Postulate: m∠ABC = 40 + 40 = 80.',
+      'By the Definition of an Angle Bisector, the two parts are equal: 2x + 10 = 4x − 20. Then 10 = 2x − 20, 30 = 2x, and x = 15. Each part is 40. By the Angle Addition Postulate, m∠ABC = 40 + 40 = 80.', ['Definition of an Angle Bisector'],
+      {setup: {prompt: 'Which equation comes first?', options: ['2x + 10 = 4x − 20', '(2x + 10) + (4x − 20) = 90', '(2x + 10) + (4x − 20) = 180'], correct: 0, explain: 'A bisector makes two equal parts, so the two measures are equal.', equation: '2x + 10 = 4x − 20'},
+       visual: bisect('(2x + 10)°', '(4x − 20)°', 'Angle ABC with vertex B. Ray BD bisects it. The top part, angle ABD, is 2x plus 10. The bottom part, angle DBC, is 4x minus 20.'),
+       visualText: 'Ray BD splits ∠ABC into a top part, ∠ABD, and a bottom part, ∠DBC.'}),
+    q('2-8-ag', 'Name the reason: lines m and n are perpendicular, so the angles they form are right angles.', 'The word perpendicular is in the problem.',
+      'Definition of Perpendicular. Perpendicular lines form right angles.', 'Definition of Perpendicular. Perpendicular lines form right angles.', ['Definition of Perpendicular']),
+    q('2-8-ah', 'Name the reason: m∠1 = 90, so ∠1 is a right angle.', 'The step switches from the number 90 to the words right angle.',
+      'Definition of a Right Angle. It works both ways: a right angle measures 90, and a 90° angle is a right angle.',
+      'Definition of a Right Angle. An angle that measures 90 is a right angle.', ['Definition of a Right Angle']),
+    q('2-8-ai', 'Name the reason: m∠A + m∠B = 90, so ∠A and ∠B are complementary.', 'The step switches from the sum 90 to the word complementary.',
+      'Definition of Complementary Angles. It works both ways. Not the Complement Theorem: that theorem is for two neighbors that fill a right angle in a picture.',
+      'Definition of Complementary Angles. Two angles whose measures add to 90 are complementary.', ['Definition of Complementary Angles']),
+    q('2-8-aj', 'Name the property: if x − 12 = 7, then x = 19.', 'What was done to both sides?',
+      'Addition Property. Add 12 to both sides.', 'Addition Property. I added 12 to both sides.', ['Addition Property']),
+    q('2-8-ak', 'Name the property: if 4x = 92, then x = 23.', 'What was done to both sides?',
+      'Division Property. Divide both sides by 4.', 'Division Property. I divided both sides by 4.', ['Division Property']),
+    q('2-8-al', 'Name the property: if m∠1 ÷ 2 = 35, then m∠1 = 70.', 'What was done to both sides?',
+      'Multiplication Property. Multiply both sides by 2.', 'Multiplication Property. I multiplied both sides by 2.', ['Multiplication Property']),
+    q('2-8-am', 'Name the property: 3(x + 4) = 3x + 12.', 'Look at the parentheses.',
+      'Distributive Property. Multiply 3 by each term inside the parentheses.', 'Distributive Property. The 3 multiplies each term inside the parentheses.', ['Distributive Property']),
+    q('2-8-an', 'Name the property: if m∠1 = m∠2, then m∠2 = m∠1.', 'The two sides switch places.',
+      'Symmetric Property. The two sides switch places.', 'Symmetric Property. The two sides switch places.', ['Symmetric Property']),
+    q('2-8-ao', 'Name the property: m∠1 = m∠1.', 'Something is equal to itself.',
+      'Reflexive Property. A measure is equal to itself.', 'Reflexive Property. A measure is equal to itself.', ['Reflexive Property']),
+    q('2-8-ap', 'Name the property: if m∠1 = m∠2 and m∠2 = m∠3, then m∠1 = m∠3.', 'm∠2 is in the middle of the chain.',
+      'Transitive Property: m∠2 connects m∠1 and m∠3. The Substitution Property is also correct.', 'Transitive Property. m∠2 connects m∠1 and m∠3.', []),
+    q('2-8-aq', 'Name the property: m∠1 + m∠2 = 180 and m∠2 = 50, so m∠1 + 50 = 180.', 'A value was plugged in.',
+      'Substitution Property. Replace m∠2 with 50.', 'Substitution Property. I replaced m∠2 with 50.', ['Substitution Property'])
+  );
+  // Practice decks show 10 questions at a time, in this order, so the Reasons Bank names come early.
+  const order = ['2-8-i', '2-8-ad', '2-8-k', '2-8-b', '2-8-o', '2-8-ae', '2-8-m', '2-8-af', '2-8-l', '2-8-p',
+    '2-8-ag', '2-8-ah', '2-8-n', '2-8-j', '2-8-z', '2-8-aj', '2-8-ak', '2-8-u', '2-8-x', '2-8-ai',
+    '2-8-d', '2-8-e', '2-8-am', '2-8-al', '2-8-aq', '2-8-an', '2-8-ao', '2-8-ap', '2-8-ab', '2-8-ac',
+    '2-8-y', '2-8-s', '2-8-aa', '2-8-v', '2-8-q', '2-8-r', '2-8-w', '2-8-h', '2-8-c', '2-8-a', '2-8-f', '2-8-g', '2-8-t'];
+  const rank = x => { const i = order.indexOf(x.id); return i < 0 ? order.length : i; };
+  T.questions.sort((a, b) => rank(a) - rank(b));
+  D._teacherNames(); delete D._teacherNames;
+  // Set after the name swap on purpose: this answer key names the book's older name so the checker accepts it.
+  Object.assign(Q('2-8-i'), {key: 'Linear Pair Theorem. Her Reasons Bank lists it as Linear Pair (Supplement) Theorem, so also accept Supplement Theorem. Also accept Definition of linear pair together with supplementary angles adding to 180.'});
+})();
