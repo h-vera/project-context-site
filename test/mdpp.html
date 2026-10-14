@@ -1,0 +1,626 @@
+<title>Maryland Permit Practice</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass:wght@600;800&family=Public+Sans:wght@400;600&display=swap">
+<style>
+/* Layout: one centered reading column (680px). Home shows exam cards in a row that stacks on phones;
+   the quiz is a single question per screen with full-width tap targets; results open with the verdict, then a review list. */
+:root{
+  --bg:#F6F5F0;
+  --surface:#FFFFFF;
+  --fg:#1A1F1C;
+  --muted:#5D6762;
+  --line:#D8DDD6;
+  --accent:#0B6B4B;        /* highway guide-sign green */
+  --accent-fg:#FFFFFF;
+  --accent-soft:#E1F0E8;
+  --gold:#C9971A;          /* Maryland flag gold, darkened for text */
+  --gold-soft:#FBF1D3;
+  --ok:#1E7F45;
+  --ok-soft:#DFF3E6;
+  --bad:#B3261E;
+  --bad-soft:#FBE3E1;
+  --display:'Overpass',"Helvetica Neue",Arial,sans-serif;   /* Overpass descends from Highway Gothic, the road-sign face */
+  --body:'Public Sans',system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --radius:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131715; --surface:#1C2220; --fg:#ECEFEA; --muted:#A4ADA7; --line:#2E3733;
+    --accent:#4FBF8E; --accent-fg:#0E1A14; --accent-soft:#1C3A2C;
+    --gold:#EFC84A; --gold-soft:#3A3113;
+    --ok:#5CCB8A; --ok-soft:#1C3A2C; --bad:#F08A80; --bad-soft:#4A2320;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#131715; --surface:#1C2220; --fg:#ECEFEA; --muted:#A4ADA7; --line:#2E3733;
+  --accent:#4FBF8E; --accent-fg:#0E1A14; --accent-soft:#1C3A2C;
+  --gold:#EFC84A; --gold-soft:#3A3113;
+  --ok:#5CCB8A; --ok-soft:#1C3A2C; --bad:#F08A80; --bad-soft:#4A2320;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font-family:var(--body); font-size:16px; line-height:1.5;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:0;
+}
+.wrap{max-width:680px; margin:0 auto; padding-block:24px 56px}
+h1,h2,h3{font-family:var(--display); font-weight:800; line-height:1.15; margin:0; text-wrap:balance}
+h1{font-size:clamp(28px, 6vw, 38px); letter-spacing:-0.01em}
+h2{font-size:22px}
+h3{font-size:17px}
+p{margin:0}
+.muted{color:var(--muted)}
+.eyebrow{font-family:var(--display); font-weight:600; font-size:12px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted)}
+.stack{display:flex; flex-direction:column; gap:14px}
+.row{display:flex; gap:12px; align-items:center; flex-wrap:wrap}
+.spread{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap}
+.num{font-variant-numeric:tabular-nums}
+
+/* brand */
+.brand{display:flex; gap:14px; align-items:center}
+.badge{
+  width:52px; height:52px; flex:0 0 auto; border-radius:8px; background:var(--accent); color:var(--accent-fg);
+  display:grid; place-items:center; font-family:var(--display); font-weight:800; font-size:20px; letter-spacing:.02em;
+  box-shadow:inset 0 0 0 3px var(--accent-fg), inset 0 0 0 5px var(--accent);
+}
+
+/* buttons */
+.btn{
+  font-family:var(--display); font-weight:800; font-size:15px; letter-spacing:.02em;
+  padding:12px 20px; border-radius:8px; border:1.5px solid var(--accent);
+  background:var(--accent); color:var(--accent-fg); cursor:pointer; line-height:1.2;
+}
+.btn:hover{filter:brightness(1.06)}
+.btn:disabled{opacity:.45; cursor:not-allowed; filter:none}
+.btn.ghost{background:transparent; color:var(--accent)}
+.btn.small{padding:8px 14px; font-size:14px}
+.btn:focus-visible,.opt:focus-visible,.seg button:focus-visible,.link:focus-visible{outline:3px solid var(--gold); outline-offset:2px}
+.link{background:none; border:0; padding:0; color:var(--accent); font:inherit; font-weight:600; cursor:pointer; text-decoration:underline; text-underline-offset:3px}
+
+/* segmented mode control */
+.seg{display:inline-flex; border:1.5px solid var(--line); border-radius:9px; padding:3px; background:var(--surface); gap:2px}
+.seg button{
+  font-family:var(--display); font-weight:600; font-size:14px; padding:8px 14px; border:0; border-radius:6px;
+  background:transparent; color:var(--muted); cursor:pointer;
+}
+.seg button[aria-pressed="true"]{background:var(--accent); color:var(--accent-fg)}
+
+/* exam cards */
+.cards{display:grid; grid-template-columns:repeat(auto-fit, minmax(190px, 1fr)); gap:12px}
+.card{
+  background:var(--surface); border:1.5px solid var(--line); border-radius:var(--radius);
+  padding:18px; display:flex; flex-direction:column; gap:10px; min-width:0;
+}
+.card .title{font-family:var(--display); font-weight:800; font-size:19px}
+.card .meta{font-size:14px; color:var(--muted)}
+.card .best{
+  align-self:flex-start; font-size:13px; font-weight:600; padding:3px 9px; border-radius:999px;
+  background:var(--gold-soft); color:var(--gold);
+}
+.card .best.pass{background:var(--ok-soft); color:var(--ok)}
+.card .btn{margin-top:auto; align-self:flex-start}
+
+.note{
+  border-left:4px solid var(--gold); background:var(--surface); padding:12px 16px; border-radius:0 8px 8px 0;
+  font-size:15px;
+}
+.note b{font-weight:600}
+dl.facts{display:grid; grid-template-columns:auto 1fr; gap:6px 16px; margin:0; font-size:15px}
+dl.facts dt{color:var(--muted)}
+dl.facts dd{margin:0; font-weight:600}
+
+/* quiz */
+.topbar{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; font-size:14px}
+.progress{height:6px; background:var(--line); border-radius:999px; overflow:hidden}
+.progress i{display:block; height:100%; width:0; background:var(--accent); transition:width .3s ease}
+.chip{display:inline-block; font-family:var(--display); font-weight:600; font-size:12px; letter-spacing:.06em; text-transform:uppercase; padding:3px 9px; border-radius:999px; background:var(--accent-soft); color:var(--accent)}
+.sign{width:120px; max-width:100%}
+.sign svg{width:100%; height:auto; display:block}
+.qtext{font-size:19px; font-weight:600; line-height:1.4; text-wrap:balance}
+.opts{display:flex; flex-direction:column; gap:10px}
+.opt{
+  display:flex; gap:12px; align-items:flex-start; width:100%; text-align:left;
+  padding:12px 14px; border:1.5px solid var(--line); border-radius:var(--radius);
+  background:var(--surface); color:var(--fg); font:inherit; line-height:1.4; cursor:pointer; min-width:0;
+}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt .k{
+  flex:0 0 auto; width:26px; height:26px; border-radius:6px; display:grid; place-items:center;
+  background:var(--accent-soft); color:var(--accent); font-family:var(--display); font-weight:800; font-size:13px;
+}
+.opt.selected{border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.opt.correct{border-color:var(--ok); background:var(--ok-soft)}
+.opt.correct .k{background:var(--ok); color:#fff}
+.opt.wrong{border-color:var(--bad); background:var(--bad-soft)}
+.opt.wrong .k{background:var(--bad); color:#fff}
+.explain{border-left:4px solid var(--ok); background:var(--ok-soft); padding:12px 14px; border-radius:0 8px 8px 0; font-size:15px}
+.explain.bad{border-color:var(--bad); background:var(--bad-soft)}
+.explain b{font-family:var(--display); font-weight:800; display:block; margin-bottom:2px}
+.hint{font-size:13px; color:var(--muted)}
+
+/* results */
+.verdict{background:var(--surface); border:1.5px solid var(--line); border-radius:var(--radius); padding:20px; display:flex; flex-direction:column; gap:10px}
+.verdict .big{font-family:var(--display); font-weight:800; font-size:clamp(40px, 10vw, 56px); line-height:1; letter-spacing:-0.02em}
+.verdict .big small{font-size:.45em; color:var(--muted); font-weight:600; letter-spacing:0}
+.pill{display:inline-block; font-family:var(--display); font-weight:800; font-size:14px; letter-spacing:.06em; padding:5px 12px; border-radius:999px}
+.pill.ok{background:var(--ok); color:#fff}
+.pill.bad{background:var(--bad); color:#fff}
+.cats{display:grid; gap:8px}
+.cat{display:grid; grid-template-columns:150px 1fr auto; gap:10px; align-items:center; font-size:14px}
+.cat .barwrap{height:8px; background:var(--line); border-radius:999px; overflow:hidden}
+.cat .barwrap i{display:block; height:100%; background:var(--accent)}
+@media (max-width:420px){.cat{grid-template-columns:1fr auto} .cat .barwrap{grid-column:1 / -1}}
+.review{display:flex; flex-direction:column}
+.rv{border-top:1.5px solid var(--line); padding:14px 0 14px 12px; border-left:4px solid transparent; display:flex; flex-direction:column; gap:6px; font-size:15px}
+.rv.missed{border-left-color:var(--bad)}
+.rv .q{font-weight:600}
+.rv .ans{display:grid; grid-template-columns:auto 1fr; gap:4px 12px}
+.rv .ans span:nth-child(odd){color:var(--muted)}
+.rv .why{color:var(--muted); font-size:14px}
+label.check{display:inline-flex; gap:8px; align-items:center; font-size:14px; cursor:pointer}
+
+@media (prefers-reduced-motion: reduce){.progress i{transition:none}}
+</style>
+
+<div class="wrap" id="app"></div>
+
+<script>
+(function(){
+"use strict";
+const N = 25, PASS = 22;
+const SIGNS = {
+  stop:'<svg viewBox="0 0 100 100" role="img" aria-label="Red octagonal sign reading STOP"><polygon points="30,3 70,3 97,30 97,70 70,97 30,97 3,70 3,30" fill="#C8102E" stroke="#fff" stroke-width="4"/><text x="50" y="59" text-anchor="middle" font-family="Overpass,Arial,sans-serif" font-weight="800" font-size="24" fill="#fff">STOP</text></svg>',
+  yield:'<svg viewBox="0 0 100 100" role="img" aria-label="Downward-pointing triangle with red border reading YIELD"><polygon points="50,97 3,10 97,10" fill="#C8102E"/><polygon points="50,78 20,22 80,22" fill="#fff"/><text x="50" y="47" text-anchor="middle" font-family="Overpass,Arial,sans-serif" font-weight="800" font-size="14" fill="#C8102E">YIELD</text></svg>',
+  rr:'<svg viewBox="0 0 100 100" role="img" aria-label="Round yellow sign with a black X and the letters R R"><circle cx="50" cy="50" r="47" fill="#F7C600" stroke="#111" stroke-width="3"/><line x1="26" y1="26" x2="74" y2="74" stroke="#111" stroke-width="6"/><line x1="74" y1="26" x2="26" y2="74" stroke="#111" stroke-width="6"/><text x="22" y="58" text-anchor="middle" font-family="Overpass,Arial,sans-serif" font-weight="800" font-size="20" fill="#111">R</text><text x="78" y="58" text-anchor="middle" font-family="Overpass,Arial,sans-serif" font-weight="800" font-size="20" fill="#111">R</text></svg>',
+  dne:'<svg viewBox="0 0 100 100" role="img" aria-label="Red circle with a white horizontal bar reading DO NOT ENTER"><rect x="2" y="2" width="96" height="96" fill="#fff" stroke="#111" stroke-width="2"/><circle cx="50" cy="50" r="42" fill="#C8102E"/><rect x="20" y="43" width="60" height="14" fill="#fff"/><text x="50" y="36" text-anchor="middle" font-family="Overpass,Arial,sans-serif" font-weight="800" font-size="10" fill="#fff">DO NOT</text><text x="50" y="74" text-anchor="middle" font-family="Overpass,Arial,sans-serif" font-weight="800" font-size="10" fill="#fff">ENTER</text></svg>',
+  school:'<svg viewBox="0 0 100 100" role="img" aria-label="Five-sided yellow-green sign showing two walking figures"><polygon points="50,3 97,38 85,97 15,97 3,38" fill="#C6F000" stroke="#111" stroke-width="2.5"/><g stroke="#111" stroke-width="4" stroke-linecap="round" fill="#111"><circle cx="40" cy="36" r="6"/><line x1="40" y1="44" x2="40" y2="66"/><line x1="40" y1="66" x2="32" y2="84"/><line x1="40" y1="66" x2="47" y2="84"/><line x1="40" y1="50" x2="30" y2="60"/><circle cx="61" cy="46" r="5"/><line x1="61" y1="52" x2="61" y2="68"/><line x1="61" y1="68" x2="55" y2="82"/><line x1="61" y1="68" x2="66" y2="82"/><line x1="61" y1="56" x2="52" y2="54"/></g></svg>',
+  wrong:'<svg viewBox="0 0 120 80" role="img" aria-label="Red rectangular sign reading WRONG WAY"><rect x="2" y="2" width="116" height="76" fill="#C8102E" stroke="#fff" stroke-width="3"/><text x="60" y="36" text-anchor="middle" font-family="Overpass,Arial,sans-serif" font-weight="800" font-size="22" fill="#fff">WRONG</text><text x="60" y="65" text-anchor="middle" font-family="Overpass,Arial,sans-serif" font-weight="800" font-size="22" fill="#fff">WAY</text></svg>',
+  speed:'<svg viewBox="0 0 80 100" role="img" aria-label="White rectangular sign reading SPEED LIMIT 45"><rect x="2" y="2" width="76" height="96" rx="4" fill="#fff" stroke="#111" stroke-width="3"/><text x="40" y="26" text-anchor="middle" font-family="Overpass,Arial,sans-serif" font-weight="800" font-size="12" fill="#111">SPEED</text><text x="40" y="41" text-anchor="middle" font-family="Overpass,Arial,sans-serif" font-weight="800" font-size="12" fill="#111">LIMIT</text><text x="40" y="85" text-anchor="middle" font-family="Overpass,Arial,sans-serif" font-weight="800" font-size="40" fill="#111">45</text></svg>',
+  ped:'<svg viewBox="0 0 100 100" role="img" aria-label="Yellow diamond sign showing a walking figure"><polygon points="50,3 97,50 50,97 3,50" fill="#F7C600" stroke="#111" stroke-width="2.5"/><g stroke="#111" stroke-width="4" stroke-linecap="round" fill="#111"><circle cx="50" cy="30" r="6"/><line x1="50" y1="38" x2="50" y2="60"/><line x1="50" y1="60" x2="41" y2="80"/><line x1="50" y1="60" x2="58" y2="80"/><line x1="50" y1="44" x2="39" y2="54"/><line x1="50" y1="44" x2="62" y2="48"/></g></svg>',
+  smv:'<svg viewBox="0 0 100 100" role="img" aria-label="Orange triangle with a red border"><polygon points="50,8 95,90 5,90" fill="#C8102E"/><polygon points="50,30 79,82 21,82" fill="#F26522"/></svg>',
+  oneway:'<svg viewBox="0 0 160 56" role="img" aria-label="Black rectangular sign with a white arrow reading ONE WAY"><rect x="2" y="2" width="156" height="52" fill="#111" stroke="#fff" stroke-width="2"/><polygon points="10,28 48,6 48,18 150,18 150,38 48,38 48,50" fill="#fff"/><text x="99" y="33" text-anchor="middle" font-family="Overpass,Arial,sans-serif" font-weight="800" font-size="13" fill="#111">ONE WAY</text></svg>',
+  nouturn:'<svg viewBox="0 0 100 100" role="img" aria-label="White square sign with a U-shaped arrow inside a red circle with a slash"><rect x="2" y="2" width="96" height="96" rx="6" fill="#fff" stroke="#111" stroke-width="2.5"/><path d="M34 76 V42 a16 16 0 0 1 32 0 V54" fill="none" stroke="#111" stroke-width="8"/><polygon points="54,52 78,52 66,70" fill="#111"/><circle cx="50" cy="50" r="40" fill="none" stroke="#C8102E" stroke-width="7"/><line x1="22" y1="22" x2="78" y2="78" stroke="#C8102E" stroke-width="7"/></svg>'
+};
+
+/* ex: 1 = Exam 1, 2 = Exam 2, 0 = extra questions used only by the mixed exam. a = index of the correct option as written. */
+const BANK = [
+  /* ---------- EXAM 1 ---------- */
+  {id:1, ex:1, cat:"Signs & signals", sign:"stop", q:"What must you do when you see this sign?",
+   opts:["Come to a complete stop, then go when it is safe","Slow down and continue if no traffic is coming","Stop only if other vehicles are present","Yield to traffic on your right"], a:0,
+   why:"A red octagon always means stop completely, behind the stop line or crosswalk, and go only when the way is clear."},
+  {id:2, ex:1, cat:"Signs & signals", sign:"yield", q:"This sign means:",
+   opts:["Slow down, be ready to stop, and let crossing traffic go first","Stop completely before proceeding","You have the right of way","Merge quickly into traffic"], a:0,
+   why:"A yield sign tells you to slow down and give the right of way to vehicles and pedestrians already on the road you are entering or crossing. Stop if you need to."},
+  {id:3, ex:1, cat:"Signs & signals", sign:"rr", q:"This round yellow sign warns that:",
+   opts:["A railroad crossing is ahead","A roundabout is ahead","A school zone is ahead","Road work is ahead"], a:0,
+   why:"The round yellow sign with an X and two Rs is the advance warning for a railroad crossing. Slow down, look, and listen for a train."},
+  {id:4, ex:1, cat:"Signs & signals", sign:"dne", q:"This sign means:",
+   opts:["Do not enter; you would be driving against traffic","No parking at any time","Road closed to trucks","Stop sign ahead"], a:0,
+   why:"DO NOT ENTER marks a road or ramp you may not enter, usually because traffic comes toward you. It is often paired with WRONG WAY."},
+  {id:5, ex:1, cat:"Signs & signals", q:"Warning signs for curves, slippery roads, and merging traffic are usually:",
+   opts:["Yellow diamonds","Orange rectangles","White rectangles","Green rectangles"], a:0,
+   why:"Yellow diamond-shaped signs warn of conditions ahead. Orange means road work, white rectangles are regulations, and green signs give directions."},
+  {id:6, ex:1, cat:"Signs & signals", q:"A flashing red traffic light means:",
+   opts:["Stop, then proceed when it is safe, the same as a stop sign","Slow down and proceed with caution","The signal is broken, so go through","Stop and wait until it turns green"], a:0,
+   why:"Treat a flashing red light exactly like a stop sign. A flashing yellow light means slow down and proceed with caution."},
+  {id:7, ex:1, cat:"Signs & signals", q:"A steady yellow traffic light means:",
+   opts:["The light is about to turn red; stop if you can do so safely","Speed up to clear the intersection","Pedestrians may now cross","Proceed with caution; no need to stop"], a:0,
+   why:"Yellow warns that red is coming. Stop if you can stop safely. Only continue if you are too close to the intersection to stop."},
+  {id:8, ex:1, cat:"Rules of the road", q:"At a four-way stop, two vehicles arrive at the same time from different directions. Who goes first?",
+   opts:["The driver on the right","The driver on the left","The driver going straight","The larger vehicle"], a:0,
+   why:"The first vehicle to stop goes first. If two arrive at the same time, the driver on the left yields to the driver on the right."},
+  {id:9, ex:1, cat:"Rules of the road", q:"Unless a sign says otherwise, in Maryland you may turn right at a red light:",
+   opts:["After coming to a complete stop and yielding to pedestrians and traffic","Without stopping if no traffic is coming","Only between 6 a.m. and 6 p.m.","Never"], a:0,
+   why:"Right on red is allowed in Maryland after a full stop, unless a sign prohibits it. You must yield to pedestrians and to traffic that has the green."},
+  {id:10, ex:1, cat:"Rules of the road", q:"How far before a turn or lane change must you signal in Maryland?",
+   opts:["At least 100 feet","At least 25 feet","At least 500 feet","Only when other vehicles are nearby"], a:0,
+   why:"Maryland law requires a continuous signal for at least the last 100 feet before turning. Signal every time, even if you think no one is around."},
+  {id:11, ex:1, cat:"Rules of the road", q:"In Maryland you may not park within how many feet of a fire hydrant?",
+   opts:["15 feet","5 feet","30 feet","50 feet"], a:0,
+   why:"Keep 15 feet clear on either side of a fire hydrant. Other no-parking distances to remember: 20 feet from a crosswalk, 30 feet from a stop sign or signal, 50 feet from a railroad crossing."},
+  {id:12, ex:1, cat:"Rules of the road", q:"A solid yellow line on your side of the center line means:",
+   opts:["You may not pass","You may pass with care","The road is one-way","You must turn left"], a:0,
+   why:"Yellow lines separate traffic moving in opposite directions. A solid yellow line on your side means no passing; a broken yellow line on your side means you may pass when it is safe."},
+  {id:13, ex:1, cat:"Rules of the road", q:"A school bus stops with its red lights flashing on an undivided road. Drivers in both directions must:",
+   opts:["Stop at least 20 feet away and wait until the lights stop flashing","Slow to 15 mph and pass carefully","Stop only if children are visible","Stop only if traveling in the same direction as the bus"], a:0,
+   why:"On a road with no physical divider, traffic in both directions must stop at least 20 feet from the bus and stay stopped until the red lights go off. Only traffic on the other side of a divided highway with a physical barrier may continue."},
+  {id:14, ex:1, cat:"Rules of the road", q:"You are turning left at an intersection with a green light. You must:",
+   opts:["Yield to oncoming traffic and pedestrians before turning","Turn immediately because you have the green","Stop before turning","Sound your horn before turning"], a:0,
+   why:"A green light lets you go, but a left turn still has to yield to oncoming vehicles and to pedestrians in the crosswalk."},
+  {id:15, ex:1, cat:"Safe driving", q:"In good weather, how much following distance should you keep behind the vehicle ahead?",
+   opts:["At least 3 seconds","One car length","One second","10 feet for every 10 mph"], a:0,
+   why:"Watch the car ahead pass a fixed object and count. You should reach it no sooner than three seconds later. Add more time in rain, fog, or heavy traffic."},
+  {id:16, ex:1, cat:"Safe driving", q:"Your car begins to hydroplane on a wet road. You should:",
+   opts:["Ease off the gas and keep the steering wheel steady","Brake hard","Turn the wheel sharply","Accelerate to regain traction"], a:0,
+   why:"Hydroplaning means the tires are riding on water. Take your foot off the gas, hold the wheel straight, and let the car slow until the tires grip again. Do not brake hard or steer sharply."},
+  {id:17, ex:1, cat:"Safe driving", q:"If your rear wheels begin to skid, you should:",
+   opts:["Take your foot off the gas and steer in the direction you want the car to go","Brake hard","Steer the opposite way from the skid","Shift to neutral and brake"], a:0,
+   why:"Ease off the accelerator and steer gently toward where you want to go (the direction the rear is sliding). Avoid slamming the brakes, which makes the skid worse."},
+  {id:18, ex:1, cat:"Safe driving", q:"When driving at night you must switch to low beams within how many feet of an oncoming vehicle?",
+   opts:["500 feet","100 feet","1,000 feet","50 feet"], a:0,
+   why:"Dim your high beams within 500 feet of an oncoming vehicle and within 300 feet when following another vehicle."},
+  {id:19, ex:1, cat:"Safe driving", q:"A driver is tailgating you. The best response is to:",
+   opts:["Slow down gradually and let them pass","Brake suddenly to warn them","Speed up","Stop in the road"], a:0,
+   why:"Increase the space ahead of you, slow gradually, and move over when it is safe so the tailgater can pass. Never brake-check."},
+  {id:20, ex:1, cat:"Maryland law", q:"In Maryland, the minimum age to apply for a learner's permit is:",
+   opts:["15 years, 9 months","15 years","16 years","16 years, 6 months"], a:0,
+   why:"You can apply for a Maryland learner's permit at 15 years and 9 months. A provisional license comes at 16 years and 6 months, after the permit requirements are met."},
+  {id:21, ex:1, cat:"Maryland law", q:"A learner's permit holder under 18 may use a cell phone while driving:",
+   opts:["Only to call 911","Only with a hands-free device","Only when stopped at a red light","Any time a supervising driver is present"], a:0,
+   why:"Drivers under 18 with a learner's permit or provisional license may not use a cell phone at all while driving, hands-free included. The only exception is calling 911."},
+  {id:22, ex:1, cat:"Maryland law", q:"The supervising driver for a learner's permit holder must be at least ___ and must have held a license for at least ___.",
+   opts:["21 years old; 3 years","18 years old; 1 year","25 years old; 5 years","21 years old; 1 year"], a:0,
+   why:"The supervising driver must be 21 or older, licensed for at least three years, and seated beside the learner."},
+  {id:23, ex:1, cat:"Maryland law", q:"Maryland's Move Over law requires that when you approach a stopped emergency vehicle with flashing lights you:",
+   opts:["Move into a lane away from it if safe, or slow to a reasonable speed","Stop behind it","Flash your headlights","Pass quickly"], a:0,
+   why:"Move over one lane if you can do so safely. If you cannot, slow to a reasonable and prudent speed. The law covers police, fire, ambulances, tow trucks, and other stopped vehicles with warning lights on."},
+  {id:24, ex:1, cat:"Sharing the road", q:"When passing a bicyclist in Maryland, you must leave at least:",
+   opts:["3 feet","1 foot","6 feet","10 feet"], a:0,
+   why:"Maryland requires at least three feet of clearance when passing a bicycle. Wait for a safe gap rather than squeezing by."},
+  {id:25, ex:1, cat:"Sharing the road", q:"Large trucks have big blind spots called No-Zones. You should:",
+   opts:["Avoid lingering in them and never cut in closely after passing","Stay directly behind the truck","Pass on the right","Follow closely so the driver can see you"], a:0,
+   why:"If you cannot see the truck driver's mirrors, the driver cannot see you. Pass promptly on the left, and leave plenty of room before pulling back in. Trucks need far more distance to stop."},
+
+  /* ---------- EXAM 2 ---------- */
+  {id:26, ex:2, cat:"Signs & signals", sign:"school", q:"A five-sided sign like this tells you:",
+   opts:["You are near a school or school crossing","A hospital is ahead","A railroad crossing is ahead","You are entering a no-passing zone"], a:0,
+   why:"The pentagon shape is used only for school zones and school crossings. Slow down and watch for children."},
+  {id:27, ex:2, cat:"Signs & signals", sign:"wrong", q:"If you see this sign facing you, you should:",
+   opts:["Pull over and turn around safely; you are going against traffic","Continue, because it applies to the other road","Slow down and continue","Stop and wait for traffic to clear"], a:0,
+   why:"WRONG WAY means you are driving against the flow of traffic, usually on a ramp or one-way street. Pull to the side and turn around as soon as it is safe."},
+  {id:28, ex:2, cat:"Signs & signals", sign:"speed", q:"This sign shows:",
+   opts:["The maximum legal speed under ideal conditions","The minimum speed allowed","A recommended speed","The speed limit at night only"], a:0,
+   why:"A speed limit is the fastest you may legally drive when conditions are good. In rain, snow, fog, or heavy traffic you must slow down even more."},
+  {id:29, ex:2, cat:"Signs & signals", sign:"ped", q:"This yellow diamond warns you to:",
+   opts:["Watch for pedestrians crossing","Stop for a school bus","Slow for a railroad crossing","Look for a bike path"], a:0,
+   why:"The walking figure on a yellow diamond warns of a pedestrian crossing ahead. Be ready to stop for people in the crosswalk."},
+  {id:30, ex:2, cat:"Signs & signals", sign:"smv", q:"An orange triangle on the back of a vehicle means:",
+   opts:["It is a slow-moving vehicle traveling 25 mph or less","It carries hazardous cargo","It is an emergency vehicle","It is a student driver"], a:0,
+   why:"The slow-moving vehicle emblem is used on farm equipment and other vehicles that travel 25 mph or less. Slow down early and pass only when it is safe."},
+  {id:31, ex:2, cat:"Signs & signals", q:"Orange signs along the road mean:",
+   opts:["Construction or a work zone is ahead; slow down","A scenic area is ahead","Motorist services are ahead","A detour for trucks only"], a:0,
+   why:"Orange is reserved for work zones. Expect workers, lane shifts, and reduced speed limits. Fines for violations in work zones are higher."},
+  {id:32, ex:2, cat:"Signs & signals", q:"A flashing yellow traffic light means:",
+   opts:["Slow down and proceed with caution","Stop and wait for a green light","Stop, then go","Pedestrians have the signal"], a:0,
+   why:"Flashing yellow means caution; slow down, look both ways, and continue when it is safe. Flashing red means stop first."},
+  {id:33, ex:2, cat:"Rules of the road", q:"Unless a different limit is posted, the speed limit on a residential street or in a business district in Maryland is:",
+   opts:["30 mph","25 mph","35 mph","20 mph"], a:0,
+   why:"Maryland's default limit in business districts and on undivided residential streets is 30 mph. A posted sign always overrides the default, and many neighborhoods post 25 mph or less."},
+  {id:34, ex:2, cat:"Rules of the road", q:"When an emergency vehicle approaches from behind with lights and siren, you must:",
+   opts:["Pull to the right edge of the road and stop","Speed up to clear the way","Stop where you are, even in an intersection","Continue at the same speed"], a:0,
+   why:"Pull as far to the right as you safely can and stop until the emergency vehicle has passed. Do not stop in an intersection; clear it first, then pull over."},
+  {id:35, ex:2, cat:"Rules of the road", q:"In Maryland you may turn left on a red light:",
+   opts:["From a one-way street onto another one-way street, after a complete stop, unless posted","Never","From any street if no traffic is coming","Only at a flashing red light"], a:0,
+   why:"Maryland allows a left turn on red only from a one-way street onto another one-way street, after a full stop and yielding, and only where no sign prohibits it."},
+  {id:36, ex:2, cat:"Rules of the road", q:"You may not park within how many feet of a railroad crossing?",
+   opts:["50 feet","15 feet","20 feet","100 feet"], a:0,
+   why:"Stay at least 50 feet from the nearest rail. Remember the set: 15 feet from a hydrant, 20 feet from a crosswalk, 30 feet from a stop sign or signal, 50 feet from a railroad crossing."},
+  {id:37, ex:2, cat:"Rules of the road", q:"When entering a roundabout you must:",
+   opts:["Yield to traffic already in the circle and drive counterclockwise","Stop before entering","Drive clockwise","Enter without yielding; you have the right of way"], a:0,
+   why:"Traffic in a roundabout moves counterclockwise and has the right of way. Slow down, yield at the entry, and signal before you exit."},
+  {id:38, ex:2, cat:"Rules of the road", q:"When is it legal to pass another vehicle on the right?",
+   opts:["When the vehicle ahead is turning left and there is room on the pavement","Any time the left lane is busy","On the shoulder if it is paved","Never"], a:0,
+   why:"You may pass on the right only when the vehicle ahead is making a left turn or on a road with two or more lanes in your direction. Never leave the pavement to pass."},
+  {id:39, ex:2, cat:"Rules of the road", q:"At a railroad crossing with flashing lights and lowered gates, you must:",
+   opts:["Stop and wait; never drive around the gates","Proceed if you do not see a train","Drive around the gates if the train seems far away","Stop, then go after 30 seconds"], a:0,
+   why:"Stop when the lights flash or the gates come down, and stay stopped until the gates rise and the lights stop. Driving around a gate is illegal and deadly; a train cannot stop for you."},
+  {id:40, ex:2, cat:"Safe driving", q:"When parking downhill next to a curb, turn your front wheels:",
+   opts:["Toward the curb","Away from the curb","Straight ahead","Either direction"], a:0,
+   why:"Downhill, turn the wheels toward the curb so the curb catches the tire if the car rolls. Uphill with a curb, turn them away from the curb. With no curb, turn toward the edge of the road either way."},
+  {id:41, ex:2, cat:"Safe driving", q:"Before changing lanes you should:",
+   opts:["Signal, check your mirrors, and look over your shoulder to check the blind spot","Signal and move over","Check your mirrors only","Sound your horn"], a:0,
+   why:"Mirrors do not show everything. Signal first, check your mirrors, then turn your head to check the blind spot before moving over."},
+  {id:42, ex:2, cat:"Safe driving", q:"You are driving in fog. You should use:",
+   opts:["Low beam headlights","High beam headlights","Parking lights only","Hazard lights while moving"], a:0,
+   why:"High beams reflect off fog and make it harder to see. Use low beams, slow down, and increase your following distance."},
+  {id:43, ex:2, cat:"Safe driving", q:"Which road surfaces freeze first in cold weather?",
+   opts:["Bridges and overpasses","Wide highways","Hills","Roads in direct sunlight"], a:0,
+   why:"Cold air circulates above and below a bridge, so it ices over before the road leading to it. Slow down before you reach one."},
+  {id:44, ex:2, cat:"Safe driving", q:"A deer runs into the road ahead of you. Generally you should:",
+   opts:["Brake firmly and stay in your lane rather than swerving","Swerve into the other lane","Speed up to pass it","Flash your high beams and continue at speed"], a:0,
+   why:"Swerving often causes a worse crash with another car, a tree, or a ditch. Brake hard, hold your lane, and expect more deer to follow the first one."},
+  {id:45, ex:2, cat:"Maryland law", q:"Maryland law requires your headlights to be on whenever:",
+   opts:["Your windshield wipers are in use because of weather","You are on a highway","You are in a tunnel only","You are driving faster than 55 mph"], a:0,
+   why:"Wipers on, headlights on. Headlights are also required from sunset to sunrise and whenever you cannot clearly see people or vehicles 1,000 feet ahead."},
+  {id:46, ex:2, cat:"Maryland law", q:"A driver under 21 in Maryland is in violation with a blood alcohol concentration of:",
+   opts:["0.02 or higher","0.08 or higher","0.05 or higher","0.10 or higher"], a:0,
+   why:"Every Maryland license issued to a driver under 21 carries an alcohol restriction. A BAC of 0.02 or more violates it, and the penalties include license suspension. For drivers 21 and over, 0.08 is driving under the influence."},
+  {id:47, ex:2, cat:"Maryland law", q:"Before getting a provisional license, a Maryland Rookie Driver under 25 must hold a learner's permit for at least ___ and complete ___ of supervised driving.",
+   opts:["9 months; 60 hours, including 10 at night","6 months; 40 hours","3 months; 14 hours","12 months; 100 hours"], a:0,
+   why:"Drivers under 25 hold the permit at least nine months and log 60 supervised hours, including 10 at night, plus a certified driver education course (30 classroom hours and 6 behind the wheel)."},
+  {id:48, ex:2, cat:"Maryland law", q:"A provisional license holder under 18 may not drive between midnight and 5 a.m. unless:",
+   opts:["Accompanied by a qualified supervising driver, or driving to or from work, school, an athletic event, or an organized volunteer program","They have no passengers","They stay within 10 miles of home","They are at least 16 and a half"], a:0,
+   why:"The night restriction lasts until age 18. Driving during those hours is allowed only with a supervising driver beside you or for work, school, athletics, or organized volunteer activities."},
+  {id:49, ex:2, cat:"Sharing the road", q:"In Maryland, who must wear a seat belt?",
+   opts:["The driver and every passenger","Only front-seat occupants","Only passengers under 16","Only the driver"], a:0,
+   why:"Everyone in the vehicle must buckle up, front seat and back. The driver is responsible for making sure passengers under 16 are properly restrained."},
+  {id:50, ex:2, cat:"Sharing the road", q:"A motorcycle is entitled to:",
+   opts:["The full width of a lane","Half of a lane","The shoulder only","The right third of the lane"], a:0,
+   why:"Never share a lane with a motorcycle. Give it the whole lane, keep extra following distance, and look twice at intersections; motorcycles are easy to miss."},
+
+  /* ---------- EXTRA QUESTIONS (mixed exam only) ---------- */
+  {id:51, ex:0, cat:"Maryland law", q:"Under Maryland's point system, accumulating ___ points results in a license suspension and ___ points results in revocation.",
+   opts:["8 points; 12 points","5 points; 8 points","10 points; 15 points","6 points; 12 points"], a:0,
+   why:"Three to four points brings a warning letter, five to seven requires a Driver Improvement Program, eight to eleven means suspension, and twelve or more means revocation."},
+  {id:52, ex:0, cat:"Maryland law", q:"Children in Maryland must ride in a child safety seat until age 8 unless they are:",
+   opts:["At least 4 feet 9 inches tall","At least 50 pounds","At least 6 years old","Seated in the back seat"], a:0,
+   why:"Under age 8, a child must ride in a federally approved child safety seat or booster unless they are 4 feet 9 inches or taller. Children under 16 must always be buckled in."},
+  {id:53, ex:0, cat:"Rules of the road", q:"A driver's left arm held straight out the window is the hand signal for:",
+   opts:["A left turn","A right turn","Stopping or slowing","Backing up"], a:0,
+   why:"Left arm straight out means left turn. Left arm bent upward means right turn. Left arm bent downward means stop or slow down."},
+  {id:54, ex:0, cat:"Maryland law", q:"Under Maryland's implied consent law, refusing a chemical test for alcohol when a police officer asks:",
+   opts:["Results in license suspension","Is a right with no penalty","Applies only to commercial drivers","Costs a fine only"], a:0,
+   why:"By driving in Maryland you have already agreed to take a breath or blood test if an officer has reason to believe you are impaired. Refusing brings an automatic suspension on top of any DUI penalties."},
+  {id:55, ex:0, cat:"Signs & signals", sign:"oneway", q:"This black rectangular sign with a white arrow means:",
+   opts:["Traffic moves only in the direction of the arrow","You may merge in either direction","Keep right of the island","Detour ahead"], a:0,
+   why:"ONE WAY means all traffic on that street travels in the direction of the arrow. Do not turn onto it against the arrow."},
+  {id:56, ex:0, cat:"Signs & signals", sign:"nouturn", q:"This sign means:",
+   opts:["U-turns are prohibited","No left turn","No right turn","Keep right"], a:0,
+   why:"A red circle with a slash means the action shown is prohibited. Here the U-shaped arrow means no U-turn."},
+  {id:57, ex:0, cat:"Safe driving", q:"When backing up, you should:",
+   opts:["Turn your head and look through the rear window","Rely on your mirrors only","Open the door and look back","Watch the backup camera only"], a:0,
+   why:"Turn your body and look through the rear window while backing slowly. Mirrors and cameras help, but they leave blind spots."},
+  {id:58, ex:0, cat:"Safe driving", q:"Total stopping distance is made up of:",
+   opts:["Perception distance plus reaction distance plus braking distance","Braking distance only","Reaction distance only","The length of the vehicle"], a:0,
+   why:"You first have to notice the hazard, then move your foot to the brake, then the car has to slow. All three distances grow with speed, which is why speeding is so dangerous."},
+  {id:59, ex:0, cat:"Maryland law", q:"A Maryland learner's permit is valid for:",
+   opts:["2 years, and it cannot be renewed","1 year","6 months","Until you turn 18"], a:0,
+   why:"The permit is good for two years from the date it is issued and cannot be renewed, so finish the supervised hours and driver education within that time."},
+  {id:60, ex:0, cat:"Rules of the road", q:"A police officer is directing traffic at an intersection where the signal is also working. You should:",
+   opts:["Follow the officer's directions","Follow the traffic signal","Follow whichever is more convenient","Stop until the officer leaves"], a:0,
+   why:"Directions from a police officer always override traffic signals and signs."}
+];
+const BY_ID = {}; BANK.forEach(q => { BY_ID[q.id] = q; });
+
+const EXAMS = {
+  "1":   {key:"1",   title:"Exam 1",      blurb:"25 questions across signs, rules, safe driving, and Maryland law.", pick:() => BANK.filter(q => q.ex === 1)},
+  "2":   {key:"2",   title:"Exam 2",      blurb:"25 different questions, same mix as the real test.", pick:() => BANK.filter(q => q.ex === 2)},
+  "mix": {key:"mix", title:"Mixed exam",  blurb:"25 questions drawn at random from all 60 in the bank.", pick:() => shuffle(BANK.slice()).slice(0, N)}
+};
+
+function shuffle(arr){ for (let i = arr.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
+function esc(s){ return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function mmss(ms){ const s = Math.max(0, Math.floor(ms / 1000)); return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); }
+
+/* best scores: per-viewer convenience only */
+function loadBest(){ try { return JSON.parse(localStorage.getItem("mdpermit.best") || "{}") || {}; } catch (e) { return {}; } }
+function saveBest(key, score, total){
+  try {
+    const b = loadBest();
+    if (!b[key] || score > b[key].score) { b[key] = {score, total, when:new Date().toISOString().slice(0, 10)}; localStorage.setItem("mdpermit.best", JSON.stringify(b)); }
+  } catch (e) {}
+}
+
+let S = {screen:"home", mode:"exam", exam:null, items:[], idx:0, answers:[], start:0, end:0, revealed:false, missedOnly:false};
+let timerId = null;
+const app = document.getElementById("app");
+
+function startExam(key){
+  const ex = EXAMS[key];
+  const qs = shuffle(ex.pick().slice());
+  S.exam = key;
+  S.items = qs.map(q => ({id:q.id, order:shuffle(q.opts.map((_, i) => i))}));
+  S.answers = S.items.map(() => null);
+  S.idx = 0; S.revealed = false; S.start = Date.now(); S.end = 0; S.missedOnly = false;
+  S.screen = "quiz";
+  render();
+}
+
+function render(){
+  if (timerId){ clearInterval(timerId); timerId = null; }
+  if (S.screen === "home") renderHome();
+  else if (S.screen === "quiz") renderQuiz();
+  else renderResults();
+  window.scrollTo({top:0, behavior:"instant"});
+}
+
+function renderHome(){
+  const best = loadBest();
+  const cards = Object.values(EXAMS).map(ex => {
+    const b = best[ex.key];
+    const bestHtml = b ? `<span class="best ${b.score >= PASS ? "pass" : ""}">Best: ${b.score} / ${b.total}${b.score >= PASS ? " · passed" : ""}</span>` : `<span class="meta">Not taken yet</span>`;
+    return `<div class="card">
+      <div class="title">${ex.title}</div>
+      <div class="meta">${ex.blurb}</div>
+      ${bestHtml}
+      <button class="btn" data-start="${ex.key}">Start ${ex.title.toLowerCase()}</button>
+    </div>`;
+  }).join("");
+
+  app.innerHTML = `
+    <div class="stack" style="gap:22px">
+      <div class="brand">
+        <div class="badge" aria-hidden="true">MD</div>
+        <div>
+          <div class="eyebrow">Maryland MVA · Class C knowledge test</div>
+          <h1>Maryland Permit Practice</h1>
+        </div>
+      </div>
+
+      <p>The real learner's permit test at the MVA is 25 multiple-choice questions. You need <b>22 correct (88%)</b> to pass. Every exam here uses the same format and pass mark, and questions and answer choices are shuffled each time you retake one.</p>
+
+      <div class="spread">
+        <div class="eyebrow">How do you want to take it?</div>
+        <div class="seg" role="group" aria-label="Mode">
+          <button type="button" data-mode="exam" aria-pressed="${S.mode === "exam"}">Exam mode</button>
+          <button type="button" data-mode="study" aria-pressed="${S.mode === "study"}">Study mode</button>
+        </div>
+      </div>
+      <p class="hint">${S.mode === "exam" ? "Exam mode grades everything at the end, like the real test. Switch to study mode to see the explanation right after each answer." : "Study mode shows whether you were right, and why, after every question. Switch to exam mode when you want a dress rehearsal."}</p>
+
+      <div class="cards">${cards}</div>
+
+      <div class="note">
+        <div class="eyebrow" style="margin-bottom:8px">Rookie Driver quick facts</div>
+        <dl class="facts">
+          <dt>Learner's permit</dt><dd>Age 15 years, 9 months; valid 2 years</dd>
+          <dt>Supervising driver</dt><dd>21 or older, licensed 3+ years, seated beside you</dd>
+          <dt>Before provisional</dt><dd>Permit held 9 months; 60 supervised hours (10 at night); driver ed</dd>
+          <dt>Provisional license</dt><dd>Age 16 years, 6 months; no driving midnight to 5 a.m. under 18</dd>
+          <dt>Cell phone</dt><dd>No use at all under 18, except to call 911</dd>
+        </dl>
+      </div>
+      <p class="hint">Questions are based on the Maryland Driver's Manual. Always check the current manual at mva.maryland.gov for the latest rules.</p>
+    </div>`;
+
+  app.querySelectorAll("[data-mode]").forEach(b => b.addEventListener("click", () => { S.mode = b.dataset.mode; render(); }));
+  app.querySelectorAll("[data-start]").forEach(b => b.addEventListener("click", () => startExam(b.dataset.start)));
+}
+
+function renderQuiz(){
+  const it = S.items[S.idx], q = BY_ID[it.id], ex = EXAMS[S.exam];
+  const chosen = S.answers[S.idx];
+  const total = S.items.length, last = S.idx === total - 1;
+  const study = S.mode === "study";
+  const locked = study && S.revealed;
+  const letters = ["A", "B", "C", "D"];
+
+  const opts = it.order.map((oi, k) => {
+    let cls = "opt";
+    if (locked){ if (oi === q.a) cls += " correct"; else if (oi === chosen) cls += " wrong"; }
+    else if (oi === chosen) cls += " selected";
+    return `<button type="button" class="${cls}" data-oi="${oi}" ${locked ? "disabled" : ""} aria-pressed="${oi === chosen}">
+      <span class="k" aria-hidden="true">${letters[k]}</span><span>${esc(q.opts[oi])}</span></button>`;
+  }).join("");
+
+  let explain = "";
+  if (locked){
+    const right = chosen === q.a;
+    explain = `<div class="explain ${right ? "" : "bad"}" role="status"><b>${right ? "Correct" : "Not quite"}</b>${esc(q.why)}</div>`;
+  }
+
+  app.innerHTML = `
+    <div class="stack" style="gap:18px">
+      <div class="topbar">
+        <div><b>${ex.title}</b> · <span class="num">Question ${S.idx + 1} of ${total}</span></div>
+        <div class="row" style="gap:16px">
+          <span class="num muted" id="clock">${mmss(Date.now() - S.start)}</span>
+          <button type="button" class="link" id="quit">Quit</button>
+        </div>
+      </div>
+      <div class="progress" aria-hidden="true"><i style="width:${(S.idx / total) * 100}%"></i></div>
+      <div class="chip">${esc(q.cat)}</div>
+      ${q.sign ? `<div class="sign">${SIGNS[q.sign]}</div>` : ""}
+      <div class="qtext">${esc(q.q)}</div>
+      <div class="opts" role="group" aria-label="Answer choices">${opts}</div>
+      ${explain}
+      <div class="spread">
+        <span class="hint">${locked ? "" : (study ? "Pick an answer to see the explanation." : "Press 1 to 4 to choose, Enter to continue.")}</span>
+        <button type="button" class="btn" id="next" ${chosen === null ? "disabled" : ""}>${last ? "Finish and see score" : "Next"}</button>
+      </div>
+    </div>`;
+
+  app.querySelectorAll(".opt").forEach(b => b.addEventListener("click", () => choose(Number(b.dataset.oi))));
+  document.getElementById("next").addEventListener("click", next);
+  document.getElementById("quit").addEventListener("click", () => { S.screen = "home"; render(); });
+
+  timerId = setInterval(() => { const c = document.getElementById("clock"); if (c) c.textContent = mmss(Date.now() - S.start); }, 1000);
+}
+
+function choose(oi){
+  if (S.mode === "study" && S.revealed) return;
+  S.answers[S.idx] = oi;
+  if (S.mode === "study") S.revealed = true;
+  render();
+  if (S.mode === "study") { const n = document.getElementById("next"); if (n) n.focus(); }
+}
+
+function next(){
+  if (S.answers[S.idx] === null) return;
+  if (S.idx < S.items.length - 1){ S.idx++; S.revealed = false; render(); }
+  else finish();
+}
+
+function finish(){
+  S.end = Date.now();
+  const score = S.items.reduce((n, it, i) => n + (S.answers[i] === BY_ID[it.id].a ? 1 : 0), 0);
+  saveBest(S.exam, score, S.items.length);
+  S.screen = "results";
+  render();
+}
+
+function renderResults(){
+  const ex = EXAMS[S.exam], total = S.items.length;
+  const rows = S.items.map((it, i) => ({q:BY_ID[it.id], chosen:S.answers[i], right:S.answers[i] === BY_ID[it.id].a, n:i + 1}));
+  const score = rows.filter(r => r.right).length;
+  const passed = score >= PASS;
+  const pct = Math.round((score / total) * 100);
+
+  const cats = {};
+  rows.forEach(r => { cats[r.q.cat] = cats[r.q.cat] || {c:0, t:0}; cats[r.q.cat].t++; if (r.right) cats[r.q.cat].c++; });
+  const catHtml = Object.keys(cats).map(c => `<div class="cat"><span>${esc(c)}</span><div class="barwrap"><i style="width:${(cats[c].c / cats[c].t) * 100}%"></i></div><span class="num">${cats[c].c} / ${cats[c].t}</span></div>`).join("");
+
+  const shown = S.missedOnly ? rows.filter(r => !r.right) : rows;
+  const review = shown.map(r => `
+    <div class="rv ${r.right ? "" : "missed"}">
+      <div class="row" style="gap:8px"><span class="chip">${esc(r.q.cat)}</span>${r.right ? "" : `<span class="pill bad" style="font-size:11px;padding:3px 8px">Missed</span>`}</div>
+      <div class="q num">${r.n}. ${esc(r.q.q)}</div>
+      <div class="ans">
+        <span>Your answer</span><span>${r.chosen === null ? "(no answer)" : esc(r.q.opts[r.chosen])}</span>
+        ${r.right ? "" : `<span>Correct answer</span><span><b>${esc(r.q.opts[r.q.a])}</b></span>`}
+      </div>
+      <div class="why">${esc(r.q.why)}</div>
+    </div>`).join("") || `<p class="muted" style="padding:14px 0">No missed questions. Nice work.</p>`;
+
+  const message = passed
+    ? (score === total ? "A perfect score. You are more than ready for the MVA." : `That would pass at the MVA. You missed ${total - score}; read through those below so they stick.`)
+    : `You need ${PASS} of ${total} to pass, so ${PASS - score} more right answer${PASS - score === 1 ? "" : "s"} would have done it. Review the missed questions, then try again.`;
+
+  app.innerHTML = `
+    <div class="stack" style="gap:20px">
+      <div class="eyebrow">${ex.title} · ${S.mode === "study" ? "study mode" : "exam mode"} · ${mmss(S.end - S.start)}</div>
+      <div class="verdict">
+        <span class="pill ${passed ? "ok" : "bad"}">${passed ? "PASS" : "NOT YET"}</span>
+        <div class="big num">${score} <small>/ ${total} · ${pct}%</small></div>
+        <p>${message}</p>
+        <div class="row" style="margin-top:6px">
+          <button type="button" class="btn" id="retake">Retake ${ex.title.toLowerCase()}</button>
+          <button type="button" class="btn ghost" id="home">All exams</button>
+        </div>
+      </div>
+
+      <div class="stack" style="gap:10px">
+        <h2>By category</h2>
+        <div class="cats">${catHtml}</div>
+      </div>
+
+      <div class="stack" style="gap:10px">
+        <div class="spread">
+          <h2>Review</h2>
+          <label class="check"><input type="checkbox" id="missedOnly" ${S.missedOnly ? "checked" : ""}> Show missed only</label>
+        </div>
+        <div class="review">${review}</div>
+      </div>
+    </div>`;
+
+  document.getElementById("retake").addEventListener("click", () => startExam(S.exam));
+  document.getElementById("home").addEventListener("click", () => { S.screen = "home"; render(); });
+  document.getElementById("missedOnly").addEventListener("change", e => { S.missedOnly = e.target.checked; render(); });
+}
+
+document.addEventListener("keydown", e => {
+  if (S.screen !== "quiz") return;
+  if (e.key >= "1" && e.key <= "4"){
+    const it = S.items[S.idx]; const k = Number(e.key) - 1;
+    if (it.order[k] !== undefined && !(S.mode === "study" && S.revealed)) choose(it.order[k]);
+  } else if (e.key === "Enter" && S.answers[S.idx] !== null && document.activeElement.tagName !== "BUTTON"){
+    next();
+  }
+});
+
+/* keep state across a republish for anyone mid-exam */
+if (window.claude && window.claude.hot && window.claude.hot.snapshot) window.claude.hot.snapshot(() => ({S}));
+function boot(data){
+  if (data && data.S && data.S.items && data.S.items.length) S = Object.assign(S, data.S);
+  render();
+}
+if (window.claude && window.claude.hot && window.claude.hot.ready) window.claude.hot.ready(boot);
+else boot((window.claude && window.claude.hot && window.claude.hot.data) || {});
+})();
+</script>
