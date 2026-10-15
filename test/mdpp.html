@@ -1,9 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B6B4B">
 <title>Maryland Permit Practice</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass:wght@600;800&family=Public+Sans:wght@400;600&display=swap">
 <style>
 /* Layout: one centered reading column (680px). Home shows exam cards in a row that stacks on phones;
    the quiz is a single question per screen with full-width tap targets; results open with the verdict, then a review list. */
+html{color-scheme:light; padding-top:env(safe-area-inset-top, 0px); padding-bottom:env(safe-area-inset-bottom, 0px); -webkit-text-size-adjust:100%}
+img,svg{max-width:100%}
+[hidden]{display:none!important}
+.btn,.opt,.seg button,.link{touch-action:manipulation; -webkit-tap-highlight-color:transparent}
 :root{
   --bg:#F6F5F0;
   --surface:#FFFFFF;
@@ -119,6 +129,8 @@ dl.facts dd{margin:0; font-weight:600}
 .progress{height:6px; background:var(--line); border-radius:999px; overflow:hidden}
 .progress i{display:block; height:100%; width:0; background:var(--accent); transition:width .3s ease}
 .chip{display:inline-block; font-family:var(--display); font-weight:600; font-size:12px; letter-spacing:.06em; text-transform:uppercase; padding:3px 9px; border-radius:999px; background:var(--accent-soft); color:var(--accent)}
+.stack > .chip{align-self:flex-start}
+@media (hover:none) and (pointer:coarse){.kbd{visibility:hidden}}
 .sign{width:120px; max-width:100%}
 .sign svg{width:100%; height:auto; display:block}
 .qtext{font-size:19px; font-weight:600; line-height:1.4; text-wrap:balance}
@@ -167,7 +179,8 @@ label.check{display:inline-flex; gap:8px; align-items:center; font-size:14px; cu
 
 @media (prefers-reduced-motion: reduce){.progress i{transition:none}}
 </style>
-
+</head>
+<body>
 <div class="wrap" id="app"></div>
 
 <script>
@@ -511,7 +524,7 @@ function renderQuiz(){
       <div class="opts" role="group" aria-label="Answer choices">${opts}</div>
       ${explain}
       <div class="spread">
-        <span class="hint">${locked ? "" : (study ? "Pick an answer to see the explanation." : "Press 1 to 4 to choose, Enter to continue.")}</span>
+        <span class="hint ${(!locked && !study) ? "kbd" : ""}">${locked ? "" : (study ? "Pick an answer to see the explanation." : "Press 1 to 4 to choose, Enter to continue.")}</span>
         <button type="button" class="btn" id="next" ${chosen === null ? "disabled" : ""}>${last ? "Finish and see score" : "Next"}</button>
       </div>
     </div>`;
@@ -624,3 +637,5 @@ if (window.claude && window.claude.hot && window.claude.hot.ready) window.claude
 else boot((window.claude && window.claude.hot && window.claude.hot.data) || {});
 })();
 </script>
+</body>
+</html>
