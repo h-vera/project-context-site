@@ -9,7 +9,7 @@
   <!-- Page Metadata -->
   <meta name="page-type"        content="methodology-master" />
   <meta name="hub-id"           content="literary-devices" />
-  <meta name="template-version" content="5.8.1" />
+  <meta name="template-version" content="5.9.4" />
   <meta name="study-type"       content="reading-framework" />
   <meta name="page-category"    content="biblical-literary-devices" />
 
@@ -36,683 +36,51 @@
 
   <link rel="canonical" href="https://projectcontext.org/resources/literary-devices/how-to-read.html" />
 
-  <!-- Preload Critical Resources -->
-  <link rel="preload" href="/assets/css/global-v2.css" as="style" />
+  <!-- Citation metadata (v5.9.3+) — consumed by the chassis cite button -->
+  <meta name="citation-author" content="Project Context" />
+  <meta name="citation-title"  content="How to Read Biblical Literature: The Reading Stack" />
+  <meta name="citation-site"   content="Project Context" />
+  <meta name="citation-date"   content="2026" />
 
-  <!-- Stylesheets (global-v2.css FIRST, then page-specific overrides) -->
-  <link rel="stylesheet" href="/assets/css/global-v2.css" />
-  <link rel="stylesheet" href="/assets/css/mobile-tabs-v5-8.css" />
+  <!-- Fonts — the v3 typography budget -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
-  <style>
-    /* ═══════════════════════════════════════════════════════════
-       PAGE ACCENT — deep indigo, sits above all category colors
-       ═══════════════════════════════════════════════════════════ */
-    :root {
-      --page-accent:       #3a3563;
-      --page-accent-dark:  #2c2454;
-      --page-accent-light: rgba(58,53,99,0.08);
-      --page-accent-tint:  rgba(58,53,99,0.15);
+  <!-- Hebrew (global-v3 --font-hebrew) -->
+  <link rel="preload" href="/assets/fonts/SBL_Hebrew.woff2" as="font" type="font/woff2" crossorigin />
 
-      /* Level colors — each maps to a category color for visual continuity */
-      --level-1-color: #c9a14a; /* Word — Meaning category gold */
-      --level-2-color: #2d5f63; /* Line — Parallelism teal */
-      --level-3-color: #5a6b2e; /* Scene — Narrative olive */
-      --level-4-color: #6b2848; /* Structure — Macro burgundy */
-      --level-5-color: #4a6741; /* Canon — Intertextual forest */
-    }
+  <!-- Stylesheets: global-v3 → polish → catalog page stylesheet -->
+  <link rel="preload"    href="/assets/css/global-v3.css?v=3.3.1" as="style" />
+  <link rel="stylesheet" href="/assets/css/global-v3.css?v=3.3.1" />
+  <link rel="stylesheet" href="/assets/css/global-v3-polish.css?v=0.3" />
+  <link rel="stylesheet" href="/assets/css/literary-devices.css?v=1.0" />
 
-    /* ═══════════════════════════════════════════════════════════
-       HERO — high-specificity, high-contrast gradient
-       Scoped to body.literary-devices-page so this beats anything in
-       global-v2.css. Wide color range from near-black to vivid violet.
-       ═══════════════════════════════════════════════════════════ */
-    body.literary-devices-page .page-header-banner {
-      background: radial-gradient(circle at 0% 0%, rgba(255,255,255,0.28) 0%, transparent 50%),
-                  radial-gradient(circle at 100% 100%, rgba(233,75,255,0.25) 0%, transparent 60%),
-                  linear-gradient(135deg, #15103a 0%, #2c2467 35%, #4d3da3 70%, #8158d8 100%) !important;
-      color: #f9fafb !important;
-      padding: 2.75rem 2.25rem;
-      border-radius: 20px;
-      margin-bottom: 2.5rem;
-      box-shadow: 0 10px 30px rgba(15,23,42,0.22);
-      position: relative;
-      overflow: hidden;
-    }
-    .page-header-banner::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 110% -10%, rgba(248,250,252,0.10) 0%, transparent 55%);
-      pointer-events: none;
-    }
-    .page-header-kicker {
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      font-size: 0.78rem;
-      font-weight: 600;
-      opacity: 0.9;
-      margin-bottom: 0.75rem;
-      position: relative;
-      z-index: 1;
-    }
-    .page-header-banner h1 {
-      margin: 0 0 0.5rem;
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
-      line-height: 1.15;
-      position: relative;
-      z-index: 1;
-    }
-    .page-header-banner h1 em {
-      font-style: italic;
-      font-weight: 400;
-      opacity: 0.92;
-    }
-    .page-header-subtitle {
-      margin: 0.5rem 0 0;
-      font-size: 1.05rem;
-      line-height: 1.55;
-      max-width: 60ch;
-      opacity: 0.94;
-      position: relative;
-      z-index: 1;
-    }
-    .page-header-stats {
-      display: flex;
-      gap: 2rem;
-      margin-top: 1.5rem;
-      flex-wrap: wrap;
-      position: relative;
-      z-index: 1;
-    }
-    .header-stat {
-      display: flex;
-      flex-direction: column;
-      gap: 0.15rem;
-    }
-    .header-stat .num {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.85rem;
-      font-weight: 600;
-      line-height: 1;
-    }
-    .header-stat .lbl {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      opacity: 0.85;
-    }
-
-    /* ═══════════════════════════════════════════════════════════
-       NOTE: .section-title and .section-icon are intentionally NOT
-       defined here. They come from global-v2.css and apply
-       site-wide. Overriding them clobbers font/color/glyph rules.
-       ═══════════════════════════════════════════════════════════ */
-
-    /* ═══════════════════════════════════════════════════════════
-       THEOLOGY CARD HOVER — explicit, not gated by @media (hover)
-       global-v2.css only applies hover inside @media (hover:hover);
-       this adds it unconditionally with the page accent.
-       ═══════════════════════════════════════════════════════════ */
-    body.literary-devices-page .theology-card {
-      transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
-    }
-    body.literary-devices-page .theology-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 32px rgba(58,53,99,0.14), 0 4px 10px rgba(15,23,42,0.06);
-      border-color: rgba(58,53,99,0.28);
-    }
-
-    /* ═══════════════════════════════════════════════════════════
-       ANIMATE-ON-SCROLL — site convention is opacity:0 → .visible.
-       global-v2.css already defines the keyframes/transitions.
-       My inline IntersectionObserver below adds .visible.
-       Stagger delays so sections cascade in.
-       ═══════════════════════════════════════════════════════════ */
-    .animate-on-scroll { transition-delay: 0s; }
-    .animate-on-scroll.stagger-1 { transition-delay: 0.05s; }
-    .animate-on-scroll.stagger-2 { transition-delay: 0.10s; }
-    .animate-on-scroll.stagger-3 { transition-delay: 0.15s; }
-    .animate-on-scroll.stagger-4 { transition-delay: 0.20s; }
-
-    /* ═══════════════════════════════════════════════════════════
-       READING STACK WIDGET — the centerpiece
-       ═══════════════════════════════════════════════════════════ */
-    .reading-stack-widget {
-      display: grid;
-      grid-template-columns: minmax(280px, 1fr) 1.3fr;
-      gap: 1.75rem;
-      margin: 1rem 0 0.5rem;
-    }
-
-    /* The vertical stack of levels */
-    .stack-column {
-      display: flex;
-      flex-direction: column-reverse; /* Word at bottom, Canon at top */
-      gap: 0.55rem;
-    }
-
-    .stack-level {
-      /* button reset */
-      appearance: none;
-      border: 1px solid var(--border-light, #e5e7eb);
-      background: #fff;
-      width: 100%;
-      text-align: left;
-      cursor: pointer;
-      font: inherit;
-      color: inherit;
-
-      /* layout */
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      gap: 0.85rem;
-      padding: 0.95rem 1.15rem;
-      border-radius: 12px;
-      border-left: 5px solid var(--level-color);
-      transition: all 0.22s ease;
-      position: relative;
-
-      /* Entrance — stagger on widget reveal */
-      opacity: 0;
-      transform: translateX(-12px);
-      animation: stackLevelIn 0.5s ease forwards;
-    }
-    @keyframes stackLevelIn {
-      to { opacity: 1; transform: translateX(0); }
-    }
-    /* column-reverse means rendered-first sits at bottom of stack;
-       delays go from rendered-first (Canon, top) downward. Reading
-       cascades top-down which is the natural eye path. */
-    .stack-column .stack-level:nth-child(1) { animation-delay: 0.05s; }
-    .stack-column .stack-level:nth-child(2) { animation-delay: 0.13s; }
-    .stack-column .stack-level:nth-child(3) { animation-delay: 0.21s; }
-    .stack-column .stack-level:nth-child(4) { animation-delay: 0.29s; }
-    .stack-column .stack-level:nth-child(5) { animation-delay: 0.37s; }
-    .stack-level:hover {
-      border-color: var(--level-color);
-      transform: translateX(3px);
-      box-shadow: 0 4px 14px rgba(15,23,42,0.06);
-    }
-    .stack-level.active {
-      background: linear-gradient(90deg, var(--level-color) 0%, color-mix(in srgb, var(--level-color) 88%, white) 100%);
-      color: #fff;
-      border-color: var(--level-color);
-      box-shadow: 0 6px 18px rgba(15,23,42,0.14);
-      transform: translateX(6px);
-    }
-    .stack-level.active .level-number,
-    .stack-level.active .level-tag {
-      background: rgba(255,255,255,0.18);
-      color: #fff;
-      border-color: rgba(255,255,255,0.25);
-    }
-    .stack-level.active .level-tagline {
-      color: rgba(255,255,255,0.88);
-    }
-
-    .level-number {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.08em;
-      font-weight: 700;
-      background: var(--level-color);
-      color: #fff;
-      padding: 0.32rem 0.55rem;
-      border-radius: 6px;
-      line-height: 1;
-      transition: all 0.22s ease;
-    }
-    .level-body {
-      display: flex;
-      flex-direction: column;
-      gap: 0.18rem;
-      min-width: 0;
-    }
-    .level-name {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.18rem;
-      font-weight: 600;
-      line-height: 1.2;
-    }
-    .level-tagline {
-      font-size: 0.84rem;
-      color: var(--text-gray, #5a5a6a);
-      line-height: 1.4;
-      transition: color 0.22s ease;
-    }
-    .level-tag {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-gray, #666);
-      background: #fff;
-      border: 1px solid var(--border-light, #e5e7eb);
-      padding: 0.22rem 0.5rem;
-      border-radius: 999px;
-      white-space: nowrap;
-      transition: all 0.22s ease;
-    }
-
-    /* Foundation marker */
-    .stack-foundation-note {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-gray, #888);
-      text-align: center;
-      margin-top: 0.65rem;
-      padding-top: 0.65rem;
-      border-top: 1px dashed var(--border-light, #e5e7eb);
-    }
-
-    /* ─────────── DETAIL PANEL ─────────── */
-    .detail-panel-wrap {
-      position: relative;
-    }
-    .detail-panel {
-      background: #fff;
-      border: 1px solid var(--border-light, #e5e7eb);
-      border-radius: 14px;
-      padding: 1.6rem 1.7rem;
-      box-shadow: 0 4px 16px rgba(15,23,42,0.05);
-      position: sticky;
-      top: 1.5rem;
-      animation: detailFadeIn 0.32s ease;
-    }
-    @keyframes detailFadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .detail-panel[hidden] { display: none; }
-
-    .detail-eyebrow {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--detail-color);
-      font-weight: 700;
-      margin-bottom: 0.4rem;
-    }
-    .detail-title {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.85rem;
-      font-weight: 600;
-      color: var(--primary-dark, #1a1a2e);
-      margin: 0 0 1.1rem;
-      padding-bottom: 0.85rem;
-      border-bottom: 2px solid var(--detail-color);
-      line-height: 1.15;
-    }
-    .detail-block {
-      margin: 0 0 1.1rem;
-    }
-    .detail-block:last-child { margin-bottom: 0; }
-    .detail-label {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-gray, #666);
-      font-weight: 700;
-      margin-bottom: 0.4rem;
-    }
-    .detail-question {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-style: italic;
-      font-size: 1.1rem;
-      color: var(--primary-dark, #1a1a2e);
-      line-height: 1.4;
-      padding: 0.6rem 0.95rem;
-      background: var(--page-accent-light);
-      border-left: 3px solid var(--detail-color);
-      border-radius: 0 6px 6px 0;
-    }
-    .detail-devices {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
-    .device-chip {
-      font-size: 0.78rem;
-      padding: 0.28rem 0.7rem;
-      background: var(--page-accent-light);
-      color: var(--detail-color);
-      border-radius: 999px;
-      font-weight: 500;
-    }
-    .detail-example {
-      font-size: 0.93rem;
-      line-height: 1.6;
-      color: var(--text, #2a2a35);
-      padding: 0.85rem 1rem;
-      background: rgba(0,0,0,0.025);
-      border-radius: 8px;
-      border-left: 3px solid var(--detail-color);
-    }
-    .detail-example .ex-ref {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.05em;
-      color: var(--detail-color);
-      font-weight: 600;
-      display: block;
-      margin-bottom: 0.3rem;
-      text-transform: uppercase;
-    }
-    .detail-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      padding: 0.55rem 1rem;
-      background: var(--detail-color);
-      color: #fff;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.92rem;
-      transition: all 0.18s ease;
-    }
-    .detail-cta:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(15,23,42,0.14);
-    }
-    .detail-categories {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-    .detail-categories a {
-      font-size: 0.85rem;
-      padding: 0.4rem 0.85rem;
-      background: #fff;
-      border: 1px solid var(--detail-color);
-      color: var(--detail-color);
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: 500;
-      transition: all 0.18s ease;
-    }
-    .detail-categories a:hover {
-      background: var(--detail-color);
-      color: #fff;
-    }
-
-    /* ═══════════════════════════════════════════════════════════
-       FRAMEWORK CARDS (Observation → Meaning grid)
-       ═══════════════════════════════════════════════════════════ */
-    .framework-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem;
-      margin-top: 1.1rem;
-    }
-    .framework-card {
-      background: #fff;
-      border: 1px solid var(--border-light, #e5e7eb);
-      border-top: 4px solid var(--page-accent);
-      border-radius: 12px;
-      padding: 1.15rem 1.25rem;
-      transition: all 0.2s ease;
-    }
-    .framework-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(15,23,42,0.08);
-    }
-    .framework-card .fc-step {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--page-accent);
-      font-weight: 700;
-      margin-bottom: 0.35rem;
-    }
-    .framework-card h4 {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin: 0 0 0.5rem;
-      color: var(--primary-dark, #1a1a2e);
-    }
-    .framework-card p {
-      font-size: 0.92rem;
-      line-height: 1.55;
-      color: var(--text, #2a2a35);
-      margin: 0;
-    }
-
-    .framework-flow {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.85rem;
-      color: var(--page-accent-dark);
-      letter-spacing: 0.04em;
-      text-align: center;
-      padding: 0.85rem;
-      background: var(--page-accent-light);
-      border-radius: 8px;
-      margin-top: 1.25rem;
-    }
-
-    /* ═══════════════════════════════════════════════════════════
-       MEANING vs SIGNIFICANCE
-       ═══════════════════════════════════════════════════════════ */
-    .meaning-significance {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-    .ms-card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 1.3rem 1.4rem;
-      border: 1px solid var(--border-light, #e5e7eb);
-    }
-    .ms-card.meaning      { border-left: 5px solid var(--level-3-color); }
-    .ms-card.significance { border-left: 5px solid var(--level-1-color); }
-    .ms-card h4 {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.3rem;
-      margin: 0 0 0.55rem;
-      color: var(--primary-dark, #1a1a2e);
-      display: flex;
-      align-items: baseline;
-      gap: 0.5rem;
-    }
-    .ms-card h4 .ms-tag {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.18rem 0.5rem;
-      border-radius: 4px;
-      font-weight: 700;
-    }
-    .ms-card.meaning      h4 .ms-tag { background: var(--level-3-color); color: #fff; }
-    .ms-card.significance h4 .ms-tag { background: var(--level-1-color); color: #fff; }
-    .ms-card p { font-size: 0.95rem; line-height: 1.6; margin: 0; color: var(--text, #2a2a35); }
-
-    /* ═══════════════════════════════════════════════════════════
-       MISREADINGS LIST
-       ═══════════════════════════════════════════════════════════ */
-    .misread-list {
-      list-style: none;
-      padding: 0;
-      margin: 1rem 0 0;
-      display: grid;
-      gap: 0.65rem;
-    }
-    .misread-list li {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 0.85rem;
-      padding: 0.85rem 1rem;
-      background: #fff;
-      border: 1px solid var(--border-light, #e5e7eb);
-      border-radius: 10px;
-      align-items: start;
-    }
-    .misread-list .mr-icon {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: #fff;
-      background: #c0392b;
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-      letter-spacing: 0.08em;
-    }
-    .misread-list strong { color: var(--primary-dark, #1a1a2e); }
-    .misread-list .mr-text {
-      font-size: 0.92rem;
-      line-height: 1.55;
-    }
-
-    /* ═══════════════════════════════════════════════════════════
-       NEXT-STEP CTAs
-       ═══════════════════════════════════════════════════════════ */
-    .next-steps {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-top: 1.25rem;
-    }
-    .next-card {
-      display: block;
-      padding: 1.4rem 1.55rem;
-      background: linear-gradient(135deg, #fff 0%, var(--page-accent-light) 100%);
-      border: 1px solid var(--page-accent-tint);
-      border-radius: 14px;
-      text-decoration: none;
-      color: inherit;
-      transition: all 0.22s ease;
-    }
-    .next-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 24px rgba(58,53,99,0.14);
-      border-color: var(--page-accent);
-    }
-    .next-card .nc-eyebrow {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--page-accent);
-      font-weight: 700;
-      margin-bottom: 0.35rem;
-    }
-    .next-card h4 {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.35rem;
-      font-weight: 600;
-      margin: 0 0 0.4rem;
-      color: var(--primary-dark, #1a1a2e);
-    }
-    .next-card p {
-      font-size: 0.9rem;
-      line-height: 1.5;
-      margin: 0;
-      color: var(--text, #2a2a35);
-    }
-    .next-card .nc-arrow {
-      display: inline-block;
-      margin-top: 0.55rem;
-      font-weight: 600;
-      color: var(--page-accent);
-      font-size: 0.92rem;
-    }
-
-    /* ═══════════════════════════════════════════════════════════
-       MOBILE
-       ═══════════════════════════════════════════════════════════ */
-    @media (max-width: 860px) {
-      .reading-stack-widget   { grid-template-columns: 1fr; }
-      .meaning-significance   { grid-template-columns: 1fr; }
-      .next-steps             { grid-template-columns: 1fr; }
-      .detail-panel           { position: static; }
-      .page-header-banner     { padding: 2rem 1.5rem; }
-      .page-header-stats      { gap: 1.25rem; }
-      .stack-level            { padding: 0.85rem 1rem; gap: 0.7rem; }
-      .stack-level .level-tag { display: none; }
-    }
-
-    /* ═══════════════════════════════════════════════════════════
-       PREV / NEXT NAV
-       ═══════════════════════════════════════════════════════════ */
-    .prev-next {
-      margin-top: 2.5rem;
-      display: flex;
-      gap: 1rem;
-      justify-content: space-between;
-    }
-    .prev-next a {
-      flex: 1;
-      max-width: 48%;
-      background: #fff;
-      border: 1px solid var(--border-light, #e5e7eb);
-      border-radius: 10px;
-      padding: 1rem 1.3rem;
-      text-decoration: none;
-      color: inherit;
-      transition: all 0.2s ease;
-    }
-    .prev-next a:hover {
-      border-color: var(--page-accent);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(15,23,42,0.08);
-    }
-    .prev-next a.next { text-align: right; }
-    .prev-next .pn-label {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-gray, #666);
-      margin-bottom: 0.3rem;
-      display: block;
-    }
-    .prev-next .pn-title {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--primary-dark, #1a1a2e);
-      display: block;
-    }
-    .prev-next a:hover .pn-title { color: var(--page-accent); }
-
-    @media (max-width: 720px) {
-      .prev-next { flex-direction: column; }
-      .prev-next a { max-width: 100%; }
-    }
-  </style>
+  <!-- Page accent: set by data-theme="catalog" + data-category on <body>
+       (see literary-devices.css §A). No page-local styles needed. -->
 </head>
-<body class="literary-devices-page" dir="ltr">
+<body class="literary-devices-page" data-theme="catalog" data-category="how-to-read" dir="ltr">
   <!-- Accessibility -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <!-- Reading Progress Bar -->
   <div class="reading-progress"></div>
 
-  <!-- Quick Navigation Sidebar (Desktop) -->
-  <div class="quick-nav-sidebar" aria-label="Section navigation"></div>
+  <!-- Navigation injected by nav-component.js -->
+  <div id="nav-placeholder"></div>
 
-  <!-- Mobile Menu Overlay (used by nav-component) -->
-  <div class="mobile-menu-overlay"></div>
+  <!-- Quick Navigation Sidebar (desktop ≥1400px) — populated by page-chassis-v5-9.js -->
+  <div class="quick-nav-sidebar" aria-label="Section navigation"></div>
 
   <main id="main-content" class="content-section" role="main" aria-label="How to Read Biblical Literature">
 
     <!-- Breadcrumbs -->
-    <div class="breadcrumbs">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
       <a href="/">Home</a> ›
       <a href="/resources/">Resources</a> ›
       <a href="literary-devices-hub.html">Literary Devices</a> ›
       How to Read
-    </div>
+    </nav>
 
     <!-- HERO -->
     <section class="page-header-banner" id="overview">
@@ -726,19 +94,31 @@
       </div>
     </section>
 
+    <!-- MINI-TOC PILL BAR (v5.9) — section jumps; mobile gets the bottom tab strip -->
+    <nav class="mini-toc" aria-label="Section navigation">
+      <span class="mini-toc-label">Sections</span>
+      <a href="#orientation">Orientation</a>
+      <a href="#reading-stack">The Reading Stack</a>
+      <a href="#how-levels-work">Levels Together</a>
+      <a href="#framework">Observation → Meaning</a>
+      <a href="#meaning-vs-significance">Meaning vs. Significance</a>
+      <a href="#misreadings">Misreadings</a>
+      <a href="#next-steps">Where Next</a>
+    </nav>
+
     <!-- INTRO -->
-    <div class="theology-card animate-on-scroll" id="orientation">
+    <section class="theology-card" id="orientation">
       <h2 class="section-title"><span class="section-icon">❡</span>Orientation</h2>
       <p>The biblical authors do not communicate through words alone. They communicate through patterns, scenes, structures, and echoes that span individual verses, whole books, and the canon as a whole. A repeated word may form a parallel line, appear inside a repeated scene, contribute to a larger structural design, and echo across the entire Bible. <strong>Meaning often emerges from the combination, not from any single device in isolation.</strong></p>
       <p>The Reading Stack is a framework for reading at all five levels at once — and for knowing where to look first when a passage seems opaque, repetitive, or strange. Click any level below to see what lives there.</p>
-    </div>
+    </section>
 
     <!-- ═══════════════════════════════════════════════════════
          THE READING STACK — INTERACTIVE WIDGET
          ═══════════════════════════════════════════════════════ -->
-    <div class="theology-card animate-on-scroll stagger-1" id="reading-stack">
+    <section class="theology-card no-lift" id="reading-stack">
       <h2 class="section-title"><span class="section-icon">❡</span>The Reading Stack</h2>
-      <p style="margin-top:-0.5rem; color:var(--text-gray,#5a5a6a); font-size:0.95rem;">Five levels of literary design, from foundation to canon. Click a level to explore what lives there.</p>
+      <p class="section-lede">Five levels of literary design, from foundation to canon. Click a level to explore what lives there.</p>
 
       <div class="reading-stack-widget">
         <!-- LEFT: The vertical stack of levels -->
@@ -977,10 +357,10 @@
 
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- HOW THE LEVELS WORK TOGETHER -->
-    <div class="theology-card animate-on-scroll stagger-2" id="how-levels-work">
+    <section class="theology-card" id="how-levels-work">
       <h2 class="section-title"><span class="section-icon">❡</span>How the Levels Work Together</h2>
       <p>A single passage rarely operates at one level. The most theologically dense moments in Scripture are usually places where multiple levels converge.</p>
       <p>Take the binding of Isaac (Genesis 22). At the <strong>word level</strong>, "your son, your only son, whom you love" repeats with a deliberate rhythm. At the <strong>line level</strong>, the dialogue between father and son is structured in terse parallel beats. At the <strong>scene level</strong>, Isaac falls silent after asking "Where is the lamb?" — a deliberate narrative gap held until the resurrection echo. At the <strong>structure level</strong>, the passage is the climactic test in a chiastic Abraham cycle. At the <strong>canon level</strong>, Isaac carrying wood up the mountain prefigures Christ carrying the cross. <strong>The text is doing all of this at once.</strong></p>
@@ -988,14 +368,14 @@
       <div class="framework-flow">
         Word → Line → Scene → Structure → Canon
       </div>
-    </div>
+    </section>
 
     <!-- OBSERVATION → MEANING FRAMEWORK -->
-    <div class="theology-card animate-on-scroll stagger-1" id="framework">
+    <section class="theology-card no-lift" id="framework">
       <h2 class="section-title"><span class="section-icon">❡</span>From Observation to Meaning</h2>
       <p>At every level, careful reading moves through four stages. Skipping the middle stages — jumping straight from observation to application — is the most common interpretive mistake.</p>
 
-      <div class="framework-grid">
+      <div class="framework-grid" data-reveal-children>
         <div class="framework-card">
           <div class="fc-step">Stage 1</div>
           <h4>Observation</h4>
@@ -1017,10 +397,10 @@
           <p>How does the design shape the reader — moving them from passive consumer to active participant in interpretation?</p>
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- MEANING vs SIGNIFICANCE -->
-    <div class="theology-card animate-on-scroll stagger-2" id="meaning-vs-significance">
+    <section class="theology-card" id="meaning-vs-significance">
       <h2 class="section-title"><span class="section-icon">❡</span>Meaning vs. Significance</h2>
       <p>Two different questions, often confused. Disciplined reading keeps them distinct, then connects them in that order.</p>
 
@@ -1035,17 +415,17 @@
         </div>
       </div>
 
-      <div class="key-insight" style="margin-top:1.25rem;">
+      <div class="key-insight">
         <strong>The discipline:</strong> ask <em>what did this mean?</em> before <em>what does this mean for me?</em> Reverse the order and the text becomes a mirror for our preferences instead of a window onto God's purposes.
       </div>
-    </div>
+    </section>
 
     <!-- COMMON MISREADINGS -->
-    <div class="theology-card animate-on-scroll stagger-1" id="misreadings">
+    <section class="theology-card" id="misreadings">
       <h2 class="section-title"><span class="section-icon">❡</span>Common Misreadings</h2>
       <p>The Reading Stack helps avoid four predictable mistakes that flatten biblical literature.</p>
 
-      <ul class="misread-list">
+      <ul class="misread-list" data-reveal-children>
         <li>
           <span class="mr-icon">01</span>
           <span class="mr-text"><strong>Reading only at the surface.</strong> Treating the Bible as a flat record of facts ignores the literary design that carries meaning. The text rewards readers who notice repetition, gaps, structure, and echo.</span>
@@ -1063,14 +443,14 @@
           <span class="mr-text"><strong>Jumping to application too quickly.</strong> Asking <em>"what does this mean for me?"</em> before <em>"what did this mean?"</em> short-circuits the literary work the author is asking the reader to do.</span>
         </li>
       </ul>
-    </div>
+    </section>
 
     <!-- NEXT STEPS -->
-    <div class="theology-card animate-on-scroll stagger-2" id="next-steps">
+    <section class="theology-card no-lift" id="next-steps">
       <h2 class="section-title"><span class="section-icon">❡</span>Where to Go Next</h2>
       <p>Two routes from here, depending on whether you want breadth or depth.</p>
 
-      <div class="next-steps">
+      <div class="next-steps" data-reveal-children>
         <a class="next-card" href="literary-devices-hub.html">
           <div class="nc-eyebrow">Breadth</div>
           <h4>Explore the Catalog</h4>
@@ -1084,17 +464,17 @@
           <span class="nc-arrow">→ Read the walkthrough</span>
         </a>
       </div>
-    </div>
+    </section>
 
     <!-- PREV/NEXT -->
-    <nav class="prev-next" aria-label="Section navigation">
+    <nav class="prev-next" aria-label="Page navigation">
       <a href="literary-devices-hub.html" class="prev"><span class="pn-label">← Hub</span><span class="pn-title">Literary Devices Catalog</span></a>
       <a href="literary-devices-hub.html#device-explorer" class="next"><span class="pn-label">Begin →</span><span class="pn-title">Search All 60 Devices</span></a>
     </nav>
 
     <!-- CROSS REFERENCES -->
-    <section class="cross-references" id="related-studies">
-      <h3>Related Resources</h3>
+    <section class="theology-card" id="related-studies">
+      <h2 class="section-title"><span class="section-icon">🔗</span>Related Resources</h2>
       <p>
         <a href="literary-devices-hub.html" class="cross-ref">→ Catalog Hub (search all 60 devices)</a>
         <a href="/resources/connections-corner/connections-hub.html" class="cross-ref">→ Connections Corner</a>
@@ -1109,6 +489,25 @@
   <!-- Back to Top -->
   <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
 
+  <!-- Mobile menu overlay (used by nav-component) -->
+  <div class="mobile-menu-overlay"></div>
+
+  <!-- Per-page section manifest — page-chassis-v5-9.js builds the mobile
+       tab strip and desktop quick-nav from this, in document order. -->
+  <script id="page-section-config" type="application/json">
+  [
+    { "id": "overview",                "label": "Overview",      "priority": 1 },
+    { "id": "orientation",             "label": "Orientation",   "priority": 3 },
+    { "id": "reading-stack",           "label": "Reading Stack", "priority": 1 },
+    { "id": "how-levels-work",         "label": "Together",      "priority": 2 },
+    { "id": "framework",               "label": "Framework",     "priority": 2 },
+    { "id": "meaning-vs-significance", "label": "Meaning",       "priority": 2 },
+    { "id": "misreadings",             "label": "Misreadings",   "priority": 2 },
+    { "id": "next-steps",              "label": "Next",          "priority": 3 },
+    { "id": "related-studies",         "label": "Related",       "priority": 4 }
+  ]
+  </script>
+
   <!-- Project Context Navigation -->
   <script type="module">
     import NavigationComponent from '/assets/js/nav-component.js';
@@ -1118,78 +517,10 @@
     });
   </script>
 
-  <!-- Project Context Mobile Tabs & Animations -->
-  <script src="/assets/js/character-page-v5-8.js" defer></script>
+  <!-- v5.9 page chassis (mobile tabs, quick-nav, mini-TOC tracking, scroll reveal) -->
+  <script src="/assets/js/page-chassis-v5-9.js?v=5.9.3" defer></script>
 
-  <!-- Reading Stack widget interactivity + animation backstop -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      // ─────────────── animate-on-scroll backstop ───────────────
-      // global-v2.css defines .animate-on-scroll (opacity:0) + .animate-on-scroll.visible
-      // (opacity:1). character-page-v5-8.js is supposed to add .visible on scroll, but
-      // if it doesn't run for any reason, sections stay invisible. This backstop
-      // observer adds .visible itself, so the page always works.
-      const animateEls = document.querySelectorAll('.animate-on-scroll');
-      if (animateEls.length && 'IntersectionObserver' in window) {
-        const obs = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('visible');
-              obs.unobserve(entry.target);
-            }
-          });
-        }, { threshold: 0.08, rootMargin: '0px 0px -8% 0px' });
-        animateEls.forEach(el => obs.observe(el));
-
-        // Anything already in viewport at page load → reveal immediately
-        // (avoids the classic "above-the-fold sections never trigger" bug)
-        requestAnimationFrame(() => {
-          animateEls.forEach(el => {
-            const rect = el.getBoundingClientRect();
-            if (rect.top < window.innerHeight && rect.bottom > 0) {
-              el.classList.add('visible');
-              obs.unobserve(el);
-            }
-          });
-        });
-      } else {
-        // No IO support — just reveal everything
-        animateEls.forEach(el => el.classList.add('visible'));
-      }
-
-      // ─────────────── Reading Stack widget ───────────────
-      const levels = document.querySelectorAll('.stack-level');
-      const panels = document.querySelectorAll('.detail-panel');
-
-      function activate(levelId) {
-        levels.forEach(b => {
-          const isActive = b.dataset.level === levelId;
-          b.classList.toggle('active', isActive);
-          b.setAttribute('aria-selected', isActive ? 'true' : 'false');
-        });
-        panels.forEach(p => {
-          p.hidden = (p.id !== 'detail-' + levelId);
-        });
-      }
-
-      levels.forEach(btn => {
-        btn.addEventListener('click', () => activate(btn.dataset.level));
-        // Keyboard navigation between levels
-        btn.addEventListener('keydown', (e) => {
-          if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
-          e.preventDefault();
-          const current = parseInt(btn.dataset.level, 10);
-          // Up arrow = higher level (toward Canon = 5); Down = lower (toward Word = 1)
-          const next = e.key === 'ArrowUp'
-            ? Math.min(5, current + 1)
-            : Math.max(1, current - 1);
-          activate(String(next));
-          document.querySelector(`.stack-level[data-level="${next}"]`).focus();
-        });
-      });
-
-      console.log('Literary Devices: How to Read v1.1 (template 5.8.1) initialized');
-    });
-  </script>
+  <!-- Catalog page script: hub search/filter + v5.9.4 reveal safety net -->
+  <script src="/assets/js/literary-devices.js?v=1.0" defer></script>
 </body>
 </html>
