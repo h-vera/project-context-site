@@ -1,5 +1,5 @@
 /* ============================================================
-   women-voices-study.css — v1.3
+   women-voices-study.css — v1.4
    Path: /assets/css/women-voices-study.css
    Page layer for /studies/thematic/women-voices/women-voices-in-scripture.html
    Loads AFTER global-v3.css + global-v3-polish.css. Adds only what
@@ -15,12 +15,23 @@
    literal hexes are the hero's dark field (as on the Ephesus
    study) and print black/white.
 
+   Depth system (v1.4): every tab panel carries a --panel-accent
+   drawn from the register colors (song rose, prophecy purple,
+   prayer indigo, sanctuary teal, witness magenta, action blue).
+   The panel's kicker, section rail, tinted header wash, voice
+   cards, figures, index chrome and prev/next tiles all read that
+   one variable, so the page shifts color as the reader moves
+   through the registers — the same idiom as the Gate and
+   Tabernacle studies (kicker + rule, gradient rails, tinted
+   diagram frames, mono tabs).
+
+   v1.4 — Depth pass: panel accents + kickers, gradient section
+          rails and header washes, tinted voice cards / figures /
+          legend / index tools, mono tab bar, prev/next tiles,
+          hero grid texture, h3 accent rules.
    v1.3 — Tab bar + panels (one tab's content shown at a time);
-          all accents moved to tokens / color-mix; dead SVG, canon
-          table, sr-only and table-hint rules removed; duplicate
-          .book-index rules consolidated; .wv-index-note added;
-          data-reveal override removed (site reveal restored);
-          heading overrides aligned with global h4 styles.
+          all accents moved to tokens / color-mix; dead rules
+          removed; .wv-index-note added; site reveal restored.
    v1.2 — Faith/communal-voices components; evidence tags; index tools.
    v1.1 — Reading tools, canon/concept/place grids, text diagrams.
    v1.0 — Initial release.
@@ -33,6 +44,9 @@
   --wv-focus: var(--accent-indigo);
   --wv-nav-h: 72px;            /* set at runtime from #main-nav */
   --wv-tabs-h: 62px;           /* set at runtime from .wv-tabs  */
+  --panel-accent: var(--page-accent);
+  --wv-deep: color-mix(in srgb, var(--panel-accent) 78%, var(--text));
+  --wv-rail: linear-gradient(90deg, var(--panel-accent), color-mix(in srgb, var(--panel-accent) 40%, var(--accent-magenta)));
 }
 
 /* ------------------------------------------------------------
@@ -69,6 +83,8 @@
   position: absolute;
   inset: 0;
   background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.022) 0 1px, transparent 1px 60px),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.022) 0 1px, transparent 1px 60px),
     radial-gradient(circle at 26% 42%, transparent 0 170px, color-mix(in srgb, var(--accent-magenta) 16%, transparent) 176px, color-mix(in srgb, var(--accent-magenta) 5%, transparent) 195px, transparent 214px),
     radial-gradient(1px 1px at 12% 22%, rgba(255, 255, 255, 0.35) 0 1px, transparent 2px),
     radial-gradient(1px 1px at 38% 12%, rgba(255, 255, 255, 0.28) 0 1px, transparent 2px),
@@ -88,6 +104,18 @@
   text-transform: uppercase;
   color: color-mix(in srgb, var(--accent-rose) 35%, #fff);
   margin: 0 0 1rem;
+}
+.women-voices-study .study-hero .study-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.women-voices-study .study-hero .study-eyebrow::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--accent-rose), var(--accent-magenta));
 }
 .women-voices-study .study-hero h1 {
   font-family: var(--font-display);
@@ -122,6 +150,7 @@
   direction: rtl;
   text-align: left;
   unicode-bidi: isolate;
+  text-shadow: 0 0 24px color-mix(in srgb, var(--accent-rose) 45%, transparent);
 }
 .women-voices-study .hero-hebrew .gloss {
   display: block;
@@ -130,6 +159,7 @@
   font-size: var(--fs-sm);
   color: rgba(255, 255, 255, 0.62);
   margin-top: 0.3rem;
+  text-shadow: none;
 }
 .women-voices-study .study-hero .character-type-badge { margin: 0.25rem 0 1.25rem; }
 .women-voices-study .hero-intro {
@@ -205,29 +235,31 @@
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  min-height: 40px;
-  padding: 0.4rem 0.72rem;
-  border: 1px solid var(--border);
+  min-height: 38px;
+  padding: 0.45rem 0.8rem;
+  border: 2px solid var(--border);
   border-radius: var(--radius-pill);
   background: var(--bg);
-  font-family: var(--font-body);
-  font-size: 0.82rem;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
   font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--text-soft);
   white-space: nowrap;
   cursor: pointer;
-  transition: background var(--duration-fast) var(--ease), color var(--duration-fast) var(--ease), border-color var(--duration-fast) var(--ease);
+  transition: background var(--duration-fast) var(--ease), color var(--duration-fast) var(--ease), border-color var(--duration-fast) var(--ease), box-shadow var(--duration-fast) var(--ease);
 }
 .women-voices-study .wv-tab:hover {
-  background: var(--bg-2);
+  background: color-mix(in srgb, var(--page-accent) 5%, var(--bg));
   color: var(--page-accent-deep, var(--page-accent));
-  border-color: color-mix(in srgb, var(--page-accent) 40%, transparent);
+  border-color: color-mix(in srgb, var(--page-accent) 45%, var(--border));
 }
 .women-voices-study .wv-tab.is-active {
   background: var(--gradient-primary);
-  color: var(--bg);
+  color: #fff;
   border-color: transparent;
+  box-shadow: 0 3px 14px color-mix(in srgb, var(--accent-purple) 30%, transparent);
 }
 
 .women-voices-study .wv-panels.is-ready .wv-panel:not(.is-active) { display: none; }
@@ -238,7 +270,76 @@
 }
 .women-voices-study .wv-panel:focus { outline: none; }
 
-/* Previous / next links at the foot of every panel */
+/* Panel accents — one register color per tab. Everything inside a
+   panel (kicker, rails, washes, cards, figures, index chrome,
+   prev/next tiles) reads --panel-accent. */
+.women-voices-study .wv-panel {
+  --wv-deep: color-mix(in srgb, var(--panel-accent) 78%, var(--text));
+  --wv-rail: linear-gradient(90deg, var(--panel-accent), color-mix(in srgb, var(--panel-accent) 40%, var(--accent-magenta)));
+}
+.women-voices-study #panel-frame     { --panel-accent: var(--accent-purple); }
+.women-voices-study #panel-map       { --panel-accent: var(--accent-rose); }
+.women-voices-study #panel-song      { --panel-accent: var(--accent-rose); }
+.women-voices-study #panel-prophecy  { --panel-accent: var(--accent-purple); }
+.women-voices-study #panel-prayer    { --panel-accent: var(--accent-indigo); }
+.women-voices-study #panel-sanctuary { --panel-accent: var(--accent-teal); }
+.women-voices-study #panel-witness   { --panel-accent: var(--accent-magenta); }
+.women-voices-study #panel-action    { --panel-accent: var(--accent-blue); }
+.women-voices-study #panel-symbols   { --panel-accent: var(--accent-magenta); }
+.women-voices-study #panel-index     { --panel-accent: var(--accent-indigo); }
+.women-voices-study #panel-record    { --panel-accent: var(--accent-purple); }
+.women-voices-study #panel-notes     { --panel-accent: var(--accent-teal); }
+
+/* Kicker above each panel: "03 / SONG" with a short accent rule. */
+.women-voices-study .wv-panel::before {
+  content: attr(data-index) "  /  " attr(data-label);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.25rem 0 0.9rem;
+  padding-left: 30px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--wv-deep);
+  background: linear-gradient(90deg, var(--panel-accent), color-mix(in srgb, var(--panel-accent) 40%, var(--accent-magenta))) no-repeat 0 50% / 20px 2px;
+  white-space: pre;
+}
+
+/* Section cards inside a panel: gradient rail + tinted header wash. */
+.women-voices-study .wv-panel > .theology-card {
+  position: relative;
+  overflow: hidden;
+  border-color: color-mix(in srgb, var(--panel-accent) 18%, var(--border));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--panel-accent) 6%, var(--bg)) 0, var(--bg) 280px);
+  box-shadow: var(--shadow);
+}
+.women-voices-study .wv-panel > .theology-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--wv-rail);
+  pointer-events: none;
+}
+.women-voices-study .wv-panel > .theology-card > h2 + .mode-pill,
+.women-voices-study .wv-panel > .theology-card > h2 .mode-pill { vertical-align: middle; }
+
+/* Shared global components inside a panel follow the panel accent
+   instead of the page-wide rose. */
+.women-voices-study .wv-panel .key-insight {
+  border-left-color: var(--panel-accent);
+  background: color-mix(in srgb, var(--panel-accent) 4%, var(--bg));
+}
+.women-voices-study .wv-panel .key-insight strong { color: var(--wv-deep); }
+.women-voices-study .wv-panel .scripture-quote { border-left-color: var(--panel-accent); }
+.women-voices-study .wv-panel .mini-card { border-left-color: var(--panel-accent); }
+.women-voices-study .wv-panel .mini-card::before { background: var(--wv-rail); }
+.women-voices-study .wv-panel .source-entry { border-left-color: var(--panel-accent); }
+
+/* Previous / next tiles at the foot of every panel */
 .women-voices-study .wv-panel-nav {
   display: flex;
   justify-content: space-between;
@@ -250,28 +351,37 @@
 .women-voices-study .wv-panel-nav a {
   display: inline-flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 0.2rem;
   min-height: 44px;
-  padding: 0.6rem 0.95rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--bg-2);
+  min-width: 11rem;
+  padding: 0.75rem 1.1rem;
+  border: 1px solid color-mix(in srgb, var(--panel-accent) 22%, var(--border));
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--panel-accent) 4%, var(--bg));
   color: var(--text);
-  font-size: var(--fs-sm);
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
   font-weight: 600;
   text-decoration: none;
-  transition: border-color var(--duration-fast) var(--ease), color var(--duration-fast) var(--ease);
+  transition: border-color var(--duration-fast) var(--ease), background var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease), box-shadow var(--duration-fast) var(--ease);
 }
 .women-voices-study .wv-panel-nav a span {
   font-family: var(--font-mono);
-  font-size: 0.66rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--wv-deep);
 }
-.women-voices-study .wv-panel-nav a:hover { border-color: var(--page-accent); color: var(--page-accent-deep, var(--page-accent)); }
-.women-voices-study .wv-panel-nav .is-next { margin-left: auto; text-align: right; }
+.women-voices-study .wv-panel-nav .is-prev span::before { content: "← "; }
+.women-voices-study .wv-panel-nav .is-next span::after  { content: " →"; }
+.women-voices-study .wv-panel-nav a:hover {
+  border-color: color-mix(in srgb, var(--panel-accent) 55%, var(--border));
+  background: color-mix(in srgb, var(--panel-accent) 9%, var(--bg));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--panel-accent) 16%, transparent);
+}
+.women-voices-study .wv-panel-nav .is-next { margin-left: auto; text-align: right; align-items: flex-end; }
 
 /* ------------------------------------------------------------
    3. MODE PILLS — the five registers of participation
@@ -326,14 +436,29 @@
 .women-voices-study .wv-evidence[data-kind="disputed"]    { --wv-tag: var(--accent-rose); border-style: dashed; }
 .women-voices-study .wv-evidence[data-kind="context"]     { --wv-tag: var(--text-muted); border-style: dashed; }
 
+/* The legend is a tinted frame; each tile takes its tag's color. */
 .women-voices-study .wv-evidence-legend {
+  --panel-accent: var(--accent-indigo);
+  position: relative;
+  overflow: hidden;
   display: block;
   margin: 1.5rem 0;
   padding: clamp(1.1rem, 3vw, 2rem);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--bg-2);
+  border: 2px solid color-mix(in srgb, var(--accent-indigo) 16%, transparent);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent-indigo) 6%, var(--bg)), color-mix(in srgb, var(--accent-teal) 5%, var(--bg)));
+  box-shadow: var(--shadow);
 }
+.women-voices-study .wv-evidence-legend::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 10%, color-mix(in srgb, var(--accent-indigo) 10%, transparent), transparent 36%),
+    radial-gradient(circle at 88% 18%, color-mix(in srgb, var(--accent-teal) 10%, transparent), transparent 38%);
+}
+.women-voices-study .wv-evidence-legend > * { position: relative; z-index: 1; }
 .women-voices-study .wv-evidence-legend .wv-concept-grid { margin: 1.25rem 0; }
 .women-voices-study .wv-evidence-legend dt { margin: 0 0 0.65rem; }
 .women-voices-study .wv-evidence-legend dd {
@@ -347,6 +472,11 @@
   font-size: var(--fs-sm);
   color: var(--text-soft);
 }
+.women-voices-study .wv-concept-card:has(.wv-evidence[data-kind="explicit"])    { --panel-accent: var(--accent-teal); }
+.women-voices-study .wv-concept-card:has(.wv-evidence[data-kind="instruction"]) { --panel-accent: var(--accent-blue); }
+.women-voices-study .wv-concept-card:has(.wv-evidence[data-kind="inference"])   { --panel-accent: var(--accent-indigo); }
+.women-voices-study .wv-concept-card:has(.wv-evidence[data-kind="symbolic"])    { --panel-accent: var(--accent-magenta); }
+.women-voices-study .wv-concept-card:has(.wv-evidence[data-kind="disputed"])    { --panel-accent: var(--accent-rose); }
 
 /* ------------------------------------------------------------
    5. VOICE CARDS — one witness per card
@@ -359,15 +489,20 @@
 }
 .women-voices-study .voice-card {
   position: relative;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-left: 4px solid var(--page-accent);
+  background: color-mix(in srgb, var(--panel-accent) 3%, var(--bg));
+  border: 1px solid color-mix(in srgb, var(--panel-accent) 20%, var(--border));
+  border-left: 4px solid var(--panel-accent);
   border-radius: var(--radius-sm);
   padding: 1.1rem 1.15rem 1rem;
   box-shadow: var(--shadow-sm);
-  transition: transform var(--duration-fast) var(--ease), box-shadow var(--duration-fast) var(--ease);
+  transition: transform var(--duration-fast) var(--ease), box-shadow var(--duration-fast) var(--ease), border-color var(--duration-fast) var(--ease);
 }
-.women-voices-study .voice-card:hover { transform: translateY(-2px); box-shadow: var(--shadow, var(--shadow-sm)); }
+.women-voices-study .voice-card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--panel-accent) 40%, var(--border));
+  border-left-color: var(--panel-accent);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--panel-accent) 16%, transparent), 0 2px 6px rgba(15, 23, 42, 0.04);
+}
 .women-voices-study .voice-card :is(h3, h4) {
   font-family: var(--font-display);
   font-size: var(--fs-lg);
@@ -380,23 +515,29 @@
   font-size: 0.72rem;
   letter-spacing: 0.045em;
   line-height: 1.6;
-  color: var(--page-accent-deep, var(--page-accent));
+  color: var(--wv-deep);
   margin: 0 0 0.6rem;
 }
 .women-voices-study .voice-card p { margin: 0 0 0.5rem; font-size: var(--fs-sm); line-height: 1.6; }
 .women-voices-study .voice-card p:last-child { margin-bottom: 0; }
 .women-voices-study .voice-card .vc-heb {
   font-family: var(--font-hebrew);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   direction: rtl;
   unicode-bidi: isolate;
-  color: var(--page-accent-deep, var(--page-accent));
+  color: var(--wv-deep);
 }
-.women-voices-study .voice-card.caution { border-left-color: var(--text-muted); background: var(--bg-2); }
+.women-voices-study .voice-card.caution {
+  --panel-accent: var(--text-muted);
+  border-left-style: dashed;
+  background: var(--bg-2);
+}
 .women-voices-study .voice-card.caution .vc-ref { color: var(--text-muted); }
 
 /* ------------------------------------------------------------
    6. FIGURES — text diagrams built from node cards
+   Tinted gradient frame with soft orb glows (the Gate study's
+   diagram-wrap idiom); node cards carry the panel rail.
    ------------------------------------------------------------ */
 .women-voices-study .study-figure {
   margin: 1.5rem 0;
@@ -415,19 +556,44 @@
   border-top: 1px dashed var(--border);
 }
 .women-voices-study .wv-diagram {
-  margin: 1.5rem 0;
-  padding: 1.25rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: linear-gradient(135deg, var(--bg-2), var(--bg));
+  position: relative;
+  overflow: hidden;
+  margin: 1.75rem 0;
+  padding: 1.5rem;
+  border: 2px solid color-mix(in srgb, var(--panel-accent) 18%, transparent);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--panel-accent) 7%, var(--bg)), color-mix(in srgb, var(--accent-blue) 4%, var(--bg)));
+  box-shadow: var(--shadow);
 }
+.women-voices-study .wv-diagram::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 14% 10%, color-mix(in srgb, var(--panel-accent) 12%, transparent), transparent 36%),
+    radial-gradient(circle at 86% 16%, color-mix(in srgb, var(--accent-blue) 10%, transparent), transparent 38%),
+    radial-gradient(circle at 50% 96%, color-mix(in srgb, var(--accent-magenta) 7%, transparent), transparent 42%);
+}
+.women-voices-study .wv-diagram > * { position: relative; z-index: 1; }
 .women-voices-study .wv-diagram > :first-child { margin-top: 0; }
 .women-voices-study .wv-diagram > :is(h3, h4) {
   font-family: var(--font-display);
-  font-size: 1.45rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  margin: 0 0 0.8rem;
+  margin: 0 0 0.9rem;
   color: var(--text);
+}
+.women-voices-study .wv-diagram > :is(h3, h4)::before {
+  content: "Text diagram";
+  display: block;
+  margin: 0 0 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--wv-deep);
 }
 .women-voices-study .wv-diagram-grid {
   list-style: none;
@@ -439,28 +605,48 @@
 }
 .women-voices-study .wv-diagram[aria-labelledby="fig-sea-title"] .wv-diagram-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .women-voices-study .wv-voice-node {
+  position: relative;
+  overflow: hidden;
   min-width: 0;
-  padding: 1rem;
-  border: 1px solid var(--border);
-  border-top: 3px solid var(--page-accent);
-  border-radius: var(--radius-sm);
+  padding: 1.15rem 1.15rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--panel-accent) 18%, var(--border));
+  border-radius: var(--radius);
   background: var(--bg);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-fast) var(--ease), box-shadow var(--duration-fast) var(--ease);
+}
+.women-voices-study .wv-voice-node::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--wv-rail);
+}
+.women-voices-study .wv-voice-node:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--panel-accent) 14%, transparent);
 }
 .women-voices-study .wv-voice-node :is(h3, h4, h5) {
   margin: 0 0 0.5rem;
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   font-weight: 700;
   color: var(--text);
 }
 .women-voices-study .wv-voice-node p { font-size: var(--fs-sm); line-height: 1.6; }
 .women-voices-study .wv-voice-node p[dir="rtl"] { text-align: left; }
+.women-voices-study .wv-voice-node .hebrew-large {
+  font-size: 1.9rem;
+  line-height: 1.25;
+  color: var(--wv-deep);
+  margin: 0.25rem 0 0.35rem;
+}
 .women-voices-study .wv-voice-node > :last-child { margin-bottom: 0; }
 .women-voices-study .wv-diagram-note,
 .women-voices-study .wv-diagram figcaption {
   margin: 1rem 0 0;
   padding-top: 0.85rem;
-  border-top: 1px dashed var(--border);
+  border-top: 1px dashed color-mix(in srgb, var(--panel-accent) 30%, var(--border));
   color: var(--text-soft);
   font-size: var(--fs-sm);
   line-height: 1.6;
@@ -480,12 +666,27 @@
 .women-voices-study .wv-canon-card,
 .women-voices-study .wv-concept-card,
 .women-voices-study .wv-place-card {
+  position: relative;
+  overflow: hidden;
   min-width: 0;
-  padding: 1.25rem;
-  border: 1px solid var(--border);
-  border-top: 3px solid var(--page-accent);
-  border-radius: var(--radius-sm);
+  padding: 1.35rem 1.25rem 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--panel-accent) 18%, var(--border));
+  border-radius: var(--radius);
   background: var(--bg);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-fast) var(--ease), box-shadow var(--duration-fast) var(--ease), border-color var(--duration-fast) var(--ease);
+}
+.women-voices-study :is(.wv-canon-card, .wv-concept-card, .wv-place-card)::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--wv-rail);
+}
+.women-voices-study :is(.wv-canon-card, .wv-concept-card, .wv-place-card):hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--panel-accent) 38%, var(--border));
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--panel-accent) 14%, transparent), 0 2px 6px rgba(15, 23, 42, 0.04);
 }
 .women-voices-study :is(.wv-canon-card, .wv-concept-card, .wv-place-card) :is(h3, h4) {
   margin: 0 0 0.6rem;
@@ -500,14 +701,23 @@
   line-height: 1.6;
 }
 .women-voices-study :is(.wv-canon-card, .wv-concept-card, .wv-place-card) p:last-child { margin-bottom: 0; }
-.women-voices-study .wv-canon-card a { text-underline-offset: 0.2em; }
-.women-voices-study .wv-canon-card .study-eyebrow {
-  color: var(--text-muted);
-  font-size: 0.7rem;
-  line-height: 1.5;
-  letter-spacing: 0.09em;
-  margin: 0 0 0.6rem;
+.women-voices-study .wv-canon-card h3 a {
+  color: var(--wv-deep);
+  text-decoration: none;
 }
+.women-voices-study .wv-canon-card h3 a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+.women-voices-study .wv-canon-card .study-eyebrow {
+  display: inline-block;
+  font-size: 0.66rem;
+  line-height: 1.5;
+  letter-spacing: 0.16em;
+  margin: 0 0 0.6rem;
+  background: var(--wv-rail);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.women-voices-study .wv-canon-card .vc-ref { color: var(--wv-deep); }
 .women-voices-study .wv-reading-path {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -515,20 +725,29 @@
   padding: 0;
   margin: 1.25rem 0;
 }
-.women-voices-study .wv-reading-path > article { border-top-color: var(--accent-indigo); }
 .women-voices-study .wv-reading-path a { font-size: var(--fs-sm); font-weight: 600; text-underline-offset: 0.2em; }
 
 /* ------------------------------------------------------------
    8. THREAD FEATURES — faith in action, echo comparisons
    ------------------------------------------------------------ */
 .women-voices-study .wv-section-kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
   margin: 0 0 0.7rem;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--page-accent-deep, var(--page-accent));
+  color: var(--wv-deep);
+}
+.women-voices-study .wv-section-kicker::before {
+  content: "";
+  width: 20px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--wv-rail);
 }
 .women-voices-study .wv-thread-nav,
 .women-voices-study .wv-thread-links,
@@ -543,15 +762,20 @@
   align-items: center;
   min-height: 44px;
   padding: 0.55rem 0.9rem;
-  border: 1px solid color-mix(in srgb, var(--accent-purple) 35%, transparent);
+  border: 1px solid color-mix(in srgb, var(--panel-accent) 35%, transparent);
   border-radius: var(--radius-pill);
-  background: color-mix(in srgb, var(--accent-purple) 8%, var(--bg));
-  color: color-mix(in srgb, var(--accent-purple) 85%, var(--text));
+  background: color-mix(in srgb, var(--panel-accent) 8%, var(--bg));
+  color: var(--wv-deep);
   font-size: 0.85rem;
   font-weight: 600;
   text-decoration: none;
+  transition: background var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease), box-shadow var(--duration-fast) var(--ease);
 }
-.women-voices-study .wv-thread-nav a:hover { background: color-mix(in srgb, var(--accent-purple) 14%, var(--bg)); }
+.women-voices-study .wv-thread-nav a:hover {
+  background: color-mix(in srgb, var(--panel-accent) 14%, var(--bg));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--panel-accent) 16%, transparent);
+}
 .women-voices-study .wv-thread-feature {
   margin: 2rem 0;
   padding-top: 1.75rem;
@@ -579,15 +803,29 @@
 .women-voices-study .wv-echo-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .women-voices-study .wv-voice-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .women-voices-study .wv-echo-card {
+  position: relative;
+  overflow: hidden;
   min-width: 0;
-  padding: 1.1rem;
-  border: 1px solid var(--border);
-  border-top: 3px solid var(--page-accent);
-  border-radius: var(--radius-sm);
-  background: var(--bg);
+  padding: 1.2rem 1.15rem 1.1rem;
+  border: 1px solid color-mix(in srgb, var(--panel-accent) 18%, var(--border));
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--panel-accent) 3%, var(--bg));
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-fast) var(--ease), box-shadow var(--duration-fast) var(--ease);
 }
-.women-voices-study .wv-echo-card:nth-child(2) { border-top-color: var(--accent-purple); }
-.women-voices-study .wv-echo-card:nth-child(3) { border-top-color: var(--accent-teal); }
+.women-voices-study .wv-echo-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--wv-rail);
+}
+.women-voices-study .wv-echo-card:nth-child(2) { --panel-accent: var(--accent-purple); }
+.women-voices-study .wv-echo-card:nth-child(3) { --panel-accent: var(--accent-teal); }
+.women-voices-study .wv-echo-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--panel-accent) 14%, transparent);
+}
 .women-voices-study .wv-echo-card :is(h4, h5) {
   margin: 0.6rem 0 0.75rem;
   font-family: var(--font-display);
@@ -601,10 +839,12 @@
 .women-voices-study .wv-echo-card p,
 .women-voices-study .wv-echo-card > a { font-size: var(--fs-sm); line-height: 1.65; }
 .women-voices-study .wv-echo-card [lang="he"] { font-size: 1.2em; }
+.women-voices-study .wv-echo-card .vc-ref { color: var(--wv-deep); }
 .women-voices-study .wv-reading-boundary {
   padding: 0.9rem 1rem;
   border-left: 3px solid color-mix(in srgb, var(--accent-indigo) 50%, transparent);
-  background: var(--bg-2);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  background: color-mix(in srgb, var(--accent-indigo) 5%, var(--bg));
   color: var(--text-soft);
   font-size: var(--fs-sm);
   line-height: 1.65;
@@ -621,10 +861,11 @@
   gap: 1rem;
   align-items: end;
   margin: 1.25rem 0 0.75rem;
-  padding: 1.1rem;
-  border: 1px solid var(--border);
+  padding: 1.1rem 1.2rem;
+  border: 1px solid color-mix(in srgb, var(--panel-accent) 20%, var(--border));
   border-radius: var(--radius);
-  background: var(--bg-2);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--panel-accent) 6%, var(--bg)), color-mix(in srgb, var(--accent-blue) 4%, var(--bg)));
+  box-shadow: var(--shadow-sm);
 }
 .women-voices-study .wv-index-tools[hidden] { display: none; }
 .women-voices-study .wv-filter-field {
@@ -636,9 +877,12 @@
 }
 .women-voices-study .wv-filter-field:first-child { flex-basis: 22rem; }
 .women-voices-study .wv-filter-field label {
-  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
   font-weight: 600;
-  color: var(--text-soft);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--wv-deep);
 }
 .women-voices-study .wv-index-tools :is(input, select, button) {
   min-height: 46px;
@@ -647,15 +891,16 @@
   font-size: 0.9rem;
   line-height: 1.35;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--text-subtle);
+  border: 1px solid color-mix(in srgb, var(--panel-accent) 30%, var(--border));
   background: var(--bg);
   color: var(--text);
   padding: 0.65rem 0.75rem;
+  box-shadow: var(--shadow-sm);
 }
 .women-voices-study .wv-index-tools input { width: 100%; }
 .women-voices-study .wv-index-tools input::placeholder { color: var(--text-muted); opacity: 1; }
-.women-voices-study .wv-index-tools button { cursor: pointer; font-weight: 600; }
-.women-voices-study .wv-index-tools button:hover { border-color: var(--page-accent); }
+.women-voices-study .wv-index-tools button { cursor: pointer; font-weight: 600; color: var(--wv-deep); }
+.women-voices-study .wv-index-tools button:hover { border-color: var(--panel-accent); background: color-mix(in srgb, var(--panel-accent) 6%, var(--bg)); }
 .women-voices-study .wv-index-status {
   min-height: 1.75em;
   margin: 0.5rem 0 1rem;
@@ -679,21 +924,45 @@
   background: var(--bg-2);
 }
 .women-voices-study .table-wrapper { max-width: 100%; }
+.women-voices-study .book-index {
+  border: 1px solid color-mix(in srgb, var(--panel-accent) 18%, var(--border));
+  border-radius: var(--radius);
+  background: var(--bg);
+  box-shadow: var(--shadow-sm);
+}
 .women-voices-study caption {
   text-align: left;
   color: var(--text-soft);
   font-size: var(--fs-sm);
   line-height: 1.55;
   margin-bottom: 0.75rem;
+  padding: 0.9rem 1rem 0;
 }
-.women-voices-study .book-index table { min-width: 900px; table-layout: fixed; }
+.women-voices-study .book-index table { min-width: 900px; table-layout: fixed; margin: 0; }
+.women-voices-study .wv-panel thead th {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--wv-deep);
+  background: color-mix(in srgb, var(--panel-accent) 8%, var(--bg));
+  border-bottom: 2px solid color-mix(in srgb, var(--panel-accent) 30%, var(--border));
+}
+.women-voices-study .wv-panel tbody tr:not(.division):nth-of-type(even) td { background: color-mix(in srgb, var(--bg-2) 70%, var(--bg)); }
+.women-voices-study .wv-panel tbody tr:not(.division):hover td { background: color-mix(in srgb, var(--panel-accent) 5%, var(--bg)); }
+.women-voices-study .book-index th[scope="row"] a {
+  color: var(--wv-deep);
+  text-decoration: none;
+}
+.women-voices-study .book-index th[scope="row"] a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
 .women-voices-study .book-index th:first-child,
 .women-voices-study .book-index td:first-child {
   width: 8.5rem;
   font-family: var(--font-display);
   font-weight: 700;
   white-space: nowrap;
-  color: var(--page-accent-deep, var(--page-accent));
+  color: var(--wv-deep);
 }
 .women-voices-study .book-index th:nth-child(3),
 .women-voices-study .book-index td:nth-child(3),
@@ -703,10 +972,12 @@
 .women-voices-study .book-index tr.division th {
   font-family: var(--font-mono);
   font-size: 0.68rem;
-  letter-spacing: 0.12em;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--text-soft);
-  background: var(--bg-2);
+  color: var(--wv-deep);
+  background: color-mix(in srgb, var(--panel-accent) 10%, var(--bg));
+  border-left: 4px solid var(--panel-accent);
   text-align: left;
 }
 .women-voices-study .book-index :is(tr, tbody)[hidden] { display: none; }
@@ -714,7 +985,7 @@
 .women-voices-study .book-index tr:target th,
 .women-voices-study .book-index tr.is-target td,
 .women-voices-study .book-index tr.is-target th {
-  background: color-mix(in srgb, var(--page-accent) 8%, var(--bg));
+  background: color-mix(in srgb, var(--panel-accent) 9%, var(--bg));
 }
 .women-voices-study .book-index .mode-pill { white-space: normal; line-height: 1.45; }
 .women-voices-study .book-index .wv-evidence { margin: 0.1rem 0.15rem 0.1rem 0; }
@@ -723,7 +994,7 @@
 /* ------------------------------------------------------------
    10. HEADINGS — this page uses h2 for sections and h3 / h4 below
    them, so the global .theology-card h3 / h4 styles are mirrored
-   one level up.
+   one level up. Section-level h3s carry a short accent rule.
    ------------------------------------------------------------ */
 .women-voices-study .theology-card > h2,
 .women-voices-study .wv-evidence-legend > h2 {
@@ -742,6 +1013,17 @@
   font-weight: 600;
   margin: 1.5rem 0 0.65rem;
   color: var(--text);
+}
+.women-voices-study .theology-card > h3::before,
+.women-voices-study .theology-card > .grid-2 > div > h3::before {
+  content: "";
+  display: inline-block;
+  width: 1.1rem;
+  height: 3px;
+  margin-right: 0.6rem;
+  border-radius: 2px;
+  vertical-align: 0.28em;
+  background: var(--wv-rail);
 }
 .women-voices-study .theology-card > .grid-2 > div > h4 {
   font-family: var(--font-display);
@@ -790,6 +1072,29 @@
   margin: 0 0 0.4rem;
 }
 
+/* Study questions: the summary holds a label + question, so lay it
+   out left-aligned with the toggle glyph pushed to the right. */
+.women-voices-study .qa-pill summary {
+  justify-content: flex-start;
+  gap: 0.35rem 0.75rem;
+  flex-wrap: wrap;
+}
+.women-voices-study .qa-pill summary::after { margin-left: auto; }
+.women-voices-study .qa-pill summary strong {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--wv-deep);
+  padding: 0.22rem 0.55rem;
+  border: 1px solid color-mix(in srgb, var(--panel-accent) 35%, var(--border));
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--panel-accent) 6%, var(--bg));
+  white-space: nowrap;
+}
+.women-voices-study .wv-panel .qa-pill[open] { border-color: color-mix(in srgb, var(--panel-accent) 55%, var(--border)); }
+
 /* ------------------------------------------------------------
    11. SMALL HELPERS
    ------------------------------------------------------------ */
@@ -798,9 +1103,9 @@
   font-size: 1.08em;
   direction: rtl;
   unicode-bidi: isolate;
-  color: var(--page-accent-deep, var(--page-accent));
+  color: var(--wv-deep);
 }
-.women-voices-study .grk-inline { font-family: var(--font-greek); font-size: 1.04em; color: var(--page-accent-deep, var(--page-accent)); }
+.women-voices-study .grk-inline { font-family: var(--font-greek); font-size: 1.04em; color: var(--wv-deep); }
 .women-voices-study .scope-note {
   border: 1px solid var(--border);
   border-left: 4px solid var(--text-muted);
@@ -845,11 +1150,13 @@
   .women-voices-study .hero-actions .print-button { display: none; }
   .women-voices-study .ref-list { columns: 1; }
   .women-voices-study .voice-grid { grid-template-columns: 1fr; }
+  .women-voices-study .wv-diagram { padding: 1.1rem; }
 }
 @media screen and (max-width: 700px) {
   /* Index table becomes a stack of book cards; explicit ARIA table
      roles in the markup keep the table semantics. */
-  .women-voices-study .book-index { overflow: visible; }
+  .women-voices-study .book-index { overflow: visible; border: 0; box-shadow: none; background: transparent; }
+  .women-voices-study caption { padding: 0; }
   .women-voices-study .book-index table,
   .women-voices-study .book-index tbody { display: block; width: 100%; min-width: 0; }
   .women-voices-study .book-index thead {
@@ -860,9 +1167,10 @@
     display: block;
     margin: 0.85rem 0;
     padding: 0.6rem 0;
-    border: 1px solid var(--border);
+    border: 1px solid color-mix(in srgb, var(--panel-accent) 18%, var(--border));
     border-radius: var(--radius-sm);
     background: var(--bg);
+    box-shadow: var(--shadow-sm);
   }
   .women-voices-study .book-index tbody :is(th, td) {
     display: block;
@@ -870,26 +1178,27 @@
     padding: 0.5rem 0.85rem;
     border: 0;
     white-space: normal;
+    background: transparent !important;
   }
   .women-voices-study .book-index tbody td[data-label]::before {
     display: block;
     content: attr(data-label);
     margin-bottom: 0.25rem;
     color: var(--text-muted);
-    font-family: var(--font-body);
-    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
     font-weight: 600;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
   }
   .women-voices-study .book-index tbody th[scope="row"] {
     font-size: 1.35rem;
-    color: var(--page-accent-deep, var(--page-accent));
+    color: var(--wv-deep);
   }
   .women-voices-study .book-index tbody tr.division {
     margin-top: 1.5rem;
-    background: var(--bg-2);
-    border-left: 4px solid var(--page-accent);
+    background: color-mix(in srgb, var(--panel-accent) 8%, var(--bg));
+    border-left: 4px solid var(--panel-accent);
   }
   .women-voices-study .book-index tbody tr[hidden] { display: none; }
   .women-voices-study .wv-diagram-grid,
@@ -910,7 +1219,8 @@
   .women-voices-study .wv-index-tools button { width: 100%; }
   .women-voices-study .study-figure { padding: 0.75rem; }
   .women-voices-study .wv-panel-nav { flex-direction: column; }
-  .women-voices-study .wv-panel-nav .is-next { margin-left: 0; text-align: left; }
+  .women-voices-study .wv-panel-nav a { min-width: 0; }
+  .women-voices-study .wv-panel-nav .is-next { margin-left: 0; text-align: left; align-items: flex-start; }
 }
 
 /* ------------------------------------------------------------
@@ -918,11 +1228,15 @@
    ------------------------------------------------------------ */
 @media print {
   .women-voices-study .study-hero { background: #fff; color: #000; box-shadow: none; border: 1px solid #ccc; }
+  .women-voices-study .study-hero::before,
+  .women-voices-study .study-hero::after,
+  .women-voices-study .wv-diagram::before,
+  .women-voices-study .wv-evidence-legend::before { display: none; }
   .women-voices-study .study-hero h1 { -webkit-text-fill-color: #000; color: #000; background: none; }
   .women-voices-study .study-hero .hero-subtitle,
   .women-voices-study .hero-intro,
   .women-voices-study .hero-hebrew,
-  .women-voices-study .study-eyebrow { color: #000; -webkit-text-fill-color: #000; }
+  .women-voices-study .study-eyebrow { color: #000; -webkit-text-fill-color: #000; text-shadow: none; }
   .women-voices-study .hero-actions,
   .women-voices-study .wv-tabs,
   .women-voices-study .wv-panel-nav,
@@ -930,10 +1244,14 @@
   .women-voices-study :is(.wv-index-tools, .wv-index-status, #wv-no-results) { display: none !important; }
   .women-voices-study .wv-panels .wv-panel { display: block !important; animation: none !important; }
   .women-voices-study .wv-panel + .wv-panel { break-before: page; }
+  .women-voices-study .wv-panel::before { color: #000; background: none; padding-left: 0; }
+  .women-voices-study .wv-panel > .theology-card { background: #fff; box-shadow: none; overflow: visible; }
+  .women-voices-study .wv-canon-card .study-eyebrow { background: none; color: #000; -webkit-text-fill-color: #000; }
   .women-voices-study .book-index tr[hidden] { display: table-row !important; }
   .women-voices-study .book-index tbody[hidden] { display: table-row-group !important; }
   .women-voices-study .theology-card { break-inside: auto; page-break-inside: auto; }
   .women-voices-study .table-wrapper { overflow: visible; }
+  .women-voices-study .book-index { border: 0; box-shadow: none; }
   .women-voices-study .book-index table { min-width: 0; width: 100%; table-layout: auto; }
   .women-voices-study .book-index th:first-child,
   .women-voices-study .book-index td:first-child { width: auto; white-space: normal; }
@@ -941,6 +1259,7 @@
   .women-voices-study .book-index td:last-child,
   .women-voices-study .book-index th:nth-child(3),
   .women-voices-study .book-index td:nth-child(3) { width: auto; }
+  .women-voices-study .wv-panel tbody tr:not(.division):nth-of-type(even) td { background: #fff; }
   .women-voices-study .book-index tr,
   .women-voices-study .voice-card,
   .women-voices-study .study-figure,
@@ -958,9 +1277,10 @@
   .women-voices-study .wv-evidence,
   .women-voices-study .mode-pill { color: #000 !important; background: #fff !important; border-color: #777 !important; }
   .women-voices-study .wv-reading-boundary { color: #000; background: #fff; }
+  .women-voices-study :is(.voice-card, .wv-voice-node, .wv-canon-card, .wv-concept-card, .wv-place-card, .wv-echo-card, .wv-diagram, .wv-evidence-legend) { background: #fff; box-shadow: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .women-voices-study .voice-card { transition: none; }
-  .women-voices-study .voice-card:hover { transform: none; }
+  .women-voices-study :is(.voice-card, .wv-voice-node, .wv-canon-card, .wv-concept-card, .wv-place-card, .wv-echo-card, .wv-panel-nav a, .wv-thread-nav a) { transition: none; }
+  .women-voices-study :is(.voice-card, .wv-voice-node, .wv-canon-card, .wv-concept-card, .wv-place-card, .wv-echo-card, .wv-panel-nav a, .wv-thread-nav a):hover { transform: none; }
   .women-voices-study .wv-panels.is-ready .wv-panel.is-active { animation: none; }
 }
