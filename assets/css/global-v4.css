@@ -1,0 +1,5482 @@
+/* ============================================================
+   GLOBAL V4 STYLESHEET — Project Context
+   Path: /assets/css/global-v4.css
+   Version: 4.0.0
+   Last Updated: 2026-11-22
+   For: the 5.10 template family, with page-chassis-v5-10.js
+
+   One stylesheet for a 5.10 page. It replaces the pair a 5.9 page
+   loads (global-v3.css + global-v3-polish.css) and adds, as shared
+   components, the pieces the David suite had to carry in a series
+   stylesheet of its own.
+
+     <link rel="stylesheet" href="/assets/css/global-v4.css?v=4.0.0">
+
+   Do not load it beside global-v3.css or global-v3-polish.css.
+   5.9 pages keep their own files. Nothing here changes them.
+
+   CONTENTS
+   --------
+   Part I    Foundation: tokens, layout and every v3 component.
+             Sections 1–57, from global-v3.css 3.3.2.
+   Part II   Themes and motion: data-theme, hover lifts, callout
+             loops, tiles. Sections A–K, from global-v3-polish.css 0.3.
+   Part III  5.10 components, first built for the David suite
+             (david-study.css 1.6). Sections L–X:
+               L  Animated hero            .book-hero
+               M  Page tabs                .rainbow-stage-tracker
+               N  Page cards               .page-nav-item (flow layout)
+               O  Passage study            .passage-study
+               P  Word tiles, note boxes   .word-tiles  .significance
+               Q  Q&A pills with no body
+               R  Study Complete banner    .study-complete-banner
+               S  Utilities                .small  .flow-line  .benediction
+               T  Chiasm outlines          .chiasm-outline
+               U  Bibliography helpers     .bibliography-stack  .bp-icon
+               V  Study tiles              .tile-columns  .study-tile
+               W  Showcase pieces          .scene-quote  .step-rail
+                                           .typology-pairs  .themes-grid
+                                           .outcome-cards
+               X  Print
+
+   The three parts keep the order the three files loaded in, so
+   the cascade a 5.9 David page gets is the cascade a 5.10 page
+   gets. The changes below are the only differences.
+
+   WHAT IS DIFFERENT FROM 3.3.2 + POLISH 0.3
+   -----------------------------------------
+   1. Scroll entrances are on by default (section 56). The chassis
+      finds the components that take part; a page marks nothing.
+      3.x was opt-in: [data-reveal] and [data-reveal-children] had
+      to be placed by hand on every page.
+   2. An entrance no longer cancels a hover lift. 3.x revealed with
+      a forwards-filled `transform` animation, which outranks a
+      later `:hover { transform }`. Entrances now animate opacity
+      and the separate `translate` property and hold nothing once
+      they finish. The per-component patches that worked around
+      this (polish K, and the series stylesheets) are gone.
+   3. Nothing is hidden by CSS alone. The waiting state is keyed on
+      an attribute only the running chassis sets, so a page with
+      no JavaScript shows everything and needs no <noscript> rule
+      and no safety-net script.
+   4. Key Insight and Pattern Summary boxes isolate their stacking
+      (sections C1, C4). Their glow sits at z-index -1 and was only
+      ever visible on boxes the old reveal rule happened to turn
+      into stacking contexts.
+   5. Page cards use the flow layout (section N): the link sits
+      under the subtitle instead of on top of it.
+   6. A page that opens with a hero does not also get the 6rem of
+      navigation clearance under it (section L).
+
+   HERO COLOURS
+   ------------
+   --hero-from, --hero-to and --hero-ink are set on :root (rose,
+   purple, white). The hero, the current page tab and the scene
+   quote all read them, so one override recolours the three:
+
+     <style>:root { --hero-from: #9f1239; --hero-to: #4f46e5; }</style>
+
+   Hero text is white. Keep both colours at least as dark as the
+   defaults (white on --accent-rose is 4.7:1).
+
+   Design philosophy
+   -----------------
+   1. v2 visual identity preserved: saturated triad on white,
+      purple→rose gradients on body components.
+   2. Components, not card-everything. Mini-Card Grid, Q&A Pills,
+      Pattern Summary, etc. are first-class.
+   3. Motion comes with the page. Content enters once as it is
+      scrolled to, cards answer the pointer, and a page that wants
+      neither says so with one attribute. Reduced-motion readers
+      get a still page.
+   ============================================================ */
+
+
+/* ############################################################
+   ############################################################
+   PART I — FOUNDATION
+   Sections 1–57. From global-v3.css 3.3.2. Sections 23, 56 and
+   57 are changed for 5.10; everything else is as it was.
+   ############################################################
+   ############################################################ */
+
+
+/* ============================================================
+   1. DESIGN TOKENS
+   ============================================================ */
+:root {
+  /* — Cool neutrals (no brown, no beige) — */
+  --bg:           #ffffff;
+  --bg-2:         #f8fafc;
+  --bg-3:         #f1f5f9;
+  --text:         #0f172a;
+  --text-soft:    #334155;
+  --text-muted:   #64748b;
+  --text-subtle:  #94a3b8;
+  --border:       #e2e8f0;
+  --border-soft:  rgba(15, 23, 42, 0.06);
+
+  /* — Legacy v2 aliases (so v2 page-CSS still works) — */
+  --ink:          var(--text);
+  --ink-soft:     var(--text-soft);
+  --ink-muted:    var(--text-muted);
+  --paper:        var(--bg);
+  --paper-2:      var(--bg-2);
+  --paper-3:      var(--bg-3);
+  --rule:         var(--border);
+  --rule-soft:    var(--border-soft);
+
+  /* — v2 accent triad (preserved exactly) — */
+  --accent-purple: #7209b7;
+  --accent-rose:   #e11d48;
+  --accent-blue:   #00b4d8;
+
+  /* — New accents (v3.1 additions) — */
+  --accent-magenta: #ec4899;
+  --accent-indigo:  #4f46e5;
+  --accent-teal:    #14b8a6;
+
+  /* — Short aliases — */
+  --purple:   var(--accent-purple);
+  --rose:     var(--accent-rose);
+  --blue:     var(--accent-blue);
+  --magenta:  var(--accent-magenta);
+  --indigo:   var(--accent-indigo);
+  --teal:     var(--accent-teal);
+
+  /* — Semantic — */
+  --success:    var(--accent-teal);
+  --warning:    var(--accent-magenta);
+  --info:       var(--accent-blue);
+  --danger:     var(--accent-rose);
+
+  /* — Signature gradients — */
+  --gradient-primary: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-rose) 100%);
+  --gradient-cool:    linear-gradient(135deg, var(--accent-blue) 0%,   var(--accent-indigo) 100%);
+  --gradient-warm:    linear-gradient(135deg, var(--accent-rose) 0%,   var(--accent-magenta) 100%);
+  --gradient-fresh:   linear-gradient(135deg, var(--accent-teal) 0%,   var(--accent-blue) 100%);
+  --gradient-deep:    linear-gradient(135deg, var(--accent-indigo) 0%, var(--accent-purple) 100%);
+
+  /* — Page accent (overridden per page in multi-page suites) — */
+  --page-accent:        var(--accent-purple);
+  --page-accent-soft:   color-mix(in srgb, var(--page-accent) 12%, transparent);
+  --page-accent-faint:  color-mix(in srgb, var(--page-accent) 4%,  transparent);
+
+  /* — Typography — */
+  --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-body:    'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-hebrew:  'SBL Hebrew', 'Ezra SIL', 'Times New Roman', serif;
+  --font-greek:   'SBL Greek', 'Times New Roman', serif;
+
+  --fs-xs:   0.78rem;
+  --fs-sm:   0.88rem;
+  --fs-base: 1rem;
+  --fs-md:   1.125rem;
+  --fs-lg:   1.25rem;
+  --fs-xl:   1.5rem;
+  --fs-2xl:  2rem;
+  --fs-3xl:  2.6rem;
+  --fs-4xl:  3.4rem;
+
+  --lh-tight: 1.25;
+  --lh-snug:  1.4;
+  --lh-base:  1.65;
+  --lh-loose: 1.85;
+
+  /* — Layout — */
+  --max-w-prose:   65ch;
+  --max-w-content: 1100px;
+  --max-w-wide:    1400px;
+  --gutter:        clamp(1rem, 4vw, 2rem);
+
+  /* — Radii — */
+  --radius-sm:   8px;
+  --radius:      14px;
+  --radius-lg:   20px;
+  --radius-pill: 999px;
+
+  /* — Shadows (cool slate, not warm) — */
+  --shadow-sm:  0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow:     0 1px 3px rgba(15, 23, 42, 0.06), 0 8px 24px rgba(15, 23, 42, 0.06);
+  --shadow-lg:  0 4px 12px rgba(15, 23, 42, 0.08), 0 24px 48px rgba(15, 23, 42, 0.10);
+  --shadow-xl:  0 12px 24px rgba(15, 23, 42, 0.10), 0 48px 96px rgba(15, 23, 42, 0.14);
+
+  /* Colored shadow for primary CTAs (v2 signature glow) */
+  --shadow-purple: 0 4px 16px rgba(114, 9, 183, 0.25);
+  --shadow-rose:   0 4px 16px rgba(225, 29, 72, 0.25);
+
+  /* — Motion — */
+  --ease:       cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out:   cubic-bezier(0, 0, 0.2, 1);
+  --ease-in:    cubic-bezier(0.4, 0, 1, 1);
+  --duration-fast:   180ms;
+  --duration:        300ms;
+  --duration-slow:   600ms;
+
+  /* — Z-layers — */
+  --z-nav:       1000;
+  --z-overlay:   998;
+  --z-progress:  1001;
+  --z-floating:  900;
+  --z-tabs:      950;
+}
+
+
+/* ============================================================
+   2. RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  line-height: var(--lh-base);
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+img, svg, video { max-width: 100%; height: auto; display: block; }
+
+a { color: var(--page-accent); text-decoration: none; transition: color var(--duration-fast) var(--ease); }
+a:hover { color: var(--accent-rose); }
+
+::selection { background: var(--accent-purple); color: var(--bg); }
+
+
+/* ============================================================
+   3. TYPOGRAPHY DEFAULTS
+   ============================================================ */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: var(--lh-tight);
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+h1 { font-size: var(--fs-4xl); }
+h2 { font-size: var(--fs-3xl); }
+h3 { font-size: var(--fs-2xl); }
+h4 { font-size: var(--fs-xl); }
+h5 { font-size: var(--fs-lg); }
+h6 { font-size: var(--fs-md); }
+
+p { margin: 0 0 1rem; max-width: var(--max-w-prose); }
+p:last-child { margin-bottom: 0; }
+
+ul, ol { margin: 0 0 1rem 1.5rem; }
+li { margin-bottom: 0.4rem; }
+
+strong { font-weight: 600; color: var(--text); }
+em { font-style: italic; }
+
+code, pre, kbd, samp { font-family: var(--font-mono); font-size: 0.92em; }
+code {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.1em 0.4em;
+}
+pre {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 3rem 0;
+}
+
+
+/* ============================================================
+   4. ACCESSIBILITY
+   ============================================================ */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background: var(--text);
+  color: var(--bg);
+  padding: 0.75rem 1.25rem;
+  text-decoration: none;
+  z-index: 2000;
+  border-radius: 0 0 var(--radius-sm) 0;
+  font-weight: 500;
+}
+.skip-link:focus { top: 0; }
+
+:focus-visible {
+  outline: 2px solid var(--page-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+
+/* ============================================================
+   5. NAVIGATION
+   ============================================================ */
+nav#main-nav {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-soft);
+  padding: 1rem var(--gutter);
+  z-index: var(--z-nav);
+  transition: box-shadow var(--duration) var(--ease), background var(--duration) var(--ease);
+}
+nav#main-nav.scrolled {
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: var(--shadow);
+}
+
+.nav-container {
+  max-width: var(--max-w-wide);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text);
+  transition: opacity var(--duration-fast) var(--ease);
+}
+.logo:hover { opacity: 0.7; color: var(--text); }
+.logo-icon { width: 40px; height: 40px; }
+.logo-text {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.nav-links {
+  display: flex;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+}
+.nav-links a {
+  color: var(--text-soft);
+  font-weight: 500;
+  font-size: var(--fs-sm);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  transition: all var(--duration-fast) var(--ease);
+}
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--accent-purple);
+  background: var(--bg-2);
+}
+
+.dropdown { position: relative; }
+.dropdown-toggle::after {
+  content: '▾';
+  font-size: 0.75rem;
+  margin-left: 0.35rem;
+  opacity: 0.6;
+  transition: transform var(--duration-fast) var(--ease);
+}
+.dropdown:hover .dropdown-toggle::after,
+.dropdown.active .dropdown-toggle::after { transform: rotate(180deg); }
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.5rem;
+  min-width: 220px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: 0.5rem 0;
+  z-index: 1;
+}
+.dropdown:hover .dropdown-content,
+.dropdown.active .dropdown-content { display: block; }
+
+.dropdown-content a {
+  display: block;
+  padding: 0.6rem 1.25rem;
+  color: var(--text-soft);
+  font-size: var(--fs-sm);
+  border-radius: 0;
+  min-height: 0;
+  transition: all var(--duration-fast) var(--ease);
+}
+.dropdown-content a:hover {
+  background: var(--bg-2);
+  color: var(--accent-purple);
+  padding-left: 1.5rem;
+}
+
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  flex-direction: column;
+  gap: 4px;
+}
+.mobile-menu-toggle span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: all var(--duration-fast) var(--ease);
+}
+.mobile-menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.mobile-menu-toggle.active span:nth-child(2) { opacity: 0; }
+.mobile-menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
+
+.mobile-menu-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  z-index: var(--z-overlay);
+  opacity: 0;
+  transition: opacity var(--duration) var(--ease);
+}
+.mobile-menu-overlay.active { display: block; opacity: 1; }
+body.menu-open { overflow: hidden; }
+
+
+/* ============================================================
+   6. LAYOUT CONTAINERS
+   ============================================================ */
+.content-section {
+  max-width: var(--max-w-content);
+  margin: 0 auto;
+  padding: 6rem var(--gutter) 2rem;
+}
+
+.container {
+  max-width: var(--max-w-wide);
+  margin: 0 auto;
+  padding: 4rem var(--gutter);
+}
+
+
+/* ============================================================
+   7. BREADCRUMBS
+   ============================================================ */
+.breadcrumbs {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+  font-family: var(--font-body);
+}
+.breadcrumbs a {
+  color: inherit;
+  border-bottom: 1px solid transparent;
+  transition: all var(--duration-fast) var(--ease);
+}
+.breadcrumbs a:hover {
+  color: var(--accent-purple);
+  border-bottom-color: var(--accent-purple);
+}
+
+
+/* ============================================================
+   8. SECTION TITLES
+   ============================================================ */
+.section-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-3xl);
+  font-weight: 700;
+  margin: 0.25rem 0 1.5rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.section-icon {
+  font-size: 0.85em;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.section-subtitle {
+  font-family: var(--font-body);
+  color: var(--text-muted);
+  font-size: var(--fs-md);
+  font-weight: 400;
+  margin-top: 0.5rem;
+}
+
+
+/* ============================================================
+   9. THEOLOGY CARD
+   ============================================================ */
+.theology-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem 2rem;
+  margin: 1.5rem 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.theology-card h3 {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  margin: 0 0 1rem;
+  color: var(--text);
+  letter-spacing: -0.015em;
+}
+
+.theology-card h4 {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  margin: 1rem 0 0.5rem;
+  color: var(--text);
+}
+
+
+/* ============================================================
+   10. MINI-CARD GRID
+   ============================================================ */
+.mini-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.mini-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--page-accent);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
+}
+
+/* Gradient top bar — scales out on hover for visual feedback */
+.mini-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--page-accent), var(--accent-rose));
+  transform: scaleX(0.4);
+  transform-origin: left;
+  transition: transform var(--duration) var(--ease);
+}
+
+@media (hover: hover) {
+  .mini-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  .mini-card:hover::before { transform: scaleX(1); }
+}
+
+.mini-card h4 {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: var(--text);
+}
+
+.mini-card p {
+  font-size: var(--fs-sm);
+  color: var(--text-soft);
+  margin: 0;
+}
+
+
+/* ============================================================
+   11. PANEL
+   ============================================================ */
+.panel {
+  background: var(--bg-2);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem;
+}
+.panel h4 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+}
+
+/* ============================================================
+   GLOBAL-V3 PATCH — goat-panel + feature-tiles
+   ------------------------------------------------------------
+   Promotes .goat-panel from the catalog into v3, and adds a
+   companion .feature-tiles system for icon-led feature rows.
+
+   PLACEMENT
+   ---------
+   Insert after section "11. PANEL" (around line 565 of
+   global-v3.css), before "12. KEY INSIGHT BOX". Renumber the
+   sections that follow if you keep that convention strict; or
+   leave the existing numbers and let these be 11a / 11b.
+
+   COMPATIBILITY
+   -------------
+   Backward-compatible with existing pages that use:
+
+     <article class="goat-panel" style="--panel-accent: ...">
+       <h3>Title</h3>
+       <ul><li>...</li></ul>
+     </article>
+
+   Old <ul> form still renders cleanly. The new tile form is
+   purely additive: drop a .feature-tiles block in instead of
+   (or alongside) the <ul>, and tiles inherit --panel-accent
+   from the surrounding panel.
+
+   PAGE-LOCAL CLEANUP
+   ------------------
+   After this patch ships, delete the inline .goat-panel block
+   from any page that copied it locally — at minimum:
+     • lltse-orientation-methodology-v1.html (lines ~128-145)
+     • leviticus-theology.css (Yom Kippur Two-Goat section)
+   ============================================================ */
+
+
+/* ============================================================
+   11a. GOAT PANEL — paired binary-comparison container
+   ------------------------------------------------------------
+   For binary oppositions in a .grid-2: Structured/Scroll,
+   Holy/Common, OT/NT, kingdom/empire. Each panel is themed
+   via --panel-accent (set per instance); falls back to the
+   page's --page-accent if unset.
+
+   Accepts inside it, in any combination:
+     - <h3>            panel title
+     - .panel-tagline  italic one-line purpose statement
+     - <ul>            legacy bullet list
+     - .feature-tiles  new icon-led feature stack
+     - free <p>        supporting prose
+   ============================================================ */
+.goat-panel {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--panel-accent, var(--page-accent));
+  border-radius: var(--radius-sm);
+  padding: 1.5rem 1.5rem 1.25rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration) var(--ease),
+              box-shadow var(--duration) var(--ease);
+}
+
+@media (hover: hover) {
+  .goat-panel:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+}
+
+.goat-panel > h3 {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  color: var(--panel-accent, var(--page-accent));
+  margin: 0 0 0.4rem;
+  letter-spacing: -0.01em;
+  line-height: var(--lh-tight);
+}
+
+/* Italic purpose line — lifts a "designed for X" sentence up
+   out of the feature list and into a binary-contrast position. */
+.goat-panel > .panel-tagline {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--fs-md);
+  color: var(--text-soft);
+  margin: 0 0 1.1rem;
+  line-height: var(--lh-snug);
+}
+
+/* Legacy <ul> form preserved verbatim. */
+.goat-panel > ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.2rem;
+  line-height: var(--lh-base);
+}
+.goat-panel > ul > li { margin-bottom: 0.3rem; }
+
+
+/* ============================================================
+   11b. FEATURE TILES — icon-led feature rows
+   ------------------------------------------------------------
+   A vertical stack of compact feature rows: square icon plate,
+   bold lead phrase, one supporting sentence. Designed to live
+   inside .goat-panel (where it inherits --panel-accent) but
+   works standalone in any container, falling back to
+   --page-accent.
+
+   Why not a sub-grid? Inside an already-2-column .grid-2 of
+   goat-panels, a nested 2-col grid creates too many small
+   boxes. A vertical stack of horizontal tiles keeps the rhythm
+   readable and puts the bold lead phrases in a single scan
+   column down each side.
+
+   Markup:
+
+     <div class="feature-tiles">
+       <div class="feature-tile">
+         <span class="ico" aria-hidden="true">📐</span>
+         <div class="body">
+           <strong>Lead phrase</strong>
+           <p>Short supporting sentence.</p>
+         </div>
+       </div>
+       ...
+     </div>
+   ============================================================ */
+.feature-tiles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin: 0.25rem 0 0;
+}
+
+.feature-tile {
+  display: grid;
+  grid-template-columns: 2.4rem 1fr;
+  gap: 0.85rem;
+  align-items: start;
+  padding: 0.7rem 0.85rem;
+  background: color-mix(in srgb, var(--panel-accent, var(--page-accent)) 4%, transparent);
+  border: 1px solid color-mix(in srgb, var(--panel-accent, var(--page-accent)) 14%, transparent);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--duration) var(--ease),
+              background var(--duration) var(--ease),
+              transform var(--duration) var(--ease);
+}
+
+@media (hover: hover) {
+  .feature-tile:hover {
+    border-color: color-mix(in srgb, var(--panel-accent, var(--page-accent)) 32%, transparent);
+    background: color-mix(in srgb, var(--panel-accent, var(--page-accent)) 7%, transparent);
+    transform: translateX(2px);
+  }
+}
+
+.feature-tile > .ico {
+  font-size: 1.35rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--panel-accent, var(--page-accent)) 10%, var(--bg));
+  border: 1px solid color-mix(in srgb, var(--panel-accent, var(--page-accent)) 18%, transparent);
+  flex-shrink: 0;
+}
+
+.feature-tile > .body { min-width: 0; }
+
+.feature-tile strong {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--fs-base);
+  color: var(--text);
+  margin: 0 0 0.15rem;
+  line-height: var(--lh-snug);
+  letter-spacing: -0.005em;
+}
+
+.feature-tile p {
+  font-size: var(--fs-sm);
+  color: var(--text-soft);
+  margin: 0;
+  line-height: var(--lh-snug);
+}
+
+/* Mobile — feature tiles already stack inside the panel; only
+   adjustment is a slightly tighter icon plate to keep the body
+   text its full width. */
+@media (max-width: 499px) {
+  .feature-tile {
+    grid-template-columns: 2rem 1fr;
+    gap: 0.7rem;
+    padding: 0.65rem 0.75rem;
+  }
+  .feature-tile > .ico {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.15rem;
+  }
+}
+
+
+/* ============================================================
+   12. KEY INSIGHT BOX
+   ============================================================ */
+.key-insight {
+  background: var(--bg-2);
+  border-left: 3px solid var(--page-accent);
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-sm);
+  margin: 1.5rem 0;
+}
+
+.key-insight strong {
+  color: var(--page-accent);
+  display: inline-block;
+  margin-right: 0.4rem;
+}
+
+
+/* ============================================================
+   13. CRITICAL DISTINCTION BOX (calm clarification)
+   ------------------------------------------------------------
+   For correcting a common misreading — a quiet "read it this
+   way," not an alarm. Was a rose box with a ⚠ glyph; now a calm
+   cool-indigo note with a thin top accent (the top bar keeps it
+   distinct from Key Insight's left-bar + 💡, and from Guided
+   Principle's cosmic gradient). No warning glyph; gentle hover.
+   ============================================================ */
+.critical-distinction {
+  position: relative;
+  background: color-mix(in srgb, var(--accent-indigo) 5%, var(--bg));
+  border: 1px solid color-mix(in srgb, var(--accent-indigo) 22%, var(--border));
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius);
+  margin: 1.5rem 0;
+  overflow: hidden;
+  transition: border-color var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
+}
+
+/* thin calm top accent — the distinguishing structural cue */
+.critical-distinction::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg,
+    var(--accent-indigo),
+    color-mix(in srgb, var(--accent-indigo) 35%, transparent));
+}
+
+.critical-distinction h4 {
+  color: var(--accent-indigo);
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  margin: 0 0 0.5rem;
+}
+
+@media (hover: hover) {
+  .critical-distinction:hover {
+    border-color: color-mix(in srgb, var(--accent-indigo) 40%, var(--border));
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--accent-indigo) 14%, transparent);
+  }
+}
+
+
+/* ============================================================
+   13b. GUIDED PRINCIPLE BOX (cosmic gradient)
+   ------------------------------------------------------------
+   For formational guidance statements — the "this is the
+   principle to internalize" callout. Sibling to .critical-
+   distinction (rose, warning) but reads as invitation, not
+   warning. Uses the Project Context cosmic palette
+   (cyan → indigo → magenta → pink → gold) for the gradient
+   border and gradient-text heading; ✦ marker instead of ⚠.
+
+   Hover: lifts -6px and scales 1.01 (matches the About page
+   core-component-card treatment); gradient border ramps from
+   55% to 100% opacity; h4 slides right 5px.
+   ============================================================ */
+.guided-principle {
+  position: relative;
+  overflow: hidden;
+  margin: 2rem 0;
+  padding: 1.75rem 2rem;
+  background: linear-gradient(135deg,
+    color-mix(in srgb, #3EE4FF 4%, var(--bg)),
+    color-mix(in srgb, #6C4FF7 4%, var(--bg)) 35%,
+    color-mix(in srgb, #E94BFF 4%, var(--bg)) 65%,
+    color-mix(in srgb, #FF9B4A 4%, var(--bg)));
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(108, 79, 247, 0.08);
+  transition:
+    transform var(--duration) var(--ease),
+    box-shadow var(--duration) var(--ease);
+}
+
+/* Animated rainbow gradient border (mask-composite trick) */
+.guided-principle::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  padding: 2px;
+  background: linear-gradient(135deg,
+    #3EE4FF 0%, #6C4FF7 30%, #E94BFF 60%,
+    #FA4ABA 80%, #FF9B4A 100%);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+          mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.55;
+  transition: opacity var(--duration) var(--ease);
+}
+
+@media (hover: hover) {
+  .guided-principle:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow:
+      0 14px 32px rgba(108, 79, 247, 0.18),
+      0 4px 14px rgba(233, 75, 255, 0.12);
+  }
+  .guided-principle:hover::before { opacity: 1; }
+  .guided-principle:hover h4 { transform: translateX(5px); }
+}
+
+.guided-principle h4 {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  margin: 0 0 0.65rem;
+  display: inline-block;
+  background: linear-gradient(135deg,
+    #3EE4FF 0%, #6C4FF7 35%, #E94BFF 70%, #FA4ABA 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  transition: transform var(--duration) var(--ease);
+}
+
+.guided-principle h4::before {
+  content: '✦ ';
+  background: linear-gradient(135deg, #FFD700, #FA4ABA);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.guided-principle p {
+  margin: 0;
+  color: var(--text-soft);
+  line-height: 1.65;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guided-principle,
+  .guided-principle::before,
+  .guided-principle h4 {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+
+/* ============================================================
+   14. CORE LOGIC QUOTE
+   ============================================================ */
+.core-logic-quote {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-style: italic;
+  line-height: var(--lh-snug);
+  color: var(--text);
+  text-align: center;
+  max-width: 50ch;
+  margin: 2.5rem auto;
+  padding: 1.5rem 2rem;
+  border-top: 2px solid transparent;
+  border-bottom: 2px solid transparent;
+  border-image: var(--gradient-primary) 1;
+  position: relative;
+}
+
+.core-logic-quote::before,
+.core-logic-quote::after {
+  font-family: var(--font-display);
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-size: 2.5rem;
+  position: absolute;
+  line-height: 0.6;
+  font-weight: 700;
+}
+.core-logic-quote::before { content: '“'; left: 0.4rem;  top: 1.2rem; }
+.core-logic-quote::after  { content: '”'; right: 0.4rem; bottom: 0.6rem; }
+
+
+/* ============================================================
+   15. PATTERN SUMMARY BOX (teal accent)
+   ============================================================ */
+.pattern-summary {
+  background: color-mix(in srgb, var(--accent-teal) 7%, var(--bg));
+  border: 1px solid color-mix(in srgb, var(--accent-teal) 30%, var(--border));
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin: 2rem 0;
+}
+
+.pattern-summary h4 {
+  color: var(--accent-teal);
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  margin: 0 0 0.5rem;
+}
+
+.pattern-summary h4::before {
+  content: '◆ ';
+  font-size: 0.85em;
+}
+
+
+/* ============================================================
+   16. ONE-LINE TAKEAWAY BOX
+   ============================================================ */
+.takeaway {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  font-style: italic;
+  text-align: center;
+  color: var(--text);
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem 2rem;
+  margin: 2.5rem auto;
+  max-width: 800px;
+  position: relative;
+}
+
+.takeaway::before {
+  content: '⤳';
+  display: block;
+  font-size: 1.5rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-style: normal;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+
+/* ============================================================
+   17. PIVOT BOX (gradient ring + magenta glow)
+   ============================================================ */
+.pivot-box {
+  background: var(--bg);
+  border: 2px solid transparent;
+  background-image:
+    linear-gradient(var(--bg), var(--bg)),
+    var(--gradient-primary);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  border-radius: var(--radius);
+  padding: 1.5rem 2rem;
+  margin: 2rem auto;
+  max-width: 50ch;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-magenta) 12%, transparent);
+}
+
+.pivot-box .pivot-label {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.pivot-box .pivot-verse {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-style: italic;
+  line-height: var(--lh-snug);
+  color: var(--text);
+}
+
+.pivot-box .pivot-ref {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+}
+
+
+/* ============================================================
+   18. SCRIPTURE QUOTE
+   ============================================================ */
+.scripture-quote {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  line-height: var(--lh-snug);
+  color: var(--text);
+  border-left: 3px solid var(--page-accent);
+  padding: 0.75rem 1.5rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+}
+
+.scripture-quote .reference {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-style: normal;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  letter-spacing: 0.05em;
+}
+
+
+/* ============================================================
+   19. SCROLL TEXT
+   ============================================================ */
+.scroll-text {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  line-height: var(--lh-loose);
+  color: var(--text);
+  background: var(--bg-2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 1.5rem 2rem;
+  margin: 1.5rem 0;
+  white-space: pre-line;
+}
+
+.scroll-text .indent-1 { padding-left: 1.5rem; display: block; }
+.scroll-text .indent-2 { padding-left: 3rem;   display: block; }
+.scroll-text .indent-3 { padding-left: 4.5rem; display: block; }
+
+
+/* ============================================================
+   20. Q&A PILLS / ACCORDION
+   ============================================================ */
+.qa-pills { margin: 1.5rem 0; }
+
+.qa-pill {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+  transition: border-color var(--duration-fast) var(--ease);
+}
+.qa-pill[open] { border-color: var(--page-accent); }
+
+.qa-pill summary {
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-weight: 500;
+  color: var(--text);
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  user-select: none;
+  min-height: 44px;
+}
+.qa-pill summary::-webkit-details-marker { display: none; }
+
+.qa-pill summary::after {
+  content: '+';
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: transform var(--duration-fast) var(--ease);
+}
+.qa-pill[open] summary::after { transform: rotate(45deg); }
+
+.qa-pill .qa-body {
+  padding: 0 1.25rem 1.25rem;
+  color: var(--text-soft);
+  border-top: 1px solid var(--border-soft);
+  padding-top: 1rem;
+}
+
+
+/* ============================================================
+   21. WORD STUDY CARD (indigo accent)
+   ============================================================ */
+.word-study {
+  background: color-mix(in srgb, var(--accent-indigo) 5%, var(--bg));
+  border: 1px solid color-mix(in srgb, var(--accent-indigo) 30%, var(--border));
+  border-radius: var(--radius);
+  padding: 1.5rem 1.75rem;
+  margin: 1.5rem 0;
+}
+
+.word-study h4 {
+  color: var(--accent-indigo);
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  margin: 0 0 0.75rem;
+}
+
+.word-study p { margin-bottom: 0.5rem; }
+
+
+/* ============================================================
+   22. CHIASTIC STRUCTURE
+   ============================================================ */
+.chiasm-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem 2rem;
+  margin: 1.5rem 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.chiasm-card h3 {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  margin: 0 0 1rem;
+}
+
+.chiasm-structure {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  background: var(--bg-2);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin: 1rem 0;
+  line-height: var(--lh-loose);
+}
+
+.chiasm-line { padding: 0.2rem 0; }
+
+.chiasm-center {
+  padding: 0.75rem 1rem;
+  margin: 0.75rem 0;
+  border-left: 3px solid var(--accent-purple);
+  background: color-mix(in srgb, var(--accent-purple) 5%, var(--bg-2));
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.indent-1 { padding-left: 1.5rem; }
+.indent-2 { padding-left: 3rem; }
+.indent-3 { padding-left: 4.5rem; }
+.indent-4 { padding-left: 6rem; }
+
+
+/* ============================================================
+   23. TIMELINE — rail uses v2 gradient
+   ============================================================ */
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+  margin: 1.5rem 0;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0; bottom: 0;
+  width: 2px;
+  background: var(--gradient-primary);
+  border-radius: 1px;
+}
+
+.timeline-item {
+  position: relative;
+  padding: 1rem 0 1rem 1.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  transition: background var(--duration-fast) var(--ease);
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -2.4rem;
+  top: 1.4rem;
+  width: 12px;
+  height: 12px;
+  background: var(--bg);
+  border: 2px solid var(--accent-purple);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-purple) 10%, transparent);
+  transition: all var(--duration-fast) var(--ease);
+}
+
+.timeline-item:hover {
+  background: var(--bg-2);
+  padding-left: 1.75rem;
+}
+.timeline-item:hover::before {
+  background: var(--accent-rose);
+  border-color: var(--accent-rose);
+  transform: scale(1.2);
+}
+
+/* 5.10: timeline items enter through the scroll reveal system
+   (section 56), sliding in from the rail. Nothing is marked: the
+   chassis treats every .timeline as a group. The 5.9 class
+   .stagger-children is harmless here and no longer needed. */
+
+
+/* ============================================================
+   24. TAGS & BADGES — v2 gradient signature
+   ============================================================ */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 0.25rem 0.85rem;
+  font-size: var(--fs-sm);
+  margin: 0.15rem 0.35rem 0.15rem 0;
+  background: var(--bg-2);
+  color: var(--text-soft);
+  font-weight: 500;
+  transition: all var(--duration-fast) var(--ease);
+}
+
+.tag:hover {
+  background: var(--gradient-primary);
+  color: var(--bg);
+  border-color: transparent;
+  transform: translateY(-1px);
+}
+
+.tag.primary {
+  background: var(--gradient-primary);
+  color: var(--bg);
+  border-color: transparent;
+}
+
+.character-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1rem;
+  background: var(--gradient-primary);
+  color: var(--bg);
+  border: 0;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  margin: 0.5rem 0;
+  box-shadow: var(--shadow-purple);
+}
+
+.enhancement-indicator,
+.optional-indicator,
+.multi-page-indicator {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 4px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-left: 0.5rem;
+  color: var(--bg);
+}
+.enhancement-indicator { background: var(--gradient-primary); }
+.optional-indicator    { background: var(--gradient-cool); }
+.multi-page-indicator  { background: var(--gradient-warm); }
+
+
+/* ============================================================
+   25. TABLES
+   ============================================================ */
+.table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin: 1rem 0;
+  font-size: var(--fs-sm);
+}
+
+thead th {
+  background: var(--bg-2);
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--text);
+  text-align: left;
+  padding: 0.85rem 1rem;
+  font-size: var(--fs-base);
+}
+
+th, td {
+  border-top: 1px solid var(--border);
+  padding: 0.85rem 1rem;
+  vertical-align: top;
+  text-align: left;
+}
+thead th { border-top: 0; }
+
+tbody tr:hover { background: var(--bg-2); }
+
+
+/* ============================================================
+   26. STAR DIVIDER
+   ============================================================ */
+.star-divider {
+  text-align: center;
+  margin: 3rem 0;
+  font-size: var(--fs-lg);
+  letter-spacing: 1.5em;
+  user-select: none;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-weight: 700;
+}
+.star-divider::before { content: '✦ ✦ ✦'; }
+
+.section-divider {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 3rem 0;
+}
+
+
+/* ============================================================
+   27. META / KV BOXES
+   ============================================================ */
+.meta {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+
+.meta .kv {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.9rem;
+  font-size: var(--fs-sm);
+  color: var(--text-soft);
+}
+.meta .kv strong {
+  color: var(--text);
+  margin-right: 0.35rem;
+}
+
+
+/* ============================================================
+   28. COMPLEXITY INDICATOR
+   ============================================================ */
+.complexity-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  padding: 0.75rem 1rem;
+  background: var(--bg-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  font-size: var(--fs-sm);
+  flex-wrap: wrap;
+}
+
+.complexity-indicator .label {
+  font-weight: 600;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.complexity-level { display: flex; gap: 0.3rem; }
+
+.complexity-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.complexity-dot.filled { background: var(--gradient-primary); }
+
+
+/* ============================================================
+   29. READING TIME + TL;DR STAMP
+   ============================================================ */
+.reading-stamp {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 1.25rem;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: 1rem 0 1.5rem;
+  font-size: var(--fs-sm);
+}
+
+.reading-stamp .stamp-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  flex-shrink: 0;
+}
+
+.reading-stamp .stamp-meta strong {
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.reading-stamp .stamp-tldr {
+  flex: 1;
+  min-width: 280px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--fs-md);
+  line-height: var(--lh-snug);
+  color: var(--text);
+  border-left: 1px solid var(--border);
+  padding-left: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .reading-stamp .stamp-tldr {
+    border-left: 0;
+    border-top: 1px solid var(--border);
+    padding-left: 0;
+    padding-top: 1rem;
+    width: 100%;
+  }
+}
+
+
+/* ============================================================
+   30. CROSS-REFERENCES
+   ============================================================ */
+.cross-ref {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.9rem;
+  min-height: 44px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  color: var(--text-soft);
+  text-decoration: none;
+  margin: 0.25rem;
+  transition: all var(--duration-fast) var(--ease);
+}
+.cross-ref:hover {
+  background: var(--gradient-primary);
+  color: var(--bg);
+  border-color: transparent;
+  transform: translateX(2px);
+  box-shadow: var(--shadow-purple);
+}
+
+
+/* ============================================================
+   31. SONG LINK (women's profiles — warm gradient)
+   ============================================================ */
+.song-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1rem;
+  background: var(--gradient-warm);
+  color: var(--bg);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-decoration: none;
+  margin: 0.25rem;
+  transition: all var(--duration-fast) var(--ease);
+  box-shadow: var(--shadow-rose);
+}
+.song-link:hover {
+  background: var(--gradient-primary);
+  color: var(--bg);
+  transform: translateY(-1px);
+}
+
+
+/* ============================================================
+   32. STUDY QUESTIONS (legacy <ol>)
+   ============================================================ */
+.question-list {
+  counter-reset: question;
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.question-list li {
+  counter-increment: question;
+  position: relative;
+  padding-left: 3rem;
+  margin-bottom: 1.25rem;
+  color: var(--text-soft);
+  line-height: var(--lh-base);
+}
+
+.question-list li::before {
+  content: counter(question);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 32px;
+  height: 32px;
+  background: var(--gradient-primary);
+  color: var(--bg);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+}
+
+
+/* ============================================================
+   33. GRID UTILITIES
+   ============================================================ */
+.grid-2 { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.grid-3 { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.grid-4 { display: grid; gap: 1rem;   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+
+/* ============================================================
+   34. MINI-TOC PILL BAR
+   ============================================================ */
+.mini-toc {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0 2.5rem;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.mini-toc-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  align-self: center;
+  margin-right: 0.5rem;
+}
+
+.mini-toc a {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-sm);
+  color: var(--text-soft);
+  font-weight: 500;
+  transition: all var(--duration-fast) var(--ease);
+}
+.mini-toc a:hover,
+.mini-toc a[aria-current="true"] {
+  background: var(--gradient-primary);
+  color: var(--bg);
+  border-color: transparent;
+}
+
+
+/* ============================================================
+   35. PAGE NAVIGATION GRID
+   The layout of a card is finished in section N (flow layout).
+   ============================================================ */
+.page-navigation {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin: 2.5rem 0;
+}
+
+.page-navigation h3 {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  margin: 0 0 1.25rem;
+  text-align: center;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+}
+
+.page-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+}
+
+.page-nav-item {
+  position: relative;
+  display: block;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  text-decoration: none;
+  color: var(--text);
+  min-height: 88px;
+  transition: all var(--duration-fast) var(--ease);
+}
+
+.page-nav-item:hover {
+  border-color: var(--page-accent);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+
+.page-nav-item.current {
+  background: var(--gradient-primary);
+  color: var(--bg);
+  border-color: transparent;
+  cursor: default;
+}
+.page-nav-item.current:hover { transform: none; }
+
+.page-nav-item h4 {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  margin: 0 0 0.25rem;
+  color: inherit;
+}
+
+.page-nav-item .nav-subtitle {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  margin: 0;
+}
+.page-nav-item.current .nav-subtitle { color: rgba(255, 255, 255, 0.85); }
+
+.page-nav-item .nav-link {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 1rem;
+  font-size: var(--fs-sm);
+  color: var(--page-accent);
+}
+.page-nav-item.current .nav-link { color: var(--bg); }
+
+
+/* ============================================================
+   36. QUICK NAV SIDEBAR (.qdot)
+   ============================================================ */
+.quick-nav-sidebar {
+  position: fixed;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: none;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: var(--z-floating);
+}
+
+@media (min-width: 1400px) {
+  .quick-nav-sidebar { display: flex; }
+}
+
+.qdot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+  position: relative;
+  transition: all var(--duration-fast) var(--ease);
+}
+
+.qdot:hover,
+.qdot.active {
+  background: var(--gradient-primary);
+  transform: scale(1.4);
+}
+
+.qdot::before {
+  content: attr(data-label);
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--text);
+  color: var(--bg);
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-fast) var(--ease);
+  font-family: var(--font-body);
+}
+.qdot:hover::before { opacity: 1; }
+
+
+/* ============================================================
+   37. READING PROGRESS BAR — v2 gradient
+   ============================================================ */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+  z-index: var(--z-progress);
+  transition: width 100ms linear;
+  width: 0%;
+}
+
+
+/* ============================================================
+   38. BACK TO TOP FAB — v2 gradient
+   ============================================================ */
+.back-to-top {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  background: var(--gradient-primary);
+  color: var(--bg);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 1.4rem;
+  font-weight: 700;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--duration) var(--ease);
+  box-shadow: var(--shadow-purple);
+  z-index: var(--z-floating);
+}
+.back-to-top.visible { opacity: 1; visibility: visible; }
+.back-to-top:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 24px rgba(114, 9, 183, 0.4);
+}
+
+/* Mobile: lift back-to-top above the section tab strip so it
+   doesn't clip behind it, and raise z-index above the tabs.
+   The base 6.5rem covers the bottom strip and home-indicator
+   area; has-mobile-tabs bumps it slightly further when the
+   chassis has actually mounted the tab bar. */
+@media (max-width: 768px) {
+  .back-to-top {
+    bottom: calc(6.5rem + env(safe-area-inset-bottom));
+    right: 1rem;
+    width: 3rem;
+    height: 3rem;
+    z-index: 1001;
+  }
+
+  body.has-mobile-tabs .back-to-top {
+    bottom: calc(7.25rem + env(safe-area-inset-bottom));
+  }
+}
+
+/* ============================================================
+   39. MOBILE SECTION TABS
+   ============================================================ */
+.mobile-section-tabs {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border);
+  z-index: var(--z-tabs);
+  transform: translateY(100%);
+  transition: transform var(--duration) var(--ease);
+}
+
+.mobile-section-tabs.slide-in { transform: translateY(0); }
+
+@media (max-width: 768px) {
+  .mobile-section-tabs.active { display: block; }
+  body.has-mobile-tabs { padding-bottom: 64px; }
+}
+
+.tabs-container {
+  display: flex;
+  gap: 0.25rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0.5rem 0.75rem;
+  scrollbar-width: none;
+}
+.tabs-container::-webkit-scrollbar { display: none; }
+
+.tab-item {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.85rem;
+  min-height: 48px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease);
+  white-space: nowrap;
+}
+
+.tab-item:hover {
+  background: var(--bg-2);
+  color: var(--accent-purple);
+}
+
+.tab-item.active {
+  background: var(--gradient-primary);
+  color: var(--bg);
+  border-color: transparent;
+}
+
+.tab-icon { font-size: 1rem; line-height: 1; }
+.tab-label, .tab-label-only { font-size: var(--fs-xs); }
+
+
+/* ============================================================
+   40. BIBLIOGRAPHY (Enhanced is default)
+   ============================================================ */
+.bibliography-section {
+  margin: 3rem 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.bibliography-section summary {
+  cursor: pointer;
+  list-style: none;
+  outline: none;
+}
+.bibliography-section summary::-webkit-details-marker { display: none; }
+
+.bibliography-header {
+  padding: 1.5rem 1.75rem;
+  background: var(--gradient-primary);
+  color: var(--bg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+}
+
+.bibliography-inner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.bibliography-icon {
+  font-size: 1.75rem;
+  flex-shrink: 0;
+  color: var(--bg);
+  opacity: 0.9;
+}
+
+.bibliography-text { flex: 1; min-width: 0; }
+
+.bibliography-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  margin: 0;
+  color: var(--bg);
+}
+
+.bibliography-subtitle {
+  margin: 0.25rem 0 0;
+  font-size: var(--fs-sm);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.expand-indicator {
+  flex-shrink: 0;
+  color: var(--bg);
+  transition: transform var(--duration) var(--ease);
+}
+.expand-indicator svg { width: 24px; height: 24px; }
+.bibliography-section[open] .expand-indicator { transform: rotate(180deg); }
+
+.bibliography-content {
+  padding: 2rem;
+  background: var(--bg-2);
+}
+
+.bibliography-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.cite-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.9rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  color: var(--text-soft);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: all var(--duration-fast) var(--ease);
+}
+.cite-button:hover {
+  background: var(--gradient-primary);
+  color: var(--bg);
+  border-color: transparent;
+}
+.cite-button.copied {
+  background: var(--gradient-fresh);
+  color: var(--bg);
+  border-color: transparent;
+}
+
+.source-category { margin-bottom: 2rem; }
+
+.source-category h4 {
+  color: var(--accent-purple);
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  margin: 0 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.source-entry {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--page-accent);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.source-citation {
+  line-height: var(--lh-base);
+  margin-bottom: 0.5rem;
+  font-size: var(--fs-sm);
+}
+.source-citation strong { color: var(--accent-purple); font-weight: 600; }
+
+.source-usage {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.usage-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.7rem;
+  background: var(--gradient-primary);
+  color: var(--bg);
+  border: 0;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.usage-note {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  font-style: italic;
+}
+
+.citation-note {
+  background: var(--bg);
+  border: 1px solid color-mix(in srgb, var(--accent-magenta) 30%, var(--border));
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-top: 2rem;
+}
+.citation-note p { margin-bottom: 0.5rem; font-size: var(--fs-sm); }
+.citation-note p:last-child { margin-bottom: 0; }
+
+
+/* ============================================================
+   41. FOOTNOTE & VERSE HOVER CARDS
+   ============================================================ */
+.footnote-ref,
+.verse-ref {
+  position: relative;
+  cursor: help;
+  border-bottom: 1px dotted var(--page-accent);
+}
+
+sup.footnote-ref {
+  font-family: var(--font-mono);
+  font-size: 0.7em;
+  color: var(--page-accent);
+  font-weight: 600;
+  border-bottom: 0;
+  padding: 0 0.1em;
+}
+
+.hover-card {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  width: max-content;
+  max-width: 320px;
+  background: var(--text);
+  color: var(--bg);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-style: normal;
+  text-transform: none;
+  letter-spacing: 0;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--duration-fast) var(--ease);
+  pointer-events: none;
+  z-index: var(--z-floating);
+}
+
+.hover-card::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--text);
+}
+
+.footnote-ref:hover .hover-card,
+.verse-ref:hover .hover-card,
+.footnote-ref:focus .hover-card,
+.verse-ref:focus .hover-card {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+
+/* ============================================================
+   42. HEBREW & GREEK
+   ============================================================ */
+.hebrew, .hebrew-large, .hebrew-inline {
+  font-family: var(--font-hebrew);
+  direction: rtl;
+  unicode-bidi: embed;
+  color: var(--page-accent);
+}
+
+.greek, .greek-large, .greek-inline {
+  font-family: var(--font-greek);
+  direction: ltr;
+  unicode-bidi: normal;
+  color: var(--page-accent);
+}
+
+.hebrew-large, .greek-large {
+  font-size: var(--fs-xl);
+  font-weight: 600;
+}
+
+.hebrew-inline, .greek-inline {
+  display: inline-block;
+  padding: 0 0.3rem;
+}
+
+
+/* ============================================================
+   43. BUTTONS
+   ============================================================ */
+.cosmic-button,
+.primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.75rem;
+  background: var(--gradient-primary);
+  color: var(--bg);
+  border: 0;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  min-height: 44px;
+  box-shadow: var(--shadow-purple);
+  transition: all var(--duration-fast) var(--ease);
+}
+.cosmic-button:hover,
+.primary-button:hover {
+  color: var(--bg);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(114, 9, 183, 0.4);
+}
+
+.secondary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.75rem;
+  background: transparent;
+  color: var(--accent-purple);
+  border: 2px solid var(--accent-purple);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  min-height: 44px;
+  transition: all var(--duration-fast) var(--ease);
+}
+.secondary-button:hover {
+  background: var(--gradient-primary);
+  color: var(--bg);
+  border-color: transparent;
+}
+
+
+/* ============================================================
+   44. EMPTY STATE
+   ============================================================ */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-muted);
+}
+
+.empty-state-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.4;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.empty-state-text {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  margin-bottom: 0.5rem;
+  color: var(--text-soft);
+}
+
+
+/* ============================================================
+   45. ANIMATIONS
+   ============================================================ */
+@keyframes fadeSlideDown {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeSlideLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes loading {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.fade-in           { animation: fadeIn var(--duration-slow) var(--ease-out); }
+.fade-slide-down   { animation: fadeSlideDown var(--duration-slow) var(--ease-out); }
+.fade-slide-left   { animation: fadeSlideLeft var(--duration-slow) var(--ease-out); }
+
+.loading-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent-purple);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-2) 25%, var(--bg-3) 50%, var(--bg-2) 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* ============================================================
+   46. UTILITIES
+   ============================================================ */
+.text-center  { text-align: center; }
+.text-muted   { color: var(--text-muted); }
+.font-bold    { font-weight: 700; }
+.font-display { font-family: var(--font-display); }
+.font-mono    { font-family: var(--font-mono); }
+
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+
+.hidden        { display: none; }
+.block         { display: block; }
+.inline-block  { display: inline-block; }
+
+
+/* ============================================================
+   47. FOOTER
+   ============================================================ */
+footer {
+  background: var(--text);
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 3rem var(--gutter);
+  margin-top: 6rem;
+  font-size: var(--fs-sm);
+}
+footer a {
+  background: var(--gradient-warm);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-weight: 600;
+}
+footer a:hover {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+/* ============================================================
+   48. RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .nav-links {
+    position: fixed;
+    top: 65px;
+    right: -100%;
+    width: 80%;
+    max-width: 320px;
+    height: calc(100vh - 65px);
+    background: var(--bg);
+    border-left: 1px solid var(--border);
+    flex-direction: column;
+    align-items: stretch;
+    padding: 2rem 1.5rem;
+    gap: 0.5rem;
+    box-shadow: -8px 0 24px rgba(15, 23, 42, 0.08);
+    transition: right var(--duration) var(--ease);
+    overflow-y: auto;
+  }
+  .nav-links.active { right: 0; }
+
+  .mobile-menu-toggle { display: flex; }
+
+  .nav-links .dropdown .dropdown-content {
+    display: none;
+    position: static;
+    box-shadow: none;
+    border: 0;
+    background: var(--bg-2);
+    margin: 0.25rem 0 0.5rem 0;
+    padding: 0.25rem 0;
+    border-left: 2px solid var(--border);
+    border-radius: 0;
+  }
+  .nav-links .dropdown.active .dropdown-content { display: block; }
+  .nav-links .dropdown.active .dropdown-toggle::after { transform: rotate(180deg); }
+
+  .nav-links a { min-height: 48px; }
+
+  .content-section { padding-top: 5.5rem; }
+
+  .section-title { font-size: var(--fs-2xl); }
+
+  .grid-2, .grid-3, .grid-4, .mini-card-grid { grid-template-columns: 1fr; }
+
+  .core-logic-quote { font-size: var(--fs-lg); padding: 1.25rem 1.5rem; }
+  .takeaway        { font-size: var(--fs-lg); }
+
+  .indent-1 { padding-left: 1rem; }
+  .indent-2 { padding-left: 2rem; }
+  .indent-3 { padding-left: 3rem; }
+  .indent-4 { padding-left: 4rem; }
+}
+
+@media (max-width: 499px) {
+  .page-navigation {
+    margin: 1.5rem -1rem;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+  }
+  .page-nav-grid { grid-template-columns: 1fr; }
+
+  .theology-card,
+  .chiasm-card { padding: 1.25rem 1.5rem; }
+}
+
+
+/* ============================================================
+   50. PIVOT BOX — PULSING MODIFIER
+   Adds a slow radial-glow pulse to draw the eye to a chiastic
+   center or theological pivot. Static .pivot-box is unchanged.
+   Use: <div class="pivot-box pulsing">…</div>
+   ============================================================ */
+.pivot-box.pulsing {
+  animation: pivotPulse 3s ease-in-out infinite;
+}
+
+@keyframes pivotPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-magenta) 12%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--accent-magenta) 18%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pivot-box.pulsing { animation: none; }
+}
+
+
+/* ============================================================
+   51. PATTERN CHAIN (Icon Trail)
+   Use for showing a lineage, sequence, or progression of
+   discrete items connected by arrows. Examples: translation
+   chain (Hebrew→Aramaic→Greek→English), method steps,
+   covenant succession.
+
+   Markup:
+     <div class="pattern-chain">
+       <div class="pattern-item">
+         <span class="pattern-icon" aria-hidden="true">🕊️</span>
+         <div class="pattern-name">Hebrew <span lang="he">עִבְרִית</span></div>
+         <span class="pattern-tagline">Thought-rhythm</span>
+       </div>
+       <span class="pattern-arrow" aria-hidden="true">→</span>
+       <div class="pattern-item">…</div>
+     </div>
+   ============================================================ */
+.pattern-chain {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.25rem 1rem;
+  background: linear-gradient(135deg, var(--bg-2), var(--bg));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: 1.5rem 0;
+}
+
+.pattern-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1rem;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  min-width: 110px;
+  text-align: center;
+  transition: transform var(--duration-fast) var(--ease),
+              border-color var(--duration-fast) var(--ease);
+}
+.pattern-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--page-accent);
+}
+
+.pattern-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.pattern-name {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  margin-top: 0.4rem;
+  color: var(--text);
+}
+.pattern-name [lang] {
+  display: block;
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--page-accent);
+  margin-top: 0.15rem;
+}
+
+.pattern-tagline {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 0.35rem;
+}
+
+.pattern-arrow {
+  color: var(--page-accent);
+  font-weight: 700;
+  font-size: 1.2rem;
+  align-self: center;
+}
+
+@media (max-width: 768px) {
+  .pattern-chain { gap: 0.4rem; padding: 0.85rem; }
+  .pattern-item { min-width: 90px; padding: 0.5rem 0.7rem; }
+  .pattern-icon { font-size: 1.3rem; }
+  .pattern-name { font-size: var(--fs-sm); }
+}
+
+
+/* ============================================================
+   52. STATE-CODED VISUAL TIMELINE
+   A vertical timeline where each item carries a moral verdict
+   ("preserved", "lost", "recovered"). Use for transmission
+   histories, degradation arcs, or any sequence with state-
+   change semantics.
+
+   The timeline rail itself shifts color from teal→rose→magenta
+   to mirror the verdicts.
+
+   Markup:
+     <div class="state-timeline">
+       <div class="state-timeline-item preserved">
+         <div class="state-header">
+           <span class="state-num">01</span>
+           <span class="state-icon" aria-hidden="true">📜</span>
+           <h4>Stage Title</h4>
+           <span class="state-verdict">Preserved</span>
+         </div>
+         <p>Description.</p>
+       </div>
+       …
+     </div>
+   ============================================================ */
+.state-timeline {
+  position: relative;
+  padding-left: 2.25rem;
+  margin: 1.75rem 0;
+}
+.state-timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.5rem;
+  top: 0.5rem; bottom: 0.5rem;
+  width: 3px;
+  background: linear-gradient(180deg,
+    var(--accent-teal)    0%,
+    var(--accent-teal)    25%,
+    var(--accent-rose)    35%,
+    var(--accent-rose)    75%,
+    var(--accent-magenta) 85%,
+    var(--accent-magenta) 100%);
+  border-radius: 2px;
+}
+
+.state-timeline-item {
+  position: relative;
+  margin-bottom: 1rem;
+  padding: 0.85rem 1rem;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-left: 3px solid var(--state-color, var(--accent-teal));
+  border-radius: var(--radius-sm);
+}
+.state-timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -1.85rem;
+  top: 1.05rem;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--state-color, var(--accent-teal));
+  border: 3px solid var(--bg);
+  box-shadow: 0 0 0 2px var(--state-color, var(--accent-teal));
+}
+
+.state-timeline-item.preserved { --state-color: var(--accent-teal); }
+.state-timeline-item.lost      { --state-color: var(--accent-rose); }
+.state-timeline-item.recovered { --state-color: var(--accent-magenta); }
+
+.state-timeline-item.recovered::before {
+  animation: statePulse 2.4s ease-in-out infinite;
+}
+@keyframes statePulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.25); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .state-timeline-item.recovered::before { animation: none; }
+}
+
+.state-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.25rem;
+}
+
+.state-num {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--state-color);
+  letter-spacing: 0.06em;
+}
+
+.state-icon { font-size: 1rem; }
+
+.state-timeline-item h4 {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.state-verdict {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.18rem 0.55rem;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--state-color) 14%, var(--bg));
+  color: var(--state-color);
+}
+
+.state-timeline-item p {
+  margin: 0.2rem 0 0;
+  color: var(--text-soft);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-base);
+}
+
+@media (max-width: 768px) {
+  .state-timeline { padding-left: 1.85rem; }
+}
+
+
+/* ============================================================
+   53. ASCII DIAGRAM BLOCK
+   For inline format demonstrations: source code, scriptio
+   continua, raw text, before/after layout comparisons. Each
+   block has a colored top stripe identifying its role.
+
+   Markup:
+     <div class="ascii-demo-grid">
+       <div class="ascii-demo continua">
+         <div class="ascii-label">Scriptio Continua</div>
+         <pre>ENARCHHENOLOGOS…</pre>
+       </div>
+       <div class="ascii-demo recovery">…</div>
+     </div>
+
+   Variants set --demo-color: .continua/.modern → rose,
+   .recovery → magenta.
+   ============================================================ */
+.ascii-demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.ascii-demo {
+  background: linear-gradient(135deg, var(--bg-2), var(--bg));
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.1rem;
+  position: relative;
+  overflow: hidden;
+}
+.ascii-demo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--demo-color, var(--accent-rose));
+}
+
+.ascii-demo.continua,
+.ascii-demo.modern   { --demo-color: var(--accent-rose); }
+.ascii-demo.recovery { --demo-color: var(--accent-magenta); }
+
+.ascii-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--demo-color, var(--accent-rose));
+  margin-bottom: 0.5rem;
+}
+
+.ascii-demo pre {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  color: var(--text);
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .ascii-demo-grid { grid-template-columns: 1fr; }
+}
+
+
+/* ============================================================
+   54. CHIASM LADDER
+   A lighter-weight chiasm display than .chiasm-structure —
+   for short, two-or-three-line chiasms shown inline within a
+   broader argument. Each row carries an A/A′/B/B′ label tag.
+
+   Markup:
+     <div class="chiasm-ladder">
+       <div class="chiasm-row">
+         <span class="chiasm-label">A</span>
+         <span>Whoever sheds the <strong>blood</strong> of <strong>man</strong>,</span>
+       </div>
+       <div class="chiasm-row">
+         <span class="chiasm-label">A′</span>
+         <span>by <strong>man</strong> shall his <strong>blood</strong> be shed;</span>
+       </div>
+     </div>
+   ============================================================ */
+.chiasm-ladder {
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1.1rem 1.3rem;
+  margin: 1rem 0;
+  font-family: var(--font-display);
+}
+
+.chiasm-row {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 0.8rem;
+  align-items: center;
+  padding: 0.35rem 0;
+  font-size: var(--fs-md);
+}
+
+.chiasm-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 800;
+  color: var(--page-accent);
+  background: color-mix(in srgb, var(--page-accent) 10%, var(--bg));
+  border-radius: 4px;
+  text-align: center;
+  padding: 0.12rem 0;
+}
+
+.chiasm-row strong { color: var(--accent-rose); }
+
+
+/* ============================================================
+   55. SEE-IT-IN-ACTION CARD
+   An opening "live demo" card. Used at the top of explainer
+   pages where the strongest argument is the artifact itself.
+   Multi-color top stripe (magenta/rose/indigo/teal) signals
+   "this is the page's thesis demonstrated."
+
+   Markup:
+     <section class="see-it-card" id="see-it">
+       <div class="see-it-eyebrow">See it before reading about it</div>
+       <h2>What it looks like, in three lines</h2>
+       <p>Lead-in.</p>
+       <div class="see-it-frame">
+         <span class="l">Line one</span>
+         <span class="l i1">Line two indented</span>
+         <span class="l i2">Line three further indented</span>
+         <span class="ref">Reference</span>
+       </div>
+       <p class="see-it-caption">Brief takeaway.</p>
+     </section>
+   ============================================================ */
+.see-it-card {
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem 2.25rem;
+  margin: 2rem 0;
+  position: relative;
+  overflow: hidden;
+}
+.see-it-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg,
+    var(--accent-magenta),
+    var(--accent-rose),
+    var(--accent-indigo),
+    var(--accent-teal));
+}
+
+.see-it-eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--page-accent);
+  margin-bottom: 0.75rem;
+}
+
+.see-it-card h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.8vw, 2.1rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 0.6rem;
+  color: var(--text);
+}
+
+.see-it-frame {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  line-height: 1.7;
+  padding: 1.5rem 1.75rem;
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--page-accent) 4%, var(--bg)),
+    var(--bg));
+  border-left: 4px solid var(--page-accent);
+  border-radius: var(--radius-sm);
+  margin: 1.25rem 0 1rem;
+}
+.see-it-frame .l  { display: block; }
+.see-it-frame .i1 { padding-left: 2rem; }
+.see-it-frame .i2 { padding-left: 4rem; opacity: 0.92; }
+.see-it-frame .ref {
+  display: block;
+  margin-top: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-style: normal;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--page-accent);
+}
+
+.see-it-caption {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: 0.5rem;
+}
+
+
+/* ============================================================
+   56. SCROLL REVEAL SYSTEM (on by default; run by the chassis)
+   ============================================================
+   On a 5.10 page content enters once, as it is scrolled to.
+   Nothing is marked by hand. page-chassis-v5-10.js finds the
+   components that take part (grids of cards, timelines, pills,
+   callout boxes, tables: its REVEAL_GROUPS and REVEAL_SINGLES
+   lists) and moves each one through these states with a single
+   attribute:
+
+     data-reveal-state="wait"   below the fold, not reached yet
+     data-reveal-state="in"     entering (the animation below)
+     data-reveal-state="done"   entered; no reveal style applies
+     data-reveal-state="now"    was on screen at load, or motion
+                                is reduced: shown without moving
+
+   A container whose children enter in turn also carries
+   data-reveal-group="wait|in|now", so a component can draw
+   something when its first child arrives (the step rail's line,
+   section W).
+
+   Three rules this section keeps. Each one answers a fault that
+   was measured on 5.9 pages.
+
+   1. Nothing is hidden by CSS alone. The waiting state is keyed
+      on an attribute only the running chassis sets, so a page
+      with no JavaScript, a blocked script or an old browser
+      shows everything.
+
+   2. An entrance never keeps `transform`. It animates opacity and
+      the separate `translate` property, and it holds nothing
+      once it ends (fill-mode backwards; the chassis then sets
+      "done"). A card's `:hover { transform }` lift works after
+      the card has scrolled in. In 3.x the forwards-filled
+      revealUp kept `transform` and cancelled every such lift.
+
+   3. Each item is watched on its own, never a whole group behind
+      one threshold, so a tall grid on a phone cannot stay hidden.
+
+   Authoring
+     <body data-reveal="off">      no entrances on this page
+     <body data-reveal="manual">   only what the page marks
+     data-reveal="off"             on any element: it and what is
+                                   inside it stay put
+     data-reveal                   add an element the lists miss
+     data-reveal-children          add a container; its children
+                                   enter in turn
+
+   Hover lifts and looping accents are not entrances. These
+   switches do not touch them.
+   ============================================================ */
+
+/* Waiting. The one !important in the motion code: without it,
+   page CSS that sets opacity on a card would leave the card
+   showing while it waits. */
+[data-reveal-state="wait"] { opacity: 0 !important; }
+
+/* Entering. The keyframes have no `to`, so an element animates to
+   its own resting values, whatever they are. */
+[data-reveal-state="in"] {
+  animation: revealUp 0.6s var(--ease-out) var(--reveal-stagger, 0ms) backwards;
+}
+@keyframes revealUp {
+  from { opacity: 0; translate: 0 20px; }
+}
+
+/* Vertical rails: an item arrives from the rail it hangs on */
+.timeline         > [data-reveal-state="in"],
+.scholar-timeline > [data-reveal-state="in"],
+.state-timeline   > [data-reveal-state="in"],
+.step-rail        > [data-reveal-state="in"] {
+  animation-name: revealLeft;
+}
+@keyframes revealLeft {
+  from { opacity: 0; translate: -20px 0; }
+}
+
+/* Fade only, for a component that should not move as it enters:
+     .my-row[data-reveal-state="in"] { animation-name: pc-reveal-fade; } */
+@keyframes pc-reveal-fade {
+  from { opacity: 0; }
+}
+
+/* A pulsing pivot box keeps its pulse while it enters. Section 50
+   sets `animation` on the same element and would otherwise win. */
+.pivot-box.pulsing[data-reveal-state="in"] {
+  animation:
+    revealUp 0.6s var(--ease-out) var(--reveal-stagger, 0ms) backwards,
+    pivotPulse 3s ease-in-out infinite;
+}
+
+/* Reduced motion: the chassis sets no "wait" and no "in". These
+   cover a preference that changes while the page is open. */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal-state="wait"] { opacity: 1 !important; }
+  [data-reveal-state="in"],
+  .pivot-box.pulsing[data-reveal-state="in"] { animation: none; }
+}
+
+
+/* ============================================================
+   57. PRINT STYLES
+   ============================================================ */
+@media print {
+  body {
+    background: white;
+    color: black;
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+
+  nav#main-nav,
+  .mobile-menu-toggle,
+  .reading-progress,
+  .skip-link,
+  .back-to-top,
+  .quick-nav-sidebar,
+  .mobile-section-tabs,
+  .mobile-menu-overlay,
+  .breadcrumbs,
+  .mini-toc,
+  .reading-stamp,
+  .bibliography-actions,
+  .cite-button,
+  footer { display: none !important; }
+
+  .content-section { padding: 0; max-width: 100%; }
+
+  .theology-card,
+  .chiasm-card,
+  .word-study,
+  .key-insight,
+  .critical-distinction,
+  .pattern-summary,
+  .mini-card,
+  .source-entry {
+    page-break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #aaa;
+    background: white;
+  }
+
+  details > summary, .bibliography-section > summary { display: none; }
+  details > *:not(summary), .bibliography-section > *:not(summary) {
+    display: block !important;
+  }
+
+  .bibliography-content { background: white; padding: 0; }
+  .bibliography-header { color: black; background: white; padding: 0 0 1rem; border-bottom: 2px solid black; }
+  .bibliography-icon, .expand-indicator { display: none; }
+
+  /* Strip gradients on body components for print */
+  .tag, .tag.primary, .character-type-badge,
+  .enhancement-indicator, .optional-indicator, .multi-page-indicator,
+  .usage-tag, .question-list li::before,
+  .timeline::before, .complexity-dot.filled,
+  .reading-progress, .back-to-top, .cosmic-button, .primary-button,
+  .secondary-button, .cross-ref, .song-link, .star-divider {
+    background: white !important;
+    color: black !important;
+    -webkit-text-fill-color: black !important;
+    border-color: #888 !important;
+  }
+
+  a { color: black; text-decoration: underline; }
+  a[href^="http"]::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.85em;
+    color: #555;
+  }
+
+  .grid-2, .grid-3, .grid-4, .mini-card-grid { grid-template-columns: 1fr 1fr; }
+
+  .hebrew, .greek { color: black; }
+
+  /* Scroll reveal (section 56): content that was never scrolled to
+     must still print. The chassis reveals everything on beforeprint;
+     these cover a print it did not see. */
+  [data-reveal-state="wait"] { opacity: 1 !important; }
+  [data-reveal-state="in"]   { animation: none !important; }
+}
+
+
+/* ############################################################
+   ############################################################
+   PART II — THEMES AND MOTION
+   Sections A–K. From global-v3-polish.css 0.3. Two changes for
+   5.10: the Pattern Summary and Key Insight boxes isolate their
+   stacking (C1, C4), and section K loses its reveal ↔ hover
+   patch, which section 56 makes unnecessary.
+
+   This part:
+     - sets --page-accent and friends per data-theme value
+     - adds hover/glow/sweep animations to all content surfaces
+     - never uses !important
+     - all keyframes namespaced `pc-*` to prevent collision
+     - reduced-motion users keep hover lifts; loops pause
+
+   Per-page theming is a body attribute:
+     <body data-theme="rose">                          single theme
+     <body data-theme="rose" data-suite-stage="2">     multi-page suite child
+     <body data-theme="purple">                        default; same as omitting
+   ############################################################
+   ############################################################ */
+
+
+/* ============================================================
+   A. COLOR THEME MENU
+   ------------------------------------------------------------
+   The menu. Each theme sets three vars that every accent-aware
+   component in v3 already consumes:
+
+     --page-accent        the theme's primary color
+     --page-accent-soft   tinted version (~20% opacity)
+     --page-accent-deep   darkened version (for high-contrast text)
+
+   Pick a theme by setting `data-theme` on <body>:
+
+     <body data-theme="rose">
+
+   For multi-page suites, ALSO set `data-suite-stage` (1-8) so
+   the page picks up the canonical Rainbow palette automatically:
+
+     <body data-theme="rose" data-suite-stage="2">
+
+   data-suite-stage wins when both are set — that way a child
+   page in a Rainbow suite inherits the suite's color even if
+   the author also wrote data-theme="rose" out of habit.
+   ============================================================ */
+
+/* ----- Default (purple — same as v3's no-attribute default) ----- */
+:root,
+body:not([data-theme]):not([data-suite-stage]) {
+  --page-accent:      var(--accent-purple);
+  --page-accent-soft: color-mix(in srgb, var(--accent-purple) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-purple) 80%, var(--text));
+}
+
+/* ----- Single-color themes (the six v3.1 accents) ----- */
+body[data-theme="purple"] {
+  --page-accent:      var(--accent-purple);
+  --page-accent-soft: color-mix(in srgb, var(--accent-purple) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-purple) 80%, var(--text));
+}
+body[data-theme="rose"] {
+  --page-accent:      var(--accent-rose);
+  --page-accent-soft: color-mix(in srgb, var(--accent-rose) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-rose) 80%, var(--text));
+}
+body[data-theme="blue"] {
+  --page-accent:      var(--accent-blue);
+  --page-accent-soft: color-mix(in srgb, var(--accent-blue) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-blue) 80%, var(--text));
+}
+body[data-theme="magenta"] {
+  --page-accent:      var(--accent-magenta);
+  --page-accent-soft: color-mix(in srgb, var(--accent-magenta) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-magenta) 80%, var(--text));
+}
+body[data-theme="indigo"] {
+  --page-accent:      var(--accent-indigo);
+  --page-accent-soft: color-mix(in srgb, var(--accent-indigo) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-indigo) 80%, var(--text));
+}
+body[data-theme="teal"] {
+  --page-accent:      var(--accent-teal);
+  --page-accent-soft: color-mix(in srgb, var(--accent-teal) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-teal) 80%, var(--text));
+}
+
+/* ----- Gold (synthesis / theology pages) -------------------------
+   Not one of the six v3.1 accents, so the color is declared here.
+   --page-accent-deep is an explicit dark gold rather than a color-mix
+   with --text, which would read muddy at this hue.
+   ----------------------------------------------------------------- */
+body[data-theme="gold"] {
+  --accent-gold:      #d4af37;
+  --page-accent:      var(--accent-gold);
+  --page-accent-soft: color-mix(in srgb, var(--accent-gold) 20%, transparent);
+  --page-accent-deep: #a16207;
+}
+
+/* ----- Rainbow palette for 8-page suites (Noah pattern) ------------
+   The rainbow palette of the multi-page suite README:
+     1 magenta · 2 rose · 3 purple · 4 indigo · 5 blue
+     6 teal · 7 deep-violet (purple+indigo blend) · 8 muted (sources)
+   ----------------------------------------------------------------- */
+body[data-suite-stage="1"] {
+  --page-accent: var(--accent-magenta);
+  --page-accent-soft: color-mix(in srgb, var(--accent-magenta) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-magenta) 80%, var(--text));
+}
+body[data-suite-stage="2"] {
+  --page-accent: var(--accent-rose);
+  --page-accent-soft: color-mix(in srgb, var(--accent-rose) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-rose) 80%, var(--text));
+}
+body[data-suite-stage="3"] {
+  --page-accent: var(--accent-purple);
+  --page-accent-soft: color-mix(in srgb, var(--accent-purple) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-purple) 80%, var(--text));
+}
+body[data-suite-stage="4"] {
+  --page-accent: var(--accent-indigo);
+  --page-accent-soft: color-mix(in srgb, var(--accent-indigo) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-indigo) 80%, var(--text));
+}
+body[data-suite-stage="5"] {
+  --page-accent: var(--accent-blue);
+  --page-accent-soft: color-mix(in srgb, var(--accent-blue) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-blue) 80%, var(--text));
+}
+body[data-suite-stage="6"] {
+  --page-accent: var(--accent-teal);
+  --page-accent-soft: color-mix(in srgb, var(--accent-teal) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-teal) 80%, var(--text));
+}
+body[data-suite-stage="7"] {
+  --page-accent: color-mix(in srgb, var(--accent-purple) 70%, var(--accent-indigo) 30%);
+  --page-accent-soft: color-mix(in srgb, var(--accent-purple) 20%, transparent);
+  --page-accent-deep: color-mix(in srgb, var(--accent-purple) 90%, var(--text));
+}
+body[data-suite-stage="8"] {
+  --page-accent: var(--text-muted);
+  --page-accent-soft: color-mix(in srgb, var(--text-muted) 20%, transparent);
+  --page-accent-deep: var(--text);
+}
+
+
+/* ============================================================
+   B. CONTENT SURFACES — hover lifts
+   The "I'm reading a card" feedback. Subtle translateY,
+   slightly larger shadow, border tints toward --page-accent.
+   ============================================================ */
+
+.theology-card,
+.see-it-card,
+.chiasm-card,
+.hebrew-vocab-card,
+.vocab-card,
+.passage-card,
+.method-card,
+.academic-note-box,
+.nt-card,
+.tier-visual,
+.hyperlink-card,
+.concept-card,
+.fulfillment-item,
+.dimension-item {
+  transition:
+    transform   0.25s var(--ease, ease),
+    box-shadow  0.25s var(--ease, ease),
+    border-color 0.25s var(--ease, ease);
+}
+
+@media (hover: hover) {
+  .theology-card:hover,
+  .see-it-card:hover,
+  .chiasm-card:hover,
+  .hebrew-vocab-card:hover,
+  .vocab-card:hover,
+  .passage-card:hover,
+  .method-card:hover,
+  .academic-note-box:hover,
+  .nt-card:hover,
+  .tier-visual:hover,
+  .hyperlink-card:hover,
+  .concept-card:hover,
+  .fulfillment-item:hover,
+  .dimension-item:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 6px 20px rgba(15, 23, 42, 0.06),
+      0 2px 6px  rgba(15, 23, 42, 0.04);
+    border-color: color-mix(in srgb, var(--page-accent) 25%, var(--border));
+  }
+  .see-it-card:hover {
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  }
+}
+
+
+/* ============================================================
+   C. CONCLUSION CALLOUTS — tile / sweep / glow
+   The catalog's "synthesis at the end" callouts. Each gets the
+   catalog-promised animation.
+   ============================================================ */
+
+/* --- C1. Pattern Summary Box: completion glow --- */
+/* isolation: the glow below sits at z-index -1. Without a stacking
+   context on the box it is painted under the box's own background
+   and never seen. In 3.x it showed only on boxes the reveal rule
+   had turned into stacking contexts. */
+.pattern-summary {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.pattern-summary::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--accent-magenta) 22%, transparent),
+    color-mix(in srgb, var(--accent-teal)    22%, transparent)
+  );
+  opacity: 0;
+  z-index: -1;
+  pointer-events: none;
+  animation: pc-summary-glow 4s ease-in-out infinite;
+}
+@media (hover: hover) {
+  .pattern-summary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--accent-teal) 18%, transparent);
+  }
+}
+@keyframes pc-summary-glow {
+  0%, 100% { opacity: 0; }
+  50%      { opacity: 0.55; }
+}
+
+/* --- C2. One-Line Takeaway: sweeping top bar --- */
+.takeaway {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.takeaway::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--accent-teal),
+    var(--accent-purple),
+    var(--accent-rose),
+    var(--accent-teal)
+  );
+  background-size: 300% 100%;
+  border-radius: var(--radius) var(--radius) 0 0;
+  animation: pc-takeaway-sweep 5s ease-in-out infinite;
+}
+@media (hover: hover) {
+  .takeaway:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  }
+}
+@keyframes pc-takeaway-sweep {
+  0%, 100% { background-position: 0%   50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+/* --- C3. Critical Distinction — now a calm clarification --- */
+/* The rose warning treatment (looping top-stripe sweep, rose hover,
+   ⚠ glyph) was retired: it read as an alarm, not a guided note. The
+   calm cool-indigo styling — soft tint, thin static top accent, and a
+   gentle hover — now lives in section 13. Nothing to add here. */
+
+/* --- C4. Key Insight: breathing glow + lightbulb glyph --- */
+/* isolation: as for C1, so the breathing glow shows on every box. */
+.key-insight {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.key-insight::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at 80% 20%,
+    color-mix(in srgb, var(--accent-magenta) 25%, transparent),
+    transparent 60%
+  );
+  opacity: 0;
+  z-index: -1;
+  pointer-events: none;
+  animation: pc-insight-breathe 5s ease-in-out infinite;
+}
+.key-insight::after {
+  content: '💡';
+  position: absolute;
+  top: 0.55rem;
+  right: 0.7rem;
+  font-size: 1.1rem;
+  opacity: 0.35;
+  pointer-events: none;
+  animation: pc-insight-float 6s ease-in-out infinite;
+}
+@media (hover: hover) {
+  .key-insight:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--accent-magenta) 18%, transparent);
+  }
+  .key-insight:hover::after { opacity: 0.7; }
+}
+@keyframes pc-insight-breathe {
+  0%, 100% { opacity: 0;    }
+  50%      { opacity: 0.55; }
+}
+@keyframes pc-insight-float {
+  0%, 100% { transform: translateY(0)    rotate(0deg); }
+  50%      { transform: translateY(-3px) rotate(-6deg); }
+}
+
+/* --- C5. Core Logic Quote: hover quote-glyph scale --- */
+.core-logic-quote {
+  transition: transform 0.3s ease;
+}
+.core-logic-quote::before,
+.core-logic-quote::after {
+  transition: transform 0.3s ease;
+}
+@media (hover: hover) {
+  .core-logic-quote:hover {
+    transform: translateY(-1px);
+  }
+  .core-logic-quote:hover::before,
+  .core-logic-quote:hover::after {
+    transform: scale(1.08);
+  }
+}
+
+
+/* --- C5. (retired) critical-distinction centering --- */
+/* Centered prose suited the old "stop and notice" alarm; the calm
+   clarification reads better left-aligned, like the surrounding body.
+   Intentionally left at default alignment. */
+
+/* --- C6. Glyph micro-animation on the takeaway --- */
+/* ⤳ on .takeaway scales 1.15× on hover (extending the gesture).
+   (The old .critical-distinction ⚠ finger-wag was removed along with
+   the warning glyph.) */
+.takeaway::before {
+  transition: transform 0.25s var(--ease, ease);
+}
+@media (hover: hover) {
+  .takeaway:hover::before {
+    transform: scale(1.15);
+  }
+}
+
+
+/* ============================================================
+   D. CARD TOP-BARS — hover scale-in
+   The catalog says mini-card, atlas-node, passage-card,
+   example-card all have "animated gradient top bar that
+   scales in on hover." Promoted to global here.
+   ============================================================ */
+
+.mini-card,
+.atlas-node,
+.passage-card,
+.example-card {
+  position: relative;
+  transition:
+    transform   0.25s ease,
+    box-shadow  0.25s ease,
+    border-color 0.25s ease;
+}
+
+.mini-card::before,
+.atlas-node::before,
+.passage-card::before,
+.example-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--page-accent),
+    color-mix(in srgb, var(--page-accent) 40%, var(--accent-magenta))
+  );
+  border-radius: var(--radius) var(--radius) 0 0;
+  transform: scaleX(0.6);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .mini-card:hover,
+  .atlas-node:hover,
+  .passage-card:hover,
+  .example-card:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      0 8px 24px rgba(15, 23, 42, 0.08),
+      0 2px 6px  rgba(15, 23, 42, 0.04);
+    border-color: color-mix(in srgb, var(--page-accent) 35%, var(--border));
+  }
+  .mini-card:hover::before,
+  .atlas-node:hover::before,
+  .passage-card:hover::before,
+  .example-card:hover::before {
+    transform: scaleX(1);
+  }
+}
+
+
+/* ============================================================
+   E. SHIMMER CARDS — hover wash
+   Catalog calls these "shimmer on hover" — quiet light wash
+   when the reader's attention lands. Hyperbole, ANE comparison,
+   NT card.
+   ============================================================ */
+
+.hyperbole-card,
+.meso-card,
+.ane-comparison-card,
+.nt-card {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform   0.25s ease,
+    box-shadow  0.25s ease;
+}
+
+.hyperbole-card::after,
+.meso-card::after,
+.ane-comparison-card::after,
+.nt-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--page-accent) 8%, transparent),
+    transparent
+  );
+  background-size: 200% 100%;
+  background-position: 200% 0;
+  pointer-events: none;
+  transition: background-position 0.8s ease;
+}
+
+@media (hover: hover) {
+  .hyperbole-card:hover::after,
+  .meso-card:hover::after,
+  .ane-comparison-card:hover::after,
+  .nt-card:hover::after {
+    background-position: -200% 0;
+  }
+  .hyperbole-card:hover,
+  .meso-card:hover,
+  .ane-comparison-card:hover,
+  .nt-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--page-accent) 14%, transparent);
+  }
+}
+
+
+/* ============================================================
+   F. SPECIAL CALLOUTS
+   High-impact attention-grabbers. Pivot Box already pulses in
+   v3 — these are the others.
+   ============================================================ */
+
+/* --- F1. Revolutionary Inversion Box: rotating glyph + flow stripe --- */
+.revolutionary-inversion-box,
+.inversion-box {
+  position: relative;
+  overflow: hidden;
+}
+.revolutionary-inversion-box::before,
+.inversion-box::before {
+  content: '⟲';
+  position: absolute;
+  top: 0.45rem;
+  right: 0.65rem;
+  font-size: 1.6rem;
+  color: var(--page-accent);
+  opacity: 0.18;
+  pointer-events: none;
+  animation: pc-inversion-spin 8s linear infinite;
+}
+.revolutionary-inversion-box::after,
+.inversion-box::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2.5px;
+  background: linear-gradient(90deg, var(--page-accent), var(--accent-teal));
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: pc-inversion-flow 3s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes pc-inversion-spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
+@keyframes pc-inversion-flow {
+  0%, 100% { transform: scaleX(0); }
+  50%      { transform: scaleX(1); }
+}
+
+/* --- F2. Star Divider: 3s twinkle (catalog-spec) --- */
+.star-divider {
+  animation: pc-star-twinkle 3s ease-in-out infinite;
+}
+@keyframes pc-star-twinkle {
+  0%, 100% { opacity: 0.55; letter-spacing: 1.5em; }
+  50%      { opacity: 1;    letter-spacing: 1.7em; }
+}
+
+/* --- F3. Cosmic Button: ripple-on-hover (catalog-spec) --- */
+.cosmic-button,
+.primary-button {
+  position: relative;
+  overflow: hidden;
+}
+.cosmic-button::before,
+.primary-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.35) 0%,
+    transparent 60%
+  );
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 0.4s ease, transform 0.5s ease;
+  pointer-events: none;
+  border-radius: inherit;
+}
+@media (hover: hover) {
+  .cosmic-button:hover::before,
+  .primary-button:hover::before {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* --- F4. Workflow Thread: slide-on-hover (catalog-spec) --- */
+.workflow-covenant-thread,
+.workflow-thread {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+@media (hover: hover) {
+  .workflow-covenant-thread:hover,
+  .workflow-thread:hover {
+    transform: translateX(4px);
+    box-shadow: -3px 4px 14px color-mix(in srgb, #66bb6a 18%, transparent);
+  }
+}
+
+
+/* ============================================================
+   G. TIMELINE-STYLE COMPONENTS — hover feedback
+   ============================================================ */
+
+.state-timeline-item,
+.scholar-timeline-item {
+  transition:
+    background    0.25s ease,
+    padding-left  0.25s ease,
+    border-radius 0.25s ease;
+}
+
+@media (hover: hover) {
+  .state-timeline-item:hover {
+    background: color-mix(in srgb, var(--state-color, var(--page-accent)) 6%, var(--bg));
+    padding-left: 1.75rem;
+  }
+  .scholar-timeline-item:hover {
+    background: color-mix(in srgb, var(--page-accent) 6%, transparent);
+    padding-left: 1.5rem;
+    border-radius: 6px;
+  }
+}
+
+
+/* ============================================================
+   H. RAINBOW STAGE TRACKER — current-dot pulse
+   The page tabs themselves are section M. The pulse ring on the
+   current tab is here and follows the page accent.
+   ============================================================ */
+
+.rainbow-stage-tracker .stage-dot.current,
+.rainbow-stage-tracker [aria-current="true"] {
+  position: relative;
+}
+.rainbow-stage-tracker .stage-dot.current::after,
+.rainbow-stage-tracker [aria-current="true"]::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  border: 2px solid var(--page-accent);
+  opacity: 0;
+  pointer-events: none;
+  animation: pc-tracker-pulse 2.5s ease-in-out infinite;
+}
+@keyframes pc-tracker-pulse {
+  0%, 100% { opacity: 0;    transform: scale(1); }
+  50%      { opacity: 0.65; transform: scale(1.15); }
+}
+
+
+/* ============================================================
+   I. REDUCED-MOTION GUARD
+   Hover lifts stay (intent-triggered, single transitions).
+   Loop animations pause. Catalog parity, accessibility intact.
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .pattern-summary::after,
+  .takeaway::after,
+  .key-insight::before,
+  .key-insight::after,
+  .star-divider,
+  .revolutionary-inversion-box::before,
+  .revolutionary-inversion-box::after,
+  .inversion-box::before,
+  .inversion-box::after,
+  .rainbow-stage-tracker .stage-dot.current::after,
+  .rainbow-stage-tracker [aria-current="true"]::after {
+    animation: none;
+  }
+  .star-divider {
+    opacity: 1;
+    letter-spacing: 1.5em;
+  }
+}
+/* ============================================================
+   J. TILED COMPONENTS — feature-tile + goat-panel ul + mini-card
+   ------------------------------------------------------------
+   The Component Catalog v1.5 promised richer tile feedback than
+   the 4%/14% surface and 2px translateX hover from
+   section 11b. This section delivers it:
+
+     - .feature-tile        stronger surface, lift+glow on hover,
+                            icon plate scales 1.08 on hover
+     - .goat-panel > ul     legacy <ul> form rendered as soft
+                            tiles (no HTML change required) —
+                            powers the Problem/Response panels
+     - .goat-panel          slightly heavier shadow on hover so
+                            the existing -2px lift reads
+     - .mini-card           translateY lift + accent border tint
+     - .principle-box       same lift treatment for parity
+
+   No !important. All hover behavior gated on (hover: hover);
+   loop animations are absent here, so the §I reduced-motion
+   guard already covers this section.
+   ============================================================ */
+
+
+/* --- J1. Feature tile — visible surface + richer hover -------- */
+/* Overrides §11b's transparent / 4% / 14% values so the tile is
+   visibly a tile *before* hover. Layout (display:grid +
+   grid-template-columns) is left untouched. */
+.feature-tile {
+  background: color-mix(in srgb, var(--panel-accent, var(--page-accent))  6%, var(--bg));
+  border-color: color-mix(in srgb, var(--panel-accent, var(--page-accent)) 22%, var(--border));
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  transition:
+    transform   0.25s var(--ease, ease),
+    background  0.25s var(--ease, ease),
+    border-color 0.25s var(--ease, ease),
+    box-shadow  0.25s var(--ease, ease);
+}
+
+.feature-tile > .ico {
+  transition:
+    transform   0.25s var(--ease, ease),
+    background  0.25s var(--ease, ease),
+    border-color 0.25s var(--ease, ease);
+}
+
+@media (hover: hover) {
+  .feature-tile:hover {
+    transform: translateY(-2px);
+    background:   color-mix(in srgb, var(--panel-accent, var(--page-accent)) 10%, var(--bg));
+    border-color: color-mix(in srgb, var(--panel-accent, var(--page-accent)) 40%, var(--border));
+    box-shadow:
+      0 6px 18px color-mix(in srgb, var(--panel-accent, var(--page-accent)) 16%, transparent),
+      0 1px 4px rgba(15, 23, 42, 0.04);
+  }
+  .feature-tile:hover > .ico {
+    transform: scale(1.08);
+    background:   color-mix(in srgb, var(--panel-accent, var(--page-accent)) 20%, var(--bg));
+    border-color: color-mix(in srgb, var(--panel-accent, var(--page-accent)) 38%, transparent);
+  }
+}
+
+
+/* --- J2. Goat panel — heavier shadow on hover ---------------- */
+/* §11a already gives -2px translateY; this just makes the
+   shadow read more clearly and bumps the accent rail. */
+@media (hover: hover) {
+  .goat-panel:hover {
+    border-left-width: 5px;
+    box-shadow:
+      0 8px 24px color-mix(in srgb, var(--panel-accent, var(--page-accent)) 16%, transparent),
+      0 2px  6px rgba(15, 23, 42, 0.04);
+  }
+}
+
+
+/* --- J3. Goat-panel <ul> as soft tiles ----------------------- */
+/* Panels using the legacy <ul><li> form (Problem / Response,
+   What-Worked / What-Didn't, etc.) get a tiled rhythm without
+   any HTML change. Custom dot bullet via ::before so we can
+   drop the default marker and pad the tile properly. */
+.goat-panel > ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.4rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.goat-panel > ul > li {
+  position: relative;
+  padding: 0.65rem 0.85rem 0.65rem 1.7rem;
+  margin: 0;
+  background: color-mix(in srgb, var(--panel-accent, var(--page-accent))  5%, var(--bg));
+  border: 1px solid color-mix(in srgb, var(--panel-accent, var(--page-accent)) 18%, var(--border));
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+  color: var(--text);
+  transition:
+    transform   0.25s var(--ease, ease),
+    background  0.25s var(--ease, ease),
+    border-color 0.25s var(--ease, ease),
+    box-shadow  0.25s var(--ease, ease);
+}
+.goat-panel > ul > li::before {
+  content: '';
+  position: absolute;
+  left: 0.7rem;
+  top: 1rem;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--panel-accent, var(--page-accent));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--panel-accent, var(--page-accent)) 18%, transparent);
+}
+@media (hover: hover) {
+  .goat-panel > ul > li:hover {
+    transform: translateX(3px);
+    background:   color-mix(in srgb, var(--panel-accent, var(--page-accent))  9%, var(--bg));
+    border-color: color-mix(in srgb, var(--panel-accent, var(--page-accent)) 36%, var(--border));
+    box-shadow: 0 3px 10px color-mix(in srgb, var(--panel-accent, var(--page-accent)) 14%, transparent);
+  }
+}
+
+
+/* --- J4. Mini-card — hover lift + accent border -------------- */
+.mini-card {
+  transition:
+    transform    0.25s var(--ease, ease),
+    box-shadow   0.25s var(--ease, ease),
+    border-color 0.25s var(--ease, ease);
+}
+@media (hover: hover) {
+  .mini-card:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--page-accent) 32%, var(--border));
+    box-shadow:
+      0 6px 18px color-mix(in srgb, var(--page-accent) 14%, transparent),
+      0 2px  4px rgba(15, 23, 42, 0.03);
+  }
+}
+
+
+/* --- J5. Principle box — match the rhythm -------------------- */
+.principle-box {
+  transition:
+    transform    0.25s var(--ease, ease),
+    box-shadow   0.25s var(--ease, ease),
+    border-color 0.25s var(--ease, ease);
+}
+@media (hover: hover) {
+  .principle-box:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--page-accent) 32%, var(--border));
+    box-shadow:
+      0 6px 18px color-mix(in srgb, var(--page-accent) 14%, transparent),
+      0 2px  4px rgba(15, 23, 42, 0.03);
+  }
+}
+
+/* ============================================================
+   K. STANDARDS ROW LIST
+   ------------------------------------------------------------
+   A lively alternative to a <table>: label/value rows with an
+   accent rail, a top-bar that scales in on hover, a hover slide,
+   and a staggered entrance (section 56). Promoted from the Authoring
+   Standards page so any page can use it. Theme per row with
+   --rail (defaults to --page-accent).
+
+     <div class="std-head" aria-hidden="true">
+       <span>Label</span><span>Value</span>
+     </div>
+     <div class="std-list">
+       <div class="std-row">
+         <span class="std-label">…</span><p class="std-body">…</p>
+       </div>
+     </div>
+   ============================================================ */
+.std-list { display: grid; gap: 0.6rem; margin: 1.25rem 0 0; }
+
+.std-head {
+  display: grid;
+  grid-template-columns: 232px 1fr;
+  gap: 1.4rem;
+  padding: 0.1rem 1.25rem 0.15rem;
+}
+.std-head span {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.std-row {
+  --rail: var(--page-accent);
+  position: relative;
+  display: grid;
+  grid-template-columns: 232px 1fr;
+  gap: 0.25rem 1.4rem;
+  align-items: baseline;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--rail);
+  border-radius: var(--radius);
+  padding: 0.9rem 1.25rem;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition:
+    transform    0.25s var(--ease, ease),
+    box-shadow   0.25s var(--ease, ease),
+    border-color 0.25s var(--ease, ease);
+}
+.std-row::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg,
+    var(--rail),
+    color-mix(in srgb, var(--rail) 30%, transparent));
+  transform: scaleX(0.3);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease, ease);
+}
+.std-label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-md);
+  line-height: 1.2;
+  color: var(--page-accent-deep, var(--page-accent));
+}
+.std-body {
+  margin: 0;
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  color: var(--text-soft);
+  max-width: none;
+}
+@media (max-width: 640px) {
+  .std-head { display: none; }
+  .std-row { grid-template-columns: 1fr; gap: 0.3rem; }
+}
+
+/* std-row hover. The slide uses `transform`, which a 3.x entrance
+   used to keep hold of; section 56 no longer does, so the patch
+   that sat here (an opacity-only entrance for .std-row, .wax-row,
+   .ov-row and .retell) is gone. */
+@media (hover: hover) {
+  .std-row:hover {
+    transform: translateX(5px);
+    box-shadow: 0 10px 26px -12px rgba(15, 23, 42, 0.28);
+    border-color: color-mix(in srgb, var(--rail) 45%, var(--border));
+  }
+  .std-row:hover::before {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .std-row, .std-row::before { transition: none; }
+}
+
+
+/* ############################################################
+   ############################################################
+   PART III — 5.10 COMPONENTS
+   Sections L–X. First built for the David suite in its series
+   stylesheet (david-study.css 1.6); shared here so a new page
+   has them from the start. What changed on the way in:
+     - keyframes and variables are named pc-* / generic, not dv-*;
+     - the hero colours are three :root variables;
+     - the reveal ↔ hover patches are gone (section 56 makes them
+       unnecessary);
+     - .word-tiles and .hero-greek are added beside .hebrew-tiles
+       and .hero-hebrew, and chiasm pairs run a to h;
+     - the current page tab and the scene quote take the hero
+       colours instead of a fixed rose and purple;
+     - in print, the labels of a typology pair wrap instead of
+       being clipped.
+   ############################################################
+   ############################################################ */
+
+
+/* ============================================================
+   L. ANIMATED HERO
+   ------------------------------------------------------------
+   Goes before <main>, in place of a page title inside it:
+
+     <header class="book-hero">
+       <span class="hero-dust"  aria-hidden="true"></span>
+       <span class="hero-sweep" aria-hidden="true"></span>
+       <div class="book-hero-inner">
+         <div class="eyebrow">Project Context · Biblical Characters · Samuel</div>
+         <div class="hero-hebrew" lang="he">…</div>     (or .hero-greek)
+         <h1>Name: <em>Subtitle</em></h1>
+         <p class="hero-sub">…</p>
+         <div class="hero-badges">
+           <span class="hbadge accent">…</span><span class="hbadge">…</span>
+         </div>
+       </div>
+     </header>
+
+   Decorative layers, all pointer-events:none and behind the text:
+     ::before     two soft glows, drifting          → pc-hero-orbs
+     .hero-dust   two fields of light, rising       → pc-hero-dust-near / -far
+     .hero-sweep  a band of light gliding across    → pc-hero-sweep
+     ::after      the hairline, breathing           → pc-hero-line
+   Content rises in sequence (pc-hero-rise); the eyebrow bar draws
+   itself (pc-hero-bar); a pale glint crosses the <em> (pc-hero-sheen).
+   The entrance is CSS only, so it plays without the chassis.
+
+   Colour: --hero-from → --hero-to with --hero-ink text, white
+   glass pills and two glows (one in --hero-from, one white). The
+   glows sit on the right so the text block stays on the plain
+   gradient. The defaults are rose → purple, the gradient of the
+   David hub's hero. See HERO COLOURS at the top of this file.
+   ============================================================ */
+:root {
+  --hero-from: var(--accent-rose);      /* #e11d48 */
+  --hero-to:   var(--accent-purple);    /* #7209b7 */
+  --hero-ink:  #ffffff;
+}
+
+.book-hero {
+  position: relative;
+  overflow: hidden;
+  color: var(--hero-ink);
+  background: linear-gradient(135deg, var(--hero-from) 0%, var(--hero-to) 100%);
+  padding: 6.5rem var(--gutter) 3.25rem;
+  margin-top: 0;
+}
+.book-hero::before {
+  content: '';
+  position: absolute;
+  inset: -15%;
+  background:
+    radial-gradient(ellipse 40% 42% at 78% 84%, color-mix(in srgb, var(--hero-from) 42%, transparent) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 44% at 82% 16%, rgba(255, 255, 255, .16) 0%, transparent 58%);
+  animation: pc-hero-orbs 18s ease-in-out infinite alternate;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.book-hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 8%; right: 8%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .75), rgba(255, 255, 255, .4), transparent);
+  animation: pc-hero-line 5s ease-in-out infinite alternate;
+}
+.book-hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: var(--max-w-content);
+  margin: 0 auto;
+}
+.book-hero .eyebrow {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .2em;
+  font-size: .68rem;
+  font-weight: 500;
+  color: var(--hero-ink);
+  margin-bottom: 1.05rem;
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+}
+.book-hero .eyebrow::before {
+  content: '';
+  flex: none;
+  width: 26px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #ffffff, rgba(255, 255, 255, .45));
+}
+.book-hero .hero-hebrew,
+.book-hero .hero-greek {
+  font-size: clamp(1.8rem, 3.4vw, 2.5rem);
+  line-height: 1.3;
+  color: var(--hero-ink);
+  opacity: .95;
+  margin-bottom: .2rem;
+}
+.book-hero .hero-hebrew { font-family: var(--font-hebrew); }
+.book-hero .hero-greek  { font-family: var(--font-greek); }
+.book-hero h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.4rem, 5.5vw, 4.1rem);
+  line-height: 1.05;
+  letter-spacing: -.02em;
+  color: var(--hero-ink);
+  margin-bottom: 1rem;
+  /* drop-shadow, not text-shadow: a text-shadow would show through the clipped <em> */
+  filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, .28));
+}
+.book-hero h1 em {
+  font-style: italic;
+  background: linear-gradient(110deg, #ffffff 0%, #ffffff 38%, #ffd9e1 50%, #ffffff 62%, #ffffff 100%);
+  background-size: 240% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: pc-hero-sheen 7s ease-in-out infinite alternate;
+}
+.book-hero .hero-sub {
+  max-width: 64ch;
+  font-size: 1.12rem;
+  line-height: 1.6;
+  color: var(--hero-ink);
+  font-style: italic;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, .2);
+  margin-bottom: 1.6rem;
+}
+.book-hero .hero-badges { display: flex; flex-wrap: wrap; gap: .5rem; }
+.book-hero .hbadge {
+  font-family: var(--font-mono);
+  font-size: .66rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  padding: .42rem .85rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, .32);
+  background: rgba(255, 255, 255, .15);
+  color: var(--hero-ink);
+}
+.book-hero .hbadge.accent {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: var(--hero-to);
+}
+
+/* — hero motion — */
+@keyframes pc-hero-orbs {
+  0%   { transform: translate3d(0, 0, 0) scale(1);          opacity: .92; }
+  50%  { transform: translate3d(-4%, 2.5%, 0) scale(1.08);  opacity: 1; }
+  100% { transform: translate3d(3%, -2%, 0) scale(1.03);    opacity: .95; }
+}
+@keyframes pc-hero-line { from { opacity: .45; } to { opacity: 1; } }
+
+.book-hero .hero-dust,
+.book-hero .hero-sweep {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.book-hero .hero-dust {
+  -webkit-mask-image: radial-gradient(ellipse 80% 95% at 50% 42%, #000 30%, transparent 100%);
+          mask-image: radial-gradient(ellipse 80% 95% at 50% 42%, #000 30%, transparent 100%);
+}
+.book-hero .hero-dust::before,
+.book-hero .hero-dust::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  background-repeat: repeat;
+  will-change: transform, opacity;
+}
+/* motes of light: white, pale rose (#fecdd3) and pale lavender (#e9d5ff) */
+.book-hero .hero-dust::before {
+  bottom: -360px;
+  background-image:
+    radial-gradient(circle at 8% 22%,  rgba(255, 255, 255, .95) 1.2px, transparent 2.3px),
+    radial-gradient(circle at 31% 71%, rgba(254, 205, 211, .9)  .9px,  transparent 1.9px),
+    radial-gradient(circle at 47% 12%, rgba(255, 255, 255, .8)  1px,   transparent 2.1px),
+    radial-gradient(circle at 63% 48%, rgba(233, 213, 255, .9)  1px,   transparent 2.1px),
+    radial-gradient(circle at 78% 83%, rgba(255, 255, 255, .9)  1.4px, transparent 2.5px),
+    radial-gradient(circle at 91% 31%, rgba(254, 205, 211, .75) .8px,  transparent 1.8px),
+    radial-gradient(circle at 20% 92%, rgba(255, 255, 255, .75) 1px,   transparent 2.1px);
+  background-size: 420px 360px;
+  animation: pc-hero-dust-near 34s linear infinite, pc-hero-twinkle-a 5s ease-in-out infinite alternate;
+}
+.book-hero .hero-dust::after {
+  bottom: -240px;
+  background-image:
+    radial-gradient(circle at 15% 35%, rgba(255, 255, 255, .7)  .8px, transparent 1.7px),
+    radial-gradient(circle at 42% 80%, rgba(233, 213, 255, .6)  .7px, transparent 1.6px),
+    radial-gradient(circle at 58% 20%, rgba(255, 255, 255, .6)  .8px, transparent 1.7px),
+    radial-gradient(circle at 73% 62%, rgba(254, 205, 211, .65) .9px, transparent 1.8px),
+    radial-gradient(circle at 88% 8%,  rgba(255, 255, 255, .55) .7px, transparent 1.6px),
+    radial-gradient(circle at 5% 68%,  rgba(255, 255, 255, .5)  .7px, transparent 1.6px);
+  background-size: 300px 240px;
+  animation: pc-hero-dust-far 56s linear infinite, pc-hero-twinkle-b 7s ease-in-out infinite alternate-reverse;
+}
+@keyframes pc-hero-dust-near { to { transform: translateY(-360px); } }
+@keyframes pc-hero-dust-far  { to { transform: translateY(-240px); } }
+@keyframes pc-hero-twinkle-a { from { opacity: .5; }  to { opacity: 1; } }
+@keyframes pc-hero-twinkle-b { from { opacity: .35; } to { opacity: .9; } }
+
+.book-hero .hero-sweep {
+  background: linear-gradient(115deg,
+    transparent 0%, transparent 40%,
+    rgba(255, 255, 255, .06) 47%, rgba(255, 255, 255, .14) 50%, rgba(255, 255, 255, .06) 53%,
+    transparent 60%, transparent 100%);
+  transform: translateX(-120%);
+  animation: pc-hero-sweep 9s cubic-bezier(.45, 0, .2, 1) infinite;
+  will-change: transform;
+}
+@keyframes pc-hero-sweep { 0% { transform: translateX(-120%); } 55%, 100% { transform: translateX(120%); } }
+
+.book-hero .eyebrow,
+.book-hero .hero-hebrew,
+.book-hero .hero-greek,
+.book-hero h1,
+.book-hero .hero-sub { animation: pc-hero-rise .9s cubic-bezier(.2, .7, .2, 1) both; }
+.book-hero .hero-hebrew,
+.book-hero .hero-greek  { animation-delay: .1s; }
+.book-hero h1           { animation-delay: .2s; }
+.book-hero .hero-sub    { animation-delay: .32s; }
+.book-hero .hbadge { animation: pc-hero-rise .7s cubic-bezier(.2, .7, .2, 1) both; animation-delay: .46s; }
+.book-hero .hbadge:nth-child(2)   { animation-delay: .52s; }
+.book-hero .hbadge:nth-child(3)   { animation-delay: .58s; }
+.book-hero .hbadge:nth-child(4)   { animation-delay: .64s; }
+.book-hero .hbadge:nth-child(5)   { animation-delay: .7s; }
+.book-hero .hbadge:nth-child(n+6) { animation-delay: .76s; }
+/* the Hebrew or Greek line rests at .95, so its entrance ends there, not at 1 */
+@keyframes pc-hero-rise { from { opacity: 0; transform: translateY(18px); } to { transform: none; } }
+
+.book-hero .eyebrow::before { animation: pc-hero-bar .8s .35s cubic-bezier(.2, .7, .2, 1) both; }
+@keyframes pc-hero-bar { from { width: 0; opacity: 0; } to { width: 26px; opacity: 1; } }
+@keyframes pc-hero-sheen { from { background-position: 100% 50%; } to { background-position: 0% 50%; } }
+
+/* Section 45 already collapses durations under reduced motion; the
+   loops are stopped outright here so nothing drifts. */
+@media (prefers-reduced-motion: reduce) {
+  .book-hero::before,
+  .book-hero::after,
+  .book-hero .hero-dust::before,
+  .book-hero .hero-dust::after,
+  .book-hero .hero-sweep,
+  .book-hero .eyebrow,
+  .book-hero .eyebrow::before,
+  .book-hero .hero-hebrew,
+  .book-hero .hero-greek,
+  .book-hero h1,
+  .book-hero h1 em,
+  .book-hero .hero-sub,
+  .book-hero .hbadge { animation: none; }
+  .book-hero .hero-sweep { display: none; }
+}
+
+/* The hero clears the fixed navigation itself (its own 6.5rem of
+   top padding), so the content after it does not need
+   .content-section's 6rem of clearance as well. */
+.book-hero + .content-section { padding-top: 2.5rem; }
+
+
+/* ============================================================
+   M. PAGE TABS (the suite stage tracker)
+   ------------------------------------------------------------
+   Multi-page studies only. One pill per page, in suite order,
+   identical on every page of the suite:
+
+     <nav class="rainbow-stage-tracker" aria-label="[Study] pages">
+       <a href="…" class="stage-dot">Overview</a>
+       <a href="…" class="stage-dot current" aria-current="page">Journey</a>
+       …
+     </nav>
+
+   Grey pills; the current page is filled with the hero gradient
+   and takes the pulse ring from section H.
+   ============================================================ */
+.rainbow-stage-tracker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.25rem 0 1.25rem;
+}
+
+.rainbow-stage-tracker .tracker-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  margin-right: 0.35rem;
+}
+
+.rainbow-stage-tracker .stage-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0.5rem 1rem;
+  background: var(--bg-2);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: background var(--duration-fast) var(--ease),
+              color var(--duration-fast) var(--ease),
+              transform var(--duration-fast) var(--ease),
+              box-shadow var(--duration-fast) var(--ease);
+}
+
+@media (hover: hover) {
+  .rainbow-stage-tracker .stage-dot:hover {
+    background: var(--bg-3);
+    color: var(--text);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(15, 23, 42, 0.1);
+  }
+}
+
+.rainbow-stage-tracker .stage-dot.current,
+.rainbow-stage-tracker .stage-dot.current:hover {
+  background: linear-gradient(135deg, var(--hero-from), var(--hero-to));
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--hero-from) 25%, transparent);
+  transform: none;
+  cursor: default;
+}
+
+@media (pointer: coarse) {
+  .rainbow-stage-tracker .stage-dot { min-height: 44px; }
+}
+
+@media (max-width: 600px) {
+  .rainbow-stage-tracker { gap: 0.4rem; }
+  .rainbow-stage-tracker .tracker-label { width: 100%; margin: 0 0 0.15rem; }
+  .rainbow-stage-tracker .stage-dot { padding: 0.45rem 0.85rem; }
+}
+
+
+/* ============================================================
+   N. PAGE CARDS (flow layout for section 35)
+   ------------------------------------------------------------
+   Section 35 positions .nav-link absolutely, so a long subtitle
+   runs underneath it. Here the card is a column and the link
+   flows below the subtitle, pinned to the bottom edge. Cards get
+   a wider minimum so nine of them sit three to a row on a
+   desktop. Colours are section 35's.
+   ============================================================ */
+.page-nav-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+.page-nav-item {
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  min-height: 0;
+  padding: 1.1rem 1.25rem 1rem;
+}
+.page-nav-item .nav-subtitle { margin-bottom: .5rem; }
+.page-nav-item .nav-link {
+  position: static;
+  margin-top: auto;
+  align-self: flex-end;
+  padding-top: .25rem;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+
+/* ============================================================
+   O. PASSAGE STUDY
+   ------------------------------------------------------------
+   One passage, walked through, inside a theology card: a psalm,
+   a prophet, an NT text, a Second Temple source.
+
+     <div class="passage-study">
+       <h4>Psalm 51</h4>
+       …
+     </div>
+   ============================================================ */
+.passage-study {
+  border-left: 3px solid var(--page-accent);
+  padding-left: 1.5rem;
+  margin: 2rem 0;
+}
+.passage-study > h4:first-child { margin-top: 0; }
+
+@media (max-width: 600px) {
+  .passage-study { padding-left: 1rem; }
+}
+
+
+/* ============================================================
+   P. WORD TILES AND NOTE BOXES
+   ------------------------------------------------------------
+   Word tiles: section 21's .word-study cards set side by side.
+
+     <div class="grid-3 word-tiles">        (.hebrew-tiles also works)
+       <div class="word-study">
+         <h4><span class="hebrew-large" lang="he">…</span></h4>
+         <p class="translit">…</p>
+         <p class="gloss">…</p>
+         <p>…</p>
+       </div>
+     </div>
+
+   The card's own vertical margin is dropped because the grid gap
+   spaces the tiles, the term is centred, and the card sits on
+   plain grey (section 21's card is indigo-tinted). The Hebrew or
+   Greek takes the page accent.
+   ============================================================ */
+:is(.hebrew-tiles, .word-tiles) { margin: 1.5rem 0; }
+:is(.hebrew-tiles, .word-tiles) > .word-study {
+  margin: 0;
+  padding: 1.25rem;
+  text-align: center;
+  background: var(--bg-2);
+  border-color: var(--border);
+}
+:is(.hebrew-tiles, .word-tiles) > .word-study h4 { margin-bottom: 0.35rem; color: var(--page-accent); }
+:is(.hebrew-tiles, .word-tiles) > .word-study :is(.hebrew-large, .greek-large) { font-size: var(--fs-2xl); }
+:is(.hebrew-tiles, .word-tiles) > .word-study p {
+  font-size: var(--fs-sm);
+  color: var(--text-soft);
+}
+:is(.hebrew-tiles, .word-tiles) > .word-study p:last-child { margin-bottom: 0; }
+:is(.hebrew-tiles, .word-tiles) > .word-study .translit {
+  font-style: italic;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+:is(.hebrew-tiles, .word-tiles) > .word-study .gloss {
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* The tiles answer the pointer the way the Quick Reference tiles
+   do (section J4): a 2px lift, a tinted border, a soft shadow. */
+:is(.hebrew-tiles, .word-tiles) > .word-study {
+  transition:
+    transform    0.25s var(--ease, ease),
+    box-shadow   0.25s var(--ease, ease),
+    border-color 0.25s var(--ease, ease);
+}
+@media (hover: hover) {
+  :is(.hebrew-tiles, .word-tiles) > .word-study:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--page-accent) 32%, var(--border));
+    box-shadow:
+      0 6px 18px color-mix(in srgb, var(--page-accent) 14%, transparent),
+      0 2px  4px rgba(15, 23, 42, 0.03);
+  }
+}
+
+/* Note boxes (.significance)
+   A titled note under a passage or an argument; a page may use
+   several to a section. A grey panel with a green left edge and
+   a green heading. It is its own component because the nearest
+   box, .pattern-summary, is a once-per-section synthesis (teal,
+   with a looping glow) and should not be overused.
+
+     <div class="significance">
+       <h4>Why this matters</h4>
+       <p>…</p>
+     </div>
+
+   --note-accent is global-v2's --success; the heading is that
+   green deepened with --text so it reads at 4.9:1 on the panel. */
+.significance {
+  --note-accent: #10b981;
+  background: var(--bg-2);
+  border-left: 4px solid var(--note-accent);
+  border-radius: var(--radius-sm);
+  padding: 1.1rem 1.4rem;
+  margin: 1.5rem 0;
+}
+.significance > h4 {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  margin: 0 0 0.6rem;
+  color: color-mix(in srgb, var(--note-accent) 62%, var(--text));
+}
+.significance > :last-child { margin-bottom: 0; }
+/* a panel or table inside a note sits on the page colour so it still reads as a box */
+.significance .panel { background: var(--bg); }
+.significance table { background: var(--bg); }
+
+
+/* ============================================================
+   Q. Q&A PILLS WITHOUT A BODY
+   ------------------------------------------------------------
+   A question set is sometimes a question and nothing more. A
+   pill with no .qa-body has nothing to open, so it drops the
+   +/× affordance and the pointer.
+   ============================================================ */
+.qa-pill:not(:has(.qa-body)) summary { cursor: default; }
+.qa-pill:not(:has(.qa-body)) summary::after { content: none; }
+.qa-pill:not(:has(.qa-body))[open] { border-color: var(--border); }
+
+/* A labelled group of pills inside one card */
+.qa-group-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  margin: 1.75rem 0 0.25rem;
+  color: var(--text);
+}
+.qa-group-title:first-of-type { margin-top: 0.5rem; }
+.qa-group-title + .qa-pills { margin-top: 0.75rem; }
+
+
+/* ============================================================
+   R. STUDY COMPLETE BANNER — last page of a multi-page study
+   ============================================================ */
+.study-complete-banner {
+  margin: 2.5rem 0;
+  padding: 1.75rem 2rem;
+  text-align: center;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--page-accent);
+  border-radius: var(--radius);
+}
+.study-complete-banner h3 {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  margin: 0 0 0.5rem;
+}
+.study-complete-banner p { color: var(--text-soft); margin: 0 auto 1rem; }
+.study-complete-banner .related-suites {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+
+/* ============================================================
+   S. UTILITIES
+   ============================================================ */
+.small {
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+/* A centred "A → B → C" line inside a panel */
+.flow-line {
+  text-align: center;
+  line-height: var(--lh-loose);
+  margin: 0.75rem 0 0;
+  max-width: none;                    /* global p is capped at 65ch, which would pull it off-centre */
+}
+.flow-line .flow-focus { color: var(--page-accent-deep); font-size: var(--fs-md); }
+
+/* A benediction or other set-apart closing text */
+.benediction {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-style: italic;
+  line-height: var(--lh-base);
+}
+.benediction p + p { margin-top: 0.75rem; }
+.benediction .benediction-close {
+  font-weight: 700;
+  text-align: right;
+  font-style: normal;
+}
+
+/* h5 sub-heads inside cards: Part I styles h3 and h4 in a card
+   but leaves h5 at the base heading size. */
+.theology-card h5,
+.chiasm-card h5,
+.passage-study h5,
+.panel h5 {
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  font-weight: 700;
+  margin: 1.25rem 0 0.5rem;
+  color: var(--text);
+}
+
+/* Grid columns must be able to shrink below the min-content width
+   of a table inside them. Without this a three-column table pushes
+   its whole column past a phone viewport (measured: 38px of overflow
+   at 390px); with it the .table-wrapper scrolls sideways as intended. */
+.grid-2 > *,
+.grid-3 > *,
+.grid-4 > * { min-width: 0; }
+
+
+/* ============================================================
+   T. CHIASM OUTLINES
+   ------------------------------------------------------------
+   A lettered outline (A B C … C′ B′ A′) inside section 22's
+   .chiasm-structure box. That box runs the letter and the text
+   together, so a line that wraps comes back under its own letter.
+   .chiasm-outline gives the letter a fixed column and the text a
+   hanging indent. The letter takes the page accent.
+
+     <div class="chiasm-structure chiasm-outline">
+       <div class="chiasm-line" data-pair="a">
+         <span class="chiasm-key">A</span><span class="chiasm-text">…</span>
+       </div>
+       <div class="chiasm-line indent-1" data-pair="b">…</div>
+       <div class="chiasm-center">…</div>
+       <div class="chiasm-line indent-1" data-pair="b">…</div>
+       <div class="chiasm-line" data-pair="a">…</div>
+     </div>
+   ============================================================ */
+.chiasm-outline { --chiasm-step: 1.5rem; }
+.chiasm-outline .chiasm-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6ch;
+  /* room for the highlight band; the negative margin keeps the
+     letters exactly where they would sit without it */
+  margin: 0 -0.5rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.2s var(--ease, ease);
+}
+/* The steps are margins here, not section 22's padding, so that the
+   band starts at the letter and the staircase stays visible. */
+.chiasm-outline .chiasm-line.indent-1 {
+  margin-left: calc(var(--chiasm-step) - 0.5rem);
+  padding-left: 0.5rem;
+}
+.chiasm-outline .chiasm-line.indent-2 {
+  margin-left: calc(var(--chiasm-step) * 2 - 0.5rem);
+  padding-left: 0.5rem;
+}
+.chiasm-outline .chiasm-line.indent-3 {
+  margin-left: calc(var(--chiasm-step) * 3 - 0.5rem);
+  padding-left: 0.5rem;
+}
+.chiasm-outline .chiasm-line.indent-4 {
+  margin-left: calc(var(--chiasm-step) * 4 - 0.5rem);
+  padding-left: 0.5rem;
+}
+
+/* Pair highlight. Lines carry data-pair="a" … "h". Pointing at one
+   line tints it and its partner, so the mirror can be seen: A with
+   A′, B with B′, and so on. Pointer devices only; a browser without
+   :has() shows no highlight and loses nothing else. The tint is the
+   page accent, the colour the letters already use. */
+@media (hover: hover) {
+  .chiasm-outline:has([data-pair="a"]:hover) [data-pair="a"],
+  .chiasm-outline:has([data-pair="b"]:hover) [data-pair="b"],
+  .chiasm-outline:has([data-pair="c"]:hover) [data-pair="c"],
+  .chiasm-outline:has([data-pair="d"]:hover) [data-pair="d"],
+  .chiasm-outline:has([data-pair="e"]:hover) [data-pair="e"],
+  .chiasm-outline:has([data-pair="f"]:hover) [data-pair="f"],
+  .chiasm-outline:has([data-pair="g"]:hover) [data-pair="g"],
+  .chiasm-outline:has([data-pair="h"]:hover) [data-pair="h"] {
+    background-color: color-mix(in srgb, var(--page-accent) 10%, transparent);
+  }
+  .chiasm-outline .chiasm-center {
+    transition: background-color 0.2s var(--ease, ease);
+  }
+  .chiasm-outline .chiasm-center:hover {
+    background-color: color-mix(in srgb, var(--accent-purple) 11%, var(--bg-2));
+  }
+}
+.chiasm-outline .chiasm-key {
+  flex: 0 0 2.4ch;
+  font-weight: 700;
+  color: var(--page-accent);
+}
+.chiasm-outline .chiasm-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.chiasm-outline .chiasm-center em { font-weight: 400; }
+
+/* h4 directly inside a .chiasm-card: Part I sizes h4 for
+   .theology-card only, so here it would fall back to the base size.
+   Direct children only, so .significance > h4 keeps its own rule. */
+.chiasm-card > h4 {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  margin: 1.75rem 0 0.5rem;
+  color: var(--text);
+}
+
+/* On a phone an outline is the longest thing on the page: slightly
+   smaller type and shallower steps keep each line to two or three
+   rows. */
+@media (max-width: 600px) {
+  .chiasm-outline {
+    --chiasm-step: 0.75rem;
+    padding: 0.9rem 0.85rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+  .chiasm-outline .chiasm-line { padding-top: 0.15rem; padding-bottom: 0.15rem; }
+  .chiasm-outline .chiasm-center { padding: 0.6rem 0.75rem; margin: 0.6rem 0; }
+}
+
+
+/* ============================================================
+   U. BIBLIOGRAPHY HELPERS
+   ============================================================ */
+/* BibleProject's mark beside a source-category heading. Part I
+   sets img { display: block }, which would put it on its own line. */
+.source-category h4 .bp-icon {
+  display: inline-block;
+  width: 1.15em;
+  height: 1.15em;
+  margin-right: 0.45em;
+  vertical-align: -0.18em;
+}
+
+/* A long URL in a citation must be able to wrap on a phone */
+.source-citation a { overflow-wrap: anywhere; }
+
+/* A page that stacks several collapsed source groups: section 40
+   gives each one a 3rem margin, which is too loose in a stack.
+
+     <div class="bibliography-stack">
+       <details class="bibliography-section">…</details>
+       <details class="bibliography-section">…</details>
+     </div>                                                        */
+.bibliography-stack {
+  display: grid;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+.bibliography-stack > .bibliography-section {
+  margin: 0;
+  min-width: 0;
+}
+
+/* A copy-citation button that sits in a card, outside any group */
+.theology-card > .bibliography-actions { margin: 1.25rem 0 0; }
+
+/* A collapsed bar lifts a little under the pointer, like the cards
+   (section C), which also shows that it opens. Once open it stays
+   still. */
+.bibliography-section {
+  transition:
+    transform  0.25s var(--ease, ease),
+    box-shadow 0.25s var(--ease, ease);
+}
+@media (hover: hover) {
+  .bibliography-section:not([open]):hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 8px 22px color-mix(in srgb, var(--page-accent) 18%, transparent),
+      0 2px  6px rgba(15, 23, 42, 0.04);
+  }
+}
+
+/* An entry takes a tint and a firmer edge under the pointer. It does
+   not move, so its text can still be selected and copied. */
+.source-entry {
+  transition:
+    background-color 0.2s var(--ease, ease),
+    border-color     0.2s var(--ease, ease),
+    box-shadow       0.2s var(--ease, ease);
+}
+@media (hover: hover) {
+  .source-entry:hover {
+    background-color: color-mix(in srgb, var(--page-accent) 3%, var(--bg));
+    border-color: color-mix(in srgb, var(--page-accent) 28%, var(--border));
+    border-left-color: var(--page-accent);
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+  }
+}
+
+
+/* ============================================================
+   V. STUDY TILES
+   ------------------------------------------------------------
+   For a section made of two columns of sub-headed blocks. Each
+   block under a column heading is a tile and the tiles stack in
+   their column, so the section reads as a board of cards and
+   every block answers the pointer.
+
+     <div class="grid-2 tile-columns">       the two columns
+       <div class="tile-stack">              one column
+         <h4>Column heading</h4>
+         <div class="study-tile">            one block: an h5 and its
+           <h5>…</h5><p>…</p>                body, or the list under
+         </div>                              the h4
+         <div class="study-tile">…</div>
+       </div>
+       <div class="tile-stack">…</div>
+     </div>
+
+   .tile-stack--fill   a heading and a single tile: the tile fills
+                       the column, so two such columns end level.
+
+   Motion is the card language of section D: a lift, a border
+   tinted toward the page accent, a soft shadow, and a gradient
+   bar drawn in along the top edge. Tiles are the body text of a
+   section, so they do not take a scroll entrance (the chassis
+   leaves .tile-columns out of its lists); what sits inside a tile
+   still does.
+   ============================================================ */
+.tile-columns { margin: 1.5rem 0; }
+.tile-stack {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+  min-width: 0;
+}
+/* a heading and a single tile: the tile fills, so two such columns end level */
+.tile-stack--fill {
+  align-content: stretch;
+  grid-template-rows: auto 1fr;
+}
+.tile-stack > h4 { margin: 0; }
+
+.study-tile {
+  position: relative;
+  overflow: hidden;            /* clips the bar to the rounded corner */
+  min-width: 0;
+  padding: 1.15rem 1.3rem 1.25rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform    0.25s var(--ease, ease),
+    box-shadow   0.25s var(--ease, ease),
+    border-color 0.25s var(--ease, ease);
+}
+.study-tile::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--page-accent), var(--accent-rose));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease, ease);
+  pointer-events: none;
+}
+
+/* the tile's padding spaces its first and last child */
+.study-tile > :first-child { margin-top: 0; }
+.study-tile > :last-child  { margin-bottom: 0; }
+.study-tile > h5 { margin-bottom: 0.55rem; }
+.study-tile > .table-wrapper { margin-top: 0.25rem; }
+.study-tile > .table-wrapper table { margin: 0; }
+
+@media (hover: hover) {
+  .study-tile:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--page-accent) 35%, var(--border));
+    box-shadow:
+      0 8px 24px color-mix(in srgb, var(--page-accent) 13%, transparent),
+      0 2px  6px rgba(15, 23, 42, 0.04);
+  }
+  .study-tile:hover::before { transform: scaleX(1); }
+}
+
+@media (max-width: 600px) {
+  .tile-stack { gap: 0.85rem; }
+  .study-tile { padding: 1rem 1rem 1.05rem; }
+}
+
+
+/* ============================================================
+   W. SHOWCASE PIECES
+   ------------------------------------------------------------
+   For a signature scene that should stand out from the sections
+   around it (the David suite uses them for the Goliath scene).
+
+     .scene-quote      a Scripture quote set on the hero gradient,
+                       white on --hero-from → --hero-to, with a
+                       band of light that crosses it
+                         <blockquote class="scripture-quote scene-quote">
+                           …<span class="reference">1 Samuel 17:45–47</span>
+                         </blockquote>
+     .step-rail        an ordered list as numbered steps on a
+                       gradient rail; the steps slide in from the
+                       rail in turn and the rail draws downward.
+                       li.is-climax keeps a slow pulse.
+                         <ol class="step-rail"><li>…</li><li class="is-climax">…</li></ol>
+     .typology-pairs   rows of type → fulfilment; on hover a line
+                       runs from the first card to the second and
+                       the arrow steps forward
+                         <div class="typology-head" aria-hidden="true">
+                           <span>Type</span><span></span><span>Fulfilment</span>
+                         </div>
+                         <ul class="typology-pairs">
+                           <li class="typology-pair">
+                             <div class="tp-side tp-from"><span class="tp-label">Type</span> <span class="tp-text">…</span></div>
+                             <span class="tp-arrow" aria-hidden="true">→</span>
+                             <div class="tp-side tp-to"><span class="tp-label">Fulfilment</span> <span class="tp-text">…</span></div>
+                           </li>
+                         </ul>
+     .themes-grid      a statement tile (.study-tile.themes-thesis)
+                       beside a wider tile
+     .outcome-cards    four section-10 mini-cards in a row
+   ============================================================ */
+
+/* --- scene quote ------------------------------------------- */
+.scripture-quote.scene-quote {
+  position: relative;
+  overflow: hidden;
+  margin: 1.25rem 0 1.75rem;
+  padding: 2.1rem 2.4rem 1.7rem;
+  border: 0;
+  border-radius: var(--radius);
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--hero-from) 0%, var(--hero-to) 100%);
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--hero-to) 26%, transparent);
+  font-size: var(--fs-lg);
+  line-height: 1.55;
+}
+.scripture-quote.scene-quote::before {
+  content: '\201C';
+  position: absolute;
+  top: 0.02em;
+  left: 0.12em;
+  font-family: var(--font-display);
+  font-size: 6.5rem;
+  font-style: normal;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.16);
+  pointer-events: none;
+}
+.scripture-quote.scene-quote::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.08) 46%,
+    rgba(255, 255, 255, 0.17) 50%,
+    rgba(255, 255, 255, 0.08) 54%,
+    transparent 60%);
+  transform: translateX(-120%);
+  animation: pc-scene-sweep 9s cubic-bezier(.45, 0, .2, 1) infinite;
+  pointer-events: none;
+}
+@keyframes pc-scene-sweep {
+  0%        { transform: translateX(-120%); }
+  55%, 100% { transform: translateX(120%); }
+}
+.scripture-quote.scene-quote .reference {
+  position: relative;
+  margin-top: 1rem;
+  color: #ffffff;
+  font-size: var(--fs-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.scripture-quote.scene-quote .reference::before {
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
+  width: 2rem;
+  height: 1px;
+  margin-right: 0.75rem;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+/* --- step rail --------------------------------------------- */
+.step-rail {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: pc-step;
+}
+.step-rail::before {
+  content: '';
+  position: absolute;
+  left: calc(0.85rem - 1px);
+  top: 1rem;
+  bottom: 1rem;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--gradient-primary);
+  transform-origin: top;
+  transition: transform 1.1s var(--ease-out, ease-out) 0.1s;
+}
+/* The rail draws downward when the first step arrives (section 56).
+   No transition on the way into the waiting state, so the rail is
+   simply absent until then; the transition above runs on the way out. */
+.step-rail[data-reveal-group="wait"]::before { transform: scaleY(0); transition: none; }
+.step-rail > li {
+  position: relative;
+  margin: 0;
+  padding: 0.5rem 0.6rem 0.5rem 2.55rem;
+  border-radius: var(--radius-sm);
+  counter-increment: pc-step;
+  line-height: var(--lh-snug);
+  transition: background-color 0.2s var(--ease, ease);
+}
+.step-rail > li + li { margin-top: 0.2rem; }
+.step-rail > li::before {
+  content: counter(pc-step);
+  position: absolute;
+  left: 0;
+  top: 0.42rem;
+  width: 1.7rem;
+  height: 1.7rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--page-accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--page-accent) 10%, transparent);
+  color: var(--page-accent);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: 1;
+  transition:
+    background-color 0.2s var(--ease, ease),
+    border-color     0.2s var(--ease, ease),
+    color            0.2s var(--ease, ease),
+    transform        0.2s var(--ease, ease);
+}
+@media (hover: hover) {
+  .step-rail > li:hover { background-color: var(--bg-2); }
+  .step-rail > li:hover::before {
+    background: var(--accent-rose);
+    border-color: var(--accent-rose);
+    color: #ffffff;
+    transform: scale(1.12);
+  }
+}
+/* the last beat of the scene keeps a slow pulse on its marker */
+.step-rail > li.is-climax::before {
+  background: var(--page-accent);
+  color: #ffffff;
+  animation: pc-step-pulse 3s ease-in-out infinite;
+}
+@keyframes pc-step-pulse {
+  0%, 100% { box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-magenta) 14%, transparent); }
+  50%      { box-shadow: 0 0 0 9px color-mix(in srgb, var(--accent-magenta) 20%, transparent); }
+}
+
+/* --- imagery tiles inside a study tile --------------------- */
+.study-tile > .feature-tiles { margin-top: 0.85rem; }
+
+/* --- typology pairs ---------------------------------------- */
+.typology-head,
+.typology-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 1.6rem minmax(0, 1fr);
+  gap: 0.55rem;
+}
+.typology-head {
+  margin: 0.35rem 0 0.45rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+.typology-head > :first-child { color: var(--accent-purple); }
+.typology-head > :last-child  { color: var(--accent-rose); }
+.typology-pairs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+.typology-pair {
+  align-items: stretch;
+  margin: 0;
+}
+.tp-side {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.65rem 0.85rem;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent-purple);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+  color: var(--text);
+  transition:
+    background-color 0.25s var(--ease, ease),
+    border-color     0.25s var(--ease, ease),
+    box-shadow       0.25s var(--ease, ease);
+}
+.tp-to { border-left-color: var(--accent-rose); }
+.tp-side::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.28s var(--ease, ease);
+  pointer-events: none;
+}
+.tp-from::before { background: linear-gradient(90deg, var(--accent-purple), color-mix(in srgb, var(--accent-purple) 50%, var(--accent-rose))); }
+.tp-to::before   { background: linear-gradient(90deg, color-mix(in srgb, var(--accent-purple) 50%, var(--accent-rose)), var(--accent-rose)); }
+.tp-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-purple);
+  margin-bottom: 0.15rem;
+}
+.tp-to .tp-label { color: var(--accent-rose); }
+.tp-arrow {
+  align-self: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1;
+  transition:
+    transform  0.25s var(--ease, ease),
+    box-shadow 0.25s var(--ease, ease);
+}
+@media (hover: hover) {
+  .typology-pair:hover .tp-side {
+    background-color: var(--bg);
+    border-color: color-mix(in srgb, var(--page-accent) 30%, var(--border));
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--page-accent) 10%, transparent);
+  }
+  .typology-pair:hover .tp-from { border-left-color: var(--accent-purple); }
+  .typology-pair:hover .tp-to   { border-left-color: var(--accent-rose); }
+  .typology-pair:hover .tp-side::before { transform: scaleX(1); }
+  .typology-pair:hover .tp-to::before   { transition-delay: 0.24s; }
+  .typology-pair:hover .tp-arrow {
+    transform: translateX(3px);
+    box-shadow: var(--shadow-purple);
+  }
+}
+/* side by side, the header row names the two columns and the card labels
+   are kept for screen readers only; stacked, each card shows its label */
+@media (min-width: 641px) {
+  .tp-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+@media (max-width: 640px) {
+  .typology-head { display: none; }
+  .typology-pair { grid-template-columns: minmax(0, 1fr); gap: 0.3rem; }
+  .typology-pair + .typology-pair { margin-top: 0.8rem; }
+  .tp-arrow { justify-self: center; transform: rotate(90deg); }
+}
+@media (hover: hover) and (max-width: 640px) {
+  .typology-pair:hover .tp-arrow { transform: rotate(90deg) translateX(3px); }
+}
+
+/* --- themes grid ------------------------------------------- */
+.themes-grid {
+  display: grid;
+  gap: 1rem;
+  margin: 0.75rem 0 1.5rem;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+}
+/* the thesis reads as a statement: a size up, centred in the height of its neighbour */
+.themes-thesis {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.themes-thesis > p {
+  font-size: var(--fs-lg);
+  line-height: 1.5;
+  color: var(--text);
+}
+@media (max-width: 860px) {
+  .themes-grid { grid-template-columns: minmax(0, 1fr); }
+  .themes-thesis > p { font-size: var(--fs-md); line-height: 1.6; }
+}
+
+/* --- outcome cards ----------------------------------------- */
+.outcome-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0.6rem 0 1.5rem;
+}
+.outcome-cards > .mini-card { padding: 1.05rem 1.1rem 1rem; }
+.outcome-cards > .mini-card > strong {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: var(--lh-snug);
+}
+.outcome-cards > .mini-card > p { line-height: var(--lh-snug); }
+@media (max-width: 900px) {
+  .outcome-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 480px) {
+  .outcome-cards { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .scripture-quote.scene-quote {
+    padding: 1.6rem 1.25rem 1.3rem;
+    font-size: var(--fs-md);
+  }
+  .scripture-quote.scene-quote::before { font-size: 5.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scripture-quote.scene-quote::after { animation: none; opacity: 0; }
+  .step-rail > li.is-climax::before { animation: none; }
+  .step-rail::before { transition: none; }
+  .step-rail[data-reveal-group="wait"]::before { transform: none; }
+}
+
+
+/* ============================================================
+   X. PRINT (Part III components)
+   ============================================================ */
+@media print {
+  /* the tabs and the banner are navigation */
+  .rainbow-stage-tracker,
+  .study-complete-banner { display: none; }
+  .passage-study { break-inside: avoid; }
+
+  /* Hero: keep the words, drop the colour and the motion */
+  .book-hero { background: none; color: #000; padding: 0 0 1rem; }
+  .book-hero::before,
+  .book-hero::after,
+  .book-hero .hero-dust,
+  .book-hero .hero-sweep { display: none; }
+  .book-hero .eyebrow,
+  .book-hero .hero-hebrew,
+  .book-hero .hero-greek,
+  .book-hero h1,
+  .book-hero .hero-sub,
+  .book-hero .hbadge { color: #000; animation: none; }
+  .book-hero h1 em { -webkit-text-fill-color: #000; color: #000; background: none; animation: none; }
+  .book-hero .hbadge { border-color: #888; background: none; }
+  .book-hero + .content-section { padding-top: 0; }
+
+  /* Source groups: print the heading with the entries. Section 57
+     hides every <summary> in print; in these groups the summary is
+     the heading (title and subtitle), which is white on screen, so
+     it is set to black here. The chassis opens each group when a
+     print starts; the ::details-content rule covers a print where
+     that has not happened. */
+  .bibliography-section { overflow: visible; transform: none; box-shadow: none; }
+  .bibliography-section > summary {
+    display: block;
+    list-style: none;
+    cursor: auto;
+  }
+  .bibliography-section > summary::-webkit-details-marker { display: none; }
+  .bibliography-section::details-content { content-visibility: visible; }
+  .bibliography-title,
+  .bibliography-subtitle { color: #000; }
+
+  /* Study tiles and the showcase print as plain blocks */
+  .study-tile { box-shadow: none; transform: none; background: none; break-inside: avoid; }
+  .study-tile::before,
+  .tp-side::before,
+  .scripture-quote.scene-quote::before,
+  .scripture-quote.scene-quote::after { display: none; }
+  .scripture-quote.scene-quote {
+    background: none;
+    color: #000;
+    box-shadow: none;
+    border-left: 3px solid #000;
+    border-radius: 0;
+    padding: 0.5rem 1.25rem;
+  }
+  .scripture-quote.scene-quote .reference { color: #000; }
+  .scripture-quote.scene-quote .reference::before { background: #000; }
+  .step-rail::before { transform: none !important; transition: none; background: #000; }
+  .step-rail > li::before,
+  .step-rail > li.is-climax::before {
+    animation: none;
+    background: #fff;
+    border-color: #000;
+    box-shadow: none;
+    color: #000;
+  }
+  .tp-arrow { background: none; color: #000; }
+  /* the labels come back into view, and may wrap in a narrow print column */
+  .tp-label { position: static; width: auto; height: auto; margin: 0 0 0.1rem; clip-path: none; overflow: visible; white-space: normal; }
+  .typology-head { display: none; }
+}

@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<!--
+  Biblical Character Profile — v5.10 template family
+  Path: /assets/templates/biblical-character-template-v5-10.html
+
+  Loads  /assets/css/global-v4.css         one stylesheet; it takes the place
+                                           of global-v3.css + global-v3-polish.css
+         /assets/js/page-chassis-v5-10.js
+         /assets/js/nav-component.js       shared, unchanged
+
+  v5.10.0 — First 5.10 release.
+           • A hero (.book-hero) opens the page. It carries the title,
+             the Hebrew or Greek name, a one-line summary and the role
+             badges, in place of the h2 title and .character-type-badge
+             of 5.9.
+           • Motion is there from the start. Cards, timelines, pills,
+             callout boxes and tables enter once as they are scrolled
+             to, and cards answer the pointer. Nothing is marked by
+             hand: no data-reveal-children, no .stagger-children, and
+             no inline "reveal safety net" script.
+           • Two-column sections are study tiles (.tile-columns): each
+             block lifts and draws a gradient bar under the pointer.
+           • New optional blocks, commented out: a signature scene,
+             word tiles, and page tabs and page cards for a multi-page
+             profile. The optional chiasm uses the lettered outline.
+           • The stylesheet and chassis versions name files that
+             exist, and the comments name the chassis correctly.
+  For the 5.9 history see biblical-character-template-v5-9.html.
+
+  MOTION SWITCHES (all optional; a page needs none of them)
+    <body … data-reveal="off">      no scroll entrances on this page
+    <body … data-reveal="manual">   only what the page marks itself
+    data-reveal="off"               on any element: it and what is
+                                    inside it stay put
+    data-reveal                     add one element the built-in
+                                    lists miss
+    data-reveal-children            add a container; its children
+                                    enter in turn
+  A reader whose system asks for reduced motion gets a still page.
+  With JavaScript off, everything is simply shown.
+
+  5.9 pages are not affected by any of this. They keep global-v3.css,
+  global-v3-polish.css and page-chassis-v5-9.js.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>[Character Name] – Biblical Character Profile | [Book]</title>
+  <meta name="description" content="Seminary-level biblical character study of [Character Name] ([Hebrew/Greek]): [key role/identity] – [major themes], narrative analysis, [specific theological focus], and [unique contribution] in [Book]'s story.">
+
+  <!-- ==========================================
+       CHARACTER METADATA
+       ========================================== -->
+  <meta name="character-gender"  content="[male/female]">
+  <meta name="profile-type"      content="[single-page/multi-page]">
+  <meta name="character-id"      content="[character-id]">
+  <meta name="book-id"           content="[book-id]">
+  <meta name="template-version"  content="5.10.0">
+  <meta name="study-type"        content="character-study">
+  <meta name="page-category"     content="biblical-character">
+
+  <!-- Navigation context -->
+  <meta name="nav-hub"     content="[tanakh/new-testament/characters]">
+  <meta name="nav-section" content="[torah/neviim/ketuvim/gospels/epistles]">
+
+  <!-- Content indicators -->
+  <meta name="has-hebrew"        content="[true/false]">
+  <meta name="has-greek"         content="[true/false]">
+  <meta name="primary-language"  content="[hebrew/greek/aramaic]">
+
+  <!-- Relationship metadata -->
+  <meta name="related-book"      content="[genesis/exodus/ruth/etc]">
+  <meta name="time-period"       content="[patriarchal/exodus/judges/monarchy/exile/post-exile/second-temple/new-testament]">
+  <meta name="canonical-order"   content="[number]">
+
+  <!-- ==========================================
+       CITATION METADATA (v5.9.3+)
+       Consumed by the chassis cite button. The bibliography button
+       reads these to build a stable, year-pinned page citation that
+       survives across reloads (vs. falling back to document.title
+       and the current year). Authors should set citation-title to
+       a clean academic short title; the <title> tag stays SEO-tuned.
+       ========================================== -->
+  <meta name="citation-author" content="Project Context">
+  <meta name="citation-title"  content="[Character Name]: A Character Study">
+  <meta name="citation-site"   content="Project Context">
+  <meta name="citation-date"   content="[YYYY]">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="[Character Name] – Biblical Character Profile">
+  <meta name="twitter:description" content="Explore the narrative, theology, and significance of [Character Name] in Scripture.">
+
+  <!-- Open Graph -->
+  <meta property="og:title"       content="[Character Name] – Biblical Character Profile">
+  <meta property="og:description" content="Comprehensive study of [Character Name]: narrative journey, theological significance, and biblical connections.">
+  <meta property="og:type"        content="article">
+  <meta property="og:url"         content="https://projectcontext.org/studies/characters/[book]/[character-name].html">
+  <meta property="og:image"       content="https://projectcontext.org/assets/images/characters/[character-name]-og.jpg">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://projectcontext.org/studies/characters/[book]/[character-name].html">
+
+  <!-- ==========================================
+       FONTS
+       5.10 asks for the weights and italics the hero uses (Cormorant
+       500, DM Sans italic) as well as the v3 set.
+       ========================================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+
+  <!-- Hebrew/Greek (preload only if used on page) -->
+  <link rel="preload" href="/assets/fonts/SBL_Hebrew.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- Stylesheet: one file. Do not add global-v3.css or global-v3-polish.css. -->
+  <link rel="preload"    href="/assets/css/global-v4.css?v=4.0.0" as="style">
+  <link rel="stylesheet" href="/assets/css/global-v4.css?v=4.0.0">
+
+  <!-- ==========================================
+       PAGE ACCENT — choose ONE approach
+       ============================================================
+       PREFERRED: set data-theme on <body> below. Activates the
+       theme system (global-v4.css section A), which sets
+       --page-accent, --page-accent-soft, and --page-accent-deep
+       together. Values: "purple" (default), "rose", "blue",
+       "magenta", "indigo", "teal", "gold". For 8-page rainbow suites use
+       data-suite-stage="1..8" — it overrides data-theme and
+       follows the canonical Noah palette (1 magenta · 2 rose ·
+       3 purple · 4 indigo · 5 blue · 6 teal · 7 deep-violet ·
+       8 muted).
+
+       FALLBACK: uncomment the :root override below ONLY when
+       you need a single token without the soft/deep variants.
+       ========================================== -->
+  <!--
+  <style>
+    :root { --page-accent: var(--accent-rose); }
+  </style>
+  -->
+
+  <!-- ==========================================
+       HERO COLOURS — leave alone for the house rose → purple
+       ============================================================
+       The hero is rose → purple on every theme. A study with a
+       palette of its own sets the two colours below; the current
+       page tab and the scene quote follow them. Hero text is
+       white, so keep both at least as dark as the defaults.
+       ========================================== -->
+  <!--
+  <style>
+    :root { --hero-from: #9f1239; --hero-to: #4f46e5; }
+  </style>
+  -->
+
+  <!-- Page-local styles (overrides allowed; load order puts these last) -->
+  <style>
+    /* Page-specific rules go here. Leave empty if not needed. */
+  </style>
+</head>
+
+<body class="character-profile [woman-profile]" data-theme="purple" dir="ltr">
+  <!-- Skip link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Reading progress -->
+  <div class="reading-progress"></div>
+
+  <!-- Navigation injected by nav-component.js -->
+  <div id="nav-placeholder"></div>
+
+  <!-- ==========================================
+       QUICK NAV SIDEBAR (desktop ≥1400px)
+       Auto-populated by page-chassis-v5-10.js with .qdot items
+       ========================================== -->
+  <div class="quick-nav-sidebar" aria-label="Section navigation"></div>
+
+  <!-- ==========================================
+       HERO (NEW in v5.10)
+       Carries the page title. Sits before <main>, under the fixed
+       navigation. Styles and motion: global-v4.css section L.
+         eyebrow       where the page lives, as a short trail
+         hero-hebrew   OT characters: Hebrew only. NT characters:
+                       use the hero-greek line instead.
+         h1            the name. Wrap an epithet in <em> and a glint
+                       of light crosses it; for a name alone, drop
+                       the colon and the <em>.
+         hero-sub      one line: who this is, why the story matters
+         hbadge        the character type first, as .accent (Matriarch ·
+                       Prophet · King · Judge · Apostle), then up to
+                       four more roles
+       The two empty spans are the moving light. Keep them.
+       ========================================== -->
+  <header class="book-hero">
+    <span class="hero-dust" aria-hidden="true"></span>
+    <span class="hero-sweep" aria-hidden="true"></span>
+    <div class="book-hero-inner">
+      <div class="eyebrow">Project Context · Biblical Characters · [Book]</div>
+      <div class="hero-hebrew" lang="he">[Hebrew Name]</div>
+      <!-- For NT characters: <div class="hero-greek" lang="grc">[Greek Name]</div> -->
+      <h1 id="character-title" data-character-id="[character-id]" data-book="[book-id]">[Character Name]: <em>[Epithet]</em></h1>
+      <p class="hero-sub">[One line: who this character is and why the story matters.]</p>
+      <div class="hero-badges" aria-label="Roles">
+        <span class="hbadge accent">[Character Type]</span>
+        <span class="hbadge">[Role]</span>
+        <span class="hbadge">[Role]</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" class="content-section" role="main"
+        aria-label="Biblical character profile: [Character Name]">
+
+    <!-- ==========================================
+         BREADCRUMBS
+         ========================================== -->
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a> ›
+      <a href="/studies/">Studies</a> ›
+      <a href="/studies/characters/">Biblical Characters</a> ›
+      <a href="/studies/characters/#[book]">[Book]</a> ›
+      [Character Name]
+    </nav>
+
+    <!-- ==========================================
+         OPTIONAL · PAGE TABS (multi-page profiles only)
+         One pill per page of the study, in the same order on every
+         page. Mark this page's pill .current.
+         ========================================== -->
+    <!--
+    <nav class="rainbow-stage-tracker" aria-label="[Character Name] study pages">
+      <a href="[character-name].html" class="stage-dot current" aria-current="page">Overview</a>
+      <a href="[character-name]-journey.html" class="stage-dot">Journey</a>
+      <a href="[character-name]-themes.html" class="stage-dot">Themes</a>
+    </nav>
+    -->
+
+    <!-- ==========================================
+         READING TIME + TL;DR STAMP
+         Sits under the breadcrumbs. Reading time auto-filled by JS.
+         ========================================== -->
+    <div class="reading-stamp">
+      <div class="stamp-meta">
+        <strong data-reading-time>~[X] min</strong>
+        <span>read</span>
+      </div>
+      <div class="stamp-meta">
+        <span>Depth</span>
+        <div class="complexity-level" aria-label="Profile depth">
+          <div class="complexity-dot filled"></div>
+          <div class="complexity-dot filled"></div>
+          <div class="complexity-dot filled"></div>
+          <div class="complexity-dot"></div>
+          <div class="complexity-dot"></div>
+        </div>
+      </div>
+      <div class="stamp-tldr">
+        [One sentence TL;DR — what's the single most important thing the reader should leave with about this character?]
+      </div>
+    </div>
+
+    <!-- ==========================================
+         MINI-TOC PILL BAR
+         Section jumps. Visible above 768px (mobile gets bottom tabs).
+         ========================================== -->
+    <nav class="mini-toc" aria-label="Section navigation">
+      <span class="mini-toc-label">Sections</span>
+      <a href="#overview">Overview</a>
+      <a href="#narrative">Journey</a>
+      <a href="#literary-context">Literary</a>
+      <a href="#themes">Themes</a>
+      <a href="#ane-context">ANE</a>
+      <a href="#biblical-theology">Theology</a>
+      <a href="#messianic">Messianic</a>
+      <a href="#application">Apply</a>
+      <a href="#questions">Questions</a>
+      <a href="#bibliography">Sources</a>
+    </nav>
+
+    <!-- ==========================================
+         SECTION 1 · OVERVIEW (required)
+         ========================================== -->
+    <section class="theology-card" id="overview">
+      <h3>Overview</h3>
+
+      <div class="meta">
+        <div class="kv"><strong>Scripture:</strong> [Primary references]</div>
+        <div class="kv"><strong>Hebrew:</strong> <span class="hebrew">[Hebrew]</span> ([Transliteration]) "[Translation]"</div>
+        <div class="kv"><strong>Etymology:</strong> [Root + suffix breakdown]</div>
+        <div class="kv"><strong>Role:</strong> [Primary role/title]</div>
+        <div class="kv"><strong>Setting:</strong> [Time period and location]</div>
+        <div class="kv"><strong>Family:</strong> [Key relationships]</div>
+      </div>
+
+      <p>
+        <strong>Tags:</strong>
+        <span class="tag primary">[Primary Role]</span>
+        <span class="tag primary">[Key Identity]</span>
+        <span class="tag">[Characteristic]</span>
+        <span class="tag">[Location]</span>
+        <span class="tag">[Theme]</span>
+      </p>
+
+      <p><strong>Summary:</strong> [3–4 sentence introduction.]</p>
+    </section>
+
+    <!-- Core Logic Quote — the page's thesis. 1 per page max. -->
+    <blockquote class="core-logic-quote">
+      [The single sentence that frames the page's argument.
+      Italic by default. Used at most once per page.]
+    </blockquote>
+
+    <hr class="star-divider" aria-hidden="true">
+
+    <!-- ==========================================
+         SECTION 2 · NARRATIVE JOURNEY (required)
+         Each event slides in from the rail as it is scrolled to.
+         Nothing to mark: every .timeline does this in 5.10.
+         ========================================== -->
+    <section class="theology-card" id="narrative">
+      <h3>Narrative Journey</h3>
+      <div class="timeline">
+        <div class="timeline-item">
+          <strong>[Event Title] ([Reference]):</strong>
+          [Description with theological depth and narrative detail.]
+        </div>
+        <div class="timeline-item">
+          <strong>[Event Title] ([Reference]):</strong>
+          [Description emphasizing transformation and covenant themes.]
+        </div>
+        <div class="timeline-item">
+          <strong>[Event Title] ([Reference]):</strong>
+          [Include emotional/psychological elements and divine-human interaction.]
+        </div>
+        <div class="timeline-item">
+          <strong>[Event Title] ([Reference]):</strong>
+          [Climactic events with transformation and resolution.]
+        </div>
+        <div class="timeline-item">
+          <strong>[Event Title] ([Reference]):</strong>
+          [Legacy and lasting impact on redemptive history.]
+        </div>
+      </div>
+
+      <div class="key-insight">
+        <strong>Narrative Pattern:</strong>
+        [Identify the character arc and theological progression.]
+      </div>
+    </section>
+
+    <hr class="star-divider" aria-hidden="true">
+
+    <!-- ==========================================
+         SECTION 3 · LITERARY CONTEXT (required)
+         Was 4 panels inside a Theology Card in v5.8.1 — now a
+         top-level Mini-Card Grid.
+         ========================================== -->
+    <section id="literary-context">
+      <h3 class="section-title" style="font-size: var(--fs-2xl);">Literary Context &amp; Structure</h3>
+
+      <div class="mini-card-grid">
+        <div class="mini-card">
+          <h4>Position in Book</h4>
+          <p>[Where character appears in book structure and why this placement matters.]</p>
+        </div>
+        <div class="mini-card">
+          <h4>Literary Patterns</h4>
+          <p>[Repetitions, parallels, key words, type scenes, narrative techniques.]</p>
+        </div>
+        <div class="mini-card">
+          <h4>Character Function</h4>
+          <p>[Role in advancing plot, representing themes, foil/parallel to others.]</p>
+        </div>
+        <div class="mini-card">
+          <h4>Narrative Techniques</h4>
+          <p>[How narrator presents character — dialogue, actions, others' responses.]</p>
+        </div>
+      </div>
+
+      <div class="key-insight">
+        <strong>Intertextual Connections:</strong>
+        [How this character's story echoes earlier or later biblical narrative.]
+      </div>
+    </section>
+
+    <!-- ==========================================
+         OPTIONAL · MAJOR CHIASTIC STRUCTURE
+         Include only when chiasm spans multiple chapters AND is
+         the primary organizing structure. For ≤5 pairs, use this
+         vertical ladder. For 5+ pairs, use Chiastic Two-Column
+         (see catalog) — markup pattern not yet in template.
+         5.10: .chiasm-outline gives each letter its own column and
+         a hanging indent; pointing at a line tints its partner
+         (the lines of a pair share a data-pair letter, a to h).
+         ========================================== -->
+    <!--
+    <section class="chiasm-card" id="major-chiasm">
+      <h3>Chiastic Structure of [Passage]</h3>
+      <div class="chiasm-structure chiasm-outline">
+        <div class="chiasm-line" data-pair="a"><span class="chiasm-key">A</span><span class="chiasm-text">[Opening theme]</span></div>
+        <div class="chiasm-line indent-1" data-pair="b"><span class="chiasm-key">B</span><span class="chiasm-text">[Development]</span></div>
+        <div class="chiasm-line indent-2" data-pair="c"><span class="chiasm-key">C</span><span class="chiasm-text">[Tertiary]</span></div>
+        <div class="chiasm-center">CENTER: [Theological pivot]</div>
+        <div class="chiasm-line indent-2" data-pair="c"><span class="chiasm-key">C′</span><span class="chiasm-text">[Tertiary mirror]</span></div>
+        <div class="chiasm-line indent-1" data-pair="b"><span class="chiasm-key">B′</span><span class="chiasm-text">[Development mirror]</span></div>
+        <div class="chiasm-line" data-pair="a"><span class="chiasm-key">A′</span><span class="chiasm-text">[Closing mirror]</span></div>
+      </div>
+      <div class="key-insight">
+        <strong>Literary Significance:</strong> [What does the center reveal?]
+      </div>
+    </section>
+    -->
+
+    <hr class="star-divider" aria-hidden="true">
+
+    <!-- ==========================================
+         SECTION 4 · THEOLOGICAL THEMES (required)
+         BIGGEST CHANGE FROM v5.8.1: was two .grid-3 rows of 6
+         panels nested inside a Theology Card. Now a top-level
+         Mini-Card Grid of 6 — the component built for this.
+         ========================================== -->
+    <section id="themes">
+      <h3 class="section-title" style="font-size: var(--fs-2xl);">Major Theological Themes</h3>
+
+      <div class="mini-card-grid">
+        <div class="mini-card">
+          <h4>[Theme 1: e.g., Faith]</h4>
+          <p>[2–3 sentences with specific textual support.]</p>
+        </div>
+        <div class="mini-card">
+          <h4>[Theme 2: e.g., Covenant Loyalty]</h4>
+          <p>[Connect to broader biblical theology.]</p>
+        </div>
+        <div class="mini-card">
+          <h4>[Theme 3: e.g., Divine Providence]</h4>
+          <p>[Show development through character's experience.]</p>
+        </div>
+        <div class="mini-card">
+          <h4>[Theme 4: e.g., Redemption]</h4>
+          <p>[Additional theme with biblical-theological significance.]</p>
+        </div>
+        <div class="mini-card">
+          <h4>[Theme 5: e.g., Justice]</h4>
+          <p>[How character embodies or struggles with this theme.]</p>
+        </div>
+        <div class="mini-card">
+          <h4>[Theme 6: e.g., Transformation]</h4>
+          <p>[Character growth and spiritual development.]</p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="star-divider" aria-hidden="true">
+
+    <!-- ==========================================
+         SECTION 5 · ANE CONTEXT (required)
+         If the closing insight corrects a misreading, use
+         Critical Distinction. If it just helps the reader notice
+         something, use Key Insight.
+
+         STUDY TILES (NEW in v5.10). A two-column section is set as
+         tiles: .tile-columns holds the two columns, each .tile-stack
+         is a column heading over one or more .study-tile blocks.
+         A tile lifts and draws a gradient bar under the pointer.
+           • one tile per column: add .tile-stack--fill (as here) so
+             the two columns end level;
+           • several tiles per column: plain .tile-stack, each tile
+             an <h5> and its body.
+         ========================================== -->
+    <section class="theology-card" id="ane-context">
+      <h3>Ancient Near Eastern Context</h3>
+      <div class="grid-2 tile-columns">
+        <div class="tile-stack tile-stack--fill">
+          <h4>ANE Parallels</h4>
+          <div class="study-tile">
+            <ul>
+              <li><strong>[Social Custom]:</strong> [Comparison]</li>
+              <li><strong>[Legal Framework]:</strong> [ANE law codes]</li>
+              <li><strong>[Religious Practice]:</strong> [ANE religion]</li>
+              <li><strong>[Literary Form]:</strong> [ANE literary parallels]</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tile-stack tile-stack--fill">
+          <h4>Biblical Distinctives</h4>
+          <div class="study-tile">
+            <ul>
+              <li><strong>[Theological]:</strong> [How biblical account differs]</li>
+              <li><strong>[Ethical]:</strong> [Unique moral framework]</li>
+              <li><strong>[Covenantal]:</strong> [Distinctive covenant elements]</li>
+              <li><strong>[Revelatory]:</strong> [Unique divine revelation]</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Use Critical Distinction when correcting a common misreading -->
+      <!--
+      <div class="critical-distinction">
+        <h4>Critical Distinction</h4>
+        <p>[Readers commonly misread X as Y. The text actually says Z.]</p>
+      </div>
+      -->
+
+      <div class="key-insight">
+        <strong>Cultural Bridge:</strong> [How understanding ANE context illuminates the narrative.]
+      </div>
+    </section>
+
+    <hr class="star-divider" aria-hidden="true">
+
+    <!-- ==========================================
+         OPTIONAL ENHANCEMENT SECTIONS
+         Uncomment whichever apply. Major characters: 3–5.
+         Minor characters: 0.
+         ========================================== -->
+
+    <!-- SIGNATURE SCENE (NEW in v5.10) — one defining episode, set apart from the
+         sections around it. At most one per page. Every piece is optional:
+           .scene-quote      the line of the scene, on the hero gradient
+           .step-rail        the episode as numbered steps; li.is-climax pulses
+           .typology-pairs   type → fulfilment rows
+           .outcome-cards    what follows, as four mini-cards
+         Give it an entry in the mini-TOC and in #page-section-config if you keep it. -->
+    <!--
+    <section class="theology-card" id="signature-scene">
+      <h3>[Scene Title] ([Reference])</h3>
+
+      <blockquote class="scripture-quote scene-quote">
+        "[The line that carries the scene.]"
+        <span class="reference">[Book Ch:V]</span>
+      </blockquote>
+
+      <div class="grid-2 tile-columns">
+        <div class="tile-stack tile-stack--fill">
+          <h4>[What Happens]</h4>
+          <div class="study-tile">
+            <ol class="step-rail">
+              <li><strong>[Setting]:</strong> [Where things stand when the scene opens]</li>
+              <li><strong>[Arrival]:</strong> [How the character enters it]</li>
+              <li><strong>[Test]:</strong> [What is asked of them]</li>
+              <li class="is-climax"><strong>[Turning point]:</strong> [The act the scene is remembered for]</li>
+            </ol>
+          </div>
+        </div>
+        <div class="tile-stack tile-stack--fill">
+          <h4>[Character] and the Messiah</h4>
+          <div class="study-tile">
+            <div class="typology-head" aria-hidden="true"><span>[Character]'s Action</span><span></span><span>Messianic Pattern</span></div>
+            <ul class="typology-pairs">
+              <li class="typology-pair">
+                <div class="tp-side tp-from"><span class="tp-label">[Character]'s Action</span> <span class="tp-text">[What the character does]</span></div>
+                <span class="tp-arrow" aria-hidden="true">→</span>
+                <div class="tp-side tp-to"><span class="tp-label">Messianic Pattern</span> <span class="tp-text">[Its fulfilment (Reference)]</span></div>
+              </li>
+              <li class="typology-pair">
+                <div class="tp-side tp-from"><span class="tp-label">[Character]'s Action</span> <span class="tp-text">[What the character does]</span></div>
+                <span class="tp-arrow" aria-hidden="true">→</span>
+                <div class="tp-side tp-to"><span class="tp-label">Messianic Pattern</span> <span class="tp-text">[Its fulfilment (Reference)]</span></div>
+              </li>
+              <li class="typology-pair">
+                <div class="tp-side tp-from"><span class="tp-label">[Character]'s Action</span> <span class="tp-text">[What the character does]</span></div>
+                <span class="tp-arrow" aria-hidden="true">→</span>
+                <div class="tp-side tp-to"><span class="tp-label">Messianic Pattern</span> <span class="tp-text">[Its fulfilment (Reference)]</span></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <h4>What Follows</h4>
+      <div class="outcome-cards">
+        <div class="mini-card"><strong>[Outcome]</strong><p>[One line]</p></div>
+        <div class="mini-card"><strong>[Outcome]</strong><p>[One line]</p></div>
+        <div class="mini-card"><strong>[Outcome]</strong><p>[One line]</p></div>
+        <div class="mini-card"><strong>[Outcome]</strong><p>[One line]</p></div>
+      </div>
+
+      <div class="key-insight">
+        <strong>Summary:</strong> [What this scene shows that the rest of the story depends on.]
+      </div>
+    </section>
+    -->
+
+    <!-- EDEN CONNECTIONS — when character has clear creation/fall/redemption parallels -->
+    <!--
+    <section class="theology-card" id="eden">
+      <h3>Echoes of Eden &amp; New Creation
+        <span class="enhancement-indicator">Enhancement</span>
+      </h3>
+      <ul>
+        <li><strong>New Adam/Eve:</strong> [How character reflects or reverses primal roles]</li>
+        <li><strong>Paradise Themes:</strong> [Garden imagery, abundance, presence]</li>
+        <li><strong>Creation from Nothing:</strong> [Life from death patterns]</li>
+        <li><strong>Seed Promise:</strong> [Advancement of Gen 3:15]</li>
+      </ul>
+    </section>
+    -->
+
+    <!-- HEBREW/GREEK WORDPLAY — when 3+ significant linguistic patterns present.
+         5.10: word tiles. Each term is a centred tile that lifts under the pointer.
+         For Greek use <span class="greek-large" lang="grc">. -->
+    <!--
+    <section class="theology-card" id="wordplay">
+      <h3>Hebrew Wordplay &amp; Literary Artistry
+        <span class="enhancement-indicator">Enhancement</span>
+      </h3>
+      <div class="grid-3 word-tiles">
+        <div class="word-study">
+          <h4><span class="hebrew-large" lang="he">[Term]</span></h4>
+          <p class="translit">[transliteration]</p>
+          <p class="gloss">[gloss]</p>
+          <p><strong>[Reference]:</strong> [Wordplay or pattern]</p>
+        </div>
+        <div class="word-study">
+          <h4><span class="hebrew-large" lang="he">[Term]</span></h4>
+          <p class="translit">[transliteration]</p>
+          <p class="gloss">[gloss]</p>
+          <p><strong>[Reference]:</strong> [Semantic range]</p>
+        </div>
+        <div class="word-study">
+          <h4><span class="hebrew-large" lang="he">[Term]</span></h4>
+          <p class="translit">[transliteration]</p>
+          <p class="gloss">[gloss]</p>
+          <p><strong>[Reference]:</strong> [Theological weight]</p>
+        </div>
+      </div>
+    </section>
+    -->
+
+    <!-- COVENANT CONTEXT — when character is active covenant participant -->
+    <!--
+    <section class="theology-card" id="covenant">
+      <h3>Covenant Context &amp; [Character]'s Role
+        <span class="enhancement-indicator">Enhancement</span>
+      </h3>
+      ...
+    </section>
+    -->
+
+    <!-- UNIQUE ASPECTS — when character has 5+ distinctive features -->
+    <!--
+    <section class="theology-card" id="unique">
+      <h3>Unique Aspects of [Character]'s Story
+        <span class="enhancement-indicator">Enhancement</span>
+      </h3>
+      ...
+    </section>
+    -->
+
+    <!-- SECOND TEMPLE — only when NT references Jewish interpretive traditions -->
+    <!--
+    <section class="theology-card" id="second-temple">
+      <h3>Second Temple &amp; Jewish Sources</h3>
+      <div class="key-insight">
+        <strong>NT Interpretation Context:</strong> [Specify the transformation technique.]
+      </div>
+      <div class="grid-2 tile-columns">
+        <div class="tile-stack tile-stack--fill">
+          <h4>Second Temple Sources</h4>
+          <div class="study-tile">
+            <ul><li><strong>[Source (date)]:</strong> [Development]</li></ul>
+          </div>
+        </div>
+        <div class="tile-stack tile-stack--fill">
+          <h4>NT Usage</h4>
+          <div class="study-tile">
+            <ul><li><strong>[NT Ref]:</strong> [Transformation + purpose]</li></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    -->
+
+    <!-- SONGS — for biblical women with songs (Miriam, Deborah, Hannah, Mary) -->
+    <!--
+    <section class="theology-card" id="songs">
+      <h3>Songs &amp; Poetry</h3>
+      <p><a href="/studies/women/songs/[name]-song.html" class="song-link">View [Character]'s Song</a></p>
+      <div class="key-insight">
+        <strong>Liturgical Significance:</strong> [Context and theological importance.]
+      </div>
+    </section>
+    -->
+
+    <!-- ==========================================
+         SECTION 6 · BIBLICAL THEOLOGY (required)
+         The "Redemption Through Crisis" callout is now a
+         Pattern Summary box, not a generic Panel.
+         ========================================== -->
+    <section class="theology-card" id="biblical-theology">
+      <h3>Creation, Fall &amp; Redemption Patterns</h3>
+      <div class="grid-2 tile-columns">
+        <div class="tile-stack tile-stack--fill">
+          <h4>Creation / Eden Echoes</h4>
+          <div class="study-tile">
+            <ul>
+              <li>[Connection to Genesis 1–2 themes]</li>
+              <li>[Image of God aspects displayed]</li>
+              <li>[New creation / restoration motifs]</li>
+              <li>[Garden or temple imagery]</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tile-stack tile-stack--fill">
+          <h4>Fall Patterns</h4>
+          <div class="study-tile">
+            <ul>
+              <li>[How sin manifests in the story]</li>
+              <li>[Consequences of rebellion]</li>
+              <li>[Death / exile / corruption themes]</li>
+              <li>[Broken relationships portrayed]</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="pattern-summary">
+        <h4>Redemption Through Crisis</h4>
+        <p>[How God brings redemption through this character's story — divine intervention, covenant faithfulness, restoration.]</p>
+      </div>
+    </section>
+
+    <hr class="star-divider" aria-hidden="true">
+
+    <!-- ==========================================
+         SECTION 7 · MESSIANIC (required)
+         Timeline (consistent with Narrative Journey).
+         ========================================== -->
+    <section class="theology-card" id="messianic">
+      <h3>Messianic Trajectory &amp; Christ Connections</h3>
+      <div class="timeline">
+        <div class="timeline-item">
+          <strong>Promise Advancement:</strong>
+          [How character advances messianic promise — genealogical, typological, prophetic.]
+        </div>
+        <div class="timeline-item">
+          <strong>Typological Pattern:</strong>
+          [Specific ways character prefigures Christ's person or work.]
+        </div>
+        <div class="timeline-item">
+          <strong>Contrast &amp; Fulfillment:</strong>
+          [Where Christ succeeds where character fails or fulfills what character initiates.]
+        </div>
+        <div class="timeline-item">
+          <strong>New Testament Connection:</strong>
+          [Direct NT references or allusions.]
+        </div>
+      </div>
+    </section>
+
+    <hr class="star-divider" aria-hidden="true">
+
+    <!-- ==========================================
+         INTERTEXTUAL TABLES
+         ========================================== -->
+    <div class="grid-2" id="intertext">
+      <section class="theology-card">
+        <h3>Old Testament Intertext</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Reference</th><th>Connection &amp; Significance</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>[Book Ch:V]</td><td>[Specific connection and why it matters]</td></tr>
+              <tr><td>[Book Ch:V]</td><td>[Literary echo or theological development]</td></tr>
+              <tr><td>[Book Ch:V]</td><td>[Contrast or comparison]</td></tr>
+              <tr><td>[Book Ch:V]</td><td>[Prophetic connection or fulfillment]</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="theology-card">
+        <h3>New Testament Intertext</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Reference</th><th>Connection &amp; Significance</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>[Book Ch:V]</td><td>[NT usage, interpretation, or application]</td></tr>
+              <tr><td>[Book Ch:V]</td><td>[Typological fulfillment in Christ or church]</td></tr>
+              <tr><td>[Book Ch:V]</td><td>[Apostolic teaching drawing from character]</td></tr>
+              <tr><td>[Book Ch:V]</td><td>[Eschatological connection]</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <hr class="star-divider" aria-hidden="true">
+
+    <!-- ==========================================
+         SECTION 8 · APPLICATION (required)
+         Reflection Points are now Q&A Pills, not an <ol>.
+         ========================================== -->
+    <section class="theology-card" id="application">
+      <h3>Application &amp; Contemporary Relevance</h3>
+      <div class="grid-2">
+        <div class="panel">
+          <h4>Personal Application</h4>
+          <ul>
+            <li><strong>Faith:</strong> [Individual faith application]</li>
+            <li><strong>Character:</strong> [Quality to emulate or avoid]</li>
+            <li><strong>Discipleship:</strong> [Following God's call]</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h4>Community Application</h4>
+          <ul>
+            <li><strong>Church:</strong> [Ecclesial implications]</li>
+            <li><strong>Mission:</strong> [Missional applications]</li>
+            <li><strong>Leadership:</strong> [Leadership lessons]</li>
+          </ul>
+        </div>
+      </div>
+
+      <h4 style="margin-top: 2rem;">Reflection Points</h4>
+      <div class="qa-pills">
+        <details class="qa-pill">
+          <summary>How does [character]'s story challenge our modern assumptions about faith and obedience?</summary>
+          <div class="qa-body">[Optional reflection prompt or pastoral note.]</div>
+        </details>
+        <details class="qa-pill">
+          <summary>What does this narrative teach us about God's character and His ways with His people?</summary>
+          <div class="qa-body">[Optional reflection prompt.]</div>
+        </details>
+        <details class="qa-pill">
+          <summary>How can we apply [character]'s example today?</summary>
+          <div class="qa-body">[Optional reflection prompt.]</div>
+        </details>
+      </div>
+    </section>
+
+    <hr class="star-divider" aria-hidden="true">
+
+    <!-- ==========================================
+         SECTION 9 · STUDY QUESTIONS (required)
+         Q&A Pills, not <ol class="question-list">.
+         ========================================== -->
+    <section class="theology-card" id="questions">
+      <h3>Study Questions</h3>
+      <div class="qa-pills">
+        <details class="qa-pill">
+          <summary><strong>Observation:</strong> What are the key events in [character]'s life and how do they connect?</summary>
+          <div class="qa-body">[Optional discussion guidance.]</div>
+        </details>
+        <details class="qa-pill">
+          <summary><strong>Literary:</strong> What literary techniques does the narrator use to present [character]?</summary>
+          <div class="qa-body">[Optional discussion guidance.]</div>
+        </details>
+        <details class="qa-pill">
+          <summary><strong>Theological:</strong> How does [character]'s story reveal God's character and purposes?</summary>
+          <div class="qa-body">[Optional discussion guidance.]</div>
+        </details>
+        <details class="qa-pill">
+          <summary><strong>Patterns:</strong> What patterns emerge through [character]'s journey?</summary>
+          <div class="qa-body">[Optional discussion guidance.]</div>
+        </details>
+        <details class="qa-pill">
+          <summary><strong>Connections:</strong> How does this narrative connect to the larger biblical storyline?</summary>
+          <div class="qa-body">[Optional discussion guidance.]</div>
+        </details>
+        <details class="qa-pill">
+          <summary><strong>Typology:</strong> In what ways does [character] point us to Christ?</summary>
+          <div class="qa-body">[Optional discussion guidance.]</div>
+        </details>
+        <details class="qa-pill">
+          <summary><strong>Application:</strong> What aspects challenge or encourage us today?</summary>
+          <div class="qa-body">[Optional discussion guidance.]</div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         CROSS-REFERENCES (consolidated footer bar)
+         ========================================== -->
+    <section class="theology-card">
+      <h3>Related Studies</h3>
+      <p>
+        <a href="/studies/characters/[book]/[name]/" class="cross-ref">→ [Related Character]</a>
+        <a href="/studies/characters/[book]/[name]/" class="cross-ref">→ [Related Character]</a>
+        <!-- Multi-page profiles -->
+        <!-- <a href="/studies/characters/genesis/abraham/" class="cross-ref">→ Abraham (Multi-Page)</a> -->
+        <!-- Women hub -->
+        <!-- <a href="/studies/women/" class="cross-ref">→ Women in the Bible</a> -->
+      </p>
+    </section>
+
+    <!-- ==========================================
+         ONE-LINE TAKEAWAY (page closer — max 1 per page)
+         ========================================== -->
+    <p class="takeaway">
+      [The single sentence the reader takes home. Different from
+      Core Logic Quote — that's the thesis; this is the practical upshot.]
+    </p>
+
+    <!-- ==========================================
+         BIBLIOGRAPHY (Enhanced is now default — no .enhanced class)
+         Includes Cite-this-study button.
+         ========================================== -->
+    <details class="bibliography-section" id="bibliography">
+      <summary>
+        <div class="bibliography-header">
+          <div class="bibliography-inner">
+            <span class="bibliography-icon" aria-hidden="true">📚</span>
+            <div class="bibliography-text">
+              <h3 class="bibliography-title">Bibliography &amp; Sources</h3>
+              <p class="bibliography-subtitle">Academic references for [Character Name]</p>
+            </div>
+          </div>
+          <div class="expand-indicator" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </div>
+      </summary>
+
+      <div class="bibliography-content">
+        <div class="bibliography-actions">
+          <button type="button" class="cite-button" data-cite-study data-copy-bibliography>
+            <span aria-hidden="true">⎘</span> Copy Citation &amp; Sources
+          </button>
+        </div>
+
+        <div class="source-category">
+          <h4>Primary Sources</h4>
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Biblia Hebraica Stuttgartensia.</strong> Stuttgart: Deutsche Bibelgesellschaft, 1997.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">All Sections</span>
+              <span class="usage-note">[Specific chapters] for Hebrew text and masoretic notes.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="source-category">
+          <h4>Major Commentaries</h4>
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>[Author Last, First].</strong> <em>[Commentary Title].</em> [Series]. [City]: [Publisher], [Year].
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Exegesis</span>
+              <span class="usage-tag">Literary Analysis</span>
+              <span class="usage-note">[How this source informed which sections, with page refs.]</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="source-category">
+          <h4>Literary &amp; Narrative Analysis</h4>
+          <div class="source-entry">
+            <div class="source-citation">
+              <strong>Alter, Robert.</strong> <em>The Art of Biblical Narrative.</em> Revised ed. New York: Basic Books, 2011.
+            </div>
+            <div class="source-usage">
+              <span class="usage-tag">Literary Context</span>
+              <span class="usage-note">Type-scene analysis, characterization techniques.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add more categories as needed: Second Temple, ANE, Theology, Articles, Reference Works -->
+
+        <div class="citation-note">
+          <p><strong>Note on Sources:</strong> This bibliography focuses on sources specific to [Character Name].</p>
+          <p><strong>Citation Format:</strong> Chicago Manual of Style, 17th edition.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- ==========================================
+         OPTIONAL · PAGE CARDS (multi-page profiles only)
+         Every page of the study as a card, this page marked
+         .current. Same set on every page; "Next →" and
+         "← Previous" on the neighbours, "Open →" on the rest.
+         ========================================== -->
+    <!--
+    <nav class="page-navigation" aria-label="Continue the [Character Name] study">
+      <h3>Continue the [Character Name] Study</h3>
+      <div class="page-nav-grid">
+        <div class="page-nav-item current" aria-current="page"><h4>Overview</h4><p class="nav-subtitle">[What this page covers]</p><span class="nav-link">Current page</span></div>
+        <a href="[character-name]-journey.html" class="page-nav-item"><h4>Narrative Journey</h4><p class="nav-subtitle">[What that page covers]</p><span class="nav-link">Next →</span></a>
+        <a href="[character-name]-themes.html" class="page-nav-item"><h4>Themes &amp; Application</h4><p class="nav-subtitle">[What that page covers]</p><span class="nav-link">Open →</span></a>
+      </div>
+    </nav>
+    -->
+
+  </main>
+
+  <!-- Back to top -->
+  <a href="#main-content" class="back-to-top" aria-label="Back to top">↑</a>
+
+  <!-- Mobile menu overlay -->
+  <div class="mobile-menu-overlay"></div>
+
+  <!-- ==========================================
+       PER-PAGE SECTION CONFIG
+       Tells page-chassis-v5-10.js which sections (and in what
+       priority order) to expose in the mobile tab strip and the
+       desktop quick-nav sidebar. Per-page beats the v5.8 global
+       sectionConfig of 200+ entries.
+       ========================================== -->
+  <script id="page-section-config" type="application/json">
+  [
+    { "id": "overview",          "label": "Overview",   "priority": 1 },
+    { "id": "narrative",         "label": "Journey",    "priority": 1 },
+    { "id": "literary-context",  "label": "Literary",   "priority": 2 },
+    { "id": "themes",            "label": "Themes",     "priority": 2 },
+    { "id": "ane-context",       "label": "ANE",        "priority": 3 },
+    { "id": "biblical-theology", "label": "Theology",   "priority": 2 },
+    { "id": "messianic",         "label": "Messianic",  "priority": 3 },
+    { "id": "application",       "label": "Apply",      "priority": 3 },
+    { "id": "questions",         "label": "Questions",  "priority": 4 },
+    { "id": "bibliography",      "label": "Sources",    "priority": 5 }
+  ]
+  </script>
+
+  <!-- ==========================================
+       SCRIPTS
+       ========================================== -->
+  <script type="module">
+    import NavigationComponent from '/assets/js/nav-component.js';
+    new NavigationComponent({
+      currentPage: 'studies/characters/[book]/[character-name]',
+      hubType: '[tanakh/new-testament/characters]'
+    });
+  </script>
+
+<!-- The chassis also runs the scroll entrances. A 5.10 page does not
+       carry the inline "reveal safety net" script that 5.9 pages have. -->
+  <script src="/assets/js/page-chassis-v5-10.js?v=5.10.0" defer></script>
+</body>
+</html>
