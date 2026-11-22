@@ -1,0 +1,932 @@
+/* ============================================================
+   david-study.css — v1.5
+   Path: /assets/css/david-study.css
+   ------------------------------------------------------------
+   Series layer for the David character suite (hub + 8 child
+   pages, /studies/characters/samuel/david/). Holds only what the
+   suite needs and global-v3 / the polish layer do not provide:
+
+     H. Animated hero (.book-hero) — David's own rose → purple
+        hero, moving the way the Galatians suite's hero moves
+     R. Reveal ↔ hover reconciliation for cards that lift on hover
+     1. Page tabs (.rainbow-stage-tracker) — the original tab row
+     2. Page cards: the Galatians flow layout for .page-nav-item
+     3. Passage study (.passage-study) — a titled sub-block that
+        walks one psalm / prophet / NT passage inside a card
+     4. Word-study tiles (.hebrew-tiles) and note boxes (.significance)
+     5. Q&A pills that carry a question but no body
+     6. Study Complete banner (last page only)
+     7. Small utilities the v5.8 markup relied on (.small)
+     8. Chiasm outlines (.chiasm-outline): lettered lines with a
+        hanging indent, for the Literary page's structure sections,
+        and a highlight that pairs a line with its partner
+     9. Bibliography helpers: the inline BibleProject icon, and the
+        stacked groups on the Bibliography & Resources page; hover
+        feedback for collapsed bars and for entries
+
+   Everything else on these pages is a global-v3 component.
+
+   COLOUR — David keeps the colours of the original David pages.
+     The motion here is the Galatians suite's; the palette is not.
+     Everything is drawn from the purple / rose pair the original
+     pages were built on (--accent-purple, --accent-rose):
+       - every page is data-theme="purple": one palette for the
+         whole suite, no per-page accent, no data-suite-stage;
+       - the hero is the gradient of the hub's October 2025 hero
+         (git 770cfeb1): rose → purple, white text, white glass
+         pills, a rose and a white glow;
+       - the page tabs keep the original tab colours: grey pills,
+         the current page filled rose → purple;
+       - note boxes keep the original grey panel with a green edge.
+     Only two things are declared here that global-v3 has no token
+     for: white tints inside the hero, and --dv-green, the green
+     global-v2 used for the note boxes (its --success, #10b981).
+     No gold, amber or teal: those belong to the Galatians suite.
+
+   LOAD ORDER — third, after the polish layer, because it reads
+   --page-accent / --page-accent-deep, which polish sets from
+   body[data-theme]:
+
+     <link rel="stylesheet" href="/assets/css/global-v3.css?v=3.3.2">
+     <link rel="stylesheet" href="/assets/css/global-v3-polish.css?v=0.3">
+     <link rel="stylesheet" href="/assets/css/david-study.css?v=1.5">
+
+   PER-PAGE CONTRACT
+     Every page   <body class="character-profile" data-theme="purple">
+     multi-page-suite-readme-v5-9.md asks each child page to carry
+     its own accent. This suite deliberately does not: the original
+     David pages shared one palette, and that is kept (owner's
+     decision, 2026-11-21). Do not add data-suite-stage here.
+
+   CHANGELOG
+     v1.5  2026-11-22  Print only. No colour or motion changes.
+                       - A source group prints its heading. global-v3
+                         hides every <summary> in print, and in a
+                         .bibliography-section the summary is the
+                         heading, so the entries printed without one.
+                         The heading text is set to black for print
+                         (on screen it is white on the gradient bar).
+                       - A collapsed group prints its entries even
+                         when the chassis script has not opened it.
+     v1.4  2026-11-21  Motion. No colour changes.
+                       - Fixed §R. Its resting `transform: none` weighed
+                         the same as the components' own :hover rules
+                         and came later in the cascade, so it cancelled
+                         the hover lift on the Quick Reference tiles,
+                         page cards, pattern items, key-insight boxes,
+                         the takeaway and the core logic quote. The
+                         resting rule is now written with :where().
+                       - Hebrew word tiles lift under the pointer, like
+                         the other tiles.
+                       - Chiasm outlines: pointing at a line highlights
+                         its partner (A with A′, and so on).
+                       - Collapsed bibliography bars lift; source
+                         entries take a tint.
+     v1.3  2026-11-21  Suite grew from seven pages to nine (Foundation
+                       & Identity; Bibliography & Resources). No colour
+                       changes. Added:
+                       - .chiasm-outline: a letter column and hanging
+                         indent for the outlines of Samuel on the
+                         Literary page, and h4 sizing in .chiasm-card;
+                       - .bp-icon: BibleProject's mark inline beside a
+                         source-category heading;
+                       - .bibliography-stack: the four collapsed groups
+                         on the Bibliography & Resources page;
+                       - citation links wrap on narrow screens;
+                       - page cards: minimum width 230px to 280px, so
+                         nine cards make three rows of three.
+     v1.2  2026-11-21  Colours returned to the original David pages:
+                       - hero recoloured from night-and-gold to the
+                         rose → purple of David's own 2025 hero;
+                       - per-page Spectrum accents and the sibling
+                         colour dots / strips removed;
+                       - page tabs restyled as the original tab row;
+                       - .significance note boxes restored (grey,
+                         green edge) in place of teal .pattern-summary;
+                       - word-study tiles on neutral grey.
+     v1.1  2026-11-21  Motion brought level with the Galatians
+                       suite (the newest 5.9 pages): animated hero,
+                       reveal ↔ hover reconciliation, the Galatians
+                       flow layout for .page-nav-item, print fallback
+                       for scroll-reveal content.
+     v1.0  2026-11-21  Initial series layer, written for the
+                       5.8 → 5.9 migration of the David suite.
+   ============================================================ */
+
+
+/* ------------------------------------------------------------
+   H. Animated hero
+      Structure and motion follow the Galatians suite (v5.9):
+
+        <header class="book-hero">
+          <span class="hero-dust"  aria-hidden="true"></span>
+          <span class="hero-sweep" aria-hidden="true"></span>
+          <div class="book-hero-inner">
+            <div class="eyebrow">…</div>
+            <div class="hero-hebrew" lang="he">…</div>
+            <h1>David: <em>…</em></h1>
+            <p class="hero-sub">…</p>
+            <div class="hero-badges"><span class="hbadge accent">…</span>…</div>
+          </div>
+        </header>
+
+      Decorative layers, all pointer-events:none and behind the text:
+        ::before     two soft glows, drifting          → dv-hero-orbs
+        .hero-dust   two fields of light, rising       → dv-hero-dust-near / -far
+        .hero-sweep  a band of light gliding across    → dv-hero-sweep
+        ::after      the hairline, breathing           → dv-hero-line
+      Content rises in sequence (dv-hero-rise); the eyebrow bar draws
+      itself (dv-hero-bar); a pale glint crosses the <em> (dv-hero-sheen).
+
+      Colour is David's, not Galatians': the surface is the gradient
+      of the hub's October 2025 hero, rose → purple, with white text,
+      white glass pills and that hero's two glows (one rose, one
+      white). The glows sit on the right so the text block stays on
+      the plain gradient, where white text is at least 4.7:1.
+      Keyframes are namespaced dv-* so they cannot collide.
+   ------------------------------------------------------------ */
+.book-hero {
+  --dv-hero-from: var(--accent-rose);      /* #e11d48 */
+  --dv-hero-to:   var(--accent-purple);    /* #7209b7 */
+  --dv-hero-ink:  #ffffff;
+
+  position: relative;
+  overflow: hidden;
+  color: var(--dv-hero-ink);
+  background: linear-gradient(135deg, var(--dv-hero-from) 0%, var(--dv-hero-to) 100%);
+  padding: 6.5rem var(--gutter) 3.25rem;
+  margin-top: 0;
+}
+.book-hero::before {
+  content: '';
+  position: absolute;
+  inset: -15%;
+  background:
+    radial-gradient(ellipse 40% 42% at 78% 84%, color-mix(in srgb, var(--dv-hero-from) 42%, transparent) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 44% at 82% 16%, rgba(255, 255, 255, .16) 0%, transparent 58%);
+  animation: dv-hero-orbs 18s ease-in-out infinite alternate;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.book-hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 8%; right: 8%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .75), rgba(255, 255, 255, .4), transparent);
+  animation: dv-hero-line 5s ease-in-out infinite alternate;
+}
+.book-hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: var(--max-w-content);
+  margin: 0 auto;
+}
+.book-hero .eyebrow {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .2em;
+  font-size: .68rem;
+  font-weight: 500;
+  color: var(--dv-hero-ink);
+  margin-bottom: 1.05rem;
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+}
+.book-hero .eyebrow::before {
+  content: '';
+  flex: none;
+  width: 26px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #ffffff, rgba(255, 255, 255, .45));
+}
+.book-hero .hero-hebrew {
+  font-family: var(--font-hebrew);
+  font-size: clamp(1.8rem, 3.4vw, 2.5rem);
+  line-height: 1.3;
+  color: var(--dv-hero-ink);
+  opacity: .95;
+  margin-bottom: .2rem;
+}
+.book-hero h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.4rem, 5.5vw, 4.1rem);
+  line-height: 1.05;
+  letter-spacing: -.02em;
+  color: var(--dv-hero-ink);
+  margin-bottom: 1rem;
+  /* drop-shadow, not text-shadow: a text-shadow would show through the clipped <em> */
+  filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, .28));
+}
+.book-hero h1 em {
+  font-style: italic;
+  background: linear-gradient(110deg, #ffffff 0%, #ffffff 38%, #ffd9e1 50%, #ffffff 62%, #ffffff 100%);
+  background-size: 240% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: dv-hero-sheen 7s ease-in-out infinite alternate;
+}
+.book-hero .hero-sub {
+  max-width: 64ch;
+  font-size: 1.12rem;
+  line-height: 1.6;
+  color: var(--dv-hero-ink);
+  font-style: italic;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, .2);
+  margin-bottom: 1.6rem;
+}
+.book-hero .hero-badges { display: flex; flex-wrap: wrap; gap: .5rem; }
+.book-hero .hbadge {
+  font-family: var(--font-mono);
+  font-size: .66rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  padding: .42rem .85rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, .32);
+  background: rgba(255, 255, 255, .15);
+  color: var(--dv-hero-ink);
+}
+.book-hero .hbadge.accent {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: var(--dv-hero-to);
+}
+
+/* — hero motion — */
+@keyframes dv-hero-orbs {
+  0%   { transform: translate3d(0, 0, 0) scale(1);          opacity: .92; }
+  50%  { transform: translate3d(-4%, 2.5%, 0) scale(1.08);  opacity: 1; }
+  100% { transform: translate3d(3%, -2%, 0) scale(1.03);    opacity: .95; }
+}
+@keyframes dv-hero-line { from { opacity: .45; } to { opacity: 1; } }
+
+.book-hero .hero-dust,
+.book-hero .hero-sweep {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.book-hero .hero-dust {
+  -webkit-mask-image: radial-gradient(ellipse 80% 95% at 50% 42%, #000 30%, transparent 100%);
+          mask-image: radial-gradient(ellipse 80% 95% at 50% 42%, #000 30%, transparent 100%);
+}
+.book-hero .hero-dust::before,
+.book-hero .hero-dust::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  background-repeat: repeat;
+  will-change: transform, opacity;
+}
+/* motes of light: white, pale rose (#fecdd3) and pale lavender (#e9d5ff) */
+.book-hero .hero-dust::before {
+  bottom: -360px;
+  background-image:
+    radial-gradient(circle at 8% 22%,  rgba(255, 255, 255, .95) 1.2px, transparent 2.3px),
+    radial-gradient(circle at 31% 71%, rgba(254, 205, 211, .9)  .9px,  transparent 1.9px),
+    radial-gradient(circle at 47% 12%, rgba(255, 255, 255, .8)  1px,   transparent 2.1px),
+    radial-gradient(circle at 63% 48%, rgba(233, 213, 255, .9)  1px,   transparent 2.1px),
+    radial-gradient(circle at 78% 83%, rgba(255, 255, 255, .9)  1.4px, transparent 2.5px),
+    radial-gradient(circle at 91% 31%, rgba(254, 205, 211, .75) .8px,  transparent 1.8px),
+    radial-gradient(circle at 20% 92%, rgba(255, 255, 255, .75) 1px,   transparent 2.1px);
+  background-size: 420px 360px;
+  animation: dv-hero-dust-near 34s linear infinite, dv-hero-twinkle-a 5s ease-in-out infinite alternate;
+}
+.book-hero .hero-dust::after {
+  bottom: -240px;
+  background-image:
+    radial-gradient(circle at 15% 35%, rgba(255, 255, 255, .7)  .8px, transparent 1.7px),
+    radial-gradient(circle at 42% 80%, rgba(233, 213, 255, .6)  .7px, transparent 1.6px),
+    radial-gradient(circle at 58% 20%, rgba(255, 255, 255, .6)  .8px, transparent 1.7px),
+    radial-gradient(circle at 73% 62%, rgba(254, 205, 211, .65) .9px, transparent 1.8px),
+    radial-gradient(circle at 88% 8%,  rgba(255, 255, 255, .55) .7px, transparent 1.6px),
+    radial-gradient(circle at 5% 68%,  rgba(255, 255, 255, .5)  .7px, transparent 1.6px);
+  background-size: 300px 240px;
+  animation: dv-hero-dust-far 56s linear infinite, dv-hero-twinkle-b 7s ease-in-out infinite alternate-reverse;
+}
+@keyframes dv-hero-dust-near { to { transform: translateY(-360px); } }
+@keyframes dv-hero-dust-far  { to { transform: translateY(-240px); } }
+@keyframes dv-hero-twinkle-a { from { opacity: .5; }  to { opacity: 1; } }
+@keyframes dv-hero-twinkle-b { from { opacity: .35; } to { opacity: .9; } }
+
+.book-hero .hero-sweep {
+  background: linear-gradient(115deg,
+    transparent 0%, transparent 40%,
+    rgba(255, 255, 255, .06) 47%, rgba(255, 255, 255, .14) 50%, rgba(255, 255, 255, .06) 53%,
+    transparent 60%, transparent 100%);
+  transform: translateX(-120%);
+  animation: dv-hero-sweep 9s cubic-bezier(.45, 0, .2, 1) infinite;
+  will-change: transform;
+}
+@keyframes dv-hero-sweep { 0% { transform: translateX(-120%); } 55%, 100% { transform: translateX(120%); } }
+
+.book-hero .eyebrow,
+.book-hero .hero-hebrew,
+.book-hero h1,
+.book-hero .hero-sub { animation: dv-hero-rise .9s cubic-bezier(.2, .7, .2, 1) both; }
+.book-hero .hero-hebrew { animation-delay: .1s; }
+.book-hero h1           { animation-delay: .2s; }
+.book-hero .hero-sub    { animation-delay: .32s; }
+.book-hero .hbadge { animation: dv-hero-rise .7s cubic-bezier(.2, .7, .2, 1) both; animation-delay: .46s; }
+.book-hero .hbadge:nth-child(2)   { animation-delay: .52s; }
+.book-hero .hbadge:nth-child(3)   { animation-delay: .58s; }
+.book-hero .hbadge:nth-child(4)   { animation-delay: .64s; }
+.book-hero .hbadge:nth-child(5)   { animation-delay: .7s; }
+.book-hero .hbadge:nth-child(n+6) { animation-delay: .76s; }
+/* the Hebrew line rests at .95, so its entrance ends there, not at 1 */
+@keyframes dv-hero-rise { from { opacity: 0; transform: translateY(18px); } to { transform: none; } }
+
+.book-hero .eyebrow::before { animation: dv-hero-bar .8s .35s cubic-bezier(.2, .7, .2, 1) both; }
+@keyframes dv-hero-bar { from { width: 0; opacity: 0; } to { width: 26px; opacity: 1; } }
+@keyframes dv-hero-sheen { from { background-position: 100% 50%; } to { background-position: 0% 50%; } }
+
+/* global-v3 §45 already collapses durations under reduced motion; the
+   loops are stopped outright here so nothing drifts. */
+@media (prefers-reduced-motion: reduce) {
+  .book-hero::before,
+  .book-hero::after,
+  .book-hero .hero-dust::before,
+  .book-hero .hero-dust::after,
+  .book-hero .hero-sweep,
+  .book-hero .eyebrow,
+  .book-hero .eyebrow::before,
+  .book-hero .hero-hebrew,
+  .book-hero h1,
+  .book-hero h1 em,
+  .book-hero .hero-sub,
+  .book-hero .hbadge { animation: none; }
+  .book-hero .hero-sweep { display: none; }
+}
+
+
+/* ------------------------------------------------------------
+   R. Reveal ↔ hover reconciliation
+      global-v3 §56 reveals with `revealUp`, which animates
+      `transform` and fills forwards. A forwards-filled animation
+      outranks a later `:hover { transform }`, so a card that
+      lifts on hover would lose its lift once it has scrolled in.
+      Same fix as the polish layer (§K) and the Galatians pages:
+      these components rest at transform:none and reveal with the
+      opacity-only `pc-reveal-fade` (defined in global-v3-polish),
+      leaving transform free for :hover.
+
+      Weight matters in the resting rule. It is written with
+      :where() so that it weighs (0,1,0): level with global-v3's
+      resting translateY, which it replaces by coming later, and
+      lighter than the components' own `:hover` rules (0,2,0) in
+      global-v3 and the polish layer, which must win. Through v1.3
+      it was written without :where(), weighed the same as those
+      hover rules and came after them, so it cancelled the very
+      lift it was there to protect.
+
+      Listed here: every revealed component on the David pages
+      whose hover moves it. Components with no hover transform
+      (.panel, .qa-pill, .table-wrapper, .significance,
+      .chiasm-structure) keep the default slide-up.
+   ------------------------------------------------------------ */
+:where([data-reveal-children]) > .mini-card,
+:where([data-reveal-children]) > .page-nav-item,
+:where([data-reveal-children]) > .pattern-item,
+:where([data-reveal-children]) > .pattern-arrow,
+:where([data-reveal-children]) > .word-study,
+:where([data-reveal-children]) > .bibliography-section,
+.key-insight:where([data-reveal]),
+.takeaway:where([data-reveal]),
+.core-logic-quote:where([data-reveal]) { transform: none; }
+
+[data-reveal-children][data-revealed] > .mini-card,
+[data-reveal-children][data-revealed] > .page-nav-item,
+[data-reveal-children][data-revealed] > .pattern-item,
+[data-reveal-children][data-revealed] > .pattern-arrow,
+[data-reveal-children][data-revealed] > .word-study,
+[data-reveal-children][data-revealed] > .bibliography-section,
+.key-insight[data-reveal][data-revealed],
+.takeaway[data-reveal][data-revealed],
+.core-logic-quote[data-reveal][data-revealed] { animation-name: pc-reveal-fade; }
+
+
+/* ------------------------------------------------------------
+   1. Page tabs (the suite stage tracker)
+      One pill per page, in suite order, identical on every child
+      page. The colours are the original David tab row's
+      (global-v2 .tab-button): grey pills, and the current page
+      filled rose → purple with white text.
+      Class names follow multi-page-suite-readme-v5-9.md, so the
+      polish layer's current-pill pulse (its §H) still applies.
+   ------------------------------------------------------------ */
+.rainbow-stage-tracker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.25rem 0 1.25rem;
+}
+
+.rainbow-stage-tracker .tracker-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  margin-right: 0.35rem;
+}
+
+.rainbow-stage-tracker .stage-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0.5rem 1rem;
+  background: var(--bg-2);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: background var(--duration-fast) var(--ease),
+              color var(--duration-fast) var(--ease),
+              transform var(--duration-fast) var(--ease),
+              box-shadow var(--duration-fast) var(--ease);
+}
+
+@media (hover: hover) {
+  .rainbow-stage-tracker .stage-dot:hover {
+    background: var(--bg-3);
+    color: var(--text);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(15, 23, 42, 0.1);
+  }
+}
+
+.rainbow-stage-tracker .stage-dot.current,
+.rainbow-stage-tracker .stage-dot.current:hover {
+  background: linear-gradient(135deg, var(--accent-rose), var(--accent-purple));
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--accent-rose) 25%, transparent);
+  transform: none;
+  cursor: default;
+}
+
+@media (pointer: coarse) {
+  .rainbow-stage-tracker .stage-dot { min-height: 44px; }
+}
+
+@media (max-width: 600px) {
+  .rainbow-stage-tracker { gap: 0.4rem; }
+  .rainbow-stage-tracker .tracker-label { width: 100%; margin: 0 0 0.15rem; }
+  .rainbow-stage-tracker .stage-dot { padding: 0.45rem 0.85rem; }
+}
+
+
+/* ------------------------------------------------------------
+   2. Page cards
+      Used by the hub's "Pages" grid and by the bottom
+      page-navigation grid on every page. Colours are global-v3's
+      (the current page takes the purple → rose fill).
+
+      Layout is the Galatians suite's: global-v3 §35 positions
+      .nav-link absolutely, so a long subtitle runs underneath it.
+      Here the card is a column and the link flows below the
+      subtitle, pinned to the bottom edge; cards get a wider
+      minimum so the nine cards sit three to a row on a desktop.
+   ------------------------------------------------------------ */
+.page-nav-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+.page-nav-item {
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  min-height: 0;
+  padding: 1.1rem 1.25rem 1rem;
+}
+.page-nav-item .nav-subtitle { margin-bottom: .5rem; }
+.page-nav-item .nav-link {
+  position: static;
+  margin-top: auto;
+  align-self: flex-end;
+  padding-top: .25rem;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+
+/* ------------------------------------------------------------
+   3. Passage study
+      One passage, walked through, inside a theology card:
+      a psalm, a prophet, an NT text, a Second Temple source.
+      Replaces the six page-local variants from the v5.8 pages
+      (.psalm-study, .prophet-study, .nt-study, .source-study,
+      .transformation-study, .passage-study), which differed
+      only in a hard-coded border colour.
+   ------------------------------------------------------------ */
+.passage-study {
+  border-left: 3px solid var(--page-accent);
+  padding-left: 1.5rem;
+  margin: 2rem 0;
+}
+.passage-study > h4:first-child { margin-top: 0; }
+
+@media (max-width: 600px) {
+  .passage-study { padding-left: 1rem; }
+}
+
+
+/* ------------------------------------------------------------
+   4. Word-study tiles and note boxes
+
+      Tiles: global-v3 .word-study cards set three-up. The card's
+      own vertical margin is dropped because the grid gap spaces
+      them, the term is centred the way the tiles were, and the
+      card sits on plain grey, as the original tiles did (global
+      .word-study is indigo-tinted). The Hebrew takes the page
+      accent, purple, as before.
+   ------------------------------------------------------------ */
+.hebrew-tiles { margin: 1.5rem 0; }
+.hebrew-tiles > .word-study {
+  margin: 0;
+  padding: 1.25rem;
+  text-align: center;
+  background: var(--bg-2);
+  border-color: var(--border);
+}
+.hebrew-tiles > .word-study h4 { margin-bottom: 0.35rem; color: var(--page-accent); }
+.hebrew-tiles > .word-study .hebrew-large { font-size: var(--fs-2xl); }
+.hebrew-tiles > .word-study p {
+  font-size: var(--fs-sm);
+  color: var(--text-soft);
+}
+.hebrew-tiles > .word-study p:last-child { margin-bottom: 0; }
+.hebrew-tiles > .word-study .translit {
+  font-style: italic;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+.hebrew-tiles > .word-study .gloss {
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* The tiles answer the pointer the way the Quick Reference tiles do
+   (polish §J4): a 2px lift, a tinted border, a soft shadow. They are
+   listed in §R so the lift survives the scroll reveal. */
+.hebrew-tiles > .word-study {
+  transition:
+    transform    0.25s var(--ease, ease),
+    box-shadow   0.25s var(--ease, ease),
+    border-color 0.25s var(--ease, ease);
+}
+@media (hover: hover) {
+  .hebrew-tiles > .word-study:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--page-accent) 32%, var(--border));
+    box-shadow:
+      0 6px 18px color-mix(in srgb, var(--page-accent) 14%, transparent),
+      0 2px  4px rgba(15, 23, 42, 0.03);
+  }
+}
+
+/* Note boxes (.significance)
+   The original pages use this box 32 times, often several to a
+   section, for a titled note under a passage or argument. It is
+   global-v2's rule carried over as it was: a grey panel with a
+   green left edge and a green heading. It is kept as its own
+   component because global-v3's nearest box, .pattern-summary,
+   is a once-per-section synthesis (teal, with a looping glow) and
+   would both recolour the pages and overuse that component.
+   --dv-green is global-v2's --success; the heading is that green
+   deepened with --text so it reads at 4.9:1 on the panel. */
+.significance {
+  --dv-green: #10b981;
+  background: var(--bg-2);
+  border-left: 4px solid var(--dv-green);
+  border-radius: var(--radius-sm);
+  padding: 1.1rem 1.4rem;
+  margin: 1.5rem 0;
+}
+.significance > h4 {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  margin: 0 0 0.6rem;
+  color: color-mix(in srgb, var(--dv-green) 62%, var(--text));
+}
+.significance > :last-child { margin-bottom: 0; }
+/* a panel or table inside a note sits on the page colour so it still reads as a box */
+.significance .panel { background: var(--bg); }
+.significance table { background: var(--bg); }
+
+
+/* ------------------------------------------------------------
+   5. Q&A pills without a body
+      Several question sets on these pages are a question and
+      nothing more. A pill with no .qa-body has nothing to
+      open, so it drops the +/× affordance and the pointer.
+   ------------------------------------------------------------ */
+.qa-pill:not(:has(.qa-body)) summary { cursor: default; }
+.qa-pill:not(:has(.qa-body)) summary::after { content: none; }
+.qa-pill:not(:has(.qa-body))[open] { border-color: var(--border); }
+
+/* A labelled group of pills inside one card */
+.qa-group-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  margin: 1.75rem 0 0.25rem;
+  color: var(--text);
+}
+.qa-group-title:first-of-type { margin-top: 0.5rem; }
+.qa-group-title + .qa-pills { margin-top: 0.75rem; }
+
+
+/* ------------------------------------------------------------
+   6. Study Complete banner — last page of the suite only
+   ------------------------------------------------------------ */
+.study-complete-banner {
+  margin: 2.5rem 0;
+  padding: 1.75rem 2rem;
+  text-align: center;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--page-accent);
+  border-radius: var(--radius);
+}
+.study-complete-banner h3 {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  margin: 0 0 0.5rem;
+}
+.study-complete-banner p { color: var(--text-soft); margin: 0 auto 1rem; }
+.study-complete-banner .related-suites {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+
+/* ------------------------------------------------------------
+   7. Utilities carried over from the v5.8 markup
+   ------------------------------------------------------------ */
+.small {
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+/* A centred "A → B → C" line inside a panel */
+.flow-line {
+  text-align: center;
+  line-height: var(--lh-loose);
+  margin: 0.75rem 0 0;
+  max-width: none;                    /* global p is capped at 65ch, which would pull it off-centre */
+}
+.flow-line .flow-focus { color: var(--page-accent-deep); font-size: var(--fs-md); }
+
+/* A benediction or other set-apart closing text */
+.benediction {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-style: italic;
+  line-height: var(--lh-base);
+}
+.benediction p + p { margin-top: 0.75rem; }
+.benediction .benediction-close {
+  font-weight: 700;
+  text-align: right;
+  font-style: normal;
+}
+
+/* h5 sub-heads inside cards: global-v3 styles h3/h4 in a card
+   but leaves h5 at the base heading size. */
+.theology-card h5,
+.chiasm-card h5,
+.passage-study h5,
+.panel h5 {
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  font-weight: 700;
+  margin: 1.25rem 0 0.5rem;
+  color: var(--text);
+}
+
+
+/* Grid columns must be able to shrink below the min-content width
+   of a table inside them. Without this a three-column table pushes
+   its whole column past a phone viewport (measured: 38px of overflow
+   at 390px on the Literary page); with it the .table-wrapper scrolls
+   sideways as intended. */
+.grid-2 > *,
+.grid-3 > *,
+.grid-4 > * { min-width: 0; }
+
+
+/* ------------------------------------------------------------
+   8. Chiasm outlines
+      The Literary page sets out the structure of Samuel as
+      lettered outlines (A B C … C′ B′ A′) inside global-v3's
+      .chiasm-structure box. That box runs the letter and the text
+      together, so a line that wraps comes back under its own
+      letter. .chiasm-outline gives the letter a fixed column and
+      the text a hanging indent. No new colour: the letter takes
+      the page accent, as global-v3's .chiasm-label does.
+   ------------------------------------------------------------ */
+.chiasm-outline { --dv-step: 1.5rem; }
+.chiasm-outline .chiasm-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6ch;
+  /* room for the highlight band; the negative margin keeps the
+     letters exactly where they would sit without it */
+  margin: 0 -0.5rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.2s var(--ease, ease);
+}
+/* The steps are margins here, not global-v3's padding, so that the
+   band starts at the letter and the staircase stays visible. */
+.chiasm-outline .chiasm-line.indent-1 {
+  margin-left: calc(var(--dv-step) - 0.5rem);
+  padding-left: 0.5rem;
+}
+.chiasm-outline .chiasm-line.indent-2 {
+  margin-left: calc(var(--dv-step) * 2 - 0.5rem);
+  padding-left: 0.5rem;
+}
+
+/* Pair highlight. Lines carry data-pair="a|b|c". Pointing at one
+   line tints it and its partner, so the mirror can be seen: A with
+   A′, B with B′, C with C′. Pointer devices only; a browser without
+   :has() shows no highlight and loses nothing else. The tint is the
+   page accent, the colour the letters already use. */
+@media (hover: hover) {
+  .chiasm-outline:has([data-pair="a"]:hover) [data-pair="a"],
+  .chiasm-outline:has([data-pair="b"]:hover) [data-pair="b"],
+  .chiasm-outline:has([data-pair="c"]:hover) [data-pair="c"] {
+    background-color: color-mix(in srgb, var(--page-accent) 10%, transparent);
+  }
+  .chiasm-outline .chiasm-center {
+    transition: background-color 0.2s var(--ease, ease);
+  }
+  .chiasm-outline .chiasm-center:hover {
+    background-color: color-mix(in srgb, var(--accent-purple) 11%, var(--bg-2));
+  }
+}
+.chiasm-outline .chiasm-key {
+  flex: 0 0 2.4ch;
+  font-weight: 700;
+  color: var(--page-accent);
+}
+.chiasm-outline .chiasm-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.chiasm-outline .chiasm-center em { font-weight: 400; }
+
+/* h4 directly inside a .chiasm-card: global-v3 sizes h4 for
+   .theology-card only, so here it would fall back to the base size.
+   Direct children only, so .significance > h4 keeps its own rule. */
+.chiasm-card > h4 {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  margin: 1.75rem 0 0.5rem;
+  color: var(--text);
+}
+
+/* On a phone the outlines are the longest thing on the page:
+   slightly smaller type and shallower steps keep each line to
+   two or three rows. */
+@media (max-width: 600px) {
+  .chiasm-outline {
+    --dv-step: 0.75rem;
+    padding: 0.9rem 0.85rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+  .chiasm-outline .chiasm-line { padding-top: 0.15rem; padding-bottom: 0.15rem; }
+  .chiasm-outline .chiasm-center { padding: 0.6rem 0.75rem; margin: 0.6rem 0; }
+}
+
+
+/* ------------------------------------------------------------
+   9. Bibliography helpers
+   ------------------------------------------------------------ */
+/* BibleProject's mark beside a source-category heading. global-v3
+   sets img { display: block }, which would put it on its own line. */
+.source-category h4 .bp-icon {
+  display: inline-block;
+  width: 1.15em;
+  height: 1.15em;
+  margin-right: 0.45em;
+  vertical-align: -0.18em;
+}
+
+/* A long URL in a citation must be able to wrap on a phone */
+.source-citation a { overflow-wrap: anywhere; }
+
+/* The Bibliography & Resources page stacks four collapsed groups;
+   global-v3 gives each one a 3rem margin, which is too loose there. */
+.bibliography-stack {
+  display: grid;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+.bibliography-stack > .bibliography-section {
+  margin: 0;
+  min-width: 0;
+}
+
+/* A copy-citation button that sits in a card, outside any group */
+.theology-card > .bibliography-actions { margin: 1.25rem 0 0; }
+
+/* A collapsed bar lifts a little under the pointer, like the cards
+   (polish §C), which also shows that it opens. Once open it stays
+   still. Listed in §R for the stack on the Bibliography page. */
+.bibliography-section {
+  transition:
+    transform  0.25s var(--ease, ease),
+    box-shadow 0.25s var(--ease, ease);
+}
+@media (hover: hover) {
+  .bibliography-section:not([open]):hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 8px 22px color-mix(in srgb, var(--page-accent) 18%, transparent),
+      0 2px  6px rgba(15, 23, 42, 0.04);
+  }
+}
+
+/* An entry takes a tint and a firmer edge under the pointer. It does
+   not move, so its text can still be selected and copied. */
+.source-entry {
+  transition:
+    background-color 0.2s var(--ease, ease),
+    border-color     0.2s var(--ease, ease),
+    box-shadow       0.2s var(--ease, ease);
+}
+@media (hover: hover) {
+  .source-entry:hover {
+    background-color: color-mix(in srgb, var(--page-accent) 3%, var(--bg));
+    border-color: color-mix(in srgb, var(--page-accent) 28%, var(--border));
+    border-left-color: var(--page-accent);
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+  }
+}
+
+
+/* ------------------------------------------------------------
+   10. Print — the tracker and banner are navigation
+   ------------------------------------------------------------ */
+@media print {
+  .rainbow-stage-tracker,
+  .study-complete-banner { display: none; }
+  .passage-study { break-inside: avoid; }
+
+  /* Hero: keep the words, drop the night sky and the motion */
+  .book-hero { background: none; color: #000; padding: 0 0 1rem; }
+  .book-hero::before,
+  .book-hero::after,
+  .book-hero .hero-dust,
+  .book-hero .hero-sweep { display: none; }
+  .book-hero .eyebrow,
+  .book-hero .hero-hebrew,
+  .book-hero h1,
+  .book-hero .hero-sub,
+  .book-hero .hbadge { color: #000; animation: none; }
+  .book-hero h1 em { -webkit-text-fill-color: #000; color: #000; background: none; animation: none; }
+  .book-hero .hbadge { border-color: #888; background: none; }
+
+  /* Scroll-reveal content that was never scrolled to must still print.
+     global-v3 §57 does not reset the §56 hidden state. */
+  [data-reveal],
+  [data-reveal-children] > * {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  /* Source groups: print the heading with the entries. global-v3 hides
+     every <summary> in print; in these groups the summary is the heading
+     (title and subtitle), which is white on screen, so it is set to black
+     here. The chassis script opens each group when a print starts; the
+     ::details-content rule covers a print where that has not happened. */
+  .bibliography-section { overflow: visible; transform: none; box-shadow: none; }
+  .bibliography-section > summary {
+    display: block;
+    list-style: none;
+    cursor: auto;
+  }
+  .bibliography-section > summary::-webkit-details-marker { display: none; }
+  .bibliography-section::details-content { content-visibility: visible; }
+  .bibliography-title,
+  .bibliography-subtitle { color: #000; }
+}
