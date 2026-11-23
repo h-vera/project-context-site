@@ -1,5 +1,5 @@
 /* ============================================================
-   david-study.css — v1.6
+   david-study.css — v1.9
    Path: /assets/css/david-study.css
    ------------------------------------------------------------
    Series layer for the David character suite (hub + 8 child
@@ -54,7 +54,7 @@
 
      <link rel="stylesheet" href="/assets/css/global-v3.css?v=3.3.2">
      <link rel="stylesheet" href="/assets/css/global-v3-polish.css?v=0.3">
-     <link rel="stylesheet" href="/assets/css/david-study.css?v=1.6">
+     <link rel="stylesheet" href="/assets/css/david-study.css?v=1.9">
 
    PER-PAGE CONTRACT
      Every page   <body class="character-profile" data-theme="purple">
@@ -64,6 +64,28 @@
      decision, 2026-11-21). Do not add data-suite-stage here.
 
    CHANGELOG
+     v1.9  2026-11-22  Section 7 gains the design note (.design-note):
+                       one line under a phase heading on the Journey
+                       page that places the phase in its chiasm and
+                       links to the outline on the Literary page. A
+                       link from another page to a section or to a
+                       lettered outline now lands below the sticky
+                       header (scroll-margin-top).
+     v1.8  2026-11-22  Study tiles on the other seven content pages
+                       (the Journey page had them from v1.6). Section
+                       10 gains what their columns need: a column of
+                       tiles with no heading or with two headings, and
+                       a callout between tiles. On screen nothing
+                       changes on the Journey page.
+                       Print: a tile prints as plain text with no box
+                       and may run over a page break, so the tiled
+                       pages print at the length they had as plain
+                       columns (the Journey page prints four pages
+                       shorter than under v1.7).
+     v1.7  2026-11-22  Step rail: when the steps are alone in a tile
+                       that is stretched to its neighbour's height,
+                       they spread down the rail instead of leaving
+                       the space empty below the last step.
      v1.6  2026-11-22  Study tiles and a showcase (sections 10, 11).
                        No colour changes: purple, rose and the
                        template's primary gradient only.
@@ -709,6 +731,22 @@
   color: var(--text-muted);
 }
 
+/* A one-line note under a phase heading: where the phase sits in the
+   book's design. The letters are the pair it belongs to in the
+   lettered outline on the Literary page. */
+.design-note { max-width: none; margin: 0 0 1.25rem; }
+.design-note .pair-key {
+  margin-right: 0.2rem;
+  font-weight: 700;
+  color: var(--page-accent);
+  white-space: nowrap;
+}
+
+/* A link from another page lands below the sticky header. In-page
+   links are scrolled by the chassis, which makes its own allowance. */
+main section[id],
+main h4[id] { scroll-margin-top: 5.5rem; }
+
 /* A centred "A → B → C" line inside a panel */
 .flow-line {
   text-align: center;
@@ -945,6 +983,16 @@
   grid-template-rows: auto 1fr;
 }
 .tile-stack > h4 { margin: 0; }
+/* a second heading in one column: air above it */
+.tile-stack > h4:not(:first-child) { margin-top: 0.6rem; }
+/* one tile and no heading: it fills the column */
+.tile-stack--solo {
+  align-content: stretch;
+  grid-template-rows: 1fr;
+}
+/* a callout that sat in a column stays a callout, between the tiles */
+.tile-stack > .key-insight,
+.tile-stack > .significance { margin: 0; }
 
 .study-tile {
   position: relative;
@@ -1159,6 +1207,16 @@
 @keyframes dv-step-pulse {
   0%, 100% { box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-magenta) 14%, transparent); }
   50%      { box-shadow: 0 0 0 9px color-mix(in srgb, var(--accent-magenta) 20%, transparent); }
+}
+/* alone in a tile stretched to its neighbour's height, the steps spread down the rail */
+.study-tile:has(> .step-rail:only-child) {
+  display: flex;
+  flex-direction: column;
+}
+.study-tile > .step-rail:only-child {
+  flex: 1 1 auto;
+  display: grid;
+  align-content: space-between;
 }
 /* steps arrive from the rail, as the template's timelines do (global-v3 56) */
 .step-rail[data-reveal-children] > li { transform: translateX(-20px); }
@@ -1404,8 +1462,21 @@
   .bibliography-title,
   .bibliography-subtitle { color: #000; }
 
-  /* Study tiles and the showcase print as plain blocks */
-  .study-tile { box-shadow: none; transform: none; background: none; break-inside: avoid; }
+  /* Study tiles print as the plain columns they were: no box, and a tile
+     may run over a page break, because on the exposition pages a tile
+     holds whole paragraphs. A column heading stays with its first tile. */
+  .study-tile {
+    box-shadow: none;
+    transform: none;
+    background: none;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    overflow: visible;
+    break-inside: auto;
+  }
+  .tile-stack { gap: 0.6rem; }
+  .tile-stack > h4 { break-after: avoid; }
   .study-tile::before,
   .tp-side::before,
   .scripture-quote.scene-quote::before,
